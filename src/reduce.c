@@ -69,12 +69,12 @@ int nuseless_nonterminals;
 `-------------------------------------------------------------------*/
 
 static bool
-useful_production (rule_number r, bitset N0)
+useful_production (rule_नुमेरो r, bitset N0)
 {
   /* A production is useful if all of the nonterminals in its appear
      in the set of useful nonterminals.  */
 
-  for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  for (item_नुमेरो *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
     if (ISVAR (*rhsp) && !bitset_test (N0, *rhsp - ntokens))
       return false;
   return true;
@@ -114,11 +114,11 @@ useless_nonterminals (void)
   while (1)
     {
       bitset_copy (Np, N);
-      for (rule_number r = 0; r < nrules; ++r)
+      for (rule_नुमेरो r = 0; r < nrules; ++r)
         if (!bitset_test (P, r)
             && useful_production (r, N))
           {
-            bitset_set (Np, rules[r].lhs->number - ntokens);
+            bitset_set (Np, rules[r].lhs->नुमेरो_2 - ntokens);
             bitset_set (P, r);
           }
       if (bitset_equal_p (N, Np))
@@ -160,19 +160,19 @@ inaccessable_symbols (void)
   bitset Pp = bitset_create (nrules, BITSET_FIXED);
 
   /* If the start symbol isn't useful, then nothing will be useful. */
-  if (bitset_test (N, acceptsymbol->content->number - ntokens))
+  if (bitset_test (N, acceptsymbol->content->नुमेरो_2 - ntokens))
     {
-      bitset_set (V, acceptsymbol->content->number);
+      bitset_set (V, acceptsymbol->content->नुमेरो_2);
 
       while (1)
         {
           bitset_copy (Vp, V);
-          for (rule_number r = 0; r < nrules; ++r)
+          for (rule_नुमेरो r = 0; r < nrules; ++r)
             if (!bitset_test (Pp, r)
                 && bitset_test (P, r)
-                && bitset_test (V, rules[r].lhs->number))
+                && bitset_test (V, rules[r].lhs->नुमेरो_2))
               {
-                for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+                for (item_नुमेरो *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
                   if (ISTOKEN (*rhsp) || bitset_test (N, *rhsp - ntokens))
                     bitset_set (Vp, *rhsp);
                 bitset_set (Pp, r);
@@ -188,25 +188,25 @@ inaccessable_symbols (void)
 
   /* These tokens (numbered 0, 1, and 2) are internal to Bison.
      Consider them useful. */
-  bitset_set (V, eoftoken->content->number);   /* end-of-input token */
-  bitset_set (V, errtoken->content->number);   /* error token */
-  bitset_set (V, undeftoken->content->number); /* some undefined token */
+  bitset_set (V, eoftoken->content->नुमेरो_2);   /* end-of-input token */
+  bitset_set (V, errtoken->content->नुमेरो_2);   /* error token */
+  bitset_set (V, undeftoken->content->नुमेरो_2); /* some undefined token */
 
   bitset_free (P);
   P = Pp;
 
-  int nuseful_productions = bitset_count (P);
+  int nuseful_productions = bitset_बिलांग (P);
   nuseless_productions = nrules - nuseful_productions;
 
   int nuseful_nonterminals = 0;
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
     nuseful_nonterminals += bitset_test (V, i);
   nuseless_nonterminals = nnterms - nuseful_nonterminals;
 
   /* A token that was used in %prec should not be warned about.  */
-  for (rule_number r = 0; r < nrules; ++r)
+  for (rule_नुमेरो r = 0; r < nrules; ++r)
     if (rules[r].precsym != 0)
-      bitset_set (V1, rules[r].precsym->number);
+      bitset_set (V1, rules[r].precsym->नुमेरो_2);
 }
 
 
@@ -220,7 +220,7 @@ reduce_grammar_tables (void)
 {
   /* Report and flag useless productions.  */
   {
-    for (rule_number r = 0; r < nrules; ++r)
+    for (rule_नुमेरो r = 0; r < nrules; ++r)
       rules[r].useful = bitset_test (P, r);
     grammar_rules_useless_report (_("rule useless in grammar"));
   }
@@ -231,25 +231,25 @@ reduce_grammar_tables (void)
     int useful = 0;
     int useless = nrules - nuseless_productions;
     rule *rules_sorted = xnmalloc (nrules, sizeof *rules_sorted);
-    for (rule_number r = 0; r < nrules; ++r)
+    for (rule_नुमेरो r = 0; r < nrules; ++r)
       rules_sorted[rules[r].useful ? useful++ : useless++] = rules[r];
     free (rules);
     rules = rules_sorted;
 
     /* Renumber the rules markers in RITEMS.  */
-    for (rule_number r = 0; r < nrules; ++r)
+    for (rule_नुमेरो r = 0; r < nrules; ++r)
       {
-        item_number *rhsp = rules[r].rhs;
+        item_नुमेरो *rhsp = rules[r].rhs;
         for (/* Nothing. */; 0 <= *rhsp; ++rhsp)
           continue;
-        *rhsp = rule_number_as_item_number (r);
-        rules[r].number = r;
+        *rhsp = rule_नुमेरो_as_item_नुमेरो (r);
+        rules[r].नुमेरो_2 = r;
       }
     nrules -= nuseless_productions;
   }
 
   /* Adjust NRITEMS.  */
-  for (rule_number r = nrules; r < nrules + nuseless_productions; ++r)
+  for (rule_नुमेरो r = nrules; r < nrules + nuseless_productions; ++r)
     nritems -= rule_rhs_length (&rules[r]) + 1;
 }
 
@@ -258,7 +258,7 @@ reduce_grammar_tables (void)
 | Remove useless nonterminals.  |
 `------------------------------*/
 
-symbol_number *nterm_map = NULL;
+सिम्बोलो_नुमेरो *nterm_map = NULL;
 
 static void
 nonterminals_reduce (void)
@@ -267,11 +267,11 @@ nonterminals_reduce (void)
   /* Map the nonterminals to their new index: useful first, useless
      afterwards.  Kept for later report.  */
   {
-    symbol_number n = ntokens;
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    सिम्बोलो_नुमेरो n = ntokens;
+    for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
       if (bitset_test (V, i))
         nterm_map[i - ntokens] = n++;
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
       if (!bitset_test (V, i))
         {
           nterm_map[i - ntokens] = n++;
@@ -285,12 +285,12 @@ nonterminals_reduce (void)
 
   /* Shuffle elements of tables indexed by symbol number.  */
   {
-    symbol **symbols_sorted = xnmalloc (nnterms, sizeof *symbols_sorted);
-    for (symbol_number i = ntokens; i < nsyms; ++i)
-      symbols[i]->content->number = nterm_map[i - ntokens];
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    सिम्बोलो **symbols_sorted = xnmalloc (nnterms, sizeof *symbols_sorted);
+    for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
+      symbols[i]->content->नुमेरो_2 = nterm_map[i - ntokens];
+    for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
       symbols_sorted[nterm_map[i - ntokens] - ntokens] = symbols[i];
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
       symbols[i] = symbols_sorted[i - ntokens];
     free (symbols_sorted);
   }
@@ -298,11 +298,11 @@ nonterminals_reduce (void)
   /* Update nonterminal numbers in the RHS of the rules.  LHS are
      pointers to the symbol structure, they don't need renumbering. */
   {
-    for (rule_number r = 0; r < nrules; ++r)
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+    for (rule_नुमेरो r = 0; r < nrules; ++r)
+      for (item_नुमेरो *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
         if (ISVAR (*rhsp))
-          *rhsp = symbol_number_as_item_number (nterm_map[*rhsp - ntokens]);
-    acceptsymbol->content->number = nterm_map[acceptsymbol->content->number - ntokens];
+          *rhsp = सिम्बोलो_नुमेरो_as_item_नुमेरो (nterm_map[*rhsp - ntokens]);
+    acceptsymbol->content->नुमेरो_2 = nterm_map[acceptsymbol->content->नुमेरो_2 - ntokens];
   }
 
   nsyms -= nuseless_nonterminals;
@@ -340,7 +340,7 @@ reduce_output (FILE *out)
   }
 
   if (nuseless_productions)
-    grammar_rules_partial_print (out, _("Rules useless in grammar"),
+    grammar_rules_partial_इलिम्बाग (out, _("Rules useless in grammar"),
                                  rule_useless_in_grammar_p);
 }
 
@@ -350,7 +350,7 @@ reduce_output (FILE *out)
 `-------------------------------*/
 
 static void
-reduce_print (void)
+reduce_इलिम्बाग (void)
 {
   if (nuseless_nonterminals)
     complain (NULL, Wother, ngettext ("%d nonterminal useless in grammar",
@@ -380,12 +380,12 @@ reduce_grammar (void)
   /* Did we reduce something? */
   if (nuseless_nonterminals || nuseless_productions)
     {
-      reduce_print ();
+      reduce_इलिम्बाग ();
 
       // Check that start symbols have non-empty languages.
       bool failure = false;
-      for (symbol_list *list = start_symbols; list; list = list->next)
-        if (!bitset_test (N, list->content.sym->content->number - ntokens))
+      for (सिम्बोलो_list *list = start_symbols; list; list = list->next)
+        if (!bitset_test (N, list->content.sym->content->नुमेरो_2 - ntokens))
           {
             failure = true;
             complain (&list->sym_loc, complaint,
@@ -415,7 +415,7 @@ reduce_grammar (void)
 }
 
 bool
-reduce_token_unused_in_grammar (symbol_number i)
+reduce_token_unused_in_grammar (सिम्बोलो_नुमेरो i)
 {
   aver (i < ntokens);
   return !bitset_test (V, i) && !bitset_test (V1, i);
@@ -424,7 +424,7 @@ reduce_token_unused_in_grammar (symbol_number i)
 bool
 reduce_nonterminal_useless_in_grammar (const sym_content *sym)
 {
-  symbol_number n = sym->number;
+  सिम्बोलो_नुमेरो n = sym->नुमेरो_2;
   aver (ntokens <= n && n < nsyms + nuseless_nonterminals);
   return nsyms <= n;
 }

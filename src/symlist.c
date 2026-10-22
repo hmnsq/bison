@@ -27,12 +27,12 @@
 | Create a list containing SYM at LOC.  |
 `--------------------------------------*/
 
-symbol_list *
-symbol_list_sym_new (symbol *sym, location loc)
+सिम्बोलो_list *
+सिम्बोलो_list_sym_new (सिम्बोलो *sym, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  सिम्बोलो_list *res = xmalloc (sizeof *res);
 
-  res->content_type = SYMLIST_SYMBOL;
+  res->content_type = SYMLIST_सिम्बोलो;
   res->content.sym = sym;
   res->sym_loc = loc;
   res->named_ref = NULL;
@@ -63,10 +63,10 @@ symbol_list_sym_new (symbol *sym, location loc)
 | Create a list containing TYPE_NAME at LOC.  |
 `--------------------------------------------*/
 
-symbol_list *
-symbol_list_type_new (uniqstr type_name, location loc)
+सिम्बोलो_list *
+सिम्बोलो_list_type_new (uniqstr type_name, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  सिम्बोलो_list *res = xmalloc (sizeof *res);
 
   res->content_type = SYMLIST_TYPE;
   res->content.sem_type = xmalloc (sizeof (semantic_type));
@@ -82,17 +82,17 @@ symbol_list_type_new (uniqstr type_name, location loc)
 }
 
 
-symbol_list *
-symbol_list_type_set (symbol_list *syms, uniqstr type_name)
+सिम्बोलो_list *
+सिम्बोलो_list_type_set (सिम्बोलो_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
-    symbol_type_set (l->content.sym, type_name, l->sym_loc);
+  for (सिम्बोलो_list *l = syms; l; l = l->next)
+    सिम्बोलो_type_set (l->content.sym, type_name, l->sym_loc);
   return syms;
 }
 
 
-symbol_list *
-symbol_list_find_symbol (symbol_list *l, const symbol *sym)
+सिम्बोलो_list *
+सिम्बोलो_list_find_सिम्बोलो (सिम्बोलो_list *l, const सिम्बोलो *sym)
 {
   for (/* Nothing. */; l && l->content.sym; l = l->next)
     if (l->content.sym == sym)
@@ -106,20 +106,20 @@ symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 `-----------------------------------------------------------------------*/
 
 void
-symbol_list_syms_print (const symbol_list *l, FILE *out)
+सिम्बोलो_list_syms_इलिम्बाग (const सिम्बोलो_list *l, FILE *out)
 {
   fputc ('[', out);
   char const *sep = "";
   for (/* Nothing. */; l && l->content.sym; l = l->next)
     {
       fputs (sep, out);
-      fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
+      fputs (l->content_type == SYMLIST_सिम्बोलो ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
              out);
-      if (l->content_type == SYMLIST_SYMBOL)
-        symbol_print (l->content.sym, out);
-      fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
+      if (l->content_type == SYMLIST_सिम्बोलो)
+        सिम्बोलो_इलिम्बाग (l->content.sym, out);
+      fputs (l->action_props.is_हालागा_used ? " (used)" : " (unused)", out);
       putc ('}', out);
       sep = ", ";
     }
@@ -131,32 +131,32 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 | Prepend NODE to the LIST.  |
 `---------------------------*/
 
-symbol_list *
-symbol_list_prepend (symbol_list *list, symbol_list *node)
+सिम्बोलो_list *
+सिम्बोलो_list_prepend (सिम्बोलो_list *list, सिम्बोलो_list *बुहोल)
 {
-  node->next = list;
-  return node;
+  बुहोल->next = list;
+  return बुहोल;
 }
 
 
-symbol_list *
-symbol_list_last (symbol_list *list)
+सिम्बोलो_list *
+सिम्बोलो_list_last (सिम्बोलो_list *list)
 {
   if (!list)
     return NULL;
-  symbol_list *next = list;
+  सिम्बोलो_list *next = list;
   while (next->next)
     next = next->next;
   return next;
 }
 
-symbol_list *
-symbol_list_append (symbol_list *list, symbol_list *node)
+सिम्बोलो_list *
+सिम्बोलो_list_append (सिम्बोलो_list *list, सिम्बोलो_list *बुहोल)
 {
   if (list)
-    symbol_list_last (list)->next = node;
+    सिम्बोलो_list_last (list)->next = बुहोल;
   else
-    list = node;
+    list = बुहोल;
   return list;
 }
 
@@ -167,9 +167,9 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 `-----------------------------------------------*/
 
 void
-symbol_list_free (symbol_list *list)
+सिम्बोलो_list_free (सिम्बोलो_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  for (सिम्बोलो_list *next; list; list = next)
     {
       next = list->next;
       named_ref_free (list->named_ref);
@@ -185,11 +185,11 @@ symbol_list_free (symbol_list *list)
 `--------------------*/
 
 int
-symbol_list_length (symbol_list const *l)
+सिम्बोलो_list_length (सिम्बोलो_list const *l)
 {
   int res = 0;
   for (/* Nothing. */;
-       l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
+       l && !(l->content_type == SYMLIST_सिम्बोलो && l->content.sym == NULL);
        l = l->next)
     ++res;
   return res;
@@ -200,8 +200,8 @@ symbol_list_length (symbol_list const *l)
 | Get item N in symbol list L.  |
 `------------------------------*/
 
-symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+सिम्बोलो_list *
+सिम्बोलो_list_n_get (सिम्बोलो_list *l, int n)
 {
   aver (0 <= n);
   for (int i = 0; i < n; ++i)
@@ -209,7 +209,7 @@ symbol_list_n_get (symbol_list *l, int n)
       l = l->next;
       aver (l);
     }
-  aver (l->content_type == SYMLIST_SYMBOL);
+  aver (l->content_type == SYMLIST_सिम्बोलो);
   aver (l->content.sym);
   return l;
 }
@@ -220,36 +220,36 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+सिम्बोलो_list_n_type_name_get (सिम्बोलो_list *l, int n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  return सिम्बोलो_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
-symbol_list_null (symbol_list *node)
+सिम्बोलो_list_null (सिम्बोलो_list *बुहोल)
 {
-  return (!node
-          || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
+  return (!बुहोल
+          || (बुहोल->content_type == SYMLIST_सिम्बोलो && !बुहोल->content.sym));
 }
 
 void
-symbol_list_code_props_set (symbol_list *node, code_props_type kind,
+सिम्बोलो_list_code_props_set (सिम्बोलो_list *बुहोल, code_props_type kind,
                             code_props const *cprops)
 {
-  switch (node->content_type)
+  switch (बुहोल->content_type)
     {
-    case SYMLIST_SYMBOL:
-      symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
-        node->content.sym->content->status = used;
+    case SYMLIST_सिम्बोलो:
+      सिम्बोलो_code_props_set (बुहोल->content.sym, kind, cprops);
+      if (बुहोल->content.sym->content->status == undeclared)
+        बुहोल->content.sym->content->status = used;
       break;
     case SYMLIST_TYPE:
       semantic_type_code_props_set
-        (semantic_type_get (node->content.sem_type->tag,
-                            &node->content.sem_type->location),
+        (semantic_type_get (बुहोल->content.sem_type->tag,
+                            &बुहोल->content.sem_type->location),
          kind, cprops);
-      if (node->content.sem_type->status == undeclared)
-        node->content.sem_type->status = used;
+      if (बुहोल->content.sem_type->status == undeclared)
+        बुहोल->content.sem_type->status = used;
       break;
     }
 }

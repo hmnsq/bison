@@ -53,17 +53,17 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_मगा_बागाय[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_मगा_बागाय || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_मगा_बागाय && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+typedef int state_item_नुमेरो;
 
 typedef struct
 {
   const state *state;
-  item_number *item;
-  state_item_number trans;
+  item_नुमेरो *item;
+  state_item_नुमेरो trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
@@ -75,24 +75,24 @@ typedef gl_list_t state_item_list;
 extern bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+extern size_t nstate_मगा_बागाय;
+extern state_item_नुमेरो *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+extern state_item *state_मगा_बागाय;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_नुमेरो s, state_item_नुमेरो off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+static inline state_item_नुमेरो
+state_item_index_lookup (state_नुमेरो s, state_item_नुमेरो off)
 {
   return state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+void state_मगा_बागाय_init (void);
+void state_मगा_बागाय_free (void);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
+void state_item_इलिम्बाग (const state_item *si, FILE *out, const char *prefix);
 const rule *state_item_rule (const state_item *si);
 
 bool production_allowed (const state_item *si, const state_item *next);

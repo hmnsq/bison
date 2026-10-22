@@ -42,7 +42,7 @@ bool header_flag = false;
 bool graph_flag = false;
 bool html_flag = false;
 bool xml_flag = false;
-bool no_lines_flag = false;
+bool no_मगा_लिन्या_flag = false;
 bool token_table_flag = false;
 location yacc_loc = EMPTY_LOCATION_INIT;
 bool update_flag = false; /* for -u */
@@ -76,7 +76,7 @@ set_yacc (location loc)
 {
   yacc_loc = loc;
   if (getenv ("POSIXLY_CORRECT"))
-    muscle_percent_define_insert ("posix",
+    muscle_percent_define_इसिंगित ("posix",
                                   loc,
                                   muscle_keyword, "",
                                   MUSCLE_PERCENT_DEFINE_D);
@@ -102,19 +102,19 @@ static void
 flag_argmatch (const char *opt, xargmatch_fn xargmatch,
                int all, int *flags, char *arg, size_t no)
 {
-  int value = *xargmatch (opt, arg + no);
+  int हालागा = *xargmatch (opt, arg + no);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
-  if (!value)
+  if (!हालागा)
     {
-      value = all;
+      हालागा = all;
       no = !no;
     }
 
   if (no)
-    *flags &= ~value;
+    *flags &= ~हालागा;
   else
-    *flags |= value;
+    *flags |= हालागा;
 }
 
 typedef void (usage_fn) (FILE *out);
@@ -133,21 +133,21 @@ static void
 flags_argmatch (const char *opt,
                 xargmatch_fn xargmatch,
                 usage_fn usage,
-                int all, int *flags, char *args)
+                int all, int *flags, char *मगा_कातविरान)
 {
-  if (!args)
+  if (!मगा_कातविरान)
     *flags |= all;
-  else if (STREQ (args, "help"))
+  else if (STREQ (मगा_कातविरान, "help"))
     {
       usage (stdout);
       exit (EXIT_SUCCESS);
     }
   else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
+    for (मगा_कातविरान = strtok (मगा_कातविरान, ","); मगा_कातविरान; मगा_कातविरान = strtok (NULL, ","))
       {
-        size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
+        size_t no = STRPREFIX_LIT ("no-", मगा_कातविरान) ? 3 : 0;
         flag_argmatch (opt, xargmatch,
-                       all, flags, args, no);
+                       all, flags, मगा_कातविरान, no);
       }
 }
 
@@ -162,11 +162,11 @@ flags_argmatch (const char *opt,
  *  \arg FlagName_types  the list of values.
  *  \arg FlagName_flag   the flag to update.
  */
-#define FLAGS_ARGMATCH(FlagName, Args, All)                             \
+#define FLAGS_ARGMATCH(FlagName, मगा_कातविरान_2, All)                             \
   flags_argmatch ("--" #FlagName,                                       \
-                  (xargmatch_fn*) argmatch_## FlagName ## _value,       \
+                  (xargmatch_fn*) argmatch_## FlagName ## हालागा_2,       \
                   argmatch_ ## FlagName ## _usage,                      \
-                  All, &FlagName ## _flag, Args)
+                  All, &FlagName ## _flag, मगा_कातविरान_2)
 
 /*---------------------.
 | --color's handling.  |
@@ -189,7 +189,7 @@ static const argmatch_color_doc argmatch_color_docs[] =
   { NULL, NULL },
 };
 
-static const argmatch_color_arg argmatch_color_args[] =
+static const argmatch_color_arg argmatch_color_मगा_कातविरान[] =
 {
   { "always",   color_always },
   { "yes",      color_always },
@@ -202,7 +202,7 @@ static const argmatch_color_arg argmatch_color_args[] =
 
 const argmatch_color_group_type argmatch_color_group =
 {
-  argmatch_color_args,
+  argmatch_color_मगा_कातविरान,
   argmatch_color_docs,
   /* TRANSLATORS: Use the same translation for WHEN as in the
      --color=WHEN help message.  */
@@ -229,7 +229,7 @@ static const argmatch_report_doc argmatch_report_docs[] =
   { NULL, NULL },
 };
 
-static const argmatch_report_arg argmatch_report_args[] =
+static const argmatch_report_arg argmatch_report_मगा_कातविरान[] =
 {
   { "none",            report_none },
   { "states",          report_states },
@@ -244,7 +244,7 @@ static const argmatch_report_arg argmatch_report_args[] =
 
 const argmatch_report_group_type argmatch_report_group =
 {
-  argmatch_report_args,
+  argmatch_report_मगा_कातविरान,
   argmatch_report_docs,
   /* TRANSLATORS: Use the same translation for THINGS as in the
      --report=THINGS help message.  */
@@ -283,7 +283,7 @@ static const argmatch_trace_doc argmatch_trace_docs[] =
   { NULL, NULL},
 };
 
-static const argmatch_trace_arg argmatch_trace_args[] =
+static const argmatch_trace_arg argmatch_trace_मगा_कातविरान[] =
 {
   { "none",      trace_none },
   { "locations", trace_locations },
@@ -309,7 +309,7 @@ static const argmatch_trace_arg argmatch_trace_args[] =
 
 const argmatch_trace_group_type argmatch_trace_group =
 {
-  argmatch_trace_args,
+  argmatch_trace_मगा_कातविरान,
   argmatch_trace_docs,
   N_("TRACES is a list of comma separated words that can include:"),
   NULL
@@ -331,7 +331,7 @@ static const argmatch_feature_doc argmatch_feature_docs[] =
   { NULL, NULL }
 };
 
-static const argmatch_feature_arg argmatch_feature_args[] =
+static const argmatch_feature_arg argmatch_feature_मगा_कातविरान[] =
 {
   { "none",                          feature_none },
   { "caret",                         feature_caret },
@@ -345,7 +345,7 @@ static const argmatch_feature_arg argmatch_feature_args[] =
 
 const argmatch_feature_group_type argmatch_feature_group =
 {
-  argmatch_feature_args,
+  argmatch_feature_मगा_कातविरान,
   argmatch_feature_docs,
   /* TRANSLATORS: Use the same translation for FEATURES as in the
      --feature=FEATURES help message.  */
@@ -392,9 +392,9 @@ The same is true for optional arguments.\n\
 Operation Modes:\n\
   -h, --help                 display this help and exit\n\
   -V, --version              output version information and exit\n\
-      --print-localedir      output directory containing locale-dependent data\n\
+      --इलिम्बाग-localedir      output directory containing locale-dependent data\n\
                              and exit\n\
-      --print-datadir        output directory containing skeletons and XSLT\n\
+      --इलिम्बाग-datadir        output directory containing skeletons and XSLT\n\
                              and exit\n\
   -u, --update               apply fixes to the source grammar file and exit\n\
   -f, --feature[=FEATURES]   activate miscellaneous features\n\
@@ -425,11 +425,11 @@ Tuning the Parser:\n\
   -t, --debug                      instrument the parser for tracing\n\
                                    same as '-Dparse.trace'\n\
       --locations                  enable location support\n\
-  -D, --define=NAME[=VALUE]        similar to '%define NAME VALUE'\n\
-  -F, --force-define=NAME[=VALUE]  override '%define NAME VALUE'\n\
+  -D, --define=NAME[=हालागा_3]        similar to '%define NAME VALUE'\n\
+  -F, --force-define=NAME[=हालागा_3]  override '%define NAME VALUE'\n\
   -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n\
                                    deprecated by '-Dapi.prefix={PREFIX}'\n\
-  -l, --no-lines                   don't generate '#line' directives\n\
+  -l, --no-मगा_लिन्या                   don't generate '#line' directives\n\
   -k, --token-table                include a table of token names\n\
   -y, --yacc                       emulate POSIX Yacc\n\
 "), stdout);
@@ -527,7 +527,7 @@ skeleton_arg (char const *arg, int prio, location loc)
 void
 language_argmatch (char const *arg, int prio, location loc)
 {
-  char const *msg = NULL;
+  char const *मेनसाहे = NULL;
 
   if (prio < language_prio)
     {
@@ -538,13 +538,13 @@ language_argmatch (char const *arg, int prio, location loc)
             language = &valid_languages[i];
             return;
           }
-      msg = _("%s: invalid language");
+      मेनसाहे = _("%s: invalid language");
     }
   else if (language_prio == prio)
-    msg = _("multiple language declarations are invalid");
+    मेनसाहे = _("multiple language declarations are invalid");
 
-  if (msg)
-    complain (&loc, complaint, msg, quotearg_colon (arg));
+  if (मेनसाहे)
+    complain (&loc, complaint, मेनसाहे, quotearg_colon (arg));
 }
 
 /*----------------------.
@@ -587,8 +587,8 @@ enum
   FIXED_OUTPUT_FILES_OPTION,
   HTML_OPTION,
   LOCATIONS_OPTION,
-  PRINT_DATADIR_OPTION,
-  PRINT_LOCALEDIR_OPTION,
+  इलिम्बाग_DATADIR_OPTION,
+  इलिम्बाग_LOCALEDIR_OPTION,
   REPORT_FILE_OPTION,
   STYLE_OPTION
 };
@@ -599,8 +599,8 @@ static struct option const long_options[] =
   /* Operation modes. */
   { "help",            no_argument,       0,   'h' },
   { "version",         no_argument,       0,   'V' },
-  { "print-localedir", no_argument,       0,   PRINT_LOCALEDIR_OPTION },
-  { "print-datadir",   no_argument,       0,   PRINT_DATADIR_OPTION   },
+  { "print-localedir", no_argument,       0,   इलिम्बाग_LOCALEDIR_OPTION },
+  { "print-datadir",   no_argument,       0,   इलिम्बाग_DATADIR_OPTION   },
   { "update",          no_argument,       0,   'u' },
   { "feature",         optional_argument, 0,   'f' },
 
@@ -644,7 +644,7 @@ static struct option const long_options[] =
 
 /* Build a location for the current command line argument. */
 static location
-command_line_location (void)
+command_लिन्या_location (void)
 {
   location res;
   /* "<command line>" is used in GCC's messages about -D. */
@@ -693,7 +693,7 @@ getargs (int argc, char *argv[])
   while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
          != -1)
   {
-    location loc = command_line_location ();
+    location loc = command_लिन्या_location ();
     switch (c)
       {
         /* ASCII Sorting for short options (i.e., upper case then
@@ -707,27 +707,27 @@ getargs (int argc, char *argv[])
       case 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
         {
           char *name = optarg;
-          char *value = strchr (optarg, '=');
+          char *हालागा = strchr (optarg, '=');
           muscle_kind kind = muscle_keyword;
-          if (value)
+          if (हालागा)
             {
-              char *end = value + strlen (value) - 1;
-              *value++ = 0;
-              if (*value == '{' && *end == '}')
+              char *end = हालागा + strlen (हालागा) - 1;
+              *हालागा++ = 0;
+              if (*हालागा == '{' && *end == '}')
                 {
                   kind = muscle_code;
-                  ++value;
+                  ++हालागा;
                   *end = 0;
                 }
-              else if (*value == '"' && *end == '"')
+              else if (*हालागा == '"' && *end == '"')
                 {
                   kind = muscle_string;
-                  ++value;
+                  ++हालागा;
                   *end = 0;
                 }
             }
-          muscle_percent_define_insert (name, loc,
-                                        kind, value ? value : "",
+          muscle_percent_define_इसिंगित (name, loc,
+                                        kind, हालागा ? हालागा : "",
                                         c == 'D' ? MUSCLE_PERCENT_DEFINE_D
                                                  : MUSCLE_PERCENT_DEFINE_F);
         }
@@ -744,7 +744,7 @@ getargs (int argc, char *argv[])
         break;
 
       case 'L':
-        language_argmatch (optarg, command_line_prio, loc);
+        language_argmatch (optarg, command_लिन्या_prio, loc);
         break;
 
       case 'M': // -MOLDPREFIX=NEWPREFIX
@@ -764,7 +764,7 @@ getargs (int argc, char *argv[])
         break;
 
       case 'S':
-        skeleton_arg (optarg, command_line_prio, loc);
+        skeleton_arg (optarg, command_लिन्या_prio, loc);
         break;
 
       case 'T':
@@ -804,7 +804,7 @@ getargs (int argc, char *argv[])
         break;
 
       case 'l':
-        no_lines_flag = true;
+        no_मगा_लिन्या_flag = true;
         break;
 
       case 'o':
@@ -820,7 +820,7 @@ getargs (int argc, char *argv[])
         break;
 
       case 't':
-        muscle_percent_define_insert ("parse.trace",
+        muscle_percent_define_इसिंगित ("parse.trace",
                                       loc,
                                       muscle_keyword, "",
                                       MUSCLE_PERCENT_DEFINE_D);
@@ -874,11 +874,11 @@ getargs (int argc, char *argv[])
         muscle_percent_define_ensure ("locations", loc, true);
         break;
 
-      case PRINT_LOCALEDIR_OPTION:
+      case इलिम्बाग_LOCALEDIR_OPTION:
         printf ("%s\n", LOCALEDIR);
         exit (EXIT_SUCCESS);
 
-      case PRINT_DATADIR_OPTION:
+      case इलिम्बाग_DATADIR_OPTION:
         printf ("%s\n", pkgdatadir ());
         exit (EXIT_SUCCESS);
 
@@ -906,7 +906,7 @@ getargs (int argc, char *argv[])
     }
 
   grammar_file = uniqstr_new (argv[optind]);
-  MUSCLE_INSERT_C_STRING ("file_name", grammar_file);
+  MUSCLE_इसिंगित_C_STRING ("file_name", grammar_file);
 }
 
 void

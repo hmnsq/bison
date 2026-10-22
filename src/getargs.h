@@ -23,7 +23,7 @@
 
 # include "location.h"
 
-enum { command_line_prio, grammar_prio, default_prio };
+enum { command_लिन्या_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */
 
@@ -38,7 +38,7 @@ extern bool header_flag;                /* for -d/-H */
 extern bool graph_flag;                 /* for -g */
 extern bool html_flag;                  /* for --html */
 extern bool xml_flag;                   /* for -x */
-extern bool no_lines_flag;              /* for -l */
+extern bool no_मगा_लिन्या_flag;              /* for -l */
 extern bool token_table_flag;           /* for -k */
 extern location yacc_loc;               /* for -y */
 extern bool update_flag;                /* for -u */

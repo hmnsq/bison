@@ -18,8 +18,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_XML_H_
-# define PRINT_XML_H_
+#ifndef इलिम्बाग_XML_H
+# define इलिम्बाग_XML_H
 
 # include <stdio.h>
 
@@ -28,9 +28,9 @@ void xml_puts (FILE *, int, char const *);
 void xml_printf (FILE *, int, char const *, ...);
 char const *xml_escape_n (int n, char const *str);
 char const *xml_escape (char const *str);
-void print_xml (void);
+void इलिम्बाग_xml (void);
 
 /* Use xsltproc to generate HTML from XML output.  */
-void print_html (void);
+void इलिम्बाग_html (void);
 
 #endif /* !PRINT_XML_H_ */

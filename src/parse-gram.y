@@ -31,7 +31,7 @@
   void parser_free (void);
 }
 
-%code top
+%code इताअस_2
 {
   /* On column 0 to please syntax-check.  */
 #include <config.h>
@@ -64,20 +64,20 @@
   static int current_prec = 0;
   static location current_lhs_loc;
   static named_ref *current_lhs_named_ref;
-  static symbol *current_lhs_symbol;
-  static symbol_class current_class = unknown_sym;
+  static सिम्बोलो *current_lhs_सिम्बोलो;
+  static सिम्बोलो_class current_class = unknown_sym;
 
   /** Set the new current left-hand side symbol, possibly common
    * to several right-hand side parts of rule.
    */
-  static void current_lhs (symbol *sym, location loc, named_ref *ref);
+  static void current_lhs (सिम्बोलो *sym, location loc, named_ref *ref);
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
   static YYLTYPE lloc_default (YYLTYPE const *, int);
 
-  #define YY_LOCATION_PRINT(File, Loc)            \
-    location_print (Loc, File)
+  #define YY_LOCATION_इलिम्बाग(File, Loc)            \
+    location_इलिम्बाग (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
@@ -96,7 +96,7 @@
   static char const *translate_code_braceless (char *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  static void handle_header (char const *हालागा);
 
   /* Handle a %error-verbose directive.  */
   static void handle_error_verbose (location const *loc, char const *directive);
@@ -104,14 +104,14 @@
   /* Handle a %file-prefix directive.  */
   static void handle_file_prefix (location const *loc,
                                   location const *dir_loc,
-                                  char const *directive, char const *value);
+                                  char const *directive, char const *हालागा);
 
   /* Handle a %language directive.  */
   static void handle_language (location const *loc, char const *lang);
 
   /* Handle a %name-prefix directive.  */
   static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+                                  char const *directive, char const *हालागा);
 
   /* Handle a %pure-parser directive.  */
   static void handle_pure_parser (location const *loc, char const *directive);
@@ -147,7 +147,7 @@
 %define api.prefix {gram_}
 %define api.pure full
 %define api.token.raw
-%define api.value.type union
+%define api.हालागा.type union
 %define locations
 %define parse.error custom
 %define parse.lac full
@@ -175,8 +175,8 @@
   PERCENT_DESTRUCTOR  "%destructor"
   PERCENT_PRINTER     "%printer"
 
-  PERCENT_LEFT        "%left"
-  PERCENT_RIGHT       "%right"
+  PERCENT_कालिवा        "%left"
+  PERCENT_कानान       "%right"
   PERCENT_NONASSOC    "%nonassoc"
   PERCENT_PRECEDENCE  "%precedence"
 
@@ -198,7 +198,7 @@
   PERCENT_LANGUAGE        "%language"
   PERCENT_NAME_PREFIX     "%name-prefix"
   PERCENT_NO_DEFAULT_PREC "%no-default-prec"
-  PERCENT_NO_LINES        "%no-lines"
+  PERCENT_NO_मगा_लिन्या        "%no-lines"
   PERCENT_NONDETERMINISTIC_PARSER "%nondeterministic-parser"
   PERCENT_OUTPUT          "%output"
   PERCENT_PURE_PARSER     "%pure-parser"
@@ -250,14 +250,14 @@
 %token <int> INT_LITERAL _("integer literal")
 %printer { fprintf (yyo, "%d", $$); } <int>
 
-%type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
-%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
+%type <सिम्बोलो*> id id_colon string_as_id सिम्बोलो token_decl token_decl_for_prec
+%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <सिम्बोलो*>
 %printer { fprintf (yyo, "%s:", $$->tag); } id_colon
 
 %type <assoc> precedence_declarator
 
-%destructor { symbol_list_free ($$); } <symbol_list*>
-%printer { symbol_list_syms_print ($$, yyo); } <symbol_list*>
+%destructor { सिम्बोलो_list_free ($$); } <सिम्बोलो_list*>
+%printer { सिम्बोलो_list_syms_इलिम्बाग ($$, yyo); } <सिम्बोलो_list*>
 
 %type <named_ref*> named_ref.opt
 
@@ -306,7 +306,7 @@
                      \==========*/
 %%
 
-input:
+पासोक:
   prologue_declarations "%%" grammar epilogue.opt
 ;
 
@@ -332,9 +332,9 @@ prologue_declaration:
     {
       muscle_percent_define_ensure ($1, @1, true);
     }
-| "%define" variable value
+| "%define" variable हालागा
     {
-      muscle_percent_define_insert ($2, @$, $3.kind, $3.chars,
+      muscle_percent_define_इसिंगित ($2, @$, $3.kind, $3.chars,
                                     MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
 | "%header" string.opt             { handle_header ($2); }
@@ -354,7 +354,7 @@ prologue_declaration:
     }
 | "%language" STRING            { handle_language (&@1, $2); }
 | "%name-prefix" STRING         { handle_name_prefix (&@$, $1, $2); }
-| "%no-lines"                   { no_lines_flag = true; }
+| "%no-lines"                   { no_मगा_लिन्या_flag = true; }
 | "%nondeterministic-parser"    { nondeterministic_parser = true; }
 | "%output" STRING              { spec_outfile = unquote ($2); gram_scanner_last_string_free (); }
 | "%param" { current_param = $1; } params { current_param = param_none; }
@@ -379,7 +379,7 @@ params:
 `----------------------*/
 
 grammar_declaration:
-  symbol_declaration
+  सिम्बोलो_declaration
 | "%start" symbols.1
     {
       grammar_start_symbols_add ($2);
@@ -387,12 +387,12 @@ grammar_declaration:
 | code_props_type "{...}" generic_symlist
     {
       code_props code;
-      code_props_symbol_action_init (&code, $2, @2);
+      code_props_सिम्बोलो_action_init (&code, $2, @2);
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = $3; list; list = list->next)
-          symbol_list_code_props_set (list, $1, &code);
-        symbol_list_free ($3);
+        for (सिम्बोलो_list *list = $3; list; list = list->next)
+          सिम्बोलो_list_code_props_set (list, $1, &code);
+        सिम्बोलो_list_free ($3);
       }
     }
 | "%default-prec"
@@ -433,7 +433,7 @@ code_props_type:
 
 union_name:
   %empty {}
-| ID     { muscle_percent_define_insert ("api.value.union.name",
+| ID     { muscle_percent_define_इसिंगित ("api.value.union.name",
                                          @1, muscle_keyword, $1,
                                          MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE); }
 ;
@@ -448,37 +448,37 @@ grammar_declaration:
 ;
 
 
-%type <symbol_list*> nterm_decls symbol_decls symbols.1
+%type <सिम्बोलो_list*> nterm_decls सिम्बोलो_decls symbols.1
       token_decls token_decls_for_prec
       token_decl.1 token_decl_for_prec.1;
-symbol_declaration:
+सिम्बोलो_declaration:
   "%nterm" { current_class = nterm_sym; } nterm_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      सिम्बोलो_list_free ($syms);
     }
 | "%token" { current_class = token_sym; } token_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      सिम्बोलो_list_free ($syms);
     }
-| "%type" { current_class = pct_type_sym; } symbol_decls[syms]
+| "%type" { current_class = pct_type_sym; } सिम्बोलो_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      सिम्बोलो_list_free ($syms);
     }
 | precedence_declarator token_decls_for_prec[syms]
     {
       ++current_prec;
-      for (symbol_list *list = $syms; list; list = list->next)
-        symbol_precedence_set (list->content.sym, current_prec, $1, @1);
-      symbol_list_free ($syms);
+      for (सिम्बोलो_list *list = $syms; list; list = list->next)
+        सिम्बोलो_precedence_set (list->content.sym, current_prec, $1, @1);
+      सिम्बोलो_list_free ($syms);
     }
 ;
 
 precedence_declarator:
-  "%left"       { $$ = left_assoc; }
-| "%right"      { $$ = right_assoc; }
+  "%left"       { $$ = कालिवा_assoc; }
+| "%right"      { $$ = कानान_assoc; }
 | "%nonassoc"   { $$ = non_assoc; }
 | "%precedence" { $$ = precedence_assoc; }
 ;
@@ -494,15 +494,15 @@ tag.opt:
 | TAG    { $$ = $1; }
 ;
 
-%type <symbol_list*> generic_symlist generic_symlist_item;
+%type <सिम्बोलो_list*> generic_symlist generic_symlist_item;
 generic_symlist:
   generic_symlist_item
-| generic_symlist generic_symlist_item   { $$ = symbol_list_append ($1, $2); }
+| generic_symlist generic_symlist_item   { $$ = सिम्बोलो_list_append ($1, $2); }
 ;
 
 generic_symlist_item:
-  symbol    { $$ = symbol_list_sym_new ($1, @1); }
-| tag       { $$ = symbol_list_type_new ($1, @1); }
+  सिम्बोलो    { $$ = सिम्बोलो_list_sym_new ($1, @1); }
+| tag       { $$ = सिम्बोलो_list_type_new ($1, @1); }
 ;
 
 tag:
@@ -536,29 +536,29 @@ token_decls:
     }
 | TAG token_decl.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = सिम्बोलो_list_type_set ($syms, $TAG);
     }
 | token_decls TAG token_decl.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = सिम्बोलो_list_append ($1, सिम्बोलो_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbol declarations for %token or %nterm.
 token_decl.1:
-  token_decl                { $$ = symbol_list_sym_new ($1, @1); }
-| token_decl.1 token_decl   { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+  token_decl                { $$ = सिम्बोलो_list_sym_new ($1, @1); }
+| token_decl.1 token_decl   { $$ = सिम्बोलो_list_append ($1, सिम्बोलो_list_sym_new ($2, @2)); }
 
 // One symbol declaration for %token or %nterm.
 token_decl:
   id int.opt[num] alias
     {
       $$ = $id;
-      symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
+      सिम्बोलो_class_set ($id, current_class, @id, true);
+      if (0 <= $नुमेरो)
+        सिम्बोलो_code_set ($id, $नुमेरो, @नुमेरो);
       if ($alias)
-        symbol_make_alias ($id, $alias, @alias);
+        सिम्बोलो_make_alias ($id, $alias, @alias);
     }
 ;
 
@@ -568,14 +568,14 @@ int.opt:
 | INT_LITERAL
 ;
 
-%type <symbol*> alias;
+%type <सिम्बोलो*> alias;
 alias:
   %empty         { $$ = NULL; }
 | string_as_id   { $$ = $1; }
 | TSTRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = सिम्बोलो_get ($1, @1);
+      सिम्बोलो_class_set ($$, token_sym, @1, false);
       $$->translatable = true;
     }
 ;
@@ -596,29 +596,29 @@ token_decls_for_prec:
     }
 | TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = सिम्बोलो_list_type_set ($syms, $TAG);
     }
 | token_decls_for_prec TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = सिम्बोलो_list_append ($1, सिम्बोलो_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more token declarations for precedence declaration.
 token_decl_for_prec.1:
   token_decl_for_prec
-    { $$ = symbol_list_sym_new ($1, @1); }
+    { $$ = सिम्बोलो_list_sym_new ($1, @1); }
 | token_decl_for_prec.1 token_decl_for_prec
-    { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+    { $$ = सिम्बोलो_list_append ($1, सिम्बोलो_list_sym_new ($2, @2)); }
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
   id int.opt[num]
     {
       $$ = $id;
-      symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
+      सिम्बोलो_class_set ($id, token_sym, @id, false);
+      if (0 <= $नुमेरो)
+        सिम्बोलो_code_set ($id, $नुमेरो, @नुमेरो);
     }
 | string_as_id
 ;
@@ -629,34 +629,34 @@ token_decl_for_prec:
 `-----------------------------------*/
 
 // A non empty list of typed symbols (for %type).
-symbol_decls:
+सिम्बोलो_decls:
   symbols.1[syms]
     {
       $$ = $syms;
     }
 | TAG symbols.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = सिम्बोलो_list_type_set ($syms, $TAG);
     }
-| symbol_decls TAG symbols.1[syms]
+| सिम्बोलो_decls TAG symbols.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = सिम्बोलो_list_append ($1, सिम्बोलो_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbols.
 symbols.1:
-  symbol
+  सिम्बोलो
     {
       if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_sym_new ($symbol, @symbol);
+        सिम्बोलो_class_set ($सिम्बोलो, current_class, @सिम्बोलो, false);
+      $$ = सिम्बोलो_list_sym_new ($सिम्बोलो, @सिम्बोलो);
     }
-  | symbols.1 symbol
+  | symbols.1 सिम्बोलो
     {
       if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
+        सिम्बोलो_class_set ($सिम्बोलो, current_class, @सिम्बोलो, false);
+      $$ = सिम्बोलो_list_append ($1, सिम्बोलो_list_sym_new ($सिम्बोलो, @सिम्बोलो));
     }
 ;
 
@@ -697,17 +697,17 @@ rhses.1:
 %token PERCENT_EMPTY "%empty";
 rhs:
   %empty
-    { grammar_current_rule_begin (current_lhs_symbol, current_lhs_loc,
+    { grammar_current_rule_begin (current_lhs_सिम्बोलो, current_lhs_loc,
                                   current_lhs_named_ref); }
-| rhs symbol named_ref.opt
-    { grammar_current_rule_symbol_append ($2, @2, $3); }
+| rhs सिम्बोलो named_ref.opt
+    { grammar_current_rule_सिम्बोलो_append ($2, @2, $3); }
 | rhs tag.opt "{...}"[action] named_ref.opt[name]
     { grammar_current_rule_action_append ($action, @action, $name, $[tag.opt]); }
 | rhs "%?{...}"
     { grammar_current_rule_predicate_append ($2, @2); }
 | rhs "%empty"
     { grammar_current_rule_empty_set (@2); }
-| rhs "%prec" symbol
+| rhs "%prec" सिम्बोलो
     { grammar_current_rule_prec_set ($3, @3); }
 | rhs "%dprec" INT_LITERAL
     { grammar_current_rule_dprec_set ($3, @3); }
@@ -740,9 +740,9 @@ variable:
   {
     char const *chars;
     muscle_kind kind;
-  } value_type;
+  } हालागा_type;
 };
-%type <value_type> value;
+%type <हालागा_type> हालागा;
 %printer
 {
   switch ($$.kind)
@@ -751,9 +751,9 @@ variable:
     case muscle_keyword: fprintf (yyo,   "%s",   $$.chars); break;
     case muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); break;
     }
-} <value_type>;
+} <हालागा_type>;
 
-value:
+हालागा:
   %empty  { $$.kind = muscle_keyword; $$.chars = ""; }
 | ID      { $$.kind = muscle_keyword; $$.chars = $1; }
 | STRING  { $$.kind = muscle_string;  $$.chars = unquote ($1); gram_scanner_last_string_free ();}
@@ -770,7 +770,7 @@ value:
 
 id:
   ID
-    { $$ = symbol_from_uniqstr ($1, @1); }
+    { $$ = सिम्बोलो_from_uniqstr ($1, @1); }
 | CHAR_LITERAL
     {
       const char *var = "api.token.raw";
@@ -788,18 +788,18 @@ id:
           location loc = muscle_percent_define_get_loc (var);
           subcomplain (&loc, complaint, _("definition of %s"), var);
         }
-      $$ = symbol_get (char_name ($1), @1);
-      symbol_class_set ($$, token_sym, @1, false);
-      symbol_code_set ($$, $1, @1);
+      $$ = सिम्बोलो_get (char_name ($1), @1);
+      सिम्बोलो_class_set ($$, token_sym, @1, false);
+      सिम्बोलो_code_set ($$, $1, @1);
     }
 ;
 
 id_colon:
-  ID_COLON { $$ = symbol_from_uniqstr ($1, @1); }
+  ID_COLON { $$ = सिम्बोलो_from_uniqstr ($1, @1); }
 ;
 
 
-symbol:
+सिम्बोलो:
   id
 | string_as_id
 ;
@@ -808,8 +808,8 @@ symbol:
 string_as_id:
   STRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = सिम्बोलो_get ($1, @1);
+      सिम्बोलो_class_set ($$, token_sym, @1, false);
     }
 ;
 
@@ -830,7 +830,7 @@ yyreport_syntax_error (const yypcontext_t *ctx)
   int res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
+  enum { मगा_कातविरान_MAX = 5 };
   const char *argv[ARGS_MAX];
   int argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
@@ -838,7 +838,7 @@ yyreport_syntax_error (const yypcontext_t *ctx)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      int nexpected = yypcontext_expected_tokens (ctx, expected, मगा_कातविरान_MAX - 1);
       if (nexpected < 0)
         res = nexpected;
       else
@@ -893,7 +893,7 @@ translate_code (char *code, location loc, bool plain)
   if (plain)
     code_props_plain_init (&plain_code, code, loc);
   else
-    code_props_symbol_action_init (&plain_code, code, loc);
+    code_props_सिम्बोलो_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
   return plain_code.code;
@@ -953,12 +953,12 @@ add_param (param_type type, char *decl, location loc)
 
 
 static void
-handle_header (char const *value)
+handle_header (char const *हालागा)
 {
   header_flag = true;
-  if (value)
+  if (हालागा)
     {
-      char *file = unquote (value);
+      char *file = unquote (हालागा);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -970,7 +970,7 @@ static void
 handle_error_verbose (location const *loc, char const *directive)
 {
   bison_directive (loc, directive);
-  muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
+  muscle_percent_define_इसिंगित (directive, *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
@@ -978,16 +978,16 @@ handle_error_verbose (location const *loc, char const *directive)
 static void
 handle_file_prefix (location const *loc,
                     location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+                    char const *directive, char const *हालागा_quoted)
 {
-  char *value = unquote (value_quoted);
+  char *हालागा = unquote (हालागा_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
   if (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
-      spec_file_prefix = value;
+      spec_file_prefix = हालागा;
     }
   else
     {
@@ -1009,25 +1009,25 @@ handle_language (location const *loc, char const *lang)
 
 static void
 handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+                    char const *directive, char const *हालागा_quoted)
 {
-  char *value = unquote (value_quoted);
+  char *हालागा = unquote (हालागा_quoted);
   bison_directive (loc, directive);
 
   char buf1[1024];
   size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
+  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, हालागा);
   if (!old)
     xalloc_die ();
 
   if (location_empty (spec_name_prefix_loc))
     {
-      spec_name_prefix = value;
+      spec_name_prefix = हालागा;
       spec_name_prefix_loc = *loc;
 
       char buf2[1024];
       size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
+      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", हालागा);
       if (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
@@ -1047,7 +1047,7 @@ handle_pure_parser (location const *loc, char const *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
-  muscle_percent_define_insert ("api.pure", *loc, muscle_keyword, "",
+  muscle_percent_define_इसिंगित ("api.pure", *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
@@ -1119,9 +1119,9 @@ handle_yacc (location const *loc)
 
 
 static void
-gram_error (location const *loc, char const *msg)
+gram_error (location const *loc, char const *मेनसाहे)
 {
-  complain (loc, complaint, "%s", msg);
+  complain (loc, complaint, "%s", मेनसाहे);
 }
 
 static char const *
@@ -1138,12 +1138,12 @@ char_name (char c)
 }
 
 static void
-current_lhs (symbol *sym, location loc, named_ref *ref)
+current_lhs (सिम्बोलो *sym, location loc, named_ref *ref)
 {
-  current_lhs_symbol = sym;
+  current_lhs_सिम्बोलो = sym;
   current_lhs_loc = loc;
   if (sym)
-    symbol_location_as_lhs_set (sym, loc);
+    सिम्बोलो_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
      node.  This is because a single named-ref in the grammar may

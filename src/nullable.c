@@ -36,13 +36,13 @@
 typedef struct rule_list
 {
   struct rule_list *next;
-  const rule *value;
+  const rule *हालागा;
 } rule_list;
 
 bool *nullable = NULL;
 
 static void
-nullable_print (FILE *out)
+nullable_इलिम्बाग (FILE *out)
 {
   fputs ("NULLABLE\n", out);
   for (int i = ntokens; i < nsyms; i++)
@@ -64,11 +64,11 @@ nullable_compute (void)
      Supposedly NRITEMS - NRULES is enough.  But why take the risk?  */
   rule_list *relts = xnmalloc (nritems + nnterms + 1, sizeof *relts);
 
-  symbol_number *squeue = xnmalloc (nnterms, sizeof *squeue);
-  symbol_number *s2 = squeue;
+  सिम्बोलो_नुमेरो *squeue = xnmalloc (nnterms, sizeof *squeue);
+  सिम्बोलो_नुमेरो *s2 = squeue;
   {
     rule_list *p = relts;
-    for (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
+    for (rule_नुमेरो ruleno = 0; ruleno < nrules; ++ruleno)
       if (rules[ruleno].useful)
         {
           const rule *r = &rules[ruleno];
@@ -76,18 +76,18 @@ nullable_compute (void)
             {
               /* This rule has a non empty RHS. */
               bool any_tokens = false;
-              for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+              for (item_नुमेरो *rp = r->rhs; *rp >= 0; ++rp)
                 if (ISTOKEN (*rp))
                   any_tokens = true;
 
               /* This rule has only nonterminals: schedule it for the second
                  pass.  */
               if (!any_tokens)
-                for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+                for (item_नुमेरो *rp = r->rhs; *rp >= 0; ++rp)
                   {
                     rcount[ruleno]++;
                     p->next = rsets[*rp - ntokens];
-                    p->value = r;
+                    p->हालागा = r;
                     rsets[*rp - ntokens] = p;
                     p++;
                   }
@@ -96,25 +96,25 @@ nullable_compute (void)
             {
               /* This rule has an empty RHS. */
               if (r->useful
-                  && ! nullable[r->lhs->number - ntokens])
+                  && ! nullable[r->lhs->नुमेरो_2 - ntokens])
                 {
-                  nullable[r->lhs->number - ntokens] = true;
-                  *s2++ = r->lhs->number;
+                  nullable[r->lhs->नुमेरो_2 - ntokens] = true;
+                  *s2++ = r->lhs->नुमेरो_2;
                 }
             }
         }
   }
 
-  symbol_number *s1 = squeue;
+  सिम्बोलो_नुमेरो *s1 = squeue;
   while (s1 < s2)
     for (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
       {
-        const rule *r = p->value;
-        if (--rcount[r->number] == 0)
-          if (r->useful && ! nullable[r->lhs->number - ntokens])
+        const rule *r = p->हालागा;
+        if (--rcount[r->नुमेरो_2] == 0)
+          if (r->useful && ! nullable[r->lhs->नुमेरो_2 - ntokens])
             {
-              nullable[r->lhs->number - ntokens] = true;
-              *s2++ = r->lhs->number;
+              nullable[r->lhs->नुमेरो_2 - ntokens] = true;
+              *s2++ = r->lhs->नुमेरो_2;
             }
       }
 
@@ -124,7 +124,7 @@ nullable_compute (void)
   free (relts);
 
   if (trace_flag & trace_sets)
-    nullable_print (stderr);
+    nullable_इलिम्बाग (stderr);
 }
 
 

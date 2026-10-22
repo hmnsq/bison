@@ -68,8 +68,8 @@ void set_goto_map (void);
  *       Thus, remove all goto entries involving this state.
  *     - The new state number.
  */
-void lalr_update_state_numbers (state_number old_to_new[],
-                                state_number nstates_old);
+void lalr_update_state_numbers (state_नुमेरो old_to_new[],
+                                state_नुमेरो nstates_old);
 
 
 /** Release the information related to lookahead tokens.
@@ -77,27 +77,27 @@ void lalr_update_state_numbers (state_number old_to_new[],
    Can be performed once the action tables are computed.  */
 void lalr_free (void);
 
-typedef size_t goto_number;
-# define GOTO_NUMBER_MAXIMUM ((goto_number) -1)
+typedef size_t goto_नुमेरो;
+# define GOTO_नुमेरो_MAXIMUM ((goto_नुमेरो) -1)
 
 /** Index into #from_state and #to_state.
 
    All the transitions that accept a particular variable are grouped
    together in FROM_STATE and TO_STATE, with indexes from GOTO_MAP[I -
    NTOKENS] to GOTO_MAP[I - NTOKENS + 1] - 1 (including both).  */
-extern goto_number *goto_map;
+extern goto_नुमेरो *goto_map;
 
 /** The size of #from_state and #to_state.  */
-extern goto_number ngotos;
+extern goto_नुमेरो ngotos;
 
 /** State number which a transition leads from.  */
-extern state_number *from_state;
+extern state_नुमेरो *from_state;
 
 /** State number it leads to.  */
-extern state_number *to_state;
+extern state_नुमेरो *to_state;
 
 /** The number of the goto from state SRC labeled with nterm SYM.  */
-goto_number map_goto (state_number src, symbol_number sym);
+goto_नुमेरो map_goto (state_नुमेरो src, सिम्बोलो_नुमेरो sym);
 
 /* goto_follows[i] is the set of tokens following goto i.  */
 extern bitsetv goto_follows;

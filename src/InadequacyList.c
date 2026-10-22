@@ -28,19 +28,19 @@ ContributionIndex const ContributionIndex__none = -1;
 ContributionIndex const ContributionIndex__error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, सिम्बोलो *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_बुहोल_बिलांग *बुहोल_बिलांग)
 {
   InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  result->id = *बुहोल_बिलांग;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  if (INT_ADD_WRAPV (*बुहोल_बिलांग, 1, बुहोल_बिलांग))
     aver (false);
   IGNORE_TYPE_LIMITS_END
   result->next = NULL;
   result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
+  result->contribution_बिलांग_2 = bitset_बिलांग (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
   return result;
@@ -51,10 +51,10 @@ InadequacyList__delete (InadequacyList *self)
 {
   while (self)
     {
-      InadequacyList *node = self;
+      InadequacyList *बुहोल = self;
       self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      bitset_free (बुहोल->inadequacy.conflict.actions);
+      free (बुहोल);
     }
 }
 
@@ -62,16 +62,16 @@ ContributionIndex
 InadequacyList__getShiftContributionIndex (InadequacyList const *self)
 {
   if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
+                    self->manifestingState->reductions->नुमेरो))
     return ContributionIndex__none;
-  return self->contributionCount - 1;
+  return self->contribution_बिलांग_2 - 1;
 }
 
-symbol *
+सिम्बोलो *
 InadequacyList__getContributionToken (InadequacyList const *self,
                                       ContributionIndex i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
+  aver (0 <= i && i < self->contribution_बिलांग_2); (void) i;
   return self->inadequacy.conflict.token;
 }
 

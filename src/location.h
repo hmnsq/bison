@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  int लिन्या;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -59,7 +59,7 @@ static inline void
 boundary_set (boundary *p, const char *f, int l, int c, int b)
 {
   p->file = f;
-  p->line = l;
+  p->लिन्या = l;
   p->column = c;
   p->byte = b;
 }
@@ -76,7 +76,7 @@ boundary_cmp (boundary a, boundary b)
     : b.file ? -1
     : 0;
   if (!res)
-    res = a.line - b.line;
+    res = a.लिन्या - b.लिन्या;
   if (!res)
     res = a.column - b.column;
   return res;
@@ -87,7 +87,7 @@ static inline bool
 equal_boundaries (boundary a, boundary b)
 {
   return (a.column == b.column
-          && a.line == b.line
+          && a.लिन्या == b.लिन्या
           && UNIQSTR_EQ (a.file, b.file));
 }
 
@@ -115,7 +115,7 @@ void location_compute (location *loc,
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+int location_इलिम्बाग (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
 void caret_init (void);

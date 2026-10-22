@@ -45,9 +45,9 @@
    repetition, like in *.output files. */
 
 static void
-print_core (struct obstack *oout, state *s)
+इलिम्बाग_core (struct obstack *oout, state *s)
 {
-  item_index const *sitems = s->items;
+  item_index const *sitems = s->मगा_बागाय;
   sym_content *previous_lhs = NULL;
   size_t snritems = s->nitems;
 
@@ -59,26 +59,26 @@ print_core (struct obstack *oout, state *s)
       snritems = nitemset;
     }
 
-  obstack_printf (oout, _("State %d"), s->number);
+  obstack_printf (oout, _("State %d"), s->नुमेरो_2);
   obstack_sgrow (oout, "\\n\\l");
   for (size_t i = 0; i < snritems; ++i)
     {
-      item_number const *sp1 = ritem + sitems[i];
+      item_नुमेरो const *sp1 = ritem + sitems[i];
       rule const *r = item_rule (sp1);
 
-      obstack_printf (oout, "%3d ", r->number);
-      if (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
-                                      r->lhs->symbol->tag))
+      obstack_printf (oout, "%3d ", r->नुमेरो_2);
+      if (previous_lhs && UNIQSTR_EQ (previous_lhs->सिम्बोलो->tag,
+                                      r->lhs->सिम्बोलो->tag))
         obstack_printf (oout, "%*s| ",
-                        (int) strlen (previous_lhs->symbol->tag), "");
+                        (int) strlen (previous_lhs->सिम्बोलो->tag), "");
       else
         {
-          obstack_backslash (oout, r->lhs->symbol->tag);
+          obstack_backslash (oout, r->lhs->सिम्बोलो->tag);
           obstack_printf (oout, ": ");
         }
       previous_lhs = r->lhs;
 
-      for (item_number const *sp = r->rhs; sp < sp1; sp++)
+      for (item_नुमेरो const *sp = r->rhs; sp < sp1; sp++)
         {
           obstack_backslash (oout, symbols[*sp]->tag);
           obstack_1grow (oout, ' ');
@@ -87,7 +87,7 @@ print_core (struct obstack *oout, state *s)
       obstack_sgrow (oout, "•");
 
       if (0 <= *r->rhs)
-        for (item_number const *sp = sp1; 0 <= *sp; ++sp)
+        for (item_नुमेरो const *sp = sp1; 0 <= *sp; ++sp)
           {
             obstack_1grow (oout, ' ');
             obstack_backslash (oout, symbols[*sp]->tag);
@@ -97,7 +97,7 @@ print_core (struct obstack *oout, state *s)
 
       /* Experimental feature: display the lookahead tokens. */
       if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
+          && item_नुमेरो_is_rule_नुमेरो (*sp1))
         {
           /* Find the reduction we are handling.  */
           reductions *reds = s->reductions;
@@ -130,18 +130,18 @@ print_core (struct obstack *oout, state *s)
 `---------------------------------------------------------------*/
 
 static void
-print_actions (state const *s, FILE *fgraph)
+इलिम्बाग_actions (state const *s, FILE *fgraph)
 {
   transitions const *trans = s->transitions;
 
-  if (!trans->num && !s->reductions)
+  if (!trans->नुमेरो && !s->reductions)
     return;
 
-  for (int i = 0; i < trans->num; i++)
+  for (int i = 0; i < trans->नुमेरो; i++)
     if (!TRANSITION_IS_DISABLED (trans, i))
       {
         const state *s1 = trans->states[i];
-        const symbol_number sym = s1->accessing_symbol;
+        const सिम्बोलो_नुमेरो sym = s1->accessing_सिम्बोलो;
 
         /* Shifts are solid, gotos are dashed, and error is dotted.  */
         char const *style =
@@ -152,7 +152,7 @@ print_actions (state const *s, FILE *fgraph)
         if (TRANSITION_IS_ERROR (trans, i)
             && STRNEQ (symbols[sym]->tag, "error"))
           abort ();
-        output_edge (s->number, s1->number,
+        output_edge (s->नुमेरो_2, s1->नुमेरो_2,
                      TRANSITION_IS_ERROR (trans, i) ? NULL : symbols[sym]->tag,
                      style, fgraph);
       }
@@ -167,30 +167,30 @@ print_actions (state const *s, FILE *fgraph)
 `-------------------------------------------------------------*/
 
 static void
-print_state (state *s, FILE *fgraph)
+इलिम्बाग_state (state *s, FILE *fgraph)
 {
-  struct obstack node_obstack;
+  struct obstack बुहोल_obstack;
 
   /* A node's label contains its items.  */
-  obstack_init (&node_obstack);
-  print_core (&node_obstack, s);
-  output_node (s->number, obstack_finish0 (&node_obstack), fgraph);
-  obstack_free (&node_obstack, 0);
+  obstack_init (&बुहोल_obstack);
+  इलिम्बाग_core (&बुहोल_obstack, s);
+  output_बुहोल (s->नुमेरो_2, obstack_finish0 (&बुहोल_obstack), fgraph);
+  obstack_free (&बुहोल_obstack, 0);
 
   /* Output the edges.  */
-  print_actions (s, fgraph);
+  इलिम्बाग_actions (s, fgraph);
 }
 
 
 void
-print_graph (void)
+इलिम्बाग_graph (void)
 {
   FILE *fgraph = xfopen (spec_graph_file, "w");
   start_graph (fgraph);
 
   /* Output nodes and edges. */
   for (int i = 0; i < nstates; i++)
-    print_state (states[i], fgraph);
+    इलिम्बाग_state (states[i], fgraph);
 
   finish_graph (fgraph);
   xfclose (fgraph);

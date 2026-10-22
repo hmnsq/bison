@@ -47,8 +47,8 @@ static void at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive
 static void at_basename (int argc, char *argv[], char**, int*);
 static void at_complain (int argc, char *argv[], char**, int*);
 static void at_output (int argc, char *argv[], char **name, int *lineno);
-static void fail_for_at_directive_too_many_args (char const *at_directive_name);
-static void fail_for_at_directive_too_few_args (char const *at_directive_name);
+static void fail_for_at_directive_too_many_मगा_कातविरान (char const *at_directive_name);
+static void fail_for_at_directive_too_few_मगा_कातविरान (char const *at_directive_name);
 static void fail_for_invalid_at (char const *at);
 static void output_mapped_file (char const *name);
 %}
@@ -58,7 +58,7 @@ macro      [bm]4_[a-zA-Z_0-9]*
 /* Safe sequence of word-constituent characters.  */
 identifier [A-Za-z_0-9]+
 
-%x SC_AT_DIRECTIVE_ARGS
+%x SC_AT_DIRECTIVE_मगा_कातविरान
 %x SC_AT_DIRECTIVE_SKIP_WS
 
 %%
@@ -100,7 +100,7 @@ identifier [A-Za-z_0-9]+
 {macro}         {
                   location loc = empty_loc;
                   loc.start.file = map_file_name (out_name);
-                  loc.start.line = out_lineno;
+                  loc.start.लिन्या = out_lineno;
                   loc.end = loc.start;
                   complain (&loc, Wother,
                             "suspicious sequence in the output: %s", yytext);
@@ -118,7 +118,7 @@ identifier [A-Za-z_0-9]+
   return EOF;
 }
 
-<SC_AT_DIRECTIVE_ARGS>
+<SC_AT_DIRECTIVE_मगा_कातविरान>
 {
   [^@]+  STRING_GROW ();
 
@@ -130,7 +130,7 @@ identifier [A-Za-z_0-9]+
 
   @[,)] {
     if (argc >= ARGC_MAX)
-      fail_for_at_directive_too_many_args (argv[0]);
+      fail_for_at_directive_too_many_मगा_कातविरान (argv[0]);
 
     argv[argc++] = obstack_finish0 (&obstack_for_string);
 
@@ -153,10 +153,10 @@ identifier [A-Za-z_0-9]+
 <SC_AT_DIRECTIVE_SKIP_WS>
 {
   [ \t\r\n]    continue;
-  .            yyless (0); BEGIN SC_AT_DIRECTIVE_ARGS;
+  .            yyless (0); BEGIN SC_AT_DIRECTIVE_मगा_कातविरान;
 }
 
-<SC_AT_DIRECTIVE_ARGS,SC_AT_DIRECTIVE_SKIP_WS>
+<SC_AT_DIRECTIVE_मगा_कातविरान,SC_AT_DIRECTIVE_SKIP_WS>
 {
   <<EOF>>  complain (NULL, fatal, _("unclosed %s directive in skeleton"), argv[0]);
 }
@@ -170,7 +170,7 @@ at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun)
   yytext[yyleng-1] = '\0';
   obstack_grow (&obstack_for_string, yytext, yyleng);
   argv[(*argc)++] = obstack_finish (&obstack_for_string);
-  BEGIN SC_AT_DIRECTIVE_ARGS;
+  BEGIN SC_AT_DIRECTIVE_मगा_कातविरान;
 }
 
 /*------------------------.
@@ -223,7 +223,7 @@ at_basename (int argc, char *argv[], char **out_namep, int *out_linenop)
   (void) out_namep;
   (void) out_linenop;
   if (2 < argc)
-    fail_for_at_directive_too_many_args (argv[0]);
+    fail_for_at_directive_too_many_मगा_कातविरान (argv[0]);
   fputs (last_component (argv[1]), yyout);
 }
 
@@ -231,7 +231,7 @@ static void
 at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
 {
   if (argc < 4)
-    fail_for_at_directive_too_few_args (argv[0]);
+    fail_for_at_directive_too_few_मगा_कातविरान (argv[0]);
 
   (void) out_namep;
   (void) out_linenop;
@@ -246,14 +246,14 @@ at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
       boundary_set_from_string (&loc.end, argv[3]);
       locp = &loc;
     }
-  complain_args (locp, w, argc - 4, argv + 4);
+  complain_मगा_कातविरान (locp, w, argc - 4, argv + 4);
 }
 
 static void
 at_output (int argc, char *argv[], char **out_namep, int *out_linenop)
 {
   if (3 < argc)
-    fail_for_at_directive_too_many_args (argv[0]);
+    fail_for_at_directive_too_many_मगा_कातविरान (argv[0]);
   if (*out_namep)
     {
       free (*out_namep);
@@ -267,14 +267,14 @@ at_output (int argc, char *argv[], char **out_namep, int *out_linenop)
 }
 
 static void
-fail_for_at_directive_too_few_args (char const *at_directive_name)
+fail_for_at_directive_too_few_मगा_कातविरान (char const *at_directive_name)
 {
   complain (NULL, fatal, _("too few arguments for %s directive in skeleton"),
             at_directive_name);
 }
 
 static void
-fail_for_at_directive_too_many_args (char const *at_directive_name)
+fail_for_at_directive_too_many_मगा_कातविरान (char const *at_directive_name)
 {
   complain (NULL, fatal, _("too many arguments for %s directive in skeleton"),
             at_directive_name);

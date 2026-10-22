@@ -33,7 +33,7 @@ typedef struct merger_list
   uniqstr name;
   /* One symbol whose type is the one used by all the symbols on which
      this merging function is used.  */
-  symbol *sym;
+  सिम्बोलो *sym;
   /* Where SYM was bound to this merging function.  */
   location type_declaration_loc;
 } merger_list;
@@ -42,7 +42,7 @@ void free_merger_functions (void);
 extern merger_list *merge_functions;
 
 /* List of the start symbols.  */
-extern symbol_list *start_symbols;
+extern सिम्बोलो_list *start_symbols;
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
 
@@ -50,22 +50,22 @@ extern symbol_list *start_symbols;
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *switching_token (const symbol *start);
+सिम्बोलो *switching_token (const सिम्बोलो *start);
 
-void grammar_start_symbols_add (symbol_list *syms);
+void grammar_start_symbols_add (सिम्बोलो_list *syms);
 
-void grammar_current_rule_begin (symbol *lhs, location loc,
+void grammar_current_rule_begin (सिम्बोलो *lhs, location loc,
                                  named_ref *lhs_named_ref);
 void grammar_current_rule_end (location loc);
 void grammar_midrule_action (void);
 /* Apply %empty to the current rule.  */
 void grammar_current_rule_empty_set (location loc);
-void grammar_current_rule_prec_set (symbol *precsym, location loc);
+void grammar_current_rule_prec_set (सिम्बोलो *precsym, location loc);
 void grammar_current_rule_dprec_set (int dprec, location loc);
 void grammar_current_rule_merge_set (uniqstr name, location loc);
-void grammar_current_rule_expect_sr (int count, location loc);
-void grammar_current_rule_expect_rr (int count, location loc);
-void grammar_current_rule_symbol_append (symbol *sym, location loc,
+void grammar_current_rule_expect_sr (int बिलांग, location loc);
+void grammar_current_rule_expect_rr (int बिलांग, location loc);
+void grammar_current_rule_सिम्बोलो_append (सिम्बोलो *sym, location loc,
                                          named_ref *nref);
 /* Attach an ACTION to the current rule.  */
 void grammar_current_rule_action_append (const char *action, location loc,

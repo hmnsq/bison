@@ -47,15 +47,15 @@ typedef enum
   token_sym,
   /** Nonterminal. */
   nterm_sym
-} symbol_class;
+} सिम्बोलो_class;
 
 
 /** Internal token numbers. */
-typedef int symbol_number;
-# define SYMBOL_NUMBER_MAXIMUM INT_MAX
+typedef int सिम्बोलो_नुमेरो;
+# define सिम्बोलो_नुमेरो_MAXIMUM INT_MAX
 
 
-typedef struct symbol symbol;
+typedef struct सिम्बोलो सिम्बोलो;
 typedef struct sym_content sym_content;
 
 /* Declaration status of a symbol.
@@ -89,7 +89,7 @@ typedef enum code_props_type code_props_type;
 
 enum { CODE_PROPS_SIZE = 2 };
 
-struct symbol
+struct सिम्बोलो
 {
   /** The key, name of the symbol.  */
   uniqstr tag;
@@ -109,7 +109,7 @@ struct symbol
   bool location_of_lhs;
 
   /** Points to the other in the symbol-string pair for an alias. */
-  symbol *alias;
+  सिम्बोलो *alias;
 
   /** Whether this symbol is the alias of another or not. */
   bool is_alias;
@@ -122,7 +122,7 @@ struct sym_content
 {
   /** The main symbol that denotes this content (it contains the
       possible alias). */
-  symbol *symbol;
+  सिम्बोलो *सिम्बोलो;
 
   /** Its \c \%type.
 
@@ -144,7 +144,7 @@ struct sym_content
       \c symbol_destructor_printer_get will compute the correct one. */
   code_props props[CODE_PROPS_SIZE];
 
-  symbol_number number;
+  सिम्बोलो_नुमेरो नुमेरो_2;
   location prec_loc;
   int prec;
   assoc assoc;
@@ -152,20 +152,20 @@ struct sym_content
   /** Token code, possibly specified by the user (%token FOO 42).  */
   int code;
 
-  symbol_class class;
+  सिम्बोलो_class class;
   declaration_status status;
 };
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_from_uniqstr (const uniqstr key, location loc);
+सिम्बोलो *सिम्बोलो_from_uniqstr (const uniqstr सुसि, location loc);
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_get (const char *key, location loc);
+सिम्बोलो *सिम्बोलो_get (const char *सुसि, location loc);
 
 /** Generate a dummy nonterminal.
 
    Its name cannot conflict with the user's names.  */
-symbol *dummy_symbol_get (location loc);
+सिम्बोलो *dummy_सिम्बोलो_get (location loc);
 
 
 /*--------------------.
@@ -173,10 +173,10 @@ symbol *dummy_symbol_get (location loc);
 `--------------------*/
 
 /** Print a symbol (for debugging). */
-void symbol_print (symbol const *s, FILE *f);
+void सिम्बोलो_इलिम्बाग (सिम्बोलो const *s, FILE *f);
 
 /** Is this a dummy nonterminal?  */
-bool symbol_is_dummy (symbol const *sym);
+bool सिम्बोलो_is_dummy (सिम्बोलो const *sym);
 
 /** The name of the code_props type: "\%destructor" or "\%printer".  */
 char const *code_props_type_string (code_props_type kind);
@@ -185,50 +185,50 @@ char const *code_props_type_string (code_props_type kind);
  ** Consider the alias if needed.
  ** Return 0 if there is none (e.g., the symbol is only defined as
  ** a string). */
-uniqstr symbol_id_get (symbol const *sym);
+uniqstr सिम्बोलो_id_get (सिम्बोलो const *sym);
 
 /**
  * Make \c str the literal string alias of \c sym.  Copy token number,
  * symbol number, and type from \c sym to \c str.
  */
-void symbol_make_alias (symbol *sym, symbol *str, location loc);
+void सिम्बोलो_make_alias (सिम्बोलो *sym, सिम्बोलो *str, location loc);
 
 /**
  * This symbol is used as the lhs of a rule.  Record this location
  * as definition point, if not already done.
  */
-void symbol_location_as_lhs_set (symbol *sym, location loc);
+void सिम्बोलो_location_as_lhs_set (सिम्बोलो *sym, location loc);
 
 /** Set the \c type_name associated with \c sym.
 
     Do nothing if passed 0 as \c type_name.  */
-void symbol_type_set (symbol *sym, uniqstr type_name, location loc);
+void सिम्बोलो_type_set (सिम्बोलो *sym, uniqstr type_name, location loc);
 
 /** Set the \c \%destructor or \c \%printer associated with \c sym.  */
-void symbol_code_props_set (symbol *sym, code_props_type kind,
+void सिम्बोलो_code_props_set (सिम्बोलो *sym, code_props_type kind,
                             code_props const *destructor);
 
 /** Get the computed \c \%destructor or \c %printer for \c sym, which was
     initialized with \c code_props_none_init if there's no \c \%destructor or
     \c %printer.  */
-code_props *symbol_code_props_get (symbol *sym, code_props_type kind);
+code_props *सिम्बोलो_code_props_get (सिम्बोलो *sym, code_props_type kind);
 
 /** Set the \c precedence associated with \c sym.
 
     Ensure that \a symbol is a terminal.
     Do nothing if invoked with \c undef_assoc as \c assoc.  */
-void symbol_precedence_set (symbol *sym, int prec, assoc a, location loc);
+void सिम्बोलो_precedence_set (सिम्बोलो *sym, int prec, assoc a, location loc);
 
 /** Set the \c class associated with \c sym.
 
     Whether \c declaring means whether this class definition comes
     from %nterm or %token (but not %type, prec/assoc, etc.).  A symbol
     can have "declaring" set only at most once.  */
-void symbol_class_set (symbol *sym, symbol_class class, location loc,
+void सिम्बोलो_class_set (सिम्बोलो *sym, सिम्बोलो_class class, location loc,
                        bool declaring);
 
 /** Set the token \c code of \c sym, specified by the user at \c loc.  */
-void symbol_code_set (symbol *sym, int code, location loc);
+void सिम्बोलो_code_set (सिम्बोलो *sym, int code, location loc);
 
 
 
@@ -237,15 +237,15 @@ void symbol_code_set (symbol *sym, int code, location loc);
 `------------------*/
 
 /** The error token. */
-extern symbol *errtoken;
+extern सिम्बोलो *errtoken;
 /** The token for unknown tokens.  */
-extern symbol *undeftoken;
+extern सिम्बोलो *undeftoken;
 /** The end of input token.  */
-extern symbol *eoftoken;
+extern सिम्बोलो *eoftoken;
 /** The genuine start symbol.
 
    $accept: start-symbol $end */
-extern symbol *acceptsymbol;
+extern सिम्बोलो *acceptsymbol;
 
 /** Whether a symbol declared with a type tag.  */
 extern bool tag_seen;
@@ -295,7 +295,7 @@ void register_precedence (graphid first, graphid snd);
 /** Print a warning for each symbol whose precedence and/or associativity
  * is useless. */
 
-void print_precedence_warnings (void);
+void इलिम्बाग_precedence_warnings (void);
 
 /*----------------------.
 | Symbol associativity  |
@@ -329,11 +329,11 @@ typedef struct {
 } semantic_type;
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_from_uniqstr (const uniqstr key,
+semantic_type *semantic_type_from_uniqstr (const uniqstr सुसि,
                                            const location *loc);
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_get (const char *key, const location *loc);
+semantic_type *semantic_type_get (const char *सुसि, const location *loc);
 
 /** Set the \c destructor or \c printer associated with \c type.  */
 void semantic_type_code_props_set (semantic_type *type,

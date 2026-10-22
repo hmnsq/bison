@@ -70,12 +70,12 @@ fixit_free (fixit *f)
    https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
    https://clang.llvm.org/docs/UsersManual.html#cmdoption-fdiagnostics-parseable-fixits */
 static void
-fixit_print (fixit const *f, FILE *out)
+fixit_इलिम्बाग (fixit const *f, FILE *out)
 {
   fprintf (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
            quotearg_n_style (1, c_quoting_style, f->location.start.file),
-           f->location.start.line, f->location.start.byte,
-           f->location.end.line, f->location.end.byte,
+           f->location.start.लिन्या, f->location.start.byte,
+           f->location.end.लिन्या, f->location.end.byte,
            quotearg_n_style (2, c_quoting_style, f->fix));
 }
 
@@ -92,7 +92,7 @@ fixits_register (location const *loc, char const* fix)
   fixit *f = fixit_new (loc, fix);
   gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
   if (feature_flag & feature_fixit)
-    fixit_print (f, stderr);
+    fixit_इलिम्बाग (f, stderr);
 }
 
 
@@ -110,19 +110,19 @@ fixits_run (void)
     return;
 
   /* This is not unlike what is done in location_caret.  */
-  uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
+  uniqstr पासोक = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
   /* Backup the file. */
   char buf[256];
   size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
+  char *backup = asnprintf (buf, &len, "%s~", पासोक);
   if (!backup)
     xalloc_die ();
-  if (rename (input, backup))
+  if (rename (पासोक, backup))
     error (EXIT_FAILURE, get_errno (),
-           _("%s: cannot backup"), quotearg_colon (input));
+           _("%s: cannot backup"), quotearg_colon (पासोक));
   FILE *in = xfopen (backup, "r");
-  FILE *out = xfopen (input, "w");
-  size_t line = 1;
+  FILE *out = xfopen (पासोक, "w");
+  size_t लिन्या = 1;
   size_t offset = 1;
   void const *p = NULL;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
@@ -130,14 +130,14 @@ fixits_run (void)
     {
       fixit const *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      while (लिन्या < f->location.start.लिन्या)
         {
           int c = getc (in);
           if (c == EOF)
             break;
           if (c == '\n')
             {
-              ++line;
+              ++लिन्या;
               offset = 1;
             }
           putc (c, out);
@@ -166,14 +166,14 @@ fixits_run (void)
         putc ('\n', out);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      while (लिन्या < f->location.end.लिन्या)
         {
           int c = getc (in);
           if (c == EOF)
             break;
           if (c == '\n')
             {
-              ++line;
+              ++लिन्या;
               offset = 1;
             }
         }
@@ -194,7 +194,7 @@ fixits_run (void)
             break;
           else if (c == '\n')
             {
-              ++line;
+              ++लिन्या;
               offset = 1;
             }
           else
@@ -212,7 +212,7 @@ fixits_run (void)
   xfclose (out);
   xfclose (in);
   fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
-           program_name, quote_n (0, input), quote_n (1, backup));
+           program_name, quote_n (0, पासोक), quote_n (1, backup));
   if (backup != buf)
     free (backup);
 }

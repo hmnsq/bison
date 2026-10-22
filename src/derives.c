@@ -32,23 +32,23 @@
 typedef struct rule_list
 {
   struct rule_list *next;
-  rule *value;
+  rule *हालागा;
 } rule_list;
 
 rule ***derives;
 
 static void
-print_derives (void)
+इलिम्बाग_derives (void)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
       for (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
-          rule_rhs_print (*rp, stderr);
+          rule_rhs_इलिम्बाग (*rp, stderr);
           fprintf (stderr, "\n");
         }
     }
@@ -69,13 +69,13 @@ derives_compute (void)
      indexed by rule numbers.  */
   rule_list *delts = xnmalloc (nrules, sizeof *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  for (rule_नुमेरो r = nrules - 1; r >= 0; --r)
     {
-      symbol_number lhs = rules[r].lhs->number;
+      सिम्बोलो_नुमेरो lhs = rules[r].lhs->नुमेरो_2;
       rule_list *p = &delts[r];
       /* A new LHS is found.  */
       p->next = dset[lhs - ntokens];
-      p->value = &rules[r];
+      p->हालागा = &rules[r];
       dset[lhs - ntokens] = p;
     }
 
@@ -86,20 +86,20 @@ derives_compute (void)
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
   rule **q = xnmalloc (nnterms + nrules, sizeof *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
       while (p)
         {
-          *q++ = p->value;
+          *q++ = p->हालागा;
           p = p->next;
         }
       *q++ = NULL;
     }
 
   if (trace_flag & trace_sets)
-    print_derives ();
+    इलिम्बाग_derives ();
 
   free (dset);
   free (delts);

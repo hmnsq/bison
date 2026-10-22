@@ -28,7 +28,7 @@
 /**
  * A unique ID assigned to every \c InadequacyList node.
  */
-typedef long long InadequacyListNodeCount;
+typedef long long Inadequacy_List_बुहोल_बिलांग;
 
 /**
  * For a conflict, each rule in the grammar can have at most one contributing
@@ -41,7 +41,7 @@ typedef long long InadequacyListNodeCount;
  * sync with this type.  Whatever the type, it must support negatives for sake
  * of the special values below.
  */
-typedef rule_number ContributionIndex;
+typedef rule_नुमेरो ContributionIndex;
 
 /* Special \c ContributionIndex used to indicate null result when looking for a
    contribution.  */
@@ -59,7 +59,7 @@ extern ContributionIndex const ContributionIndex__error_action;
  */
 typedef struct {
   /** The \c token passed to \c InadequacyList__new_conflict.  */
-  symbol *token;
+  सिम्बोलो *token;
   /** The \c actions passed to \c InadequacyList__new_conflict.  */
   bitset actions;
 } Conflict;
@@ -71,9 +71,9 @@ typedef struct {
  */
 typedef struct InadequacyList {
   struct InadequacyList *next;
-  InadequacyListNodeCount id;
+  Inadequacy_List_बुहोल_बिलांग id;
   state *manifestingState;
-  ContributionIndex contributionCount;
+  ContributionIndex contribution_बिलांग_2;
   union {
     Conflict conflict;
   } inadequacy;
@@ -108,8 +108,8 @@ typedef struct InadequacyList {
  *   - \c result assumes responsibility for the memory of \c actions.
  */
 InadequacyList *InadequacyList__new_conflict (
-  state *manifesting_state, symbol *token, bitset actions,
-  InadequacyListNodeCount *node_count);
+  state *manifesting_state, सिम्बोलो *token, bitset actions,
+  Inadequacy_List_बुहोल_बिलांग *बुहोल_बिलांग);
 
 /**
  * \post
@@ -137,7 +137,7 @@ InadequacyList__getShiftContributionIndex (InadequacyList const *self);
  *   - \c result = the token associated with contribution \c i in the
  *     inadequacy described by the node \c self.
  */
-symbol *InadequacyList__getContributionToken (InadequacyList const *self,
+सिम्बोलो *InadequacyList__getContributionToken (InadequacyList const *self,
                                               ContributionIndex i);
 
 /**

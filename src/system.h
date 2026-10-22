@@ -300,11 +300,11 @@ obstack_escape (struct obstack* obs, const char *cp)
 
 # define LIST_FREE(Type, List)                  \
   do {                                          \
-    Type *_node, *_next;                        \
-    for (_node = List; _node; _node = _next)    \
+    Type *बुहोल_2, *_next;                        \
+    for (बुहोल_2 = List; बुहोल_2; बुहोल_2 = _next)    \
       {                                         \
-        _next = _node->next;                    \
-        free (_node);                           \
+        _next = बुहोल_2->next;                    \
+        free (बुहोल_2);                           \
       }                                         \
   } while (0)
 

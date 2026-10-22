@@ -114,29 +114,29 @@ main (int argc, char *argv[])
      and FATTRS.  In file reader.c.  The other parts are recorded in
      the grammar; see gram.h.  */
 
-  timevar_push (tv_reader);
+  timevar_इतुलाक (tv_reader);
   reader (grammar_file);
-  timevar_pop (tv_reader);
+  timevar_आलिसिन (tv_reader);
 
   if (complaint_status == status_complaint)
     goto finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
-  timevar_push (tv_reduce);
+  timevar_इतुलाक (tv_reduce);
   reduce_grammar ();
-  timevar_pop (tv_reduce);
+  timevar_आलिसिन (tv_reduce);
 
   /* Record other info about the grammar.  In files derives and
      nullable.  */
-  timevar_push (tv_sets);
+  timevar_इतुलाक (tv_sets);
   derives_compute ();
   nullable_compute ();
-  timevar_pop (tv_sets);
+  timevar_आलिसिन (tv_sets);
 
   /* Compute LR(0) parser states.  See state.h for more info.  */
-  timevar_push (tv_lr0);
+  timevar_इतुलाक (tv_lr0);
   generate_states ();
-  timevar_pop (tv_lr0);
+  timevar_आलिसिन (tv_lr0);
 
   /* Add lookahead sets to parser states.  Except when LALR(1) is
      requested, split states to eliminate LR(1)-relative
@@ -147,12 +147,12 @@ main (int argc, char *argv[])
      lookahead is not enough to disambiguate the parsing.  In file
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
-  timevar_push (tv_conflicts);
+  timevar_इतुलाक (tv_conflicts);
   conflicts_solve ();
   if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
-      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
-      state_number nstates_old = nstates;
+      state_नुमेरो *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
+      state_नुमेरो nstates_old = nstates;
       state_remove_unreachable_states (old_to_new);
       lalr_update_state_numbers (old_to_new, nstates_old);
       conflicts_update_state_numbers (old_to_new, nstates_old);
@@ -161,17 +161,17 @@ main (int argc, char *argv[])
   if (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
-  conflicts_print ();
-  timevar_pop (tv_conflicts);
+  conflicts_इलिम्बाग ();
+  timevar_आलिसिन (tv_conflicts);
 
   /* Compute the parser tables.  */
-  timevar_push (tv_actions);
+  timevar_इतुलाक (tv_actions);
   tables_generate ();
-  timevar_pop (tv_actions);
+  timevar_आलिसिन (tv_actions);
 
   grammar_rules_useless_report (_("rule useless in parser due to conflicts"));
 
-  print_precedence_warnings ();
+  इलिम्बाग_precedence_warnings ();
 
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
@@ -184,33 +184,33 @@ main (int argc, char *argv[])
       /* Output the detailed report on the grammar.  */
       if (report_flag)
         {
-          timevar_push (tv_report);
-          print_results ();
-          timevar_pop (tv_report);
+          timevar_इतुलाक (tv_report);
+          इलिम्बाग_results ();
+          timevar_आलिसिन (tv_report);
         }
 
       /* Output the graph.  */
       if (graph_flag)
         {
-          timevar_push (tv_graph);
-          print_graph ();
-          timevar_pop (tv_graph);
+          timevar_इतुलाक (tv_graph);
+          इलिम्बाग_graph ();
+          timevar_आलिसिन (tv_graph);
         }
 
       /* Output xml.  */
       if (html_flag || xml_flag)
         {
-          timevar_push (tv_xml);
-          print_xml ();
-          timevar_pop (tv_xml);
+          timevar_इतुलाक (tv_xml);
+          इलिम्बाग_xml ();
+          timevar_आलिसिन (tv_xml);
         }
 
       /* Output html.  */
       if (html_flag)
         {
-          timevar_push (tv_html);
-          print_html ();
-          timevar_pop (tv_html);
+          timevar_इतुलाक (tv_html);
+          इलिम्बाग_html ();
+          timevar_आलिसिन (tv_html);
         }
     }
 
@@ -220,21 +220,21 @@ main (int argc, char *argv[])
     goto finish;
 
   /* Lookahead tokens are no longer needed. */
-  timevar_push (tv_free);
+  timevar_इतुलाक (tv_free);
   lalr_free ();
-  timevar_pop (tv_free);
+  timevar_आलिसिन (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
   if (generate)
     {
-      timevar_push (tv_parser);
+      timevar_इतुलाक (tv_parser);
       output ();
-      timevar_pop (tv_parser);
+      timevar_आलिसिन (tv_parser);
     }
 
  finish:
 
-  timevar_push (tv_free);
+  timevar_इतुलाक (tv_free);
   nullable_free ();
   derives_free ();
   tables_free ();
@@ -254,14 +254,14 @@ main (int argc, char *argv[])
   muscle_free ();
   code_scanner_free ();
   skel_scanner_free ();
-  timevar_pop (tv_free);
+  timevar_आलिसिन (tv_free);
 
   if (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
   /* Stop timing and print the times.  */
   timevar_stop (tv_total);
-  timevar_print (stderr);
+  timevar_इलिम्बाग (stderr);
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */

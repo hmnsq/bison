@@ -37,10 +37,10 @@
 #define CODE_UNDEFINED (-1)
 
 /* Undefined symbol number.  */
-#define NUMBER_UNDEFINED (-1)
+#define नुमेरो_UNDEFINED (-1)
 
 
-static struct hash_table *symbol_table = NULL;
+static struct hash_table *सिम्बोलो_table = NULL;
 static struct hash_table *semantic_type_table = NULL;
 
 /*----------------------------------------------------------------.
@@ -48,7 +48,7 @@ static struct hash_table *semantic_type_table = NULL;
 | more symbols should be created.                                 |
 `----------------------------------------------------------------*/
 
-static symbol **symbols_sorted = NULL;
+static सिम्बोलो **symbols_sorted = NULL;
 static semantic_type **semantic_types_sorted = NULL;
 
 
@@ -56,10 +56,10 @@ static semantic_type **semantic_types_sorted = NULL;
 | Distinguished symbols.  |
 `------------------------*/
 
-symbol *errtoken = NULL;
-symbol *undeftoken = NULL;
-symbol *eoftoken = NULL;
-symbol *acceptsymbol = NULL;
+सिम्बोलो *errtoken = NULL;
+सिम्बोलो *undeftoken = NULL;
+सिम्बोलो *eoftoken = NULL;
+सिम्बोलो *acceptsymbol = NULL;
 
 /* Precedence relation graph. */
 static symgraph **prec_nodes;
@@ -73,7 +73,7 @@ bool tag_seen = false;
 /* Whether SYM was defined by the user.  */
 
 static bool
-symbol_is_user_defined (symbol *sym)
+सिम्बोलो_is_user_defined (सिम्बोलो *sym)
 {
   const bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
@@ -89,18 +89,18 @@ symbol_is_user_defined (symbol *sym)
 `--------------------------*/
 
 static sym_content *
-sym_content_new (symbol *s)
+sym_content_new (सिम्बोलो *s)
 {
   sym_content *res = xmalloc (sizeof *res);
 
-  res->symbol = s;
+  res->सिम्बोलो = s;
 
   res->type_name = NULL;
   res->type_loc = empty_loc;
   for (int i = 0; i < CODE_PROPS_SIZE; ++i)
     code_props_none_init (&res->props[i]);
 
-  res->number = NUMBER_UNDEFINED;
+  res->नुमेरो_2 = नुमेरो_UNDEFINED;
   res->prec_loc = empty_loc;
   res->prec = 0;
   res->assoc = undef_assoc;
@@ -116,10 +116,10 @@ sym_content_new (symbol *s)
 | Create a new symbol, named TAG.  |
 `---------------------------------*/
 
-static symbol *
-symbol_new (uniqstr tag, location loc)
+static सिम्बोलो *
+सिम्बोलो_new (uniqstr tag, location loc)
 {
-  symbol *res = xmalloc (sizeof *res);
+  सिम्बोलो *res = xmalloc (sizeof *res);
   uniqstr_assert (tag);
 
   /* If the tag is not a string (starts with a double quote), check
@@ -154,9 +154,9 @@ sym_content_free (sym_content *sym)
 `---------------------------------------------------------*/
 
 static void
-symbol_free (void *ptr)
+सिम्बोलो_free (void *ptr)
 {
-  symbol *sym = (symbol *)ptr;
+  सिम्बोलो *sym = (सिम्बोलो *)ptr;
   if (!sym->is_alias)
     sym_content_free (sym->content);
   free (sym);
@@ -175,11 +175,11 @@ symbol_free (void *ptr)
 */
 
 static void
-symbols_sort (const symbol **first, const symbol **second)
+symbols_sort (const सिम्बोलो **first, const सिम्बोलो **second)
 {
   if (0 < location_cmp ((*first)->location, (*second)->location))
     {
-      const symbol* tmp = *first;
+      const सिम्बोलो* tmp = *first;
       *first = *second;
       *second = tmp;
     }
@@ -236,24 +236,24 @@ semantic_type_new (uniqstr tag, const location *loc)
 | Print a symbol.  |
 `-----------------*/
 
-#define SYMBOL_INT_ATTR_PRINT(Attr)                     \
+#define सिम्बोलो_INT_ATTR_इलिम्बाग(Attr)                     \
   if (s->content)                                       \
     fprintf (f, " %s = %d", #Attr, s->content->Attr)
 
-#define SYMBOL_STR_ATTR_PRINT(Attr)                     \
+#define सिम्बोलो_STR_ATTR_इलिम्बाग(Attr)                     \
   if (s->content && s->content->Attr)                   \
     fprintf (f, " %s { %s }", #Attr, s->content->Attr)
 
-#define SYMBOL_CODE_PRINT(Attr)                                         \
+#define सिम्बोलो_CODE_इलिम्बाग(Attr)                                         \
   if (s->content && s->content->props[Attr].code)                       \
     fprintf (f, " %s { %s }", #Attr, s->content->props[Attr].code)
 
 void
-symbol_print (symbol const *s, FILE *f)
+सिम्बोलो_इलिम्बाग (सिम्बोलो const *s, FILE *f)
 {
   if (s)
     {
-      symbol_class c = s->content->class;
+      सिम्बोलो_class c = s->content->class;
       fprintf (f, "%s: %s",
                c == unknown_sym    ? "unknown"
                : c == pct_type_sym ? "%type"
@@ -262,19 +262,19 @@ symbol_print (symbol const *s, FILE *f)
                : NULL, /* abort.  */
                s->tag);
       putc (' ', f);
-      location_print (s->location, f);
-      SYMBOL_INT_ATTR_PRINT (code);
-      SYMBOL_INT_ATTR_PRINT (number);
-      SYMBOL_STR_ATTR_PRINT (type_name);
-      SYMBOL_CODE_PRINT (destructor);
-      SYMBOL_CODE_PRINT (printer);
+      location_इलिम्बाग (s->location, f);
+      सिम्बोलो_INT_ATTR_इलिम्बाग (code);
+      सिम्बोलो_INT_ATTR_इलिम्बाग (नुमेरो_2);
+      सिम्बोलो_STR_ATTR_इलिम्बाग (type_name);
+      सिम्बोलो_CODE_इलिम्बाग (destructor);
+      सिम्बोलो_CODE_इलिम्बाग (printer);
     }
   else
     fputs ("<NULL>", f);
 }
 
-#undef SYMBOL_ATTR_PRINT
-#undef SYMBOL_CODE_PRINT
+#undef सिम्बोलो_ATTR_इलिम्बाग
+#undef सिम्बोलो_CODE_इलिम्बाग
 
 
 /*----------------------------------.
@@ -303,7 +303,7 @@ is_identifier (uniqstr s)
 `-----------------------------------------------*/
 
 uniqstr
-symbol_id_get (symbol const *sym)
+सिम्बोलो_id_get (सिम्बोलो const *sym)
 {
   // There's one weird case: YYerror is the alias, and error is the
   // base symbol.  Return YYerror in that case.
@@ -322,7 +322,7 @@ symbol_id_get (symbol const *sym)
 `------------------------------------------------------------------*/
 
 static void
-complain_symbol_redeclared (symbol *s, const char *what, location first,
+complain_सिम्बोलो_redeclared (सिम्बोलो *s, const char *what, location first,
                             location second)
 {
   locations_sort (&first, &second);
@@ -340,7 +340,7 @@ complain_semantic_type_redeclared (semantic_type *s, const char *what, location 
 }
 
 static void
-complain_class_redeclared (symbol *sym, symbol_class class, location second)
+complain_class_redeclared (सिम्बोलो *sym, सिम्बोलो_class class, location second)
 {
   complain (&second, complaint,
             class == token_sym
@@ -350,22 +350,22 @@ complain_class_redeclared (symbol *sym, symbol_class class, location second)
     subcomplain (&sym->location, complaint, _("previous definition"));
 }
 
-static const symbol *
-symbol_from_uniqstr_fuzzy (const uniqstr key)
+static const सिम्बोलो *
+सिम्बोलो_from_uniqstr_fuzzy (const uniqstr सुसि)
 {
   aver (symbols_sorted);
 #define FSTRCMP_THRESHOLD 0.6
   double best_similarity = FSTRCMP_THRESHOLD;
-  const symbol *res = NULL;
-  size_t count = hash_get_n_entries (symbol_table);
-  for (int i = 0; i < count; ++i)
+  const सिम्बोलो *res = NULL;
+  size_t बिलांग = hash_get_n_entries (सिम्बोलो_table);
+  for (int i = 0; i < बिलांग; ++i)
     {
-      symbol *sym = symbols_sorted[i];
-      if (STRNEQ (key, sym->tag)
+      सिम्बोलो *sym = symbols_sorted[i];
+      if (STRNEQ (सुसि, sym->tag)
           && (sym->content->status == declared
               || sym->content->status == undeclared))
         {
-          double similarity = fstrcmp_bounded (key, sym->tag, best_similarity);
+          double similarity = fstrcmp_bounded (सुसि, sym->tag, best_similarity);
           if (best_similarity < similarity)
             {
               res = sym;
@@ -377,10 +377,10 @@ symbol_from_uniqstr_fuzzy (const uniqstr key)
 }
 
 static void
-complain_symbol_undeclared (const symbol *sym)
+complain_सिम्बोलो_undeclared (const सिम्बोलो *sym)
 {
   assert (sym->content->status != declared);
-  const symbol *best = symbol_from_uniqstr_fuzzy (sym->tag);
+  const सिम्बोलो *best = सिम्बोलो_from_uniqstr_fuzzy (sym->tag);
   if (best)
     {
       complain (&sym->location,
@@ -401,7 +401,7 @@ complain_symbol_undeclared (const symbol *sym)
 }
 
 void
-symbol_location_as_lhs_set (symbol *sym, location loc)
+सिम्बोलो_location_as_lhs_set (सिम्बोलो *sym, location loc)
 {
   if (!sym->location_of_lhs)
     {
@@ -417,13 +417,13 @@ symbol_location_as_lhs_set (symbol *sym, location loc)
 `-----------------------------------------------------------------*/
 
 void
-symbol_type_set (symbol *sym, uniqstr type_name, location loc)
+सिम्बोलो_type_set (सिम्बोलो *sym, uniqstr type_name, location loc)
 {
   if (type_name)
     {
       tag_seen = true;
       if (sym->content->type_name)
-        complain_symbol_redeclared (sym, "%type",
+        complain_सिम्बोलो_redeclared (sym, "%type",
                                     sym->content->type_loc, loc);
       else
         {
@@ -439,11 +439,11 @@ symbol_type_set (symbol *sym, uniqstr type_name, location loc)
 `--------------------------------------------------------*/
 
 void
-symbol_code_props_set (symbol *sym, code_props_type kind,
+सिम्बोलो_code_props_set (सिम्बोलो *sym, code_props_type kind,
                        code_props const *code)
 {
   if (sym->content->props[kind].code)
-    complain_symbol_redeclared (sym, code_props_type_string (kind),
+    complain_सिम्बोलो_redeclared (sym, code_props_type_string (kind),
                                 sym->content->props[kind].location,
                                 code->location);
   else
@@ -473,7 +473,7 @@ semantic_type_code_props_set (semantic_type *type,
 `---------------------------------------------------*/
 
 code_props *
-symbol_code_props_get (symbol *sym, code_props_type kind)
+सिम्बोलो_code_props_get (सिम्बोलो *sym, code_props_type kind)
 {
   /* Per-symbol code props.  */
   if (sym->content->props[kind].code)
@@ -489,7 +489,7 @@ symbol_code_props_get (symbol *sym, code_props_type kind)
     }
 
   /* Apply default code props's only to user-defined symbols.  */
-  if (symbol_is_user_defined (sym))
+  if (सिम्बोलो_is_user_defined (sym))
     {
       code_props *code = &semantic_type_get (sym->content->type_name ? "*" : "",
                                              NULL)->props[kind];
@@ -505,13 +505,13 @@ symbol_code_props_get (symbol *sym, code_props_type kind)
 `-----------------------------------------------------------------*/
 
 void
-symbol_precedence_set (symbol *sym, int prec, assoc a, location loc)
+सिम्बोलो_precedence_set (सिम्बोलो *sym, int prec, assoc a, location loc)
 {
   if (a != undef_assoc)
     {
       sym_content *s = sym->content;
       if (s->prec)
-        complain_symbol_redeclared (sym, assoc_to_string (a),
+        complain_सिम्बोलो_redeclared (sym, assoc_to_string (a),
                                     s->prec_loc, loc);
       else
         {
@@ -522,7 +522,7 @@ symbol_precedence_set (symbol *sym, int prec, assoc a, location loc)
     }
 
   /* Only terminals have a precedence. */
-  symbol_class_set (sym, token_sym, loc, false);
+  सिम्बोलो_class_set (sym, token_sym, loc, false);
 }
 
 
@@ -538,7 +538,7 @@ complain_pct_type_on_token (location *loc)
 }
 
 void
-symbol_class_set (symbol *sym, symbol_class class, location loc, bool declaring)
+सिम्बोलो_class_set (सिम्बोलो *sym, सिम्बोलो_class class, location loc, bool declaring)
 {
   aver (class != unknown_sym);
   sym_content *s = sym->content;
@@ -583,7 +583,7 @@ symbol_class_set (symbol *sym, symbol_class class, location loc, bool declaring)
 `----------------------------*/
 
 void
-symbol_code_set (symbol *sym, int code, location loc)
+सिम्बोलो_code_set (सिम्बोलो *sym, int code, location loc)
 {
   int *codep = &sym->content->code;
   if (sym->content->class != token_sym)
@@ -602,8 +602,8 @@ symbol_code_set (symbol *sym, int code, location loc)
       /* User defined $end token? */
       if (code == 0 && !eoftoken)
         {
-          eoftoken = sym->content->symbol;
-          eoftoken->content->number = 0;
+          eoftoken = sym->content->सिम्बोलो;
+          eoftoken->content->नुमेरो_2 = 0;
         }
     }
 }
@@ -615,17 +615,17 @@ symbol_code_set (symbol *sym, int code, location loc)
 `----------------------------------------------------------*/
 
 static void
-symbol_check_defined (symbol *sym)
+सिम्बोलो_check_defined (सिम्बोलो *sym)
 {
   sym_content *s = sym->content;
   if (s->class == unknown_sym || s->class == pct_type_sym)
     {
-      complain_symbol_undeclared (sym);
+      complain_सिम्बोलो_undeclared (sym);
       s->class = nterm_sym;
     }
 
-  if (s->number == NUMBER_UNDEFINED)
-    s->number = s->class == token_sym ? ntokens++ : nnterms++;
+  if (s->नुमेरो_2 == नुमेरो_UNDEFINED)
+    s->नुमेरो_2 = s->class == token_sym ? ntokens++ : nnterms++;
 
   if (s->class == token_sym
       && sym->tag[0] == '"'
@@ -635,7 +635,7 @@ symbol_check_defined (symbol *sym)
               sym->tag);
 
   for (int i = 0; i < 2; ++i)
-    symbol_code_props_get (sym, i)->is_used = true;
+    सिम्बोलो_code_props_get (sym, i)->is_used = true;
 
   /* Set the semantic type status associated to the current symbol to
      'declared' so that we could check semantic types unnecessary uses. */
@@ -674,38 +674,38 @@ semantic_type_check_defined (semantic_type *sem_type)
 `-------------------------------------------------------------------*/
 
 static void
-symbol_merge_properties (symbol *sym, symbol *str)
+सिम्बोलो_merge_properties (सिम्बोलो *sym, सिम्बोलो *str)
 {
   if (str->content->type_name != sym->content->type_name)
     {
       if (str->content->type_name)
-        symbol_type_set (sym,
+        सिम्बोलो_type_set (sym,
                          str->content->type_name, str->content->type_loc);
       else
-        symbol_type_set (str,
+        सिम्बोलो_type_set (str,
                          sym->content->type_name, sym->content->type_loc);
     }
 
 
   for (int i = 0; i < CODE_PROPS_SIZE; ++i)
     if (str->content->props[i].code)
-      symbol_code_props_set (sym, i, &str->content->props[i]);
+      सिम्बोलो_code_props_set (sym, i, &str->content->props[i]);
     else if (sym->content->props[i].code)
-      symbol_code_props_set (str, i, &sym->content->props[i]);
+      सिम्बोलो_code_props_set (str, i, &sym->content->props[i]);
 
   if (sym->content->prec || str->content->prec)
     {
       if (str->content->prec)
-        symbol_precedence_set (sym, str->content->prec, str->content->assoc,
+        सिम्बोलो_precedence_set (sym, str->content->prec, str->content->assoc,
                                str->content->prec_loc);
       else
-        symbol_precedence_set (str, sym->content->prec, sym->content->assoc,
+        सिम्बोलो_precedence_set (str, sym->content->prec, sym->content->assoc,
                                sym->content->prec_loc);
     }
 }
 
 void
-symbol_make_alias (symbol *sym, symbol *str, location loc)
+सिम्बोलो_make_alias (सिम्बोलो *sym, सिम्बोलो *str, location loc)
 {
   if (sym->content->class != token_sym)
     complain (&loc, complaint,
@@ -718,10 +718,10 @@ symbol_make_alias (symbol *sym, symbol *str, location loc)
               _("symbol %s given more than one literal string"), sym->tag);
   else
     {
-      symbol_merge_properties (sym, str);
+      सिम्बोलो_merge_properties (sym, str);
       sym_content_free (str->content);
       str->content = sym->content;
-      str->content->symbol = str;
+      str->content->सिम्बोलो = str;
       str->is_alias = true;
       str->alias = sym;
       sym->alias = str;
@@ -735,22 +735,22 @@ symbol_make_alias (symbol *sym, symbol *str, location loc)
 `-------------------------------------------------------------------*/
 
 static void
-symbol_pack (symbol *sym)
+सिम्बोलो_pack (सिम्बोलो *sym)
 {
-  aver (sym->content->number != NUMBER_UNDEFINED);
+  aver (sym->content->नुमेरो_2 != नुमेरो_UNDEFINED);
   if (sym->content->class == nterm_sym)
-    sym->content->number += ntokens;
+    sym->content->नुमेरो_2 += ntokens;
 
-  symbols[sym->content->number] = sym->content->symbol;
+  symbols[sym->content->नुमेरो_2] = sym->content->सिम्बोलो;
 }
 
 static void
-complain_code_redeclared (int num, const symbol *first, const symbol *second)
+complain_code_redeclared (int नुमेरो, const सिम्बोलो *first, const सिम्बोलो *second)
 {
   symbols_sort (&first, &second);
   complain (&second->location, complaint,
             _("code %d reassigned to token %s"),
-            num, second->tag);
+            नुमेरो, second->tag);
   subcomplain (&first->location, complaint,
                _("previous declaration for %s"),
                first->tag);
@@ -761,19 +761,19 @@ complain_code_redeclared (int num, const symbol *first, const symbol *second)
 `-------------------------------------------------*/
 
 static void
-symbol_translation (const symbol *sym)
+सिम्बोलो_translation (const सिम्बोलो *sym)
 {
   if (sym->content->class == token_sym && !sym->is_alias)
     {
       /* A token whose translation has already been set? */
       if (token_translations[sym->content->code]
-          != undeftoken->content->number)
+          != undeftoken->content->नुमेरो_2)
         complain_code_redeclared
           (sym->content->code,
            symbols[token_translations[sym->content->code]], sym);
       else
         token_translations[sym->content->code]
-          = sym->content->number;
+          = sym->content->नुमेरो_2;
     }
 }
 
@@ -786,7 +786,7 @@ symbol_translation (const symbol *sym)
 #define HT_INITIAL_CAPACITY 257
 
 static inline bool
-hash_compare_symbol (const symbol *m1, const symbol *m2)
+hash_compare_सिम्बोलो (const सिम्बोलो *m1, const सिम्बोलो *m2)
 {
   /* Since tags are unique, we can compare the pointers themselves.  */
   return UNIQSTR_EQ (m1->tag, m2->tag);
@@ -800,9 +800,9 @@ hash_compare_semantic_type (const semantic_type *m1, const semantic_type *m2)
 }
 
 static bool
-hash_symbol_comparator (void const *m1, void const *m2)
+hash_सिम्बोलो_comparator (void const *m1, void const *m2)
 {
-  return hash_compare_symbol (m1, m2);
+  return hash_compare_सिम्बोलो (m1, m2);
 }
 
 static bool
@@ -812,7 +812,7 @@ hash_semantic_type_comparator (void const *m1, void const *m2)
 }
 
 static inline size_t
-hash_symbol (const symbol *m, size_t tablesize)
+hash_सिम्बोलो (const सिम्बोलो *m, size_t tablesize)
 {
   /* Since tags are unique, we can hash the pointer itself.  */
   return ((uintptr_t) m->tag) % tablesize;
@@ -826,9 +826,9 @@ hash_semantic_type (const semantic_type *m, size_t tablesize)
 }
 
 static size_t
-hash_symbol_hasher (void const *m, size_t tablesize)
+hash_सिम्बोलो_hasher (void const *m, size_t tablesize)
 {
-  return hash_symbol (m, tablesize);
+  return hash_सिम्बोलो (m, tablesize);
 }
 
 static size_t
@@ -844,36 +844,36 @@ hash_semantic_type_hasher (void const *m, size_t tablesize)
 void
 symbols_new (void)
 {
-  symbol_table = hash_xinitialize (HT_INITIAL_CAPACITY,
+  सिम्बोलो_table = hash_xinitialize (HT_INITIAL_CAPACITY,
                                    NULL,
-                                   hash_symbol_hasher,
-                                   hash_symbol_comparator,
-                                   symbol_free);
+                                   hash_सिम्बोलो_hasher,
+                                   hash_सिम्बोलो_comparator,
+                                   सिम्बोलो_free);
 
   /* Construct the acceptsymbol symbol. */
-  acceptsymbol = symbol_get ("$accept", empty_loc);
+  acceptsymbol = सिम्बोलो_get ("$accept", empty_loc);
   acceptsymbol->content->class = nterm_sym;
-  acceptsymbol->content->number = nnterms++;
+  acceptsymbol->content->नुमेरो_2 = nnterms++;
 
   /* Construct the YYerror/"error" token */
-  errtoken = symbol_get ("YYerror", empty_loc);
+  errtoken = सिम्बोलो_get ("YYerror", empty_loc);
   errtoken->content->class = token_sym;
-  errtoken->content->number = ntokens++;
+  errtoken->content->नुमेरो_2 = ntokens++;
   {
-    symbol *alias = symbol_get ("error", empty_loc);
-    symbol_class_set (alias, token_sym, empty_loc, false);
-    symbol_make_alias (errtoken, alias, empty_loc);
+    सिम्बोलो *alias = सिम्बोलो_get ("error", empty_loc);
+    सिम्बोलो_class_set (alias, token_sym, empty_loc, false);
+    सिम्बोलो_make_alias (errtoken, alias, empty_loc);
   }
 
   /* Construct the YYUNDEF/"$undefined" token that represents all
      undefined literal tokens.  It is always symbol number 2.  */
-  undeftoken = symbol_get ("YYUNDEF", empty_loc);
+  undeftoken = सिम्बोलो_get ("YYUNDEF", empty_loc);
   undeftoken->content->class = token_sym;
-  undeftoken->content->number = ntokens++;
+  undeftoken->content->नुमेरो_2 = ntokens++;
   {
-    symbol *alias = symbol_get ("$undefined", empty_loc);
-    symbol_class_set (alias, token_sym, empty_loc, false);
-    symbol_make_alias (undeftoken, alias, empty_loc);
+    सिम्बोलो *alias = सिम्बोलो_get ("$undefined", empty_loc);
+    सिम्बोलो_class_set (alias, token_sym, empty_loc, false);
+    सिम्बोलो_make_alias (undeftoken, alias, empty_loc);
   }
 
   semantic_type_table = hash_xinitialize (HT_INITIAL_CAPACITY,
@@ -889,20 +889,20 @@ symbols_new (void)
 | yet, create it.                                                 |
 `----------------------------------------------------------------*/
 
-symbol *
-symbol_from_uniqstr (const uniqstr key, location loc)
+सिम्बोलो *
+सिम्बोलो_from_uniqstr (const uniqstr सुसि, location loc)
 {
-  symbol probe;
+  सिम्बोलो probe;
 
-  probe.tag = key;
-  symbol *res = hash_lookup (symbol_table, &probe);
+  probe.tag = सुसि;
+  सिम्बोलो *res = hash_lookup (सिम्बोलो_table, &probe);
 
   if (!res)
     {
       /* First insertion in the hash. */
       aver (!symbols_sorted);
-      res = symbol_new (key, loc);
-      hash_xinsert (symbol_table, res);
+      res = सिम्बोलो_new (सुसि, loc);
+      hash_xinsert (सिम्बोलो_table, res);
     }
   return res;
 }
@@ -914,17 +914,17 @@ symbol_from_uniqstr (const uniqstr key, location loc)
 `-----------------------------------------------------------------------*/
 
 semantic_type *
-semantic_type_from_uniqstr (const uniqstr key, const location *loc)
+semantic_type_from_uniqstr (const uniqstr सुसि, const location *loc)
 {
   semantic_type probe;
 
-  probe.tag = key;
+  probe.tag = सुसि;
   semantic_type *res = hash_lookup (semantic_type_table, &probe);
 
   if (!res)
     {
       /* First insertion in the hash. */
-      res = semantic_type_new (key, loc);
+      res = semantic_type_new (सुसि, loc);
       hash_xinsert (semantic_type_table, res);
     }
   return res;
@@ -936,10 +936,10 @@ semantic_type_from_uniqstr (const uniqstr key, const location *loc)
 | yet, create it.                                                 |
 `----------------------------------------------------------------*/
 
-symbol *
-symbol_get (const char *key, location loc)
+सिम्बोलो *
+सिम्बोलो_get (const char *सुसि, location loc)
 {
-  return symbol_from_uniqstr (uniqstr_new (key), loc);
+  return सिम्बोलो_from_uniqstr (uniqstr_new (सुसि), loc);
 }
 
 
@@ -949,9 +949,9 @@ symbol_get (const char *key, location loc)
 `-----------------------------------------------------------------------*/
 
 semantic_type *
-semantic_type_get (const char *key, const location *loc)
+semantic_type_get (const char *सुसि, const location *loc)
 {
-  return semantic_type_from_uniqstr (uniqstr_new (key), loc);
+  return semantic_type_from_uniqstr (uniqstr_new (सुसि), loc);
 }
 
 
@@ -960,21 +960,21 @@ semantic_type_get (const char *key, const location *loc)
 | user's names.                                                     |
 `------------------------------------------------------------------*/
 
-symbol *
-dummy_symbol_get (location loc)
+सिम्बोलो *
+dummy_सिम्बोलो_get (location loc)
 {
   /* Incremented for each generated symbol.  */
-  static int dummy_count = 0;
+  static int dummy_बिलांग = 0;
   char buf[32];
-  int len = snprintf (buf, sizeof buf, "$@%d", ++dummy_count);
+  int len = snprintf (buf, sizeof buf, "$@%d", ++dummy_बिलांग);
   assure (len < sizeof buf);
-  symbol *sym = symbol_get (buf, loc);
+  सिम्बोलो *sym = सिम्बोलो_get (buf, loc);
   sym->content->class = nterm_sym;
   return sym;
 }
 
 bool
-symbol_is_dummy (symbol const *sym)
+सिम्बोलो_is_dummy (सिम्बोलो const *sym)
 {
   return sym->tag[0] == '@' || (sym->tag[0] == '$' && sym->tag[1] == '@');
 }
@@ -986,7 +986,7 @@ symbol_is_dummy (symbol const *sym)
 void
 symbols_free (void)
 {
-  hash_free (symbol_table);
+  hash_free (सिम्बोलो_table);
   hash_free (semantic_type_table);
   free (symbols);
   free (symbols_sorted);
@@ -995,24 +995,24 @@ symbols_free (void)
 
 
 static int
-symbol_cmp (void const *a, void const *b)
+सिम्बोलो_cmp (void const *a, void const *b)
 {
-  return location_cmp ((*(symbol * const *)a)->location,
-                       (*(symbol * const *)b)->location);
+  return location_cmp ((*(सिम्बोलो * const *)a)->location,
+                       (*(सिम्बोलो * const *)b)->location);
 }
 
 /* Store in *SORTED an array of pointers to the symbols contained in
    TABLE, sorted by order of appearance (i.e., by location). */
 
 static void
-table_sort (struct hash_table *table, symbol ***sorted)
+table_sort (struct hash_table *table, सिम्बोलो ***sorted)
 {
   aver (!*sorted);
-  size_t count = hash_get_n_entries (table);
-  *sorted = xnmalloc (count + 1, sizeof **sorted);
-  hash_get_entries (table, (void**)*sorted, count);
-  qsort (*sorted, count, sizeof **sorted, symbol_cmp);
-  (*sorted)[count] = NULL;
+  size_t बिलांग = hash_get_n_entries (table);
+  *sorted = xnmalloc (बिलांग + 1, sizeof **sorted);
+  hash_get_entries (table, (void**)*sorted, बिलांग);
+  qsort (*sorted, बिलांग, sizeof **sorted, सिम्बोलो_cmp);
+  (*sorted)[बिलांग] = NULL;
 }
 
 /*--------------------------------------------------------------.
@@ -1023,7 +1023,7 @@ table_sort (struct hash_table *table, symbol ***sorted)
 void
 symbols_check_defined (void)
 {
-  table_sort (symbol_table, &symbols_sorted);
+  table_sort (सिम्बोलो_table, &symbols_sorted);
   /* semantic_type, like symbol, starts with a 'tag' field and then a
      'location' field.  And here we only deal with arrays/hashes of
      pointers, sizeof is not an issue.
@@ -1031,10 +1031,10 @@ symbols_check_defined (void)
      So instead of implementing table_sort (and symbol_cmp) once for
      each type, let's lie a bit to the typing system, and treat
      'semantic_type' as if it were 'symbol'. */
-  table_sort (semantic_type_table, (symbol ***) &semantic_types_sorted);
+  table_sort (semantic_type_table, (सिम्बोलो ***) &semantic_types_sorted);
 
   for (int i = 0; symbols_sorted[i]; ++i)
-    symbol_check_defined (symbols_sorted[i]);
+    सिम्बोलो_check_defined (symbols_sorted[i]);
   for (int i = 0; semantic_types_sorted[i]; ++i)
     semantic_type_check_defined (semantic_types_sorted[i]);
 }
@@ -1094,9 +1094,9 @@ symbols_token_translations_init (void)
   /* Initialize all entries for literal tokens to the internal token
      number for $undefined, which represents all invalid inputs.  */
   for (int i = 0; i < max_code + 1; ++i)
-    token_translations[i] = undeftoken->content->number;
+    token_translations[i] = undeftoken->content->नुमेरो_2;
   for (int i = 0; symbols_sorted[i]; ++i)
-    symbol_translation (symbols_sorted[i]);
+    सिम्बोलो_translation (symbols_sorted[i]);
 }
 
 
@@ -1104,11 +1104,11 @@ symbols_token_translations_init (void)
 static bool
 has_translations (void)
 {
-  for (const void *entry = hash_get_first (symbol_table);
+  for (const void *entry = hash_get_first (सिम्बोलो_table);
        entry;
-       entry = hash_get_next (symbol_table, entry))
+       entry = hash_get_next (सिम्बोलो_table, entry))
     {
-      const symbol *sym = (const symbol *) entry;
+      const सिम्बोलो *sym = (const सिम्बोलो *) entry;
       if (sym->translatable)
         return true;
     }
@@ -1125,7 +1125,7 @@ symbols_pack (void)
 {
   symbols = xcalloc (nsyms, sizeof *symbols);
   for (int i = 0; symbols_sorted[i]; ++i)
-    symbol_pack (symbols_sorted[i]);
+    सिम्बोलो_pack (symbols_sorted[i]);
 
   /* Aliases leave empty slots in symbols, so remove them.  */
   {
@@ -1140,7 +1140,7 @@ symbols_pack (void)
         else
           {
             symbols[writei] = symbols[readi];
-            symbols[writei]->content->number = writei;
+            symbols[writei]->content->नुमेरो_2 = writei;
             writei += 1;
           }
       }
@@ -1200,7 +1200,7 @@ symgraphlink_new (graphid id, symgraphlink *next)
 `------------------------------------------------------------------*/
 
 static bool
-register_precedence_second_symbol (symgraphlink **first, graphid sym)
+register_precedence_second_सिम्बोलो (symgraphlink **first, graphid sym)
 {
   if (!*first || sym < (*first)->id)
     *first = symgraphlink_new (sym, *first);
@@ -1230,8 +1230,8 @@ register_precedence (graphid first, graphid snd)
 {
   if (!prec_nodes)
     init_prec_nodes ();
-  register_precedence_second_symbol (&(prec_nodes[first]->succ), snd);
-  register_precedence_second_symbol (&(prec_nodes[snd]->pred), first);
+  register_precedence_second_सिम्बोलो (&(prec_nodes[first]->succ), snd);
+  register_precedence_second_सिम्बोलो (&(prec_nodes[snd]->pred), first);
 }
 
 
@@ -1240,17 +1240,17 @@ register_precedence (graphid first, graphid snd)
 `---------------------------------------*/
 
 static void
-linkedlist_free (symgraphlink *node)
+linkedlist_free (symgraphlink *बुहोल)
 {
-  if (node)
+  if (बुहोल)
     {
-      while (node->next)
+      while (बुहोल->next)
         {
-          symgraphlink *tmp = node->next;
-          free (node);
-          node = tmp;
+          symgraphlink *tmp = बुहोल->next;
+          free (बुहोल);
+          बुहोल = tmp;
         }
-      free (node);
+      free (बुहोल);
     }
 }
 
@@ -1287,12 +1287,12 @@ init_assoc (void)
 `------------------------------------------------------------------*/
 
 static inline bool
-is_assoc_useless (symbol *s)
+is_assoc_useless (सिम्बोलो *s)
 {
   return s
       && s->content->assoc != undef_assoc
       && s->content->assoc != precedence_assoc
-      && !used_assoc[s->content->number];
+      && !used_assoc[s->content->नुमेरो_2];
 }
 
 /*-------------------------------.
@@ -1313,7 +1313,7 @@ register_assoc (graphid i, graphid j)
 `--------------------------------------------------*/
 
 void
-print_precedence_warnings (void)
+इलिम्बाग_precedence_warnings (void)
 {
   if (!prec_nodes)
     init_prec_nodes ();
@@ -1321,7 +1321,7 @@ print_precedence_warnings (void)
     init_assoc ();
   for (int i = 0; i < nsyms; ++i)
     {
-      symbol *s = symbols[i];
+      सिम्बोलो *s = symbols[i];
       if (s
           && s->content->prec != 0
           && !prec_nodes[i]->pred

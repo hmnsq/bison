@@ -52,7 +52,7 @@ static bitset lookahead_set;
 bool
 has_conflicts (const state *s)
 {
-  return conflicts[s->number];
+  return conflicts[s->नुमेरो_2];
 }
 
 
@@ -61,8 +61,8 @@ enum conflict_resolution
   {
     shift_resolution,
     reduce_resolution,
-    left_resolution,
-    right_resolution,
+    कालिवा_resolution,
+    कानान_resolution,
     nonassoc_resolution
   };
 
@@ -73,7 +73,7 @@ enum conflict_resolution
 `----------------------------------------------------------------*/
 
 static inline void
-log_resolution (rule *r, symbol_number token,
+log_resolution (rule *r, सिम्बोलो_नुमेरो token,
                 enum conflict_resolution resolution)
 {
   if (report_flag & report_solved_conflicts)
@@ -82,22 +82,22 @@ log_resolution (rule *r, symbol_number token,
       switch (resolution)
         {
         case shift_resolution:
-        case right_resolution:
+        case कानान_resolution:
           obstack_sgrow (&solved_conflicts_obstack, "    ");
           obstack_printf (&solved_conflicts_obstack,
                           _("Conflict between rule %d and token %s"
                             " resolved as shift"),
-                          r->number,
+                          r->नुमेरो_2,
                           symbols[token]->tag);
           break;
 
         case reduce_resolution:
-        case left_resolution:
+        case कालिवा_resolution:
           obstack_sgrow (&solved_conflicts_obstack, "    ");
           obstack_printf (&solved_conflicts_obstack,
                           _("Conflict between rule %d and token %s"
                             " resolved as reduce"),
-                          r->number,
+                          r->नुमेरो_2,
                           symbols[token]->tag);
           break;
 
@@ -106,7 +106,7 @@ log_resolution (rule *r, symbol_number token,
           obstack_printf (&solved_conflicts_obstack,
                           _("Conflict between rule %d and token %s"
                             " resolved as an error"),
-                          r->number,
+                          r->नुमेरो_2,
                           symbols[token]->tag);
           break;
         }
@@ -117,7 +117,7 @@ log_resolution (rule *r, symbol_number token,
         case shift_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%s < %s)",
-                          r->prec->symbol->tag,
+                          r->prec->सिम्बोलो->tag,
                           symbols[token]->tag);
           break;
 
@@ -125,16 +125,16 @@ log_resolution (rule *r, symbol_number token,
           obstack_printf (&solved_conflicts_obstack,
                           " (%s < %s)",
                           symbols[token]->tag,
-                          r->prec->symbol->tag);
+                          r->prec->सिम्बोलो->tag);
           break;
 
-        case left_resolution:
+        case कालिवा_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%%left %s)",
                           symbols[token]->tag);
           break;
 
-        case right_resolution:
+        case कानान_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%%right %s)",
                           symbols[token]->tag);
@@ -157,20 +157,20 @@ log_resolution (rule *r, symbol_number token,
       switch (resolution)
         {
         case shift_resolution:
-        case right_resolution:
+        case कानान_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "        <resolution rule=\"%d\" symbol=\"%s\""
                           " type=\"shift\">",
-                          r->number,
+                          r->नुमेरो_2,
                           xml_escape (symbols[token]->tag));
           break;
 
         case reduce_resolution:
-        case left_resolution:
+        case कालिवा_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "        <resolution rule=\"%d\" symbol=\"%s\""
                           " type=\"reduce\">",
-                          r->number,
+                          r->नुमेरो_2,
                           xml_escape (symbols[token]->tag));
           break;
 
@@ -178,7 +178,7 @@ log_resolution (rule *r, symbol_number token,
           obstack_printf (&solved_conflicts_xml_obstack,
                           "        <resolution rule=\"%d\" symbol=\"%s\""
                           " type=\"error\">",
-                          r->number,
+                          r->नुमेरो_2,
                           xml_escape (symbols[token]->tag));
           break;
         }
@@ -189,7 +189,7 @@ log_resolution (rule *r, symbol_number token,
         case shift_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%s &lt; %s",
-                          xml_escape_n (0, r->prec->symbol->tag),
+                          xml_escape_n (0, r->prec->सिम्बोलो->tag),
                           xml_escape_n (1, symbols[token]->tag));
           break;
 
@@ -197,16 +197,16 @@ log_resolution (rule *r, symbol_number token,
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%s &lt; %s",
                           xml_escape_n (0, symbols[token]->tag),
-                          xml_escape_n (1, r->prec->symbol->tag));
+                          xml_escape_n (1, r->prec->सिम्बोलो->tag));
           break;
 
-        case left_resolution:
+        case कालिवा_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%%left %s",
                           xml_escape (symbols[token]->tag));
           break;
 
-        case right_resolution:
+        case कानान_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%%right %s",
                           xml_escape (symbols[token]->tag));
@@ -236,9 +236,9 @@ flush_shift (state *s, int token)
   transitions *trans = s->transitions;
 
   bitset_reset (lookahead_set, token);
-  for (int i = 0; i < trans->num; ++i)
+  for (int i = 0; i < trans->नुमेरो; ++i)
     if (!TRANSITION_IS_DISABLED (trans, i)
-        && TRANSITION_SYMBOL (trans, i) == token)
+        && TRANSITION_सिम्बोलो (trans, i) == token)
       TRANSITION_DISABLE (trans, i);
 }
 
@@ -269,7 +269,7 @@ flush_reduce (bitset lookaheads, int token)
 `------------------------------------------------------------------*/
 
 static void
-resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
+resolve_sr_conflict (state *s, int ruleno, सिम्बोलो **errors, int *nerrs)
 {
   reductions *reds = s->reductions;
   /* Find the rule to reduce by to get precedence of reduction.  */
@@ -277,7 +277,7 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
   int redprec = redrule->prec->prec;
   bitset lookaheads = reds->lookaheads[ruleno];
 
-  for (symbol_number i = 0; i < ntokens; ++i)
+  for (सिम्बोलो_नुमेरो i = 0; i < ntokens; ++i)
     if (bitset_test (lookaheads, i)
         && bitset_test (lookahead_set, i)
         && symbols[i]->content->prec)
@@ -287,13 +287,13 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
            The precedence of shifting is that of token i.  */
         if (symbols[i]->content->prec < redprec)
           {
-            register_precedence (redrule->prec->number, i);
+            register_precedence (redrule->prec->नुमेरो_2, i);
             log_resolution (redrule, i, reduce_resolution);
             flush_shift (s, i);
           }
         else if (symbols[i]->content->prec > redprec)
           {
-            register_precedence (i, redrule->prec->number);
+            register_precedence (i, redrule->prec->नुमेरो_2);
             log_resolution (redrule, i, shift_resolution);
             flush_reduce (lookaheads, i);
           }
@@ -313,20 +313,20 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
             case precedence_assoc:
               break;
 
-            case right_assoc:
-              register_assoc (i, redrule->prec->number);
-              log_resolution (redrule, i, right_resolution);
+            case कानान_assoc:
+              register_assoc (i, redrule->prec->नुमेरो_2);
+              log_resolution (redrule, i, कानान_resolution);
               flush_reduce (lookaheads, i);
               break;
 
-            case left_assoc:
-              register_assoc (i, redrule->prec->number);
-              log_resolution (redrule, i, left_resolution);
+            case कालिवा_assoc:
+              register_assoc (i, redrule->prec->नुमेरो_2);
+              log_resolution (redrule, i, कालिवा_resolution);
               flush_shift (s, i);
               break;
 
             case non_assoc:
-              register_assoc (i, redrule->prec->number);
+              register_assoc (i, redrule->prec->नुमेरो_2);
               log_resolution (redrule, i, nonassoc_resolution);
               flush_shift (s, i);
               flush_reduce (lookaheads, i);
@@ -346,7 +346,7 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
 `-------------------------------------------------------------------*/
 
 static void
-set_conflicts (state *s, symbol **errors)
+set_conflicts (state *s, सिम्बोलो **errors)
 {
   if (s->consistent)
     return;
@@ -360,13 +360,13 @@ set_conflicts (state *s, symbol **errors)
     transitions *trans = s->transitions;
     int i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (lookahead_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (lookahead_set, TRANSITION_सिम्बोलो (trans, i));
   }
 
   /* Loop over all rules which require lookahead in this state.  First
      check for shift/reduce conflict, and try to resolve using
      precedence.  */
-  for (int i = 0; i < reds->num; ++i)
+  for (int i = 0; i < reds->नुमेरो; ++i)
     if (reds->rules[i]->prec
         && reds->rules[i]->prec->prec
         && !bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
@@ -387,10 +387,10 @@ set_conflicts (state *s, symbol **errors)
 
      reds->lookaheads can be NULL if the LR type is LR(0).  */
   if (reds->lookaheads)
-    for (int i = 0; i < reds->num; ++i)
+    for (int i = 0; i < reds->नुमेरो; ++i)
       {
         if (!bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
-          conflicts[s->number] = true;
+          conflicts[s->नुमेरो_2] = true;
         bitset_or (lookahead_set, lookahead_set, reds->lookaheads[i]);
       }
 }
@@ -405,7 +405,7 @@ void
 conflicts_solve (void)
 {
   /* List of lookahead tokens on which we explicitly raise a syntax error.  */
-  symbol **errors = xnmalloc (ntokens + 1, sizeof *errors);
+  सिम्बोलो **errors = xnmalloc (ntokens + 1, sizeof *errors);
 
   conflicts = xcalloc (nstates, sizeof *conflicts);
   shift_set = bitset_create (ntokens, BITSET_FIXED);
@@ -413,7 +413,7 @@ conflicts_solve (void)
   obstack_init (&solved_conflicts_obstack);
   obstack_init (&solved_conflicts_xml_obstack);
 
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     {
       set_conflicts (states[i], errors);
 
@@ -428,10 +428,10 @@ conflicts_solve (void)
 
 
 void
-conflicts_update_state_numbers (state_number old_to_new[],
-                                state_number nstates_old)
+conflicts_update_state_numbers (state_नुमेरो old_to_new[],
+                                state_नुमेरो nstates_old)
 {
-  for (state_number i = 0; i < nstates_old; ++i)
+  for (state_नुमेरो i = 0; i < nstates_old; ++i)
     if (old_to_new[i] != nstates_old)
       conflicts[old_to_new[i]] = conflicts[i];
 }
@@ -442,7 +442,7 @@ conflicts_update_state_numbers (state_number old_to_new[],
 `---------------------------------------------*/
 
 static size_t
-count_state_sr_conflicts (const state *s)
+बिलांग_state_sr_conflicts (const state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
@@ -456,15 +456,15 @@ count_state_sr_conflicts (const state *s)
   {
     int i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (shift_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (shift_set, TRANSITION_सिम्बोलो (trans, i));
   }
 
-  for (int i = 0; i < reds->num; ++i)
+  for (int i = 0; i < reds->नुमेरो; ++i)
     bitset_or (lookahead_set, lookahead_set, reds->lookaheads[i]);
 
   bitset_and (lookahead_set, lookahead_set, shift_set);
 
-  return bitset_count (lookahead_set);
+  return bitset_बिलांग (lookahead_set);
 }
 
 /*---------------------------------------------.
@@ -472,13 +472,13 @@ count_state_sr_conflicts (const state *s)
 `---------------------------------------------*/
 
 static size_t
-count_sr_conflicts (void)
+बिलांग_sr_conflicts (void)
 {
   size_t res = 0;
   /* Conflicts by state.  */
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     if (conflicts[i])
-      res += count_state_sr_conflicts (states[i]);
+      res += बिलांग_state_sr_conflicts (states[i]);
   return res;
 }
 
@@ -490,31 +490,31 @@ count_sr_conflicts (void)
 `-----------------------------------------------------------------*/
 
 static size_t
-count_state_rr_conflicts (const state *s)
+बिलांग_state_rr_conflicts (const state *s)
 {
   reductions *reds = s->reductions;
   size_t res = 0;
 
-  for (symbol_number i = 0; i < ntokens; ++i)
+  for (सिम्बोलो_नुमेरो i = 0; i < ntokens; ++i)
     {
-      int count = 0;
-      for (int j = 0; j < reds->num; ++j)
-        count += bitset_test (reds->lookaheads[j], i);
-      if (2 <= count)
-        res += count-1;
+      int बिलांग = 0;
+      for (int j = 0; j < reds->नुमेरो; ++j)
+        बिलांग += bitset_test (reds->lookaheads[j], i);
+      if (2 <= बिलांग)
+        res += बिलांग-1;
     }
 
   return res;
 }
 
 static size_t
-count_rr_conflicts (void)
+बिलांग_rr_conflicts (void)
 {
   size_t res = 0;
   /* Conflicts by state.  */
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     if (conflicts[i])
-      res += count_state_rr_conflicts (states[i]);
+      res += बिलांग_state_rr_conflicts (states[i]);
   return res;
 }
 
@@ -525,19 +525,19 @@ count_rr_conflicts (void)
 `------------------------------------------------------------------*/
 
 static size_t
-count_rule_state_sr_conflicts (rule *r, state *s)
+बिलांग_rule_state_sr_conflicts (rule *r, state *s)
 {
   size_t res = 0;
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
 
-  for (int i = 0; i < reds->num; ++i)
+  for (int i = 0; i < reds->नुमेरो; ++i)
     if (reds->rules[i] == r)
       {
         bitset lookaheads = reds->lookaheads[i];
         int j;
         FOR_EACH_SHIFT (trans, j)
-          res += bitset_test (lookaheads, TRANSITION_SYMBOL (trans, j));
+          res += bitset_test (lookaheads, TRANSITION_सिम्बोलो (trans, j));
       }
 
   return res;
@@ -549,12 +549,12 @@ count_rule_state_sr_conflicts (rule *r, state *s)
 `----------------------------------------------------------------------*/
 
 static size_t
-count_rule_sr_conflicts (rule *r)
+बिलांग_rule_sr_conflicts (rule *r)
 {
   size_t res = 0;
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     if (conflicts[i])
-      res += count_rule_state_sr_conflicts (r, states[i]);
+      res += बिलांग_rule_state_sr_conflicts (r, states[i]);
   return res;
 }
 
@@ -564,32 +564,32 @@ count_rule_sr_conflicts (rule *r)
 `-----------------------------------------------------------------*/
 
 static size_t
-count_rule_state_rr_conflicts (rule *r, state *s)
+बिलांग_rule_state_rr_conflicts (rule *r, state *s)
 {
   size_t res = 0;
   const reductions *reds = s->reductions;
   bitset lookaheads = bitset_create (ntokens, BITSET_FIXED);
 
-  for (int i = 0; i < reds->num; ++i)
+  for (int i = 0; i < reds->नुमेरो; ++i)
     if (reds->rules[i] == r)
-      for (int j = 0; j < reds->num; ++j)
+      for (int j = 0; j < reds->नुमेरो; ++j)
         if (reds->rules[j] != r)
           {
             bitset_and (lookaheads,
                         reds->lookaheads[i],
                         reds->lookaheads[j]);
-            res += bitset_count (lookaheads);
+            res += bitset_बिलांग (lookaheads);
           }
   bitset_free (lookaheads);
   return res;
 }
 
 static size_t
-count_rule_rr_conflicts (rule *r)
+बिलांग_rule_rr_conflicts (rule *r)
 {
   size_t res = 0;
-  for (state_number i = 0; i < nstates; ++i)
-    res += count_rule_state_rr_conflicts (r, states[i]);
+  for (state_नुमेरो i = 0; i < nstates; ++i)
+    res += बिलांग_rule_state_rr_conflicts (r, states[i]);
   return res;
 }
 
@@ -601,12 +601,12 @@ void
 conflicts_output (FILE *out)
 {
   bool printed_sth = false;
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     if (conflicts[i])
       {
         const state *s = states[i];
-        int src = count_state_sr_conflicts (s);
-        int rrc = count_state_rr_conflicts (s);
+        int src = बिलांग_state_sr_conflicts (s);
+        int rrc = बिलांग_state_rr_conflicts (s);
         fprintf (out, _("State %d "), i);
         if (src && rrc)
           fprintf (out,
@@ -627,15 +627,15 @@ conflicts_output (FILE *out)
 `--------------------------------------------*/
 
 int
-conflicts_total_count (void)
+conflicts_total_बिलांग (void)
 {
-  return count_sr_conflicts () + count_rr_conflicts ();
+  return बिलांग_sr_conflicts () + बिलांग_rr_conflicts ();
 }
 
 static void
 report_counterexamples (void)
 {
-  for (state_number sn = 0; sn < nstates; ++sn)
+  for (state_नुमेरो sn = 0; sn < nstates; ++sn)
     if (conflicts[sn])
       counterexample_report_state (states[sn], stderr, "");
 }
@@ -647,7 +647,7 @@ report_counterexamples (void)
 static void
 report_rule_expectation_mismatches (void)
 {
-  for (rule_number i = 0; i < nrules; i += 1)
+  for (rule_नुमेरो i = 0; i < nrules; i += 1)
     {
       rule *r = &rules[i];
       int expected_sr = r->expected_sr_conflicts;
@@ -655,13 +655,13 @@ report_rule_expectation_mismatches (void)
 
       if (expected_sr != -1 || expected_rr != -1)
         {
-          int sr = count_rule_sr_conflicts (r);
+          int sr = बिलांग_rule_sr_conflicts (r);
           if (sr != expected_sr && (sr != 0 || expected_sr != -1))
             complain (&r->location, complaint,
                       _("shift/reduce conflicts for rule %d:"
                         " %d found, %d expected"),
                       r->code, sr, expected_sr);
-          int rr = count_rule_rr_conflicts (r);
+          int rr = बिलांग_rule_rr_conflicts (r);
           if (rr != expected_rr && (rr != 0 || expected_rr != -1))
             complain (&r->location, complaint,
                       _("reduce/reduce conflicts for rule %d:"
@@ -676,7 +676,7 @@ report_rule_expectation_mismatches (void)
 `---------------------------------*/
 
 void
-conflicts_print (void)
+conflicts_इलिम्बाग (void)
 {
   report_rule_expectation_mismatches ();
 
@@ -691,7 +691,7 @@ conflicts_print (void)
   /* The following two blocks scream for factoring, but i18n support
      would make it ugly.  */
   {
-    int total = count_sr_conflicts ();
+    int total = बिलांग_sr_conflicts ();
     /* If %expect is not used, but %expect-rr is, then expect 0 sr.  */
     int expected =
       (expected_sr_conflicts == -1 && expected_rr_conflicts != -1)
@@ -720,7 +720,7 @@ conflicts_print (void)
   }
 
   {
-    int total = count_rr_conflicts ();
+    int total = बिलांग_rr_conflicts ();
     /* If %expect-rr is not used, but %expect is, then expect 0 rr.  */
     int expected =
       (expected_rr_conflicts == -1 && expected_sr_conflicts != -1)

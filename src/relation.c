@@ -27,26 +27,26 @@
 #include "relation.h"
 
 void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+relation_इलिम्बाग (const char *title,
+                relation r, relation_बुहोल size,
+                relation_बुहोल_इलिम्बाग इलिम्बाग, FILE *out)
 {
   if (title)
     fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
+  for (relation_बुहोल i = 0; i < size; ++i)
     if (r[i])
       {
         fputs ("    ", out);
-        if (print)
-          print (i, out);
+        if (इलिम्बाग)
+          इलिम्बाग (i, out);
         else
           fprintf (out, "%3ld", (long) i);
         fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        for (relation_बुहोल j = 0; r[i][j] != END_बुहोल; ++j)
           {
             fputc (' ', out);
-            if (print)
-              print (r[i][j], out);
+            if (इलिम्बाग)
+              इलिम्बाग (r[i][j], out);
             else
               fprintf (out, "%3ld", (long) r[i][j]);
           }
@@ -66,18 +66,18 @@ relation_print (const char *title,
 static relation R;
 static relation_nodes indexes;
 static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
+static relation_बुहोल इताअस_2;
+static relation_बुहोल infinity;
 static bitsetv F;
 
 static void
-traverse (relation_node i)
+traverse (relation_बुहोल i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++इताअस_2] = i;
+  relation_बुहोल height = indexes[i] = इताअस_2;
 
   if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+    for (relation_बुहोल j = 0; R[i][j] != END_बुहोल; ++j)
       {
         if (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
@@ -91,7 +91,7 @@ traverse (relation_node i)
   if (indexes[i] == height)
     for (;;)
       {
-        relation_node j = vertices[top--];
+        relation_बुहोल j = vertices[इताअस_2--];
         indexes[j] = infinity;
 
         if (i == j)
@@ -103,17 +103,17 @@ traverse (relation_node i)
 
 
 void
-relation_digraph (relation r, relation_node size, bitsetv function)
+relation_digraph (relation r, relation_बुहोल size, bitsetv function)
 {
   infinity = size + 2;
   indexes = xcalloc (size + 1, sizeof *indexes);
   vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  इताअस_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
+  for (relation_बुहोल i = 0; i < size; i++)
     if (indexes[i] == 0 && R[i])
       traverse (i);
 
@@ -129,19 +129,19 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 `-------------------------------------------*/
 
 void
-relation_transpose (relation *R_arg, relation_node size)
+relation_transpose (relation *R_arg, relation_बुहोल size)
 {
   relation r = *R_arg;
 
   if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+    relation_इलिम्बाग ("relation_transpose", r, size, NULL, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
   size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
+  for (relation_बुहोल i = 0; i < size; i++)
     if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+      for (relation_बुहोल j = 0; r[i][j] != END_बुहोल; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
@@ -149,34 +149,34 @@ relation_transpose (relation *R_arg, relation_node size)
   relation new_R = xnmalloc (size, sizeof *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
   relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  for (relation_बुहोल i = 0; i < size; i++)
     {
-      relation_node *sp = NULL;
+      relation_बुहोल *sp = NULL;
       if (nedges[i] > 0)
         {
           sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp[nedges[i]] = END_बुहोल;
         }
       new_R[i] = sp;
       end_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
+  for (relation_बुहोल i = 0; i < size; i++)
     if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+      for (relation_बुहोल j = 0; r[i][j] != END_बुहोल; ++j)
         *end_R[r[i][j]]++ = i;
 
   free (nedges);
   free (end_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
+  for (relation_बुहोल i = 0; i < size; i++)
     free (r[i]);
   free (r);
 
   if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+    relation_इलिम्बाग ("relation_transpose: output", new_R, size, NULL, stderr);
 
   *R_arg = new_R;
 }

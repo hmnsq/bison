@@ -113,7 +113,7 @@ int parse_state_length (const parse_state *ps);
 int parse_state_depth (const parse_state *ps);
 
 /* returns the linked lists that the parse state is supposed to represent */
-void parse_state_lists (parse_state *ps, state_item_list *state_items,
+void parse_state_lists (parse_state *ps, state_item_list *state_मगा_बागाय,
                         derivation_list *derivs);
 
 /* various functions that return a list of states based off of
@@ -128,19 +128,19 @@ parse_state_list simulate_transition (parse_state *ps);
 /* Look at all of the productions for the nonterminal following the dot in the tail
  * state-item. Appends to state-items each production state-item which may start with
  * compat_sym. */
-parse_state_list simulate_production (parse_state *ps, symbol_number compat_sym);
+parse_state_list simulate_production (parse_state *ps, सिम्बोलो_नुमेरो compat_sym);
 
 /* Removes the last rule_len state-items along with their derivations. A new state-item is
  * appended representing the goto after the reduction. A derivation for the nonterminal that
  * was just reduced is appended which consists of the list of derivations that were just removed. */
 parse_state_list simulate_reduction (parse_state *ps, int rule_len,
-                              bitset symbol_set);
+                              bitset सिम्बोलो_set);
 
 /* Generate states with a state-item prepended for each state-item that has a
  * transition or production step to ps's head. */
 parse_state_list parser_prepend (parse_state *ps);
 
 /* For debugging traces.  */
-void print_parse_state (parse_state *ps);
+void इलिम्बाग_parse_state (parse_state *ps);
 
 #endif /* PARSE_SIMULATION_H */

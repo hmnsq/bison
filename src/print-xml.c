@@ -50,8 +50,8 @@ struct escape_buf
   char *ptr;
   size_t size;
 };
-enum { num_escape_bufs = 3 };
-static struct escape_buf escape_bufs[num_escape_bufs];
+enum { नुमेरो_escape_bufs = 3 };
+static struct escape_buf escape_bufs[नुमेरो_escape_bufs];
 
 
 /*--------------------------------.
@@ -59,9 +59,9 @@ static struct escape_buf escape_bufs[num_escape_bufs];
 `--------------------------------*/
 
 static void
-print_core (FILE *out, int level, state *s)
+इलिम्बाग_core (FILE *out, int level, state *s)
 {
-  item_index *sitems = s->items;
+  item_index *sitems = s->मगा_बागाय;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not only its kernel.  */
@@ -80,12 +80,12 @@ print_core (FILE *out, int level, state *s)
   for (size_t i = 0; i < snritems; i++)
     {
       bool printed = false;
-      item_number *sp1 = ritem + sitems[i];
+      item_नुमेरो *sp1 = ritem + sitems[i];
       rule const *r = item_rule (sp1);
-      item_number *sp = r->rhs;
+      item_नुमेरो *sp = r->rhs;
 
       /* Display the lookahead tokens?  */
-      if (item_number_is_rule_number (*sp1))
+      if (item_नुमेरो_is_rule_नुमेरो (*sp1))
         {
           reductions *reds = s->reductions;
           int red = state_reduction_find (s, r);
@@ -94,8 +94,8 @@ print_core (FILE *out, int level, state *s)
             {
               xml_printf (out, level + 1,
                           "<item rule-number=\"%d\" dot=\"%d\">",
-                          r->number, sp1 - sp);
-              state_rule_lookaheads_print_xml (s, r,
+                          r->नुमेरो_2, sp1 - sp);
+              state_rule_lookaheads_इलिम्बाग_xml (s, r,
                                                      out, level + 2);
               xml_puts (out, level + 1, "</item>");
               printed = true;
@@ -105,7 +105,7 @@ print_core (FILE *out, int level, state *s)
       if (!printed)
         xml_printf (out, level + 1,
                     "<item rule-number=\"%d\" dot=\"%d\"/>",
-                    r->number,
+                    r->नुमेरो_2,
                     sp1 - sp);
     }
   xml_puts (out, level, "</itemset>");
@@ -118,13 +118,13 @@ print_core (FILE *out, int level, state *s)
 `-----------------------------------------------------------*/
 
 static void
-print_transitions (state *s, FILE *out, int level)
+इलिम्बाग_transitions (state *s, FILE *out, int level)
 {
   transitions *trans = s->transitions;
   int n = 0;
   int i;
 
-  for (i = 0; i < trans->num; i++)
+  for (i = 0; i < trans->नुमेरो; i++)
     if (!TRANSITION_IS_DISABLED (trans, i))
       {
         n++;
@@ -140,30 +140,30 @@ print_transitions (state *s, FILE *out, int level)
   /* Report lookahead tokens and shifts.  */
   xml_puts (out, level, "<transitions>");
 
-  for (i = 0; i < trans->num; i++)
+  for (i = 0; i < trans->नुमेरो; i++)
     if (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i))
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
+        सिम्बोलो *sym = symbols[TRANSITION_सिम्बोलो (trans, i)];
         char const *tag = sym->tag;
         state *s1 = trans->states[i];
 
         xml_printf (out, level + 1,
                     "<transition type=\"shift\" symbol=\"%s\" state=\"%d\"/>",
-                    xml_escape (tag), s1->number);
+                    xml_escape (tag), s1->नुमेरो_2);
       }
 
-  for (i = 0; i < trans->num; i++)
+  for (i = 0; i < trans->नुमेरो; i++)
     if (!TRANSITION_IS_DISABLED (trans, i)
         && !TRANSITION_IS_SHIFT (trans, i))
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
+        सिम्बोलो *sym = symbols[TRANSITION_सिम्बोलो (trans, i)];
         char const *tag = sym->tag;
         state *s1 = trans->states[i];
 
         xml_printf (out, level + 1,
                     "<transition type=\"goto\" symbol=\"%s\" state=\"%d\"/>",
-                    xml_escape (tag), s1->number);
+                    xml_escape (tag), s1->नुमेरो_2);
       }
 
   xml_puts (out, level, "</transitions>");
@@ -175,18 +175,18 @@ print_transitions (state *s, FILE *out, int level)
 `--------------------------------------------------------*/
 
 static void
-print_errs (FILE *out, int level, state *s)
+इलिम्बाग_errs (FILE *out, int level, state *s)
 {
   errs *errp = s->errs;
-  bool count = false;
+  bool बिलांग = false;
   int i;
 
-  for (i = 0; i < errp->num; ++i)
+  for (i = 0; i < errp->नुमेरो; ++i)
     if (errp->symbols[i])
-      count = true;
+      बिलांग = true;
 
   /* Nothing to report. */
-  if (!count)
+  if (!बिलांग)
     {
       xml_puts (out, level, "<errors/>");
       return;
@@ -194,7 +194,7 @@ print_errs (FILE *out, int level, state *s)
 
   /* Report lookahead tokens and errors.  */
   xml_puts (out, level, "<errors>");
-  for (i = 0; i < errp->num; ++i)
+  for (i = 0; i < errp->नुमेरो; ++i)
     if (errp->symbols[i])
       {
         char const *tag = errp->symbols[i]->tag;
@@ -213,7 +213,7 @@ print_errs (FILE *out, int level, state *s)
 `-------------------------------------------------------------------*/
 
 static void
-print_reduction (FILE *out, int level, char const *lookahead,
+इलिम्बाग_reduction (FILE *out, int level, char const *lookahead,
                  rule *r, bool enabled)
 {
   if (rule_is_initial (r))
@@ -225,7 +225,7 @@ print_reduction (FILE *out, int level, char const *lookahead,
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"%d\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
-                r->number,
+                r->नुमेरो_2,
                 enabled ? "true" : "false");
 }
 
@@ -235,7 +235,7 @@ print_reduction (FILE *out, int level, char const *lookahead,
 `-------------------------------------------*/
 
 static void
-print_reductions (FILE *out, int level, state *s)
+इलिम्बाग_reductions (FILE *out, int level, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
@@ -243,21 +243,21 @@ print_reductions (FILE *out, int level, state *s)
   int report = false;
   int i, j;
 
-  if (reds->num == 0)
+  if (reds->नुमेरो == 0)
     {
       xml_puts (out, level, "<reductions/>");
       return;
     }
 
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  if (yydefact[s->नुमेरो_2] != 0)
+    default_reduction = &rules[yydefact[s->नुमेरो_2] - 1];
 
   bitset_zero (no_reduce_set);
   FOR_EACH_SHIFT (trans, i)
-    bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
-  for (i = 0; i < s->errs->num; ++i)
+    bitset_set (no_reduce_set, TRANSITION_सिम्बोलो (trans, i));
+  for (i = 0; i < s->errs->नुमेरो; ++i)
     if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+      bitset_set (no_reduce_set, s->errs->symbols[i]->content->नुमेरो_2);
 
   if (default_reduction)
     report = true;
@@ -265,16 +265,16 @@ print_reductions (FILE *out, int level, state *s)
   if (reds->lookaheads)
     for (i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool बिलांग = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
+        for (j = 0; j < reds->नुमेरो; ++j)
           if (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              if (! बिलांग)
                 {
                   if (reds->rules[j] != default_reduction)
                     report = true;
-                  count = true;
+                  बिलांग = true;
                 }
               else
                 {
@@ -297,34 +297,34 @@ print_reductions (FILE *out, int level, state *s)
     for (i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
+        bool बिलांग = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
+        for (j = 0; j < reds->नुमेरो; ++j)
           if (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              if (! बिलांग)
                 {
                   if (reds->rules[j] != default_reduction)
-                    print_reduction (out, level + 1, symbols[i]->tag,
+                    इलिम्बाग_reduction (out, level + 1, symbols[i]->tag,
                                      reds->rules[j], true);
                   else
                     defaulted = true;
-                  count = true;
+                  बिलांग = true;
                 }
               else
                 {
                   if (defaulted)
-                    print_reduction (out, level + 1, symbols[i]->tag,
+                    इलिम्बाग_reduction (out, level + 1, symbols[i]->tag,
                                      default_reduction, true);
                   defaulted = false;
-                  print_reduction (out, level + 1, symbols[i]->tag,
+                  इलिम्बाग_reduction (out, level + 1, symbols[i]->tag,
                                    reds->rules[j], false);
                 }
             }
       }
 
   if (default_reduction)
-    print_reduction (out, level + 1,
+    इलिम्बाग_reduction (out, level + 1,
                      "$default", default_reduction, true);
 
   xml_puts (out, level, "</reductions>");
@@ -337,12 +337,12 @@ print_reductions (FILE *out, int level, state *s)
 `--------------------------------------------------------------*/
 
 static void
-print_actions (FILE *out, int level, state *s)
+इलिम्बाग_actions (FILE *out, int level, state *s)
 {
   xml_puts (out, level, "<actions>");
-  print_transitions (s, out, level + 1);
-  print_errs (out, level + 1, s);
-  print_reductions (out, level + 1, s);
+  इलिम्बाग_transitions (s, out, level + 1);
+  इलिम्बाग_errs (out, level + 1, s);
+  इलिम्बाग_reductions (out, level + 1, s);
   xml_puts (out, level, "</actions>");
 }
 
@@ -352,12 +352,12 @@ print_actions (FILE *out, int level, state *s)
 `----------------------------------*/
 
 static void
-print_state (FILE *out, int level, state *s)
+इलिम्बाग_state (FILE *out, int level, state *s)
 {
   fputc ('\n', out);
-  xml_printf (out, level, "<state number=\"%d\">", s->number);
-  print_core (out, level + 1, s);
-  print_actions (out, level + 1, s);
+  xml_printf (out, level, "<state number=\"%d\">", s->नुमेरो_2);
+  इलिम्बाग_core (out, level + 1, s);
+  इलिम्बाग_actions (out, level + 1, s);
   if (s->solved_conflicts_xml)
     {
       xml_puts (out, level + 1, "<solved-conflicts>");
@@ -375,18 +375,18 @@ print_state (FILE *out, int level, state *s)
 `-----------------------------------------*/
 
 static void
-print_grammar (FILE *out, int level)
+इलिम्बाग_grammar (FILE *out, int level)
 {
   fputc ('\n', out);
   xml_puts (out, level, "<grammar>");
-  grammar_rules_print_xml (out, level);
+  grammar_rules_इलिम्बाग_xml (out, level);
 
   /* Terminals */
   xml_puts (out, level + 1, "<terminals>");
   for (int i = 0; i < max_code + 1; i++)
-    if (token_translations[i] != undeftoken->content->number)
+    if (token_translations[i] != undeftoken->content->नुमेरो_2)
       {
-        symbol const *sym = symbols[token_translations[i]];
+        सिम्बोलो const *sym = symbols[token_translations[i]];
         char const *tag = sym->tag;
         char const *type = sym->content->type_name;
         int precedence = sym->content->prec;
@@ -409,9 +409,9 @@ print_grammar (FILE *out, int level)
 
   /* Nonterminals */
   xml_puts (out, level + 1, "<nonterminals>");
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms + nuseless_nonterminals; i++)
     {
-      symbol const *sym = symbols[i];
+      सिम्बोलो const *sym = symbols[i];
       char const *tag = sym->tag;
       char const *type = sym->content->type_name;
       xml_printf (out, level + 2,
@@ -496,7 +496,7 @@ xml_escape (char const *str)
 }
 
 void
-print_xml (void)
+इलिम्बाग_xml (void)
 {
   FILE *out = xfopen (spec_xml_file, "w");
 
@@ -515,22 +515,22 @@ print_xml (void)
               xml_escape (grammar_file));
 
   /* print grammar */
-  print_grammar (out, level + 1);
+  इलिम्बाग_grammar (out, level + 1);
 
   no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
 
   /* print automaton */
   fputc ('\n', out);
   xml_puts (out, level + 1, "<automaton>");
-  for (state_number i = 0; i < nstates; i++)
-    print_state (out, level + 2, states[i]);
+  for (state_नुमेरो i = 0; i < nstates; i++)
+    इलिम्बाग_state (out, level + 2, states[i]);
   xml_puts (out, level + 1, "</automaton>");
 
   bitset_free (no_reduce_set);
 
   xml_puts (out, 0, "</bison-xml-report>");
 
-  for (int i = 0; i < num_escape_bufs; ++i)
+  for (int i = 0; i < नुमेरो_escape_bufs; ++i)
     free (escape_bufs[i].ptr);
 
   xfclose (out);
@@ -538,7 +538,7 @@ print_xml (void)
 
 
 void
-print_html (void)
+इलिम्बाग_html (void)
 {
   assert (xml_flag);
 

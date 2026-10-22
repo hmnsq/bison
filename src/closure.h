@@ -35,7 +35,7 @@ void closure_new (int n);
    rules could be run and which items could be accepted when those
    items are the active ones.  */
 
-void closure (item_index const *items, size_t n);
+void closure (item_index const *मगा_बागाय, size_t n);
 
 
 /* Free ITEMSET, RULESET and internal data.  */

@@ -32,10 +32,10 @@ assoc_to_string (assoc a)
     case undef_assoc:
       return "undefined associativity";
 
-    case right_assoc:
+    case कानान_assoc:
       return "%right";
 
-    case left_assoc:
+    case कालिवा_assoc:
       return "%left";
 
     case non_assoc:

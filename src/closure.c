@@ -54,30 +54,30 @@ static bitsetv firsts = NULL;
 `-----------------*/
 
 static void
-closure_print (char const *title, item_index const *array, size_t size)
+closure_इलिम्बाग (char const *title, item_index const *array, size_t size)
 {
   fprintf (stderr, "Closure: %s\n", title);
   for (size_t i = 0; i < size; ++i)
     {
       fprintf (stderr, "  %2d: .", array[i]);
-      item_number *rp;
+      item_नुमेरो *rp;
       for (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
         fprintf (stderr, " %s", symbols[*rp]->tag);
-      fprintf (stderr, "  (rule %d)\n", item_number_as_rule_number (*rp));
+      fprintf (stderr, "  (rule %d)\n", item_नुमेरो_as_rule_नुमेरो (*rp));
     }
   fputs ("\n\n", stderr);
 }
 
 
 static void
-print_firsts (void)
+इलिम्बाग_firsts (void)
 {
   fprintf (stderr, "FIRSTS\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s firsts\n", symbols[i]->tag);
       bitset_iterator iter;
-      symbol_number j;
+      सिम्बोलो_नुमेरो j;
       BITSET_FOR_EACH (iter, FIRSTS (i), j, 0)
         fprintf (stderr, "    %s\n", symbols[j + ntokens]->tag);
     }
@@ -86,18 +86,18 @@ print_firsts (void)
 
 
 static void
-print_fderives (void)
+इलिम्बाग_fderives (void)
 {
   fprintf (stderr, "FDERIVES\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
       bitset_iterator iter;
-      rule_number r;
+      rule_नुमेरो r;
       BITSET_FOR_EACH (iter, FDERIVES (i), r, 0)
         {
           fprintf (stderr, "    %3d ", r);
-          rule_rhs_print (&rules[r], stderr);
+          rule_rhs_इलिम्बाग (&rules[r], stderr);
           fprintf (stderr, "\n");
         }
     }
@@ -120,10 +120,10 @@ set_firsts (void)
 {
   firsts = bitsetv_create (nnterms, nnterms, BITSET_FIXED);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = 0; derives[i - ntokens][j]; ++j)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
+    for (सिम्बोलो_नुमेरो j = 0; derives[i - ntokens][j]; ++j)
       {
-        item_number sym = derives[i - ntokens][j]->rhs[0];
+        item_नुमेरो sym = derives[i - ntokens][j]->rhs[0];
         if (ISVAR (sym))
           bitset_set (FIRSTS (i), sym - ntokens);
       }
@@ -135,7 +135,7 @@ set_firsts (void)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Output", firsts);
 
   if (trace_flag & trace_sets)
-    print_firsts ();
+    इलिम्बाग_firsts ();
 }
 
 /*-------------------------------------------------------------------.
@@ -155,14 +155,14 @@ set_fderives (void)
 
   set_firsts ();
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = ntokens; j < nsyms; ++j)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
+    for (सिम्बोलो_नुमेरो j = ntokens; j < nsyms; ++j)
       if (bitset_test (FIRSTS (i), j - ntokens))
-        for (rule_number k = 0; derives[j - ntokens][k]; ++k)
-          bitset_set (FDERIVES (i), derives[j - ntokens][k]->number);
+        for (rule_नुमेरो k = 0; derives[j - ntokens][k]; ++k)
+          bitset_set (FDERIVES (i), derives[j - ntokens][k]->नुमेरो_2);
 
   if (trace_flag & trace_sets)
-    print_fderives ();
+    इलिम्बाग_fderives ();
 
   bitsetv_free (firsts);
 }
@@ -185,7 +185,7 @@ void
 closure (item_index const *core, size_t n)
 {
   if (trace_flag & trace_closure)
-    closure_print ("input", core, n);
+    closure_इलिम्बाग ("input", core, n);
 
   bitset_zero (ruleset);
 
@@ -199,7 +199,7 @@ closure (item_index const *core, size_t n)
   size_t c = 0;
 
   /* A bit index over RULESET. */
-  rule_number ruleno;
+  rule_नुमेरो ruleno;
   bitset_iterator iter;
   BITSET_FOR_EACH (iter, ruleset, ruleno, 0)
     {
@@ -222,7 +222,7 @@ closure (item_index const *core, size_t n)
     }
 
   if (trace_flag & trace_closure)
-    closure_print ("output", itemset, nitemset);
+    closure_इलिम्बाग ("output", itemset, nitemset);
 }
 
 

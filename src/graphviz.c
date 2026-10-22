@@ -61,7 +61,7 @@ start_graph (FILE *fout)
 }
 
 void
-output_node (int id, char const *label, FILE *fout)
+output_बुहोल (int id, char const *label, FILE *fout)
 {
   fprintf (fout, "  %d [label=\"%s\"]\n", id, label);
 }
@@ -94,16 +94,16 @@ no_reduce_bitset_init (state const *s, bitset *no_reduce_set)
   {
     int n;
     FOR_EACH_SHIFT (s->transitions, n)
-      bitset_set (*no_reduce_set, TRANSITION_SYMBOL (s->transitions, n));
+      bitset_set (*no_reduce_set, TRANSITION_सिम्बोलो (s->transitions, n));
   }
-  for (int n = 0; n < s->errs->num; ++n)
+  for (int n = 0; n < s->errs->नुमेरो; ++n)
     if (s->errs->symbols[n])
-      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->number);
+      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->नुमेरो_2);
 }
 
 /* Show the reductions from state SOURCE on rule RULENO. */
 static void
-conclude_red (struct obstack *out, int source, rule_number ruleno,
+conclude_red (struct obstack *out, int source, rule_नुमेरो ruleno,
               bool enabled, bool first, FILE *fout)
 {
   /* If no lookahead tokens were valid transitions, this reduction is
@@ -151,7 +151,7 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
 }
 
 static bool
-print_token (struct obstack *out, bool first, char const *tok)
+इलिम्बाग_token (struct obstack *out, bool first, char const *tok)
 {
   if (! first)
     obstack_sgrow (out, ", ");
@@ -166,7 +166,7 @@ output_red (state const *s, reductions const *reds, FILE *fout)
   no_reduce_bitset_init (s, &no_reduce_set);
 
   rule *default_reduction
-    = yydefact[s->number] ? &rules[yydefact[s->number] - 1] : NULL;
+    = yydefact[s->नुमेरो_2] ? &rules[yydefact[s->नुमेरो_2] - 1] : NULL;
 
   /* Two obstacks are needed: one for the enabled reductions, and one
      for the disabled reductions, because in the end we want two
@@ -177,8 +177,8 @@ output_red (state const *s, reductions const *reds, FILE *fout)
   obstack_init (&dout);
   obstack_init (&eout);
 
-  const int source = s->number;
-  for (int j = 0; j < reds->num; ++j)
+  const int source = s->नुमेरो_2;
+  for (int j = 0; j < reds->नुमेरो; ++j)
     {
       bool defaulted = default_reduction && default_reduction == reds->rules[j];
 
@@ -186,18 +186,18 @@ output_red (state const *s, reductions const *reds, FILE *fout)
          and one for disabled transitions. */
       bool firstd = true;
       bool firste = true;
-      rule_number ruleno = reds->rules[j]->number;
+      rule_नुमेरो ruleno = reds->rules[j]->नुमेरो_2;
 
       if (reds->lookaheads)
         for (int i = 0; i < ntokens; i++)
           if (bitset_test (reds->lookaheads[j], i))
             {
               if (bitset_test (no_reduce_set, i))
-                firstd = print_token (&dout, firstd, symbols[i]->tag);
+                firstd = इलिम्बाग_token (&dout, firstd, symbols[i]->tag);
               else
                 {
                   if (! defaulted)
-                    firste = print_token (&eout, firste, symbols[i]->tag);
+                    firste = इलिम्बाग_token (&eout, firste, symbols[i]->tag);
                   bitset_set (no_reduce_set, i);
                 }
             }

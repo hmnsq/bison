@@ -42,22 +42,22 @@
 `-----------------------------------------*/
 
 static transitions *
-transitions_new (int num, state **dst)
+transitions_new (int नुमेरो, state **dst)
 {
-  size_t states_size = num * sizeof *dst;
+  size_t states_size = नुमेरो * sizeof *dst;
   transitions *res = xmalloc (offsetof (transitions, states) + states_size);
-  res->num = num;
+  res->नुमेरो = नुमेरो;
   memcpy (res->states, dst, states_size);
   return res;
 }
 
 
 state *
-transitions_to (state *s, symbol_number sym)
+transitions_to (state *s, सिम्बोलो_नुमेरो sym)
 {
   transitions *trans = s->transitions;
-  for (int i = 0; i < trans->num; ++i)
-    if (TRANSITION_SYMBOL (trans, i) == sym)
+  for (int i = 0; i < trans->नुमेरो; ++i)
+    if (TRANSITION_सिम्बोलो (trans, i) == sym)
       return trans->states[i];
   abort ();
 }
@@ -73,11 +73,11 @@ transitions_to (state *s, symbol_number sym)
 `---------------------------------*/
 
 errs *
-errs_new (int num, symbol **tokens)
+errs_new (int नुमेरो, सिम्बोलो **tokens)
 {
-  size_t symbols_size = num * sizeof *tokens;
+  size_t symbols_size = नुमेरो * sizeof *tokens;
   errs *res = xmalloc (offsetof (errs, symbols) + symbols_size);
-  res->num = num;
+  res->नुमेरो = नुमेरो;
   if (tokens)
     memcpy (res->symbols, tokens, symbols_size);
   return res;
@@ -96,11 +96,11 @@ errs_new (int num, symbol **tokens)
 `---------------------------------------*/
 
 static reductions *
-reductions_new (int num, rule **reds)
+reductions_new (int नुमेरो, rule **reds)
 {
-  size_t rules_size = num * sizeof *reds;
+  size_t rules_size = नुमेरो * sizeof *reds;
   reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
-  res->num = num;
+  res->नुमेरो = नुमेरो;
   res->lookaheads = NULL;
   memcpy (res->rules, reds, rules_size);
   return res;
@@ -113,7 +113,7 @@ reductions_new (int num, rule **reds)
                         `---------*/
 
 
-state_number nstates = 0;
+state_नुमेरो nstates = 0;
 /* FINAL_STATE is properly set by new_state when it recognizes its
    accessing symbol: $end.  */
 state *final_state = NULL;
@@ -125,15 +125,15 @@ state *final_state = NULL;
 `------------------------------------------------------------------*/
 
 state *
-state_new (symbol_number accessing_symbol,
+state_new (सिम्बोलो_नुमेरो accessing_सिम्बोलो,
            size_t nitems, item_index *core)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_नुमेरो_MAXIMUM);
 
-  size_t items_size = nitems * sizeof *core;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = accessing_symbol;
+  size_t मगा_बागाय_size = nitems * sizeof *core;
+  state *res = xmalloc (offsetof (state, मगा_बागाय) + मगा_बागाय_size);
+  res->नुमेरो_2 = nstates++;
+  res->accessing_सिम्बोलो = accessing_सिम्बोलो;
   res->transitions = NULL;
   res->reductions = NULL;
   res->errs = NULL;
@@ -143,9 +143,9 @@ state_new (symbol_number accessing_symbol,
   res->solved_conflicts_xml = NULL;
 
   res->nitems = nitems;
-  memcpy (res->items, core, items_size);
+  memcpy (res->मगा_बागाय, core, मगा_बागाय_size);
 
-  state_hash_insert (res);
+  state_hash_इसिंगित (res);
 
   return res;
 }
@@ -153,15 +153,15 @@ state_new (symbol_number accessing_symbol,
 state *
 state_new_isocore (state const *s)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_नुमेरो_MAXIMUM);
 
-  size_t items_size = s->nitems * sizeof *s->items;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = s->accessing_symbol;
+  size_t मगा_बागाय_size = s->nitems * sizeof *s->मगा_बागाय;
+  state *res = xmalloc (offsetof (state, मगा_बागाय) + मगा_बागाय_size);
+  res->नुमेरो_2 = nstates++;
+  res->accessing_सिम्बोलो = s->accessing_सिम्बोलो;
   res->transitions =
-    transitions_new (s->transitions->num, s->transitions->states);
-  res->reductions = reductions_new (s->reductions->num, s->reductions->rules);
+    transitions_new (s->transitions->नुमेरो, s->transitions->states);
+  res->reductions = reductions_new (s->reductions->नुमेरो, s->reductions->rules);
   res->errs = NULL;
   res->state_list = NULL;
   res->consistent = s->consistent;
@@ -169,7 +169,7 @@ state_new_isocore (state const *s)
   res->solved_conflicts_xml = NULL;
 
   res->nitems = s->nitems;
-  memcpy (res->items, s->items, items_size);
+  memcpy (res->मगा_बागाय, s->मगा_बागाय, मगा_बागाय_size);
 
   return res;
 }
@@ -190,17 +190,17 @@ state_free (state *s)
 
 
 void
-state_transitions_print (const state *s, FILE *out)
+state_transitions_इलिम्बाग (const state *s, FILE *out)
 {
   const transitions *trans = s->transitions;
   fprintf (out, "transitions of %d (%d):\n",
-           s->number, trans->num);
-  for (int i = 0; i < trans->num; ++i)
+           s->नुमेरो_2, trans->नुमेरो);
+  for (int i = 0; i < trans->नुमेरो; ++i)
     fprintf (out, "  %d: (%d, %s, %d)\n",
              i,
-             s->number,
-             symbols[s->transitions->states[i]->accessing_symbol]->tag,
-             s->transitions->states[i]->number);
+             s->नुमेरो_2,
+             symbols[s->transitions->states[i]->accessing_सिम्बोलो]->tag,
+             s->transitions->states[i]->नुमेरो_2);
 }
 
 
@@ -209,12 +209,12 @@ state_transitions_print (const state *s, FILE *out)
 `---------------------------*/
 
 void
-state_transitions_set (state *s, int num, state **dst)
+state_transitions_set (state *s, int नुमेरो, state **dst)
 {
   aver (!s->transitions);
-  s->transitions = transitions_new (num, dst);
+  s->transitions = transitions_new (नुमेरो, dst);
   if (trace_flag & trace_automaton)
-    state_transitions_print (s, stderr);
+    state_transitions_इलिम्बाग (s, stderr);
 }
 
 
@@ -223,10 +223,10 @@ state_transitions_set (state *s, int num, state **dst)
 `--------------------------*/
 
 void
-state_reductions_set (state *s, int num, rule **reds)
+state_reductions_set (state *s, int नुमेरो, rule **reds)
 {
   aver (!s->reductions);
-  s->reductions = reductions_new (num, reds);
+  s->reductions = reductions_new (नुमेरो, reds);
 }
 
 
@@ -234,7 +234,7 @@ int
 state_reduction_find (state const *s, rule const *r)
 {
   reductions *reds = s->reductions;
-  for (int i = 0; i < reds->num; ++i)
+  for (int i = 0; i < reds->नुमेरो; ++i)
     if (reds->rules[i] == r)
       return i;
   abort ();
@@ -246,10 +246,10 @@ state_reduction_find (state const *s, rule const *r)
 `--------------------*/
 
 void
-state_errs_set (state *s, int num, symbol **tokens)
+state_errs_set (state *s, int नुमेरो, सिम्बोलो **tokens)
 {
   aver (!s->errs);
-  s->errs = errs_new (num, tokens);
+  s->errs = errs_new (नुमेरो, tokens);
 }
 
 
@@ -260,7 +260,7 @@ state_errs_set (state *s, int num, symbol **tokens)
 `--------------------------------------------------*/
 
 void
-state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
+state_rule_lookaheads_इलिम्बाग (state const *s, rule const *r, FILE *out)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
@@ -283,7 +283,7 @@ state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
 }
 
 void
-state_rule_lookaheads_print_xml (state const *s, rule const *r,
+state_rule_lookaheads_इलिम्बाग_xml (state const *s, rule const *r,
                                        FILE *out, int level)
 {
   /* Find the reduction we are handling.  */
@@ -323,7 +323,7 @@ state_compare (state const *s1, state const *s2)
     return false;
 
   for (size_t i = 0; i < s1->nitems; ++i)
-    if (s1->items[i] != s2->items[i])
+    if (s1->मगा_बागाय[i] != s2->मगा_बागाय[i])
       return false;
 
   return true;
@@ -339,10 +339,10 @@ static inline size_t
 state_hash (state const *s, size_t tablesize)
 {
   /* Add up the state's item numbers to get a hash key.  */
-  size_t key = 0;
+  size_t सुसि = 0;
   for (size_t i = 0; i < s->nitems; ++i)
-    key += s->items[i];
-  return key % tablesize;
+    सुसि += s->मगा_बागाय[i];
+  return सुसि % tablesize;
 }
 
 static size_t
@@ -383,7 +383,7 @@ state_hash_free (void)
 `-----------------------------------*/
 
 void
-state_hash_insert (state *s)
+state_hash_इसिंगित (state *s)
 {
   hash_xinsert (state_table, s);
 }
@@ -397,10 +397,10 @@ state_hash_insert (state *s)
 state *
 state_hash_lookup (size_t nitems, const item_index *core)
 {
-  size_t items_size = nitems * sizeof *core;
-  state *probe = xmalloc (offsetof (state, items) + items_size);
+  size_t मगा_बागाय_size = nitems * sizeof *core;
+  state *probe = xmalloc (offsetof (state, मगा_बागाय) + मगा_बागाय_size);
   probe->nitems = nitems;
-  memcpy (probe->items, core, items_size);
+  memcpy (probe->मगा_बागाय, core, मगा_बागाय_size);
   state *entry = hash_lookup (state_table, probe);
   free (probe);
   return entry;
@@ -414,26 +414,26 @@ state_hash_lookup (size_t nitems, const item_index *core)
 static void
 state_record_reachable_states (state *s, bitset reachable)
 {
-  if (bitset_test (reachable, s->number))
+  if (bitset_test (reachable, s->नुमेरो_2))
     return;
-  bitset_set (reachable, s->number);
-  for (int i = 0; i < s->transitions->num; ++i)
+  bitset_set (reachable, s->नुमेरो_2);
+  for (int i = 0; i < s->transitions->नुमेरो; ++i)
     if (!TRANSITION_IS_DISABLED (s->transitions, i))
       state_record_reachable_states (s->transitions->states[i], reachable);
 }
 
 void
-state_remove_unreachable_states (state_number old_to_new[])
+state_remove_unreachable_states (state_नुमेरो old_to_new[])
 {
-  state_number nstates_reachable = 0;
+  state_नुमेरो nstates_reachable = 0;
   bitset reachable = bitset_create (nstates, BITSET_FIXED);
   state_record_reachable_states (states[0], reachable);
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     {
-      if (bitset_test (reachable, states[i]->number))
+      if (bitset_test (reachable, states[i]->नुमेरो_2))
         {
           states[nstates_reachable] = states[i];
-          states[nstates_reachable]->number = nstates_reachable;
+          states[nstates_reachable]->नुमेरो_2 = nstates_reachable;
           old_to_new[i] = nstates_reachable++;
         }
       else
@@ -458,7 +458,7 @@ void
 states_free (void)
 {
   closure_free ();
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     state_free (states[i]);
   free (states);
 }

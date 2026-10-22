@@ -59,7 +59,7 @@ static struct obstack format_obstack;
 `-------------------------------------------------------------------*/
 
 
-#define GENERATE_MUSCLE_INSERT_TABLE(Name, Type)                        \
+#define GENERATE_MUSCLE_इसिंगित_TABLE(Name, Type)                        \
                                                                         \
 static void                                                             \
 Name (char const *name, Type *table_data, Type first,                   \
@@ -86,23 +86,23 @@ Name (char const *name, Type *table_data, Type first,                   \
       if (max < table_data[i])                                          \
         max = table_data[i];                                            \
     }                                                                   \
-  muscle_insert (name, obstack_finish0 (&format_obstack));              \
+  muscle_इसिंगित (name, obstack_finish0 (&format_obstack));              \
                                                                         \
   long lmin = min;                                                      \
   long lmax = max;                                                      \
   /* Build 'NAME_min' and 'NAME_max' in the obstack. */                 \
   obstack_printf (&format_obstack, "%s_min", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
+  MUSCLE_इसिंगित_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
   obstack_printf (&format_obstack, "%s_max", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
+  MUSCLE_इसिंगित_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
 }
 
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_int_table, int)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_base_table, base_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_rule_number_table, rule_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_symbol_number_table, symbol_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_item_number_table, item_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
+GENERATE_MUSCLE_इसिंगित_TABLE (muscle_इसिंगित_int_table, int)
+GENERATE_MUSCLE_इसिंगित_TABLE (muscle_इसिंगित_base_table, base_नुमेरो)
+GENERATE_MUSCLE_इसिंगित_TABLE (muscle_इसिंगित_rule_नुमेरो_table, rule_नुमेरो)
+GENERATE_MUSCLE_इसिंगित_TABLE (muscle_इसिंगित_सिम्बोलो_नुमेरो_table, सिम्बोलो_नुमेरो)
+GENERATE_MUSCLE_इसिंगित_TABLE (muscle_इसिंगित_item_नुमेरो_table, item_नुमेरो)
+GENERATE_MUSCLE_इसिंगित_TABLE (muscle_इसिंगित_state_नुमेरो_table, state_नुमेरो)
 
 
 /*----------------------------------------------------------------.
@@ -221,7 +221,7 @@ xescape_trigraphs (const char *src)
    than "$end".  But keep "$end" in the reports, it's shorter and more
    consistent.  Support i18n if the user already uses it.  */
 static const char *
-symbol_tag (const symbol *sym)
+सिम्बोलो_tag (const सिम्बोलो *sym)
 {
   const bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
@@ -238,7 +238,7 @@ symbol_tag (const symbol *sym)
    symbol names (aka tags). */
 
 static void
-prepare_symbol_names (char const *muscle_name)
+prepare_सिम्बोलो_names (char const *muscle_name)
 {
   // Whether to add a pair of quotes around the name.
   const bool quote = STREQ (muscle_name, "tname");
@@ -251,7 +251,7 @@ prepare_symbol_names (char const *muscle_name)
   set_quoting_flags (qo, QA_SPLIT_TRIGRAPHS);
   for (int i = 0; i < nsyms; i++)
     {
-      const char *tag = symbol_tag (symbols[i]);
+      const char *tag = सिम्बोलो_tag (symbols[i]);
       bool translatable = !quote && symbols[i]->translatable;
       if (translatable)
         has_translations = true;
@@ -287,10 +287,10 @@ prepare_symbol_names (char const *muscle_name)
   obstack_sgrow (&format_obstack, " ]b4_null[");
 
   /* Finish table and store. */
-  muscle_insert (muscle_name, obstack_finish0 (&format_obstack));
+  muscle_इसिंगित (muscle_name, obstack_finish0 (&format_obstack));
 
   /* Announce whether translation support is needed.  */
-  MUSCLE_INSERT_BOOL ("has_translations_flag", has_translations);
+  MUSCLE_इसिंगित_BOOL ("has_translations_flag", has_translations);
 }
 
 
@@ -302,19 +302,19 @@ prepare_symbol_names (char const *muscle_name)
 static void
 prepare_symbols (void)
 {
-  MUSCLE_INSERT_INT ("tokens_number", ntokens);
-  MUSCLE_INSERT_INT ("nterms_number", nnterms);
-  MUSCLE_INSERT_INT ("symbols_number", nsyms);
-  MUSCLE_INSERT_INT ("code_max", max_code);
+  MUSCLE_इसिंगित_INT ("tokens_number", ntokens);
+  MUSCLE_इसिंगित_INT ("nterms_number", nnterms);
+  MUSCLE_इसिंगित_INT ("symbols_number", nsyms);
+  MUSCLE_इसिंगित_INT ("code_max", max_code);
 
-  muscle_insert_symbol_number_table ("translate",
+  muscle_इसिंगित_सिम्बोलो_नुमेरो_table ("translate",
                                      token_translations,
                                      token_translations[0],
                                      1, max_code + 1);
 
   /* tname -- token names.  */
-  prepare_symbol_names ("tname");
-  prepare_symbol_names ("symbol_names");
+  prepare_सिम्बोलो_names ("tname");
+  prepare_सिम्बोलो_names ("symbol_names");
 
   /* translatable -- whether a token is translatable. */
   {
@@ -327,23 +327,23 @@ prepare_symbols (void)
         }
     if (translatable)
       {
-        int *values = xnmalloc (nsyms, sizeof *values);
+        int *मगा_हालागा = xnmalloc (nsyms, sizeof *मगा_हालागा);
         for (int i = 0; i < ntokens; ++i)
-          values[i] = symbols[i]->translatable;
-        muscle_insert_int_table ("translatable", values,
-                                 values[0], 1, ntokens);
-        free (values);
+          मगा_हालागा[i] = symbols[i]->translatable;
+        muscle_इसिंगित_int_table ("translatable", मगा_हालागा,
+                                 मगा_हालागा[0], 1, ntokens);
+        free (मगा_हालागा);
       }
   }
 
   /* Output YYTOKNUM. */
   {
-    int *values = xnmalloc (ntokens, sizeof *values);
+    int *मगा_हालागा = xnmalloc (ntokens, sizeof *मगा_हालागा);
     for (int i = 0; i < ntokens; ++i)
-      values[i] = symbols[i]->content->code;
-    muscle_insert_int_table ("toknum", values,
-                             values[0], 1, ntokens);
-    free (values);
+      मगा_हालागा[i] = symbols[i]->content->code;
+    muscle_इसिंगित_int_table ("toknum", मगा_हालागा,
+                             मगा_हालागा[0], 1, ntokens);
+    free (मगा_हालागा);
   }
 }
 
@@ -357,9 +357,9 @@ static void
 prepare_rules (void)
 {
   int *prhs = xnmalloc (nrules, sizeof *prhs);
-  item_number *rhs = xnmalloc (nritems, sizeof *rhs);
+  item_नुमेरो *rhs = xnmalloc (nritems, sizeof *rhs);
   int *rline = xnmalloc (nrules, sizeof *rline);
-  symbol_number *r1 = xnmalloc (nrules, sizeof *r1);
+  सिम्बोलो_नुमेरो *r1 = xnmalloc (nrules, sizeof *r1);
   int *r2 = xnmalloc (nrules, sizeof *r2);
   int *dprec = xnmalloc (nrules, sizeof *dprec);
   int *merger = xnmalloc (nrules, sizeof *merger);
@@ -367,20 +367,20 @@ prepare_rules (void)
 
   /* Index in RHS.  */
   int i = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  for (rule_नुमेरो r = 0; r < nrules; ++r)
     {
       /* Index of rule R in RHS. */
       prhs[r] = i;
       /* RHS of the rule R. */
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+      for (item_नुमेरो *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
         rhs[i++] = *rhsp;
       /* Separator in RHS. */
       rhs[i++] = -1;
 
       /* Line where rule was defined. */
-      rline[r] = rules[r].location.start.line;
+      rline[r] = rules[r].location.start.लिन्या;
       /* LHS of the rule R. */
-      r1[r] = rules[r].lhs->number;
+      r1[r] = rules[r].lhs->नुमेरो_2;
       /* Length of rule R's RHS. */
       r2[r] = rule_rhs_length (&rules[r]);
       /* Dynamic precedence (GLR).  */
@@ -392,17 +392,17 @@ prepare_rules (void)
     }
   aver (i == nritems);
 
-  muscle_insert_item_number_table ("rhs", rhs, ritem[0], 1, nritems);
-  muscle_insert_int_table ("prhs", prhs, 0, 0, nrules);
-  muscle_insert_int_table ("rline", rline, 0, 0, nrules);
-  muscle_insert_symbol_number_table ("r1", r1, 0, 0, nrules);
-  muscle_insert_int_table ("r2", r2, 0, 0, nrules);
-  muscle_insert_int_table ("dprec", dprec, 0, 0, nrules);
-  muscle_insert_int_table ("merger", merger, 0, 0, nrules);
-  muscle_insert_int_table ("immediate", immediate, 0, 0, nrules);
+  muscle_इसिंगित_item_नुमेरो_table ("rhs", rhs, ritem[0], 1, nritems);
+  muscle_इसिंगित_int_table ("prhs", prhs, 0, 0, nrules);
+  muscle_इसिंगित_int_table ("rline", rline, 0, 0, nrules);
+  muscle_इसिंगित_सिम्बोलो_नुमेरो_table ("r1", r1, 0, 0, nrules);
+  muscle_इसिंगित_int_table ("r2", r2, 0, 0, nrules);
+  muscle_इसिंगित_int_table ("dprec", dprec, 0, 0, nrules);
+  muscle_इसिंगित_int_table ("merger", merger, 0, 0, nrules);
+  muscle_इसिंगित_int_table ("immediate", immediate, 0, 0, nrules);
 
-  MUSCLE_INSERT_INT ("rules_number", nrules);
-  MUSCLE_INSERT_INT ("max_left_semantic_context", max_left_semantic_context);
+  MUSCLE_इसिंगित_INT ("rules_number", nrules);
+  MUSCLE_इसिंगित_INT ("max_left_semantic_context", max_कालिवा_semantic_context);
 
   free (prhs);
   free (rhs);
@@ -421,16 +421,16 @@ prepare_rules (void)
 static void
 prepare_states (void)
 {
-  symbol_number *values = xnmalloc (nstates, sizeof *values);
-  for (state_number i = 0; i < nstates; ++i)
-    values[i] = states[i]->accessing_symbol;
-  muscle_insert_symbol_number_table ("stos", values,
+  सिम्बोलो_नुमेरो *मगा_हालागा = xnmalloc (nstates, sizeof *मगा_हालागा);
+  for (state_नुमेरो i = 0; i < nstates; ++i)
+    मगा_हालागा[i] = states[i]->accessing_सिम्बोलो;
+  muscle_इसिंगित_सिम्बोलो_नुमेरो_table ("stos", मगा_हालागा,
                                      0, 1, nstates);
-  free (values);
+  free (मगा_हालागा);
 
-  MUSCLE_INSERT_INT ("last", high);
-  MUSCLE_INSERT_INT ("final_state_number", final_state->number);
-  MUSCLE_INSERT_INT ("states_number", nstates);
+  MUSCLE_इसिंगित_INT ("last", माताअस);
+  MUSCLE_इसिंगित_INT ("final_state_number", final_state->नुमेरो_2);
+  MUSCLE_इसिंगित_INT ("states_number", nstates);
 }
 
 
@@ -439,11 +439,11 @@ prepare_states (void)
 `-------------------------------------------------------*/
 
 static int
-symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
+सिम्बोलो_type_name_cmp (const सिम्बोलो **lhs, const सिम्बोलो **rhs)
 {
   int res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
   if (!res)
-    res = (*lhs)->content->number - (*rhs)->content->number;
+    res = (*lhs)->content->नुमेरो_2 - (*rhs)->content->नुमेरो_2;
   return res;
 }
 
@@ -452,12 +452,12 @@ symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
 | Return a (malloc'ed) table of the symbols sorted by type-name.  |
 `----------------------------------------------------------------*/
 
-static symbol **
+static सिम्बोलो **
 symbols_by_type_name (void)
 {
   typedef int (*qcmp_type) (const void *, const void *);
-  symbol **res = xmemdup (symbols, nsyms * sizeof *res);
-  qsort (res, nsyms, sizeof *res, (qcmp_type) &symbol_type_name_cmp);
+  सिम्बोलो **res = xmemdup (symbols, nsyms * sizeof *res);
+  qsort (res, nsyms, sizeof *res, (qcmp_type) &सिम्बोलो_type_name_cmp);
   return res;
 }
 
@@ -470,7 +470,7 @@ symbols_by_type_name (void)
 static void
 type_names_output (FILE *out)
 {
-  symbol **syms = symbols_by_type_name ();
+  सिम्बोलो **syms = symbols_by_type_name ();
   fputs ("m4_define([b4_type_names],\n[", out);
   for (int i = 0; i < nsyms; /* nothing */)
     {
@@ -479,7 +479,7 @@ type_names_output (FILE *out)
       fputs (i ? ",\n[" : "[", out);
       for (; i < nsyms
            && syms[i]->content->type_name == syms[i0]->content->type_name; ++i)
-        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->number);
+        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->नुमेरो_2);
       fputs ("]", out);
     }
   fputs ("])\n\n", out);
@@ -495,13 +495,13 @@ start_symbols_output (FILE *out)
   if (start_symbols && start_symbols->next)
     {
       fputs ("m4_define([b4_start_symbols],\n[", out);
-      for (symbol_list *list = start_symbols; list; list = list->next)
+      for (सिम्बोलो_list *list = start_symbols; list; list = list->next)
         {
-          const symbol *start = list->content.sym;
-          const symbol *swtok = switching_token (start);
+          const सिम्बोलो *start = list->content.sym;
+          const सिम्बोलो *swtok = switching_token (start);
           fprintf (out, "%s[%d, %d]",
                    list == start_symbols ? "" : ", ",
-                   start->content->number, swtok->content->number);
+                   start->content->नुमेरो_2, swtok->content->नुमेरो_2);
         }
       fputs ("])\n\n", out);
     }
@@ -513,7 +513,7 @@ start_symbols_output (FILE *out)
 `-------------------------------------*/
 
 static void
-symbol_numbers_output (FILE *out)
+सिम्बोलो_numbers_output (FILE *out)
 {
   fputs ("m4_define([b4_symbol_numbers],\n[", out);
   for (int i = 0; i < nsyms; ++i)
@@ -529,10 +529,10 @@ symbol_numbers_output (FILE *out)
 static void
 rule_output (const rule *r, FILE *out)
 {
-  output_escaped (out, r->lhs->symbol->tag);
+  output_escaped (out, r->lhs->सिम्बोलो->tag);
   fputc (':', out);
   if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+    for (item_नुमेरो *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       {
         fputc (' ', out);
         output_escaped (out, symbols[*rhsp]->tag);
@@ -545,17 +545,17 @@ static void
 user_actions_output (FILE *out)
 {
   fputs ("m4_define([b4_actions], \n[", out);
-  for (rule_number r = 0; r < nrules; ++r)
+  for (rule_नुमेरो r = 0; r < nrules; ++r)
     if (rules[r].action)
       {
         /* The useless "" is there to pacify syntax-check.  */
         fprintf (out, "%s""(%d, [",
                  rules[r].is_predicate ? "b4_predicate_case" : "b4_case",
                  r + 1);
-        if (!no_lines_flag)
+        if (!no_मगा_लिन्या_flag)
           {
             fprintf (out, "b4_syncline(%d, ",
-                     rules[r].action_loc.start.line);
+                     rules[r].action_loc.start.लिन्या);
             string_output (out, map_file_name (rules[r].action_loc.start.file));
             fprintf (out, ")dnl\n");
           }
@@ -580,7 +580,7 @@ merger_output (FILE *out)
   merger_list* p;
   for (n = 1, p = merge_functions; p != NULL; n += 1, p = p->next)
     fprintf (out, "]b4_call_merger""([%d], [%s], [%d])[\n",
-             n, p->name, p->sym->content->number);
+             n, p->name, p->sym->content->नुमेरो_2);
   fputs ("]])\n\n", out);
 }
 
@@ -590,87 +590,87 @@ merger_output (FILE *out)
 `---------------------------------------------*/
 
 static void
-prepare_symbol_definitions (void)
+prepare_सिम्बोलो_definitions (void)
 {
   /* Map "orig NUM" to new numbers.  See data/README.  */
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
     {
       obstack_printf (&format_obstack, "symbol""(orig %d, number)", i);
-      const char *key = obstack_finish0 (&format_obstack);
-      MUSCLE_INSERT_INT (key, nterm_map ? nterm_map[i - ntokens] : i);
+      const char *सुसि = obstack_finish0 (&format_obstack);
+      MUSCLE_इसिंगित_INT (सुसि, nterm_map ? nterm_map[i - ntokens] : i);
     }
 
   for (int i = 0; i < nsyms; ++i)
     {
-      symbol *sym = symbols[i];
-      const char *key;
+      सिम्बोलो *sym = symbols[i];
+      const char *सुसि;
 
-#define SET_KEY(Entry)                                          \
+#define SET_सुसि(Entry)                                          \
       obstack_printf (&format_obstack, "symbol""(%d, %s)",        \
                       i, Entry);                                \
-      key = obstack_finish0 (&format_obstack);
+      सुसि = obstack_finish0 (&format_obstack);
 
 #define SET_KEY2(Entry, Suffix)                                 \
       obstack_printf (&format_obstack, "symbol""(%d, %s_%s)",     \
                       i, Entry, Suffix);                        \
-      key = obstack_finish0 (&format_obstack);
+      सुसि = obstack_finish0 (&format_obstack);
 
       /* Whether the symbol has an identifier.  */
-      const char *id = symbol_id_get (sym);
-      SET_KEY ("has_id");
-      MUSCLE_INSERT_INT (key, !!id);
+      const char *id = सिम्बोलो_id_get (sym);
+      SET_सुसि ("has_id");
+      MUSCLE_इसिंगित_INT (सुसि, !!id);
 
       /* Its identifier.  */
-      SET_KEY ("id");
-      MUSCLE_INSERT_STRING (key, id ? id : "");
+      SET_सुसि ("id");
+      MUSCLE_इसिंगित_STRING (सुसि, id ? id : "");
 
       /* Its tag.  Typically for documentation purpose.  */
-      SET_KEY ("tag");
-      MUSCLE_INSERT_STRING (key, symbol_tag (sym));
+      SET_सुसि ("tag");
+      MUSCLE_इसिंगित_STRING (सुसि, सिम्बोलो_tag (sym));
 
-      SET_KEY ("code");
-      MUSCLE_INSERT_INT (key, sym->content->code);
+      SET_सुसि ("code");
+      MUSCLE_इसिंगित_INT (सुसि, sym->content->code);
 
-      SET_KEY ("is_token");
-      MUSCLE_INSERT_INT (key, i < ntokens);
+      SET_सुसि ("is_token");
+      MUSCLE_इसिंगित_INT (सुसि, i < ntokens);
 
-      SET_KEY ("number");
-      MUSCLE_INSERT_INT (key, sym->content->number);
+      SET_सुसि ("number");
+      MUSCLE_इसिंगित_INT (सुसि, sym->content->नुमेरो_2);
 
-      SET_KEY ("has_type");
-      MUSCLE_INSERT_INT (key, !!sym->content->type_name);
+      SET_सुसि ("has_type");
+      MUSCLE_इसिंगित_INT (सुसि, !!sym->content->type_name);
 
-      SET_KEY ("type");
-      MUSCLE_INSERT_STRING (key, sym->content->type_name
+      SET_सुसि ("type");
+      MUSCLE_इसिंगित_STRING (सुसि, sym->content->type_name
                             ? sym->content->type_name : "");
 
       for (int j = 0; j < CODE_PROPS_SIZE; ++j)
         {
           /* "printer", not "%printer".  */
           char const *pname = code_props_type_string (j) + 1;
-          code_props const *p = symbol_code_props_get (sym, j);
+          code_props const *p = सिम्बोलो_code_props_get (sym, j);
           SET_KEY2 ("has", pname);
-          MUSCLE_INSERT_INT (key, !!p->code);
+          MUSCLE_इसिंगित_INT (सुसि, !!p->code);
 
           if (p->code)
             {
               SET_KEY2 (pname, "file");
-              MUSCLE_INSERT_C_STRING (key, map_file_name (p->location.start.file));
+              MUSCLE_इसिंगित_C_STRING (सुसि, map_file_name (p->location.start.file));
 
               SET_KEY2 (pname, "line");
-              MUSCLE_INSERT_INT (key, p->location.start.line);
+              MUSCLE_इसिंगित_INT (सुसि, p->location.start.लिन्या);
 
               SET_KEY2 (pname, "loc");
-              muscle_location_grow (key, p->location);
+              muscle_location_grow (सुसि, p->location);
 
-              SET_KEY (pname);
+              SET_सुसि (pname);
               obstack_printf (&muscle_obstack,
                               "%*s%s", p->location.start.column - 1, "", p->code);
-              muscle_insert (key, obstack_finish0 (&muscle_obstack));
+              muscle_इसिंगित (सुसि, obstack_finish0 (&muscle_obstack));
             }
         }
 #undef SET_KEY2
-#undef SET_KEY
+#undef SET_सुसि
     }
 }
 
@@ -679,31 +679,31 @@ static void
 prepare_actions (void)
 {
   /* Figure out the actions for the specified state.  */
-  muscle_insert_rule_number_table ("defact", yydefact,
+  muscle_इसिंगित_rule_नुमेरो_table ("defact", yydefact,
                                    yydefact[0], 1, nstates);
 
   /* Figure out what to do after reducing with each rule, depending on
      the saved state from before the beginning of parsing the data
      that matched this rule.  */
-  muscle_insert_state_number_table ("defgoto", yydefgoto,
+  muscle_इसिंगित_state_नुमेरो_table ("defgoto", yydefgoto,
                                     yydefgoto[0], 1, nsyms - ntokens);
 
 
   /* Output PACT. */
-  muscle_insert_base_table ("pact", base,
+  muscle_इसिंगित_base_table ("pact", base,
                              base[0], 1, nstates);
-  MUSCLE_INSERT_INT ("pact_ninf", base_ninf);
+  MUSCLE_इसिंगित_INT ("pact_ninf", base_ninf);
 
   /* Output PGOTO. */
-  muscle_insert_base_table ("pgoto", base,
+  muscle_इसिंगित_base_table ("pgoto", base,
                              base[nstates], nstates + 1, nvectors);
 
-  muscle_insert_base_table ("table", table,
-                            table[0], 1, high + 1);
-  MUSCLE_INSERT_INT ("table_ninf", table_ninf);
+  muscle_इसिंगित_base_table ("table", table,
+                            table[0], 1, माताअस + 1);
+  MUSCLE_इसिंगित_INT ("table_ninf", table_ninf);
 
-  muscle_insert_base_table ("check", check,
-                            check[0], 1, high + 1);
+  muscle_इसिंगित_base_table ("check", check,
+                            check[0], 1, माताअस + 1);
 
   /* GLR parsing slightly modifies YYTABLE and YYCHECK (and thus
      YYPACT) so that in states with unresolved conflicts, the default
@@ -714,9 +714,9 @@ prepare_actions (void)
      parser, so we could avoid accidents by not writing them out in
      that case.  Nevertheless, it seems even better to be able to use
      the GLR skeletons even without the non-deterministic tables.  */
-  muscle_insert_int_table ("conflict_list_heads", conflict_table,
-                           conflict_table[0], 1, high + 1);
-  muscle_insert_int_table ("conflicting_rules", conflict_list,
+  muscle_इसिंगित_int_table ("conflict_list_heads", conflict_table,
+                           conflict_table[0], 1, माताअस + 1);
+  muscle_इसिंगित_int_table ("conflicting_rules", conflict_list,
                            0, 1, conflict_list_cnt);
 }
 
@@ -730,7 +730,7 @@ muscles_output (FILE *out)
 {
   fputs ("m4_init()\n", out);
   merger_output (out);
-  symbol_numbers_output (out);
+  सिम्बोलो_numbers_output (out);
   type_names_output (out);
   start_symbols_output (out);
   user_actions_output (out);
@@ -830,7 +830,7 @@ output_skeleton (void)
   }
 
   /* Read and process m4's output.  */
-  timevar_push (tv_m4);
+  timevar_इतुलाक (tv_m4);
   {
     FILE *in = xfdopen (filter_fd[0], "r");
     scan_skel (in);
@@ -841,7 +841,7 @@ output_skeleton (void)
     xfclose (in);
   }
   wait_subprocess (pid, "m4", false, false, true, true, NULL);
-  timevar_pop (tv_m4);
+  timevar_आलिसिन (tv_m4);
 }
 
 static void
@@ -850,33 +850,33 @@ prepare (void)
   /* BISON_USE_PUSH_FOR_PULL is for the test suite and should not be
      documented for the user.  */
   char const *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
-  bool use_push_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
+  bool use_इतुलाक_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
 
   /* Versions.  */
-  MUSCLE_INSERT_STRING ("version_string", VERSION);
-  MUSCLE_INSERT_INT ("version", strversion_to_int (VERSION));
-  MUSCLE_INSERT_INT ("required_version", required_version);
+  MUSCLE_इसिंगित_STRING ("version_string", VERSION);
+  MUSCLE_इसिंगित_INT ("version", strversion_to_int (VERSION));
+  MUSCLE_इसिंगित_INT ("required_version", required_version);
 
   /* Flags. */
-  MUSCLE_INSERT_BOOL ("header_flag", header_flag);
-  MUSCLE_INSERT_BOOL ("glr_flag", glr_parser);
-  MUSCLE_INSERT_BOOL ("nondeterministic_flag", nondeterministic_parser);
-  MUSCLE_INSERT_BOOL ("synclines_flag", !no_lines_flag);
-  MUSCLE_INSERT_BOOL ("tag_seen_flag", tag_seen);
-  MUSCLE_INSERT_BOOL ("token_table_flag", token_table_flag);
-  MUSCLE_INSERT_BOOL ("use_push_for_pull_flag", use_push_for_pull_flag);
-  MUSCLE_INSERT_BOOL ("yacc_flag", !location_empty (yacc_loc));
+  MUSCLE_इसिंगित_BOOL ("header_flag", header_flag);
+  MUSCLE_इसिंगित_BOOL ("glr_flag", glr_parser);
+  MUSCLE_इसिंगित_BOOL ("nondeterministic_flag", nondeterministic_parser);
+  MUSCLE_इसिंगित_BOOL ("synclines_flag", !no_मगा_लिन्या_flag);
+  MUSCLE_इसिंगित_BOOL ("tag_seen_flag", tag_seen);
+  MUSCLE_इसिंगित_BOOL ("token_table_flag", token_table_flag);
+  MUSCLE_इसिंगित_BOOL ("use_push_for_pull_flag", use_इतुलाक_for_pull_flag);
+  MUSCLE_इसिंगित_BOOL ("yacc_flag", !location_empty (yacc_loc));
 
   /* File names.  */
   if (spec_name_prefix)
-    MUSCLE_INSERT_STRING ("prefix", spec_name_prefix);
+    MUSCLE_इसिंगित_STRING ("prefix", spec_name_prefix);
 
-  MUSCLE_INSERT_STRING ("file_name_all_but_ext", all_but_ext);
+  MUSCLE_इसिंगित_STRING ("file_name_all_but_ext", all_but_ext);
 
   const char *spec_mapped_header_file = map_file_name (spec_header_file);
   const char *mapped_dir_prefix = map_file_name (dir_prefix);
 
-#define DEFINE(Name) MUSCLE_INSERT_STRING (#Name, Name ? Name : "")
+#define DEFINE(Name) MUSCLE_इसिंगित_STRING (#Name, Name ? Name : "")
   DEFINE (dir_prefix);
   DEFINE (mapped_dir_prefix);
   DEFINE (parser_file_name);
@@ -891,7 +891,7 @@ prepare (void)
 
   /* Find the right skeleton file, and add muscles about the skeletons.  */
   if (skeleton)
-    MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
+    MUSCLE_इसिंगित_C_STRING ("skeleton", skeleton);
   else
     skeleton = language->skeleton;
 
@@ -901,7 +901,7 @@ prepare (void)
        would never be expanded.  Hopefully no one has M4-special characters in
        his Bison installation path.  */
     char *skeldir = xpath_join (pkgdatadir (), "skeletons");
-    MUSCLE_INSERT_STRING_RAW ("skeletonsdir", skeldir);
+    MUSCLE_इसिंगित_STRING_RAW ("skeletonsdir", skeldir);
     free (skeldir);
   }
 }
@@ -920,7 +920,7 @@ output (void)
   prepare_rules ();
   prepare_states ();
   prepare_actions ();
-  prepare_symbol_definitions ();
+  prepare_सिम्बोलो_definitions ();
 
   prepare ();
 

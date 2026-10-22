@@ -37,16 +37,16 @@
  *   - All memory was allocated on \c annotations_obstackp.
  */
 static AnnotationList*
-AnnotationList__alloc_on_obstack (ContributionIndex contribution_count,
+AnnotationList__alloc_on_obstack (ContributionIndex contribution_बिलांग,
                                   struct obstack *annotations_obstackp)
 {
   AnnotationList *res;
-  size_t contributions_size = contribution_count * sizeof res->contributions[0];
+  size_t contributions_size = contribution_बिलांग * sizeof res->contributions[0];
   res = obstack_alloc (annotations_obstackp,
                        offsetof (AnnotationList, contributions)
                        + contributions_size);
   res->next = NULL;
-  res->inadequacyNode = NULL;
+  res->inadequacy_बुहोल = NULL;
   return res;
 }
 
@@ -62,7 +62,7 @@ static bool
 AnnotationList__isContributionAlways (AnnotationList const *self,
                                       ContributionIndex ci)
 {
-  aver (0 <= ci && ci < self->inadequacyNode->contributionCount);
+  aver (0 <= ci && ci < self->inadequacy_बुहोल->contribution_बिलांग_2);
   return self->contributions[ci] == NULL;
 }
 
@@ -96,45 +96,45 @@ AnnotationList__isContributionAlways (AnnotationList const *self,
  *    - Other than that, it's probably not important.
  */
 static bool
-AnnotationList__insertInto (AnnotationList *self, AnnotationList **list,
+Annotation_List_इसिंगित_Into (AnnotationList *self, AnnotationList **list,
                             size_t nitems)
 {
-  AnnotationList **node;
-  for (node = list; *node; node = &(*node)->next)
+  AnnotationList **बुहोल;
+  for (बुहोल = list; *बुहोल; बुहोल = &(*बुहोल)->next)
     {
       int cmp = 0;
-      if (self->inadequacyNode->id < (*node)->inadequacyNode->id)
+      if (self->inadequacy_बुहोल->id < (*बुहोल)->inadequacy_बुहोल->id)
         cmp = 1;
-      else if ((*node)->inadequacyNode->id < self->inadequacyNode->id)
+      else if ((*बुहोल)->inadequacy_बुहोल->id < self->inadequacy_बुहोल->id)
         cmp = -1;
       else
         for (ContributionIndex ci = 0;
-             cmp == 0 && ci < self->inadequacyNode->contributionCount;
+             cmp == 0 && ci < self->inadequacy_बुहोल->contribution_बिलांग_2;
              ++ci)
           {
             if (AnnotationList__isContributionAlways (self, ci))
               {
-                if (!AnnotationList__isContributionAlways (*node, ci))
+                if (!AnnotationList__isContributionAlways (*बुहोल, ci))
                   cmp = -1;
               }
-            else if (AnnotationList__isContributionAlways (*node, ci))
+            else if (AnnotationList__isContributionAlways (*बुहोल, ci))
               cmp = 1;
             else
               for (size_t item = 0; cmp == 0 && item < nitems; ++item)
                 {
                   if (!Sbitset__test (self->contributions[ci], item))
                     {
-                      if (Sbitset__test ((*node)->contributions[ci], item))
+                      if (Sbitset__test ((*बुहोल)->contributions[ci], item))
                         cmp = -1;
                     }
-                  else if (!Sbitset__test ((*node)->contributions[ci], item))
+                  else if (!Sbitset__test ((*बुहोल)->contributions[ci], item))
                     cmp = 1;
                 }
           }
       if (cmp < 0)
         {
-          self->next = *node;
-          *node = self;
+          self->next = *बुहोल;
+          *बुहोल = self;
           break;
         }
       else if (cmp == 0)
@@ -143,8 +143,8 @@ AnnotationList__insertInto (AnnotationList *self, AnnotationList **list,
           break;
         }
     }
-  if (!*node)
-    *node = self;
+  if (!*बुहोल)
+    *बुहोल = self;
   return self != NULL;
 }
 
@@ -154,7 +154,7 @@ AnnotationList__compute_shift_tokens (transitions *trans)
   bitset shift_tokens = bitset_create (ntokens, BITSET_FIXED);
   int i;
   FOR_EACH_SHIFT (trans, i)
-    bitset_set (shift_tokens, TRANSITION_SYMBOL (trans, i));
+    bitset_set (shift_tokens, TRANSITION_सिम्बोलो (trans, i));
   return shift_tokens;
 }
 
@@ -167,7 +167,7 @@ AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
   bitset tokens = bitset_create (ntokens, BITSET_FIXED);
 
   bitset_copy (tokens, shift_tokens);
-  for (int i = 0; i < reds->num; ++i)
+  for (int i = 0; i < reds->नुमेरो; ++i)
     {
       bitset_and (conflicted_tokens_rule, tokens, reds->lookaheads[i]);
       bitset_or (conflicted_tokens,
@@ -186,26 +186,26 @@ AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
 
 static bool
 AnnotationList__compute_lhs_contributions (state *s, const rule *the_rule,
-                                           symbol_number conflicted_token,
-                                           bitsetv follow_kernel_items,
+                                           सिम्बोलो_नुमेरो conflicted_token,
+                                           bitsetv follow_kernel_मगा_बागाय,
                                            bitsetv always_follows,
                                            state ***predecessors,
                                            bitset **item_lookahead_sets,
-                                           Sbitset *items,
+                                           Sbitset *मगा_बागाय,
                                            struct obstack
                                              *annotations_obstackp)
 {
-  goto_number lhs_goto = map_goto (s->number, the_rule->lhs->number);
+  goto_नुमेरो lhs_goto = map_goto (s->नुमेरो_2, the_rule->lhs->नुमेरो_2);
   if (bitset_test (always_follows[lhs_goto], conflicted_token))
     return true;
-  *items = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
+  *मगा_बागाय = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
   {
     bitset_iterator biter_item;
     bitset_bindex item;
-    BITSET_FOR_EACH (biter_item, follow_kernel_items[lhs_goto], item, 0)
+    BITSET_FOR_EACH (biter_item, follow_kernel_मगा_बागाय[lhs_goto], item, 0)
       if (ielr_item_has_lookahead (s, 0, item, conflicted_token,
                                    predecessors, item_lookahead_sets))
-        Sbitset__set (*items, item);
+        Sbitset__set (*मगा_बागाय, item);
   }
   return false;
 }
@@ -213,7 +213,7 @@ AnnotationList__compute_lhs_contributions (state *s, const rule *the_rule,
 static void
 AnnotationList__computePredecessorAnnotations (
   AnnotationList *self, state *s,
-  bitsetv follow_kernel_items,
+  bitsetv follow_kernel_मगा_बागाय,
   bitsetv always_follows,
   state ***predecessors,
   bitset **item_lookahead_sets,
@@ -221,26 +221,26 @@ AnnotationList__computePredecessorAnnotations (
   AnnotationIndex *annotation_counts,
   struct obstack *annotations_obstackp)
 {
-  for (state **predecessor = predecessors[s->number]; *predecessor; ++predecessor)
+  for (state **predecessor = predecessors[s->नुमेरो_2]; *predecessor; ++predecessor)
     {
-      AnnotationList *annotation_node =
+      AnnotationList *annotation_बुहोल =
         AnnotationList__alloc_on_obstack (
-          self->inadequacyNode->contributionCount, annotations_obstackp);
-      annotation_node->inadequacyNode = self->inadequacyNode;
+          self->inadequacy_बुहोल->contribution_बिलांग_2, annotations_obstackp);
+      annotation_बुहोल->inadequacy_बुहोल = self->inadequacy_बुहोल;
       bool potential_contribution = false;
       bitset *lookaheads = NULL;
 
-      for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+      for (ContributionIndex ci = 0; ci < self->inadequacy_बुहोल->contribution_बिलांग_2; ++ci)
         {
-          symbol_number contribution_token =
-            InadequacyList__getContributionToken (self->inadequacyNode, ci)
-            ->content->number;
+          सिम्बोलो_नुमेरो contribution_token =
+            InadequacyList__getContributionToken (self->inadequacy_बुहोल, ci)
+            ->content->नुमेरो_2;
           if (AnnotationList__isContributionAlways (self, ci))
             {
-              annotation_node->contributions[ci] = NULL;
+              annotation_बुहोल->contributions[ci] = NULL;
               continue;
             }
-          annotation_node->contributions[ci] =
+          annotation_बुहोल->contributions[ci] =
             Sbitset__new_on_obstack ((*predecessor)->nitems,
                                      annotations_obstackp);
           {
@@ -259,32 +259,32 @@ AnnotationList__computePredecessorAnnotations (
                    set is still empty, and so it also should never have been
                    identified as a contribution.  This situation is fortunate
                    because we want to avoid the - 2 below in both cases.  */
-                aver (s->items[self_item] > 1);
+                aver (s->मगा_बागाय[self_item] > 1);
                 /* If this kernel item is next to the beginning of the RHS,
                    then check all of the predecessor's goto follows for the
                    LHS.  */
-                if (item_number_is_rule_number (ritem[s->items[self_item] - 2]))
+                if (item_नुमेरो_is_rule_नुमेरो (ritem[s->मगा_बागाय[self_item] - 2]))
                   {
-                    Sbitset items;
+                    Sbitset मगा_बागाय;
                     if (AnnotationList__compute_lhs_contributions (
                           *predecessor,
-                          item_rule (&ritem[s->items[self_item]]),
+                          item_rule (&ritem[s->मगा_बागाय[self_item]]),
                           contribution_token,
-                          follow_kernel_items, always_follows, predecessors,
-                          item_lookahead_sets, &items, annotations_obstackp))
+                          follow_kernel_मगा_बागाय, always_follows, predecessors,
+                          item_lookahead_sets, &मगा_बागाय, annotations_obstackp))
                       {
                         obstack_free (annotations_obstackp,
-                                      annotation_node->contributions[ci]);
-                        annotation_node->contributions[ci] = NULL;
+                                      annotation_बुहोल->contributions[ci]);
+                        annotation_बुहोल->contributions[ci] = NULL;
                         // "Break" out of SBITSET__FOR_EACH.
                         goto after_sbitset__for_each;
                       }
                     else
                       {
-                        Sbitset__or (annotation_node->contributions[ci],
-                                     annotation_node->contributions[ci],
-                                     items, (*predecessor)->nitems);
-                        obstack_free (annotations_obstackp, items);
+                        Sbitset__or (annotation_बुहोल->contributions[ci],
+                                     annotation_बुहोल->contributions[ci],
+                                     मगा_बागाय, (*predecessor)->nitems);
+                        obstack_free (annotations_obstackp, मगा_बागाय);
                       }
                   }
                 /* If this kernel item is later in the RHS, then check the
@@ -297,8 +297,8 @@ AnnotationList__computePredecessorAnnotations (
                     for (;
                          predecessor_item < (*predecessor)->nitems;
                          ++predecessor_item)
-                      if ((*predecessor)->items[predecessor_item]
-                          == s->items[self_item] - 1)
+                      if ((*predecessor)->मगा_बागाय[predecessor_item]
+                          == s->मगा_बागाय[self_item] - 1)
                         break;
                     aver (predecessor_item != (*predecessor)->nitems);
                     if (ielr_item_has_lookahead (*predecessor, 0,
@@ -306,17 +306,17 @@ AnnotationList__computePredecessorAnnotations (
                                                  contribution_token,
                                                  predecessors,
                                                  item_lookahead_sets))
-                      Sbitset__set (annotation_node->contributions[ci],
+                      Sbitset__set (annotation_बुहोल->contributions[ci],
                                     predecessor_item);
                   }
               }
           after_sbitset__for_each:;
           }
-          if (annotation_node->contributions[ci])
+          if (annotation_बुहोल->contributions[ci])
             {
               Sbitset biter;
               Sbitset__Index i;
-              SBITSET__FOR_EACH (annotation_node->contributions[ci],
+              SBITSET__FOR_EACH (annotation_बुहोल->contributions[ci],
                                  (*predecessor)->nitems, biter, i)
                 {
                   potential_contribution = true;
@@ -357,10 +357,10 @@ AnnotationList__computePredecessorAnnotations (
         {
           if (ContributionIndex__none
               != AnnotationList__computeDominantContribution (
-                   annotation_node, (*predecessor)->nitems, lookaheads, true))
+                   annotation_बुहोल, (*predecessor)->nitems, lookaheads, true))
             {
-              obstack_free (annotations_obstackp, annotation_node);
-              annotation_node = NULL;
+              obstack_free (annotations_obstackp, annotation_बुहोल);
+              annotation_बुहोल = NULL;
             }
           {
             for (size_t i = 0; i < (*predecessor)->nitems; ++i)
@@ -368,38 +368,38 @@ AnnotationList__computePredecessorAnnotations (
                 bitset_free (lookaheads[i]);
             free (lookaheads);
           }
-          if (annotation_node)
+          if (annotation_बुहोल)
             {
-              if (AnnotationList__insertInto (annotation_node,
+              if (Annotation_List_इसिंगित_Into (annotation_बुहोल,
                                               &annotation_lists[(*predecessor)
-                                                                ->number],
+                                                                ->नुमेरो_2],
                                               (*predecessor)->nitems))
                 {
-                  ++annotation_counts[(*predecessor)->number];
+                  ++annotation_counts[(*predecessor)->नुमेरो_2];
                   AnnotationList__computePredecessorAnnotations (
-                    annotation_node, *predecessor,
-                    follow_kernel_items, always_follows, predecessors,
+                    annotation_बुहोल, *predecessor,
+                    follow_kernel_मगा_बागाय, always_follows, predecessors,
                     item_lookahead_sets, annotation_lists, annotation_counts,
                     annotations_obstackp);
                 }
               else
-                obstack_free (annotations_obstackp, annotation_node);
+                obstack_free (annotations_obstackp, annotation_बुहोल);
             }
         }
       else
-        obstack_free (annotations_obstackp, annotation_node);
+        obstack_free (annotations_obstackp, annotation_बुहोल);
     }
 }
 
 void
 AnnotationList__compute_from_inadequacies (
-  state *s, bitsetv follow_kernel_items, bitsetv always_follows,
+  state *s, bitsetv follow_kernel_मगा_बागाय, bitsetv always_follows,
   state ***predecessors, bitset **item_lookahead_sets,
   InadequacyList **inadequacy_lists, AnnotationList **annotation_lists,
   AnnotationIndex *annotation_counts,
   ContributionIndex *max_contributionsp,
   struct obstack *annotations_obstackp,
-  InadequacyListNodeCount *inadequacy_list_node_count)
+  Inadequacy_List_बुहोल_बिलांग *inadequacy_list_बुहोल_बिलांग)
 {
   /* Return an empty list if s->lookaheads = NULL.  */
   if (s->consistent)
@@ -416,25 +416,25 @@ AnnotationList__compute_from_inadequacies (
   bitset_bindex conflicted_token;
   BITSET_FOR_EACH (biter_conflict, conflicted_tokens, conflicted_token, 0)
     {
-      AnnotationList *annotation_node;
-      ContributionIndex contribution_count = 0;
+      AnnotationList *annotation_बुहोल;
+      ContributionIndex contribution_बिलांग = 0;
 
       /* Allocate the annotation node.  */
       {
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
+        for (int rule_i = 0; rule_i < s->reductions->नुमेरो; ++rule_i)
           if (bitset_test (s->reductions->lookaheads[rule_i],
                            conflicted_token))
-            ++contribution_count;
+            ++contribution_बिलांग;
         if (bitset_test (shift_tokens, conflicted_token))
-          ++contribution_count;
-        annotation_node =
-          AnnotationList__alloc_on_obstack (contribution_count,
+          ++contribution_बिलांग;
+        annotation_बुहोल =
+          AnnotationList__alloc_on_obstack (contribution_बिलांग,
                                             annotations_obstackp);
       }
 
       /* FIXME: Would a BITSET_FRUGAL or BITEST_SPARSE be more efficient?  Now
          or convert it inside InadequacyList__new_conflict?  */
-      bitset actions = bitset_create (s->reductions->num + 1, BITSET_FIXED);
+      bitset actions = bitset_create (s->reductions->नुमेरो + 1, BITSET_FIXED);
       bool potential_contribution = false;
 
       /* Add a contribution for each reduction that has conflicted_token as a
@@ -442,7 +442,7 @@ AnnotationList__compute_from_inadequacies (
       {
         ContributionIndex ci = 0;
         int item_i = 0;
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
+        for (int rule_i = 0; rule_i < s->reductions->नुमेरो; ++rule_i)
           {
             rule *the_rule = s->reductions->rules[rule_i];
             if (bitset_test (s->reductions->lookaheads[rule_i],
@@ -450,35 +450,35 @@ AnnotationList__compute_from_inadequacies (
               {
                 bitset_set (actions, rule_i);
                 /* If this reduction is on a kernel item, just add it.  */
-                if (!item_number_is_rule_number (the_rule->rhs[0]))
+                if (!item_नुमेरो_is_rule_नुमेरो (the_rule->rhs[0]))
                   {
-                    annotation_node->contributions[ci] =
+                    annotation_बुहोल->contributions[ci] =
                       Sbitset__new_on_obstack (s->nitems,
                                                annotations_obstackp);
                     /* Catch item_i up to rule_i.  This works because both are
                        sorted on rule number.  */
-                    while (!item_number_is_rule_number (ritem[s->items[item_i]])
-                           || item_number_as_rule_number (ritem[s->items[item_i]]) != the_rule->number)
+                    while (!item_नुमेरो_is_rule_नुमेरो (ritem[s->मगा_बागाय[item_i]])
+                           || item_नुमेरो_as_rule_नुमेरो (ritem[s->मगा_बागाय[item_i]]) != the_rule->नुमेरो_2)
                       {
                         ++item_i;
                         aver (item_i < s->nitems);
                       }
-                    Sbitset__set (annotation_node->contributions[ci], item_i);
+                    Sbitset__set (annotation_बुहोल->contributions[ci], item_i);
                   }
                 /* Otherwise, add the kernel items whose lookahead sets
                    contribute the conflicted token to this reduction's
                    lookahead set.  */
                 else if (AnnotationList__compute_lhs_contributions (
-                           s, the_rule, conflicted_token, follow_kernel_items,
+                           s, the_rule, conflicted_token, follow_kernel_मगा_बागाय,
                            always_follows, predecessors, item_lookahead_sets,
-                           &annotation_node->contributions[ci],
+                           &annotation_बुहोल->contributions[ci],
                            annotations_obstackp))
                   {
-                    annotation_node->contributions[ci++] = NULL;
+                    annotation_बुहोल->contributions[ci++] = NULL;
                     continue;
                   }
                 /* The lookahead token has to come from somewhere.  */
-                aver (!Sbitset__isEmpty (annotation_node->contributions[ci],
+                aver (!Sbitset__isEmpty (annotation_बुहोल->contributions[ci],
                                          s->nitems));
                 ++ci;
                 potential_contribution = true;
@@ -497,31 +497,31 @@ AnnotationList__compute_from_inadequacies (
         {
           if (bitset_test (shift_tokens, conflicted_token))
             {
-              bitset_set (actions, s->reductions->num);
-              annotation_node->contributions[contribution_count - 1] = NULL;
+              bitset_set (actions, s->reductions->नुमेरो);
+              annotation_बुहोल->contributions[contribution_बिलांग - 1] = NULL;
             }
           {
-            InadequacyList *conflict_node =
+            InadequacyList *conflict_बुहोल =
               InadequacyList__new_conflict (
                 s, symbols[conflicted_token], actions,
-                inadequacy_list_node_count);
+                inadequacy_list_बुहोल_बिलांग);
             actions = NULL;
-            annotation_node->inadequacyNode = conflict_node;
+            annotation_बुहोल->inadequacy_बुहोल = conflict_बुहोल;
             if (ContributionIndex__none
                 != AnnotationList__computeDominantContribution (
-                     annotation_node, s->nitems, all_lookaheads, true))
+                     annotation_बुहोल, s->nitems, all_lookaheads, true))
               {
-                obstack_free (annotations_obstackp, annotation_node);
-                InadequacyList__delete (conflict_node);
+                obstack_free (annotations_obstackp, annotation_बुहोल);
+                InadequacyList__delete (conflict_बुहोल);
               }
             else
               {
-                InadequacyList__prependTo (conflict_node,
-                                           &inadequacy_lists[s->number]);
+                InadequacyList__prependTo (conflict_बुहोल,
+                                           &inadequacy_lists[s->नुमेरो_2]);
                 {
                   bool b =
-                    AnnotationList__insertInto (annotation_node,
-                                                &annotation_lists[s->number],
+                    Annotation_List_इसिंगित_Into (annotation_बुहोल,
+                                                &annotation_lists[s->नुमेरो_2],
                                                 s->nitems);
                   aver (b); (void) b;
                 }
@@ -531,12 +531,12 @@ AnnotationList__compute_from_inadequacies (
                    conflict with no token precedence.  */
                 aver (!bitset_test (shift_tokens, conflicted_token)
                       || symbols[conflicted_token]->content->prec);
-                ++annotation_counts[s->number];
-                if (contribution_count > *max_contributionsp)
-                  *max_contributionsp = contribution_count;
+                ++annotation_counts[s->नुमेरो_2];
+                if (contribution_बिलांग > *max_contributionsp)
+                  *max_contributionsp = contribution_बिलांग;
                 AnnotationList__computePredecessorAnnotations (
-                  annotation_node, s,
-                  follow_kernel_items, always_follows, predecessors,
+                  annotation_बुहोल, s,
+                  follow_kernel_मगा_बागाय, always_follows, predecessors,
                   item_lookahead_sets, annotation_lists, annotation_counts,
                   annotations_obstackp);
               }
@@ -545,7 +545,7 @@ AnnotationList__compute_from_inadequacies (
       else
         {
           bitset_free (actions);
-          obstack_free (annotations_obstackp, annotation_node);
+          obstack_free (annotations_obstackp, annotation_बुहोल);
         }
     }
 
@@ -563,27 +563,27 @@ AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
     {
       fprintf (stderr, "%*sAnnotation %d (manifesting state %d):\n",
                spaces, "",
-               ai, a->inadequacyNode->manifestingState->number);
+               ai, a->inadequacy_बुहोल->manifestingState->नुमेरो_2);
       bitset_bindex rulei
-        = bitset_first (a->inadequacyNode->inadequacy.conflict.actions);
-      for (ContributionIndex ci = 0; ci < a->inadequacyNode->contributionCount; ++ci)
+        = bitset_first (a->inadequacy_बुहोल->inadequacy.conflict.actions);
+      for (ContributionIndex ci = 0; ci < a->inadequacy_बुहोल->contribution_बिलांग_2; ++ci)
         {
-          symbol_number token =
-            InadequacyList__getContributionToken (a->inadequacyNode, ci)
-            ->content->number;
+          सिम्बोलो_नुमेरो token =
+            InadequacyList__getContributionToken (a->inadequacy_बुहोल, ci)
+            ->content->नुमेरो_2;
           fprintf (stderr, "%*s", spaces+2, "");
           if (ci == InadequacyList__getShiftContributionIndex (
-                                                               a->inadequacyNode))
+                                                               a->inadequacy_बुहोल))
             fprintf (stderr, "Contributes shift of token %d.\n", token);
           else
             {
               fprintf (stderr, "Contributes token %d", token);
               aver (rulei != BITSET_BINDEX_MAX);
               fprintf (stderr, " as lookahead, rule number %d",
-                       a->inadequacyNode->manifestingState
-                       ->reductions->rules[rulei]->number);
+                       a->inadequacy_बुहोल->manifestingState
+                       ->reductions->rules[rulei]->नुमेरो_2);
               rulei =
-                bitset_next (a->inadequacyNode->inadequacy.conflict.actions,
+                bitset_next (a->inadequacy_बुहोल->inadequacy.conflict.actions,
                              rulei+1);
               if (AnnotationList__isContributionAlways (a, ci))
                 fprintf (stderr, " always.");
@@ -605,12 +605,12 @@ AnnotationList__computeLookaheadFilter (AnnotationList const *self,
 {
   bitsetv_zero (lookahead_filter);
   for (; self; self = self->next)
-    for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+    for (ContributionIndex ci = 0; ci < self->inadequacy_बुहोल->contribution_बिलांग_2; ++ci)
       if (!AnnotationList__isContributionAlways (self, ci))
         {
-          symbol_number token =
-            InadequacyList__getContributionToken (self->inadequacyNode, ci)
-            ->content->number;
+          सिम्बोलो_नुमेरो token =
+            InadequacyList__getContributionToken (self->inadequacy_बुहोल, ci)
+            ->content->नुमेरो_2;
           Sbitset__Index item;
           Sbitset biter;
           SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
@@ -645,9 +645,9 @@ AnnotationList__stateMakesContribution (AnnotationList const *self,
   if (!lookaheads)
     return false;
   {
-    symbol_number token =
-      InadequacyList__getContributionToken (self->inadequacyNode, ci)
-      ->content->number;
+    सिम्बोलो_नुमेरो token =
+      InadequacyList__getContributionToken (self->inadequacy_बुहोल, ci)
+      ->content->नुमेरो_2;
     Sbitset__Index item;
     Sbitset biter;
     SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
@@ -663,9 +663,9 @@ AnnotationList__computeDominantContribution (AnnotationList const *self,
                                              bool require_split_stable)
 {
   ContributionIndex const ci_shift =
-    InadequacyList__getShiftContributionIndex (self->inadequacyNode);
+    InadequacyList__getShiftContributionIndex (self->inadequacy_बुहोल);
 
-  symbol *token = self->inadequacyNode->inadequacy.conflict.token;
+  सिम्बोलो *token = self->inadequacy_बुहोल->inadequacy.conflict.token;
 
   /* S/R conflict.  */
   if (ci_shift != ContributionIndex__none)
@@ -686,18 +686,18 @@ AnnotationList__computeDominantContribution (AnnotationList const *self,
         int actioni;
         ContributionIndex ci;
         for (ci = 0,
-               actioni = bitset_first (self->inadequacyNode->inadequacy
+               actioni = bitset_first (self->inadequacy_बुहोल->inadequacy
                                        .conflict.actions);
-             ci < self->inadequacyNode->contributionCount;
+             ci < self->inadequacy_बुहोल->contribution_बिलांग_2;
              ++ci,
-               actioni = bitset_next (self->inadequacyNode->inadequacy
+               actioni = bitset_next (self->inadequacy_बुहोल->inadequacy
                                       .conflict.actions, actioni+1))
           {
             int reduce_precedence = 0;
             if (ci == ci_shift)
               continue;
             {
-              rule *r = self->inadequacyNode->manifestingState
+              rule *r = self->inadequacy_बुहोल->manifestingState
                           ->reductions->rules[actioni];
               if (r->prec)
                 reduce_precedence = r->prec->prec;
@@ -708,7 +708,7 @@ AnnotationList__computeDominantContribution (AnnotationList const *self,
             if (reduce_precedence
                 && (reduce_precedence < shift_precedence
                     || (reduce_precedence == shift_precedence
-                        && token->content->assoc == right_assoc)))
+                        && token->content->assoc == कानान_assoc)))
               continue;
             if (!AnnotationList__stateMakesContribution (self, nitems, ci,
                                                          lookaheads))
@@ -760,7 +760,7 @@ AnnotationList__computeDominantContribution (AnnotationList const *self,
 
   /* R/R conflict, so the reduction with the lowest rule number dominates.
      Fortunately, contributions are sorted by rule number.  */
-  for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+  for (ContributionIndex ci = 0; ci < self->inadequacy_बुहोल->contribution_बिलांग_2; ++ci)
     if (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
       {
         if (require_split_stable

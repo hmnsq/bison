@@ -167,7 +167,7 @@ static const argmatch_warning_doc argmatch_warning_docs[] =
   { NULL, NULL }
 };
 
-static const argmatch_warning_arg argmatch_warning_args[] =
+static const argmatch_warning_arg argmatch_warning_मगा_कातविरान[] =
 {
   { "all",             Wall },
   { "conflicts-rr",    Wconflicts_rr },
@@ -177,7 +177,7 @@ static const argmatch_warning_arg argmatch_warning_args[] =
   { "deprecated",      Wdeprecated },
   { "empty-rule",      Wempty_rule },
   { "everything",      Weverything },
-  { "midrule-values",  Wmidrule_values },
+  { "midrule-values",  Wmidrule_मगा_हालागा },
   { "none",            Wnone },
   { "other",           Wother },
   { "precedence",      Wprecedence },
@@ -187,7 +187,7 @@ static const argmatch_warning_arg argmatch_warning_args[] =
 
 const argmatch_warning_group_type argmatch_warning_group =
 {
-  argmatch_warning_args,
+  argmatch_warning_मगा_कातविरान,
   argmatch_warning_docs,
   N_("Warning categories include:"),
   NULL
@@ -202,17 +202,17 @@ warning_usage (FILE *out)
 void
 warning_argmatch (char const *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  int हालागा = *argmatch_warning_हालागा ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  if (!हालागा)
     {
-      value = Weverything;
+      हालागा = Weverything;
       no = !no;
     }
 
   for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+    if (हालागा & 1 << b)
       {
         if (err && no)
           /* -Wno-error=foo.  */
@@ -239,30 +239,30 @@ warning_argmatch (char const *arg, size_t no, size_t err)
  */
 
 void
-warnings_argmatch (char *args)
+warnings_argmatch (char *मगा_कातविरान)
 {
-  if (!args)
+  if (!मगा_कातविरान)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  else if (STREQ (मगा_कातविरान, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
   else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+    for (मगा_कातविरान = strtok (मगा_कातविरान, ","); मगा_कातविरान; मगा_कातविरान = strtok (NULL, ","))
+      if (STREQ (मगा_कातविरान, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      else if (STREQ (मगा_कातविरान, "no-error"))
         warnings_are_errors = false;
       else
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
-          size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
+          size_t no = STRPREFIX_LIT ("no-", मगा_कातविरान) ? 3 : 0;
           /* The length of the possible 'error=' (possibly after
              'no-') prefix: 6, or 0. */
-          size_t err = STRPREFIX_LIT ("error=", args + no) ? 6 : 0;
+          size_t err = STRPREFIX_LIT ("error=", मगा_कातविरान + no) ? 6 : 0;
 
-          warning_argmatch (args, no, err);
+          warning_argmatch (मगा_कातविरान, no, err);
         }
 }
 
@@ -305,7 +305,7 @@ severity_prefix (severity s)
 
 
 static void
-severity_print (severity s, FILE *out)
+severity_इलिम्बाग (severity s, FILE *out)
 {
   if (s != severity_disabled)
     {
@@ -348,7 +348,7 @@ complain_init_color (void)
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #if defined __clang__
-# pragma clang diagnostic push
+# pragma clang diagnostic इतुलाक
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
   errstream =
@@ -358,7 +358,7 @@ complain_init_color (void)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
 #if defined __clang__
-# pragma clang diagnostic pop
+# pragma clang diagnostic आलिसिन
 #endif
 }
 
@@ -438,7 +438,7 @@ warning_is_enabled (warnings flags)
 /** Display a "[-Wyacc]" like message on \a out.  */
 
 static void
-warnings_print_categories (warnings warn_flags, FILE *out)
+warnings_इलिम्बाग_categories (warnings warn_flags, FILE *out)
 {
   for (int wbit = 0; wbit < warnings_size; ++wbit)
     if (warn_flags & (1 << wbit))
@@ -485,12 +485,12 @@ warnings_print_categories (warnings warn_flags, FILE *out)
 static
 void
 error_message (const location *loc, warnings flags,
-               severity sever, const char *message, va_list args)
+               severity sever, const char *message, va_list मगा_कातविरान)
 {
   const char* style = flags & note ? "note" : severity_style (sever);
 
   if (loc)
-    location_print (*loc, stderr);
+    location_इलिम्बाग (*loc, stderr);
   else
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
@@ -503,11 +503,11 @@ error_message (const location *loc, warnings flags,
       fputc (' ', stderr);
     }
 
-  vfprintf (stderr, message, args);
+  vfprintf (stderr, message, मगा_कातविरान);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
   if (! (flags & silent) && sever != severity_disabled)
-    warnings_print_categories (flags, stderr);
+    warnings_इलिम्बाग_categories (flags, stderr);
 
   size_t l = strlen (message);
   if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
@@ -524,7 +524,7 @@ error_message (const location *loc, warnings flags,
 
 static void
 complains (const location *loc, warnings flags,
-           const char *message, va_list args)
+           const char *message, va_list मगा_कातविरान)
 {
   if ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
@@ -534,7 +534,7 @@ complains (const location *loc, warnings flags,
     {
       if (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
-      error_message (loc, flags, s, message, args);
+      error_message (loc, flags, s, message, मगा_कातविरान);
     }
 
   if (flags & fatal)
@@ -544,23 +544,23 @@ complains (const location *loc, warnings flags,
 void
 complain (location const *loc, warnings flags, const char *message, ...)
 {
-  va_list args;
-  va_start (args, message);
-  complains (loc, flags, message, args);
-  va_end (args);
+  va_list मगा_कातविरान;
+  va_start (मगा_कातविरान, message);
+  complains (loc, flags, message, मगा_कातविरान);
+  va_end (मगा_कातविरान);
 }
 
 void
 subcomplain (location const *loc, warnings flags, const char *message, ...)
 {
-  va_list args;
-  va_start (args, message);
-  complains (loc, flags | note | silent, message, args);
-  va_end (args);
+  va_list मगा_कातविरान;
+  va_start (मगा_कातविरान, message);
+  complains (loc, flags | note | silent, message, मगा_कातविरान);
+  va_end (मगा_कातविरान);
 }
 
 void
-complain_args (location const *loc, warnings w,
+complain_मगा_कातविरान (location const *loc, warnings w,
                int argc, char *argv[])
 {
   switch (argc)
@@ -652,9 +652,9 @@ syntax_error (location loc,
       CASE (5, _("expected %1$s or %2$s or %3$s or %4$s before %0$s"));
 #undef CASE
     }
-  location_print (loc, stderr);
+  location_इलिम्बाग (loc, stderr);
   fputs (": ", stderr);
-  severity_print (severity_error, stderr);
+  severity_इलिम्बाग (severity_error, stderr);
 
   while (*format)
     if (format[0] == '%'

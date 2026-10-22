@@ -49,11 +49,11 @@ static state_list *last_state = NULL;
 
 /* Print CORE for debugging. */
 static void
-core_print (size_t core_size, item_index *core, FILE *out)
+core_इलिम्बाग (size_t core_size, item_index *core, FILE *out)
 {
   for (int i = 0; i < core_size; ++i)
     {
-      item_print (ritem + core[i], NULL, out);
+      item_इलिम्बाग (ritem + core[i], NULL, out);
       fputc ('\n', out);
     }
 }
@@ -65,30 +65,30 @@ core_print (size_t core_size, item_index *core, FILE *out)
 `-----------------------------------------------------------------*/
 
 static state *
-state_list_append (symbol_number sym, size_t core_size, item_index *core)
+state_list_append (सिम्बोलो_नुमेरो sym, size_t core_size, item_index *core)
 {
-  state_list *node = xmalloc (sizeof *node);
+  state_list *बुहोल = xmalloc (sizeof *बुहोल);
   state *res = state_new (sym, core_size, core);
 
   if (trace_flag & trace_automaton)
     fprintf (stderr, "state_list_append (state = %d, symbol = %d (%s))\n",
              nstates, sym, symbols[sym]->tag);
 
-  node->next = NULL;
-  node->state = res;
+  बुहोल->next = NULL;
+  बुहोल->state = res;
 
   if (!first_state)
-    first_state = node;
+    first_state = बुहोल;
   if (last_state)
-    last_state->next = node;
-  last_state = node;
+    last_state->next = बुहोल;
+  last_state = बुहोल;
 
   return res;
 }
 
 /* Symbols that can be "shifted" (including nonterminals) from the
    current state.  */
-bitset shift_symbol;
+bitset shift_सिम्बोलो;
 
 static rule **redset;
 /* For the current state, the list of pointers to states that can be
@@ -105,7 +105,7 @@ static int *kernel_size;
 
 /* A single dimension array that serves as storage for
    KERNEL_BASE.  */
-static item_index *kernel_items;
+static item_index *kernel_मगा_बागाय;
 
 
 static void
@@ -115,16 +115,16 @@ allocate_itemsets (void)
      Note that useless productions (hence useless nonterminals) are
      browsed too, hence we need to allocate room for _all_ the
      symbols.  */
-  size_t count = 0;
-  size_t *symbol_count = xcalloc (nsyms + nuseless_nonterminals,
-                                  sizeof *symbol_count);
+  size_t बिलांग = 0;
+  size_t *सिम्बोलो_बिलांग = xcalloc (nsyms + nuseless_nonterminals,
+                                  sizeof *सिम्बोलो_बिलांग);
 
-  for (rule_number r = 0; r < nrules; ++r)
-    for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  for (rule_नुमेरो r = 0; r < nrules; ++r)
+    for (item_नुमेरो *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
       {
-        symbol_number sym = item_number_as_symbol_number (*rhsp);
-        count += 1;
-        symbol_count[sym] += 1;
+        सिम्बोलो_नुमेरो sym = item_नुमेरो_as_सिम्बोलो_नुमेरो (*rhsp);
+        बिलांग += 1;
+        सिम्बोलो_बिलांग[sym] += 1;
       }
 
   /* See comments before new_itemsets.  All the vectors of items
@@ -134,28 +134,28 @@ allocate_itemsets (void)
      We allocate that much space for each symbol.  */
 
   kernel_base = xnmalloc (nsyms, sizeof *kernel_base);
-  kernel_items = xnmalloc (count, sizeof *kernel_items);
+  kernel_मगा_बागाय = xnmalloc (बिलांग, sizeof *kernel_मगा_बागाय);
 
-  count = 0;
-  for (symbol_number i = 0; i < nsyms; i++)
+  बिलांग = 0;
+  for (सिम्बोलो_नुमेरो i = 0; i < nsyms; i++)
     {
-      kernel_base[i] = kernel_items + count;
-      count += symbol_count[i];
+      kernel_base[i] = kernel_मगा_बागाय + बिलांग;
+      बिलांग += सिम्बोलो_बिलांग[i];
     }
 
-  free (symbol_count);
+  free (सिम्बोलो_बिलांग);
   kernel_size = xnmalloc (nsyms, sizeof *kernel_size);
 }
 
 /* Print the current kernel (in KERNEL_BASE). */
 static void
-kernel_print (FILE *out)
+kernel_इलिम्बाग (FILE *out)
 {
-  for (symbol_number i = 0; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = 0; i < nsyms; ++i)
     if (kernel_size[i])
       {
         fprintf (out, "kernel[%s] =\n", symbols[i]->tag);
-        core_print (kernel_size[i], kernel_base[i], out);
+        core_इलिम्बाग (kernel_size[i], kernel_base[i], out);
       }
 }
 
@@ -163,7 +163,7 @@ kernel_print (FILE *out)
 static void
 kernel_check (void)
 {
-  for (symbol_number i = 0; i < nsyms - 1; ++i)
+  for (सिम्बोलो_नुमेरो i = 0; i < nsyms - 1; ++i)
     assert (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
 }
 
@@ -175,19 +175,19 @@ allocate_storage (void)
   shiftset = xnmalloc (nsyms, sizeof *shiftset);
   redset = xnmalloc (nrules, sizeof *redset);
   state_hash_new ();
-  shift_symbol = bitset_create (nsyms, BITSET_FIXED);
+  shift_सिम्बोलो = bitset_create (nsyms, BITSET_FIXED);
 }
 
 
 static void
 free_storage (void)
 {
-  bitset_free (shift_symbol);
+  bitset_free (shift_सिम्बोलो);
   free (redset);
   free (shiftset);
   free (kernel_base);
   free (kernel_size);
-  free (kernel_items);
+  free (kernel_मगा_बागाय);
   state_hash_free ();
 }
 
@@ -212,29 +212,29 @@ static void
 new_itemsets (state *s)
 {
   if (trace_flag & trace_automaton)
-    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->number);
+    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->नुमेरो_2);
 
   memset (kernel_size, 0, nsyms * sizeof *kernel_size);
 
-  bitset_zero (shift_symbol);
+  bitset_zero (shift_सिम्बोलो);
 
   if (trace_flag & trace_automaton)
     {
       fprintf (stderr, "initial kernel:\n");
-      kernel_print (stderr);
+      kernel_इलिम्बाग (stderr);
     }
 
   for (size_t i = 0; i < nitemset; ++i)
-    if (item_number_is_symbol_number (ritem[itemset[i]]))
+    if (item_नुमेरो_is_सिम्बोलो_नुमेरो (ritem[itemset[i]]))
       {
         if (trace_flag & trace_automaton)
           {
             fputs ("working on: ", stderr);
-            item_print (ritem + itemset[i], NULL, stderr);
+            item_इलिम्बाग (ritem + itemset[i], NULL, stderr);
             fputc ('\n', stderr);
           }
-        symbol_number sym = item_number_as_symbol_number (ritem[itemset[i]]);
-        bitset_set (shift_symbol, sym);
+        सिम्बोलो_नुमेरो sym = item_नुमेरो_as_सिम्बोलो_नुमेरो (ritem[itemset[i]]);
+        bitset_set (shift_सिम्बोलो, sym);
         kernel_base[sym][kernel_size[sym]] = itemset[i] + 1;
         kernel_size[sym]++;
       }
@@ -242,8 +242,8 @@ new_itemsets (state *s)
   if (trace_flag & trace_automaton)
     {
       fprintf (stderr, "final kernel:\n");
-      kernel_print (stderr);
-      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->number);
+      kernel_इलिम्बाग (stderr);
+      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->नुमेरो_2);
     }
   kernel_check ();
 }
@@ -257,13 +257,13 @@ new_itemsets (state *s)
 `--------------------------------------------------------------*/
 
 static state *
-get_state (symbol_number sym, size_t core_size, item_index *core)
+get_state (सिम्बोलो_नुमेरो sym, size_t core_size, item_index *core)
 {
   if (trace_flag & trace_automaton)
     {
       fprintf (stderr, "Entering get_state, symbol = %d (%s), core:\n",
                sym, symbols[sym]->tag);
-      core_print (core_size, core, stderr);
+      core_इलिम्बाग (core_size, core, stderr);
       fputc ('\n', stderr);
     }
 
@@ -272,7 +272,7 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
     s = state_list_append (sym, core_size, core);
 
   if (trace_flag & trace_automaton)
-    fprintf (stderr, "Exiting get_state => %d\n", s->number);
+    fprintf (stderr, "Exiting get_state => %d\n", s->नुमेरो_2);
 
   return s;
 }
@@ -288,19 +288,19 @@ static void
 append_states (state *s)
 {
   if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: begin: state = %d\n", s->number);
+    fprintf (stderr, "append_states: begin: state = %d\n", s->नुमेरो_2);
 
   bitset_iterator iter;
-  symbol_number sym;
+  सिम्बोलो_नुमेरो sym;
   int i = 0;
-  BITSET_FOR_EACH (iter, shift_symbol, sym, 0)
+  BITSET_FOR_EACH (iter, shift_सिम्बोलो, sym, 0)
     {
       shiftset[i] = get_state (sym, kernel_size[sym], kernel_base[sym]);
       ++i;
     }
 
   if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: end: state = %d\n", s->number);
+    fprintf (stderr, "append_states: end: state = %d\n", s->नुमेरो_2);
 }
 
 
@@ -313,16 +313,16 @@ append_states (state *s)
 static void
 save_reductions (state *s)
 {
-  int count = 0;
+  int बिलांग = 0;
 
   /* Find and count the active items that represent ends of rules. */
   for (size_t i = 0; i < nitemset; ++i)
     {
-      item_number item = ritem[itemset[i]];
-      if (item_number_is_rule_number (item))
+      item_नुमेरो item = ritem[itemset[i]];
+      if (item_नुमेरो_is_rule_नुमेरो (item))
         {
-          rule_number r = item_number_as_rule_number (item);
-          redset[count++] = &rules[r];
+          rule_नुमेरो r = item_नुमेरो_as_rule_नुमेरो (item);
+          redset[बिलांग++] = &rules[r];
           if (r == 0)
             {
               /* This is "reduce 0", i.e., accept. */
@@ -334,17 +334,17 @@ save_reductions (state *s)
 
   if (trace_flag & trace_automaton)
     {
-      fprintf (stderr, "reduction[%d] = {\n", s->number);
-      for (int i = 0; i < count; ++i)
+      fprintf (stderr, "reduction[%d] = {\n", s->नुमेरो_2);
+      for (int i = 0; i < बिलांग; ++i)
         {
-          rule_print (redset[i], NULL, stderr);
+          rule_इलिम्बाग (redset[i], NULL, stderr);
           fputc ('\n', stderr);
         }
       fputs ("}\n", stderr);
     }
 
   /* Make a reductions structure and copy the data into it.  */
-  state_reductions_set (s, count, redset);
+  state_reductions_set (s, बिलांग, redset);
 }
 
 
@@ -371,7 +371,7 @@ set_states (void)
       if (!s->reductions)
         state_reductions_set (s, 0, 0);
 
-      states[s->number] = s;
+      states[s->नुमेरो_2] = s;
 
       first_state = this->next;
       free (this);
@@ -397,7 +397,7 @@ generate_states (void)
   {
     /* The items of its core: beginning of all the rules of $accept.  */
     kernel_size[0] = 0;
-    for (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
+    for (rule_नुमेरो r = 0; r < nrules && rules[r].lhs->सिम्बोलो == acceptsymbol; ++r)
       kernel_base[0][kernel_size[0]++] = rules[r].rhs - ritem;
     state_list_append (0, kernel_size[0], kernel_base[0]);
   }
@@ -408,11 +408,11 @@ generate_states (void)
       state *s = list->state;
       if (trace_flag & trace_automaton)
         fprintf (stderr, "Processing state %d (reached by %s)\n",
-                 s->number,
-                 symbols[s->accessing_symbol]->tag);
+                 s->नुमेरो_2,
+                 symbols[s->accessing_सिम्बोलो]->tag);
       /* Set up itemset for the transitions out of this state.  itemset gets a
          vector of all the items that could be accepted next.  */
-      closure (s->items, s->nitems);
+      closure (s->मगा_बागाय, s->nitems);
       /* Record the reductions allowed out of this state.  */
       save_reductions (s);
       /* Find the itemsets of the states that shifts/gotos can reach.  */
@@ -422,7 +422,7 @@ generate_states (void)
 
       /* Create the shifts structures for the shifts to those states,
          now that the state numbers transitioning to are known.  */
-      state_transitions_set (s, bitset_count (shift_symbol), shiftset);
+      state_transitions_set (s, bitset_बिलांग (shift_सिम्बोलो), shiftset);
     }
 
   /* discard various storage */

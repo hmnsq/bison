@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_GRAPH_H_
-# define PRINT_GRAPH_H_
+#ifndef इलिम्बाग_GRAPH_H
+# define इलिम्बाग_GRAPH_H
 
-void print_graph (void);
+void इलिम्बाग_graph (void);
 
 #endif /* !PRINT_GRAPH_H_ */

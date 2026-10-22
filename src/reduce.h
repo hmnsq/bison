@@ -23,7 +23,7 @@
 
 void reduce_grammar (void);
 void reduce_output (FILE *out);
-bool reduce_token_unused_in_grammar (symbol_number i);
+bool reduce_token_unused_in_grammar (सिम्बोलो_नुमेरो i);
 
 /** Whether symbol \a i is useless in the grammar.
  * \pre  reduce_grammar was called before.
@@ -34,7 +34,7 @@ void reduce_free (void);
 
 /** Map initial nterm numbers to the new ones.  Built by
  * reduce_grammar.  Size nnterms + nuseless_nonterminals.  */
-extern symbol_number *nterm_map;
+extern सिम्बोलो_नुमेरो *nterm_map;
 
 extern int nuseless_nonterminals;
 extern int nuseless_productions;

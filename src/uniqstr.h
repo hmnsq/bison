@@ -64,6 +64,6 @@ void uniqstrs_new (void);
 void uniqstrs_free (void);
 
 /* Report them all.  */
-void uniqstrs_print (void);
+void uniqstrs_इलिम्बाग (void);
 
 #endif /* ! defined UNIQSTR_H_ */

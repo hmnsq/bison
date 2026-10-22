@@ -32,27 +32,27 @@
 #include "getargs.h"
 #include "nullable.h"
 
-size_t nstate_items;
-state_item_number *state_item_map;
-state_item *state_items;
+size_t nstate_मगा_बागाय;
+state_item_नुमेरो *state_item_map;
+state_item *state_मगा_बागाय;
 
 // Hash functions for index -> bitset hash maps.
 typedef struct
 {
-  int key;
+  int सुसि;
   bitset l;
 } hash_pair;
 
 static size_t
 hash_pair_hasher (const hash_pair *sl, size_t max)
 {
-  return sl->key % max;
+  return sl->सुसि % max;
 }
 
 static bool
 hash_pair_comparator (const hash_pair *l, const hash_pair *r)
 {
-  return l->key == r->key;
+  return l->सुसि == r->सुसि;
 }
 
 static void
@@ -73,19 +73,19 @@ hash_pair_table_create (int size)
 }
 
 static bitset
-hash_pair_lookup (Hash_table *tab, int key)
+hash_pair_lookup (Hash_table *tab, int सुसि)
 {
   hash_pair probe;
-  probe.key = key;
+  probe.सुसि = सुसि;
   hash_pair *hp = hash_lookup (tab, &probe);
   return hp ? hp->l : NULL;
 }
 
 static void
-hash_pair_insert (Hash_table *tab, int key, bitset val)
+hash_pair_इसिंगित (Hash_table *tab, int सुसि, bitset val)
 {
   hash_pair *hp = xmalloc (sizeof *hp);
-  hp->key = key;
+  hp->सुसि = सुसि;
   hp->l = val;
   hash_pair *res = hash_xinsert (tab, hp);
   // This must be the first insertion.
@@ -96,126 +96,126 @@ hash_pair_insert (Hash_table *tab, int key, bitset val)
 /* A state_item from a state's id and the offset of the item within
    the state. */
 state_item *
-state_item_lookup (state_number s, state_item_number off)
+state_item_lookup (state_नुमेरो s, state_item_नुमेरो off)
 {
-  return &state_items[state_item_index_lookup (s, off)];
+  return &state_मगा_बागाय[state_item_index_lookup (s, off)];
 }
 
 static inline void
-state_item_set (state_item_number sidx, const state *s, item_number off)
+state_item_set (state_item_नुमेरो sidx, const state *s, item_नुमेरो off)
 {
-  state_items[sidx].state = s;
-  state_items[sidx].item = &ritem[off];
-  state_items[sidx].lookahead = NULL;
-  state_items[sidx].trans = -1;
-  state_items[sidx].prods = NULL;
-  state_items[sidx].revs = bitset_create (nstate_items, BITSET_SPARSE);
+  state_मगा_बागाय[sidx].state = s;
+  state_मगा_बागाय[sidx].item = &ritem[off];
+  state_मगा_बागाय[sidx].lookahead = NULL;
+  state_मगा_बागाय[sidx].trans = -1;
+  state_मगा_बागाय[sidx].prods = NULL;
+  state_मगा_बागाय[sidx].revs = bitset_create (nstate_मगा_बागाय, BITSET_SPARSE);
 }
 
 /**
  * Initialize state_items set
  */
 static void
-init_state_items (void)
+init_state_मगा_बागाय (void)
 {
-  nstate_items = 0;
-  bitsetv production_items = bitsetv_create (nstates, nritems, BITSET_SPARSE);
+  nstate_मगा_बागाय = 0;
+  bitsetv production_मगा_बागाय = bitsetv_create (nstates, nritems, BITSET_SPARSE);
   for (int i = 0; i < nstates; ++i)
     {
       const state *s = states[i];
-      nstate_items += s->nitems;
-      closure (s->items, s->nitems);
+      nstate_मगा_बागाय += s->nitems;
+      closure (s->मगा_बागाय, s->nitems);
       for (size_t j = 0; j < nitemset; ++j)
         if (0 < itemset[j]
-            && item_number_is_rule_number (ritem[itemset[j] - 1]))
+            && item_नुमेरो_is_rule_नुमेरो (ritem[itemset[j] - 1]))
           {
-            bitset_set (production_items[i], itemset[j]);
-            ++nstate_items;
+            bitset_set (production_मगा_बागाय[i], itemset[j]);
+            ++nstate_मगा_बागाय;
           }
     }
-  state_item_map = xnmalloc (nstates + 1, sizeof (state_item_number));
-  state_items = xnmalloc (nstate_items, sizeof (state_item));
-  state_item_number sidx = 0;
+  state_item_map = xnmalloc (nstates + 1, sizeof (state_item_नुमेरो));
+  state_मगा_बागाय = xnmalloc (nstate_मगा_बागाय, sizeof (state_item));
+  state_item_नुमेरो sidx = 0;
   for (int i = 0; i < nstates; ++i)
     {
       state_item_map[i] = sidx;
-      int rule_search_idx = 0;
+      int rule_हानाप_idx = 0;
       const state *s = states[i];
       const reductions *red = s->reductions;
       for (int j = 0; j < s->nitems; ++j)
         {
-          state_item_set (sidx, s, s->items[j]);
-          state_item *si = &state_items[sidx];
+          state_item_set (sidx, s, s->मगा_बागाय[j]);
+          state_item *si = &state_मगा_बागाय[sidx];
           const rule *r = item_rule (si->item);
-          if (rule_search_idx < red->num && red->rules[rule_search_idx] < r)
-            ++rule_search_idx;
-          if (rule_search_idx < red->num && r == red->rules[rule_search_idx])
+          if (rule_हानाप_idx < red->नुमेरो && red->rules[rule_हानाप_idx] < r)
+            ++rule_हानाप_idx;
+          if (rule_हानाप_idx < red->नुमेरो && r == red->rules[rule_हानाप_idx])
             {
               bitsetv lookahead = red->lookaheads;
               if (lookahead)
-                si->lookahead = lookahead[rule_search_idx];
+                si->lookahead = lookahead[rule_हानाप_idx];
             }
           ++sidx;
         }
       bitset_iterator biter;
-      item_number off;
-      BITSET_FOR_EACH (biter, production_items[i], off, 0)
+      item_नुमेरो off;
+      BITSET_FOR_EACH (biter, production_मगा_बागाय[i], off, 0)
         {
           state_item_set (sidx, s, off);
-          if (item_number_is_rule_number (ritem[off]))
+          if (item_नुमेरो_is_rule_नुमेरो (ritem[off]))
             {
               bitsetv lookahead = red->lookaheads;
               if (lookahead)
-                state_items[sidx].lookahead = lookahead[rule_search_idx];
-              ++rule_search_idx;
+                state_मगा_बागाय[sidx].lookahead = lookahead[rule_हानाप_idx];
+              ++rule_हानाप_idx;
             }
           ++sidx;
         }
 
     }
-  state_item_map[nstates] = nstate_items;
-  bitsetv_free (production_items);
+  state_item_map[nstates] = nstate_मगा_बागाय;
+  bitsetv_free (production_मगा_बागाय);
 }
 
 static size_t
 state_sym_hasher (const void *st, size_t max)
 {
-  return ((state *) st)->accessing_symbol % max;
+  return ((state *) st)->accessing_सिम्बोलो % max;
 }
 
 static bool
 state_sym_comparator (const void *s1, const void *s2)
 {
-  return ((state *) s1)->accessing_symbol == ((state *) s2)->accessing_symbol;
+  return ((state *) s1)->accessing_सिम्बोलो == ((state *) s2)->accessing_सिम्बोलो;
 }
 
 static state *
-state_sym_lookup (symbol_number sym, Hash_table *h)
+state_sym_lookup (सिम्बोलो_नुमेरो sym, Hash_table *h)
 {
   state probe;
-  probe.accessing_symbol = sym;
+  probe.accessing_सिम्बोलो = sym;
   return hash_lookup (h, &probe);
 }
 
 static void
 init_trans (void)
 {
-  for (state_number i = 0; i < nstates; ++i)
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     {
       // Generate a hash set that maps from accepting symbols to the states
       // this state transitions to.
       state *s = states[i];
       transitions *t = s->transitions;
       Hash_table *transition_set
-        = hash_xinitialize (t->num, NULL, (Hash_hasher) state_sym_hasher,
+        = hash_xinitialize (t->नुमेरो, NULL, (Hash_hasher) state_sym_hasher,
                             (Hash_comparator) state_sym_comparator, NULL);
-      for (int j = 0; j < t->num; ++j)
+      for (int j = 0; j < t->नुमेरो; ++j)
         if (!TRANSITION_IS_DISABLED (t, j))
           hash_xinsert (transition_set, t->states[j]);
-      for (state_item_number j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
+      for (state_item_नुमेरो j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
         {
-          item_number *item = state_items[j].item;
-          if (item_number_is_rule_number (*item))
+          item_नुमेरो *item = state_मगा_बागाय[j].item;
+          if (item_नुमेरो_is_rule_नुमेरो (*item))
             continue;
           state *dst = state_sym_lookup (*item, transition_set);
           if (!dst)
@@ -223,13 +223,13 @@ init_trans (void)
           // find the item in the destination state that corresponds
           // to the transition of item
           for (int k = 0; k < dst->nitems; ++k)
-            if (item + 1 == ritem + dst->items[k])
+            if (item + 1 == ritem + dst->मगा_बागाय[k])
               {
-                state_item_number dstSI =
-                  state_item_index_lookup (dst->number, k);
+                state_item_नुमेरो dstSI =
+                  state_item_index_lookup (dst->नुमेरो_2, k);
 
-                state_items[j].trans = dstSI;
-                bitset_set (state_items[dstSI].revs, j);
+                state_मगा_बागाय[j].trans = dstSI;
+                bitset_set (state_मगा_बागाय[dstSI].revs, j);
                 break;
             }
         }
@@ -249,43 +249,43 @@ init_prods (void)
 
       // Add the nitems of state to skip to the production portion
       // of that state's state_items
-      for (state_item_number j = state_item_map[i] + s->nitems;
+      for (state_item_नुमेरो j = state_item_map[i] + s->nitems;
            j < state_item_map[i + 1]; ++j)
         {
-          state_item *src = &state_items[j];
-          item_number *item = src->item;
-          symbol_number lhs = item_rule (item)->lhs->number;
+          state_item *src = &state_मगा_बागाय[j];
+          item_नुमेरो *item = src->item;
+          सिम्बोलो_नुमेरो lhs = item_rule (item)->lhs->नुमेरो_2;
           bitset itms = hash_pair_lookup (closure_map, lhs);
           if (!itms)
             {
-              itms = bitset_create (nstate_items, BITSET_SPARSE);
-              hash_pair_insert (closure_map, lhs, itms);
+              itms = bitset_create (nstate_मगा_बागाय, BITSET_SPARSE);
+              hash_pair_इसिंगित (closure_map, lhs, itms);
             }
           bitset_set (itms, j);
         }
       // For each item with a dot followed by a nonterminal,
       // try to create a production edge.
-      for (state_item_number j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
+      for (state_item_नुमेरो j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
         {
-          state_item *src = &state_items[j];
-          item_number item = *(src->item);
+          state_item *src = &state_मगा_बागाय[j];
+          item_नुमेरो item = *(src->item);
           // Skip reduce items and items with terminals after the dot
-          if (item_number_is_rule_number (item) || ISTOKEN (item))
+          if (item_नुमेरो_is_rule_नुमेरो (item) || ISTOKEN (item))
             continue;
-          symbol_number sym = item_number_as_symbol_number (item);
+          सिम्बोलो_नुमेरो sym = item_नुमेरो_as_सिम्बोलो_नुमेरो (item);
           bitset lb = hash_pair_lookup (closure_map, sym);
           if (lb)
             {
-              bitset copy = bitset_create (nstate_items, BITSET_SPARSE);
+              bitset copy = bitset_create (nstate_मगा_बागाय, BITSET_SPARSE);
               bitset_copy (copy, lb);
               // update prods.
-              state_items[j].prods = copy;
+              state_मगा_बागाय[j].prods = copy;
 
               // update revs.
               bitset_iterator biter;
-              state_item_number prod;
+              state_item_नुमेरो prod;
               BITSET_FOR_EACH (biter, copy, prod, 0)
-                bitset_set (state_items[prod].revs, j);
+                bitset_set (state_मगा_बागाय[prod].revs, j);
             }
         }
       hash_free (closure_map);
@@ -298,10 +298,10 @@ init_prods (void)
 static inline void
 gen_lookaheads (void)
 {
-  for (state_item_number i = 0; i < nstate_items; ++i)
+  for (state_item_नुमेरो i = 0; i < nstate_मगा_बागाय; ++i)
     {
-      state_item *si = &state_items[i];
-      if (item_number_is_symbol_number (*(si->item)) || !si->lookahead)
+      state_item *si = &state_मगा_बागाय[i];
+      if (item_नुमेरो_is_सिम्बोलो_नुमेरो (*(si->item)) || !si->lookahead)
         continue;
 
       bitset lookahead = si->lookahead;
@@ -319,11 +319,11 @@ gen_lookaheads (void)
           prev->lookahead = lookahead;
           if (SI_TRANSITION (prev))
             {
-              bitset rsi = state_items[prev - state_items].revs;
+              bitset rsi = state_मगा_बागाय[prev - state_मगा_बागाय].revs;
               bitset_iterator biter;
-              state_item_number sin;
+              state_item_नुमेरो sin;
               BITSET_FOR_EACH (biter, rsi, sin, 0)
-                gl_list_add_first (queue, &state_items[sin]);
+                gl_list_add_first (queue, &state_मगा_बागाय[sin]);
             }
         }
       gl_list_free (queue);
@@ -336,31 +336,31 @@ static void
 init_firsts (void)
 {
   firsts = bitsetv_create (nnterms, nsyms, BITSET_FIXED);
-  for (rule_number i = 0; i < nrules; ++i)
+  for (rule_नुमेरो i = 0; i < nrules; ++i)
     {
       rule *r = &rules[i];
-      item_number *n = r->rhs;
+      item_नुमेरो *n = r->rhs;
       // Iterate through nullable nonterminals to try to find a terminal.
-      while (item_number_is_symbol_number (*n) && ISVAR (*n)
+      while (item_नुमेरो_is_सिम्बोलो_नुमेरो (*n) && ISVAR (*n)
              && nullable[*n - ntokens])
         ++n;
-      if (item_number_is_rule_number (*n) || ISVAR (*n))
+      if (item_नुमेरो_is_rule_नुमेरो (*n) || ISVAR (*n))
         continue;
 
-      symbol_number lhs = r->lhs->number;
+      सिम्बोलो_नुमेरो lhs = r->lhs->नुमेरो_2;
       bitset_set (FIRSTS (lhs), *n);
     }
   bool change = true;
   while (change)
     {
       change = false;
-      for (rule_number i = 0; i < nrules; ++i)
+      for (rule_नुमेरो i = 0; i < nrules; ++i)
         {
           rule *r = &rules[i];
-          symbol_number lhs = r->lhs->number;
+          सिम्बोलो_नुमेरो lhs = r->lhs->नुमेरो_2;
           bitset f_lhs = FIRSTS (lhs);
-          for (item_number *n = r->rhs;
-               item_number_is_symbol_number (*n) && ISVAR (*n);
+          for (item_नुमेरो *n = r->rhs;
+               item_नुमेरो_is_सिम्बोलो_नुमेरो (*n) && ISVAR (*n);
                ++n)
             {
               bitset f = FIRSTS (*n);
@@ -398,13 +398,13 @@ prune_state_item (const state_item *si)
     {
       state_item *dsi = (state_item *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      if (SI_DISABLED (dsi - state_items))
+      if (SI_DISABLED (dsi - state_मगा_बागाय))
         continue;
 
       if (dsi->trans >= 0 && !SI_DISABLED (dsi->trans))
       {
-        const state_item *trans = &state_items[dsi->trans];
-        bitset_reset (trans->revs, dsi - state_items);
+        const state_item *trans = &state_मगा_बागाय[dsi->trans];
+        bitset_reset (trans->revs, dsi - state_मगा_बागाय);
         if (bitset_empty_p (trans->revs))
           gl_list_add_last (queue, trans);
       }
@@ -412,30 +412,30 @@ prune_state_item (const state_item *si)
       if (dsi->prods)
         {
           bitset_iterator biter;
-          state_item_number sin;
+          state_item_नुमेरो sin;
           BITSET_FOR_EACH (biter, dsi->prods, sin, 0)
             {
               if (SI_DISABLED (sin))
                 continue;
-              const state_item *prod = &state_items[sin];
-              bitset_reset (prod->revs, dsi - state_items);
+              const state_item *prod = &state_मगा_बागाय[sin];
+              bitset_reset (prod->revs, dsi - state_मगा_बागाय);
               if (bitset_empty_p (prod->revs))
                 gl_list_add_last (queue, prod);
             }
         }
 
       bitset_iterator biter;
-      state_item_number sin;
+      state_item_नुमेरो sin;
       BITSET_FOR_EACH (biter, dsi->revs, sin, 0)
         {
           if (SI_DISABLED (sin))
             continue;
-          state_item *rev = &state_items[sin];
-          if (&state_items[rev->trans] == dsi)
+          state_item *rev = &state_मगा_बागाय[sin];
+          if (&state_मगा_बागाय[rev->trans] == dsi)
             gl_list_add_last (queue, rev);
           else if (rev->prods)
             {
-              bitset_reset (rev->prods, dsi - state_items);
+              bitset_reset (rev->prods, dsi - state_मगा_बागाय);
               if (bitset_empty_p (rev->prods))
                 gl_list_add_last (queue, rev);
             }
@@ -452,19 +452,19 @@ prune_state_item (const state_item *si)
 static void
 prune_disabled_paths (void)
 {
-  for (int i = nstate_items - 1; i >= 0; --i)
+  for (int i = nstate_मगा_बागाय - 1; i >= 0; --i)
     {
-      state_item *si = &state_items[i];
-      if (si->trans == -1 && item_number_is_symbol_number (*si->item))
+      state_item *si = &state_मगा_बागाय[i];
+      if (si->trans == -1 && item_नुमेरो_is_सिम्बोलो_नुमेरो (*si->item))
         prune_state_item (si);
     }
 }
 
 void
-state_item_print (const state_item *si, FILE *out, const char *prefix)
+state_item_इलिम्बाग (const state_item *si, FILE *out, const char *prefix)
 {
   fputs (prefix, out);
-  item_print (si->item, NULL, out);
+  item_इलिम्बाग (si->item, NULL, out);
   putc ('\n', out);
 }
 
@@ -478,16 +478,16 @@ state_item_rule (const state_item *si)
  * Report the state_item graph
  */
 static void
-state_items_report (FILE *out)
+state_मगा_बागाय_report (FILE *out)
 {
-  fprintf (out, "# state items: %zu\n", nstate_items);
-  for (state_number i = 0; i < nstates; ++i)
+  fprintf (out, "# state items: %zu\n", nstate_मगा_बागाय);
+  for (state_नुमेरो i = 0; i < nstates; ++i)
     {
       fprintf (out, "State %d:\n", i);
-      for (state_item_number j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
+      for (state_item_नुमेरो j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
         {
-          const state_item *si = &state_items[j];
-          item_print (si->item, NULL, out);
+          const state_item *si = &state_मगा_बागाय[j];
+          item_इलिम्बाग (si->item, NULL, out);
           if (SI_DISABLED (j))
             fputs ("  DISABLED\n", out);
           else
@@ -496,7 +496,7 @@ state_items_report (FILE *out)
               if (si->trans >= 0)
                 {
                   fputs ("    -> ", out);
-                  state_item_print (&state_items[si->trans], out, "");
+                  state_item_इलिम्बाग (&state_मगा_बागाय[si->trans], out, "");
                 }
 
               bitset sets[2] = { si->prods, si->revs };
@@ -507,11 +507,11 @@ state_items_report (FILE *out)
                   if (b)
                     {
                       bitset_iterator biter;
-                      state_item_number sin;
+                      state_item_नुमेरो sin;
                       BITSET_FOR_EACH (biter, b, sin, 0)
                         {
                           fputs (txt[seti], out);
-                          state_item_print (&state_items[sin], out, "");
+                          state_item_इलिम्बाग (&state_मगा_बागाय[sin], out, "");
                         }
                     }
                 }
@@ -520,11 +520,11 @@ state_items_report (FILE *out)
         }
     }
   fprintf (out, "FIRSTS\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  for (सिम्बोलो_नुमेरो i = ntokens; i < nsyms; ++i)
     {
       fprintf (out, "  %s firsts\n", symbols[i]->tag);
       bitset_iterator iter;
-      symbol_number j;
+      सिम्बोलो_नुमेरो j;
       BITSET_FOR_EACH (iter, FIRSTS (i), j, 0)
         fprintf (out, "    %s\n", symbols[j]->tag);
     }
@@ -532,10 +532,10 @@ state_items_report (FILE *out)
 }
 
 void
-state_items_init (void)
+state_मगा_बागाय_init (void)
 {
   xtime_t start = gethrxtime ();
-  init_state_items ();
+  init_state_मगा_बागाय ();
   init_trans ();
   init_prods ();
   gen_lookaheads ();
@@ -544,22 +544,22 @@ state_items_init (void)
   if (trace_flag & trace_cex)
     {
       fprintf (stderr, "state_items_init: %.3fs\n", (gethrxtime () - start) / 1e9);
-      state_items_report (stderr);
+      state_मगा_बागाय_report (stderr);
     }
 }
 
 void
-state_items_free (void)
+state_मगा_बागाय_free (void)
 {
-  for (state_item_number i = 0; i < nstate_items; ++i)
+  for (state_item_नुमेरो i = 0; i < nstate_मगा_बागाय; ++i)
     if (!SI_DISABLED (i))
       {
-        state_item *si = &state_items[i];
+        state_item *si = &state_मगा_बागाय[i];
         if (si->prods)
           bitset_free (si->prods);
         bitset_free (si->revs);
       }
-  free (state_items);
+  free (state_मगा_बागाय);
   bitsetv_free (firsts);
 }
 
@@ -580,7 +580,7 @@ production_allowed (const state_item *si, const state_item *next)
       if (prec1 > prec2)
         return false;
       // Do not expand if same precedence, but left-associative.
-      if (prec1 == prec2 && s1->assoc == left_assoc)
+      if (prec1 == prec2 && s1->assoc == कालिवा_assoc)
         return false;
     }
   return true;

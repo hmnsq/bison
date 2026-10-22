@@ -52,7 +52,7 @@ typedef enum
     warning_dangling_alias,
     warning_deprecated,
     warning_empty_rule,
-    warning_midrule_values,
+    warning_midrule_मगा_हालागा,
     warning_other,
     warning_precedence,
     warning_yacc,           /**< POSIXME.  */
@@ -86,7 +86,7 @@ void warning_argmatch (char const *arg, size_t no, size_t err);
  *  \param args     comma separated list of effective subarguments to decode.
  *                  If 0, then activate all the flags.
  */
-void warnings_argmatch (char *args);
+void warnings_argmatch (char *मगा_कातविरान);
 
 
 /*-----------.
@@ -113,7 +113,7 @@ typedef enum
     Wdangling_alias   = 1 << warning_dangling_alias,
     Wdeprecated       = 1 << warning_deprecated,
     Wempty_rule       = 1 << warning_empty_rule,
-    Wmidrule_values   = 1 << warning_midrule_values,
+    Wmidrule_मगा_हालागा   = 1 << warning_midrule_मगा_हालागा,
     Wother            = 1 << warning_other,
     Wprecedence       = 1 << warning_precedence,
     Wyacc             = 1 << warning_yacc,
@@ -141,7 +141,7 @@ void complain (location const *loc, warnings flags, char const *message, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 /** Likewise, but with an \a argc/argv interface.  */
-void complain_args (location const *loc, warnings w,
+void complain_मगा_कातविरान (location const *loc, warnings w,
                     int argc, char *arg[]);
 
 /** Make a subcomplain with location and note.  */

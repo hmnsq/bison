@@ -40,7 +40,7 @@ typedef struct AnnotationList
   /** The next node in the list or \c NULL if none.  */
   struct AnnotationList *next;
   /** The \c InadequacyList node describing how this inadequacy manifests.  */
-  InadequacyList *inadequacyNode;
+  InadequacyList *inadequacy_बुहोल;
   /**
    * List of how the "always", "never", and potential contributions of the
    * inadequacy might be made by isocores of the annotated LR(0) state:
@@ -108,13 +108,13 @@ typedef struct AnnotationList
  */
 void
 AnnotationList__compute_from_inadequacies (
-  state *s, bitsetv follow_kernel_items, bitsetv always_follows,
+  state *s, bitsetv follow_kernel_मगा_बागाय, bitsetv always_follows,
   state ***predecessors, bitset **item_lookahead_sets,
   InadequacyList **inadequacy_lists, AnnotationList **annotation_lists,
   AnnotationIndex *annotation_counts,
   ContributionIndex *max_contributionsp,
   struct obstack *annotations_obstackp,
-  InadequacyListNodeCount *inadequacy_list_node_count);
+  Inadequacy_List_बुहोल_बिलांग *inadequacy_list_बुहोल_बिलांग);
 
 /**
  * \pre

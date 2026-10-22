@@ -54,15 +54,15 @@ static boundary scanner_cursor;
 #define BISON_DIRECTIVE(Directive)                              \
   (bison_directive (loc, yytext), PERCENT_ ## Directive)
 
-#define RETURN_PERCENT_PARAM(Value)             \
-  RETURN_VALUE(PERCENT_PARAM, param_ ## Value)
+#define RETURN_PERCENT_PARAM(हालागा_4)             \
+  RETURN_हालागा(PERCENT_PARAM, param_ ## हालागा_4)
 
-#define RETURN_PERCENT_FLAG(Value)                      \
-  RETURN_VALUE(PERCENT_FLAG, uniqstr_new (Value))
+#define RETURN_PERCENT_FLAG(हालागा_4)                      \
+  RETURN_हालागा(PERCENT_FLAG, uniqstr_new (हालागा_4))
 
-#define RETURN_VALUE(Token, Value)              \
+#define RETURN_हालागा(Token, हालागा_4)              \
   do {                                          \
-    val->Token = Value;                         \
+    val->Token = हालागा_4;                         \
     return Token;                               \
   } while (0)
 
@@ -73,13 +73,13 @@ static boundary scanner_cursor;
     yyless (0);                                                 \
   } while (0)
 
-#define DEPRECATED_DIRECTIVE(Msg)                               \
+#define DEPRECATED_DIRECTIVE(मेनसाहे_2)                               \
   do {                                                          \
-    deprecated_directive (loc, yytext, Msg);                    \
-    scanner_cursor.column -= mbsnwidth (Msg, strlen (Msg), 0);  \
-    scanner_cursor.byte -= strlen (Msg);                        \
-    for (size_t i = strlen (Msg); i != 0; --i)                  \
-      unput (Msg[i - 1]);                                       \
+    deprecated_directive (loc, yytext, मेनसाहे_2);                    \
+    scanner_cursor.column -= mbsnwidth (मेनसाहे_2, strlen (मेनसाहे_2), 0);  \
+    scanner_cursor.byte -= strlen (मेनसाहे_2);                        \
+    for (size_t i = strlen (मेनसाहे_2); i != 0; --i)                  \
+      unput (मेनसाहे_2[i - 1]);                                       \
   } while (0)
 
 
@@ -146,7 +146,7 @@ static void unexpected_newline (boundary, char const *);
     - predicate (code between '%?{' and '{' in middle section); */
 %x SC_PROLOGUE SC_BRACED_CODE SC_EPILOGUE SC_PREDICATE
  /* C and C++ comments in code. */
-%x SC_COMMENT SC_LINE_COMMENT
+%x SC_COMMENT SC_लिन्या_COMMENT
  /* Strings and characters in code. */
 %x SC_STRING SC_CHARACTER
  /* Bracketed identifiers support. */
@@ -250,17 +250,17 @@ eqopt    ({sp}=)?
   "%empty"                          return BISON_DIRECTIVE (EMPTY);
   "%expect"                         return BISON_DIRECTIVE (EXPECT);
   "%expect-rr"                      return BISON_DIRECTIVE (EXPECT_RR);
-  "%file-prefix"                    RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%file-prefix"                    RETURN_हालागा (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
   "%glr-parser"                     return BISON_DIRECTIVE (GLR_PARSER);
   "%header"                         return BISON_DIRECTIVE (HEADER);
   "%initial-action"                 return BISON_DIRECTIVE (INITIAL_ACTION);
   "%language"                       return BISON_DIRECTIVE (LANGUAGE);
-  "%left"                           return PERCENT_LEFT;
+  "%left"                           return PERCENT_कालिवा;
   "%lex-param"                      RETURN_PERCENT_PARAM (lex);
   "%locations"                      RETURN_PERCENT_FLAG ("locations");
   "%merge"                          return BISON_DIRECTIVE (MERGE);
   "%no-default-prec"                return BISON_DIRECTIVE (NO_DEFAULT_PREC);
-  "%no-lines"                       return BISON_DIRECTIVE (NO_LINES);
+  "%no-lines"                       return BISON_DIRECTIVE (NO_मगा_लिन्या);
   "%nonassoc"                       return PERCENT_NONASSOC;
   "%nondeterministic-parser"        return BISON_DIRECTIVE (NONDETERMINISTIC_PARSER);
   "%nterm"                          return BISON_DIRECTIVE (NTERM);
@@ -271,7 +271,7 @@ eqopt    ({sp}=)?
   "%precedence"                     return BISON_DIRECTIVE (PRECEDENCE);
   "%printer"                        return BISON_DIRECTIVE (PRINTER);
   "%require"                        return BISON_DIRECTIVE (REQUIRE);
-  "%right"                          return PERCENT_RIGHT;
+  "%right"                          return PERCENT_कानान;
   "%skeleton"                       return BISON_DIRECTIVE (SKELETON);
   "%start"                          return PERCENT_START;
   "%term"                           return BISON_DIRECTIVE (TOKEN);
@@ -284,21 +284,21 @@ eqopt    ({sp}=)?
 
   /* Deprecated since Bison 2.3b (2008-05-27), but the warning is
      issued only since Bison 3.4. */
-  "%pure"[-_]"parser"               RETURN_VALUE (PERCENT_PURE_PARSER, uniqstr_new (yytext));
+  "%pure"[-_]"parser"               RETURN_हालागा (PERCENT_PURE_PARSER, uniqstr_new (yytext));
 
   /* Deprecated since Bison 3.0 (2013-07-25), but the warning is
      issued only since Bison 3.3. */
-  "%error-verbose"                  RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%error-verbose"                  RETURN_हालागा (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
 
   /* Deprecated since Bison 2.6 (2012-07-19), but the warning is
      issued only since Bison 3.3. */
-  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_VALUE (PERCENT_NAME_PREFIX, uniqstr_new (yytext));
+  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_हालागा (PERCENT_NAME_PREFIX, uniqstr_new (yytext));
 
   /* Deprecated since Bison 2.7.90, 2012. */
   "%default"[-_]"prec"              DEPRECATED_DIRECTIVE ("%default-prec");
-  "%error"[-_]"verbose"             RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%error"[-_]"verbose"             RETURN_हालागा (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
   "%expect"[-_]"rr"                 DEPRECATED_DIRECTIVE ("%expect-rr");
-  "%file-prefix"{eqopt}             RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%file-prefix"{eqopt}             RETURN_हालागा (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
   "%fixed"[-_]"output"[-_]"files"   DEPRECATED_DIRECTIVE ("%output \"y.tab.c\"");
   "%no"[-_]"default"[-_]"prec"      DEPRECATED_DIRECTIVE ("%no-default-prec");
   "%no"[-_]"lines"                  DEPRECATED_DIRECTIVE ("%no-lines");
@@ -322,8 +322,8 @@ eqopt    ({sp}=)?
     BEGIN SC_AFTER_IDENTIFIER;
   }
 
-  {int}      RETURN_VALUE (INT_LITERAL, scan_integer (yytext, 10, *loc));
-  {xint}     RETURN_VALUE (INT_LITERAL, scan_integer (yytext, 16, *loc));
+  {int}      RETURN_हालागा (INT_LITERAL, scan_integer (yytext, 10, *loc));
+  {xint}     RETURN_हालागा (INT_LITERAL, scan_integer (yytext, 16, *loc));
 
   /* Identifiers may not start with a digit.  Yet, don't silently
      accept "1FOO" as "1 FOO".  */
@@ -367,8 +367,8 @@ eqopt    ({sp}=)?
   }
 
   "%%" {
-    static int percent_percent_count;
-    if (++percent_percent_count == 2)
+    static int percent_percent_बिलांग;
+    if (++percent_percent_बिलांग == 2)
       BEGIN SC_EPILOGUE;
     return PERCENT_PERCENT;
   }
@@ -543,7 +543,7 @@ eqopt    ({sp}=)?
   | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
-<SC_LINE_COMMENT>
+<SC_लिन्या_COMMENT>
 {
   {eol}          STRING_GROW (); BEGIN context_state;
   {splice}       STRING_GROW ();
@@ -565,7 +565,7 @@ eqopt    ({sp}=)?
     loc->start = token_start;
     complain (loc, Wyacc,
               _("POSIX Yacc does not support string literals"));
-    RETURN_VALUE (STRING, last_string);
+    RETURN_हालागा (STRING, last_string);
   }
   <<EOF>>   unexpected_eof (token_start, "\"");
   "\n"      unexpected_newline (token_start, "\"");
@@ -580,7 +580,7 @@ eqopt    ({sp}=)?
     loc->start = token_start;
     complain (loc, Wyacc,
               _("POSIX Yacc does not support string literals"));
-    RETURN_VALUE (TSTRING, last_string);
+    RETURN_हालागा (TSTRING, last_string);
   }
   <<EOF>>   unexpected_eof (token_start, "\")");
   "\n"      unexpected_newline (token_start, "\")");
@@ -753,7 +753,7 @@ eqopt    ({sp}=)?
   "/"{splice}"/" {
     STRING_GROW ();
     context_state = YY_START;
-    BEGIN SC_LINE_COMMENT;
+    BEGIN SC_लिन्या_COMMENT;
   }
 }
 
@@ -787,7 +787,7 @@ eqopt    ({sp}=)?
         STRING_FINISH ();
         loc->start = code_start;
         BEGIN INITIAL;
-        RETURN_VALUE (BRACED_CODE, last_string);
+        RETURN_हालागा (BRACED_CODE, last_string);
       }
   }
 }
@@ -801,7 +801,7 @@ eqopt    ({sp}=)?
         STRING_FINISH ();
         loc->start = code_start;
         BEGIN INITIAL;
-        RETURN_VALUE (BRACED_PREDICATE, last_string);
+        RETURN_हालागा (BRACED_PREDICATE, last_string);
       }
     else
       STRING_1GROW ('}');
@@ -818,7 +818,7 @@ eqopt    ({sp}=)?
     STRING_FINISH ();
     loc->start = code_start;
     BEGIN INITIAL;
-    RETURN_VALUE (PROLOGUE, last_string);
+    RETURN_हालागा (PROLOGUE, last_string);
   }
 
   <<EOF>>   unexpected_eof (code_start, "%}");
@@ -836,7 +836,7 @@ eqopt    ({sp}=)?
     STRING_FINISH ();
     loc->start = code_start;
     BEGIN INITIAL;
-    RETURN_VALUE (EPILOGUE, last_string);
+    RETURN_हालागा (EPILOGUE, last_string);
   }
 }
 
@@ -845,7 +845,7 @@ eqopt    ({sp}=)?
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 
-<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
+<SC_COMMENT,SC_लिन्या_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
 {
   /* Accept multibyte characters in one block instead of byte after
      byte, so that add_column_width and mbsnwidth can compute correct
@@ -864,7 +864,7 @@ eqopt    ({sp}=)?
 `------------------------------------------------------*/
 
 static int
-scan_integer (char const *number, int base, location loc)
+scan_integer (char const *नुमेरो_2, int base, location loc)
 {
   verify (INT_MAX < ULONG_MAX);
   if (base == 16)
@@ -872,16 +872,16 @@ scan_integer (char const *number, int base, location loc)
               _("POSIX Yacc does not support hexadecimal literals"));
 
   errno = 0;
-  long num = strtol (number, NULL, base);
+  long नुमेरो = strtol (नुमेरो_2, NULL, base);
 
-  if (! (0 <= num && num <= INT_MAX && errno == 0))
+  if (! (0 <= नुमेरो && नुमेरो <= INT_MAX && errno == 0))
     {
       complain (&loc, complaint, _("integer out of range: %s"),
-                quote (number));
-      num = INT_MAX;
+                quote (नुमेरो_2));
+      नुमेरो = INT_MAX;
     }
 
-  return num;
+  return नुमेरो;
 }
 
 
@@ -947,11 +947,11 @@ convert_ucn_to_byte (char const *ucn)
 `----------------------------------------------------------------------------*/
 
 static void
-handle_syncline (char *args, location loc)
+handle_syncline (char *मगा_कातविरान, location loc)
 {
   char *file;
   errno = 0;
-  long lineno = strtol (args, &file, 10);
+  long lineno = strtol (मगा_कातविरान, &file, 10);
   if (! (0 <= lineno && lineno <= INT_MAX && errno == 0))
     {
       complain (&loc, Wother, _("line number overflow"));

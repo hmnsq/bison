@@ -56,18 +56,18 @@ void derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
+derivation_new (सिम्बोलो_नुमेरो sym, derivation_list children,
                 const rule *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+static inline derivation *derivation_new_leaf (सिम्बोलो_नुमेरो sym)
 {
   return derivation_new (sym, NULL, NULL);
 }
 
 // Number of symbols.
 size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
+void derivation_इलिम्बाग (const derivation *deriv, FILE *out, const char *prefix);
+void derivation_इलिम्बाग_leaves (const derivation *deriv, FILE *out);
 void derivation_free (derivation *deriv);
 void derivation_retain (derivation *deriv);
 

@@ -88,7 +88,7 @@ add_column_width (int column, char const *buf, size_t bufsize)
 static void
 boundary_compute (boundary *cur, char const *token, size_t size)
 {
-  int line = cur->line;
+  int लिन्या = cur->लिन्या;
   int column = cur->column;
   int byte = cur->byte;
   char const *p0 = token;
@@ -99,7 +99,7 @@ boundary_compute (boundary *cur, char const *token, size_t size)
     switch (*p)
       {
       case '\n':
-        line += line < INT_MAX;
+        लिन्या += लिन्या < INT_MAX;
         column = 1;
         byte = 1;
         p0 = p + 1;
@@ -118,7 +118,7 @@ boundary_compute (boundary *cur, char const *token, size_t size)
       }
   column = add_column_width (column, p0, p - p0);
 
-  cur->line = line;
+  cur->लिन्या = लिन्या;
   cur->column = column;
   cur->byte = byte;
 }
@@ -134,7 +134,7 @@ location_compute (location *loc, boundary *cur, char const *token, size_t size)
   boundary_compute (cur, token, size);
   loc->end = *cur;
 
-  if (loc->end.line == INT_MAX && loc->start.line != INT_MAX)
+  if (loc->end.लिन्या == INT_MAX && loc->start.लिन्या != INT_MAX)
     complain (loc, Wother, _("line number overflow"));
   if (loc->end.column == INT_MAX && loc->start.column != INT_MAX)
     complain (loc, Wother, _("column number overflow"));
@@ -144,24 +144,24 @@ location_compute (location *loc, boundary *cur, char const *token, size_t size)
 }
 
 static int
-boundary_print (boundary const *b, FILE *out)
+boundary_इलिम्बाग (boundary const *b, FILE *out)
 {
   return fprintf (out, "%s:%d.%d@%d",
                   quotearg_n_style (3, escape_quoting_style, b->file),
-                  b->line, b->column, b->byte);
+                  b->लिन्या, b->column, b->byte);
 }
 
 int
-location_print (location loc, FILE *out)
+location_इलिम्बाग (location loc, FILE *out)
 {
   int res = 0;
   if (location_empty (loc))
     res += fprintf (out, "(empty location)");
   else if (trace_flag & trace_locations)
     {
-      res += boundary_print (&loc.start, out);
+      res += boundary_इलिम्बाग (&loc.start, out);
       res += fprintf (out, "-");
-      res += boundary_print (&loc.end, out);
+      res += boundary_इलिम्बाग (&loc.end, out);
     }
   else
     {
@@ -170,9 +170,9 @@ location_print (location loc, FILE *out)
       int end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
       res += fprintf (out, "%s",
                       quotearg_n_style (3, escape_quoting_style, loc.start.file));
-      if (0 < loc.start.line)
+      if (0 < loc.start.लिन्या)
         {
-          res += fprintf (out, ":%d", loc.start.line);
+          res += fprintf (out, ":%d", loc.start.लिन्या);
           if (0 < loc.start.column)
             res += fprintf (out, ".%d", loc.start.column);
         }
@@ -181,18 +181,18 @@ location_print (location loc, FILE *out)
           res += fprintf (out, "-%s",
                           quotearg_n_style (3, escape_quoting_style,
                                             loc.end.file));
-          if (0 < loc.end.line)
+          if (0 < loc.end.लिन्या)
             {
-              res += fprintf (out, ":%d", loc.end.line);
+              res += fprintf (out, ":%d", loc.end.लिन्या);
               if (0 <= end_col)
                 res += fprintf (out, ".%d", end_col);
             }
         }
-      else if (0 < loc.end.line)
+      else if (0 < loc.end.लिन्या)
         {
-          if (loc.start.line < loc.end.line)
+          if (loc.start.लिन्या < loc.end.लिन्या)
             {
-              res += fprintf (out, "-%d", loc.end.line);
+              res += fprintf (out, "-%d", loc.end.लिन्या);
               if (0 <= end_col)
                 res += fprintf (out, ".%d", end_col);
             }
@@ -221,7 +221,7 @@ static struct
      starts).  */
   size_t offset;
   /* Length of the current line.  */
-  int line_len;
+  int लिन्या_len;
   /* Given the initial column to display, the offset (number of
      characters to skip at the beginning of the line). */
   int skip;
@@ -279,7 +279,7 @@ caret_set_file (const char *file)
           if (fstat (fileno (caret_info.file), &buf) == 0
               && buf.st_mode & S_IFREG)
             {
-              caret_info.pos.line = 1;
+              caret_info.pos.लिन्या = 1;
               mbf_init (caret_info.mbfile, caret_info.file);
             }
           else
@@ -311,32 +311,32 @@ caret_getc_internal (mbchar_t *res)
    Compute and cache that line's length in CARET_INFO.LINE_LEN.
    Return whether successful.  */
 static bool
-caret_set_line (int line)
+caret_set_लिन्या (int लिन्या)
 {
   /* If the line we want to quote is seekable (the same line as the previous
      location), just seek it. If it was a previous line, we lost track of it,
      so return to the start of file.  */
-  if (line < caret_info.pos.line)
+  if (लिन्या < caret_info.pos.लिन्या)
     {
-      caret_info.pos.line = 1;
+      caret_info.pos.लिन्या = 1;
       caret_info.offset = 0;
     }
   if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
     return false;
 
   /* If this is the same line as the previous one, we are done. */
-  if (line < caret_info.pos.line)
+  if (लिन्या < caret_info.pos.लिन्या)
     return true;
 
   /* Advance to the line's position, keeping track of the offset.  */
-  while (caret_info.pos.line < line)
+  while (caret_info.pos.लिन्या < लिन्या)
     {
       mbchar_t c;
       caret_getc (c);
       if (mb_iseof (c))
         /* Something is wrong, that line number does not exist.  */
         return false;
-      caret_info.pos.line += mb_iseq (c, '\n');
+      caret_info.pos.लिन्या += mb_iseq (c, '\n');
     }
   caret_info.offset = ftell (caret_info.file);
   caret_info.pos.column = 1;
@@ -353,7 +353,7 @@ caret_set_line (int line)
         break;
       boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
     }
-  caret_info.line_len = caret_info.pos.column;
+  caret_info.लिन्या_len = caret_info.pos.column;
   /* Go back to the beginning of line.  */
   if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
     return false;
@@ -373,7 +373,7 @@ caret_set_column (int col)
      (with line number).  */
   caret_info.width = screen_width - 8;
   caret_info.skip = 0;
-  if (caret_info.width < caret_info.line_len)
+  if (caret_info.width < caret_info.लिन्या_len)
     {
       /* We cannot quote the whole line.  Make sure we can see the
          beginning of the location.  */
@@ -384,7 +384,7 @@ caret_set_column (int col)
     caret_info.width -= ellipsize;
   /* If the end of line does not fit, we also need to truncate the
      end, and leave "..." there.  */
-  if (caret_info.width < caret_info.line_len - caret_info.skip)
+  if (caret_info.width < caret_info.लिन्या_len - caret_info.skip)
     caret_info.width -= ellipsize;
   return true;
 }
@@ -394,11 +394,11 @@ location_caret (location loc, const char *style, FILE *out)
 {
   if (!(feature_flag & feature_caret))
     return;
-  if (!loc.start.line)
+  if (!loc.start.लिन्या)
     return;
   if (!caret_set_file (loc.start.file))
     return;
-  if (!caret_set_line (loc.start.line))
+  if (!caret_set_लिन्या (loc.start.लिन्या))
     return;
   if (!caret_set_column (loc.start.column))
     return;
@@ -421,13 +421,13 @@ location_caret (location loc, const char *style, FILE *out)
            easier.  However, we went back to using (visual) columns to
            support truncating of long lines.  */
         const int col_end
-          = loc.start.line == loc.end.line
+          = loc.start.लिन्या == loc.end.लिन्या
           ? loc.end.column
-          : caret_info.line_len;
+          : caret_info.लिन्या_len;
         /* Quote the file (at most the first line in the case of
            multiline locations).  */
         {
-          fprintf (out, "%5d | %s", loc.start.line, skip ? ellipsis : "");
+          fprintf (out, "%5d | %s", loc.start.लिन्या, skip ? ellipsis : "");
           /* Whether we opened the style.  If the line is not as
              expected (maybe the file was changed since the scanner
              ran), we might reach the end before we actually saw the
@@ -508,8 +508,8 @@ location_caret_suggestion (location loc, const char *s, FILE *out)
 bool
 location_empty (location loc)
 {
-  return !loc.start.file && !loc.start.line && !loc.start.column
-    && !loc.end.file && !loc.end.line && !loc.end.column;
+  return !loc.start.file && !loc.start.लिन्या && !loc.start.column
+    && !loc.end.file && !loc.end.लिन्या && !loc.end.column;
 }
 
 static inline int
@@ -541,7 +541,7 @@ boundary_set_from_string (boundary *bound, char *str)
     char *colon = strrchr (str, ':');
     aver (colon);
     *colon = '\0';
-    bound->line = str_to_int (colon + 1);
+    bound->लिन्या = str_to_int (colon + 1);
   }
   bound->file = uniqstr_new (str);
 }

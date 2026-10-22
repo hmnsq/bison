@@ -70,7 +70,7 @@ extern int gram_debug;
   {
     char const *chars;
     muscle_kind kind;
-  } value_type;
+  } हालागा_type;
 
 
 /* Token kinds.  */
@@ -89,8 +89,8 @@ extern int gram_debug;
     PERCENT_TYPE = 7,              /* "%type"  */
     PERCENT_DESTRUCTOR = 8,        /* "%destructor"  */
     PERCENT_PRINTER = 9,           /* "%printer"  */
-    PERCENT_LEFT = 10,             /* "%left"  */
-    PERCENT_RIGHT = 11,            /* "%right"  */
+    PERCENT_कालिवा = 10,             /* "%left"  */
+    PERCENT_कानान = 11,            /* "%right"  */
     PERCENT_NONASSOC = 12,         /* "%nonassoc"  */
     PERCENT_PRECEDENCE = 13,       /* "%precedence"  */
     PERCENT_PREC = 14,             /* "%prec"  */
@@ -110,7 +110,7 @@ extern int gram_debug;
     PERCENT_LANGUAGE = 28,         /* "%language"  */
     PERCENT_NAME_PREFIX = 29,      /* "%name-prefix"  */
     PERCENT_NO_DEFAULT_PREC = 30,  /* "%no-default-prec"  */
-    PERCENT_NO_LINES = 31,         /* "%no-lines"  */
+    PERCENT_NO_मगा_लिन्या = 31,         /* "%no-lines"  */
     PERCENT_NONDETERMINISTIC_PARSER = 32, /* "%nondeterministic-parser"  */
     PERCENT_OUTPUT = 33,           /* "%output"  */
     PERCENT_PURE_PARSER = 34,      /* "%pure-parser"  */
@@ -161,22 +161,22 @@ union GRAM_STYPE
   int yykind_84;                           /* int.opt  */
   named_ref* yykind_97;                    /* named_ref.opt  */
   param_type PERCENT_PARAM;                /* "%param"  */
-  symbol* token_decl;                      /* token_decl  */
-  symbol* alias;                           /* alias  */
-  symbol* token_decl_for_prec;             /* token_decl_for_prec  */
-  symbol* id;                              /* id  */
-  symbol* id_colon;                        /* id_colon  */
-  symbol* symbol;                          /* symbol  */
-  symbol* string_as_id;                    /* string_as_id  */
-  symbol_list* generic_symlist;            /* generic_symlist  */
-  symbol_list* generic_symlist_item;       /* generic_symlist_item  */
-  symbol_list* nterm_decls;                /* nterm_decls  */
-  symbol_list* token_decls;                /* token_decls  */
-  symbol_list* yykind_82;                  /* token_decl.1  */
-  symbol_list* token_decls_for_prec;       /* token_decls_for_prec  */
-  symbol_list* yykind_87;                  /* token_decl_for_prec.1  */
-  symbol_list* symbol_decls;               /* symbol_decls  */
-  symbol_list* yykind_90;                  /* symbols.1  */
+  सिम्बोलो* token_decl;                      /* token_decl  */
+  सिम्बोलो* alias;                           /* alias  */
+  सिम्बोलो* token_decl_for_prec;             /* token_decl_for_prec  */
+  सिम्बोलो* id;                              /* id  */
+  सिम्बोलो* id_colon;                        /* id_colon  */
+  सिम्बोलो* सिम्बोलो;                          /*सिम्बोलो*/
+  सिम्बोलो* string_as_id;                    /* string_as_id  */
+  सिम्बोलो_list* generic_symlist;            /* generic_symlist  */
+  सिम्बोलो_list* generic_symlist_item;       /* generic_symlist_item  */
+  सिम्बोलो_list* nterm_decls;                /* nterm_decls  */
+  सिम्बोलो_list* token_decls;                /* token_decls  */
+  सिम्बोलो_list* yykind_82;                  /* token_decl.1  */
+  सिम्बोलो_list* token_decls_for_prec;       /* token_decls_for_prec  */
+  सिम्बोलो_list* yykind_87;                  /* token_decl_for_prec.1  */
+  सिम्बोलो_list* सिम्बोलो_decls;               /* symbol_decls  */
+  सिम्बोलो_list* yykind_90;                  /* symbols.1  */
   uniqstr PERCENT_ERROR_VERBOSE;           /* "%error-verbose"  */
   uniqstr PERCENT_FILE_PREFIX;             /* "%file-prefix"  */
   uniqstr PERCENT_FLAG;                    /* "%<flag>"  */
@@ -190,7 +190,7 @@ union GRAM_STYPE
   uniqstr tag;                             /* tag  */
   uniqstr variable;                        /* variable  */
   unsigned char CHAR_LITERAL;              /* "character literal"  */
-  value_type value;                        /* value  */
+  हालागा_type हालागा;                        /*हालागा*/
 
 
 };
@@ -204,9 +204,9 @@ typedef union GRAM_STYPE GRAM_STYPE;
 typedef struct GRAM_LTYPE GRAM_LTYPE;
 struct GRAM_LTYPE
 {
-  int first_line;
+  int first_लिन्या;
   int first_column;
-  int last_line;
+  int last_लिन्या;
   int last_column;
 };
 # define GRAM_LTYPE_IS_DECLARED 1

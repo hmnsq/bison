@@ -52,9 +52,9 @@ YY_DECL;
 static char *fetch_type_name (char *cp, char const **type_name,
                               const location *dollar_loc);
 
-static void handle_action_dollar (symbol_list *rule, char *cp,
+static void handle_action_dollar (सिम्बोलो_list *rule, char *cp,
                                   const location *dollar_loc);
-static void handle_action_at (symbol_list *rule, char *cp,
+static void handle_action_at (सिम्बोलो_list *rule, char *cp,
                               const location *at_loc);
 
 /* A string to be pushed to obstack after dollar/at has been handled. */
@@ -71,12 +71,12 @@ static bool untyped_var_seen;
 
 %}
  /* C and C++ comments in code. */
-%x SC_COMMENT SC_LINE_COMMENT
+%x SC_COMMENT SC_लिन्या_COMMENT
  /* Strings and characters in code. */
 %x SC_STRING SC_CHARACTER
  /* Whether in a rule or symbol action.  Specifies the translation
     of $ and @.  */
-%x SC_RULE_ACTION SC_SYMBOL_ACTION
+%x SC_RULE_ACTION SC_सिम्बोलो_ACTION
 
 
 /* POSIX says that a tag must be both an id and a C union member, but
@@ -102,7 +102,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   /* This scanner is special: it is invoked only once, henceforth
      is expected to return only once.  This initialization is
      therefore done once per action to translate. */
-  aver (sc_context == SC_SYMBOL_ACTION
+  aver (sc_context == SC_सिम्बोलो_ACTION
         || sc_context == SC_RULE_ACTION
         || sc_context == INITIAL);
   BEGIN sc_context;
@@ -122,7 +122,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
-<SC_LINE_COMMENT>
+<SC_लिन्या_COMMENT>
 {
   "\n"           STRING_GROW (); BEGIN sc_context;
   {splice}       STRING_GROW ();
@@ -149,12 +149,12 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
 }
 
 
-<SC_RULE_ACTION,SC_SYMBOL_ACTION>
+<SC_RULE_ACTION,SC_सिम्बोलो_ACTION>
 {
   "'"              STRING_GROW (); BEGIN SC_CHARACTER;
   "\""             STRING_GROW (); BEGIN SC_STRING;
   "/"{splice}"*"   STRING_GROW (); BEGIN SC_COMMENT;
-  "/"{splice}"/"   STRING_GROW (); BEGIN SC_LINE_COMMENT;
+  "/"{splice}"/"   STRING_GROW (); BEGIN SC_लिन्या_COMMENT;
 
   [$@]  {
     complain (loc, Wother, _("stray '%s'"), yytext);
@@ -178,7 +178,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   }
 }
 
-<SC_SYMBOL_ACTION>
+<SC_सिम्बोलो_ACTION>
 {
   "$"("<"{tag}">")?"$" {
     const char *type_name = NULL;
@@ -186,7 +186,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
     obstack_sgrow (&obstack_for_string, "]b4_dollar_dollar(");
     obstack_quote (&obstack_for_string, type_name);
     obstack_sgrow (&obstack_for_string, ")[");
-    self->is_value_used = true;
+    self->is_हालागा_used = true;
   }
   "@$" {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
@@ -228,7 +228,7 @@ contains_dot_or_dash (const char* p)
 typedef struct
 {
   /* Index in symbol list. */
-  int symbol_index;
+  int सिम्बोलो_index;
 
   /* Matched symbol id and loc. */
   uniqstr id;
@@ -256,15 +256,15 @@ typedef struct
 
 static variant *variant_table = NULL;
 static int variant_table_size = 0;
-static int variant_count = 0;
+static int variant_बिलांग = 0;
 
 static variant *
 variant_table_grow (void)
 {
-  ++variant_count;
-  if (variant_count > variant_table_size)
+  ++variant_बिलांग;
+  if (variant_बिलांग > variant_table_size)
     {
-      while (variant_count > variant_table_size)
+      while (variant_बिलांग > variant_table_size)
         variant_table_size = 2 * variant_table_size + 3;
       variant_table = xnrealloc (variant_table, variant_table_size,
                                  sizeof *variant_table);
@@ -277,7 +277,7 @@ variant_table_free (void)
 {
   free (variant_table);
   variant_table = NULL;
-  variant_table_size = variant_count = 0;
+  variant_table_size = variant_बिलांग = 0;
 }
 
 static char const *
@@ -291,7 +291,7 @@ find_prefix_end (char const *prefix, char const *cp, char const *end)
 }
 
 static variant *
-variant_add (uniqstr id, location id_loc, int symbol_index,
+variant_add (uniqstr id, location id_loc, int सिम्बोलो_index,
              char const *cp, char const *cp_end, bool explicit_bracketing)
 {
   char const *prefix_end = find_prefix_end (id, cp, cp_end);
@@ -300,7 +300,7 @@ variant_add (uniqstr id, location id_loc, int symbol_index,
        (!explicit_bracketing && is_dot_or_dash (*prefix_end))))
     {
       variant *r = variant_table_grow ();
-      r->symbol_index = symbol_index;
+      r->सिम्बोलो_index = सिम्बोलो_index;
       r->id = id;
       r->loc = id_loc;
       r->hidden_by = NULL;
@@ -312,13 +312,13 @@ variant_add (uniqstr id, location id_loc, int symbol_index,
 }
 
 static const char *
-get_at_spec(int symbol_index)
+get_at_spec(int सिम्बोलो_index)
 {
   static char at_buf[20];
-  if (symbol_index == 0)
+  if (सिम्बोलो_index == 0)
     strcpy (at_buf, "$$");
   else
-    snprintf (at_buf, sizeof at_buf, "$%u", symbol_index);
+    snprintf (at_buf, sizeof at_buf, "$%u", सिम्बोलो_index);
   return at_buf;
 }
 
@@ -328,7 +328,7 @@ show_sub_message (warnings warning,
                   int midrule_rhs_index, char dollar_or_at,
                   const variant *var)
 {
-  const char *at_spec = get_at_spec (var->symbol_index);
+  const char *at_spec = get_at_spec (var->सिम्बोलो_index);
 
   if (var->err == 0)
     subcomplain (&var->loc, warning,
@@ -353,36 +353,36 @@ show_sub_message (warnings warning,
       const char *tail = explicit_bracketing ? "" : cp + strlen (var->id);
 
       /* Create the explanation message. */
-      static struct obstack msg_buf;
-      obstack_init (&msg_buf);
+      static struct obstack मेनसाहे_buf;
+      obstack_init (&मेनसाहे_buf);
 
-      obstack_printf (&msg_buf, _("possibly meant: %c"), dollar_or_at);
+      obstack_printf (&मेनसाहे_buf, _("possibly meant: %c"), dollar_or_at);
       if (contains_dot_or_dash (id))
-        obstack_printf (&msg_buf, "[%s]", id);
+        obstack_printf (&मेनसाहे_buf, "[%s]", id);
       else
-        obstack_sgrow (&msg_buf, id);
-      obstack_sgrow (&msg_buf, tail);
+        obstack_sgrow (&मेनसाहे_buf, id);
+      obstack_sgrow (&मेनसाहे_buf, tail);
 
       if (var->err & VARIANT_HIDDEN)
         {
-          obstack_printf (&msg_buf, _(", hiding %c"), dollar_or_at);
+          obstack_printf (&मेनसाहे_buf, _(", hiding %c"), dollar_or_at);
           if (contains_dot_or_dash (var->id))
-            obstack_printf (&msg_buf, "[%s]", var->id);
+            obstack_printf (&मेनसाहे_buf, "[%s]", var->id);
           else
-            obstack_sgrow (&msg_buf, var->id);
-          obstack_sgrow (&msg_buf, tail);
+            obstack_sgrow (&मेनसाहे_buf, var->id);
+          obstack_sgrow (&मेनसाहे_buf, tail);
         }
 
-      obstack_printf (&msg_buf, _(" at %s"), at_spec);
+      obstack_printf (&मेनसाहे_buf, _(" at %s"), at_spec);
 
       if (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
-        obstack_printf (&msg_buf,
+        obstack_printf (&मेनसाहे_buf,
                         _(", cannot be accessed from midrule action at $%d"),
                         midrule_rhs_index);
 
       subcomplain (&id_loc, warning, "%s",
-                   obstack_finish0 (&msg_buf));
-      obstack_free (&msg_buf, 0);
+                   obstack_finish0 (&मेनसाहे_buf));
+      obstack_free (&मेनसाहे_buf, 0);
     }
 }
 
@@ -391,7 +391,7 @@ show_sub_messages (warnings warning,
                    const char* cp, bool explicit_bracketing,
                    int midrule_rhs_index, char dollar_or_at)
 {
-  for (int i = 0; i < variant_count; ++i)
+  for (int i = 0; i < variant_बिलांग; ++i)
     show_sub_message (warning | silent,
                       cp, explicit_bracketing,
                       midrule_rhs_index, dollar_or_at,
@@ -411,9 +411,9 @@ static long
 parse_positional_ref (char *cp, int rule_length,
                       char *text, const location *text_loc)
 {
-  long num = strtol (cp, &cp, 10);
-  if (1 - INT_MAX + rule_length <= num && num <= rule_length)
-    return num;
+  long नुमेरो = strtol (cp, &cp, 10);
+  if (1 - INT_MAX + rule_length <= नुमेरो && नुमेरो <= rule_length)
+    return नुमेरो;
   else
     {
       complain (text_loc, complaint, _("integer out of range: %s"),
@@ -427,7 +427,7 @@ parse_positional_ref (char *cp, int rule_length,
    references, can return negative values for $-n "deep" stack
    accesses. */
 static long
-parse_ref (char *cp, symbol_list *rule, int rule_length,
+parse_ref (char *cp, सिम्बोलो_list *rule, int rule_length,
            int midrule_rhs_index, char *text, const location *text_loc,
            char dollar_or_at)
 {
@@ -448,38 +448,38 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
 
   /* Add all relevant variants. */
   {
-    int symbol_index;
-    symbol_list *l;
-    variant_count = 0;
-    for (symbol_index = 0, l = rule; !symbol_list_null (l);
-         ++symbol_index, l = l->next)
+    int सिम्बोलो_index;
+    सिम्बोलो_list *l;
+    variant_बिलांग = 0;
+    for (सिम्बोलो_index = 0, l = rule; !सिम्बोलो_list_null (l);
+         ++सिम्बोलो_index, l = l->next)
       {
-        if (l->content_type != SYMLIST_SYMBOL)
+        if (l->content_type != SYMLIST_सिम्बोलो)
           continue;
 
         variant *var
           = variant_add (l->content.sym->tag, l->sym_loc,
-                         symbol_index, cp, cp_end, explicit_bracketing);
+                         सिम्बोलो_index, cp, cp_end, explicit_bracketing);
         if (var && l->named_ref)
           var->hidden_by = l->named_ref;
 
         if (l->named_ref)
           variant_add (l->named_ref->id, l->named_ref->loc,
-                       symbol_index, cp, cp_end, explicit_bracketing);
+                       सिम्बोलो_index, cp, cp_end, explicit_bracketing);
       }
   }
 
   /* Check errors. */
   int valid_variants = 0;
   int valid_variant_index = 0;
-  for (int i = 0; i < variant_count; ++i)
+  for (int i = 0; i < variant_बिलांग; ++i)
     {
       variant *var = &variant_table[i];
-      int symbol_index = var->symbol_index;
+      int सिम्बोलो_index = var->सिम्बोलो_index;
 
       /* Check visibility from midrule actions. */
       if (midrule_rhs_index != 0
-          && (symbol_index == 0 || midrule_rhs_index < symbol_index))
+          && (सिम्बोलो_index == 0 || midrule_rhs_index < सिम्बोलो_index))
         var->err |= VARIANT_NOT_VISIBLE_FROM_MIDRULE;
 
       /* Check correct bracketing. */
@@ -526,7 +526,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                        _("symbol not found in production: %.*s"),
                        len, cp);
 
-        if (variant_count > 0)
+        if (variant_बिलांग > 0)
           show_sub_messages (complaint,
                              cp, explicit_bracketing, midrule_rhs_index,
                              dollar_or_at);
@@ -534,7 +534,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
       }
     case 1:
       {
-        if (variant_count > 1)
+        if (variant_बिलांग > 1)
           {
             complain (text_loc, Wother,
                       _("misleading reference: %s"), quote (text));
@@ -543,9 +543,9 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                                dollar_or_at);
           }
         {
-          int symbol_index =
-            variant_table[valid_variant_index].symbol_index;
-          return (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
+          int सिम्बोलो_index =
+            variant_table[valid_variant_index].सिम्बोलो_index;
+          return (सिम्बोलो_index == midrule_rhs_index) ? LHS_REF : सिम्बोलो_index;
         }
       }
     case 2:
@@ -564,7 +564,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
 /* Keeps track of the maximum number of semantic values to the left of
    a handle (those referenced by $0, $-1, etc.) are required by the
    semantic actions of this grammar. */
-int max_left_semantic_context = 0;
+int max_कालिवा_semantic_context = 0;
 
 
 /* If CP points to a typename (i.e., <.*?>), set TYPE_NAME to its
@@ -603,9 +603,9 @@ fetch_type_name (char *cp, char const **type_name,
 `------------------------------------------------------------------*/
 
 static void
-handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
+handle_action_dollar (सिम्बोलो_list *rule, char *text, const location *dollar_loc)
 {
-  symbol_list *effective_rule;
+  सिम्बोलो_list *effective_rule;
   int effective_rule_length;
 
   if (rule->midrule_parent_rule)
@@ -616,7 +616,7 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
   else
     {
       effective_rule = rule;
-      effective_rule_length = symbol_list_length (rule->next);
+      effective_rule_length = सिम्बोलो_list_length (rule->next);
     }
 
   /* The type name if explicit, otherwise left null. */
@@ -635,7 +635,7 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
 
     case LHS_REF:
       {
-        symbol_list *sym = symbol_list_n_get (rule, 0);
+        सिम्बोलो_list *sym = सिम्बोलो_list_n_get (rule, 0);
         if (!type_name
             && !sym->content.sym->content->type_name)
           {
@@ -657,19 +657,19 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
           }
 
         obstack_printf (&obstack_for_string, "]b4_lhs_value(orig %d, ",
-                        sym->content.sym->content->number);
+                        sym->content.sym->content->नुमेरो_2);
         obstack_quote (&obstack_for_string, type_name);
         obstack_sgrow (&obstack_for_string, ")[");
-        rule->action_props.is_value_used = true;
+        rule->action_props.is_हालागा_used = true;
       }
       break;
 
       /* Reference to a RHS symbol.  */
     default:
       {
-        if (max_left_semantic_context < 1 - n)
-          max_left_semantic_context = 1 - n;
-        symbol_list *sym = 0 < n ? symbol_list_n_get (effective_rule, n) : NULL;
+        if (max_कालिवा_semantic_context < 1 - n)
+          max_कालिवा_semantic_context = 1 - n;
+        सिम्बोलो_list *sym = 0 < n ? सिम्बोलो_list_n_get (effective_rule, n) : NULL;
         if (!type_name
             && (!sym || !sym->content.sym->content->type_name))
           {
@@ -687,7 +687,7 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
         if (sym)
           obstack_printf (&obstack_for_string, "%s%d, ",
                           sym->content.sym->content->class == nterm_sym ? "orig " : "",
-                          sym->content.sym->content->number);
+                          sym->content.sym->content->नुमेरो_2);
         else
           obstack_sgrow (&obstack_for_string, "[], ");
 
@@ -696,11 +696,11 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
         if (0 < n)
           {
             if (muscle_percent_define_ifdef ("api.value.automove")
-                && sym->action_props.is_value_used)
+                && sym->action_props.is_हालागा_used)
               complain (dollar_loc, Wother,
                         _("multiple occurrences of $%d with api.value.automove"),
                         n);
-            sym->action_props.is_value_used = true;
+            sym->action_props.is_हालागा_used = true;
           }
       }
       break;
@@ -714,9 +714,9 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
 `------------------------------------------------------*/
 
 static void
-handle_action_at (symbol_list *rule, char *text, const location *at_loc)
+handle_action_at (सिम्बोलो_list *rule, char *text, const location *at_loc)
 {
-  symbol_list *effective_rule;
+  सिम्बोलो_list *effective_rule;
   int effective_rule_length;
 
   if (rule->midrule_parent_rule)
@@ -727,7 +727,7 @@ handle_action_at (symbol_list *rule, char *text, const location *at_loc)
   else
     {
       effective_rule = rule;
-      effective_rule_length = symbol_list_length (rule->next);
+      effective_rule_length = सिम्बोलो_list_length (rule->next);
     }
 
   muscle_percent_define_ensure ("locations", *at_loc, true);
@@ -791,18 +791,18 @@ code_props_plain_init (code_props *self, char const *code,
 }
 
 void
-code_props_symbol_action_init (code_props *self, char const *code,
+code_props_सिम्बोलो_action_init (code_props *self, char const *code,
                                location code_loc)
 {
   code_props_none_init (self);
-  self->kind = CODE_PROPS_SYMBOL_ACTION;
+  self->kind = CODE_PROPS_सिम्बोलो_ACTION;
   self->code = code;
   self->location = code_loc;
 }
 
 void
 code_props_rule_action_init (code_props *self, char const *code,
-                             location code_loc, symbol_list *rule,
+                             location code_loc, सिम्बोलो_list *rule,
                              named_ref *name, uniqstr type,
                              bool is_predicate)
 {
@@ -826,8 +826,8 @@ code_props_translate_code (code_props *self)
     case CODE_PROPS_PLAIN:
       self->code = translate_action (self, INITIAL);
       break;
-    case CODE_PROPS_SYMBOL_ACTION:
-      self->code = translate_action (self, SC_SYMBOL_ACTION);
+    case CODE_PROPS_सिम्बोलो_ACTION:
+      self->code = translate_action (self, SC_सिम्बोलो_ACTION);
       break;
     case CODE_PROPS_RULE_ACTION:
       self->code = translate_action (self, SC_RULE_ACTION);

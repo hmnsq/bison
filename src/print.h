@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_H_
-# define PRINT_H_
+#ifndef इलिम्बाग_H
+# define इलिम्बाग_H
 
-void print_results (void);
+void इलिम्बाग_results (void);
 
 #endif /* !PRINT_H_ */

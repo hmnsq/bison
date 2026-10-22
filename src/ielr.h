@@ -39,8 +39,8 @@
  */
 void ielr (void);
 
-bool ielr_item_has_lookahead (state *s, symbol_number lhs, size_t item,
-                              symbol_number lookahead, state ***predecessors,
+bool ielr_item_has_lookahead (state *s, सिम्बोलो_नुमेरो lhs, size_t item,
+                              सिम्बोलो_नुमेरो lookahead, state ***predecessors,
                               bitset **item_lookahead_sets);
 
 #endif /* !IELR_H_ */

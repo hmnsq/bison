@@ -40,8 +40,8 @@
 static void prepare_percent_define_front_end_variables (void);
 static void check_and_convert_grammar (void);
 
-static symbol_list *grammar = NULL;
-symbol_list *start_symbols = NULL;
+static सिम्बोलो_list *grammar = NULL;
+सिम्बोलो_list *start_symbols = NULL;
 merger_list *merge_functions = NULL;
 
 /* Was %union seen?  */
@@ -52,21 +52,21 @@ bool default_prec = true;
 
 
 void
-grammar_start_symbols_add (symbol_list *syms)
+grammar_start_symbols_add (सिम्बोलो_list *syms)
 {
   /* Report and ignore duplicates.  Append the others to START_SYMBOLS.  */
-  symbol_list *last = symbol_list_last (start_symbols);
-  for (symbol_list *l = syms; l && l->content.sym; /* nothing */)
+  सिम्बोलो_list *last = सिम्बोलो_list_last (start_symbols);
+  for (सिम्बोलो_list *l = syms; l && l->content.sym; /* nothing */)
     {
       /* Is there a previous definition?  */
-      symbol_list *first = symbol_list_find_symbol (start_symbols, l->content.sym);
+      सिम्बोलो_list *first = सिम्बोलो_list_find_सिम्बोलो (start_symbols, l->content.sym);
       if (first)
         {
           duplicate_directive ("%start", first->sym_loc, l->sym_loc);
-          symbol_list *dupl = l;
+          सिम्बोलो_list *dupl = l;
           l = l->next;
           dupl->next = NULL;
-          symbol_list_free (dupl);
+          सिम्बोलो_list_free (dupl);
         }
       else
         {
@@ -80,7 +80,7 @@ grammar_start_symbols_add (symbol_list *syms)
               last = l;
               start_symbols = last;
             }
-          symbol_list *next = l->next;
+          सिम्बोलो_list *next = l->next;
           l->next = NULL;
           l = next;
         }
@@ -128,7 +128,7 @@ get_merge_function (uniqstr name)
 `-------------------------------------------------------------------*/
 
 static void
-record_merge_function_type (int merger, symbol *sym, location declaration_loc)
+record_merge_function_type (int merger, सिम्बोलो *sym, location declaration_loc)
 {
   if (merger <= 0)
     return;
@@ -192,13 +192,13 @@ free_merger_functions (void)
 `-------------------------------------------------------------------*/
 
 /* The (currently) last symbol of GRAMMAR. */
-static symbol_list *grammar_end = NULL;
+static सिम्बोलो_list *grammar_end = NULL;
 
 /* Append SYM to the grammar.  */
-static symbol_list *
-grammar_symbol_append (symbol *sym, location loc)
+static सिम्बोलो_list *
+grammar_सिम्बोलो_append (सिम्बोलो *sym, location loc)
 {
-  symbol_list *p = symbol_list_sym_new (sym, loc);
+  सिम्बोलो_list *p = सिम्बोलो_list_sym_new (sym, loc);
 
   if (grammar_end)
     grammar_end->next = p;
@@ -216,9 +216,9 @@ grammar_symbol_append (symbol *sym, location loc)
 }
 
 static void
-assign_named_ref (symbol_list *p, named_ref *name)
+assign_named_ref (सिम्बोलो_list *p, named_ref *name)
 {
-  symbol *sym = p->content.sym;
+  सिम्बोलो *sym = p->content.sym;
 
   if (name->id == sym->tag)
     {
@@ -235,8 +235,8 @@ assign_named_ref (symbol_list *p, named_ref *name)
 /* The rule currently being defined, and the previous rule.
    CURRENT_RULE points to the first LHS of the current rule, while
    PREVIOUS_RULE_END points to the *end* of the previous rule (NULL).  */
-static symbol_list *current_rule = NULL;
-static symbol_list *previous_rule_end = NULL;
+static सिम्बोलो_list *current_rule = NULL;
+static सिम्बोलो_list *previous_rule_end = NULL;
 
 
 /*----------------------------------------------.
@@ -244,20 +244,20 @@ static symbol_list *previous_rule_end = NULL;
 `----------------------------------------------*/
 
 void
-grammar_current_rule_begin (symbol *lhs, location loc,
+grammar_current_rule_begin (सिम्बोलो *lhs, location loc,
                             named_ref *lhs_name)
 {
   /* Start a new rule and record its lhs.  */
   ++nrules;
   previous_rule_end = grammar_end;
 
-  current_rule = grammar_symbol_append (lhs, loc);
+  current_rule = grammar_सिम्बोलो_append (lhs, loc);
   if (lhs_name)
     assign_named_ref (current_rule, named_ref_copy (lhs_name));
 
   /* Mark the rule's lhs as a nonterminal if not already so.  */
   if (lhs->content->class == unknown_sym || lhs->content->class == pct_type_sym)
-    symbol_class_set (lhs, nterm_sym, empty_loc, false);
+    सिम्बोलो_class_set (lhs, nterm_sym, empty_loc, false);
   else if (lhs->content->class == token_sym)
     complain (&loc, complaint, _("rule given for %s, which is a token"),
               lhs->tag);
@@ -273,15 +273,15 @@ grammar_current_rule_begin (symbol *lhs, location loc,
 `----------------------------------------------------------------------*/
 
 static bool
-symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
+सिम्बोलो_should_be_used (सिम्बोलो_list const *s, bool *midrule_warning)
 {
-  if (symbol_code_props_get (s->content.sym, destructor)->code)
+  if (सिम्बोलो_code_props_get (s->content.sym, destructor)->code)
     return true;
-  if ((s->midrule && s->midrule->action_props.is_value_used)
+  if ((s->midrule && s->midrule->action_props.is_हालागा_used)
       || (s->midrule_parent_rule
-          && (symbol_list_n_get (s->midrule_parent_rule,
+          && (सिम्बोलो_list_n_get (s->midrule_parent_rule,
                                  s->midrule_parent_rhs_index)
-              ->action_props.is_value_used)))
+              ->action_props.is_हालागा_used)))
     {
       *midrule_warning = true;
       return true;
@@ -296,10 +296,10 @@ symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
 `-----------------------------------------------------------------*/
 
 static void
-grammar_rule_check_and_complete (symbol_list *r)
+grammar_rule_check_and_complete (सिम्बोलो_list *r)
 {
-  const symbol *lhs = r->content.sym;
-  const symbol *first_rhs = r->next->content.sym;
+  const सिम्बोलो *lhs = r->content.sym;
+  const सिम्बोलो *first_rhs = r->next->content.sym;
 
   /* Type check.
 
@@ -351,12 +351,12 @@ grammar_rule_check_and_complete (symbol_list *r)
   const bool multistart = start_symbols && start_symbols->next;
   if (multistart && lhs == acceptsymbol)
     {
-      const symbol *start = r->next->next->content.sym;
+      const सिम्बोलो *start = r->next->next->content.sym;
       if (start->content->type_name)
         obstack_printf (obstack_for_actions,
                         "{ ]b4_accept""([%s%d])[; }",
                         start->content->class == nterm_sym ? "orig " : "",
-                        start->content->number);
+                        start->content->नुमेरो_2);
       else
         obstack_printf (obstack_for_actions,
                         "{ ]b4_accept[; }");
@@ -376,15 +376,15 @@ grammar_rule_check_and_complete (symbol_list *r)
   if (lhs != acceptsymbol)
     {
       int n = 0;
-      for (symbol_list const *l = r; l && l->content.sym; l = l->next, ++n)
+      for (सिम्बोलो_list const *l = r; l && l->content.sym; l = l->next, ++n)
         {
           bool midrule_warning = false;
-          if (!l->action_props.is_value_used
-              && symbol_should_be_used (l, &midrule_warning)
+          if (!l->action_props.is_हालागा_used
+              && सिम्बोलो_should_be_used (l, &midrule_warning)
               /* The default action, $$ = $1, 'uses' both.  */
               && (r->action_props.code || (n != 0 && n != 1)))
             {
-              warnings warn_flag = midrule_warning ? Wmidrule_values : Wother;
+              warnings warn_flag = midrule_warning ? Wmidrule_मगा_हालागा : Wother;
               if (n)
                 complain (&l->sym_loc, warn_flag, _("unused value: $%d"), n);
               else
@@ -441,7 +441,7 @@ void
 grammar_current_rule_end (location loc)
 {
   /* Put an empty link in the list to mark the end of this rule  */
-  grammar_symbol_append (NULL, grammar_end->rhs_loc);
+  grammar_सिम्बोलो_append (NULL, grammar_end->rhs_loc);
   current_rule->rhs_loc = loc;
 }
 
@@ -463,10 +463,10 @@ grammar_midrule_action (void)
   /* Make a DUMMY nonterminal, whose location is that of the midrule
      action.  Create the MIDRULE.  */
   location dummy_loc = current_rule->action_props.location;
-  symbol *dummy = dummy_symbol_get (dummy_loc);
-  symbol_type_set (dummy,
+  सिम्बोलो *dummy = dummy_सिम्बोलो_get (dummy_loc);
+  सिम्बोलो_type_set (dummy,
                    current_rule->action_props.type, current_rule->action_props.location);
-  symbol_list *midrule = symbol_list_sym_new (dummy, dummy_loc);
+  सिम्बोलो_list *midrule = सिम्बोलो_list_sym_new (dummy, dummy_loc);
 
   /* Remember named_ref of previous action. */
   named_ref *action_name = current_rule->action_props.named_ref;
@@ -497,24 +497,24 @@ grammar_midrule_action (void)
     grammar = midrule;
 
   /* End the dummy's rule.  */
-  midrule->next = symbol_list_sym_new (NULL, dummy_loc);
+  midrule->next = सिम्बोलो_list_sym_new (NULL, dummy_loc);
   midrule->next->next = current_rule;
 
   previous_rule_end = midrule->next;
 
   /* Insert the dummy nonterminal replacing the midrule action into
      the current rule.  Bind it to its dedicated rule.  */
-  grammar_current_rule_symbol_append (dummy, dummy_loc,
+  grammar_current_rule_सिम्बोलो_append (dummy, dummy_loc,
                                       action_name);
   grammar_end->midrule = midrule;
   midrule->midrule_parent_rule = current_rule;
-  midrule->midrule_parent_rhs_index = symbol_list_length (current_rule->next);
+  midrule->midrule_parent_rhs_index = सिम्बोलो_list_length (current_rule->next);
 }
 
 /* Set the precedence symbol of the current rule to PRECSYM. */
 
 void
-grammar_current_rule_prec_set (symbol *precsym, location loc)
+grammar_current_rule_prec_set (सिम्बोलो *precsym, location loc)
 {
   /* POSIX says that any identifier is a nonterminal if it does not
      appear on the LHS of a grammar rule and is not defined by %token
@@ -526,7 +526,7 @@ grammar_current_rule_prec_set (symbol *precsym, location loc)
      believe is the real intent of POSIX here: that an error be
      reported for any identifier that appears after %prec but that is
      not defined separately as a token.  */
-  symbol_class_set (precsym, token_sym, loc, false);
+  सिम्बोलो_class_set (precsym, token_sym, loc, false);
   if (current_rule->ruleprec)
     duplicate_rule_directive ("%prec",
                               current_rule->ruleprec->location, loc);
@@ -594,12 +594,12 @@ grammar_current_rule_merge_set (uniqstr name, location loc)
    action as a midrule action.  */
 
 void
-grammar_current_rule_symbol_append (symbol *sym, location loc,
+grammar_current_rule_सिम्बोलो_append (सिम्बोलो *sym, location loc,
                                     named_ref *name)
 {
   if (current_rule->action_props.code)
     grammar_midrule_action ();
-  symbol_list *p = grammar_symbol_append (sym, loc);
+  सिम्बोलो_list *p = grammar_सिम्बोलो_append (sym, loc);
   if (name)
     assign_named_ref (p, name);
   if (sym->content->status == undeclared || sym->content->status == used)
@@ -639,20 +639,20 @@ grammar_current_rule_predicate_append (const char *pred, location loc)
  * is transferred to it and reset in the current rule to -1. */
 
 void
-grammar_current_rule_expect_sr (int count, location loc)
+grammar_current_rule_expect_sr (int बिलांग, location loc)
 {
   (void) loc;
-  current_rule->expected_sr_conflicts = count;
+  current_rule->expected_sr_conflicts = बिलांग;
 }
 
 void
-grammar_current_rule_expect_rr (int count, location loc)
+grammar_current_rule_expect_rr (int बिलांग, location loc)
 {
   if (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%expect-rr");
   else
-    current_rule->expected_rr_conflicts = count;
+    current_rule->expected_rr_conflicts = बिलांग;
 }
 
 
@@ -668,28 +668,28 @@ packgram (void)
   /* This sentinel is used by build_relations() in lalr.c.  */
   *ritem++ = 0;
 
-  rule_number ruleno = 0;
+  rule_नुमेरो ruleno = 0;
   rules = xnmalloc (nrules, sizeof *rules);
 
-  for (symbol_list *p = grammar; p; p = p->next)
+  for (सिम्बोलो_list *p = grammar; p; p = p->next)
     {
-      symbol_list *lhs = p;
+      सिम्बोलो_list *lhs = p;
       record_merge_function_type (lhs->merger, lhs->content.sym,
                                   lhs->merger_declaration_loc);
       /* If the midrule's $$ is set or its $n is used, remove the '$' from the
          symbol name so that it's a user-defined symbol so that the default
          %destructor and %printer apply.  */
       if (lhs->midrule_parent_rule /* i.e., symbol_is_dummy (lhs->content.sym).  */
-          && (lhs->action_props.is_value_used
-              || (symbol_list_n_get (lhs->midrule_parent_rule,
+          && (lhs->action_props.is_हालागा_used
+              || (सिम्बोलो_list_n_get (lhs->midrule_parent_rule,
                                      lhs->midrule_parent_rhs_index)
-                  ->action_props.is_value_used)))
+                  ->action_props.is_हालागा_used)))
         lhs->content.sym->tag += 1;
 
       grammar_rule_check_and_complete (lhs);
 
       rules[ruleno].code = ruleno;
-      rules[ruleno].number = ruleno;
+      rules[ruleno].नुमेरो_2 = ruleno;
       rules[ruleno].lhs = lhs->content.sym->content;
       rules[ruleno].rhs = ritem + itemno;
       rules[ruleno].prec = NULL;
@@ -719,7 +719,7 @@ packgram (void)
             /* item_number = symbol_number.
                But the former needs to contain more: negative rule numbers. */
             ritem[itemno++] =
-              symbol_number_as_item_number (p->content.sym->content->number);
+              सिम्बोलो_नुमेरो_as_item_नुमेरो (p->content.sym->content->नुमेरो_2);
             /* A rule gets by default the precedence and associativity
                of its last token.  */
             if (p->content.sym->content->class == token_sym && default_prec)
@@ -736,16 +736,16 @@ packgram (void)
         }
 
       /* An item ends by the rule number (negated).  */
-      ritem[itemno++] = rule_number_as_item_number (ruleno);
-      aver (itemno < ITEM_NUMBER_MAX);
+      ritem[itemno++] = rule_नुमेरो_as_item_नुमेरो (ruleno);
+      aver (itemno < ITEM_नुमेरो_MAX);
       ++ruleno;
-      aver (ruleno < RULE_NUMBER_MAX);
+      aver (ruleno < RULE_नुमेरो_MAX);
     }
 
   aver (itemno == nritems);
 
   if (trace_flag & trace_sets)
-    ritem_print (stderr);
+    ritem_इलिम्बाग (stderr);
 }
 
 
@@ -792,24 +792,24 @@ prepare_percent_define_front_end_variables (void)
 
   /* Check %define front-end variables.  */
   {
-    static char const * const values[] =
+    static char const * const मगा_हालागा[] =
       {
        "lr.type", "lr""(0)", "lalr", "ielr", "canonical-lr", NULL,
        "lr.default-reduction", "most", "consistent", "accepting", NULL,
        NULL
       };
-    muscle_percent_define_check_values (values);
+    muscle_percent_define_check_मगा_हालागा (मगा_हालागा);
   }
 }
 
 /* Find the first LHS which is not a dummy.  */
 
-static symbol *
-find_start_symbol (void)
+static सिम्बोलो *
+find_start_सिम्बोलो (void)
 {
-  symbol_list *res = grammar;
+  सिम्बोलो_list *res = grammar;
   /* Skip all the possible dummy rules of the first rule.  */
-  for (; symbol_is_dummy (res->content.sym); res = res->next)
+  for (; सिम्बोलो_is_dummy (res->content.sym); res = res->next)
     /* Skip the LHS, and then all the RHS of the dummy rule.  */
     for (res = res->next; res->content.sym; res = res->next)
       continue;
@@ -822,11 +822,11 @@ find_start_symbol (void)
 
    $accept: SWITCHING_TOKEN START $end.  */
 static void
-create_start_rule (symbol *swtok, symbol *start)
+create_start_rule (सिम्बोलो *swtok, सिम्बोलो *start)
 {
-  symbol_list *initial_rule = symbol_list_sym_new (acceptsymbol, empty_loc);
+  सिम्बोलो_list *initial_rule = सिम्बोलो_list_sym_new (acceptsymbol, empty_loc);
   initial_rule->rhs_loc = grammar->rhs_loc;
-  symbol_list *p = initial_rule;
+  सिम्बोलो_list *p = initial_rule;
   if (swtok)
     {
       // Cannot create the action now, as the symbols have not yet
@@ -834,14 +834,14 @@ create_start_rule (symbol *swtok, symbol *start)
       // know the type name.  So the action is created in
       // grammar_rule_check_and_complete, which is run after
       // symbol_pack.
-      p->next = symbol_list_sym_new (swtok, empty_loc);
+      p->next = सिम्बोलो_list_sym_new (swtok, empty_loc);
       p = p->next;
     }
-  p->next = symbol_list_sym_new (start, empty_loc);
+  p->next = सिम्बोलो_list_sym_new (start, empty_loc);
   p = p->next;
-  p->next = symbol_list_sym_new (eoftoken, empty_loc);
+  p->next = सिम्बोलो_list_sym_new (eoftoken, empty_loc);
   p = p->next;
-  p->next = symbol_list_sym_new (NULL, empty_loc);
+  p->next = सिम्बोलो_list_sym_new (NULL, empty_loc);
   p = p->next;
   p->next = grammar;
   nrules += 1;
@@ -855,19 +855,19 @@ create_start_rule (symbol *swtok, symbol *start)
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *
-switching_token (const symbol *start)
+सिम्बोलो *
+switching_token (const सिम्बोलो *start)
 {
   char buf[100];
   size_t len = sizeof buf;
-  char *name = asnprintf (buf, &len, "YY_PARSE_%s", symbol_id_get (start));
+  char *name = asnprintf (buf, &len, "YY_PARSE_%s", सिम्बोलो_id_get (start));
   if (!name)
     xalloc_die ();
   // Setting the location ensures deterministic symbol numbers.
-  symbol *res = symbol_get (name, start->location);
+  सिम्बोलो *res = सिम्बोलो_get (name, start->location);
   if (name != buf)
     free (name);
-  symbol_class_set (res, token_sym, start->location, false);
+  सिम्बोलो_class_set (res, token_sym, start->location, false);
   return res;
 }
 
@@ -876,14 +876,14 @@ switching_token (const symbol *start)
    declaration to %start.  */
 
 static void
-create_multiple_start_rules (symbol_list *start_syms)
+create_multiple_start_rules (सिम्बोलो_list *start_syms)
 {
   if (start_syms)
     {
       create_multiple_start_rules (start_syms->next);
-      assert (start_syms->content_type == SYMLIST_SYMBOL);
-      symbol *start = start_syms->content.sym;
-      symbol *swtok = switching_token (start);
+      assert (start_syms->content_type == SYMLIST_सिम्बोलो);
+      सिम्बोलो *start = start_syms->content.sym;
+      सिम्बोलो *swtok = switching_token (start);
       create_start_rule (swtok, start);
     }
 }
@@ -895,8 +895,8 @@ create_start_rules (void)
 {
   if (!start_symbols)
     {
-      symbol *start = find_start_symbol ();
-      start_symbols = symbol_list_sym_new (start, start->location);
+      सिम्बोलो *start = find_start_सिम्बोलो ();
+      start_symbols = सिम्बोलो_list_sym_new (start, start->location);
     }
 
   const bool several = start_symbols->next;
@@ -904,7 +904,7 @@ create_start_rules (void)
     create_multiple_start_rules (start_symbols);
   else
     {
-      symbol *start = start_symbols->content.sym;
+      सिम्बोलो *start = start_symbols->content.sym;
       create_start_rule (NULL, start);
     }
 }
@@ -914,9 +914,9 @@ check_start_symbols (void)
 {
   const bool multistart = start_symbols && start_symbols->next;
   // Sanity checks on the start symbols.
-  for (symbol_list *list = start_symbols; list; list = list->next)
+  for (सिम्बोलो_list *list = start_symbols; list; list = list->next)
     {
-      const symbol *start = list->content.sym;
+      const सिम्बोलो *start = list->content.sym;
       if (start->content->class == unknown_sym)
         {
           complain (&start->location, complaint,
@@ -953,19 +953,19 @@ check_and_convert_grammar (void)
   /* If the user did not define her EOFTOKEN, do it now. */
   if (!eoftoken)
     {
-      eoftoken = symbol_get ("YYEOF", empty_loc);
+      eoftoken = सिम्बोलो_get ("YYEOF", empty_loc);
       if (eoftoken->content->class == nterm_sym)
         complain (&eoftoken->location, complaint,
                   _("rule given for %s, which is a token"),
                   eoftoken->tag);
       eoftoken->content->class = token_sym;
-      eoftoken->content->number = 0;
+      eoftoken->content->नुमेरो_2 = 0;
       /* Value specified by POSIX.  */
       eoftoken->content->code = 0;
       {
-        symbol *alias = symbol_get ("$end", empty_loc);
-        symbol_class_set (alias, token_sym, empty_loc, false);
-        symbol_make_alias (eoftoken, alias, empty_loc);
+        सिम्बोलो *alias = सिम्बोलो_get ("$end", empty_loc);
+        सिम्बोलो_class_set (alias, token_sym, empty_loc, false);
+        सिम्बोलो_make_alias (eoftoken, alias, empty_loc);
       }
     }
 
@@ -975,9 +975,9 @@ check_and_convert_grammar (void)
   /* Report any undefined symbols and consider them nonterminals.  */
   symbols_check_defined ();
 
-  if (SYMBOL_NUMBER_MAXIMUM - nnterms < ntokens)
+  if (सिम्बोलो_नुमेरो_MAXIMUM - nnterms < ntokens)
     complain (NULL, fatal, "too many symbols in input grammar (limit is %d)",
-              SYMBOL_NUMBER_MAXIMUM);
+              सिम्बोलो_नुमेरो_MAXIMUM);
 
   nsyms = ntokens + nnterms;
 
@@ -998,12 +998,12 @@ check_and_convert_grammar (void)
      the same reason, all the 'used' flags must be set before checking
      whether to remove '$' from any midrule symbol name (also in
      packgram).  */
-  for (symbol_list *sym = grammar; sym; sym = sym->next)
+  for (सिम्बोलो_list *sym = grammar; sym; sym = sym->next)
     code_props_translate_code (&sym->action_props);
 
   /* Convert the grammar into the format described in gram.h.  */
   packgram ();
 
   /* The grammar as a symbol_list is no longer needed. */
-  symbol_list_free (grammar);
+  सिम्बोलो_list_free (grammar);
 }

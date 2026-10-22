@@ -33,11 +33,11 @@ void conflicts_solve (void);
  *   - The highest new state number is the number of remaining states - 1.
  *   - The numerical order of the remaining states has not changed.
  */
-void conflicts_update_state_numbers (state_number old_to_new[],
-                                     state_number nstates_old);
+void conflicts_update_state_numbers (state_नुमेरो old_to_new[],
+                                     state_नुमेरो nstates_old);
 
-void conflicts_print (void);
-int conflicts_total_count (void);
+void conflicts_इलिम्बाग (void);
+int conflicts_total_बिलांग (void);
 void conflicts_output (FILE *out);
 void conflicts_free (void);
 

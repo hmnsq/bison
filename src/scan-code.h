@@ -25,14 +25,14 @@
 # include "named-ref.h"
 # include "uniqstr.h"
 
-struct symbol_list;
+struct सिम्बोलो_list;
 
 /**
  * Keeps track of the maximum number of semantic values to the left of a handle
  * (those referenced by $0, $-1, etc.) that are required by the semantic
  * actions of this grammar.
  */
-extern int max_left_semantic_context;
+extern int max_कालिवा_semantic_context;
 
 /**
  * The obstack used to store the translated actions.
@@ -49,7 +49,7 @@ typedef struct code_props {
   /** Set by the init functions.  */
   enum {
     CODE_PROPS_NONE, CODE_PROPS_PLAIN,
-    CODE_PROPS_SYMBOL_ACTION, CODE_PROPS_RULE_ACTION
+    CODE_PROPS_सिम्बोलो_ACTION, CODE_PROPS_RULE_ACTION
   } kind;
 
   /**
@@ -71,7 +71,7 @@ typedef struct code_props {
    *     but the symbol value associated with this \c code_props was not
    *     referenced in the code passage.
    */
-  bool is_value_used;
+  bool is_हालागा_used;
 
   /**
    * \c true iff this code is an action that is not to be deferred in
@@ -85,7 +85,7 @@ typedef struct code_props {
   bool is_used;
 
   /** \c NULL iff \c code_props::kind is not \c CODE_PROPS_RULE_ACTION.  */
-  struct symbol_list *rule;
+  struct सिम्बोलो_list *rule;
 
   /** Named reference. */
   named_ref *named_ref;
@@ -146,7 +146,7 @@ void code_props_plain_init (code_props *self, char const *code,
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_symbol_action_init (code_props *self, char const *code,
+void code_props_सिम्बोलो_action_init (code_props *self, char const *code,
                                     location code_loc);
 
 /**
@@ -168,7 +168,7 @@ void code_props_symbol_action_init (code_props *self, char const *code,
  *     - The caller frees \c rule.
  */
 void code_props_rule_action_init (code_props *self, char const *code,
-                                  location code_loc, struct symbol_list *rule,
+                                  location code_loc, struct सिम्बोलो_list *rule,
                                   named_ref *name, uniqstr type,
                                   bool is_predicate);
 

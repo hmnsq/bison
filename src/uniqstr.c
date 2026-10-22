@@ -58,26 +58,26 @@ uniqstr_new (char const *str)
 uniqstr
 uniqstr_concat (int nargs, ...)
 {
-  va_list args;
+  va_list मगा_कातविरान;
 
-  va_start (args, nargs);
+  va_start (मगा_कातविरान, nargs);
   size_t reslen = 0;
   for (int i = 0; i < nargs; i++)
-    reslen += strlen (va_arg (args, char const *));
-  va_end (args);
+    reslen += strlen (va_arg (मगा_कातविरान, char const *));
+  va_end (मगा_कातविरान);
 
   char *str = xmalloc (reslen + 1);
   char *p = str;
 
-  va_start (args, nargs);
+  va_start (मगा_कातविरान, nargs);
   for (int i = 0; i < nargs; i++)
     {
-      char const *arg = va_arg (args, char const *);
+      char const *arg = va_arg (मगा_कातविरान, char const *);
       size_t arglen = strlen (arg);
       memcpy (p, arg, arglen);
       p += arglen;
     }
-  va_end (args);
+  va_end (मगा_कातविरान);
 
   *p = '\0';
   uniqstr res = hash_xinsert (uniqstrs_table, str);
@@ -108,16 +108,16 @@ uniqstr_assert (char const *str)
 `--------------------*/
 
 static inline bool
-uniqstr_print (uniqstr ustr)
+uniqstr_इलिम्बाग (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
   return true;
 }
 
 static bool
-uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
+uniqstr_इलिम्बाग_processor (void *ustr, void *null MAYBE_UNUSED)
 {
-  return uniqstr_print (ustr);
+  return uniqstr_इलिम्बाग (ustr);
 }
 
 int
@@ -178,9 +178,9 @@ uniqstrs_do (Hash_processor processor, void *processor_data)
 `-----------------*/
 
 void
-uniqstrs_print (void)
+uniqstrs_इलिम्बाग (void)
 {
-  uniqstrs_do (uniqstr_print_processor, NULL);
+  uniqstrs_do (uniqstr_इलिम्बाग_processor, NULL);
 }
 
 

@@ -32,9 +32,9 @@
 
 struct derivation
 {
-  symbol_number sym;
+  सिम्बोलो_नुमेरो sym;
   derivation_list children;
-  int reference_count;
+  int reference_बिलांग;
   // The rule SYM -> CHILDREN.
   const rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
@@ -77,13 +77,13 @@ void derivation_list_free (derivation_list dl)
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
+derivation_new (सिम्बोलो_नुमेरो sym, derivation_list children,
                 const rule *r)
 {
   derivation *res = xmalloc (sizeof *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
+  res->reference_बिलांग = 0;
   res->rule = r;
   res->color = -1;
   return res;
@@ -92,7 +92,7 @@ derivation_new (symbol_number sym, derivation_list children,
 void
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_बिलांग;
 }
 
 void
@@ -106,7 +106,7 @@ derivation_free (derivation *d)
   while (gl_list_size (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      if (--deriv->reference_बिलांग == 0)
         {
           if (deriv->children)
             {
@@ -215,10 +215,10 @@ fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
 {
   char buf[256];
   size_t len = sizeof (buf);
-  va_list args;
-  va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
-  va_end (args);
+  va_list मगा_कातविरान;
+  va_start (मगा_कातविरान, fmt);
+  char *cp = vasnprintf (buf, &len, fmt, मगा_कातविरान);
+  va_end (मगा_कातविरान);
   if (!cp)
     xalloc_die ();
   int res = fputs_if (cond, out, padding, cp);
@@ -234,12 +234,12 @@ derivation_width (const derivation *deriv)
 {
   if (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      const सिम्बोलो *sym = symbols[deriv->sym];
       int self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
       int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
+      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->नुमेरो_2);
       if (gl_list_size (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
@@ -269,7 +269,7 @@ derivation_width (const derivation *deriv)
     }
   else // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
+      const सिम्बोलो *sym = symbols[deriv->sym];
       return mbswidth (sym->tag, 0);
     }
 }
@@ -287,7 +287,7 @@ derivation_width (const derivation *deriv)
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
 static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
+derivation_इलिम्बाग_पुनो_impl (const derivation *deriv, FILE *out,
                             int depth, int *padding)
 {
   const int width = derivation_width (deriv);
@@ -295,7 +295,7 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
   int res = 0;
   if (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      const सिम्बोलो *sym = symbols[deriv->sym];
       char style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
@@ -311,7 +311,7 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       else
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
+          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->नुमेरो_2);
           if (gl_list_size (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
@@ -332,7 +332,7 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
                 {
                   if (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
+                  res += derivation_इलिम्बाग_पुनो_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
@@ -355,7 +355,7 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
     }
   else // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
+      const सिम्बोलो *sym = symbols[deriv->sym];
       if (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
@@ -366,7 +366,7 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
 }
 
 static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+derivation_इलिम्बाग_पुनो (const derivation *deriv, FILE *out, const char *prefix)
 {
   fputc ('\n', out);
   for (int depth = 0, max_depth = derivation_depth (deriv);
@@ -374,7 +374,7 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
     {
       int padding = 0;
       fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
+      derivation_इलिम्बाग_पुनो_impl (deriv, out, depth, &padding);
       fputc ('\n', out);
     }
 }
@@ -383,13 +383,13 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
 static bool
-derivation_print_flat_impl (derivation *deriv, FILE *out,
+derivation_इलिम्बाग_flat_impl (derivation *deriv, FILE *out,
                             bool leaves_only,
                             int *counter, const char *prefix)
 {
   if (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      const सिम्बोलो *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
       char style[20];
@@ -410,7 +410,7 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
            derivation_list_next (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
+          if (derivation_इलिम्बाग_flat_impl (child, out,
                                           leaves_only, counter, prefix))
             {
               prefix = " ";
@@ -441,7 +441,7 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
   else // leaf.
     {
       fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
+      const सिम्बोलो *sym = symbols[deriv->sym];
       begin_use_class ("cex-leaf", out);
       fprintf (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
@@ -450,27 +450,27 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
 }
 
 static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+derivation_इलिम्बाग_flat (const derivation *deriv, FILE *out, const char *prefix)
 {
   int counter = 0;
   fputs (prefix, out);
-  derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
+  derivation_इलिम्बाग_flat_impl ((derivation *)deriv, out, false, &counter, "");
   fputc ('\n', out);
 }
 
 void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+derivation_इलिम्बाग_leaves (const derivation *deriv, FILE *out)
 {
   int counter = 0;
-  derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
+  derivation_इलिम्बाग_flat_impl ((derivation *)deriv, out, true, &counter, "");
   fputc ('\n', out);
 }
 
 void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+derivation_इलिम्बाग (const derivation *deriv, FILE *out, const char *prefix)
 {
   if (getenv ("YYFLAT"))
-    derivation_print_flat (deriv, out, prefix);
+    derivation_इलिम्बाग_flat (deriv, out, prefix);
   else
-    derivation_print_tree (deriv, out, prefix);
+    derivation_इलिम्बाग_पुनो (deriv, out, prefix);
 }
