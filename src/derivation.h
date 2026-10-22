@@ -35,7 +35,7 @@ typedef struct derivation derivation;
 
 static inline derivation_list derivation_list_new (void)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  trả_về gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
 }
 
 static inline bool
@@ -43,11 +43,11 @@ derivation_list_next (gl_list_iterator_t *it, derivation **d)
 {
   const void *p = NULL;
   bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  nếu (res)
     *d = (derivation *) p;
-  else
+  không_thì
     gl_list_iterator_free (it);
-  return res;
+  trả_về res;
 }
 
 void derivation_list_append (derivation_list dl, derivation *d);
@@ -61,7 +61,7 @@ derivation_new (symbol_number sym, derivation_list children,
 
 static inline derivation *derivation_new_leaf (symbol_number sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  trả_về derivation_new (sym, NULL, NULL);
 }
 
 // Number of symbols.

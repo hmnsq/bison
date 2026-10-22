@@ -30,19 +30,19 @@
 
 
 glyph_buffer_t arrow;
-int arrow_width;
+số_nguyên arrow_width;
 
 glyph_buffer_t down_arrow;
-int down_arrow_width;
+số_nguyên down_arrow_width;
 
 glyph_buffer_t dot;
-int dot_width;
+số_nguyên dot_width;
 
 glyph_buffer_t empty;
-int empty_width;
+số_nguyên empty_width;
 
 const char *derivation_separator = " ";
-int derivation_separator_width = 1;
+số_nguyên derivation_separator_width = 1;
 
 typedef struct
 {
@@ -57,7 +57,7 @@ on_success (const char *buf, size_t buflen, void *callback_arg)
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
   assert (buflen + 1 < sizeof *arg->pbuf);
   *stpncpy (*arg->pbuf, buf, buflen) = '\0';
-  return 1;
+  trả_về 1;
 }
 
 static long
@@ -67,17 +67,17 @@ on_failure (unsigned code MAYBE_UNUSED, const char *msg MAYBE_UNUSED,
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
   assert (strlen (arg->fallback) + 1 < sizeof *arg->pbuf);
   strcpy (*arg->pbuf, arg->fallback);
-  return 0;
+  trả_về 0;
 }
 
 static bool
-glyph_set (glyph_buffer_t *glyph, int *width,
+glyph_set (glyph_buffer_t *glyph, số_nguyên *width,
            unsigned code, const char *fallback)
 {
   callback_arg_t arg = { glyph, fallback };
-  int res = unicode_to_mb (code, on_success, on_failure, &arg);
+  số_nguyên res = unicode_to_mb (code, on_success, on_failure, &arg);
   *width = mbswidth (*glyph, 0);
-  return res;
+  trả_về res;
 }
 
 void

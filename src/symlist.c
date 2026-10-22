@@ -55,7 +55,7 @@ symbol_list_sym_new (symbol *sym, location loc)
 
   res->next = NULL;
 
-  return res;
+  trả_về res;
 }
 
 
@@ -78,26 +78,26 @@ symbol_list_type_new (uniqstr type_name, location loc)
   res->named_ref = NULL;
   res->next = NULL;
 
-  return res;
+  trả_về res;
 }
 
 
 symbol_list *
 symbol_list_type_set (symbol_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
+  cho (symbol_list *l = syms; l; l = l->next)
     symbol_type_set (l->content.sym, type_name, l->sym_loc);
-  return syms;
+  trả_về syms;
 }
 
 
 symbol_list *
 symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 {
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
-    if (l->content.sym == sym)
-      return l;
-  return NULL;
+  cho (/* Nothing. */; l && l->content.sym; l = l->next)
+    nếu (l->content.sym == sym)
+      trả_về l;
+  trả_về NULL;
 }
 
 
@@ -110,14 +110,14 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 {
   fputc ('[', out);
   char const *sep = "";
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
+  cho (/* Nothing. */; l && l->content.sym; l = l->next)
     {
       fputs (sep, out);
       fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
              out);
-      if (l->content_type == SYMLIST_SYMBOL)
+      nếu (l->content_type == SYMLIST_SYMBOL)
         symbol_print (l->content.sym, out);
       fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
       putc ('}', out);
@@ -135,29 +135,29 @@ symbol_list *
 symbol_list_prepend (symbol_list *list, symbol_list *node)
 {
   node->next = list;
-  return node;
+  trả_về node;
 }
 
 
 symbol_list *
 symbol_list_last (symbol_list *list)
 {
-  if (!list)
-    return NULL;
+  nếu (!list)
+    trả_về NULL;
   symbol_list *next = list;
-  while (next->next)
+  trong_khi (next->next)
     next = next->next;
-  return next;
+  trả_về next;
 }
 
 symbol_list *
 symbol_list_append (symbol_list *list, symbol_list *node)
 {
-  if (list)
+  nếu (list)
     symbol_list_last (list)->next = node;
-  else
+  không_thì
     list = node;
-  return list;
+  trả_về list;
 }
 
 
@@ -169,11 +169,11 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 void
 symbol_list_free (symbol_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  cho (symbol_list *next; list; list = next)
     {
       next = list->next;
       named_ref_free (list->named_ref);
-      if (list->content_type == SYMLIST_TYPE)
+      nếu (list->content_type == SYMLIST_TYPE)
         free (list->content.sem_type);
       free (list);
     }
@@ -184,15 +184,15 @@ symbol_list_free (symbol_list *list)
 | Return its length.  |
 `--------------------*/
 
-int
+số_nguyên
 symbol_list_length (symbol_list const *l)
 {
-  int res = 0;
-  for (/* Nothing. */;
+  số_nguyên res = 0;
+  cho (/* Nothing. */;
        l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
        l = l->next)
     ++res;
-  return res;
+  trả_về res;
 }
 
 
@@ -201,17 +201,17 @@ symbol_list_length (symbol_list const *l)
 `------------------------------*/
 
 symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+symbol_list_n_get (symbol_list *l, số_nguyên n)
 {
   aver (0 <= n);
-  for (int i = 0; i < n; ++i)
+  cho (số_nguyên i = 0; i < n; ++i)
     {
       l = l->next;
       aver (l);
     }
   aver (l->content_type == SYMLIST_SYMBOL);
   aver (l->content.sym);
-  return l;
+  trả_về l;
 }
 
 /*--------------------------------------------------------------.
@@ -220,15 +220,15 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+symbol_list_n_type_name_get (symbol_list *l, số_nguyên n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  trả_về symbol_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
 symbol_list_null (symbol_list *node)
 {
-  return (!node
+  trả_về (!node
           || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
 }
 
@@ -240,7 +240,7 @@ symbol_list_code_props_set (symbol_list *node, code_props_type kind,
     {
     case SYMLIST_SYMBOL:
       symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
+      nếu (node->content.sym->content->status == undeclared)
         node->content.sym->content->status = used;
       break;
     case SYMLIST_TYPE:
@@ -248,7 +248,7 @@ symbol_list_code_props_set (symbol_list *node, code_props_type kind,
         (semantic_type_get (node->content.sem_type->tag,
                             &node->content.sem_type->location),
          kind, cprops);
-      if (node->content.sem_type->status == undeclared)
+      nếu (node->content.sem_type->status == undeclared)
         node->content.sem_type->status = used;
       break;
     }

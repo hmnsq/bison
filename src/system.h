@@ -23,7 +23,7 @@
    runs afoul of pre-C99 compilers that have <inttypes.h> or
    <stdint.h>, which are included below if available.  It also runs
    afoul of pre-C99 compilers that define these macros in <limits.h>.  */
-# if ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
+# nếu ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
 #  undef INT8_MIN
 #  undef INT16_MIN
 #  undef INT32_MIN
@@ -74,19 +74,19 @@ typedef size_t uintptr_t;
 # include <xalloc.h>
 
 // Clang and ICC like to pretend they are GCC.
-# if defined __GNUC__ && !defined __clang__ && !defined __ICC
+# nếu defined __GNUC__ && !defined __clang__ && !defined __ICC
 #  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
 # endif
 
 // See https://lists.gnu.org/r/bug-bison/2019-10/msg00061.html
 // and https://trac.macports.org/ticket/59927.
-# if defined GCC_VERSION && 405 <= GCC_VERSION
+# nếu defined GCC_VERSION && 405 <= GCC_VERSION
 #  define IGNORE_TYPE_LIMITS_BEGIN \
      _Pragma ("GCC diagnostic push") \
      _Pragma ("GCC diagnostic ignored \"-Wtype-limits\"")
 #  define IGNORE_TYPE_LIMITS_END \
      _Pragma ("GCC diagnostic pop")
-# else
+# không_thì
 #  define IGNORE_TYPE_LIMITS_BEGIN
 #  define IGNORE_TYPE_LIMITS_END
 # endif
@@ -135,16 +135,16 @@ typedef size_t uintptr_t;
 | Integers.  |
 `-----------*/
 
-static inline int
-min_int (int a, int b)
+static inline số_nguyên
+min_int (số_nguyên a, số_nguyên b)
 {
-  return a < b ? a : b;
+  trả_về a < b ? a : b;
 }
 
-static inline int
-max_int (int a, int b)
+static inline số_nguyên
+max_int (số_nguyên a, số_nguyên b)
 {
-  return a >= b ? a : b;
+  trả_về a >= b ? a : b;
 }
 
 
@@ -194,14 +194,14 @@ max_int (int a, int b)
 # define obstack_backslash(Obs, Str)                    \
   do {                                                  \
     char const *p__;                                    \
-    for (p__ = Str; *p__; p__++)                        \
+    cho (p__ = Str; *p__; p__++)                        \
       switch (*p__)                                     \
         {                                               \
         case '"':  obstack_sgrow (Obs, "\\\""); break;  \
         case '\\': obstack_sgrow (Obs, "\\\\"); break;  \
         default:   obstack_1grow (Obs, *p__);   break;  \
         }                                               \
-  } while (0)
+  } trong_khi (0)
 
 
 /* Output CP escaped for our postprocessing (i.e., escape M4 special
@@ -220,7 +220,7 @@ max_int (int a, int b)
 static inline void
 obstack_escape (struct obstack* obs, const char *cp)
 {
-  for (; *cp; ++cp)
+  cho (; *cp; ++cp)
     switch (*cp)
       {
       case '$': obstack_sgrow (obs, "$]["); break;
@@ -228,23 +228,23 @@ obstack_escape (struct obstack* obs, const char *cp)
       case '[': obstack_sgrow (obs, "@{" ); break;
       case ']': obstack_sgrow (obs, "@}" ); break;
       case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+        nếu (STRPREFIX_LIT ("b4_", cp))
           {
             obstack_sgrow (obs, "b4@'_");
             cp += strlen ("b4_") - 1;
             break;
           }
-        else
+        không_thì
           goto append;
 
       case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+        nếu (STRPREFIX_LIT ("m4_", cp))
           {
             obstack_sgrow (obs, "m4@'_");
             cp += strlen ("m4_") - 1;
             break;
           }
-        else
+        không_thì
           goto append;
 
       append:
@@ -263,15 +263,15 @@ obstack_escape (struct obstack* obs, const char *cp)
 # define obstack_quote(Obs, Str)                \
   do {                                          \
     char const* obstack_quote_p = Str;          \
-    if (obstack_quote_p && obstack_quote_p[0])  \
+    nếu (obstack_quote_p && obstack_quote_p[0])  \
       {                                         \
         obstack_sgrow (Obs, "[[");              \
         obstack_escape (Obs, obstack_quote_p);  \
         obstack_sgrow (Obs, "]]");              \
       }                                         \
-    else                                        \
+    không_thì                                        \
       obstack_sgrow (Obs, "[]");                \
-  } while (0)
+  } trong_khi (0)
 
 
 /* Append the ending 0, finish Obs, and return the string.  */
@@ -301,11 +301,11 @@ obstack_escape (struct obstack* obs, const char *cp)
 # define LIST_FREE(Type, List)                  \
   do {                                          \
     Type *_node, *_next;                        \
-    for (_node = List; _node; _node = _next)    \
+    cho (_node = List; _node; _node = _next)    \
       {                                         \
         _next = _node->next;                    \
         free (_node);                           \
       }                                         \
-  } while (0)
+  } trong_khi (0)
 
 #endif  /* ! BISON_SYSTEM_H */

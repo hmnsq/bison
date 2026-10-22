@@ -51,7 +51,7 @@ typedef enum
 
 
 /** Internal token numbers. */
-typedef int symbol_number;
+typedef số_nguyên symbol_number;
 # define SYMBOL_NUMBER_MAXIMUM INT_MAX
 
 
@@ -146,11 +146,11 @@ struct sym_content
 
   symbol_number number;
   location prec_loc;
-  int prec;
+  số_nguyên prec;
   assoc assoc;
 
   /** Token code, possibly specified by the user (%token FOO 42).  */
-  int code;
+  số_nguyên code;
 
   symbol_class class;
   declaration_status status;
@@ -217,7 +217,7 @@ code_props *symbol_code_props_get (symbol *sym, code_props_type kind);
 
     Ensure that \a symbol is a terminal.
     Do nothing if invoked with \c undef_assoc as \c assoc.  */
-void symbol_precedence_set (symbol *sym, int prec, assoc a, location loc);
+void symbol_precedence_set (symbol *sym, số_nguyên prec, assoc a, location loc);
 
 /** Set the \c class associated with \c sym.
 
@@ -228,7 +228,7 @@ void symbol_class_set (symbol *sym, symbol_class class, location loc,
                        bool declaring);
 
 /** Set the token \c code of \c sym, specified by the user at \c loc.  */
-void symbol_code_set (symbol *sym, int code, location loc);
+void symbol_code_set (symbol *sym, số_nguyên code, location loc);
 
 
 
@@ -258,7 +258,7 @@ extern bool tag_seen;
 /* The symbol relations are represented by a directed graph. */
 
 /* The id of a node */
-typedef int graphid;
+typedef số_nguyên graphid;
 
 typedef struct symgraphlink symgraphlink;
 

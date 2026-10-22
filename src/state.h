@@ -96,14 +96,14 @@
 | Numbering states.  |
 `-------------------*/
 
-typedef int state_number;
+typedef số_nguyên state_number;
 # define STATE_NUMBER_MAXIMUM INT_MAX
 
 /* Be ready to map a state_number to an int.  */
-static inline int
+static inline số_nguyên
 state_number_as_int (state_number s)
 {
-  return s;
+  trả_về s;
 }
 
 
@@ -115,7 +115,7 @@ typedef struct state state;
 
 typedef struct
 {
-  int num;            /** Size of destination STATES.  */
+  số_nguyên num;            /** Size of destination STATES.  */
   state *states[1];
 } transitions;
 
@@ -154,12 +154,12 @@ typedef struct
 
 /* Iterate over each transition over a token (shifts).  */
 # define FOR_EACH_SHIFT(Transitions, Iter)                      \
-  for (Iter = 0;                                                \
+  cho (Iter = 0;                                                \
        Iter < Transitions->num                                  \
          && (TRANSITION_IS_DISABLED (Transitions, Iter)         \
              || TRANSITION_IS_SHIFT (Transitions, Iter));       \
        ++Iter)                                                  \
-    if (!TRANSITION_IS_DISABLED (Transitions, Iter))
+    nếu (!TRANSITION_IS_DISABLED (Transitions, Iter))
 
 
 /* The destination of the transition (shift/goto) from state S on
@@ -173,11 +173,11 @@ struct state *transitions_to (state *s, symbol_number sym);
 
 typedef struct
 {
-  int num;
+  số_nguyên num;
   symbol *symbols[1];
 } errs;
 
-errs *errs_new (int num, symbol **tokens);
+errs *errs_new (số_nguyên num, symbol **tokens);
 
 
 /*-------------.
@@ -186,7 +186,7 @@ errs *errs_new (int num, symbol **tokens);
 
 typedef struct
 {
-  int num;
+  số_nguyên num;
   bitset *lookaheads;
   /* Sorted ascendingly on rule number.  */
   rule *rules[1];
@@ -239,26 +239,26 @@ state *state_new (symbol_number accessing_symbol,
 state *state_new_isocore (state const *s);
 
 /* Record that from S we can reach all the DST states (NUM of them).  */
-void state_transitions_set (state *s, int num, state **dst);
+void state_transitions_set (state *s, số_nguyên num, state **dst);
 
 /* Print the transitions of state s for debug.  */
 void state_transitions_print (const state *s, FILE *out);
 
 /* Set the reductions of STATE.  */
-void state_reductions_set (state *s, int num, rule **reds);
+void state_reductions_set (state *s, số_nguyên num, rule **reds);
 
 /* The index of the reduction of state S that corresponds to rule R.
    Aborts if there is no reduction of R in S.  */
-int state_reduction_find (state const *s, rule const *r);
+số_nguyên state_reduction_find (state const *s, rule const *r);
 
 /* Set the errs of STATE.  */
-void state_errs_set (state *s, int num, symbol **errors);
+void state_errs_set (state *s, số_nguyên num, symbol **errors);
 
 /* Print on OUT all the lookahead tokens such that this STATE wants to
    reduce R.  */
 void state_rule_lookaheads_print (state const *s, rule const *r, FILE *out);
 void state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                      FILE *out, int level);
+                                      FILE *out, số_nguyên level);
 
 /* Create/destroy the states hash table.  */
 void state_hash_new (void);
