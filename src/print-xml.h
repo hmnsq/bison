@@ -23,10 +23,10 @@
 
 # include <stdio.h>
 
-void xml_indent (FILE *out, int level);
-void xml_puts (FILE *, int, char const *);
-void xml_printf (FILE *, int, char const *, ...);
-char const *xml_escape_n (int n, char const *str);
+void xml_indent (FILE *out, 정수 level);
+void xml_puts (FILE *, 정수, char const *);
+void xml_printf (FILE *, 정수, char const *, ...);
+char const *xml_escape_n (정수 n, char const *str);
 char const *xml_escape (char const *str);
 void print_xml (void);
 

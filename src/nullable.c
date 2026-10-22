@@ -45,7 +45,7 @@ static void
 nullable_print (FILE *out)
 {
   fputs ("NULLABLE\n", out);
-  for (int i = ntokens; i < nsyms; i++)
+  위해 (정수 i = ntokens; i < nsyms; i++)
     fprintf (out, "  %s: %s\n", symbols[i]->tag,
              nullable[i - ntokens] ? "yes" : "no");
   fputs ("\n\n", out);
@@ -68,22 +68,22 @@ nullable_compute (void)
   symbol_number *s2 = squeue;
   {
     rule_list *p = relts;
-    for (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
-      if (rules[ruleno].useful)
+    위해 (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
+      만약 (rules[ruleno].useful)
         {
           const rule *r = &rules[ruleno];
-          if (r->rhs[0] >= 0)
+          만약 (r->rhs[0] >= 0)
             {
               /* This rule has a non empty RHS. */
               bool any_tokens = false;
-              for (item_number *rp = r->rhs; *rp >= 0; ++rp)
-                if (ISTOKEN (*rp))
+              위해 (item_number *rp = r->rhs; *rp >= 0; ++rp)
+                만약 (ISTOKEN (*rp))
                   any_tokens = true;
 
               /* This rule has only nonterminals: schedule it for the second
                  pass.  */
-              if (!any_tokens)
-                for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+              만약 (!any_tokens)
+                위해 (item_number *rp = r->rhs; *rp >= 0; ++rp)
                   {
                     rcount[ruleno]++;
                     p->next = rsets[*rp - ntokens];
@@ -92,10 +92,10 @@ nullable_compute (void)
                     p++;
                   }
             }
-          else
+          아니면
             {
               /* This rule has an empty RHS. */
-              if (r->useful
+              만약 (r->useful
                   && ! nullable[r->lhs->number - ntokens])
                 {
                   nullable[r->lhs->number - ntokens] = true;
@@ -106,12 +106,12 @@ nullable_compute (void)
   }
 
   symbol_number *s1 = squeue;
-  while (s1 < s2)
-    for (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
+  동안 (s1 < s2)
+    위해 (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
       {
         const rule *r = p->value;
-        if (--rcount[r->number] == 0)
-          if (r->useful && ! nullable[r->lhs->number - ntokens])
+        만약 (--rcount[r->number] == 0)
+          만약 (r->useful && ! nullable[r->lhs->number - ntokens])
             {
               nullable[r->lhs->number - ntokens] = true;
               *s2++ = r->lhs->number;
@@ -123,7 +123,7 @@ nullable_compute (void)
   free (rsets);
   free (relts);
 
-  if (trace_flag & trace_sets)
+  만약 (trace_flag & trace_sets)
     nullable_print (stderr);
 }
 

@@ -57,11 +57,11 @@ static void
 closure_print (char const *title, item_index const *array, size_t size)
 {
   fprintf (stderr, "Closure: %s\n", title);
-  for (size_t i = 0; i < size; ++i)
+  위해 (size_t i = 0; i < size; ++i)
     {
       fprintf (stderr, "  %2d: .", array[i]);
       item_number *rp;
-      for (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
+      위해 (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
         fprintf (stderr, " %s", symbols[*rp]->tag);
       fprintf (stderr, "  (rule %d)\n", item_number_as_rule_number (*rp));
     }
@@ -73,7 +73,7 @@ static void
 print_firsts (void)
 {
   fprintf (stderr, "FIRSTS\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  위해 (symbol_number i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s firsts\n", symbols[i]->tag);
       bitset_iterator iter;
@@ -89,7 +89,7 @@ static void
 print_fderives (void)
 {
   fprintf (stderr, "FDERIVES\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  위해 (symbol_number i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
       bitset_iterator iter;
@@ -120,21 +120,21 @@ set_firsts (void)
 {
   firsts = bitsetv_create (nnterms, nnterms, BITSET_FIXED);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = 0; derives[i - ntokens][j]; ++j)
+  위해 (symbol_number i = ntokens; i < nsyms; ++i)
+    위해 (symbol_number j = 0; derives[i - ntokens][j]; ++j)
       {
         item_number sym = derives[i - ntokens][j]->rhs[0];
-        if (ISVAR (sym))
+        만약 (ISVAR (sym))
           bitset_set (FIRSTS (i), sym - ntokens);
       }
 
-  if (trace_flag & trace_sets)
+  만약 (trace_flag & trace_sets)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Input", firsts);
   bitsetv_reflexive_transitive_closure (firsts);
-  if (trace_flag & trace_sets)
+  만약 (trace_flag & trace_sets)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Output", firsts);
 
-  if (trace_flag & trace_sets)
+  만약 (trace_flag & trace_sets)
     print_firsts ();
 }
 
@@ -155,13 +155,13 @@ set_fderives (void)
 
   set_firsts ();
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = ntokens; j < nsyms; ++j)
-      if (bitset_test (FIRSTS (i), j - ntokens))
-        for (rule_number k = 0; derives[j - ntokens][k]; ++k)
+  위해 (symbol_number i = ntokens; i < nsyms; ++i)
+    위해 (symbol_number j = ntokens; j < nsyms; ++j)
+      만약 (bitset_test (FIRSTS (i), j - ntokens))
+        위해 (rule_number k = 0; derives[j - ntokens][k]; ++k)
           bitset_set (FDERIVES (i), derives[j - ntokens][k]->number);
 
-  if (trace_flag & trace_sets)
+  만약 (trace_flag & trace_sets)
     print_fderives ();
 
   bitsetv_free (firsts);
@@ -170,7 +170,7 @@ set_fderives (void)
 
 
 void
-closure_new (int n)
+closure_new (정수 n)
 {
   itemset = xnmalloc (n, sizeof *itemset);
 
@@ -184,13 +184,13 @@ closure_new (int n)
 void
 closure (item_index const *core, size_t n)
 {
-  if (trace_flag & trace_closure)
+  만약 (trace_flag & trace_closure)
     closure_print ("input", core, n);
 
   bitset_zero (ruleset);
 
-  for (size_t c = 0; c < n; ++c)
-    if (ISVAR (ritem[core[c]]))
+  위해 (size_t c = 0; c < n; ++c)
+    만약 (ISVAR (ritem[core[c]]))
       bitset_or (ruleset, ruleset, FDERIVES (ritem[core[c]]));
 
   /* core is sorted on item index in ritem, which is sorted on rule number.
@@ -204,7 +204,7 @@ closure (item_index const *core, size_t n)
   BITSET_FOR_EACH (iter, ruleset, ruleno, 0)
     {
       item_index itemno = rules[ruleno].rhs - ritem;
-      while (c < n && core[c] < itemno)
+      동안 (c < n && core[c] < itemno)
         {
           itemset[nitemset] = core[c];
           nitemset++;
@@ -214,14 +214,14 @@ closure (item_index const *core, size_t n)
       nitemset++;
     };
 
-  while (c < n)
+  동안 (c < n)
     {
       itemset[nitemset] = core[c];
       nitemset++;
       c++;
     }
 
-  if (trace_flag & trace_closure)
+  만약 (trace_flag & trace_closure)
     closure_print ("output", itemset, nitemset);
 }
 

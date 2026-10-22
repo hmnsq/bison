@@ -34,13 +34,13 @@ struct derivation
 {
   symbol_number sym;
   derivation_list children;
-  int reference_count;
+  정수 reference_count;
   // The rule SYM -> CHILDREN.
   const rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  정수 color;
 };
 
 static derivation d_dot = { -1, NULL, -1, NULL, -1 };
@@ -48,7 +48,7 @@ static derivation d_dot = { -1, NULL, -1, NULL, -1 };
 derivation *
 derivation_dot (void)
 {
-  return &d_dot;
+  반환 &d_dot;
 }
 
 void
@@ -68,10 +68,10 @@ derivation_list_prepend (derivation_list dl, derivation *d)
 void derivation_list_free (derivation_list dl)
 {
   derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
+  위해 (gl_list_iterator_t it = gl_list_iterator (dl);
        derivation_list_next (&it, &d);
        )
-    if (d != &d_dot)
+    만약 (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
@@ -86,7 +86,7 @@ derivation_new (symbol_number sym, derivation_list children,
   res->reference_count = 0;
   res->rule = r;
   res->color = -1;
-  return res;
+  반환 res;
 }
 
 void
@@ -98,23 +98,23 @@ derivation_retain (derivation *d)
 void
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
+  만약 (!d)
+    반환;
   derivation_list free_queue =
     gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
                     1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+  동안 (gl_list_size (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      만약 (--deriv->reference_count == 0)
         {
-          if (deriv->children)
+          만약 (deriv->children)
             {
               derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              위해 (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
-                if (child != &d_dot)
+                만약 (child != &d_dot)
                   gl_list_add_last (free_queue, child);
               gl_list_free (deriv->children);
             }
@@ -128,44 +128,44 @@ derivation_free (derivation *d)
 size_t
 derivation_size (const derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
+  만약 (!deriv->children)
+    반환 1;
+  정수 size = 1;
   derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+  위해 (gl_list_iterator_t it = gl_list_iterator (deriv->children);
        derivation_list_next (&it, &child);
        )
     size += derivation_size (child);
-  return size;
+  반환 size;
 }
 
 
 // Longest distance from root to leaf.
-static int
+static 정수
 derivation_depth (const derivation *deriv)
 {
-  if (deriv->children)
+  만약 (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
+      정수 res = 1;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      위해 (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         res = max_int (res, derivation_depth (child));
-      return res + 1;
+      반환 res + 1;
     }
-  else
-    return 1;
+  아니면
+    반환 1;
 }
 
 static bool
 all_spaces (const char *s)
 {
-  while (c_isspace (*s))
+  동안 (c_isspace (*s))
     s++;
-  return *s == '\0';
+  반환 *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,24 +194,24 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+static 정수
+fputs_if (bool cond, FILE *out, 정수 *padding, const char *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  정수 res = mbswidth (s, 0);
+  만약 (cond && !all_spaces (s))
     {
       fprintf (out, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  아니면
     {
       *padding += res;
     }
-  return res;
+  반환 res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+static 정수
+fprintf_if (bool cond, FILE *out, 정수 *padding, const char *fmt, ...)
 {
   char buf[256];
   size_t len = sizeof (buf);
@@ -219,33 +219,33 @@ fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
   va_start (args, fmt);
   char *cp = vasnprintf (buf, &len, fmt, args);
   va_end (args);
-  if (!cp)
+  만약 (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
+  정수 res = fputs_if (cond, out, padding, cp);
+  만약 (cp != buf)
     free (cp);
-  return res;
+  반환 res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
+static 정수
 derivation_width (const derivation *deriv)
 {
-  if (deriv->children)
+  만약 (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      정수 self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
+      정수 children_width = down_arrow_width;
       children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      만약 (gl_list_size (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
-      else
+      아니면
         {
-          if (gl_list_size (deriv->children) == 1
+          만약 (gl_list_size (deriv->children) == 1
               && gl_list_get_first (deriv->children) == &d_dot)
             {
               children_width += empty_width;
@@ -253,7 +253,7 @@ derivation_width (const derivation *deriv)
             }
 
           derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+          위해 (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                derivation_list_next (&it, &child);
                )
             children_width
@@ -261,16 +261,16 @@ derivation_width (const derivation *deriv)
           // No separator at the beginning.
           children_width -= derivation_separator_width;
         }
-      return max_int (self_width, children_width);
+      반환 max_int (self_width, children_width);
     }
-  else if (deriv == &d_dot)
+  아니면 만약 (deriv == &d_dot)
     {
-      return dot_width;
+      반환 dot_width;
     }
-  else // leaf.
+  아니면 // leaf.
     {
       const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      반환 mbswidth (sym->tag, 0);
     }
 }
 
@@ -286,38 +286,38 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
+static 정수
 derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+                            정수 depth, 정수 *padding)
 {
-  const int width = derivation_width (deriv);
+  const 정수 width = derivation_width (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  정수 res = 0;
+  만약 (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
       char style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      만약 (depth == 0 || depth == 1)
         {
           begin_use_class (style, out);
           begin_use_class ("cex-step", out);
         }
-      if (depth == 0)
+      만약 (depth == 0)
         {
           res += fputs_if (true, out, padding, sym->tag);
         }
-      else
+      아니면
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
           res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          만약 (gl_list_size (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
-          else
+          아니면
             {
-              if (gl_list_size (deriv->children) == 1
+              만약 (gl_list_size (deriv->children) == 1
                   && gl_list_get_first (deriv->children) == &d_dot)
                 {
                   res += fputs_if (depth == 1, out, padding, empty);
@@ -326,18 +326,18 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
 
               bool first = true;
               derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              위해 (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
                 {
-                  if (!first)
+                  만약 (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
                   res += derivation_print_tree_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      만약 (depth == 0 || depth == 1)
         {
           end_use_class ("cex-step", out);
           end_use_class (style, out);
@@ -345,34 +345,34 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       *padding += width - res;
       res = width;
     }
-  else if (deriv == &d_dot)
+  아니면 만약 (deriv == &d_dot)
     {
-      if (depth == 0)
+      만약 (depth == 0)
         begin_use_class ("cex-dot", out);
       res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
+      만약 (depth == 0)
         end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  아니면 // leaf.
     {
       const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
+      만약 (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
+      만약 (depth == 0)
         end_use_class ("cex-leaf", out);
     }
-  return res;
+  반환 res;
 }
 
 static void
 derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 {
   fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
+  위해 (정수 depth = 0, max_depth = derivation_depth (deriv);
        depth < max_depth; ++depth)
     {
-      int padding = 0;
+      정수 padding = 0;
       fprintf (out, "    %s", prefix);
       derivation_print_tree_impl (deriv, out, depth, &padding);
       fputc ('\n', out);
@@ -385,9 +385,9 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 static bool
 derivation_print_flat_impl (derivation *deriv, FILE *out,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            정수 *counter, const char *prefix)
 {
-  if (deriv->children)
+  만약 (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
       deriv->color = *counter;
@@ -396,7 +396,7 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
       snprintf (style, 20, "cex-%d", deriv->color);
       begin_use_class (style, out);
 
-      if (!leaves_only)
+      만약 (!leaves_only)
         {
           fputs (prefix, out);
           begin_use_class ("cex-step", out);
@@ -406,39 +406,39 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
         }
       bool res = false;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      위해 (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
+          만약 (derivation_print_flat_impl (child, out,
                                           leaves_only, counter, prefix))
             {
               prefix = " ";
               res = true;
             }
-          else if (!leaves_only)
+          아니면 만약 (!leaves_only)
             prefix = " ";
         }
-      if (!leaves_only)
+      만약 (!leaves_only)
         {
           begin_use_class ("cex-step", out);
-          if (res)
+          만약 (res)
             fputs (" ]", out);
-          else
+          아니면
             fputs ("]", out);
           end_use_class ("cex-step", out);
         }
       end_use_class (style, out);
-      return res;
+      반환 res;
     }
-  else if (deriv == &d_dot)
+  아니면 만약 (deriv == &d_dot)
     {
       fputs (prefix, out);
       begin_use_class ("cex-dot", out);
       fputs (dot, out);
       end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  아니면 // leaf.
     {
       fputs (prefix, out);
       const symbol *sym = symbols[deriv->sym];
@@ -446,13 +446,13 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
       fprintf (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
     }
-  return true;
+  반환 true;
 }
 
 static void
 derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
 {
-  int counter = 0;
+  정수 counter = 0;
   fputs (prefix, out);
   derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
   fputc ('\n', out);
@@ -461,7 +461,7 @@ derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
 void
 derivation_print_leaves (const derivation *deriv, FILE *out)
 {
-  int counter = 0;
+  정수 counter = 0;
   derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
   fputc ('\n', out);
 }
@@ -469,8 +469,8 @@ derivation_print_leaves (const derivation *deriv, FILE *out)
 void
 derivation_print (const derivation *deriv, FILE *out, const char *prefix)
 {
-  if (getenv ("YYFLAT"))
+  만약 (getenv ("YYFLAT"))
     derivation_print_flat (deriv, out, prefix);
-  else
+  아니면
     derivation_print_tree (deriv, out, prefix);
 }

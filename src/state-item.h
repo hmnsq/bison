@@ -57,7 +57,7 @@
 # define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
 # define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+typedef 정수 state_item_number;
 
 typedef struct
 {
@@ -86,7 +86,7 @@ state_item *state_item_lookup (state_number s, state_item_number off);
 static inline state_item_number
 state_item_index_lookup (state_number s, state_item_number off)
 {
-  return state_item_map[s] + off;
+  반환 state_item_map[s] + off;
 }
 
 void state_items_init (void);
@@ -103,11 +103,11 @@ state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
   const void *p = NULL;
   bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  만약 (res)
     *si = (state_item *) p;
-  else
+  아니면
     gl_list_iterator_free (it);
-  return res;
+  반환 res;
 }
 
 

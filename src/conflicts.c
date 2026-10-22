@@ -37,8 +37,8 @@
 #include "symtab.h"
 
 /* -1 stands for not specified. */
-int expected_sr_conflicts = -1;
-int expected_rr_conflicts = -1;
+정수 expected_sr_conflicts = -1;
+정수 expected_rr_conflicts = -1;
 
 /* CONFLICTS[STATE-NUM] -- Whether that state has unresolved conflicts.  */
 static bool *conflicts;
@@ -52,7 +52,7 @@ static bitset lookahead_set;
 bool
 has_conflicts (const state *s)
 {
-  return conflicts[s->number];
+  반환 conflicts[s->number];
 }
 
 
@@ -76,7 +76,7 @@ static inline void
 log_resolution (rule *r, symbol_number token,
                 enum conflict_resolution resolution)
 {
-  if (report_flag & report_solved_conflicts)
+  만약 (report_flag & report_solved_conflicts)
     {
       /* The description of the resolution. */
       switch (resolution)
@@ -151,7 +151,7 @@ log_resolution (rule *r, symbol_number token,
     }
 
   /* XML report */
-  if (xml_flag)
+  만약 (xml_flag)
     {
       /* The description of the resolution. */
       switch (resolution)
@@ -231,13 +231,13 @@ log_resolution (rule *r, symbol_number token,
 `------------------------------------------------------------------*/
 
 static void
-flush_shift (state *s, int token)
+flush_shift (state *s, 정수 token)
 {
   transitions *trans = s->transitions;
 
   bitset_reset (lookahead_set, token);
-  for (int i = 0; i < trans->num; ++i)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  위해 (정수 i = 0; i < trans->num; ++i)
+    만약 (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_SYMBOL (trans, i) == token)
       TRANSITION_DISABLE (trans, i);
 }
@@ -250,7 +250,7 @@ flush_shift (state *s, int token)
 `--------------------------------------------------------------------*/
 
 static void
-flush_reduce (bitset lookaheads, int token)
+flush_reduce (bitset lookaheads, 정수 token)
 {
   bitset_reset (lookaheads, token);
 }
@@ -269,35 +269,35 @@ flush_reduce (bitset lookaheads, int token)
 `------------------------------------------------------------------*/
 
 static void
-resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
+resolve_sr_conflict (state *s, 정수 ruleno, symbol **errors, 정수 *nerrs)
 {
   reductions *reds = s->reductions;
   /* Find the rule to reduce by to get precedence of reduction.  */
   rule *redrule = reds->rules[ruleno];
-  int redprec = redrule->prec->prec;
+  정수 redprec = redrule->prec->prec;
   bitset lookaheads = reds->lookaheads[ruleno];
 
-  for (symbol_number i = 0; i < ntokens; ++i)
-    if (bitset_test (lookaheads, i)
+  위해 (symbol_number i = 0; i < ntokens; ++i)
+    만약 (bitset_test (lookaheads, i)
         && bitset_test (lookahead_set, i)
         && symbols[i]->content->prec)
       {
         /* Shift/reduce conflict occurs for token number i
            and it has a precedence.
            The precedence of shifting is that of token i.  */
-        if (symbols[i]->content->prec < redprec)
+        만약 (symbols[i]->content->prec < redprec)
           {
             register_precedence (redrule->prec->number, i);
             log_resolution (redrule, i, reduce_resolution);
             flush_shift (s, i);
           }
-        else if (symbols[i]->content->prec > redprec)
+        아니면 만약 (symbols[i]->content->prec > redprec)
           {
             register_precedence (i, redrule->prec->number);
             log_resolution (redrule, i, shift_resolution);
             flush_reduce (lookaheads, i);
           }
-        else
+        아니면
           /* Matching precedence levels.
              For non-defined associativity, keep both: unexpected
              associativity conflict.
@@ -348,17 +348,17 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
 static void
 set_conflicts (state *s, symbol **errors)
 {
-  if (s->consistent)
-    return;
+  만약 (s->consistent)
+    반환;
 
   reductions *reds = s->reductions;
-  int nerrs = 0;
+  정수 nerrs = 0;
 
   bitset_zero (lookahead_set);
 
   {
     transitions *trans = s->transitions;
-    int i;
+    정수 i;
     FOR_EACH_SHIFT (trans, i)
       bitset_set (lookahead_set, TRANSITION_SYMBOL (trans, i));
   }
@@ -366,30 +366,30 @@ set_conflicts (state *s, symbol **errors)
   /* Loop over all rules which require lookahead in this state.  First
      check for shift/reduce conflict, and try to resolve using
      precedence.  */
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i]->prec
+  위해 (정수 i = 0; i < reds->num; ++i)
+    만약 (reds->rules[i]->prec
         && reds->rules[i]->prec->prec
         && !bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
       resolve_sr_conflict (s, i, errors, &nerrs);
 
-  if (nerrs)
+  만약 (nerrs)
     /* Some tokens have been explicitly made errors.  Allocate a
        permanent errs structure for this state, to record them.  */
     state_errs_set (s, nerrs, errors);
 
-  if (obstack_object_size (&solved_conflicts_obstack))
+  만약 (obstack_object_size (&solved_conflicts_obstack))
     s->solved_conflicts = obstack_finish0 (&solved_conflicts_obstack);
-  if (obstack_object_size (&solved_conflicts_xml_obstack))
+  만약 (obstack_object_size (&solved_conflicts_xml_obstack))
     s->solved_conflicts_xml = obstack_finish0 (&solved_conflicts_xml_obstack);
 
   /* Loop over all rules which require lookahead in this state.  Check
      for conflicts not resolved above.
 
      reds->lookaheads can be NULL if the LR type is LR(0).  */
-  if (reds->lookaheads)
-    for (int i = 0; i < reds->num; ++i)
+  만약 (reds->lookaheads)
+    위해 (정수 i = 0; i < reds->num; ++i)
       {
-        if (!bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
+        만약 (!bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
           conflicts[s->number] = true;
         bitset_or (lookahead_set, lookahead_set, reds->lookaheads[i]);
       }
@@ -413,13 +413,13 @@ conflicts_solve (void)
   obstack_init (&solved_conflicts_obstack);
   obstack_init (&solved_conflicts_xml_obstack);
 
-  for (state_number i = 0; i < nstates; ++i)
+  위해 (state_number i = 0; i < nstates; ++i)
     {
       set_conflicts (states[i], errors);
 
       /* For uniformity of the code, make sure all the states have a valid
          'errs' member.  */
-      if (!states[i]->errs)
+      만약 (!states[i]->errs)
         states[i]->errs = errs_new (0, 0);
     }
 
@@ -431,8 +431,8 @@ void
 conflicts_update_state_numbers (state_number old_to_new[],
                                 state_number nstates_old)
 {
-  for (state_number i = 0; i < nstates_old; ++i)
-    if (old_to_new[i] != nstates_old)
+  위해 (state_number i = 0; i < nstates_old; ++i)
+    만약 (old_to_new[i] != nstates_old)
       conflicts[old_to_new[i]] = conflicts[i];
 }
 
@@ -447,24 +447,24 @@ count_state_sr_conflicts (const state *s)
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
 
-  if (!trans)
-    return 0;
+  만약 (!trans)
+    반환 0;
 
   bitset_zero (lookahead_set);
   bitset_zero (shift_set);
 
   {
-    int i;
+    정수 i;
     FOR_EACH_SHIFT (trans, i)
       bitset_set (shift_set, TRANSITION_SYMBOL (trans, i));
   }
 
-  for (int i = 0; i < reds->num; ++i)
+  위해 (정수 i = 0; i < reds->num; ++i)
     bitset_or (lookahead_set, lookahead_set, reds->lookaheads[i]);
 
   bitset_and (lookahead_set, lookahead_set, shift_set);
 
-  return bitset_count (lookahead_set);
+  반환 bitset_count (lookahead_set);
 }
 
 /*---------------------------------------------.
@@ -476,10 +476,10 @@ count_sr_conflicts (void)
 {
   size_t res = 0;
   /* Conflicts by state.  */
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
+  위해 (state_number i = 0; i < nstates; ++i)
+    만약 (conflicts[i])
       res += count_state_sr_conflicts (states[i]);
-  return res;
+  반환 res;
 }
 
 
@@ -495,16 +495,16 @@ count_state_rr_conflicts (const state *s)
   reductions *reds = s->reductions;
   size_t res = 0;
 
-  for (symbol_number i = 0; i < ntokens; ++i)
+  위해 (symbol_number i = 0; i < ntokens; ++i)
     {
-      int count = 0;
-      for (int j = 0; j < reds->num; ++j)
+      정수 count = 0;
+      위해 (정수 j = 0; j < reds->num; ++j)
         count += bitset_test (reds->lookaheads[j], i);
-      if (2 <= count)
+      만약 (2 <= count)
         res += count-1;
     }
 
-  return res;
+  반환 res;
 }
 
 static size_t
@@ -512,10 +512,10 @@ count_rr_conflicts (void)
 {
   size_t res = 0;
   /* Conflicts by state.  */
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
+  위해 (state_number i = 0; i < nstates; ++i)
+    만약 (conflicts[i])
       res += count_state_rr_conflicts (states[i]);
-  return res;
+  반환 res;
 }
 
 
@@ -531,16 +531,16 @@ count_rule_state_sr_conflicts (rule *r, state *s)
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
 
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
+  위해 (정수 i = 0; i < reds->num; ++i)
+    만약 (reds->rules[i] == r)
       {
         bitset lookaheads = reds->lookaheads[i];
-        int j;
+        정수 j;
         FOR_EACH_SHIFT (trans, j)
           res += bitset_test (lookaheads, TRANSITION_SYMBOL (trans, j));
       }
 
-  return res;
+  반환 res;
 }
 
 /*----------------------------------------------------------------------.
@@ -552,10 +552,10 @@ static size_t
 count_rule_sr_conflicts (rule *r)
 {
   size_t res = 0;
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
+  위해 (state_number i = 0; i < nstates; ++i)
+    만약 (conflicts[i])
       res += count_rule_state_sr_conflicts (r, states[i]);
-  return res;
+  반환 res;
 }
 
 /*-----------------------------------------------------------------.
@@ -570,10 +570,10 @@ count_rule_state_rr_conflicts (rule *r, state *s)
   const reductions *reds = s->reductions;
   bitset lookaheads = bitset_create (ntokens, BITSET_FIXED);
 
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
-      for (int j = 0; j < reds->num; ++j)
-        if (reds->rules[j] != r)
+  위해 (정수 i = 0; i < reds->num; ++i)
+    만약 (reds->rules[i] == r)
+      위해 (정수 j = 0; j < reds->num; ++j)
+        만약 (reds->rules[j] != r)
           {
             bitset_and (lookaheads,
                         reds->lookaheads[i],
@@ -581,16 +581,16 @@ count_rule_state_rr_conflicts (rule *r, state *s)
             res += bitset_count (lookaheads);
           }
   bitset_free (lookaheads);
-  return res;
+  반환 res;
 }
 
 static size_t
 count_rule_rr_conflicts (rule *r)
 {
   size_t res = 0;
-  for (state_number i = 0; i < nstates; ++i)
+  위해 (state_number i = 0; i < nstates; ++i)
     res += count_rule_state_rr_conflicts (r, states[i]);
-  return res;
+  반환 res;
 }
 
 /*-----------------------------------------------------------.
@@ -601,24 +601,24 @@ void
 conflicts_output (FILE *out)
 {
   bool printed_sth = false;
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
+  위해 (state_number i = 0; i < nstates; ++i)
+    만약 (conflicts[i])
       {
         const state *s = states[i];
-        int src = count_state_sr_conflicts (s);
-        int rrc = count_state_rr_conflicts (s);
+        정수 src = count_state_sr_conflicts (s);
+        정수 rrc = count_state_rr_conflicts (s);
         fprintf (out, _("State %d "), i);
-        if (src && rrc)
+        만약 (src && rrc)
           fprintf (out,
                    _("conflicts: %d shift/reduce, %d reduce/reduce\n"),
                    src, rrc);
-        else if (src)
+        아니면 만약 (src)
           fprintf (out, _("conflicts: %d shift/reduce\n"), src);
-        else if (rrc)
+        아니면 만약 (rrc)
           fprintf (out, _("conflicts: %d reduce/reduce\n"), rrc);
         printed_sth = true;
       }
-  if (printed_sth)
+  만약 (printed_sth)
     fputs ("\n\n", out);
 }
 
@@ -626,17 +626,17 @@ conflicts_output (FILE *out)
 | Total the number of S/R and R/R conflicts.  |
 `--------------------------------------------*/
 
-int
+정수
 conflicts_total_count (void)
 {
-  return count_sr_conflicts () + count_rr_conflicts ();
+  반환 count_sr_conflicts () + count_rr_conflicts ();
 }
 
 static void
 report_counterexamples (void)
 {
-  for (state_number sn = 0; sn < nstates; ++sn)
-    if (conflicts[sn])
+  위해 (state_number sn = 0; sn < nstates; ++sn)
+    만약 (conflicts[sn])
       counterexample_report_state (states[sn], stderr, "");
 }
 
@@ -647,22 +647,22 @@ report_counterexamples (void)
 static void
 report_rule_expectation_mismatches (void)
 {
-  for (rule_number i = 0; i < nrules; i += 1)
+  위해 (rule_number i = 0; i < nrules; i += 1)
     {
       rule *r = &rules[i];
-      int expected_sr = r->expected_sr_conflicts;
-      int expected_rr = r->expected_rr_conflicts;
+      정수 expected_sr = r->expected_sr_conflicts;
+      정수 expected_rr = r->expected_rr_conflicts;
 
-      if (expected_sr != -1 || expected_rr != -1)
+      만약 (expected_sr != -1 || expected_rr != -1)
         {
-          int sr = count_rule_sr_conflicts (r);
-          if (sr != expected_sr && (sr != 0 || expected_sr != -1))
+          정수 sr = count_rule_sr_conflicts (r);
+          만약 (sr != expected_sr && (sr != 0 || expected_sr != -1))
             complain (&r->location, complaint,
                       _("shift/reduce conflicts for rule %d:"
                         " %d found, %d expected"),
                       r->code, sr, expected_sr);
-          int rr = count_rule_rr_conflicts (r);
-          if (rr != expected_rr && (rr != 0 || expected_rr != -1))
+          정수 rr = count_rule_rr_conflicts (r);
+          만약 (rr != expected_rr && (rr != 0 || expected_rr != -1))
             complain (&r->location, complaint,
                       _("reduce/reduce conflicts for rule %d:"
                         " %d found, %d expected"),
@@ -680,7 +680,7 @@ conflicts_print (void)
 {
   report_rule_expectation_mismatches ();
 
-  if (! glr_parser && expected_rr_conflicts != -1)
+  만약 (! glr_parser && expected_rr_conflicts != -1)
     {
       complain (NULL, Wother, _("%%expect-rr applies only to GLR parsers"));
       expected_rr_conflicts = -1;
@@ -691,24 +691,24 @@ conflicts_print (void)
   /* The following two blocks scream for factoring, but i18n support
      would make it ugly.  */
   {
-    int total = count_sr_conflicts ();
+    정수 total = count_sr_conflicts ();
     /* If %expect is not used, but %expect-rr is, then expect 0 sr.  */
-    int expected =
+    정수 expected =
       (expected_sr_conflicts == -1 && expected_rr_conflicts != -1)
       ? 0
       : expected_sr_conflicts;
-    if (expected != -1)
+    만약 (expected != -1)
       {
-        if (expected != total)
+        만약 (expected != total)
           {
             complain (NULL, complaint,
                       _("shift/reduce conflicts: %d found, %d expected"),
                       total, expected);
-            if (total)
+            만약 (total)
               unexpected_conflicts_warning = complaint;
           }
       }
-    else if (total)
+    아니면 만약 (total)
       {
         complain (NULL, Wconflicts_sr,
                   ngettext ("%d shift/reduce conflict",
@@ -720,24 +720,24 @@ conflicts_print (void)
   }
 
   {
-    int total = count_rr_conflicts ();
+    정수 total = count_rr_conflicts ();
     /* If %expect-rr is not used, but %expect is, then expect 0 rr.  */
-    int expected =
+    정수 expected =
       (expected_rr_conflicts == -1 && expected_sr_conflicts != -1)
       ? 0
       : expected_rr_conflicts;
-    if (expected != -1)
+    만약 (expected != -1)
       {
-        if (expected != total)
+        만약 (expected != total)
           {
             complain (NULL, complaint,
                       _("reduce/reduce conflicts: %d found, %d expected"),
                       total, expected);
-            if (total)
+            만약 (total)
               unexpected_conflicts_warning = complaint;
           }
       }
-    else if (total)
+    아니면 만약 (total)
       {
         complain (NULL, Wconflicts_rr,
                   ngettext ("%d reduce/reduce conflict",
@@ -748,9 +748,9 @@ conflicts_print (void)
       }
   }
 
-  if (warning_is_enabled (Wcounterexamples))
+  만약 (warning_is_enabled (Wcounterexamples))
     report_counterexamples ();
-  else if (unexpected_conflicts_warning != Wnone)
+  아니면 만약 (unexpected_conflicts_warning != Wnone)
     subcomplain (NULL, unexpected_conflicts_warning,
                  _("rerun with option '-Wcounterexamples'"
                    " to generate conflict counterexamples"));

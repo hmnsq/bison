@@ -44,7 +44,7 @@ struct obstack *obstack_for_actions = &obstack_for_string;
 
 /* The current calling start condition: SC_RULE_ACTION or
    SC_SYMBOL_ACTION. */
-# define YY_DECL static char *code_lex (code_props *self, int sc_context)
+# define YY_DECL static char *code_lex (code_props *self, 정수 sc_context)
 YY_DECL;
 
 #define YY_USER_ACTION  location_compute (loc, &loc->end, yytext, yyleng);
@@ -167,13 +167,13 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   "$"("<"{tag}">")?{ref}  {
     ref_tail_fields = NULL;
     handle_action_dollar (self->rule, yytext, loc);
-    if (ref_tail_fields)
+    만약 (ref_tail_fields)
       obstack_sgrow (&obstack_for_string, ref_tail_fields);
   }
   "@"{ref} {
     ref_tail_fields = NULL;
     handle_action_at (self->rule, yytext, loc);
-    if (ref_tail_fields)
+    만약 (ref_tail_fields)
       obstack_sgrow (&obstack_for_string, ref_tail_fields);
   }
 }
@@ -207,7 +207,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   .|\n        STRING_GROW ();
 
   /* End of processing. */
-  <<EOF>>     STRING_FINISH (); return last_string;
+  <<EOF>>     STRING_FINISH (); 반환 last_string;
 }
 
 %%
@@ -215,20 +215,20 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
 static inline bool
 is_dot_or_dash (char ch)
 {
-  return ch == '.' || ch == '-';
+  반환 ch == '.' || ch == '-';
 }
 
 static inline bool
 contains_dot_or_dash (const char* p)
 {
-  return !!strpbrk (p, ".-");
+  반환 !!strpbrk (p, ".-");
 }
 
 /* Defines a variant of a symbolic name resolution. */
 typedef struct
 {
   /* Index in symbol list. */
-  int symbol_index;
+  정수 symbol_index;
 
   /* Matched symbol id and loc. */
   uniqstr id;
@@ -255,21 +255,21 @@ typedef struct
 #define VARIANT_NOT_VISIBLE_FROM_MIDRULE (1 << 2)
 
 static variant *variant_table = NULL;
-static int variant_table_size = 0;
-static int variant_count = 0;
+static 정수 variant_table_size = 0;
+static 정수 variant_count = 0;
 
 static variant *
 variant_table_grow (void)
 {
   ++variant_count;
-  if (variant_count > variant_table_size)
+  만약 (variant_count > variant_table_size)
     {
-      while (variant_count > variant_table_size)
+      동안 (variant_count > variant_table_size)
         variant_table_size = 2 * variant_table_size + 3;
       variant_table = xnrealloc (variant_table, variant_table_size,
                                  sizeof *variant_table);
     }
-  return &variant_table[variant_count - 1];
+  반환 &variant_table[variant_count - 1];
 }
 
 static void
@@ -283,19 +283,19 @@ variant_table_free (void)
 static char const *
 find_prefix_end (char const *prefix, char const *cp, char const *end)
 {
-  for (; *prefix && cp != end; ++prefix, ++cp)
-    if (*prefix != *cp)
-      return NULL;
+  위해 (; *prefix && cp != end; ++prefix, ++cp)
+    만약 (*prefix != *cp)
+      반환 NULL;
 
-  return *prefix ? NULL : cp;
+  반환 *prefix ? NULL : cp;
 }
 
 static variant *
-variant_add (uniqstr id, location id_loc, int symbol_index,
+variant_add (uniqstr id, location id_loc, 정수 symbol_index,
              char const *cp, char const *cp_end, bool explicit_bracketing)
 {
   char const *prefix_end = find_prefix_end (id, cp, cp_end);
-  if (prefix_end &&
+  만약 (prefix_end &&
       (prefix_end == cp_end ||
        (!explicit_bracketing && is_dot_or_dash (*prefix_end))))
     {
@@ -305,46 +305,46 @@ variant_add (uniqstr id, location id_loc, int symbol_index,
       r->loc = id_loc;
       r->hidden_by = NULL;
       r->err = 0;
-      return r;
+      반환 r;
     }
-  else
-    return NULL;
+  아니면
+    반환 NULL;
 }
 
 static const char *
-get_at_spec(int symbol_index)
+get_at_spec(정수 symbol_index)
 {
   static char at_buf[20];
-  if (symbol_index == 0)
+  만약 (symbol_index == 0)
     strcpy (at_buf, "$$");
-  else
+  아니면
     snprintf (at_buf, sizeof at_buf, "$%u", symbol_index);
-  return at_buf;
+  반환 at_buf;
 }
 
 static void
 show_sub_message (warnings warning,
                   const char* cp, bool explicit_bracketing,
-                  int midrule_rhs_index, char dollar_or_at,
+                  정수 midrule_rhs_index, char dollar_or_at,
                   const variant *var)
 {
   const char *at_spec = get_at_spec (var->symbol_index);
 
-  if (var->err == 0)
+  만약 (var->err == 0)
     subcomplain (&var->loc, warning,
                  _("refers to: %c%s at %s"), dollar_or_at,
                  var->id, at_spec);
-  else
+  아니면
     {
       const char *id;
       location id_loc;
 
-      if (var->hidden_by)
+      만약 (var->hidden_by)
         {
           id = var->hidden_by->id;
           id_loc = var->hidden_by->loc;
         }
-      else
+      아니면
         {
           id = var->id;
           id_loc = var->loc;
@@ -357,25 +357,25 @@ show_sub_message (warnings warning,
       obstack_init (&msg_buf);
 
       obstack_printf (&msg_buf, _("possibly meant: %c"), dollar_or_at);
-      if (contains_dot_or_dash (id))
+      만약 (contains_dot_or_dash (id))
         obstack_printf (&msg_buf, "[%s]", id);
-      else
+      아니면
         obstack_sgrow (&msg_buf, id);
       obstack_sgrow (&msg_buf, tail);
 
-      if (var->err & VARIANT_HIDDEN)
+      만약 (var->err & VARIANT_HIDDEN)
         {
           obstack_printf (&msg_buf, _(", hiding %c"), dollar_or_at);
-          if (contains_dot_or_dash (var->id))
+          만약 (contains_dot_or_dash (var->id))
             obstack_printf (&msg_buf, "[%s]", var->id);
-          else
+          아니면
             obstack_sgrow (&msg_buf, var->id);
           obstack_sgrow (&msg_buf, tail);
         }
 
       obstack_printf (&msg_buf, _(" at %s"), at_spec);
 
-      if (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
+      만약 (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
         obstack_printf (&msg_buf,
                         _(", cannot be accessed from midrule action at $%d"),
                         midrule_rhs_index);
@@ -389,9 +389,9 @@ show_sub_message (warnings warning,
 static void
 show_sub_messages (warnings warning,
                    const char* cp, bool explicit_bracketing,
-                   int midrule_rhs_index, char dollar_or_at)
+                   정수 midrule_rhs_index, char dollar_or_at)
 {
-  for (int i = 0; i < variant_count; ++i)
+  위해 (정수 i = 0; i < variant_count; ++i)
     show_sub_message (warning | silent,
                       cp, explicit_bracketing,
                       midrule_rhs_index, dollar_or_at,
@@ -408,17 +408,17 @@ show_sub_messages (warnings warning,
 
 /* Parse a positional reference in RULE.  */
 static long
-parse_positional_ref (char *cp, int rule_length,
+parse_positional_ref (char *cp, 정수 rule_length,
                       char *text, const location *text_loc)
 {
   long num = strtol (cp, &cp, 10);
-  if (1 - INT_MAX + rule_length <= num && num <= rule_length)
-    return num;
-  else
+  만약 (1 - INT_MAX + rule_length <= num && num <= rule_length)
+    반환 num;
+  아니면
     {
       complain (text_loc, complaint, _("integer out of range: %s"),
                 quote (text));
-      return INVALID_REF;
+      반환 INVALID_REF;
     }
 }
 
@@ -427,70 +427,70 @@ parse_positional_ref (char *cp, int rule_length,
    references, can return negative values for $-n "deep" stack
    accesses. */
 static long
-parse_ref (char *cp, symbol_list *rule, int rule_length,
-           int midrule_rhs_index, char *text, const location *text_loc,
+parse_ref (char *cp, symbol_list *rule, 정수 rule_length,
+           정수 midrule_rhs_index, char *text, const location *text_loc,
            char dollar_or_at)
 {
-  if ('$' == *cp)
-    return LHS_REF;
+  만약 ('$' == *cp)
+    반환 LHS_REF;
 
-  if (c_isdigit (*cp) || (*cp == '-' && c_isdigit (cp[1])))
-    return parse_positional_ref (cp, rule_length, text, text_loc);
+  만약 (c_isdigit (*cp) || (*cp == '-' && c_isdigit (cp[1])))
+    반환 parse_positional_ref (cp, rule_length, text, text_loc);
 
   bool const explicit_bracketing = *cp == '[';
 
-  if (explicit_bracketing)
+  만약 (explicit_bracketing)
     ++cp;
-  else
+  아니면
     ref_tail_fields = strpbrk (cp, ".-");
 
   char const *cp_end = strchr (cp, explicit_bracketing ? ']' : '\0');
 
   /* Add all relevant variants. */
   {
-    int symbol_index;
+    정수 symbol_index;
     symbol_list *l;
     variant_count = 0;
-    for (symbol_index = 0, l = rule; !symbol_list_null (l);
+    위해 (symbol_index = 0, l = rule; !symbol_list_null (l);
          ++symbol_index, l = l->next)
       {
-        if (l->content_type != SYMLIST_SYMBOL)
+        만약 (l->content_type != SYMLIST_SYMBOL)
           continue;
 
         variant *var
           = variant_add (l->content.sym->tag, l->sym_loc,
                          symbol_index, cp, cp_end, explicit_bracketing);
-        if (var && l->named_ref)
+        만약 (var && l->named_ref)
           var->hidden_by = l->named_ref;
 
-        if (l->named_ref)
+        만약 (l->named_ref)
           variant_add (l->named_ref->id, l->named_ref->loc,
                        symbol_index, cp, cp_end, explicit_bracketing);
       }
   }
 
   /* Check errors. */
-  int valid_variants = 0;
-  int valid_variant_index = 0;
-  for (int i = 0; i < variant_count; ++i)
+  정수 valid_variants = 0;
+  정수 valid_variant_index = 0;
+  위해 (정수 i = 0; i < variant_count; ++i)
     {
       variant *var = &variant_table[i];
-      int symbol_index = var->symbol_index;
+      정수 symbol_index = var->symbol_index;
 
       /* Check visibility from midrule actions. */
-      if (midrule_rhs_index != 0
+      만약 (midrule_rhs_index != 0
           && (symbol_index == 0 || midrule_rhs_index < symbol_index))
         var->err |= VARIANT_NOT_VISIBLE_FROM_MIDRULE;
 
       /* Check correct bracketing. */
-      if (!explicit_bracketing && contains_dot_or_dash (var->id))
+      만약 (!explicit_bracketing && contains_dot_or_dash (var->id))
         var->err |= VARIANT_BAD_BRACKETING;
 
       /* Check using of hidden symbols. */
-      if (var->hidden_by)
+      만약 (var->hidden_by)
         var->err |= VARIANT_HIDDEN;
 
-      if (!var->err)
+      만약 (!var->err)
         {
           valid_variant_index = i;
           ++valid_variants;
@@ -501,12 +501,12 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
     {
     case 0:
       {
-        int len = (explicit_bracketing || !ref_tail_fields) ?
+        정수 len = (explicit_bracketing || !ref_tail_fields) ?
           cp_end - cp : ref_tail_fields - cp;
 
         complain (text_loc, complaint,
                   _("invalid reference: %s"), quote (text));
-        if (len == 0)
+        만약 (len == 0)
           {
             location sym_loc = *text_loc;
             sym_loc.start.column += 1;
@@ -516,25 +516,25 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                          "letter, '_', '[', or '$'"),
                          dollar_or_at);
           }
-        else if (midrule_rhs_index)
+        아니면 만약 (midrule_rhs_index)
           subcomplain (&rule->rhs_loc, complaint,
                        _("symbol not found in production before $%d: "
                        "%.*s"),
                        midrule_rhs_index, len, cp);
-        else
+        아니면
           subcomplain (&rule->rhs_loc, complaint,
                        _("symbol not found in production: %.*s"),
                        len, cp);
 
-        if (variant_count > 0)
+        만약 (variant_count > 0)
           show_sub_messages (complaint,
                              cp, explicit_bracketing, midrule_rhs_index,
                              dollar_or_at);
-        return INVALID_REF;
+        반환 INVALID_REF;
       }
     case 1:
       {
-        if (variant_count > 1)
+        만약 (variant_count > 1)
           {
             complain (text_loc, Wother,
                       _("misleading reference: %s"), quote (text));
@@ -543,9 +543,9 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                                dollar_or_at);
           }
         {
-          int symbol_index =
+          정수 symbol_index =
             variant_table[valid_variant_index].symbol_index;
-          return (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
+          반환 (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
         }
       }
     case 2:
@@ -556,7 +556,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
         show_sub_messages (complaint,
                            cp, explicit_bracketing, midrule_rhs_index,
                            dollar_or_at);
-        return INVALID_REF;
+        반환 INVALID_REF;
       }
     }
 }
@@ -564,7 +564,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
 /* Keeps track of the maximum number of semantic values to the left of
    a handle (those referenced by $0, $-1, etc.) are required by the
    semantic actions of this grammar. */
-int max_left_semantic_context = 0;
+정수 max_left_semantic_context = 0;
 
 
 /* If CP points to a typename (i.e., <.*?>), set TYPE_NAME to its
@@ -576,22 +576,22 @@ char *
 fetch_type_name (char *cp, char const **type_name,
                  const location *dollar_loc)
 {
-  if (*cp == '<')
+  만약 (*cp == '<')
     {
       *type_name = ++cp;
       /* Series of non-'>' or "->".  */
-      while (*cp != '>' || cp[-1] == '-')
+      동안 (*cp != '>' || cp[-1] == '-')
         ++cp;
 
       /* The '>' symbol will be later replaced by '\0'. Original
          'text' is needed for error messages. */
       ++cp;
-      if (untyped_var_seen)
+      만약 (untyped_var_seen)
         complain (dollar_loc, complaint,
                   _("explicit type given in untyped grammar"));
       tag_seen = true;
     }
-  return cp;
+  반환 cp;
 }
 
 /*------------------------------------------------------------------.
@@ -606,14 +606,14 @@ static void
 handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
 {
   symbol_list *effective_rule;
-  int effective_rule_length;
+  정수 effective_rule_length;
 
-  if (rule->midrule_parent_rule)
+  만약 (rule->midrule_parent_rule)
     {
       effective_rule = rule->midrule_parent_rule;
       effective_rule_length = rule->midrule_parent_rhs_index - 1;
     }
-  else
+  아니면
     {
       effective_rule = rule;
       effective_rule_length = symbol_list_length (rule->next);
@@ -622,10 +622,10 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
   /* The type name if explicit, otherwise left null. */
   char const *type_name = NULL;
   char *cp = fetch_type_name (text + 1, &type_name, dollar_loc);
-  int n = parse_ref (cp, effective_rule, effective_rule_length,
+  정수 n = parse_ref (cp, effective_rule, effective_rule_length,
                      rule->midrule_parent_rhs_index, text, dollar_loc, '$');
   /* End type_name.  Don't do it earlier: parse_ref depends on TEXT.  */
-  if (type_name)
+  만약 (type_name)
     cp[-1] = '\0';
 
   switch (n)
@@ -636,23 +636,23 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
     case LHS_REF:
       {
         symbol_list *sym = symbol_list_n_get (rule, 0);
-        if (!type_name
+        만약 (!type_name
             && !sym->content.sym->content->type_name)
           {
-            if (union_seen || tag_seen)
+            만약 (union_seen || tag_seen)
               {
-                if (rule->midrule_parent_rule)
+                만약 (rule->midrule_parent_rule)
                   complain (dollar_loc, complaint,
                             _("$$ for the midrule at $%d of %s"
                               " has no declared type"),
                             rule->midrule_parent_rhs_index,
                             quote (effective_rule->content.sym->tag));
-                else
+                아니면
                   complain (dollar_loc, complaint,
                             _("$$ of %s has no declared type"),
                             quote (rule->content.sym->tag));
               }
-            else
+            아니면
               untyped_var_seen = true;
           }
 
@@ -667,35 +667,35 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
       /* Reference to a RHS symbol.  */
     default:
       {
-        if (max_left_semantic_context < 1 - n)
+        만약 (max_left_semantic_context < 1 - n)
           max_left_semantic_context = 1 - n;
         symbol_list *sym = 0 < n ? symbol_list_n_get (effective_rule, n) : NULL;
-        if (!type_name
+        만약 (!type_name
             && (!sym || !sym->content.sym->content->type_name))
           {
-            if (union_seen || tag_seen)
+            만약 (union_seen || tag_seen)
               complain (dollar_loc, complaint,
                         _("$%s of %s has no declared type"), cp,
                         quote (effective_rule->content.sym->tag));
-            else
+            아니면
               untyped_var_seen = true;
           }
 
         obstack_printf (&obstack_for_string,
                         "]b4_rhs_value(%d, %d, ",
                         effective_rule_length, n);
-        if (sym)
+        만약 (sym)
           obstack_printf (&obstack_for_string, "%s%d, ",
                           sym->content.sym->content->class == nterm_sym ? "orig " : "",
                           sym->content.sym->content->number);
-        else
+        아니면
           obstack_sgrow (&obstack_for_string, "[], ");
 
         obstack_quote (&obstack_for_string, type_name);
         obstack_sgrow (&obstack_for_string, ")[");
-        if (0 < n)
+        만약 (0 < n)
           {
-            if (muscle_percent_define_ifdef ("api.value.automove")
+            만약 (muscle_percent_define_ifdef ("api.value.automove")
                 && sym->action_props.is_value_used)
               complain (dollar_loc, Wother,
                         _("multiple occurrences of $%d with api.value.automove"),
@@ -717,14 +717,14 @@ static void
 handle_action_at (symbol_list *rule, char *text, const location *at_loc)
 {
   symbol_list *effective_rule;
-  int effective_rule_length;
+  정수 effective_rule_length;
 
-  if (rule->midrule_parent_rule)
+  만약 (rule->midrule_parent_rule)
     {
       effective_rule = rule->midrule_parent_rule;
       effective_rule_length = rule->midrule_parent_rhs_index - 1;
     }
-  else
+  아니면
     {
       effective_rule = rule;
       effective_rule_length = symbol_list_length (rule->next);
@@ -732,7 +732,7 @@ handle_action_at (symbol_list *rule, char *text, const location *at_loc)
 
   muscle_percent_define_ensure ("locations", *at_loc, true);
 
-  int n = parse_ref (text + 1, effective_rule, effective_rule_length,
+  정수 n = parse_ref (text + 1, effective_rule, effective_rule_length,
                      rule->midrule_parent_rhs_index, text, at_loc, '@');
   switch (n)
     {
@@ -759,13 +759,13 @@ handle_action_at (symbol_list *rule, char *text, const location *at_loc)
    sc_context (SC_RULE_ACTION, SC_SYMBOL_ACTION, INITIAL).  */
 
 static char const *
-translate_action (code_props *self, int sc_context)
+translate_action (code_props *self, 정수 sc_context)
 {
   loc->start = loc->end = self->location.start;
   yy_switch_to_buffer (yy_scan_string (self->code));
   char *res = code_lex (self, sc_context);
   yy_delete_buffer (YY_CURRENT_BUFFER);
-  return res;
+  반환 res;
 }
 
 /*------------------------------------------------------------------------.

@@ -27,7 +27,7 @@ Sbitset__new (Sbitset__Index nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  반환 xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
@@ -38,9 +38,9 @@ Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
   Sbitset end;
   aver (nbits);
   result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
-  for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
+  위해 (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
     *ptr = 0;
-  return result;
+  반환 result;
 }
 
 void
@@ -53,10 +53,10 @@ bool
 Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
 {
   Sbitset last = self + Sbitset__nbytes (nbits) - 1;
-  for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+  위해 (; self < last; ++self)
+    만약 (*self != 0)
+      반환 false;
+  반환 ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
 }
 
 void
@@ -70,9 +70,9 @@ Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
+      만약 (first)
         first = false;
-      else
+      아니면
         fprintf (file, ",");
       fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
     }

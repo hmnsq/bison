@@ -39,14 +39,14 @@
 #undef skel_wrap
 #define skel_wrap() 1
 
-#define YY_DECL static int skel_lex (void)
+#define YY_DECL static 정수 skel_lex (void)
 YY_DECL;
 
-typedef void (*at_directive)(int, char**, char **, int*);
-static void at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun);
-static void at_basename (int argc, char *argv[], char**, int*);
-static void at_complain (int argc, char *argv[], char**, int*);
-static void at_output (int argc, char *argv[], char **name, int *lineno);
+typedef void (*at_directive)(정수, char**, char **, 정수*);
+static void at_init (정수 *argc, char *argv[], at_directive *at_ptr, at_directive fun);
+static void at_basename (정수 argc, char *argv[], char**, 정수*);
+static void at_complain (정수 argc, char *argv[], char**, 정수*);
+static void at_output (정수 argc, char *argv[], char **name, 정수 *lineno);
 static void fail_for_at_directive_too_many_args (char const *at_directive_name);
 static void fail_for_at_directive_too_few_args (char const *at_directive_name);
 static void fail_for_invalid_at (char const *at);
@@ -64,14 +64,14 @@ identifier [A-Za-z_0-9]+
 %%
 
 %{
-  int out_lineno PACIFY_CC (= 0);
+  정수 out_lineno PACIFY_CC (= 0);
   char *out_name = NULL;
 
   /* Currently, only the @complain directive takes multiple arguments, and
      never more than 7, with argv[0] being the directive name and argv[1]
      being the type of complaint to dispatch. */
 #define ARGC_MAX 9
-  int argc = 0;
+  정수 argc = 0;
   char *argv[ARGC_MAX];
   at_directive at_ptr = NULL;
 %}
@@ -110,12 +110,12 @@ identifier [A-Za-z_0-9]+
 .               ECHO;
 
 <INITIAL><<EOF>> {
-  if (out_name)
+  만약 (out_name)
     {
       free (out_name);
       xfclose (yyout);
     }
-  return EOF;
+  반환 EOF;
 }
 
 <SC_AT_DIRECTIVE_ARGS>
@@ -129,15 +129,15 @@ identifier [A-Za-z_0-9]+
   @\n    continue;
 
   @[,)] {
-    if (argc >= ARGC_MAX)
+    만약 (argc >= ARGC_MAX)
       fail_for_at_directive_too_many_args (argv[0]);
 
     argv[argc++] = obstack_finish0 (&obstack_for_string);
 
     /* Like M4, skip whitespace after a comma.  */
-    if (yytext[1] == ',')
+    만약 (yytext[1] == ',')
       BEGIN SC_AT_DIRECTIVE_SKIP_WS;
-    else
+    아니면
       {
         aver (at_ptr);
         at_ptr (argc, argv, &out_name, &out_lineno);
@@ -164,7 +164,7 @@ identifier [A-Za-z_0-9]+
 %%
 
 static void
-at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun)
+at_init (정수 *argc, char *argv[], at_directive *at_ptr, at_directive fun)
 {
   *at_ptr = fun;
   yytext[yyleng-1] = '\0';
@@ -181,7 +181,7 @@ void
 scan_skel (FILE *in)
 {
   static bool initialized = false;
-  if (!initialized)
+  만약 (!initialized)
     {
       initialized = true;
       obstack_init (&obstack_for_string);
@@ -203,34 +203,34 @@ static inline warnings
 flag (const char *arg)
 {
   /* compare with values issued from b4_error */
-  if (STREQ (arg, "complain"))
-    return complaint;
-  else if (STREQ (arg, "deprecated"))
-    return Wdeprecated;
-  else if (STREQ (arg, "fatal"))
-    return fatal;
-  else if (STREQ (arg, "note"))
-    return silent | complaint | no_caret | note;
-  else if (STREQ (arg, "warn"))
-    return Wother;
-  else
+  만약 (STREQ (arg, "complain"))
+    반환 complaint;
+  아니면 만약 (STREQ (arg, "deprecated"))
+    반환 Wdeprecated;
+  아니면 만약 (STREQ (arg, "fatal"))
+    반환 fatal;
+  아니면 만약 (STREQ (arg, "note"))
+    반환 silent | complaint | no_caret | note;
+  아니면 만약 (STREQ (arg, "warn"))
+    반환 Wother;
+  아니면
     abort ();
 }
 
 static void
-at_basename (int argc, char *argv[], char **out_namep, int *out_linenop)
+at_basename (정수 argc, char *argv[], char **out_namep, 정수 *out_linenop)
 {
   (void) out_namep;
   (void) out_linenop;
-  if (2 < argc)
+  만약 (2 < argc)
     fail_for_at_directive_too_many_args (argv[0]);
   fputs (last_component (argv[1]), yyout);
 }
 
 static void
-at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
+at_complain (정수 argc, char *argv[], char **out_namep, 정수 *out_linenop)
 {
-  if (argc < 4)
+  만약 (argc < 4)
     fail_for_at_directive_too_few_args (argv[0]);
 
   (void) out_namep;
@@ -240,7 +240,7 @@ at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
 
   location loc;
   location *locp = NULL;
-  if (argv[2] && argv[2][0])
+  만약 (argv[2] && argv[2][0])
     {
       boundary_set_from_string (&loc.start, argv[2]);
       boundary_set_from_string (&loc.end, argv[3]);
@@ -250,11 +250,11 @@ at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
 }
 
 static void
-at_output (int argc, char *argv[], char **out_namep, int *out_linenop)
+at_output (정수 argc, char *argv[], char **out_namep, 정수 *out_linenop)
 {
-  if (3 < argc)
+  만약 (3 < argc)
     fail_for_at_directive_too_many_args (argv[0]);
-  if (*out_namep)
+  만약 (*out_namep)
     {
       free (*out_namep);
       xfclose (yyout);

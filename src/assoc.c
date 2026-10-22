@@ -30,19 +30,19 @@ assoc_to_string (assoc a)
   switch (a)
     {
     case undef_assoc:
-      return "undefined associativity";
+      반환 "undefined associativity";
 
     case right_assoc:
-      return "%right";
+      반환 "%right";
 
     case left_assoc:
-      return "%left";
+      반환 "%left";
 
     case non_assoc:
-      return "%nonassoc";
+      반환 "%nonassoc";
 
     case precedence_assoc:
-      return "%precedence";
+      반환 "%precedence";
     }
   abort ();
 }

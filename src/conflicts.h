@@ -37,14 +37,14 @@ void conflicts_update_state_numbers (state_number old_to_new[],
                                      state_number nstates_old);
 
 void conflicts_print (void);
-int conflicts_total_count (void);
+정수 conflicts_total_count (void);
 void conflicts_output (FILE *out);
 void conflicts_free (void);
 
 bool has_conflicts (const state *s);
 
 /* Were there conflicts? */
-extern int expected_sr_conflicts;
-extern int expected_rr_conflicts;
+extern 정수 expected_sr_conflicts;
+extern 정수 expected_rr_conflicts;
 
 #endif /* !CONFLICTS_H_ */

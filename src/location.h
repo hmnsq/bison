@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  정수 line;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,17 +46,17 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  정수 column;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  정수 byte;
 
 } boundary;
 
 /* Set the position of \a p. */
 static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+boundary_set (boundary *p, const char *f, 정수 l, 정수 c, 정수 b)
 {
   p->file = f;
   p->line = l;
@@ -66,27 +66,27 @@ boundary_set (boundary *p, const char *f, int l, int c, int b)
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+static inline 정수
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  정수 res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
+  만약 (!res)
     res = a.line - b.line;
-  if (!res)
+  만약 (!res)
     res = a.column - b.column;
-  return res;
+  반환 res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
 static inline bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
+  반환 (a.column == b.column
           && a.line == b.line
           && UNIQSTR_EQ (a.file, b.file));
 }
@@ -115,7 +115,7 @@ void location_compute (location *loc,
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+정수 location_print (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
 void caret_init (void);
@@ -134,13 +134,13 @@ void location_caret_suggestion (location loc, const char *s, FILE *out);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+static inline 정수
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
+  정수 res = boundary_cmp (a.start, b.start);
+  만약 (!res)
     res = boundary_cmp (a.end, b.end);
-  return res;
+  반환 res;
 }
 
 /* Whether this is the empty location.  */
