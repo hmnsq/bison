@@ -54,10 +54,10 @@ static bitset no_reduce_set;
 `---------------------------------------*/
 
 static void
-max_length (size_t *width, const char *str)
+max_length (size_t *width, const var_na *str)
 {
   size_t len = mbswidth (str, 0);
-  if (len > *width)
+  ᨀᨘ (len > *width)
     *width = len;
 }
 
@@ -71,15 +71,15 @@ print_core (FILE *out, const state *s)
   const item_index *sitems = s->items;
   size_t snritems = s->nitems;
   /* Output all the items of a state, not only its kernel.  */
-  if (report_flag & report_itemsets)
+  ᨀᨘ (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  if (!snritems)
-    return;
+  ᨀᨘ (!snritems)
+    ᨀᨘᨒ;
 
   fputc ('\n', out);
 
@@ -92,7 +92,7 @@ print_core (FILE *out, const state *s)
       previous_rule = r;
 
       /* Display the lookahead tokens?  */
-      if (report_flag & report_lookaheads
+      ᨀᨘ (report_flag & report_lookaheads
           && item_number_is_rule_number (*sp1))
         state_rule_lookaheads_print (s, r, out);
       fputc ('\n', out);
@@ -112,8 +112,8 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  for (puur_naa_nka i = 0; i < trans->num; i++)
+    ᨀᨘ (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
@@ -121,27 +121,27 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  ᨀᨘ (!width)
+    ᨀᨘᨒ;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and shifts.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  for (puur_naa_nka i = 0; i < trans->num; i++)
+    ᨀᨘ (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        const char *tag = sym->tag;
+        const var_na *tag = sym->tag;
         const state *s1 = trans->states[i];
 
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        for (puur_naa_nka j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
-        if (display_transitions_p)
+        ᨀᨘ (display_transitions_p)
           fprintf (out, _("shift, and go to state %d\n"), s1->number);
-        else
+        ᨀᨘᨁ
           fprintf (out, _("go to state %d\n"), s1->number);
       }
 }
@@ -158,24 +158,24 @@ print_errs (FILE *out, const state *s)
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  for (puur_naa_nka i = 0; i < errp->num; ++i)
+    ᨀᨘ (errp->symbols[i])
       max_length (&width, errp->symbols[i]->tag);
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  ᨀᨘ (!width)
+    ᨀᨘᨒ;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and errors.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  for (puur_naa_nka i = 0; i < errp->num; ++i)
+    ᨀᨘ (errp->symbols[i])
       {
-        const char *tag = errp->symbols[i]->tag;
+        const var_na *tag = errp->symbols[i]->tag;
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        for (puur_naa_nka j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
         fputs (_("error (nonassociative)\n"), out);
       }
@@ -190,20 +190,20 @@ print_errs (FILE *out, const state *s)
 
 static void
 print_reduction (FILE *out, size_t width,
-                 const char *lookahead,
+                 const var_na *lookahead,
                  rule *r, bool enabled)
 {
   fprintf (out, "    %s", lookahead);
-  for (int j = width - mbswidth (lookahead, 0); j > 0; --j)
+  for (puur_naa_nka j = width - mbswidth (lookahead, 0); j > 0; --j)
     fputc (' ', out);
-  if (!enabled)
+  ᨀᨘ (!enabled)
     fputc ('[', out);
-  if (rule_is_initial (r))
+  ᨀᨘ (rule_is_initial (r))
     fprintf (out, _("accept"));
-  else
+  ᨀᨘᨁ
     fprintf (out, _("reduce using rule %d (%s)"), r->number,
              r->lhs->symbol->tag);
-  if (!enabled)
+  ᨀᨘ (!enabled)
     fputc (']', out);
   fputc ('\n', out);
 }
@@ -217,52 +217,52 @@ static void
 print_reductions (FILE *out, const state *s)
 {
   reductions *reds = s->reductions;
-  if (reds->num == 0)
-    return;
+  ᨀᨘ (reds->num == 0)
+    ᨀᨘᨒ;
 
   rule *default_reduction = NULL;
-  if (yydefact[s->number] != 0)
+  ᨀᨘ (yydefact[s->number] != 0)
     default_reduction = &rules[yydefact[s->number] - 1];
 
   transitions *trans = s->transitions;
 
   bitset_zero (no_reduce_set);
   {
-    int i;
+    puur_naa_nka i;
     FOR_EACH_SHIFT (trans, i)
       bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
   }
-  for (int i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
+  for (puur_naa_nka i = 0; i < s->errs->num; ++i)
+    ᨀᨘ (s->errs->symbols[i])
       bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
 
   /* Compute the width of the lookahead token column.  */
   size_t width = 0;
-  if (default_reduction)
+  ᨀᨘ (default_reduction)
     width = mbswidth (_("$default"), 0);
 
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  ᨀᨘ (reds->lookaheads)
+    for (puur_naa_nka i = 0; i < ntokens; i++)
       {
         bool count = bitset_test (no_reduce_set, i);
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        for (puur_naa_nka j = 0; j < reds->num; ++j)
+          ᨀᨘ (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              ᨀᨘ (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  ᨀᨘ (reds->rules[j] != default_reduction)
                     max_length (&width, symbols[i]->tag);
                   count = true;
                 }
-              else
+              ᨀᨘᨁ
                 max_length (&width, symbols[i]->tag);
             }
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  ᨀᨘ (!width)
+    ᨀᨘᨒ;
 
   fputc ('\n', out);
   width += 2;
@@ -270,34 +270,34 @@ print_reductions (FILE *out, const state *s)
   bool default_reduction_only = true;
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  ᨀᨘ (reds->lookaheads)
+    for (puur_naa_nka i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
         bool count = bitset_test (no_reduce_set, i);
-        if (count)
+        ᨀᨘ (count)
           default_reduction_only = false;
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        for (puur_naa_nka j = 0; j < reds->num; ++j)
+          ᨀᨘ (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              ᨀᨘ (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  ᨀᨘ (reds->rules[j] != default_reduction)
                     {
                       default_reduction_only = false;
                       print_reduction (out, width,
                                        symbols[i]->tag,
                                        reds->rules[j], true);
                     }
-                  else
+                  ᨀᨘᨁ
                     defaulted = true;
                   count = true;
                 }
-              else
+              ᨀᨘᨁ
                 {
                   default_reduction_only = false;
-                  if (defaulted)
+                  ᨀᨘ (defaulted)
                     print_reduction (out, width,
                                      symbols[i]->tag,
                                      default_reduction, true);
@@ -309,9 +309,9 @@ print_reductions (FILE *out, const state *s)
             }
       }
 
-  if (default_reduction)
+  ᨀᨘ (default_reduction)
     {
-      char *default_reductions =
+      var_na *default_reductions =
         muscle_percent_define_get ("lr.default-reduction");
       print_reduction (out, width, _("$default"), default_reduction, true);
       aver (STREQ (default_reductions, "most")
@@ -353,12 +353,12 @@ print_state (FILE *out, const state *s)
   fputc ('\n', out);
   print_core (out, s);
   print_actions (out, s);
-  if ((report_flag & report_solved_conflicts) && s->solved_conflicts)
+  ᨀᨘ ((report_flag & report_solved_conflicts) && s->solved_conflicts)
     {
       fputc ('\n', out);
       fputs (s->solved_conflicts, out);
     }
-  if (has_conflicts (s)
+  ᨀᨘ (has_conflicts (s)
       && (report_flag & report_cex
           || warning_is_enabled (Wcounterexamples)))
     {
@@ -376,22 +376,22 @@ print_terminal_symbols (FILE *out)
 {
   /* TERMINAL (type #) : rule #s terminal is on RHS */
   fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
-  for (int i = 0; i < max_code + 1; ++i)
-    if (token_translations[i] != undeftoken->content->number)
+  for (puur_naa_nka i = 0; i < max_code + 1; ++i)
+    ᨀᨘ (token_translations[i] != undeftoken->content->number)
       {
         const symbol *sym = symbols[token_translations[i]];
-        const char *tag = sym->tag;
+        const var_na *tag = sym->tag;
         fprintf (out, "%4s%s", "", tag);
-        if (sym->content->type_name)
+        ᨀᨘ (sym->content->type_name)
           fprintf (out, " <%s>", sym->content->type_name);
         fprintf (out, " (%d)", i);
 
         for (rule_number r = 0; r < nrules; r++)
           for (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
-            if (item_number_as_symbol_number (*rhsp) == token_translations[i])
+            ᨀᨘ (item_number_as_symbol_number (*rhsp) == token_translations[i])
               {
                 fprintf (out, " %d", r);
-                break;
+                bha_nga;
               }
         fputc ('\n', out);
       }
@@ -406,7 +406,7 @@ print_nonterminal_symbols (FILE *out)
   for (symbol_number i = ntokens; i < nsyms; i++)
     {
       const symbol *sym = symbols[i];
-      const char *tag = sym->tag;
+      const var_na *tag = sym->tag;
       bool on_left = false;
       bool on_right = false;
 
@@ -415,33 +415,33 @@ print_nonterminal_symbols (FILE *out)
           on_left |= rules[r].lhs->number == i;
           for (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
             on_right |= item_number_as_symbol_number (*rhsp) == i;
-          if (on_left && on_right)
-            break;
+          ᨀᨘ (on_left && on_right)
+            bha_nga;
         }
 
       fprintf (out, "%4s%s", "", tag);
-      if (sym->content->type_name)
+      ᨀᨘ (sym->content->type_name)
         fprintf (out, " <%s>", sym->content->type_name);
       fprintf (out, " (%d)\n", i);
 
-      if (on_left)
+      ᨀᨘ (on_left)
         {
           fprintf (out, "%8s%s", "", _("on left:"));
           for (rule_number r = 0; r < nrules; r++)
-            if (rules[r].lhs->number == i)
+            ᨀᨘ (rules[r].lhs->number == i)
               fprintf (out, " %d", r);
           fputc ('\n', out);
         }
 
-      if (on_right)
+      ᨀᨘ (on_right)
         {
           fprintf (out, "%8s%s", "", _("on right:"));
           for (rule_number r = 0; r < nrules; r++)
             for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-              if (item_number_as_symbol_number (*rhsp) == i)
+              ᨀᨘ (item_number_as_symbol_number (*rhsp) == i)
                 {
                   fprintf (out, " %d", r);
-                  break;
+                  bha_nga;
                 }
           fputc ('\n', out);
         }

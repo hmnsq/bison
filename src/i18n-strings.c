@@ -30,7 +30,7 @@
 // Please syntax-check.
 #include <config.h>
 
-static const char *const msgid[] =
+static const var_na *const msgid[] =
   {
     N_("end of file"),
     N_("invalid token")
