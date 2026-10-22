@@ -36,7 +36,7 @@
 `----------*/
 
 /** Symbol classes.  */
-typedef enum
+ಪ್ರಕಾರನಿರ್ದೇಶ ಗಣನಾ
 {
   /** Undefined.  */
   unknown_sym,
@@ -47,16 +47,16 @@ typedef enum
   token_sym,
   /** Nonterminal. */
   nterm_sym
-} symbol_class;
+} ಚಿಹ್ನೆ_class;
 
 
 /** Internal token numbers. */
-typedef int symbol_number;
-# define SYMBOL_NUMBER_MAXIMUM INT_MAX
+ಪ್ರಕಾರನಿರ್ದೇಶ ಪೂರ್ಣಾಙ್ಕ ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ;
+# define ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_MAXIMUM INT_MAX
 
 
-typedef struct symbol symbol;
-typedef struct sym_content sym_content;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ ಚಿಹ್ನೆ ಚಿಹ್ನೆ;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ sym_content sym_content;
 
 /* Declaration status of a symbol.
 
@@ -68,7 +68,7 @@ typedef struct sym_content sym_content;
    When status are checked at the end, "declared" symbols are fine,
    "used" symbols trigger warnings, otherwise it's an error.  */
 
-typedef enum
+ಪ್ರಕಾರನಿರ್ದೇಶ ಗಣನಾ
   {
     /** Used in the input file for an unknown reason (error).  */
     undeclared,
@@ -80,16 +80,16 @@ typedef enum
     declared,
   } declaration_status;
 
-enum code_props_type
+ಗಣನಾ code_props_type
   {
     destructor = 0,
     printer = 1,
   };
-typedef enum code_props_type code_props_type;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಗಣನಾ code_props_type code_props_type;
 
-enum { CODE_PROPS_SIZE = 2 };
+ಗಣನಾ { CODE_PROPS_SIZE = 2 };
 
-struct symbol
+ಸಂರಚನಾ ಚಿಹ್ನೆ
 {
   /** The key, name of the symbol.  */
   uniqstr tag;
@@ -109,7 +109,7 @@ struct symbol
   bool location_of_lhs;
 
   /** Points to the other in the symbol-string pair for an alias. */
-  symbol *alias;
+  ಚಿಹ್ನೆ *alias;
 
   /** Whether this symbol is the alias of another or not. */
   bool is_alias;
@@ -118,11 +118,11 @@ struct symbol
   sym_content *content;
 };
 
-struct sym_content
+ಸಂರಚನಾ sym_content
 {
   /** The main symbol that denotes this content (it contains the
       possible alias). */
-  symbol *symbol;
+  ಚಿಹ್ನೆ *ಚಿಹ್ನೆ;
 
   /** Its \c \%type.
 
@@ -144,28 +144,28 @@ struct sym_content
       \c symbol_destructor_printer_get will compute the correct one. */
   code_props props[CODE_PROPS_SIZE];
 
-  symbol_number number;
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ ಸಂಖ್ಯೆ;
   location prec_loc;
-  int prec;
+  ಪೂರ್ಣಾಙ್ಕ prec;
   assoc assoc;
 
   /** Token code, possibly specified by the user (%token FOO 42).  */
-  int code;
+  ಪೂರ್ಣಾಙ್ಕ code;
 
-  symbol_class class;
+  ಚಿಹ್ನೆ_class class;
   declaration_status status;
 };
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_from_uniqstr (const uniqstr key, location loc);
+ಚಿಹ್ನೆ *ಚಿಹ್ನೆ_from_uniqstr (ಧ್ರುವ uniqstr ಕೀಲಿ, location loc);
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_get (const char *key, location loc);
+ಚಿಹ್ನೆ *ಚಿಹ್ನೆ_get (ಧ್ರುವ ವರ್ಣ *ಕೀಲಿ, location loc);
 
 /** Generate a dummy nonterminal.
 
    Its name cannot conflict with the user's names.  */
-symbol *dummy_symbol_get (location loc);
+ಚಿಹ್ನೆ *dummy_ಚಿಹ್ನೆ_get (location loc);
 
 
 /*--------------------.
@@ -173,62 +173,62 @@ symbol *dummy_symbol_get (location loc);
 `--------------------*/
 
 /** Print a symbol (for debugging). */
-void symbol_print (symbol const *s, FILE *f);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_print (ಚಿಹ್ನೆ ಧ್ರುವ *s, FILE *f);
 
 /** Is this a dummy nonterminal?  */
-bool symbol_is_dummy (symbol const *sym);
+bool ಚಿಹ್ನೆ_is_dummy (ಚಿಹ್ನೆ ಧ್ರುವ *sym);
 
 /** The name of the code_props type: "\%destructor" or "\%printer".  */
-char const *code_props_type_string (code_props_type kind);
+ವರ್ಣ ಧ್ರುವ *code_props_type_string (code_props_type kind);
 
 /** The name of the symbol that can be used as an identifier.
  ** Consider the alias if needed.
  ** Return 0 if there is none (e.g., the symbol is only defined as
  ** a string). */
-uniqstr symbol_id_get (symbol const *sym);
+uniqstr ಚಿಹ್ನೆ_id_get (ಚಿಹ್ನೆ ಧ್ರುವ *sym);
 
 /**
  * Make \c str the literal string alias of \c sym.  Copy token number,
  * symbol number, and type from \c sym to \c str.
  */
-void symbol_make_alias (symbol *sym, symbol *str, location loc);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_make_alias (ಚಿಹ್ನೆ *sym, ಚಿಹ್ನೆ *str, location loc);
 
 /**
  * This symbol is used as the lhs of a rule.  Record this location
  * as definition point, if not already done.
  */
-void symbol_location_as_lhs_set (symbol *sym, location loc);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_location_as_lhs_set (ಚಿಹ್ನೆ *sym, location loc);
 
 /** Set the \c type_name associated with \c sym.
 
     Do nothing if passed 0 as \c type_name.  */
-void symbol_type_set (symbol *sym, uniqstr type_name, location loc);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_type_set (ಚಿಹ್ನೆ *sym, uniqstr type_name, location loc);
 
 /** Set the \c \%destructor or \c \%printer associated with \c sym.  */
-void symbol_code_props_set (symbol *sym, code_props_type kind,
-                            code_props const *destructor);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_code_props_set (ಚಿಹ್ನೆ *sym, code_props_type kind,
+                            code_props ಧ್ರುವ *destructor);
 
 /** Get the computed \c \%destructor or \c %printer for \c sym, which was
     initialized with \c code_props_none_init if there's no \c \%destructor or
     \c %printer.  */
-code_props *symbol_code_props_get (symbol *sym, code_props_type kind);
+code_props *ಚಿಹ್ನೆ_code_props_get (ಚಿಹ್ನೆ *sym, code_props_type kind);
 
 /** Set the \c precedence associated with \c sym.
 
     Ensure that \a symbol is a terminal.
     Do nothing if invoked with \c undef_assoc as \c assoc.  */
-void symbol_precedence_set (symbol *sym, int prec, assoc a, location loc);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_precedence_set (ಚಿಹ್ನೆ *sym, ಪೂರ್ಣಾಙ್ಕ prec, assoc a, location loc);
 
 /** Set the \c class associated with \c sym.
 
     Whether \c declaring means whether this class definition comes
     from %nterm or %token (but not %type, prec/assoc, etc.).  A symbol
     can have "declaring" set only at most once.  */
-void symbol_class_set (symbol *sym, symbol_class class, location loc,
+ಶೂನ್ಯ ಚಿಹ್ನೆ_class_set (ಚಿಹ್ನೆ *sym, ಚಿಹ್ನೆ_class class, location loc,
                        bool declaring);
 
 /** Set the token \c code of \c sym, specified by the user at \c loc.  */
-void symbol_code_set (symbol *sym, int code, location loc);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_code_set (ಚಿಹ್ನೆ *sym, ಪೂರ್ಣಾಙ್ಕ code, location loc);
 
 
 
@@ -237,18 +237,18 @@ void symbol_code_set (symbol *sym, int code, location loc);
 `------------------*/
 
 /** The error token. */
-extern symbol *errtoken;
+ಬಾಹ್ಯ ಚಿಹ್ನೆ *errtoken;
 /** The token for unknown tokens.  */
-extern symbol *undeftoken;
+ಬಾಹ್ಯ ಚಿಹ್ನೆ *undeftoken;
 /** The end of input token.  */
-extern symbol *eoftoken;
+ಬಾಹ್ಯ ಚಿಹ್ನೆ *eoftoken;
 /** The genuine start symbol.
 
    $accept: start-symbol $end */
-extern symbol *acceptsymbol;
+ಬಾಹ್ಯ ಚಿಹ್ನೆ *acceptsymbol;
 
 /** Whether a symbol declared with a type tag.  */
-extern bool tag_seen;
+ಬಾಹ್ಯ bool tag_seen;
 
 
 /*-------------------.
@@ -258,11 +258,11 @@ extern bool tag_seen;
 /* The symbol relations are represented by a directed graph. */
 
 /* The id of a node */
-typedef int graphid;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಪೂರ್ಣಾಙ್ಕ graphid;
 
-typedef struct symgraphlink symgraphlink;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ symgraphlink symgraphlink;
 
-struct symgraphlink
+ಸಂರಚನಾ symgraphlink
 {
   /** The second \c symbol or group of a precedence relation.
    * See \c symgraph. */
@@ -274,9 +274,9 @@ struct symgraphlink
 /* Symbol precedence graph, to store the used precedence relations between
  * symbols. */
 
-typedef struct symgraph symgraph;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ symgraph symgraph;
 
-struct symgraph
+ಸಂರಚನಾ symgraph
 {
   /** Identifier for the node: equal to the number of the symbol. */
   graphid id;
@@ -290,18 +290,18 @@ struct symgraph
 
 /** Register a new precedence relation as used. */
 
-void register_precedence (graphid first, graphid snd);
+ಶೂನ್ಯ register_precedence (graphid first, graphid snd);
 
 /** Print a warning for each symbol whose precedence and/or associativity
  * is useless. */
 
-void print_precedence_warnings (void);
+ಶೂನ್ಯ print_precedence_warnings (ಶೂನ್ಯ);
 
 /*----------------------.
 | Symbol associativity  |
 `----------------------*/
 
-void register_assoc (graphid i, graphid j);
+ಶೂನ್ಯ register_assoc (graphid i, graphid j);
 
 /*-----------------.
 | Semantic types.  |
@@ -311,7 +311,7 @@ void register_assoc (graphid i, graphid j);
 
    Access the fields of this struct only through the interface functions in
    this file.  \sa symbol::destructor  */
-typedef struct {
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ {
   /** The key, name of the semantic type.  */
   uniqstr tag;
 
@@ -329,16 +329,16 @@ typedef struct {
 } semantic_type;
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_from_uniqstr (const uniqstr key,
-                                           const location *loc);
+semantic_type *semantic_type_from_uniqstr (ಧ್ರುವ uniqstr ಕೀಲಿ,
+                                           ಧ್ರುವ location *loc);
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_get (const char *key, const location *loc);
+semantic_type *semantic_type_get (ಧ್ರುವ ವರ್ಣ *ಕೀಲಿ, ಧ್ರುವ location *loc);
 
 /** Set the \c destructor or \c printer associated with \c type.  */
-void semantic_type_code_props_set (semantic_type *type,
+ಶೂನ್ಯ semantic_type_code_props_set (semantic_type *type,
                                    code_props_type kind,
-                                   code_props const *code);
+                                   code_props ಧ್ರುವ *code);
 
 /*----------------------------------.
 | Symbol and semantic type tables.  |
@@ -346,20 +346,20 @@ void semantic_type_code_props_set (semantic_type *type,
 
 /** Create the symbol and semantic type tables, and the built-in
     symbols.  */
-void symbols_new (void);
+ಶೂನ್ಯ symbols_new (ಶೂನ್ಯ);
 
 /** Free all the memory allocated for symbols and semantic types.  */
-void symbols_free (void);
+ಶೂನ್ಯ symbols_free (ಶೂನ್ಯ);
 
 /** Check that all the symbols are defined.
 
     Report any undefined symbols and consider them nonterminals.  */
-void symbols_check_defined (void);
+ಶೂನ್ಯ symbols_check_defined (ಶೂನ್ಯ);
 
 /** Sanity checks and #token_translations construction.
 
    Perform various sanity checks, assign symbol numbers, and set up
    #token_translations.  */
-void symbols_pack (void);
+ಶೂನ್ಯ symbols_pack (ಶೂನ್ಯ);
 
 #endif /* !SYMTAB_H_ */

@@ -1,3 +1,3 @@
-#include <config.h>
-#include "system.h"
-#include "src/scan-gram.c"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
+#ಅನ್ತರ್ಭಾವ "src/scan-gram.c"

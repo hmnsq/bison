@@ -18,22 +18,22 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include <bitset.h>
-#include <bitsetv.h>
+#ಅನ್ತರ್ಭಾವ <bitset.h>
+#ಅನ್ತರ್ಭಾವ <bitsetv.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "symtab.h"
-#include "tables.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
+#ಅನ್ತರ್ಭಾವ "conflicts.h"
+#ಅನ್ತರ್ಭಾವ "files.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "gram.h"
+#ಅನ್ತರ್ಭಾವ "lalr.h"
+#ಅನ್ತರ್ಭಾವ "muscle-tab.h"
+#ಅನ್ತರ್ಭಾವ "reader.h"
+#ಅನ್ತರ್ಭಾವ "symtab.h"
+#ಅನ್ತರ್ಭಾವ "tables.h"
 
 /* Several tables are indexed both by state and nonterminal numbers.
    We call such an index a 'vector'; i.e., a vector is either a state
@@ -41,23 +41,23 @@
 
    Of course vector_number_t ought to be wide enough to contain
    state_number and symbol_number.  */
-typedef int vector_number;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಪೂರ್ಣಾಙ್ಕ vector_ಸಂಖ್ಯೆ;
 
-#if 0 /* Not currently used.  */
-static inline vector_number
-state_number_to_vector_number (state_number s)
+#ಯದಿ 0 /* Not currently used.  */
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ vector_ಸಂಖ್ಯೆ
+state_ಸಂಖ್ಯೆ_to_vector_ಸಂಖ್ಯೆ (state_ಸಂಖ್ಯೆ s)
 {
-  return s;
+  ಪ್ರತ್ಯಾಗಮ s;
 }
 #endif
 
-static inline vector_number
-symbol_number_to_vector_number (symbol_number sym)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ vector_ಸಂಖ್ಯೆ
+ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_to_vector_ಸಂಖ್ಯೆ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym)
 {
-  return state_number_as_int (nstates) + sym - ntokens;
+  ಪ್ರತ್ಯಾಗಮ state_ಸಂಖ್ಯೆ_as_int (nstates) + sym - ntokens;
 }
 
-int nvectors;
+ಪೂರ್ಣಾಙ್ಕ nvectors;
 
 
 /* FROMS and TOS are indexed by vector_number.
@@ -82,11 +82,11 @@ int nvectors;
 #define BASE_MAXIMUM INT_MAX
 #define BASE_MINIMUM INT_MIN
 
-static base_number **froms;
-static base_number **tos;
-static int **conflict_tos;
-static size_t *tally;
-static base_number *width;
+ಸ್ಥಿರ base_ಸಂಖ್ಯೆ **froms;
+ಸ್ಥಿರ base_ಸಂಖ್ಯೆ **tos;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ **conflict_tos;
+ಸ್ಥಿರ size_t *tally;
+ಸ್ಥಿರ base_ಸಂಖ್ಯೆ *width;
 
 
 /* For a given state, N = ACTROW[SYMBOL]:
@@ -95,65 +95,65 @@ static base_number *width;
    If N = MIN, stands for 'raise a syntax error'.
    If N > 0, stands for 'shift SYMBOL and go to n'.
    If N < 0, stands for 'reduce -N'.  */
-typedef int action_number;
-#define ACTION_NUMBER_MINIMUM INT_MIN
+ಪ್ರಕಾರನಿರ್ದೇಶ ಪೂರ್ಣಾಙ್ಕ action_ಸಂಖ್ಯೆ;
+#define ACTION_ಸಂಖ್ಯೆ_MINIMUM INT_MIN
 
-static action_number *actrow;
+ಸ್ಥಿರ action_ಸಂಖ್ಯೆ *actrow;
 
 /* FROMS and TOS are reordered to be compressed.  ORDER[VECTOR] is the
    new vector number of VECTOR.  We skip 'empty' vectors (i.e.,
    TALLY[VECTOR] = 0), and call these 'entries'.  */
-static vector_number *order;
-static int nentries;
+ಸ್ಥಿರ vector_ಸಂಖ್ಯೆ *order;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ nentries;
 
-base_number *base = NULL;
+base_ಸಂಖ್ಯೆ *base = ರಿಕ್ತ;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-base_number base_ninf = 0;
+base_ಸಂಖ್ಯೆ base_ninf = 0;
 
 /* Bitset representing an integer set in the range
    POS_SET_OFFSET..(POS_SET_OFFSET + SIZE).  POS_SET_OFFSET is
    nonpositive. */
-static bitset pos_set = NULL;
+ಸ್ಥಿರ bitset pos_set = ರಿಕ್ತ;
 /* The integer denoted by bitno 0 in pos_set.  */
-static int pos_set_base = 0;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ pos_set_base = 0;
 
-static int *conflrow;
-int *conflict_table;
-int *conflict_list;
-int conflict_list_cnt;
-static int conflict_list_free;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ *conflrow;
+ಪೂರ್ಣಾಙ್ಕ *conflict_table;
+ಪೂರ್ಣಾಙ್ಕ *conflict_list;
+ಪೂರ್ಣಾಙ್ಕ conflict_list_cnt;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ conflict_list_free;
 
 /* TABLE_SIZE is the allocated size of both TABLE and CHECK.  We start
    with more or less the original hard-coded value (which was
    SHRT_MAX).  */
-static int table_size = 32768;
-base_number *table;
-base_number *check;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ table_size = 32768;
+base_ಸಂಖ್ಯೆ *table;
+base_ಸಂಖ್ಯೆ *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  First defaults to ACTION_NUMBER_MINIMUM,
    but in order to keep small tables, renumbered as TABLE_ERROR, which
    is the smallest (non error) value minus 1.  */
-base_number table_ninf = 0;
-static int lowzero;
-int high;
+base_ಸಂಖ್ಯೆ table_ninf = 0;
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ lowzero;
+ಪೂರ್ಣಾಙ್ಕ ಮೇಲಿನ;
 
-state_number *yydefgoto;
-rule_number *yydefact;
+state_ಸಂಖ್ಯೆ *yydefgoto;
+rule_ಸಂಖ್ಯೆ *yydefact;
 
 
 /*----------.
 | pos_set.  |
 `----------*/
 
-#if 0
-static void
-pos_set_dump (void)
+#ಯದಿ 0
+ಸ್ಥಿರ ಶೂನ್ಯ
+pos_set_dump (ಶೂನ್ಯ)
 {
   fprintf (stderr, "pos_set (%ld, %d) =", bitset_size (pos_set), pos_set_base);
   bitset_iterator biter;
-  int i;
+  ಪೂರ್ಣಾಙ್ಕ i;
   BITSET_FOR_EACH (biter, pos_set, i, 0)
     fprintf (stderr, " %d", i + pos_set_base);
   putc ('\n', stderr);
@@ -174,41 +174,41 @@ pos_set_dump (void)
    something like doubling the size.
   */
 
-static void
-pos_set_set (int pos)
+ಸ್ಥಿರ ಶೂನ್ಯ
+pos_set_set (ಪೂರ್ಣಾಙ್ಕ pos)
 {
-  int bitno = pos - pos_set_base;
-  if (bitno < 0)
+  ಪೂರ್ಣಾಙ್ಕ bitno = pos - pos_set_base;
+  ಯದಿ (bitno < 0)
     {
       // Need more room on the left.
       // DELTA is positive.  Run 'pos_set >> delta'.
-      const int delta = pos_set_base - pos;
-      const int old_size = bitset_size (pos_set);
-      const int new_size = old_size + delta;
+      ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ delta = pos_set_base - pos;
+      ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ old_size = bitset_size (pos_set);
+      ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ new_size = old_size + delta;
       bitset_resize (pos_set, new_size);
       // Right-shift all the bits by DELTA.  Be sure to reset the new
       // bits on the left.
       //
       // FIXME: add bitset_assign, and bitset_shift?
-      for (int i = new_size - 1; 0 <= i ; --i)
-        if (delta <= i && bitset_test (pos_set, i - delta))
+      ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = new_size - 1; 0 <= i ; --i)
+        ಯದಿ (delta <= i && bitset_test (pos_set, i - delta))
           bitset_set (pos_set, i);
-        else
+        ಅನ್ಯಥಾ
           bitset_reset (pos_set, i);
       pos_set_base = pos;
       bitno = 0;
     }
-  else if (bitset_size (pos_set) <= bitno)
+  ಅನ್ಯಥಾ ಯದಿ (bitset_size (pos_set) <= bitno)
     // Need more room on the right.
     bitset_resize (pos_set, bitno + 1);
   bitset_set (pos_set, bitno);
 }
 
-static bool
-pos_set_test (int pos)
+ಸ್ಥಿರ bool
+pos_set_test (ಪೂರ್ಣಾಙ್ಕ pos)
 {
-  const int bitno = pos - pos_set_base;
-  return bitset_test (pos_set, bitno);
+  ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ bitno = pos - pos_set_base;
+  ಪ್ರತ್ಯಾಗಮ bitset_test (pos_set, bitno);
 }
 
 
@@ -218,29 +218,29 @@ pos_set_test (int pos)
 | size is at least DESIRED + 1.                                      |
 `-------------------------------------------------------------------*/
 
-static void
-table_grow (int desired)
+ಸ್ಥಿರ ಶೂನ್ಯ
+table_grow (ಪೂರ್ಣಾಙ್ಕ desired)
 {
-  int old_size = table_size;
+  ಪೂರ್ಣಾಙ್ಕ old_size = table_size;
 
-  while (table_size <= desired)
+  ಯಾವತ್ (table_size <= desired)
     table_size *= 2;
 
-  if (trace_flag & trace_resource)
+  ಯದಿ (trace_flag & trace_resource)
     fprintf (stderr, "growing tables from %d to %d\n",
              old_size, table_size);
 
-  table = xnrealloc (table, table_size, sizeof *table);
+  table = xnrealloc (table, table_size, ಪರಿಮಾಣ *table);
   memset (table + old_size, 0,
-          sizeof *table * (table_size - old_size));
+          ಪರಿಮಾಣ *table * (table_size - old_size));
 
   conflict_table = xnrealloc (conflict_table, table_size,
-                              sizeof *conflict_table);
+                              ಪರಿಮಾಣ *conflict_table);
   memset (conflict_table + old_size, 0,
-          sizeof *conflict_table * (table_size - old_size));
+          ಪರಿಮಾಣ *conflict_table * (table_size - old_size));
 
-  check = xnrealloc (check, table_size, sizeof *check);
-  for (int i = old_size; i < table_size; ++i)
+  check = xnrealloc (check, table_size, ಪರಿಮಾಣ *check);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = old_size; i < table_size; ++i)
     check[i] = -1;
 }
 
@@ -257,27 +257,27 @@ table_grow (int desired)
 | back into CONFLROW.                                                |
 `-------------------------------------------------------------------*/
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 conflict_row (state *s)
 {
-  if (!nondeterministic_parser)
-    return;
+  ಯದಿ (!nondeterministic_parser)
+    ಪ್ರತ್ಯಾಗಮ;
 
-  const reductions *reds = s->reductions;
-  for (state_number j = 0; j < ntokens; j += 1)
-    if (conflrow[j])
+  ಧ್ರುವ reductions *reds = s->reductions;
+  ಪ್ರತಿ (state_ಸಂಖ್ಯೆ j = 0; j < ntokens; j += 1)
+    ಯದಿ (conflrow[j])
       {
         conflrow[j] = conflict_list_cnt;
 
         /* Find all reductions for token J, and record all that do not
            match ACTROW[J].  */
-        for (int i = 0; i < reds->num; i += 1)
-          if (bitset_test (reds->lookaheads[i], j)
+        ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < reds->ಅಂಕೆ; i += 1)
+          ಯದಿ (bitset_test (reds->lookaheads[i], j)
               && (actrow[j]
-                  != rule_number_as_item_number (reds->rules[i]->number)))
+                  != rule_ಸಂಖ್ಯೆ_as_item_ಸಂಖ್ಯೆ (reds->rules[i]->ಸಂಖ್ಯೆ)))
             {
               aver (0 < conflict_list_free);
-              conflict_list[conflict_list_cnt] = reds->rules[i]->number + 1;
+              conflict_list[conflict_list_cnt] = reds->rules[i]->ಸಂಖ್ಯೆ + 1;
               conflict_list_cnt += 1;
               conflict_list_free -= 1;
             }
@@ -311,34 +311,34 @@ conflict_row (state *s)
 | that has any such conflicts.                                      |
 `------------------------------------------------------------------*/
 
-static rule *
+ಸ್ಥಿರ rule *
 action_row (state *s)
 {
-  for (state_number i = 0; i < ntokens; i++)
+  ಪ್ರತಿ (state_ಸಂಖ್ಯೆ i = 0; i < ntokens; i++)
     actrow[i] = conflrow[i] = 0;
 
   reductions *reds = s->reductions;
   bool conflicted = false;
-  if (reds->lookaheads)
+  ಯದಿ (reds->lookaheads)
     /* loop over all the rules available here which require
        lookahead (in reverse order to give precedence to the first
        rule) */
-    for (int i = reds->num - 1; 0 <= i; --i)
+    ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = reds->ಅಂಕೆ - 1; 0 <= i; --i)
       /* and find each token which the rule finds acceptable
          to come next */
       {
         bitset_iterator biter;
-        int j;
+        ಪೂರ್ಣಾಙ್ಕ j;
         BITSET_FOR_EACH (biter, reds->lookaheads[i], j, 0)
           {
             /* and record this rule as the rule to use if that
                token follows.  */
-            if (actrow[j] != 0)
+            ಯದಿ (actrow[j] != 0)
               {
                 conflicted = true;
                 conflrow[j] = 1;
               }
-            actrow[j] = rule_number_as_item_number (reds->rules[i]->number);
+            actrow[j] = rule_ಸಂಖ್ಯೆ_as_item_ಸಂಖ್ಯೆ (reds->rules[i]->ಸಂಖ್ಯೆ);
           }
       }
 
@@ -349,22 +349,22 @@ action_row (state *s)
   /* Set to nonzero to inhibit having any default reduction.  */
   bool nodefault = false;
   {
-    int i;
+    ಪೂರ್ಣಾಙ್ಕ i;
     FOR_EACH_SHIFT (trans, i)
       {
-        symbol_number sym = TRANSITION_SYMBOL (trans, i);
+        ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym = TRANSITION_ಚಿಹ್ನೆ (trans, i);
         state *shift_state = trans->states[i];
 
-        if (actrow[sym] != 0)
+        ಯದಿ (actrow[sym] != 0)
           {
             conflicted = true;
             conflrow[sym] = 1;
           }
-        actrow[sym] = state_number_as_int (shift_state->number);
+        actrow[sym] = state_ಸಂಖ್ಯೆ_as_int (shift_state->ಸಂಖ್ಯೆ);
 
         /* Do not use any default reduction if there is a shift for
            error */
-        if (sym == errtoken->content->number)
+        ಯದಿ (sym == errtoken->content->ಸಂಖ್ಯೆ)
           nodefault = true;
       }
   }
@@ -373,44 +373,44 @@ action_row (state *s)
      %nonassoc).  For them, record ACTION_NUMBER_MINIMUM as the
      action.  */
   errs *errp = s->errs;
-  for (int i = 0; i < errp->num; i++)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < errp->ಅಂಕೆ; i++)
     {
-      symbol *sym = errp->symbols[i];
-      actrow[sym->content->number] = ACTION_NUMBER_MINIMUM;
+      ಚಿಹ್ನೆ *sym = errp->symbols[i];
+      actrow[sym->content->ಸಂಖ್ಯೆ] = ACTION_ಸಂಖ್ಯೆ_MINIMUM;
     }
 
   /* Turn off default reductions where requested by the user.  See
      state_lookaheads_count in lalr.c to understand when states are
      labeled as consistent.  */
   {
-    char *default_reductions =
+    ವರ್ಣ *default_reductions =
       muscle_percent_define_get ("lr.default-reduction");
-    if (STRNEQ (default_reductions, "most") && !s->consistent)
+    ಯದಿ (STRNEQ (default_reductions, "most") && !s->consistent)
       nodefault = true;
-    free (default_reductions);
+    ಮುಕ್ತ (default_reductions);
   }
 
   /* Now find the most common reduction and make it the default action
      for this state.  */
-  rule *default_reduction = NULL;
-  if (reds->num >= 1 && !nodefault)
+  rule *default_reduction = ರಿಕ್ತ;
+  ಯದಿ (reds->ಅಂಕೆ >= 1 && !nodefault)
     {
-      if (s->consistent)
+      ಯದಿ (s->consistent)
         default_reduction = reds->rules[0];
-      else
+      ಅನ್ಯಥಾ
         {
-          int max = 0;
-          for (int i = 0; i < reds->num; i++)
+          ಪೂರ್ಣಾಙ್ಕ max = 0;
+          ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < reds->ಅಂಕೆ; i++)
             {
-              int count = 0;
+              ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
               rule *r = reds->rules[i];
-              for (symbol_number j = 0; j < ntokens; j++)
-                if (actrow[j] == rule_number_as_item_number (r->number))
-                  count++;
+              ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ j = 0; j < ntokens; j++)
+                ಯದಿ (actrow[j] == rule_ಸಂಖ್ಯೆ_as_item_ಸಂಖ್ಯೆ (r->ಸಂಖ್ಯೆ))
+                  ಎಣಿಕೆ++;
 
-              if (count > max)
+              ಯದಿ (ಎಣಿಕೆ > max)
                 {
-                  max = count;
+                  max = ಎಣಿಕೆ;
                   default_reduction = r;
                 }
             }
@@ -421,10 +421,10 @@ action_row (state *s)
              actions that match the default are replaced with zero,
              which means "use the default". */
 
-          if (0 < max)
-            for (symbol_number j = 0; j < ntokens; j++)
-              if (actrow[j]
-                  == rule_number_as_item_number (default_reduction->number)
+          ಯದಿ (0 < max)
+            ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ j = 0; j < ntokens; j++)
+              ಯದಿ (actrow[j]
+                  == rule_ಸಂಖ್ಯೆ_as_item_ಸಂಖ್ಯೆ (default_reduction->ಸಂಖ್ಯೆ)
                   && ! (nondeterministic_parser && conflrow[j]))
                 actrow[j] = 0;
         }
@@ -433,15 +433,15 @@ action_row (state *s)
   /* If have no default reduction, the default is an error.
      So replace any action which says "error" with "use default".  */
 
-  if (!default_reduction)
-    for (symbol_number i = 0; i < ntokens; i++)
-      if (actrow[i] == ACTION_NUMBER_MINIMUM)
+  ಯದಿ (!default_reduction)
+    ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = 0; i < ntokens; i++)
+      ಯದಿ (actrow[i] == ACTION_ಸಂಖ್ಯೆ_MINIMUM)
         actrow[i] = 0;
 
-  if (conflicted)
+  ಯದಿ (conflicted)
     conflict_row (s);
 
-  return default_reduction;
+  ಪ್ರತ್ಯಾಗಮ default_reduction;
 }
 
 
@@ -449,34 +449,34 @@ action_row (state *s)
 | Set FROMS, TOS, TALLY and WIDTH for S.  |
 `----------------------------------------*/
 
-static void
-save_row (state_number s)
+ಸ್ಥಿರ ಶೂನ್ಯ
+save_row (state_ಸಂಖ್ಯೆ s)
 {
   /* Number of non default actions in S.  */
-  size_t count = 0;
-  for (symbol_number i = 0; i < ntokens; i++)
-    if (actrow[i] != 0)
-      count++;
+  size_t ಎಣಿಕೆ = 0;
+  ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = 0; i < ntokens; i++)
+    ಯದಿ (actrow[i] != 0)
+      ಎಣಿಕೆ++;
 
-  if (count)
+  ಯದಿ (ಎಣಿಕೆ)
     {
       /* Allocate non defaulted actions.  */
-      base_number *sp1 = froms[s] = xnmalloc (count, sizeof *sp1);
-      base_number *sp2 = tos[s] = xnmalloc (count, sizeof *sp2);
-      int *sp3 = conflict_tos[s] =
-        nondeterministic_parser ? xnmalloc (count, sizeof *sp3) : NULL;
+      base_ಸಂಖ್ಯೆ *sp1 = froms[s] = xnmalloc (ಎಣಿಕೆ, ಪರಿಮಾಣ *sp1);
+      base_ಸಂಖ್ಯೆ *sp2 = tos[s] = xnmalloc (ಎಣಿಕೆ, ಪರಿಮಾಣ *sp2);
+      ಪೂರ್ಣಾಙ್ಕ *sp3 = conflict_tos[s] =
+        nondeterministic_parser ? xnmalloc (ಎಣಿಕೆ, ಪರಿಮಾಣ *sp3) : ರಿಕ್ತ;
 
       /* Store non defaulted actions.  */
-      for (symbol_number i = 0; i < ntokens; i++)
-        if (actrow[i] != 0)
+      ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = 0; i < ntokens; i++)
+        ಯದಿ (actrow[i] != 0)
           {
             *sp1++ = i;
             *sp2++ = actrow[i];
-            if (nondeterministic_parser)
+            ಯದಿ (nondeterministic_parser)
               *sp3++ = conflrow[i];
           }
 
-      tally[s] = count;
+      tally[s] = ಎಣಿಕೆ;
       width[s] = sp1[-1] - froms[s][0] + 1;
     }
 }
@@ -490,45 +490,45 @@ save_row (state_number s)
 | putting into YYTABLE later.                                       |
 `------------------------------------------------------------------*/
 
-static void
-token_actions (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+token_actions (ಶೂನ್ಯ)
 {
-  int nconflict = nondeterministic_parser ? conflicts_total_count () : 0;
+  ಪೂರ್ಣಾಙ್ಕ nconflict = nondeterministic_parser ? conflicts_total_ಎಣಿಕೆ () : 0;
 
-  yydefact = xnmalloc (nstates, sizeof *yydefact);
+  yydefact = xnmalloc (nstates, ಪರಿಮಾಣ *yydefact);
 
-  actrow = xnmalloc (ntokens, sizeof *actrow);
-  conflrow = xnmalloc (ntokens, sizeof *conflrow);
+  actrow = xnmalloc (ntokens, ಪರಿಮಾಣ *actrow);
+  conflrow = xnmalloc (ntokens, ಪರಿಮಾಣ *conflrow);
 
-  conflict_list = xnmalloc (1 + 2 * nconflict, sizeof *conflict_list);
+  conflict_list = xnmalloc (1 + 2 * nconflict, ಪರಿಮಾಣ *conflict_list);
   conflict_list_free = 2 * nconflict;
   conflict_list_cnt = 1;
 
   /* Find the rules which are reduced.  */
-  if (!nondeterministic_parser)
-    for (rule_number r = 0; r < nrules; ++r)
+  ಯದಿ (!nondeterministic_parser)
+    ಪ್ರತಿ (rule_ಸಂಖ್ಯೆ r = 0; r < nrules; ++r)
       rules[r].useful = false;
 
-  for (state_number i = 0; i < nstates; ++i)
+  ಪ್ರತಿ (state_ಸಂಖ್ಯೆ i = 0; i < nstates; ++i)
     {
       rule *default_reduction = action_row (states[i]);
-      yydefact[i] = default_reduction ? default_reduction->number + 1 : 0;
+      yydefact[i] = default_reduction ? default_reduction->ಸಂಖ್ಯೆ + 1 : 0;
       save_row (i);
 
       /* Now that the parser was computed, we can find which rules are
          really reduced, and which are not because of SR or RR
          conflicts.  */
-      if (!nondeterministic_parser)
+      ಯದಿ (!nondeterministic_parser)
         {
-          for (symbol_number j = 0; j < ntokens; ++j)
-            if (actrow[j] < 0 && actrow[j] != ACTION_NUMBER_MINIMUM)
-              rules[item_number_as_rule_number (actrow[j])].useful = true;
-          if (yydefact[i])
+          ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ j = 0; j < ntokens; ++j)
+            ಯದಿ (actrow[j] < 0 && actrow[j] != ACTION_ಸಂಖ್ಯೆ_MINIMUM)
+              rules[item_ಸಂಖ್ಯೆ_as_rule_ಸಂಖ್ಯೆ (actrow[j])].useful = true;
+          ಯದಿ (yydefact[i])
             rules[yydefact[i] - 1].useful = true;
         }
     }
-  free (actrow);
-  free (conflrow);
+  ಮುಕ್ತ (actrow);
+  ಮುಕ್ತ (conflrow);
 }
 
 
@@ -541,34 +541,34 @@ token_actions (void)
 | default GOTO destination on SYM.                                  |
 `------------------------------------------------------------------*/
 
-static void
-save_column (symbol_number sym, state_number default_state)
+ಸ್ಥಿರ ಶೂನ್ಯ
+save_column (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym, state_ಸಂಖ್ಯೆ default_state)
 {
-  const goto_number begin = goto_map[sym - ntokens];
-  const goto_number end = goto_map[sym - ntokens + 1];
+  ಧ್ರುವ goto_ಸಂಖ್ಯೆ begin = goto_map[sym - ntokens];
+  ಧ್ರುವ goto_ಸಂಖ್ಯೆ end = goto_map[sym - ntokens + 1];
 
   /* Number of non default GOTO.  */
-  size_t count = 0;
-  for (goto_number i = begin; i < end; i++)
-    if (to_state[i] != default_state)
-      count++;
+  size_t ಎಣಿಕೆ = 0;
+  ಪ್ರತಿ (goto_ಸಂಖ್ಯೆ i = begin; i < end; i++)
+    ಯದಿ (to_state[i] != default_state)
+      ಎಣಿಕೆ++;
 
-  if (count)
+  ಯದಿ (ಎಣಿಕೆ)
     {
       /* Allocate room for non defaulted gotos.  */
-      vector_number symno = symbol_number_to_vector_number (sym);
-      base_number *sp1 = froms[symno] = xnmalloc (count, sizeof *sp1);
-      base_number *sp2 = tos[symno] = xnmalloc (count, sizeof *sp2);
+      vector_ಸಂಖ್ಯೆ symno = ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_to_vector_ಸಂಖ್ಯೆ (sym);
+      base_ಸಂಖ್ಯೆ *sp1 = froms[symno] = xnmalloc (ಎಣಿಕೆ, ಪರಿಮಾಣ *sp1);
+      base_ಸಂಖ್ಯೆ *sp2 = tos[symno] = xnmalloc (ಎಣಿಕೆ, ಪರಿಮಾಣ *sp2);
 
       /* Store the state numbers of the non defaulted gotos.  */
-      for (goto_number i = begin; i < end; i++)
-        if (to_state[i] != default_state)
+      ಪ್ರತಿ (goto_ಸಂಖ್ಯೆ i = begin; i < end; i++)
+        ಯದಿ (to_state[i] != default_state)
           {
             *sp1++ = from_state[i];
             *sp2++ = to_state[i];
           }
 
-      tally[symno] = count;
+      tally[symno] = ಎಣಿಕೆ;
       width[symno] = sp1[-1] - froms[symno][0] + 1;
     }
 }
@@ -579,11 +579,11 @@ save_column (symbol_number sym, state_number default_state)
 | GOTO destination on SYM (an nterm).                             |
 `----------------------------------------------------------------*/
 
-static state_number
-default_goto (symbol_number sym, size_t state_count[])
+ಸ್ಥಿರ state_ಸಂಖ್ಯೆ
+default_goto (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym, size_t state_ಎಣಿಕೆ[])
 {
-  const goto_number begin = goto_map[sym - ntokens];
-  const goto_number end = goto_map[sym - ntokens + 1];
+  ಧ್ರುವ goto_ಸಂಖ್ಯೆ begin = goto_map[sym - ntokens];
+  ಧ್ರುವ goto_ಸಂಖ್ಯೆ end = goto_map[sym - ntokens + 1];
 
   /* In the case this symbol is never reduced to ($accept), use state
      0.  We used to use -1, but as a result the yydefgoto table must
@@ -591,25 +591,25 @@ default_goto (symbol_number sym, size_t state_count[])
      a value from yydefgoto into a state number (nonnegative), and (2)
      wastes bits which might result in using a int16 where a uint8
      suffices. */
-  state_number res = 0;
+  state_ಸಂಖ್ಯೆ res = 0;
 
-  if (begin != end)
+  ಯದಿ (begin != end)
     {
-      for (state_number s = 0; s < nstates; s++)
-        state_count[s] = 0;
+      ಪ್ರತಿ (state_ಸಂಖ್ಯೆ s = 0; s < nstates; s++)
+        state_ಎಣಿಕೆ[s] = 0;
 
-      for (goto_number i = begin; i < end; i++)
-        state_count[to_state[i]]++;
+      ಪ್ರತಿ (goto_ಸಂಖ್ಯೆ i = begin; i < end; i++)
+        state_ಎಣಿಕೆ[to_state[i]]++;
 
       size_t max = 0;
-      for (state_number s = 0; s < nstates; s++)
-        if (max < state_count[s])
+      ಪ್ರತಿ (state_ಸಂಖ್ಯೆ s = 0; s < nstates; s++)
+        ಯದಿ (max < state_ಎಣಿಕೆ[s])
           {
-            max = state_count[s];
+            max = state_ಎಣಿಕೆ[s];
             res = s;
           }
     }
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 
@@ -622,21 +622,21 @@ default_goto (symbol_number sym, size_t state_count[])
 | putting into YYTABLE later.                                        |
 `-------------------------------------------------------------------*/
 
-static void
-goto_actions (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+goto_actions (ಶೂನ್ಯ)
 {
-  size_t *state_count = xnmalloc (nstates, sizeof *state_count);
-  yydefgoto = xnmalloc (nnterms, sizeof *yydefgoto);
+  size_t *state_ಎಣಿಕೆ = xnmalloc (nstates, ಪರಿಮಾಣ *state_ಎಣಿಕೆ);
+  yydefgoto = xnmalloc (nnterms, ಪರಿಮಾಣ *yydefgoto);
 
   /* For a given nterm I, STATE_COUNT[S] is the number of times there
      is a GOTO to S on I.  */
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms; ++i)
     {
-      state_number default_state = default_goto (i, state_count);
+      state_ಸಂಖ್ಯೆ default_state = default_goto (i, state_ಎಣಿಕೆ);
       save_column (i, default_state);
       yydefgoto[i - ntokens] = default_state;
     }
-  free (state_count);
+  ಮುಕ್ತ (state_ಎಣಿಕೆ);
 }
 
 
@@ -645,25 +645,25 @@ goto_actions (void)
 | pack the actions and gotos information into yytable.              |
 `------------------------------------------------------------------*/
 
-static void
-sort_actions (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+sort_actions (ಶೂನ್ಯ)
 {
   nentries = 0;
 
-  for (int i = 0; i < nvectors; i++)
-    if (0 < tally[i])
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nvectors; i++)
+    ಯದಿ (0 < tally[i])
       {
-        const size_t t = tally[i];
-        const int w = width[i];
-        int j = nentries - 1;
+        ಧ್ರುವ size_t t = tally[i];
+        ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ w = width[i];
+        ಪೂರ್ಣಾಙ್ಕ j = nentries - 1;
 
-        while (0 <= j && width[order[j]] < w)
+        ಯಾವತ್ (0 <= j && width[order[j]] < w)
           j--;
 
-        while (0 <= j && width[order[j]] == w && tally[order[j]] < t)
+        ಯಾವತ್ (0 <= j && width[order[j]] == w && tally[order[j]] < t)
           j--;
 
-        for (int k = nentries - 1; k > j; k--)
+        ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ k = nentries - 1; k > j; k--)
           order[k + 1] = order[k];
 
         order[j + 1] = i;
@@ -678,96 +678,96 @@ sort_actions (void)
 
    In any other case, return -1.  */
 
-static state_number
-matching_state (vector_number vector)
+ಸ್ಥಿರ state_ಸಂಖ್ಯೆ
+matching_state (vector_ಸಂಖ್ಯೆ vector)
 {
-  vector_number i = order[vector];
+  vector_ಸಂಖ್ಯೆ i = order[vector];
   /* If VECTOR is a nterm, return -1.  */
-  if (i < nstates)
+  ಯದಿ (i < nstates)
     {
       size_t t = tally[i];
-      int w = width[i];
+      ಪೂರ್ಣಾಙ್ಕ w = width[i];
 
       /* If VECTOR has GLR conflicts, return -1 */
-      if (conflict_tos[i] != NULL)
-        for (int j = 0; j < t; j += 1)
-          if (conflict_tos[i][j] != 0)
-            return -1;
+      ಯದಿ (conflict_tos[i] != ರಿಕ್ತ)
+        ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ j = 0; j < t; j += 1)
+          ಯದಿ (conflict_tos[i][j] != 0)
+            ಪ್ರತ್ಯಾಗಮ -1;
 
-      for (int prev = vector - 1; 0 <= prev; prev--)
+      ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ prev = vector - 1; 0 <= prev; prev--)
         {
-          vector_number j = order[prev];
+          vector_ಸಂಖ್ಯೆ j = order[prev];
           /* Given how ORDER was computed, if the WIDTH or TALLY is
              different, there cannot be a matching state.  */
-          if (width[j] != w || tally[j] != t)
-            return -1;
-          else
+          ಯದಿ (width[j] != w || tally[j] != t)
+            ಪ್ರತ್ಯಾಗಮ -1;
+          ಅನ್ಯಥಾ
             {
               bool match = true;
-              for (int k = 0; match && k < t; k++)
-                if (tos[j][k] != tos[i][k]
+              ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ k = 0; match && k < t; k++)
+                ಯದಿ (tos[j][k] != tos[i][k]
                     || froms[j][k] != froms[i][k]
-                    || (conflict_tos[j] != NULL && conflict_tos[j][k] != 0))
+                    || (conflict_tos[j] != ರಿಕ್ತ && conflict_tos[j][k] != 0))
                   match = false;
-              if (match)
-                return j;
+              ಯದಿ (match)
+                ಪ್ರತ್ಯಾಗಮ j;
             }
         }
     }
-  return -1;
+  ಪ್ರತ್ಯಾಗಮ -1;
 }
 
 
-static base_number
-pack_vector (vector_number vector)
+ಸ್ಥಿರ base_ಸಂಖ್ಯೆ
+pack_vector (vector_ಸಂಖ್ಯೆ vector)
 {
-  vector_number i = order[vector];
+  vector_ಸಂಖ್ಯೆ i = order[vector];
   size_t t = tally[i];
-  base_number *from = froms[i];
-  base_number *to = tos[i];
-  int *conflict_to = conflict_tos[i];
+  base_ಸಂಖ್ಯೆ *from = froms[i];
+  base_ಸಂಖ್ಯೆ *to = tos[i];
+  ಪೂರ್ಣಾಙ್ಕ *conflict_to = conflict_tos[i];
 
   aver (t != 0);
 
-  for (base_number res = lowzero - from[0]; ; res++)
+  ಪ್ರತಿ (base_ಸಂಖ್ಯೆ res = lowzero - from[0]; ; res++)
     {
       bool ok = true;
       aver (res < table_size);
       {
-        for (int k = 0; ok && k < t; k++)
+        ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ k = 0; ok && k < t; k++)
           {
-            int loc = res + state_number_as_int (from[k]);
-            if (table_size <= loc)
+            ಪೂರ್ಣಾಙ್ಕ loc = res + state_ಸಂಖ್ಯೆ_as_int (from[k]);
+            ಯದಿ (table_size <= loc)
               table_grow (loc);
 
-            if (table[loc] != 0)
+            ಯದಿ (table[loc] != 0)
               ok = false;
           }
 
-        if (ok && pos_set_test (res))
+        ಯದಿ (ok && pos_set_test (res))
           ok = false;
       }
 
-      if (ok)
+      ಯದಿ (ok)
         {
-          int loc PACIFY_CC (= -1);
-          for (int k = 0; k < t; k++)
+          ಪೂರ್ಣಾಙ್ಕ loc PACIFY_CC (= -1);
+          ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ k = 0; k < t; k++)
             {
-              loc = res + state_number_as_int (from[k]);
+              loc = res + state_ಸಂಖ್ಯೆ_as_int (from[k]);
               table[loc] = to[k];
-              if (nondeterministic_parser && conflict_to != NULL)
+              ಯದಿ (nondeterministic_parser && conflict_to != ರಿಕ್ತ)
                 conflict_table[loc] = conflict_to[k];
               check[loc] = from[k];
             }
 
-          while (table[lowzero] != 0)
+          ಯಾವತ್ (table[lowzero] != 0)
             lowzero++;
 
-          if (high < loc)
-            high = loc;
+          ಯದಿ (ಮೇಲಿನ < loc)
+            ಮೇಲಿನ = loc;
 
           aver (BASE_MINIMUM <= res && res <= BASE_MAXIMUM);
-          return res;
+          ಪ್ರತ್ಯಾಗಮ res;
         }
     }
 }
@@ -781,52 +781,52 @@ pack_vector (vector_number vector)
 | parsers.                                                     |
 `-------------------------------------------------------------*/
 
-static base_number
-table_ninf_remap (base_number tab[], int size, base_number ninf)
+ಸ್ಥಿರ base_ಸಂಖ್ಯೆ
+table_ninf_remap (base_ಸಂಖ್ಯೆ tab[], ಪೂರ್ಣಾಙ್ಕ size, base_ಸಂಖ್ಯೆ ninf)
 {
-  base_number res = 0;
+  base_ಸಂಖ್ಯೆ res = 0;
 
-  for (int i = 0; i < size; i++)
-    if (tab[i] < res && tab[i] != ninf)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < size; i++)
+    ಯದಿ (tab[i] < res && tab[i] != ninf)
       res = tab[i];
 
   --res;
 
-  for (int i = 0; i < size; i++)
-    if (tab[i] == ninf)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < size; i++)
+    ಯದಿ (tab[i] == ninf)
       tab[i] = res;
 
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
-static void
-pack_table (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+pack_table (ಶೂನ್ಯ)
 {
-  base = xnmalloc (nvectors, sizeof *base);
+  base = xnmalloc (nvectors, ಪರಿಮಾಣ *base);
   pos_set = bitset_create (table_size + nstates, BITSET_FRUGAL);
   pos_set_base = -nstates;
-  table = xcalloc (table_size, sizeof *table);
-  conflict_table = xcalloc (table_size, sizeof *conflict_table);
-  check = xnmalloc (table_size, sizeof *check);
+  table = xcalloc (table_size, ಪರಿಮಾಣ *table);
+  conflict_table = xcalloc (table_size, ಪರಿಮಾಣ *conflict_table);
+  check = xnmalloc (table_size, ಪರಿಮಾಣ *check);
 
   lowzero = 0;
-  high = 0;
+  ಮೇಲಿನ = 0;
 
-  for (int i = 0; i < nvectors; i++)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nvectors; i++)
     base[i] = BASE_MINIMUM;
 
-  for (int i = 0; i < table_size; i++)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < table_size; i++)
     check[i] = -1;
 
-  for (int i = 0; i < nentries; i++)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nentries; i++)
     {
-      state_number s = matching_state (i);
-      base_number place;
+      state_ಸಂಖ್ಯೆ s = matching_state (i);
+      base_ಸಂಖ್ಯೆ place;
 
-      if (s < 0)
+      ಯದಿ (s < 0)
         /* A new set of state actions, or a nonterminal.  */
         place = pack_vector (i);
-      else
+      ಅನ್ಯಥಾ
         /* Action of I were already coded for S.  */
         place = base[s];
 
@@ -836,7 +836,7 @@ pack_table (void)
 
   /* Use the greatest possible negative infinites.  */
   base_ninf = table_ninf_remap (base, nvectors, BASE_MINIMUM);
-  table_ninf = table_ninf_remap (table, high + 1, ACTION_NUMBER_MINIMUM);
+  table_ninf = table_ninf_remap (table, ಮೇಲಿನ + 1, ACTION_ಸಂಖ್ಯೆ_MINIMUM);
 
   bitset_free (pos_set);
 }
@@ -848,48 +848,48 @@ pack_table (void)
 | and yycheck.                                                     |
 `-----------------------------------------------------------------*/
 
-void
-tables_generate (void)
+ಶೂನ್ಯ
+tables_generate (ಶೂನ್ಯ)
 {
   /* This is a poor way to make sure the sizes are properly
      correlated.  In particular the signedness is not taken into
      account.  But it's not useless.  */
-  verify (sizeof nstates <= sizeof nvectors);
-  verify (sizeof nnterms <= sizeof nvectors);
+  verify (ಪರಿಮಾಣ nstates <= ಪರಿಮಾಣ nvectors);
+  verify (ಪರಿಮಾಣ nnterms <= ಪರಿಮಾಣ nvectors);
 
-  nvectors = state_number_as_int (nstates) + nnterms;
+  nvectors = state_ಸಂಖ್ಯೆ_as_int (nstates) + nnterms;
 
-  froms = xcalloc (nvectors, sizeof *froms);
-  tos = xcalloc (nvectors, sizeof *tos);
-  conflict_tos = xcalloc (nvectors, sizeof *conflict_tos);
-  tally = xcalloc (nvectors, sizeof *tally);
-  width = xnmalloc (nvectors, sizeof *width);
+  froms = xcalloc (nvectors, ಪರಿಮಾಣ *froms);
+  tos = xcalloc (nvectors, ಪರಿಮಾಣ *tos);
+  conflict_tos = xcalloc (nvectors, ಪರಿಮಾಣ *conflict_tos);
+  tally = xcalloc (nvectors, ಪರಿಮಾಣ *tally);
+  width = xnmalloc (nvectors, ಪರಿಮಾಣ *width);
 
   token_actions ();
 
   goto_actions ();
-  free (goto_map);
-  free (from_state);
-  free (to_state);
+  ಮುಕ್ತ (goto_map);
+  ಮುಕ್ತ (from_state);
+  ಮುಕ್ತ (to_state);
 
-  order = xcalloc (nvectors, sizeof *order);
+  order = xcalloc (nvectors, ಪರಿಮಾಣ *order);
   sort_actions ();
   pack_table ();
-  free (order);
+  ಮುಕ್ತ (order);
 
-  free (tally);
-  free (width);
+  ಮುಕ್ತ (tally);
+  ಮುಕ್ತ (width);
 
-  for (int i = 0; i < nvectors; i++)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nvectors; i++)
     {
-      free (froms[i]);
-      free (tos[i]);
-      free (conflict_tos[i]);
+      ಮುಕ್ತ (froms[i]);
+      ಮುಕ್ತ (tos[i]);
+      ಮುಕ್ತ (conflict_tos[i]);
     }
 
-  free (froms);
-  free (tos);
-  free (conflict_tos);
+  ಮುಕ್ತ (froms);
+  ಮುಕ್ತ (tos);
+  ಮುಕ್ತ (conflict_tos);
 }
 
 
@@ -897,14 +897,14 @@ tables_generate (void)
 | Free the parser tables.  |
 `-------------------------*/
 
-void
-tables_free (void)
+ಶೂನ್ಯ
+tables_free (ಶೂನ್ಯ)
 {
-  free (base);
-  free (conflict_table);
-  free (conflict_list);
-  free (table);
-  free (check);
-  free (yydefgoto);
-  free (yydefact);
+  ಮುಕ್ತ (base);
+  ಮುಕ್ತ (conflict_table);
+  ಮುಕ್ತ (conflict_list);
+  ಮುಕ್ತ (table);
+  ಮುಕ್ತ (check);
+  ಮುಕ್ತ (yydefgoto);
+  ಮುಕ್ತ (yydefact);
 }

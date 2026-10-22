@@ -27,18 +27,18 @@
    If GRAPH is a relation, then GRAPH[Node] is a list of adjacent
    nodes, ended with END_NODE.  */
 
-# define END_NODE ((relation_node) -1)
+# define END_ಗಂಟು ((relation_ಗಂಟು) -1)
 
-typedef size_t relation_node;
-typedef relation_node *relation_nodes;
-typedef relation_nodes *relation;
+ಪ್ರಕಾರನಿರ್ದೇಶ size_t relation_ಗಂಟು;
+ಪ್ರಕಾರನಿರ್ದೇಶ relation_ಗಂಟು *relation_nodes;
+ಪ್ರಕಾರನಿರ್ದೇಶ relation_nodes *relation;
 
-typedef void (relation_node_print) (relation_node node, FILE* out);
+ಪ್ರಕಾರನಿರ್ದೇಶ ಶೂನ್ಯ (relation_ಗಂಟು_print) (relation_ಗಂಟು ಗಂಟು, FILE* out);
 
 /* Report a relation R that has SIZE vertices.  */
-void relation_print (const char *title,
+ಶೂನ್ಯ relation_print (ಧ್ರುವ ವರ್ಣ *title,
                      relation r, size_t size,
-                     relation_node_print print, FILE *out);
+                     relation_ಗಂಟು_print print, FILE *out);
 
 /* Compute the transitive closure of the FUNCTION on the relation R
    with SIZE vertices.
@@ -47,9 +47,9 @@ void relation_print (const char *title,
    (unioned) with FUNCTION[NODE2].
 
    FUNCTION is in-out, R is read only.  */
-void relation_digraph (const relation r, relation_node size, bitsetv function);
+ಶೂನ್ಯ relation_digraph (ಧ್ರುವ relation r, relation_ಗಂಟು size, bitsetv function);
 
 /* Destructively transpose *R_ARG, of size SIZE.  */
-void relation_transpose (relation *R_arg, relation_node size);
+ಶೂನ್ಯ relation_transpose (relation *R_arg, relation_ಗಂಟು size);
 
 #endif /* ! RELATION_H_ */

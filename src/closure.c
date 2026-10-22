@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include <bitset.h>
-#include <bitsetv.h>
+#ಅನ್ತರ್ಭಾವ <bitset.h>
+#ಅನ್ತರ್ಭಾವ <bitsetv.h>
 
-#include "closure.h"
-#include "derives.h"
-#include "getargs.h"
-#include "gram.h"
-#include "reader.h"
-#include "symtab.h"
+#ಅನ್ತರ್ಭಾವ "closure.h"
+#ಅನ್ತರ್ಭಾವ "derives.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "gram.h"
+#ಅನ್ತರ್ಭಾವ "reader.h"
+#ಅನ್ತರ್ಭಾವ "symtab.h"
 
 /* NITEMSET is the size of the array ITEMSET.  */
 item_index *itemset;
@@ -38,11 +38,11 @@ size_t nitemset;
 /* RULESET contains a bit for each rule.  CLOSURE sets the bits for
    all rules which could potentially describe the next input to be
    read.  */
-static bitset ruleset;
+ಸ್ಥಿರ bitset ruleset;
 
 /* internal data.  See comments before set_fderives and set_firsts.  */
-static bitsetv fderives = NULL;
-static bitsetv firsts = NULL;
+ಸ್ಥಿರ bitsetv fderives = ರಿಕ್ತ;
+ಸ್ಥಿರ bitsetv firsts = ರಿಕ್ತ;
 
 /* Retrieve the FDERIVES/FIRSTS sets of the nonterminals numbered Var.  */
 #define FDERIVES(Var)   fderives[(Var) - ntokens]
@@ -53,31 +53,31 @@ static bitsetv firsts = NULL;
 | Debugging code.  |
 `-----------------*/
 
-static void
-closure_print (char const *title, item_index const *array, size_t size)
+ಸ್ಥಿರ ಶೂನ್ಯ
+closure_print (ವರ್ಣ ಧ್ರುವ *title, item_index ಧ್ರುವ *array, size_t size)
 {
   fprintf (stderr, "Closure: %s\n", title);
-  for (size_t i = 0; i < size; ++i)
+  ಪ್ರತಿ (size_t i = 0; i < size; ++i)
     {
       fprintf (stderr, "  %2d: .", array[i]);
-      item_number *rp;
-      for (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
+      item_ಸಂಖ್ಯೆ *rp;
+      ಪ್ರತಿ (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
         fprintf (stderr, " %s", symbols[*rp]->tag);
-      fprintf (stderr, "  (rule %d)\n", item_number_as_rule_number (*rp));
+      fprintf (stderr, "  (rule %d)\n", item_ಸಂಖ್ಯೆ_as_rule_ಸಂಖ್ಯೆ (*rp));
     }
   fputs ("\n\n", stderr);
 }
 
 
-static void
-print_firsts (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+print_firsts (ಶೂನ್ಯ)
 {
   fprintf (stderr, "FIRSTS\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s firsts\n", symbols[i]->tag);
       bitset_iterator iter;
-      symbol_number j;
+      ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ j;
       BITSET_FOR_EACH (iter, FIRSTS (i), j, 0)
         fprintf (stderr, "    %s\n", symbols[j + ntokens]->tag);
     }
@@ -85,15 +85,15 @@ print_firsts (void)
 }
 
 
-static void
-print_fderives (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+print_fderives (ಶೂನ್ಯ)
 {
   fprintf (stderr, "FDERIVES\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
       bitset_iterator iter;
-      rule_number r;
+      rule_ಸಂಖ್ಯೆ r;
       BITSET_FOR_EACH (iter, FDERIVES (i), r, 0)
         {
           fprintf (stderr, "    %3d ", r);
@@ -115,26 +115,26 @@ print_fderives (void)
 | (5)) is set.                                                       |
 `-------------------------------------------------------------------*/
 
-static void
-set_firsts (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+set_firsts (ಶೂನ್ಯ)
 {
   firsts = bitsetv_create (nnterms, nnterms, BITSET_FIXED);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = 0; derives[i - ntokens][j]; ++j)
+  ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms; ++i)
+    ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ j = 0; derives[i - ntokens][j]; ++j)
       {
-        item_number sym = derives[i - ntokens][j]->rhs[0];
-        if (ISVAR (sym))
+        item_ಸಂಖ್ಯೆ sym = derives[i - ntokens][j]->rhs[0];
+        ಯದಿ (ISVAR (sym))
           bitset_set (FIRSTS (i), sym - ntokens);
       }
 
-  if (trace_flag & trace_sets)
+  ಯದಿ (trace_flag & trace_sets)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Input", firsts);
   bitsetv_reflexive_transitive_closure (firsts);
-  if (trace_flag & trace_sets)
+  ಯದಿ (trace_flag & trace_sets)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Output", firsts);
 
-  if (trace_flag & trace_sets)
+  ಯದಿ (trace_flag & trace_sets)
     print_firsts ();
 }
 
@@ -148,20 +148,20 @@ set_firsts (void)
 | the [5 - NTOKENS, 4] bit in FDERIVES is set.                       |
 `-------------------------------------------------------------------*/
 
-static void
-set_fderives (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+set_fderives (ಶೂನ್ಯ)
 {
   fderives = bitsetv_create (nnterms, nrules, BITSET_FIXED);
 
   set_firsts ();
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = ntokens; j < nsyms; ++j)
-      if (bitset_test (FIRSTS (i), j - ntokens))
-        for (rule_number k = 0; derives[j - ntokens][k]; ++k)
-          bitset_set (FDERIVES (i), derives[j - ntokens][k]->number);
+  ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms; ++i)
+    ಪ್ರತಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ j = ntokens; j < nsyms; ++j)
+      ಯದಿ (bitset_test (FIRSTS (i), j - ntokens))
+        ಪ್ರತಿ (rule_ಸಂಖ್ಯೆ k = 0; derives[j - ntokens][k]; ++k)
+          bitset_set (FDERIVES (i), derives[j - ntokens][k]->ಸಂಖ್ಯೆ);
 
-  if (trace_flag & trace_sets)
+  ಯದಿ (trace_flag & trace_sets)
     print_fderives ();
 
   bitsetv_free (firsts);
@@ -169,10 +169,10 @@ set_fderives (void)
 
 
 
-void
-closure_new (int n)
+ಶೂನ್ಯ
+closure_new (ಪೂರ್ಣಾಙ್ಕ n)
 {
-  itemset = xnmalloc (n, sizeof *itemset);
+  itemset = xnmalloc (n, ಪರಿಮಾಣ *itemset);
 
   ruleset = bitset_create (nrules, BITSET_FIXED);
 
@@ -181,16 +181,16 @@ closure_new (int n)
 
 
 
-void
-closure (item_index const *core, size_t n)
+ಶೂನ್ಯ
+closure (item_index ಧ್ರುವ *core, size_t n)
 {
-  if (trace_flag & trace_closure)
+  ಯದಿ (trace_flag & trace_closure)
     closure_print ("input", core, n);
 
   bitset_zero (ruleset);
 
-  for (size_t c = 0; c < n; ++c)
-    if (ISVAR (ritem[core[c]]))
+  ಪ್ರತಿ (size_t c = 0; c < n; ++c)
+    ಯದಿ (ISVAR (ritem[core[c]]))
       bitset_or (ruleset, ruleset, FDERIVES (ritem[core[c]]));
 
   /* core is sorted on item index in ritem, which is sorted on rule number.
@@ -199,12 +199,12 @@ closure (item_index const *core, size_t n)
   size_t c = 0;
 
   /* A bit index over RULESET. */
-  rule_number ruleno;
+  rule_ಸಂಖ್ಯೆ ruleno;
   bitset_iterator iter;
   BITSET_FOR_EACH (iter, ruleset, ruleno, 0)
     {
       item_index itemno = rules[ruleno].rhs - ritem;
-      while (c < n && core[c] < itemno)
+      ಯಾವತ್ (c < n && core[c] < itemno)
         {
           itemset[nitemset] = core[c];
           nitemset++;
@@ -214,22 +214,22 @@ closure (item_index const *core, size_t n)
       nitemset++;
     };
 
-  while (c < n)
+  ಯಾವತ್ (c < n)
     {
       itemset[nitemset] = core[c];
       nitemset++;
       c++;
     }
 
-  if (trace_flag & trace_closure)
+  ಯದಿ (trace_flag & trace_closure)
     closure_print ("output", itemset, nitemset);
 }
 
 
-void
-closure_free (void)
+ಶೂನ್ಯ
+closure_free (ಶೂನ್ಯ)
 {
-  free (itemset);
+  ಮುಕ್ತ (itemset);
   bitset_free (ruleset);
   bitsetv_free (fderives);
 }

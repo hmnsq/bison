@@ -113,30 +113,30 @@
    summary, forget about zero values in YYTABLE.
 */
 
-extern int nvectors;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಙ್ಕ nvectors;
 
-typedef int base_number;
-extern base_number *base;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಪೂರ್ಣಾಙ್ಕ base_ಸಂಖ್ಯೆ;
+ಬಾಹ್ಯ base_ಸಂಖ್ಯೆ *base;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-extern base_number base_ninf;
+ಬಾಹ್ಯ base_ಸಂಖ್ಯೆ base_ninf;
 
-extern int *conflict_table;
-extern int *conflict_list;
-extern int conflict_list_cnt;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಙ್ಕ *conflict_table;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಙ್ಕ *conflict_list;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಙ್ಕ conflict_list_cnt;
 
-extern base_number *table;
-extern base_number *check;
+ಬಾಹ್ಯ base_ಸಂಖ್ಯೆ *table;
+ಬಾಹ್ಯ base_ಸಂಖ್ಯೆ *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  */
-extern base_number table_ninf;
+ಬಾಹ್ಯ base_ಸಂಖ್ಯೆ table_ninf;
 
-extern state_number *yydefgoto;
-extern rule_number *yydefact;
-extern int high;
+ಬಾಹ್ಯ state_ಸಂಖ್ಯೆ *yydefgoto;
+ಬಾಹ್ಯ rule_ಸಂಖ್ಯೆ *yydefact;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಙ್ಕ ಮೇಲಿನ;
 
-void tables_generate (void);
-void tables_free (void);
+ಶೂನ್ಯ tables_generate (ಶೂನ್ಯ);
+ಶೂನ್ಯ tables_free (ಶೂನ್ಯ);
 
 #endif /* !TABLES_H_ */

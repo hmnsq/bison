@@ -18,66 +18,66 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "symtab.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "symtab.h"
 
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include <assure.h>
-#include <fstrcmp.h>
-#include <hash.h>
-#include <quote.h>
+#ಅನ್ತರ್ಭಾವ <assure.h>
+#ಅನ್ತರ್ಭಾವ <fstrcmp.h>
+#ಅನ್ತರ್ಭಾವ <hash.h>
+#ಅನ್ತರ್ಭಾವ <quote.h>
 
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "intprops.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "gram.h"
+#ಅನ್ತರ್ಭಾವ "intprops.h"
 
 /** Undefined token code.  */
 #define CODE_UNDEFINED (-1)
 
 /* Undefined symbol number.  */
-#define NUMBER_UNDEFINED (-1)
+#define ಸಂಖ್ಯೆ_UNDEFINED (-1)
 
 
-static struct hash_table *symbol_table = NULL;
-static struct hash_table *semantic_type_table = NULL;
+ಸ್ಥಿರ ಸಂರಚನಾ hash_table *ಚಿಹ್ನೆ_table = ರಿಕ್ತ;
+ಸ್ಥಿರ ಸಂರಚನಾ hash_table *semantic_type_table = ರಿಕ್ತ;
 
 /*----------------------------------------------------------------.
 | Symbols sorted by tag.  Allocated by table_sort, after which no |
 | more symbols should be created.                                 |
 `----------------------------------------------------------------*/
 
-static symbol **symbols_sorted = NULL;
-static semantic_type **semantic_types_sorted = NULL;
+ಸ್ಥಿರ ಚಿಹ್ನೆ **symbols_sorted = ರಿಕ್ತ;
+ಸ್ಥಿರ semantic_type **semantic_types_sorted = ರಿಕ್ತ;
 
 
 /*------------------------.
 | Distinguished symbols.  |
 `------------------------*/
 
-symbol *errtoken = NULL;
-symbol *undeftoken = NULL;
-symbol *eoftoken = NULL;
-symbol *acceptsymbol = NULL;
+ಚಿಹ್ನೆ *errtoken = ರಿಕ್ತ;
+ಚಿಹ್ನೆ *undeftoken = ರಿಕ್ತ;
+ಚಿಹ್ನೆ *eoftoken = ರಿಕ್ತ;
+ಚಿಹ್ನೆ *acceptsymbol = ರಿಕ್ತ;
 
 /* Precedence relation graph. */
-static symgraph **prec_nodes;
+ಸ್ಥಿರ symgraph **prec_nodes;
 
 /* Store which associativity is used.  */
-static bool *used_assoc = NULL;
+ಸ್ಥಿರ bool *used_assoc = ರಿಕ್ತ;
 
 bool tag_seen = false;
 
 
 /* Whether SYM was defined by the user.  */
 
-static bool
-symbol_is_user_defined (symbol *sym)
+ಸ್ಥಿರ bool
+ಚಿಹ್ನೆ_is_user_defined (ಚಿಹ್ನೆ *sym)
 {
-  const bool eof_is_user_defined
+  ಧ್ರುವ bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
-  return sym->tag[0] != '$'
+  ಪ್ರತ್ಯಾಗಮ sym->tag[0] != '$'
     && (eof_is_user_defined || (sym != eoftoken && sym->alias != errtoken))
     && sym != errtoken && sym->alias != errtoken
     && sym != undeftoken && sym->alias != undeftoken;
@@ -88,19 +88,19 @@ symbol_is_user_defined (symbol *sym)
 | Create a new sym_content. |
 `--------------------------*/
 
-static sym_content *
-sym_content_new (symbol *s)
+ಸ್ಥಿರ sym_content *
+sym_content_new (ಚಿಹ್ನೆ *s)
 {
-  sym_content *res = xmalloc (sizeof *res);
+  sym_content *res = xmalloc (ಪರಿಮಾಣ *res);
 
-  res->symbol = s;
+  res->ಚಿಹ್ನೆ = s;
 
-  res->type_name = NULL;
+  res->type_name = ರಿಕ್ತ;
   res->type_loc = empty_loc;
-  for (int i = 0; i < CODE_PROPS_SIZE; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < CODE_PROPS_SIZE; ++i)
     code_props_none_init (&res->props[i]);
 
-  res->number = NUMBER_UNDEFINED;
+  res->ಸಂಖ್ಯೆ = ಸಂಖ್ಯೆ_UNDEFINED;
   res->prec_loc = empty_loc;
   res->prec = 0;
   res->assoc = undef_assoc;
@@ -109,22 +109,22 @@ sym_content_new (symbol *s)
   res->class = unknown_sym;
   res->status = undeclared;
 
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 /*---------------------------------.
 | Create a new symbol, named TAG.  |
 `---------------------------------*/
 
-static symbol *
-symbol_new (uniqstr tag, location loc)
+ಸ್ಥಿರ ಚಿಹ್ನೆ *
+ಚಿಹ್ನೆ_new (uniqstr tag, location loc)
 {
-  symbol *res = xmalloc (sizeof *res);
+  ಚಿಹ್ನೆ *res = xmalloc (ಪರಿಮಾಣ *res);
   uniqstr_assert (tag);
 
   /* If the tag is not a string (starts with a double quote), check
      that it is valid for Yacc. */
-  if (tag[0] != '\"' && tag[0] != '\'' && strchr (tag, '-'))
+  ಯದಿ (tag[0] != '\"' && tag[0] != '\'' && strchr (tag, '-'))
     complain (&loc, Wyacc,
               _("POSIX Yacc forbids dashes in symbol names: %s"), tag);
 
@@ -132,20 +132,20 @@ symbol_new (uniqstr tag, location loc)
   res->location = loc;
   res->translatable = false;
   res->location_of_lhs = false;
-  res->alias = NULL;
+  res->alias = ರಿಕ್ತ;
   res->content = sym_content_new (res);
   res->is_alias = false;
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 /*--------------------.
 | Free a sym_content. |
 `--------------------*/
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 sym_content_free (sym_content *sym)
 {
-  free (sym);
+  ಮುಕ್ತ (sym);
 }
 
 
@@ -153,13 +153,13 @@ sym_content_free (sym_content *sym)
 | Free a symbol and its associated content if appropriate. |
 `---------------------------------------------------------*/
 
-static void
-symbol_free (void *ptr)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಚಿಹ್ನೆ_free (ಶೂನ್ಯ *ptr)
 {
-  symbol *sym = (symbol *)ptr;
-  if (!sym->is_alias)
+  ಚಿಹ್ನೆ *sym = (ಚಿಹ್ನೆ *)ptr;
+  ಯದಿ (!sym->is_alias)
     sym_content_free (sym->content);
-  free (sym);
+  ಮುಕ್ತ (sym);
 
 }
 
@@ -174,12 +174,12 @@ symbol_free (void *ptr)
    declaration first.
 */
 
-static void
-symbols_sort (const symbol **first, const symbol **second)
+ಸ್ಥಿರ ಶೂನ್ಯ
+symbols_sort (ಧ್ರುವ ಚಿಹ್ನೆ **first, ಧ್ರುವ ಚಿಹ್ನೆ **second)
 {
-  if (0 < location_cmp ((*first)->location, (*second)->location))
+  ಯದಿ (0 < location_cmp ((*first)->location, (*second)->location))
     {
-      const symbol* tmp = *first;
+      ಧ್ರುವ ಚಿಹ್ನೆ* tmp = *first;
       *first = *second;
       *second = tmp;
     }
@@ -187,10 +187,10 @@ symbols_sort (const symbol **first, const symbol **second)
 
 /* Likewise, for locations.  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 locations_sort (location *first, location *second)
 {
-  if (0 < location_cmp (*first, *second))
+  ಯದಿ (0 < location_cmp (*first, *second))
     {
       location tmp = *first;
       *first = *second;
@@ -198,15 +198,15 @@ locations_sort (location *first, location *second)
     }
 }
 
-char const *
+ವರ್ಣ ಧ್ರುವ *
 code_props_type_string (code_props_type kind)
 {
-  switch (kind)
+  ವಿಕಲ್ಪ (kind)
     {
-    case destructor:
-      return "%destructor";
-    case printer:
-      return "%printer";
+    ಪಕ್ಷ destructor:
+      ಪ್ರತ್ಯಾಗಮ "%destructor";
+    ಪಕ್ಷ printer:
+      ಪ್ರತ್ಯಾಗಮ "%printer";
     }
   abort ();
 }
@@ -216,19 +216,19 @@ code_props_type_string (code_props_type kind)
 | Create a new semantic type, named TAG.  |
 `----------------------------------------*/
 
-static semantic_type *
-semantic_type_new (uniqstr tag, const location *loc)
+ಸ್ಥಿರ semantic_type *
+semantic_type_new (uniqstr tag, ಧ್ರುವ location *loc)
 {
-  semantic_type *res = xmalloc (sizeof *res);
+  semantic_type *res = xmalloc (ಪರಿಮಾಣ *res);
 
   uniqstr_assert (tag);
   res->tag = tag;
   res->location = loc ? *loc : empty_loc;
   res->status = undeclared;
-  for (int i = 0; i < CODE_PROPS_SIZE; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < CODE_PROPS_SIZE; ++i)
     code_props_none_init (&res->props[i]);
 
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 
@@ -236,65 +236,65 @@ semantic_type_new (uniqstr tag, const location *loc)
 | Print a symbol.  |
 `-----------------*/
 
-#define SYMBOL_INT_ATTR_PRINT(Attr)                     \
-  if (s->content)                                       \
+#define ಚಿಹ್ನೆ_INT_ATTR_PRINT(Attr)                     \
+  ಯದಿ (s->content)                                       \
     fprintf (f, " %s = %d", #Attr, s->content->Attr)
 
-#define SYMBOL_STR_ATTR_PRINT(Attr)                     \
-  if (s->content && s->content->Attr)                   \
+#define ಚಿಹ್ನೆ_STR_ATTR_PRINT(Attr)                     \
+  ಯದಿ (s->content && s->content->Attr)                   \
     fprintf (f, " %s { %s }", #Attr, s->content->Attr)
 
-#define SYMBOL_CODE_PRINT(Attr)                                         \
-  if (s->content && s->content->props[Attr].code)                       \
+#define ಚಿಹ್ನೆ_CODE_PRINT(Attr)                                         \
+  ಯದಿ (s->content && s->content->props[Attr].code)                       \
     fprintf (f, " %s { %s }", #Attr, s->content->props[Attr].code)
 
-void
-symbol_print (symbol const *s, FILE *f)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_print (ಚಿಹ್ನೆ ಧ್ರುವ *s, FILE *f)
 {
-  if (s)
+  ಯದಿ (s)
     {
-      symbol_class c = s->content->class;
+      ಚಿಹ್ನೆ_class c = s->content->class;
       fprintf (f, "%s: %s",
                c == unknown_sym    ? "unknown"
                : c == pct_type_sym ? "%type"
                : c == token_sym    ? "token"
                : c == nterm_sym    ? "nterm"
-               : NULL, /* abort.  */
+               : ರಿಕ್ತ, /* abort.  */
                s->tag);
       putc (' ', f);
       location_print (s->location, f);
-      SYMBOL_INT_ATTR_PRINT (code);
-      SYMBOL_INT_ATTR_PRINT (number);
-      SYMBOL_STR_ATTR_PRINT (type_name);
-      SYMBOL_CODE_PRINT (destructor);
-      SYMBOL_CODE_PRINT (printer);
+      ಚಿಹ್ನೆ_INT_ATTR_PRINT (code);
+      ಚಿಹ್ನೆ_INT_ATTR_PRINT (ಸಂಖ್ಯೆ);
+      ಚಿಹ್ನೆ_STR_ATTR_PRINT (type_name);
+      ಚಿಹ್ನೆ_CODE_PRINT (destructor);
+      ಚಿಹ್ನೆ_CODE_PRINT (printer);
     }
-  else
+  ಅನ್ಯಥಾ
     fputs ("<NULL>", f);
 }
 
-#undef SYMBOL_ATTR_PRINT
-#undef SYMBOL_CODE_PRINT
+#undef ಚಿಹ್ನೆ_ATTR_PRINT
+#undef ಚಿಹ್ನೆ_CODE_PRINT
 
 
 /*----------------------------------.
 | Whether S is a valid identifier.  |
 `----------------------------------*/
 
-static bool
+ಸ್ಥಿರ bool
 is_identifier (uniqstr s)
 {
-  static char const alphanum[26 + 26 + 1 + 10] =
+  ಸ್ಥಿರ ವರ್ಣ ಧ್ರುವ alphanum[26 + 26 + 1 + 10] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
-  if (!s || ! memchr (alphanum, *s, sizeof alphanum - 10))
-    return false;
-  for (++s; *s; ++s)
-    if (! memchr (alphanum, *s, sizeof alphanum))
-      return false;
-  return true;
+  ಯದಿ (!s || ! memchr (alphanum, *s, ಪರಿಮಾಣ alphanum - 10))
+    ಪ್ರತ್ಯಾಗಮ false;
+  ಪ್ರತಿ (++s; *s; ++s)
+    ಯದಿ (! memchr (alphanum, *s, ಪರಿಮಾಣ alphanum))
+      ಪ್ರತ್ಯಾಗಮ false;
+  ಪ್ರತ್ಯಾಗಮ true;
 }
 
 
@@ -303,16 +303,16 @@ is_identifier (uniqstr s)
 `-----------------------------------------------*/
 
 uniqstr
-symbol_id_get (symbol const *sym)
+ಚಿಹ್ನೆ_id_get (ಚಿಹ್ನೆ ಧ್ರುವ *sym)
 {
   // There's one weird case: YYerror is the alias, and error is the
   // base symbol.  Return YYerror in that case.
-  if (sym->alias && is_identifier (sym->alias->tag))
-    return sym->alias->tag;
-  else if (is_identifier (sym->tag))
-    return sym->tag;
-  else
-    return NULL;
+  ಯದಿ (sym->alias && is_identifier (sym->alias->tag))
+    ಪ್ರತ್ಯಾಗಮ sym->alias->tag;
+  ಅನ್ಯಥಾ ಯದಿ (is_identifier (sym->tag))
+    ಪ್ರತ್ಯಾಗಮ sym->tag;
+  ಅನ್ಯಥಾ
+    ಪ್ರತ್ಯಾಗಮ ರಿಕ್ತ;
 }
 
 
@@ -321,8 +321,8 @@ symbol_id_get (symbol const *sym)
 | at FIRST.                                                         |
 `------------------------------------------------------------------*/
 
-static void
-complain_symbol_redeclared (symbol *s, const char *what, location first,
+ಸ್ಥಿರ ಶೂನ್ಯ
+complain_ಚಿಹ್ನೆ_redeclared (ಚಿಹ್ನೆ *s, ಧ್ರುವ ವರ್ಣ *what, location first,
                             location second)
 {
   locations_sort (&first, &second);
@@ -330,8 +330,8 @@ complain_symbol_redeclared (symbol *s, const char *what, location first,
   subcomplain (&first, complaint, _("previous declaration"));
 }
 
-static void
-complain_semantic_type_redeclared (semantic_type *s, const char *what, location first,
+ಸ್ಥಿರ ಶೂನ್ಯ
+complain_semantic_type_redeclared (semantic_type *s, ಧ್ರುವ ವರ್ಣ *what, location first,
                                    location second)
 {
   locations_sort (&first, &second);
@@ -339,49 +339,49 @@ complain_semantic_type_redeclared (semantic_type *s, const char *what, location 
   subcomplain (&first, complaint, _("previous declaration"));
 }
 
-static void
-complain_class_redeclared (symbol *sym, symbol_class class, location second)
+ಸ್ಥಿರ ಶೂನ್ಯ
+complain_class_redeclared (ಚಿಹ್ನೆ *sym, ಚಿಹ್ನೆ_class class, location second)
 {
   complain (&second, complaint,
             class == token_sym
             ? _("symbol %s redeclared as a token")
             : _("symbol %s redeclared as a nonterminal"), sym->tag);
-  if (!location_empty (sym->location))
+  ಯದಿ (!location_empty (sym->location))
     subcomplain (&sym->location, complaint, _("previous definition"));
 }
 
-static const symbol *
-symbol_from_uniqstr_fuzzy (const uniqstr key)
+ಸ್ಥಿರ ಧ್ರುವ ಚಿಹ್ನೆ *
+ಚಿಹ್ನೆ_from_uniqstr_fuzzy (ಧ್ರುವ uniqstr ಕೀಲಿ)
 {
   aver (symbols_sorted);
 #define FSTRCMP_THRESHOLD 0.6
-  double best_similarity = FSTRCMP_THRESHOLD;
-  const symbol *res = NULL;
-  size_t count = hash_get_n_entries (symbol_table);
-  for (int i = 0; i < count; ++i)
+  ದ್ವಿಗುಣ best_similarity = FSTRCMP_THRESHOLD;
+  ಧ್ರುವ ಚಿಹ್ನೆ *res = ರಿಕ್ತ;
+  size_t ಎಣಿಕೆ = hash_get_n_entries (ಚಿಹ್ನೆ_table);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < ಎಣಿಕೆ; ++i)
     {
-      symbol *sym = symbols_sorted[i];
-      if (STRNEQ (key, sym->tag)
+      ಚಿಹ್ನೆ *sym = symbols_sorted[i];
+      ಯದಿ (STRNEQ (ಕೀಲಿ, sym->tag)
           && (sym->content->status == declared
               || sym->content->status == undeclared))
         {
-          double similarity = fstrcmp_bounded (key, sym->tag, best_similarity);
-          if (best_similarity < similarity)
+          ದ್ವಿಗುಣ similarity = fstrcmp_bounded (ಕೀಲಿ, sym->tag, best_similarity);
+          ಯದಿ (best_similarity < similarity)
             {
               res = sym;
               best_similarity = similarity;
             }
         }
     }
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
-static void
-complain_symbol_undeclared (const symbol *sym)
+ಸ್ಥಿರ ಶೂನ್ಯ
+complain_ಚಿಹ್ನೆ_undeclared (ಧ್ರುವ ಚಿಹ್ನೆ *sym)
 {
-  assert (sym->content->status != declared);
-  const symbol *best = symbol_from_uniqstr_fuzzy (sym->tag);
-  if (best)
+  ಪ್ರತಿಜ್ಞಾ (sym->content->status != declared);
+  ಧ್ರುವ ಚಿಹ್ನೆ *best = ಚಿಹ್ನೆ_from_uniqstr_fuzzy (sym->tag);
+  ಯದಿ (best)
     {
       complain (&sym->location,
                 sym->content->status == needed ? complaint : Wother,
@@ -389,10 +389,10 @@ complain_symbol_undeclared (const symbol *sym)
                   " and has no rules; did you mean %s?"),
                 quote_n (0, sym->tag),
                 quote_n (1, best->tag));
-      if (feature_flag & feature_caret)
+      ಯದಿ (feature_flag & feature_caret)
         location_caret_suggestion (sym->location, best->tag, stderr);
     }
-  else
+  ಅನ್ಯಥಾ
     complain (&sym->location,
               sym->content->status == needed ? complaint : Wother,
               _("symbol %s is used, but is not defined as a token"
@@ -400,10 +400,10 @@ complain_symbol_undeclared (const symbol *sym)
               quote (sym->tag));
 }
 
-void
-symbol_location_as_lhs_set (symbol *sym, location loc)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_location_as_lhs_set (ಚಿಹ್ನೆ *sym, location loc)
 {
-  if (!sym->location_of_lhs)
+  ಯದಿ (!sym->location_of_lhs)
     {
       sym->location = loc;
       sym->location_of_lhs = true;
@@ -416,16 +416,16 @@ symbol_location_as_lhs_set (symbol *sym, location loc)
 | as TYPE_NAME.                                                    |
 `-----------------------------------------------------------------*/
 
-void
-symbol_type_set (symbol *sym, uniqstr type_name, location loc)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_type_set (ಚಿಹ್ನೆ *sym, uniqstr type_name, location loc)
 {
-  if (type_name)
+  ಯದಿ (type_name)
     {
       tag_seen = true;
-      if (sym->content->type_name)
-        complain_symbol_redeclared (sym, "%type",
+      ಯದಿ (sym->content->type_name)
+        complain_ಚಿಹ್ನೆ_redeclared (sym, "%type",
                                     sym->content->type_loc, loc);
-      else
+      ಅನ್ಯಥಾ
         {
           uniqstr_assert (type_name);
           sym->content->type_name = type_name;
@@ -438,15 +438,15 @@ symbol_type_set (symbol *sym, uniqstr type_name, location loc)
 | Set the DESTRUCTOR or PRINTER associated with the SYM.  |
 `--------------------------------------------------------*/
 
-void
-symbol_code_props_set (symbol *sym, code_props_type kind,
-                       code_props const *code)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_code_props_set (ಚಿಹ್ನೆ *sym, code_props_type kind,
+                       code_props ಧ್ರುವ *code)
 {
-  if (sym->content->props[kind].code)
-    complain_symbol_redeclared (sym, code_props_type_string (kind),
+  ಯದಿ (sym->content->props[kind].code)
+    complain_ಚಿಹ್ನೆ_redeclared (sym, code_props_type_string (kind),
                                 sym->content->props[kind].location,
                                 code->location);
-  else
+  ಅನ್ಯಥಾ
     sym->content->props[kind] = *code;
 }
 
@@ -455,16 +455,16 @@ symbol_code_props_set (symbol *sym, code_props_type kind,
 | Set the DESTRUCTOR or PRINTER associated with TYPE.  |
 `-----------------------------------------------------*/
 
-void
+ಶೂನ್ಯ
 semantic_type_code_props_set (semantic_type *type,
                               code_props_type kind,
-                              code_props const *code)
+                              code_props ಧ್ರುವ *code)
 {
-  if (type->props[kind].code)
+  ಯದಿ (type->props[kind].code)
     complain_semantic_type_redeclared (type, code_props_type_string (kind),
                                        type->props[kind].location,
                                        code->location);
-  else
+  ಅನ್ಯಥಾ
     type->props[kind] = *code;
 }
 
@@ -473,30 +473,30 @@ semantic_type_code_props_set (semantic_type *type,
 `---------------------------------------------------*/
 
 code_props *
-symbol_code_props_get (symbol *sym, code_props_type kind)
+ಚಿಹ್ನೆ_code_props_get (ಚಿಹ್ನೆ *sym, code_props_type kind)
 {
   /* Per-symbol code props.  */
-  if (sym->content->props[kind].code)
-    return &sym->content->props[kind];
+  ಯದಿ (sym->content->props[kind].code)
+    ಪ್ರತ್ಯಾಗಮ &sym->content->props[kind];
 
   /* Per-type code props.  */
-  if (sym->content->type_name)
+  ಯದಿ (sym->content->type_name)
     {
       code_props *code =
-        &semantic_type_get (sym->content->type_name, NULL)->props[kind];
-      if (code->code)
-        return code;
+        &semantic_type_get (sym->content->type_name, ರಿಕ್ತ)->props[kind];
+      ಯದಿ (code->code)
+        ಪ್ರತ್ಯಾಗಮ code;
     }
 
   /* Apply default code props's only to user-defined symbols.  */
-  if (symbol_is_user_defined (sym))
+  ಯದಿ (ಚಿಹ್ನೆ_is_user_defined (sym))
     {
       code_props *code = &semantic_type_get (sym->content->type_name ? "*" : "",
-                                             NULL)->props[kind];
-      if (code->code)
-        return code;
+                                             ರಿಕ್ತ)->props[kind];
+      ಯದಿ (code->code)
+        ಪ್ರತ್ಯಾಗಮ code;
     }
-  return &code_props_none;
+  ಪ್ರತ್ಯಾಗಮ &code_props_none;
 }
 
 /*-----------------------------------------------------------------.
@@ -504,16 +504,16 @@ symbol_code_props_get (symbol *sym, code_props_type kind)
 | with UNDEF_ASSOC as ASSOC.                                       |
 `-----------------------------------------------------------------*/
 
-void
-symbol_precedence_set (symbol *sym, int prec, assoc a, location loc)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_precedence_set (ಚಿಹ್ನೆ *sym, ಪೂರ್ಣಾಙ್ಕ prec, assoc a, location loc)
 {
-  if (a != undef_assoc)
+  ಯದಿ (a != undef_assoc)
     {
       sym_content *s = sym->content;
-      if (s->prec)
-        complain_symbol_redeclared (sym, assoc_to_string (a),
+      ಯದಿ (s->prec)
+        complain_ಚಿಹ್ನೆ_redeclared (sym, assoc_to_string (a),
                                     s->prec_loc, loc);
-      else
+      ಅನ್ಯಥಾ
         {
           s->prec = prec;
           s->assoc = a;
@@ -522,7 +522,7 @@ symbol_precedence_set (symbol *sym, int prec, assoc a, location loc)
     }
 
   /* Only terminals have a precedence. */
-  symbol_class_set (sym, token_sym, loc, false);
+  ಚಿಹ್ನೆ_class_set (sym, token_sym, loc, false);
 }
 
 
@@ -530,45 +530,45 @@ symbol_precedence_set (symbol *sym, int prec, assoc a, location loc)
 | Set the CLASS associated with SYM.  |
 `------------------------------------*/
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 complain_pct_type_on_token (location *loc)
 {
   complain (loc, Wyacc,
             _("POSIX yacc reserves %%type to nonterminals"));
 }
 
-void
-symbol_class_set (symbol *sym, symbol_class class, location loc, bool declaring)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_class_set (ಚಿಹ್ನೆ *sym, ಚಿಹ್ನೆ_class class, location loc, bool declaring)
 {
   aver (class != unknown_sym);
   sym_content *s = sym->content;
-  if (class == pct_type_sym)
+  ಯದಿ (class == pct_type_sym)
     {
-      if (s->class == token_sym)
+      ಯದಿ (s->class == token_sym)
         complain_pct_type_on_token (&loc);
-      else if (s->class == unknown_sym)
+      ಅನ್ಯಥಾ ಯದಿ (s->class == unknown_sym)
         s->class = class;
     }
-  else if (s->class != unknown_sym && s->class != pct_type_sym
+  ಅನ್ಯಥಾ ಯದಿ (s->class != unknown_sym && s->class != pct_type_sym
            && s->class != class)
     complain_class_redeclared (sym, class, loc);
-  else
+  ಅನ್ಯಥಾ
     {
-      if (class == token_sym && s->class == pct_type_sym)
+      ಯದಿ (class == token_sym && s->class == pct_type_sym)
         complain_pct_type_on_token (&sym->location);
 
       s->class = class;
 
-      if (declaring)
+      ಯದಿ (declaring)
         {
-          if (s->status == declared)
+          ಯದಿ (s->status == declared)
             {
               complain (&loc, Wother,
                         _("symbol %s redeclared"), sym->tag);
               subcomplain (&sym->location, Wother,
                            _("previous declaration"));
             }
-          else
+          ಅನ್ಯಥಾ
             {
               sym->location = loc;
               s->status = declared;
@@ -582,28 +582,28 @@ symbol_class_set (symbol *sym, symbol_class class, location loc, bool declaring)
 | Set the token code of SYM.  |
 `----------------------------*/
 
-void
-symbol_code_set (symbol *sym, int code, location loc)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_code_set (ಚಿಹ್ನೆ *sym, ಪೂರ್ಣಾಙ್ಕ code, location loc)
 {
-  int *codep = &sym->content->code;
-  if (sym->content->class != token_sym)
+  ಪೂರ್ಣಾಙ್ಕ *codep = &sym->content->code;
+  ಯದಿ (sym->content->class != token_sym)
     complain (&loc, complaint,
               _("nonterminals cannot be given a token code"));
-  else if (*codep != CODE_UNDEFINED
+  ಅನ್ಯಥಾ ಯದಿ (*codep != CODE_UNDEFINED
            && *codep != code)
     complain (&loc, complaint, _("redefining code of token %s"),
               sym->tag);
-  else if (code == INT_MAX)
+  ಅನ್ಯಥಾ ಯದಿ (code == INT_MAX)
     complain (&loc, complaint, _("code of token %s too large"),
               sym->tag);
-  else
+  ಅನ್ಯಥಾ
     {
       *codep = code;
       /* User defined $end token? */
-      if (code == 0 && !eoftoken)
+      ಯದಿ (code == 0 && !eoftoken)
         {
-          eoftoken = sym->content->symbol;
-          eoftoken->content->number = 0;
+          eoftoken = sym->content->ಚಿಹ್ನೆ;
+          eoftoken->content->ಸಂಖ್ಯೆ = 0;
         }
     }
 }
@@ -614,55 +614,55 @@ symbol_code_set (symbol *sym, int code, location loc)
 | nonterminal.                                              |
 `----------------------------------------------------------*/
 
-static void
-symbol_check_defined (symbol *sym)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಚಿಹ್ನೆ_check_defined (ಚಿಹ್ನೆ *sym)
 {
   sym_content *s = sym->content;
-  if (s->class == unknown_sym || s->class == pct_type_sym)
+  ಯದಿ (s->class == unknown_sym || s->class == pct_type_sym)
     {
-      complain_symbol_undeclared (sym);
+      complain_ಚಿಹ್ನೆ_undeclared (sym);
       s->class = nterm_sym;
     }
 
-  if (s->number == NUMBER_UNDEFINED)
-    s->number = s->class == token_sym ? ntokens++ : nnterms++;
+  ಯದಿ (s->ಸಂಖ್ಯೆ == ಸಂಖ್ಯೆ_UNDEFINED)
+    s->ಸಂಖ್ಯೆ = s->class == token_sym ? ntokens++ : nnterms++;
 
-  if (s->class == token_sym
+  ಯದಿ (s->class == token_sym
       && sym->tag[0] == '"'
       && !sym->is_alias)
     complain (&sym->location, Wdangling_alias,
               _("string literal %s not attached to a symbol"),
               sym->tag);
 
-  for (int i = 0; i < 2; ++i)
-    symbol_code_props_get (sym, i)->is_used = true;
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < 2; ++i)
+    ಚಿಹ್ನೆ_code_props_get (sym, i)->is_used = true;
 
   /* Set the semantic type status associated to the current symbol to
      'declared' so that we could check semantic types unnecessary uses. */
-  if (s->type_name)
+  ಯದಿ (s->type_name)
     {
-      semantic_type *sem_type = semantic_type_get (s->type_name, NULL);
-      if (sem_type)
+      semantic_type *sem_type = semantic_type_get (s->type_name, ರಿಕ್ತ);
+      ಯದಿ (sem_type)
         sem_type->status = declared;
     }
 }
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 semantic_type_check_defined (semantic_type *sem_type)
 {
   /* <*> and <> do not have to be "declared".  */
-  if (sem_type->status == declared
+  ಯದಿ (sem_type->status == declared
       || !*sem_type->tag
       || STREQ (sem_type->tag, "*"))
     {
-      for (int i = 0; i < 2; ++i)
-        if (sem_type->props[i].kind != CODE_PROPS_NONE
+      ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < 2; ++i)
+        ಯದಿ (sem_type->props[i].kind != CODE_PROPS_NONE
             && ! sem_type->props[i].is_used)
           complain (&sem_type->location, Wother,
                     _("useless %s for type <%s>"),
                     code_props_type_string (i), sem_type->tag);
     }
-  else
+  ಅನ್ಯಥಾ
     complain (&sem_type->location, Wother,
               _("type <%s> is used, but is not associated to any symbol"),
               sem_type->tag);
@@ -673,55 +673,55 @@ semantic_type_check_defined (semantic_type *sem_type)
 | its string-named alias STR; check consistency.                     |
 `-------------------------------------------------------------------*/
 
-static void
-symbol_merge_properties (symbol *sym, symbol *str)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಚಿಹ್ನೆ_merge_properties (ಚಿಹ್ನೆ *sym, ಚಿಹ್ನೆ *str)
 {
-  if (str->content->type_name != sym->content->type_name)
+  ಯದಿ (str->content->type_name != sym->content->type_name)
     {
-      if (str->content->type_name)
-        symbol_type_set (sym,
+      ಯದಿ (str->content->type_name)
+        ಚಿಹ್ನೆ_type_set (sym,
                          str->content->type_name, str->content->type_loc);
-      else
-        symbol_type_set (str,
+      ಅನ್ಯಥಾ
+        ಚಿಹ್ನೆ_type_set (str,
                          sym->content->type_name, sym->content->type_loc);
     }
 
 
-  for (int i = 0; i < CODE_PROPS_SIZE; ++i)
-    if (str->content->props[i].code)
-      symbol_code_props_set (sym, i, &str->content->props[i]);
-    else if (sym->content->props[i].code)
-      symbol_code_props_set (str, i, &sym->content->props[i]);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < CODE_PROPS_SIZE; ++i)
+    ಯದಿ (str->content->props[i].code)
+      ಚಿಹ್ನೆ_code_props_set (sym, i, &str->content->props[i]);
+    ಅನ್ಯಥಾ ಯದಿ (sym->content->props[i].code)
+      ಚಿಹ್ನೆ_code_props_set (str, i, &sym->content->props[i]);
 
-  if (sym->content->prec || str->content->prec)
+  ಯದಿ (sym->content->prec || str->content->prec)
     {
-      if (str->content->prec)
-        symbol_precedence_set (sym, str->content->prec, str->content->assoc,
+      ಯದಿ (str->content->prec)
+        ಚಿಹ್ನೆ_precedence_set (sym, str->content->prec, str->content->assoc,
                                str->content->prec_loc);
-      else
-        symbol_precedence_set (str, sym->content->prec, sym->content->assoc,
+      ಅನ್ಯಥಾ
+        ಚಿಹ್ನೆ_precedence_set (str, sym->content->prec, sym->content->assoc,
                                sym->content->prec_loc);
     }
 }
 
-void
-symbol_make_alias (symbol *sym, symbol *str, location loc)
+ಶೂನ್ಯ
+ಚಿಹ್ನೆ_make_alias (ಚಿಹ್ನೆ *sym, ಚಿಹ್ನೆ *str, location loc)
 {
-  if (sym->content->class != token_sym)
+  ಯದಿ (sym->content->class != token_sym)
     complain (&loc, complaint,
               _("nonterminals cannot be given a string alias"));
-  else if (str->alias)
+  ಅನ್ಯಥಾ ಯದಿ (str->alias)
     complain (&loc, Wother,
               _("symbol %s used more than once as a literal string"), str->tag);
-  else if (sym->alias)
+  ಅನ್ಯಥಾ ಯದಿ (sym->alias)
     complain (&loc, Wother,
               _("symbol %s given more than one literal string"), sym->tag);
-  else
+  ಅನ್ಯಥಾ
     {
-      symbol_merge_properties (sym, str);
+      ಚಿಹ್ನೆ_merge_properties (sym, str);
       sym_content_free (str->content);
       str->content = sym->content;
-      str->content->symbol = str;
+      str->content->ಚಿಹ್ನೆ = str;
       str->is_alias = true;
       str->alias = sym;
       sym->alias = str;
@@ -734,23 +734,23 @@ symbol_make_alias (symbol *sym, symbol *str, location loc)
 | into FDEFINES.  Put in SYMBOLS.                                    |
 `-------------------------------------------------------------------*/
 
-static void
-symbol_pack (symbol *sym)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಚಿಹ್ನೆ_pack (ಚಿಹ್ನೆ *sym)
 {
-  aver (sym->content->number != NUMBER_UNDEFINED);
-  if (sym->content->class == nterm_sym)
-    sym->content->number += ntokens;
+  aver (sym->content->ಸಂಖ್ಯೆ != ಸಂಖ್ಯೆ_UNDEFINED);
+  ಯದಿ (sym->content->class == nterm_sym)
+    sym->content->ಸಂಖ್ಯೆ += ntokens;
 
-  symbols[sym->content->number] = sym->content->symbol;
+  symbols[sym->content->ಸಂಖ್ಯೆ] = sym->content->ಚಿಹ್ನೆ;
 }
 
-static void
-complain_code_redeclared (int num, const symbol *first, const symbol *second)
+ಸ್ಥಿರ ಶೂನ್ಯ
+complain_code_redeclared (ಪೂರ್ಣಾಙ್ಕ ಅಂಕೆ, ಧ್ರುವ ಚಿಹ್ನೆ *first, ಧ್ರುವ ಚಿಹ್ನೆ *second)
 {
   symbols_sort (&first, &second);
   complain (&second->location, complaint,
             _("code %d reassigned to token %s"),
-            num, second->tag);
+            ಅಂಕೆ, second->tag);
   subcomplain (&first->location, complaint,
                _("previous declaration for %s"),
                first->tag);
@@ -760,20 +760,20 @@ complain_code_redeclared (int num, const symbol *first, const symbol *second)
 | Put SYM in TOKEN_TRANSLATIONS if it is a token.  |
 `-------------------------------------------------*/
 
-static void
-symbol_translation (const symbol *sym)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಚಿಹ್ನೆ_translation (ಧ್ರುವ ಚಿಹ್ನೆ *sym)
 {
-  if (sym->content->class == token_sym && !sym->is_alias)
+  ಯದಿ (sym->content->class == token_sym && !sym->is_alias)
     {
       /* A token whose translation has already been set? */
-      if (token_translations[sym->content->code]
-          != undeftoken->content->number)
+      ಯದಿ (token_translations[sym->content->code]
+          != undeftoken->content->ಸಂಖ್ಯೆ)
         complain_code_redeclared
           (sym->content->code,
            symbols[token_translations[sym->content->code]], sym);
-      else
+      ಅನ್ಯಥಾ
         token_translations[sym->content->code]
-          = sym->content->number;
+          = sym->content->ಸಂಖ್ಯೆ;
     }
 }
 
@@ -785,102 +785,102 @@ symbol_translation (const symbol *sym)
 /* Initial capacity of symbol and semantic type hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static inline bool
-hash_compare_symbol (const symbol *m1, const symbol *m2)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ bool
+hash_compare_ಚಿಹ್ನೆ (ಧ್ರುವ ಚಿಹ್ನೆ *m1, ಧ್ರುವ ಚಿಹ್ನೆ *m2)
 {
   /* Since tags are unique, we can compare the pointers themselves.  */
-  return UNIQSTR_EQ (m1->tag, m2->tag);
+  ಪ್ರತ್ಯಾಗಮ UNIQSTR_EQ (m1->tag, m2->tag);
 }
 
-static inline bool
-hash_compare_semantic_type (const semantic_type *m1, const semantic_type *m2)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ bool
+hash_compare_semantic_type (ಧ್ರುವ semantic_type *m1, ಧ್ರುವ semantic_type *m2)
 {
   /* Since names are unique, we can compare the pointers themselves.  */
-  return UNIQSTR_EQ (m1->tag, m2->tag);
+  ಪ್ರತ್ಯಾಗಮ UNIQSTR_EQ (m1->tag, m2->tag);
 }
 
-static bool
-hash_symbol_comparator (void const *m1, void const *m2)
+ಸ್ಥಿರ bool
+hash_ಚಿಹ್ನೆ_comparator (ಶೂನ್ಯ ಧ್ರುವ *m1, ಶೂನ್ಯ ಧ್ರುವ *m2)
 {
-  return hash_compare_symbol (m1, m2);
+  ಪ್ರತ್ಯಾಗಮ hash_compare_ಚಿಹ್ನೆ (m1, m2);
 }
 
-static bool
-hash_semantic_type_comparator (void const *m1, void const *m2)
+ಸ್ಥಿರ bool
+hash_semantic_type_comparator (ಶೂನ್ಯ ಧ್ರುವ *m1, ಶೂನ್ಯ ಧ್ರುವ *m2)
 {
-  return hash_compare_semantic_type (m1, m2);
+  ಪ್ರತ್ಯಾಗಮ hash_compare_semantic_type (m1, m2);
 }
 
-static inline size_t
-hash_symbol (const symbol *m, size_t tablesize)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ size_t
+hash_ಚಿಹ್ನೆ (ಧ್ರುವ ಚಿಹ್ನೆ *m, size_t tablesize)
 {
   /* Since tags are unique, we can hash the pointer itself.  */
-  return ((uintptr_t) m->tag) % tablesize;
+  ಪ್ರತ್ಯಾಗಮ ((uintptr_t) m->tag) % tablesize;
 }
 
-static inline size_t
-hash_semantic_type (const semantic_type *m, size_t tablesize)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ size_t
+hash_semantic_type (ಧ್ರುವ semantic_type *m, size_t tablesize)
 {
   /* Since names are unique, we can hash the pointer itself.  */
-  return ((uintptr_t) m->tag) % tablesize;
+  ಪ್ರತ್ಯಾಗಮ ((uintptr_t) m->tag) % tablesize;
 }
 
-static size_t
-hash_symbol_hasher (void const *m, size_t tablesize)
+ಸ್ಥಿರ size_t
+hash_ಚಿಹ್ನೆ_hasher (ಶೂನ್ಯ ಧ್ರುವ *m, size_t tablesize)
 {
-  return hash_symbol (m, tablesize);
+  ಪ್ರತ್ಯಾಗಮ hash_ಚಿಹ್ನೆ (m, tablesize);
 }
 
-static size_t
-hash_semantic_type_hasher (void const *m, size_t tablesize)
+ಸ್ಥಿರ size_t
+hash_semantic_type_hasher (ಶೂನ್ಯ ಧ್ರುವ *m, size_t tablesize)
 {
-  return hash_semantic_type (m, tablesize);
+  ಪ್ರತ್ಯಾಗಮ hash_semantic_type (m, tablesize);
 }
 
 /*-------------------------------.
 | Create the symbol hash table.  |
 `-------------------------------*/
 
-void
-symbols_new (void)
+ಶೂನ್ಯ
+symbols_new (ಶೂನ್ಯ)
 {
-  symbol_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                   NULL,
-                                   hash_symbol_hasher,
-                                   hash_symbol_comparator,
-                                   symbol_free);
+  ಚಿಹ್ನೆ_table = hash_xinitialize (HT_INITIAL_CAPACITY,
+                                   ರಿಕ್ತ,
+                                   hash_ಚಿಹ್ನೆ_hasher,
+                                   hash_ಚಿಹ್ನೆ_comparator,
+                                   ಚಿಹ್ನೆ_free);
 
   /* Construct the acceptsymbol symbol. */
-  acceptsymbol = symbol_get ("$accept", empty_loc);
+  acceptsymbol = ಚಿಹ್ನೆ_get ("$accept", empty_loc);
   acceptsymbol->content->class = nterm_sym;
-  acceptsymbol->content->number = nnterms++;
+  acceptsymbol->content->ಸಂಖ್ಯೆ = nnterms++;
 
   /* Construct the YYerror/"error" token */
-  errtoken = symbol_get ("YYerror", empty_loc);
+  errtoken = ಚಿಹ್ನೆ_get ("YYerror", empty_loc);
   errtoken->content->class = token_sym;
-  errtoken->content->number = ntokens++;
+  errtoken->content->ಸಂಖ್ಯೆ = ntokens++;
   {
-    symbol *alias = symbol_get ("error", empty_loc);
-    symbol_class_set (alias, token_sym, empty_loc, false);
-    symbol_make_alias (errtoken, alias, empty_loc);
+    ಚಿಹ್ನೆ *alias = ಚಿಹ್ನೆ_get ("error", empty_loc);
+    ಚಿಹ್ನೆ_class_set (alias, token_sym, empty_loc, false);
+    ಚಿಹ್ನೆ_make_alias (errtoken, alias, empty_loc);
   }
 
   /* Construct the YYUNDEF/"$undefined" token that represents all
      undefined literal tokens.  It is always symbol number 2.  */
-  undeftoken = symbol_get ("YYUNDEF", empty_loc);
+  undeftoken = ಚಿಹ್ನೆ_get ("YYUNDEF", empty_loc);
   undeftoken->content->class = token_sym;
-  undeftoken->content->number = ntokens++;
+  undeftoken->content->ಸಂಖ್ಯೆ = ntokens++;
   {
-    symbol *alias = symbol_get ("$undefined", empty_loc);
-    symbol_class_set (alias, token_sym, empty_loc, false);
-    symbol_make_alias (undeftoken, alias, empty_loc);
+    ಚಿಹ್ನೆ *alias = ಚಿಹ್ನೆ_get ("$undefined", empty_loc);
+    ಚಿಹ್ನೆ_class_set (alias, token_sym, empty_loc, false);
+    ಚಿಹ್ನೆ_make_alias (undeftoken, alias, empty_loc);
   }
 
   semantic_type_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                          NULL,
+                                          ರಿಕ್ತ,
                                           hash_semantic_type_hasher,
                                           hash_semantic_type_comparator,
-                                          free);
+                                          ಮುಕ್ತ);
 }
 
 
@@ -889,22 +889,22 @@ symbols_new (void)
 | yet, create it.                                                 |
 `----------------------------------------------------------------*/
 
-symbol *
-symbol_from_uniqstr (const uniqstr key, location loc)
+ಚಿಹ್ನೆ *
+ಚಿಹ್ನೆ_from_uniqstr (ಧ್ರುವ uniqstr ಕೀಲಿ, location loc)
 {
-  symbol probe;
+  ಚಿಹ್ನೆ probe;
 
-  probe.tag = key;
-  symbol *res = hash_lookup (symbol_table, &probe);
+  probe.tag = ಕೀಲಿ;
+  ಚಿಹ್ನೆ *res = hash_lookup (ಚಿಹ್ನೆ_table, &probe);
 
-  if (!res)
+  ಯದಿ (!res)
     {
       /* First insertion in the hash. */
       aver (!symbols_sorted);
-      res = symbol_new (key, loc);
-      hash_xinsert (symbol_table, res);
+      res = ಚಿಹ್ನೆ_new (ಕೀಲಿ, loc);
+      hash_xinsert (ಚಿಹ್ನೆ_table, res);
     }
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 
@@ -914,20 +914,20 @@ symbol_from_uniqstr (const uniqstr key, location loc)
 `-----------------------------------------------------------------------*/
 
 semantic_type *
-semantic_type_from_uniqstr (const uniqstr key, const location *loc)
+semantic_type_from_uniqstr (ಧ್ರುವ uniqstr ಕೀಲಿ, ಧ್ರುವ location *loc)
 {
   semantic_type probe;
 
-  probe.tag = key;
+  probe.tag = ಕೀಲಿ;
   semantic_type *res = hash_lookup (semantic_type_table, &probe);
 
-  if (!res)
+  ಯದಿ (!res)
     {
       /* First insertion in the hash. */
-      res = semantic_type_new (key, loc);
+      res = semantic_type_new (ಕೀಲಿ, loc);
       hash_xinsert (semantic_type_table, res);
     }
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 
@@ -936,10 +936,10 @@ semantic_type_from_uniqstr (const uniqstr key, const location *loc)
 | yet, create it.                                                 |
 `----------------------------------------------------------------*/
 
-symbol *
-symbol_get (const char *key, location loc)
+ಚಿಹ್ನೆ *
+ಚಿಹ್ನೆ_get (ಧ್ರುವ ವರ್ಣ *ಕೀಲಿ, location loc)
 {
-  return symbol_from_uniqstr (uniqstr_new (key), loc);
+  ಪ್ರತ್ಯಾಗಮ ಚಿಹ್ನೆ_from_uniqstr (uniqstr_new (ಕೀಲಿ), loc);
 }
 
 
@@ -949,9 +949,9 @@ symbol_get (const char *key, location loc)
 `-----------------------------------------------------------------------*/
 
 semantic_type *
-semantic_type_get (const char *key, const location *loc)
+semantic_type_get (ಧ್ರುವ ವರ್ಣ *ಕೀಲಿ, ಧ್ರುವ location *loc)
 {
-  return semantic_type_from_uniqstr (uniqstr_new (key), loc);
+  ಪ್ರತ್ಯಾಗಮ semantic_type_from_uniqstr (uniqstr_new (ಕೀಲಿ), loc);
 }
 
 
@@ -960,59 +960,59 @@ semantic_type_get (const char *key, const location *loc)
 | user's names.                                                     |
 `------------------------------------------------------------------*/
 
-symbol *
-dummy_symbol_get (location loc)
+ಚಿಹ್ನೆ *
+dummy_ಚಿಹ್ನೆ_get (location loc)
 {
   /* Incremented for each generated symbol.  */
-  static int dummy_count = 0;
-  char buf[32];
-  int len = snprintf (buf, sizeof buf, "$@%d", ++dummy_count);
-  assure (len < sizeof buf);
-  symbol *sym = symbol_get (buf, loc);
+  ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ dummy_ಎಣಿಕೆ = 0;
+  ವರ್ಣ buf[32];
+  ಪೂರ್ಣಾಙ್ಕ len = snprintf (buf, ಪರಿಮಾಣ buf, "$@%d", ++dummy_ಎಣಿಕೆ);
+  assure (len < ಪರಿಮಾಣ buf);
+  ಚಿಹ್ನೆ *sym = ಚಿಹ್ನೆ_get (buf, loc);
   sym->content->class = nterm_sym;
-  return sym;
+  ಪ್ರತ್ಯಾಗಮ sym;
 }
 
 bool
-symbol_is_dummy (symbol const *sym)
+ಚಿಹ್ನೆ_is_dummy (ಚಿಹ್ನೆ ಧ್ರುವ *sym)
 {
-  return sym->tag[0] == '@' || (sym->tag[0] == '$' && sym->tag[1] == '@');
+  ಪ್ರತ್ಯಾಗಮ sym->tag[0] == '@' || (sym->tag[0] == '$' && sym->tag[1] == '@');
 }
 
 /*-------------------.
 | Free the symbols.  |
 `-------------------*/
 
-void
-symbols_free (void)
+ಶೂನ್ಯ
+symbols_free (ಶೂನ್ಯ)
 {
-  hash_free (symbol_table);
+  hash_free (ಚಿಹ್ನೆ_table);
   hash_free (semantic_type_table);
-  free (symbols);
-  free (symbols_sorted);
-  free (semantic_types_sorted);
+  ಮುಕ್ತ (symbols);
+  ಮುಕ್ತ (symbols_sorted);
+  ಮುಕ್ತ (semantic_types_sorted);
 }
 
 
-static int
-symbol_cmp (void const *a, void const *b)
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ
+ಚಿಹ್ನೆ_cmp (ಶೂನ್ಯ ಧ್ರುವ *a, ಶೂನ್ಯ ಧ್ರುವ *b)
 {
-  return location_cmp ((*(symbol * const *)a)->location,
-                       (*(symbol * const *)b)->location);
+  ಪ್ರತ್ಯಾಗಮ location_cmp ((*(ಚಿಹ್ನೆ * ಧ್ರುವ *)a)->location,
+                       (*(ಚಿಹ್ನೆ * ಧ್ರುವ *)b)->location);
 }
 
 /* Store in *SORTED an array of pointers to the symbols contained in
    TABLE, sorted by order of appearance (i.e., by location). */
 
-static void
-table_sort (struct hash_table *table, symbol ***sorted)
+ಸ್ಥಿರ ಶೂನ್ಯ
+table_sort (ಸಂರಚನಾ hash_table *table, ಚಿಹ್ನೆ ***sorted)
 {
   aver (!*sorted);
-  size_t count = hash_get_n_entries (table);
-  *sorted = xnmalloc (count + 1, sizeof **sorted);
-  hash_get_entries (table, (void**)*sorted, count);
-  qsort (*sorted, count, sizeof **sorted, symbol_cmp);
-  (*sorted)[count] = NULL;
+  size_t ಎಣಿಕೆ = hash_get_n_entries (table);
+  *sorted = xnmalloc (ಎಣಿಕೆ + 1, ಪರಿಮಾಣ **sorted);
+  hash_get_entries (table, (ಶೂನ್ಯ**)*sorted, ಎಣಿಕೆ);
+  qsort (*sorted, ಎಣಿಕೆ, ಪರಿಮಾಣ **sorted, ಚಿಹ್ನೆ_cmp);
+  (*sorted)[ಎಣಿಕೆ] = ರಿಕ್ತ;
 }
 
 /*--------------------------------------------------------------.
@@ -1020,10 +1020,10 @@ table_sort (struct hash_table *table, symbol ***sorted)
 | symbols and consider them nonterminals.                       |
 `--------------------------------------------------------------*/
 
-void
-symbols_check_defined (void)
+ಶೂನ್ಯ
+symbols_check_defined (ಶೂನ್ಯ)
 {
-  table_sort (symbol_table, &symbols_sorted);
+  table_sort (ಚಿಹ್ನೆ_table, &symbols_sorted);
   /* semantic_type, like symbol, starts with a 'tag' field and then a
      'location' field.  And here we only deal with arrays/hashes of
      pointers, sizeof is not an issue.
@@ -1031,11 +1031,11 @@ symbols_check_defined (void)
      So instead of implementing table_sort (and symbol_cmp) once for
      each type, let's lie a bit to the typing system, and treat
      'semantic_type' as if it were 'symbol'. */
-  table_sort (semantic_type_table, (symbol ***) &semantic_types_sorted);
+  table_sort (semantic_type_table, (ಚಿಹ್ನೆ ***) &semantic_types_sorted);
 
-  for (int i = 0; symbols_sorted[i]; ++i)
-    symbol_check_defined (symbols_sorted[i]);
-  for (int i = 0; semantic_types_sorted[i]; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; symbols_sorted[i]; ++i)
+    ಚಿಹ್ನೆ_check_defined (symbols_sorted[i]);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; semantic_types_sorted[i]; ++i)
     semantic_type_check_defined (semantic_types_sorted[i]);
 }
 
@@ -1044,75 +1044,75 @@ symbols_check_defined (void)
 | number.                                                           |
 `------------------------------------------------------------------*/
 
-static void
-symbols_token_translations_init (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+symbols_token_translations_init (ಶೂನ್ಯ)
 {
   bool code_256_available_p = true;
 
   /* Find the highest token code, and whether 256, the POSIX preferred
      token code for the error token, is used.  */
   max_code = 0;
-  for (int i = 0; i < ntokens; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < ntokens; ++i)
     {
       sym_content *sym = symbols[i]->content;
-      if (sym->code != CODE_UNDEFINED)
+      ಯದಿ (sym->code != CODE_UNDEFINED)
         {
-          if (sym->code > max_code)
+          ಯದಿ (sym->code > max_code)
             max_code = sym->code;
-          if (sym->code == 256)
+          ಯದಿ (sym->code == 256)
             code_256_available_p = false;
         }
     }
 
   /* If 256 is not used, assign it to error, to follow POSIX.  */
-  if (code_256_available_p
+  ಯದಿ (code_256_available_p
       && errtoken->content->code == CODE_UNDEFINED)
     errtoken->content->code = 256;
 
   /* Set the missing codes. */
-  if (max_code < 256)
+  ಯದಿ (max_code < 256)
     max_code = 256;
 
-  for (int i = 0; i < ntokens; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < ntokens; ++i)
     {
       sym_content *sym = symbols[i]->content;
-      if (sym->code == CODE_UNDEFINED)
+      ಯದಿ (sym->code == CODE_UNDEFINED)
         {
           IGNORE_TYPE_LIMITS_BEGIN
-          if (INT_ADD_WRAPV (max_code, 1, &max_code))
-            complain (NULL, fatal, _("token number too large"));
+          ಯದಿ (INT_ADD_WRAPV (max_code, 1, &max_code))
+            complain (ರಿಕ್ತ, fatal, _("token number too large"));
           IGNORE_TYPE_LIMITS_END
           sym->code = max_code;
         }
-      if (sym->code > max_code)
+      ಯದಿ (sym->code > max_code)
         max_code = sym->code;
     }
 
   token_translations = xnmalloc (max_code + 1,
-                                 sizeof *token_translations);
+                                 ಪರಿಮಾಣ *token_translations);
 
   /* Initialize all entries for literal tokens to the internal token
      number for $undefined, which represents all invalid inputs.  */
-  for (int i = 0; i < max_code + 1; ++i)
-    token_translations[i] = undeftoken->content->number;
-  for (int i = 0; symbols_sorted[i]; ++i)
-    symbol_translation (symbols_sorted[i]);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < max_code + 1; ++i)
+    token_translations[i] = undeftoken->content->ಸಂಖ್ಯೆ;
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; symbols_sorted[i]; ++i)
+    ಚಿಹ್ನೆ_translation (symbols_sorted[i]);
 }
 
 
 /* Whether some symbol requires internationalization.  */
-static bool
-has_translations (void)
+ಸ್ಥಿರ bool
+has_translations (ಶೂನ್ಯ)
 {
-  for (const void *entry = hash_get_first (symbol_table);
+  ಪ್ರತಿ (ಧ್ರುವ ಶೂನ್ಯ *entry = hash_get_first (ಚಿಹ್ನೆ_table);
        entry;
-       entry = hash_get_next (symbol_table, entry))
+       entry = hash_get_next (ಚಿಹ್ನೆ_table, entry))
     {
-      const symbol *sym = (const symbol *) entry;
-      if (sym->translatable)
-        return true;
+      ಧ್ರುವ ಚಿಹ್ನೆ *sym = (ಧ್ರುವ ಚಿಹ್ನೆ *) entry;
+      ಯದಿ (sym->translatable)
+        ಪ್ರತ್ಯಾಗಮ true;
     }
-  return false;
+  ಪ್ರತ್ಯಾಗಮ false;
 }
 
 /*----------------------------------------------------------------.
@@ -1120,42 +1120,42 @@ has_translations (void)
 | FDEFINES.  Set up vectors SYMBOL_TABLE, TAGS of symbols.        |
 `----------------------------------------------------------------*/
 
-void
-symbols_pack (void)
+ಶೂನ್ಯ
+symbols_pack (ಶೂನ್ಯ)
 {
-  symbols = xcalloc (nsyms, sizeof *symbols);
-  for (int i = 0; symbols_sorted[i]; ++i)
-    symbol_pack (symbols_sorted[i]);
+  symbols = xcalloc (nsyms, ಪರಿಮಾಣ *symbols);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; symbols_sorted[i]; ++i)
+    ಚಿಹ್ನೆ_pack (symbols_sorted[i]);
 
   /* Aliases leave empty slots in symbols, so remove them.  */
   {
-    int nsyms_old = nsyms;
-    for (int writei = 0, readi = 0; readi < nsyms_old; readi += 1)
+    ಪೂರ್ಣಾಙ್ಕ nsyms_old = nsyms;
+    ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ writei = 0, readi = 0; readi < nsyms_old; readi += 1)
       {
-        if (symbols[readi] == NULL)
+        ಯದಿ (symbols[readi] == ರಿಕ್ತ)
           {
             nsyms -= 1;
             ntokens -= 1;
           }
-        else
+        ಅನ್ಯಥಾ
           {
             symbols[writei] = symbols[readi];
-            symbols[writei]->content->number = writei;
+            symbols[writei]->content->ಸಂಖ್ಯೆ = writei;
             writei += 1;
           }
       }
   }
-  symbols = xnrealloc (symbols, nsyms, sizeof *symbols);
+  symbols = xnrealloc (symbols, nsyms, ಪರಿಮಾಣ *symbols);
 
   symbols_token_translations_init ();
 
   // If some user tokens are internationalized, the internal ones
   // should be too.
-  if (has_translations ())
+  ಯದಿ (has_translations ())
     {
-      const bool eof_is_user_defined
+      ಧ್ರುವ bool eof_is_user_defined
         = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
-      if (!eof_is_user_defined)
+      ಯದಿ (!eof_is_user_defined)
         eoftoken->alias->translatable = true;
       undeftoken->alias->translatable = true;
       errtoken->alias->translatable = true;
@@ -1166,13 +1166,13 @@ symbols_pack (void)
 | Initialize relation graph nodes. |
 `---------------------------------*/
 
-static void
-init_prec_nodes (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+init_prec_nodes (ಶೂನ್ಯ)
 {
-  prec_nodes = xcalloc (nsyms, sizeof *prec_nodes);
-  for (int i = 0; i < nsyms; ++i)
+  prec_nodes = xcalloc (nsyms, ಪರಿಮಾಣ *prec_nodes);
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nsyms; ++i)
     {
-      prec_nodes[i] = xmalloc (sizeof *prec_nodes[i]);
+      prec_nodes[i] = xmalloc (ಪರಿಮಾಣ *prec_nodes[i]);
       symgraph *s = prec_nodes[i];
       s->id = i;
       s->succ = 0;
@@ -1184,13 +1184,13 @@ init_prec_nodes (void)
 | Create a link.  |
 `----------------*/
 
-static symgraphlink *
+ಸ್ಥಿರ symgraphlink *
 symgraphlink_new (graphid id, symgraphlink *next)
 {
-  symgraphlink *res = xmalloc (sizeof *res);
+  symgraphlink *res = xmalloc (ಪರಿಮಾಣ *res);
   res->id = id;
   res->next = next;
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 
@@ -1199,25 +1199,25 @@ symgraphlink_new (graphid id, symgraphlink *next)
 | whether this relation is new.  Use only in register_precedence.   |
 `------------------------------------------------------------------*/
 
-static bool
-register_precedence_second_symbol (symgraphlink **first, graphid sym)
+ಸ್ಥಿರ bool
+register_precedence_second_ಚಿಹ್ನೆ (symgraphlink **first, graphid sym)
 {
-  if (!*first || sym < (*first)->id)
+  ಯದಿ (!*first || sym < (*first)->id)
     *first = symgraphlink_new (sym, *first);
-  else
+  ಅನ್ಯಥಾ
     {
       symgraphlink *slist = *first;
 
-      while (slist->next && slist->next->id <= sym)
+      ಯಾವತ್ (slist->next && slist->next->id <= sym)
         slist = slist->next;
 
-      if (slist->id == sym)
+      ಯದಿ (slist->id == sym)
         /* Relation already present. */
-        return false;
+        ಪ್ರತ್ಯಾಗಮ false;
 
       slist->next = symgraphlink_new (sym, slist->next);
     }
-  return true;
+  ಪ್ರತ್ಯಾಗಮ true;
 }
 
 /*------------------------------------------------------------------.
@@ -1225,13 +1225,13 @@ register_precedence_second_symbol (symgraphlink **first, graphid sym)
 | has a greater precedence than the second one.                     |
 `------------------------------------------------------------------*/
 
-void
+ಶೂನ್ಯ
 register_precedence (graphid first, graphid snd)
 {
-  if (!prec_nodes)
+  ಯದಿ (!prec_nodes)
     init_prec_nodes ();
-  register_precedence_second_symbol (&(prec_nodes[first]->succ), snd);
-  register_precedence_second_symbol (&(prec_nodes[snd]->pred), first);
+  register_precedence_second_ಚಿಹ್ನೆ (&(prec_nodes[first]->succ), snd);
+  register_precedence_second_ಚಿಹ್ನೆ (&(prec_nodes[snd]->pred), first);
 }
 
 
@@ -1239,18 +1239,18 @@ register_precedence (graphid first, graphid snd)
 | Deep clear a linked / adjacency list). |
 `---------------------------------------*/
 
-static void
-linkedlist_free (symgraphlink *node)
+ಸ್ಥಿರ ಶೂನ್ಯ
+linkedlist_free (symgraphlink *ಗಂಟು)
 {
-  if (node)
+  ಯದಿ (ಗಂಟು)
     {
-      while (node->next)
+      ಯಾವತ್ (ಗಂಟು->next)
         {
-          symgraphlink *tmp = node->next;
-          free (node);
-          node = tmp;
+          symgraphlink *tmp = ಗಂಟು->next;
+          ಮುಕ್ತ (ಗಂಟು);
+          ಗಂಟು = tmp;
         }
-      free (node);
+      ಮುಕ್ತ (ಗಂಟು);
     }
 }
 
@@ -1258,27 +1258,27 @@ linkedlist_free (symgraphlink *node)
 | Clear and destroy association tracking table. |
 `----------------------------------------------*/
 
-static void
-assoc_free (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+assoc_free (ಶೂನ್ಯ)
 {
-  for (int i = 0; i < nsyms; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nsyms; ++i)
     {
       linkedlist_free (prec_nodes[i]->pred);
       linkedlist_free (prec_nodes[i]->succ);
-      free (prec_nodes[i]);
+      ಮುಕ್ತ (prec_nodes[i]);
     }
-  free (prec_nodes);
+  ಮುಕ್ತ (prec_nodes);
 }
 
 /*---------------------------------------.
 | Initialize association tracking table. |
 `---------------------------------------*/
 
-static void
-init_assoc (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+init_assoc (ಶೂನ್ಯ)
 {
-  used_assoc = xcalloc (nsyms, sizeof *used_assoc);
-  for (graphid i = 0; i < nsyms; ++i)
+  used_assoc = xcalloc (nsyms, ಪರಿಮಾಣ *used_assoc);
+  ಪ್ರತಿ (graphid i = 0; i < nsyms; ++i)
     used_assoc[i] = false;
 }
 
@@ -1286,23 +1286,23 @@ init_assoc (void)
 | Test if the associativity for the symbols is defined and useless. |
 `------------------------------------------------------------------*/
 
-static inline bool
-is_assoc_useless (symbol *s)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ bool
+is_assoc_useless (ಚಿಹ್ನೆ *s)
 {
-  return s
+  ಪ್ರತ್ಯಾಗಮ s
       && s->content->assoc != undef_assoc
       && s->content->assoc != precedence_assoc
-      && !used_assoc[s->content->number];
+      && !used_assoc[s->content->ಸಂಖ್ಯೆ];
 }
 
 /*-------------------------------.
 | Register a used associativity. |
 `-------------------------------*/
 
-void
+ಶೂನ್ಯ
 register_assoc (graphid i, graphid j)
 {
-  if (!used_assoc)
+  ಯದಿ (!used_assoc)
     init_assoc ();
   used_assoc[i] = true;
   used_assoc[j] = true;
@@ -1312,32 +1312,32 @@ register_assoc (graphid i, graphid j)
 | Print a warning for unused precedence relations.  |
 `--------------------------------------------------*/
 
-void
-print_precedence_warnings (void)
+ಶೂನ್ಯ
+print_precedence_warnings (ಶೂನ್ಯ)
 {
-  if (!prec_nodes)
+  ಯದಿ (!prec_nodes)
     init_prec_nodes ();
-  if (!used_assoc)
+  ಯದಿ (!used_assoc)
     init_assoc ();
-  for (int i = 0; i < nsyms; ++i)
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nsyms; ++i)
     {
-      symbol *s = symbols[i];
-      if (s
+      ಚಿಹ್ನೆ *s = symbols[i];
+      ಯದಿ (s
           && s->content->prec != 0
           && !prec_nodes[i]->pred
           && !prec_nodes[i]->succ)
         {
-          if (is_assoc_useless (s))
+          ಯದಿ (is_assoc_useless (s))
             complain (&s->content->prec_loc, Wprecedence,
                       _("useless precedence and associativity for %s"), s->tag);
-          else if (s->content->assoc == precedence_assoc)
+          ಅನ್ಯಥಾ ಯದಿ (s->content->assoc == precedence_assoc)
             complain (&s->content->prec_loc, Wprecedence,
                       _("useless precedence for %s"), s->tag);
         }
-      else if (is_assoc_useless (s))
+      ಅನ್ಯಥಾ ಯದಿ (is_assoc_useless (s))
         complain (&s->content->prec_loc, Wprecedence,
                   _("useless associativity for %s, use %%precedence"), s->tag);
     }
-  free (used_assoc);
+  ಮುಕ್ತ (used_assoc);
   assoc_free ();
 }

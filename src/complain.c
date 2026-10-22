@@ -19,26 +19,26 @@
 /* Based on error.c and error.h,
    written by David MacKenzie <djm@gnu.ai.mit.edu>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include <argmatch.h>
-#include <c-ctype.h>
-#include <progname.h>
-#include <stdarg.h>
-#include <sys/stat.h>
-#include <textstyle.h>
+#ಅನ್ತರ್ಭಾವ <argmatch.h>
+#ಅನ್ತರ್ಭಾವ <c-ctype.h>
+#ಅನ್ತರ್ಭಾವ <progname.h>
+#ಅನ್ತರ್ಭಾವ <stdarg.h>
+#ಅನ್ತರ್ಭಾವ <sys/stat.h>
+#ಅನ್ತರ್ಭಾವ <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "quote.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
+#ಅನ್ತರ್ಭಾವ "files.h"
+#ಅನ್ತರ್ಭಾವ "fixits.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "quote.h"
 
 // The URL of the manual page about diagnostics.  Use the per-node
 // manual, to avoid downloading repeatedly the whole manual over the
 // Internet.
-static const char *diagnostics_url
+ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ *diagnostics_url
   = "https://www.gnu.org/software/bison/manual/html_node/Diagnostics.html";
 
 
@@ -47,7 +47,7 @@ err_status complaint_status = status_none;
 bool warnings_are_errors = false;
 
 /** Whether -Werror/-Wno-error was applied to a warning.  */
-typedef enum
+ಪ್ರಕಾರನಿರ್ದೇಶ ಗಣನಾ
   {
     errority_unset = 0,     /** No explicit status.  */
     errority_disabled = 1,  /** Explicitly disabled with -Wno-error=foo.  */
@@ -55,10 +55,10 @@ typedef enum
   } errority;
 
 /** For each warning type, its errority.  */
-static errority errority_flag[warnings_size];
+ಸ್ಥಿರ errority errority_flag[warnings_size];
 
 /** Diagnostics severity.  */
-typedef enum
+ಪ್ರಕಾರನಿರ್ದೇಶ ಗಣನಾ
   {
     severity_disabled = 0, /**< Explicitly disabled via -Wno-foo.  */
     severity_unset = 1,    /**< Unspecified status.  */
@@ -69,18 +69,18 @@ typedef enum
 
 
 /** For each warning type, its severity.  */
-static severity warnings_flag[warnings_size];
+ಸ್ಥಿರ severity warnings_flag[warnings_size];
 
-styled_ostream_t errstream = NULL;
+styled_ostream_t errstream = ರಿಕ್ತ;
 
-void
-begin_use_class (const char *s, FILE *out)
+ಶೂನ್ಯ
+begin_use_class (ಧ್ರುವ ವರ್ಣ *s, FILE *out)
 {
-  if (out == stderr)
+  ಯದಿ (out == stderr)
     {
-      if (color_debug)
+      ಯದಿ (color_debug)
         fprintf (out, "<%s>", s);
-      else
+      ಅನ್ಯಥಾ
         {
           styled_ostream_begin_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -88,14 +88,14 @@ begin_use_class (const char *s, FILE *out)
     }
 }
 
-void
-end_use_class (const char *s, FILE *out)
+ಶೂನ್ಯ
+end_use_class (ಧ್ರುವ ವರ್ಣ *s, FILE *out)
 {
-  if (out == stderr)
+  ಯದಿ (out == stderr)
     {
-      if (color_debug)
+      ಯದಿ (color_debug)
         fprintf (out, "</%s>", s);
-      else
+      ಅನ್ಯಥಾ
         {
           styled_ostream_end_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -103,24 +103,24 @@ end_use_class (const char *s, FILE *out)
     }
 }
 
-static void
-begin_hyperlink (FILE *out, const char *ref)
+ಸ್ಥಿರ ಶೂನ್ಯ
+begin_hyperlink (FILE *out, ಧ್ರುವ ವರ್ಣ *ref)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, ref, NULL);
+  ಯದಿ (out == stderr)
+    styled_ostream_set_hyperlink (errstream, ref, ರಿಕ್ತ);
 }
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 end_hyperlink (FILE *out)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, NULL, NULL);
+  ಯದಿ (out == stderr)
+    styled_ostream_set_hyperlink (errstream, ರಿಕ್ತ, ರಿಕ್ತ);
 }
 
-void
+ಶೂನ್ಯ
 flush (FILE *out)
 {
-  if (out == stderr)
+  ಯದಿ (out == stderr)
     ostream_flush (errstream, FLUSH_THIS_STREAM);
   fflush (out);
 }
@@ -128,16 +128,16 @@ flush (FILE *out)
 bool
 is_styled (FILE *out)
 {
-  if (out != stderr)
-    return false;
-  if (color_debug)
-    return true;
-#if HAVE_LIBTEXTSTYLE
-  return (color_mode == color_yes
+  ಯದಿ (out != stderr)
+    ಪ್ರತ್ಯಾಗಮ false;
+  ಯದಿ (color_debug)
+    ಪ್ರತ್ಯಾಗಮ true;
+#ಯದಿ HAVE_LIBTEXTSTYLE
+  ಪ್ರತ್ಯಾಗಮ (color_mode == color_yes
           || color_mode == color_html
           || (color_mode == color_tty && isatty (STDERR_FILENO)));
-#else
-  return false;
+#ಅನ್ಯಥಾ
+  ಪ್ರತ್ಯಾಗಮ false;
 #endif
 }
 
@@ -148,7 +148,7 @@ is_styled (FILE *out)
 
 ARGMATCH_DEFINE_GROUP (warning, warnings)
 
-static const argmatch_warning_doc argmatch_warning_docs[] =
+ಸ್ಥಿರ ಧ್ರುವ argmatch_warning_doc argmatch_warning_docs[] =
 {
   { "conflicts-sr",     N_("S/R conflicts (enabled by default)") },
   { "conflicts-rr",     N_("R/R conflicts (enabled by default)") },
@@ -164,10 +164,10 @@ static const argmatch_warning_doc argmatch_warning_docs[] =
   { "no-CATEGORY",      N_("turn off warnings in CATEGORY") },
   { "none",             N_("turn off all the warnings") },
   { "error[=CATEGORY]", N_("treat warnings as errors") },
-  { NULL, NULL }
+  { ರಿಕ್ತ, ರಿಕ್ತ }
 };
 
-static const argmatch_warning_arg argmatch_warning_args[] =
+ಸ್ಥಿರ ಧ್ರುವ argmatch_warning_arg argmatch_warning_args[] =
 {
   { "all",             Wall },
   { "conflicts-rr",    Wconflicts_rr },
@@ -177,56 +177,56 @@ static const argmatch_warning_arg argmatch_warning_args[] =
   { "deprecated",      Wdeprecated },
   { "empty-rule",      Wempty_rule },
   { "everything",      Weverything },
-  { "midrule-values",  Wmidrule_values },
+  { "midrule-values",  Wmidrule_ಮೌಲ್ಯಗಳು },
   { "none",            Wnone },
   { "other",           Wother },
   { "precedence",      Wprecedence },
   { "yacc",            Wyacc },
-  { NULL, Wnone }
+  { ರಿಕ್ತ, Wnone }
 };
 
-const argmatch_warning_group_type argmatch_warning_group =
+ಧ್ರುವ argmatch_warning_group_type argmatch_warning_group =
 {
   argmatch_warning_args,
   argmatch_warning_docs,
   N_("Warning categories include:"),
-  NULL
+  ರಿಕ್ತ
 };
 
-void
+ಶೂನ್ಯ
 warning_usage (FILE *out)
 {
   argmatch_warning_usage (out);
 }
 
-void
-warning_argmatch (char const *arg, size_t no, size_t err)
+ಶೂನ್ಯ
+warning_argmatch (ವರ್ಣ ಧ್ರುವ *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  ಪೂರ್ಣಾಙ್ಕ ಮೌಲ್ಯ = *argmatch_warning_ಮೌಲ್ಯ ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  ಯದಿ (!ಮೌಲ್ಯ)
     {
-      value = Weverything;
+      ಮೌಲ್ಯ = Weverything;
       no = !no;
     }
 
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+  ಪ್ರತಿ (size_t b = 0; b < warnings_size; ++b)
+    ಯದಿ (ಮೌಲ್ಯ & 1 << b)
       {
-        if (err && no)
+        ಯದಿ (err && no)
           /* -Wno-error=foo.  */
           errority_flag[b] = errority_disabled;
-        else if (err && !no)
+        ಅನ್ಯಥಾ ಯದಿ (err && !no)
           {
             /* -Werror=foo: enables -Wfoo. */
             errority_flag[b] = errority_enabled;
             warnings_flag[b] = severity_warning;
           }
-        else if (no)
+        ಅನ್ಯಥಾ ಯದಿ (no)
           /* -Wno-foo.  */
           warnings_flag[b] = severity_disabled;
-        else
+        ಅನ್ಯಥಾ
           /* -Wfoo. */
           warnings_flag[b] = severity_warning;
       }
@@ -238,23 +238,23 @@ warning_argmatch (char const *arg, size_t no, size_t err)
  *                  If 0, then activate all the flags.
  */
 
-void
-warnings_argmatch (char *args)
+ಶೂನ್ಯ
+warnings_argmatch (ವರ್ಣ *args)
 {
-  if (!args)
+  ಯದಿ (!args)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  ಅನ್ಯಥಾ ಯದಿ (STREQ (args, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+  ಅನ್ಯಥಾ
+    ಪ್ರತಿ (args = strtok (args, ","); args; args = strtok (ರಿಕ್ತ, ","))
+      ಯದಿ (STREQ (args, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      ಅನ್ಯಥಾ ಯದಿ (STREQ (args, "no-error"))
         warnings_are_errors = false;
-      else
+      ಅನ್ಯಥಾ
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
           size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -267,49 +267,49 @@ warnings_argmatch (char *args)
 }
 
 /* Color style for this type of message.  */
-static const char*
+ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ*
 severity_style (severity s)
 {
-  switch (s)
+  ವಿಕಲ್ಪ (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "note";
-    case severity_warning:
-      return "warning";
-    case severity_error:
-    case severity_fatal:
-      return "error";
+    ಪಕ್ಷ severity_disabled:
+    ಪಕ್ಷ severity_unset:
+      ಪ್ರತ್ಯಾಗಮ "note";
+    ಪಕ್ಷ severity_warning:
+      ಪ್ರತ್ಯಾಗಮ "warning";
+    ಪಕ್ಷ severity_error:
+    ಪಕ್ಷ severity_fatal:
+      ಪ್ರತ್ಯಾಗಮ "error";
     }
   abort ();
 }
 
 /* Prefix for this type of message.  */
-static const char*
+ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ*
 severity_prefix (severity s)
 {
-  switch (s)
+  ವಿಕಲ್ಪ (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "";
-    case severity_warning:
-      return _("warning");
-    case severity_error:
-      return  _("error");
-    case severity_fatal:
-      return _("fatal error");
+    ಪಕ್ಷ severity_disabled:
+    ಪಕ್ಷ severity_unset:
+      ಪ್ರತ್ಯಾಗಮ "";
+    ಪಕ್ಷ severity_warning:
+      ಪ್ರತ್ಯಾಗಮ _("warning");
+    ಪಕ್ಷ severity_error:
+      ಪ್ರತ್ಯಾಗಮ  _("error");
+    ಪಕ್ಷ severity_fatal:
+      ಪ್ರತ್ಯಾಗಮ _("fatal error");
     }
   abort ();
 }
 
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 severity_print (severity s, FILE *out)
 {
-  if (s != severity_disabled)
+  ಯದಿ (s != severity_disabled)
     {
-      const char* style = severity_style (s);
+      ಧ್ರುವ ವರ್ಣ* style = severity_style (s);
       begin_use_class (style, out);
       fprintf (out, "%s:", severity_prefix (s));
       end_use_class (style, out);
@@ -322,23 +322,23 @@ severity_print (severity s, FILE *out)
 | complain.  |
 `-----------*/
 
-void
-complain_init_color (void)
+ಶೂನ್ಯ
+complain_init_color (ಶೂನ್ಯ)
 {
-#if HAVE_LIBTEXTSTYLE
-  if (is_styled (stderr))
+#ಯದಿ HAVE_LIBTEXTSTYLE
+  ಯದಿ (is_styled (stderr))
     {
       style_file_prepare ("BISON_STYLE", "BISON_STYLEDIR", pkgdatadir (),
                           "bison-default.css");
       /* As a fallback, use the default in the current directory.  */
-      struct stat statbuf;
-      if ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
+      ಸಂರಚನಾ stat statbuf;
+      ಯದಿ ((style_file_name == ರಿಕ್ತ || stat (style_file_name, &statbuf) < 0)
           && stat ("bison-default.css", &statbuf) == 0)
         style_file_name = "bison-default.css";
     }
-  else
+  ಅನ್ಯಥಾ
     /* No styling.  */
-    style_file_name = NULL;
+    style_file_name = ರಿಕ್ತ;
 #endif
 
   /* Workaround clang's warning (starting at Clang 3.5) about the stub
@@ -347,8 +347,8 @@ complain_init_color (void)
      | src/complain.c:274:7: error: code will never be executed [-Werror,-Wunreachable-code]
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#if defined __clang__
-# pragma clang diagnostic push
+#ಯದಿ defined __clang__
+# pragma clang diagnostic ತಳ್ಳು
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
   errstream =
@@ -357,20 +357,20 @@ complain_init_color (void)
                                   style_file_name)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
-#if defined __clang__
-# pragma clang diagnostic pop
+#ಯದಿ defined __clang__
+# pragma clang diagnostic ತೆಗೆ
 #endif
 }
 
-void
-complain_init (void)
+ಶೂನ್ಯ
+complain_init (ಶೂನ್ಯ)
 {
   caret_init ();
 
   warnings warnings_default =
     Wconflicts_sr | Wconflicts_rr | Wdeprecated | Wother;
 
-  for (size_t b = 0; b < warnings_size; ++b)
+  ಪ್ರತಿ (size_t b = 0; b < warnings_size; ++b)
     {
       warnings_flag[b] = (1 << b & warnings_default
                           ? severity_warning
@@ -379,8 +379,8 @@ complain_init (void)
     }
 }
 
-void
-complain_free (void)
+ಶೂನ್ಯ
+complain_free (ಶೂನ್ಯ)
 {
   caret_free ();
   styled_ostream_free (errstream);
@@ -390,68 +390,68 @@ complain_free (void)
    (severity_fatal, severity_error, severity_disabled, or
    severity_warning.) */
 
-static severity
+ಸ್ಥಿರ severity
 warning_severity (warnings flags)
 {
-  if (flags & fatal)
+  ಯದಿ (flags & fatal)
     /* Diagnostics about fatal errors.  */
-    return severity_fatal;
-  else if (flags & complaint)
+    ಪ್ರತ್ಯಾಗಮ severity_fatal;
+  ಅನ್ಯಥಾ ಯದಿ (flags & complaint)
     /* Diagnostics about errors.  */
-    return severity_error;
-  else
+    ಪ್ರತ್ಯಾಗಮ severity_error;
+  ಅನ್ಯಥಾ
     {
       /* Diagnostics about warnings.  */
       severity res = severity_disabled;
-      for (size_t b = 0; b < warnings_size; ++b)
-        if (flags & 1 << b)
+      ಪ್ರತಿ (size_t b = 0; b < warnings_size; ++b)
+        ಯದಿ (flags & 1 << b)
           {
             res = res < warnings_flag[b] ? warnings_flag[b] : res;
             /* If the diagnostic is enabled, and -Werror is enabled,
                and -Wno-error=foo was not explicitly requested, this
                is an error. */
-            if (res == severity_warning
+            ಯದಿ (res == severity_warning
                 && (errority_flag[b] == errority_enabled
                     || (warnings_are_errors
                         && errority_flag[b] != errority_disabled)))
               res = severity_error;
           }
-      return res;
+      ಪ್ರತ್ಯಾಗಮ res;
     }
 }
 
 bool
 warning_is_unset (warnings flags)
 {
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (flags & 1 << b && warnings_flag[b] != severity_unset)
-      return false;
-  return true;
+  ಪ್ರತಿ (size_t b = 0; b < warnings_size; ++b)
+    ಯದಿ (flags & 1 << b && warnings_flag[b] != severity_unset)
+      ಪ್ರತ್ಯಾಗಮ false;
+  ಪ್ರತ್ಯಾಗಮ true;
 }
 
 bool
 warning_is_enabled (warnings flags)
 {
-  return severity_warning <= warning_severity (flags);
+  ಪ್ರತ್ಯಾಗಮ severity_warning <= warning_severity (flags);
 }
 
 /** Display a "[-Wyacc]" like message on \a out.  */
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 warnings_print_categories (warnings warn_flags, FILE *out)
 {
-  for (int wbit = 0; wbit < warnings_size; ++wbit)
-    if (warn_flags & (1 << wbit))
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ wbit = 0; wbit < warnings_size; ++wbit)
+    ಯದಿ (warn_flags & (1 << wbit))
       {
         warnings w = 1 << wbit;
         severity s = warning_severity (w);
-        const char* style = severity_style (s);
+        ಧ್ರುವ ವರ್ಣ* style = severity_style (s);
         fputs (" [", out);
         begin_use_class (style, out);
         // E.g., "counterexamples".
-        const char *warning = argmatch_warning_argument (&w);
-        char ref[200];
-        snprintf (ref, sizeof ref,
+        ಧ್ರುವ ವರ್ಣ *warning = argmatch_warning_argument (&w);
+        ವರ್ಣ ref[200];
+        snprintf (ref, ಪರಿಮಾಣ ref,
                   "%s#W%s", diagnostics_url, warning);
         begin_hyperlink (out, ref);
         ostream_printf (errstream,
@@ -465,7 +465,7 @@ warnings_print_categories (warnings warn_flags, FILE *out)
         end_use_class (style, out);
         fputc (']', out);
         /* Display only the first match, the second is "-Wall".  */
-        return;
+        ಪ್ರತ್ಯಾಗಮ;
       }
 }
 
@@ -482,20 +482,20 @@ warnings_print_categories (warnings warn_flags, FILE *out)
  *                newline-terminated message to stderr.
  * \param args    the arguments of the format string.
  */
-static
-void
-error_message (const location *loc, warnings flags,
-               severity sever, const char *message, va_list args)
+ಸ್ಥಿರ
+ಶೂನ್ಯ
+error_message (ಧ್ರುವ location *loc, warnings flags,
+               severity sever, ಧ್ರುವ ವರ್ಣ *message, va_list args)
 {
-  const char* style = flags & note ? "note" : severity_style (sever);
+  ಧ್ರುವ ವರ್ಣ* style = flags & note ? "note" : severity_style (sever);
 
-  if (loc)
+  ಯದಿ (loc)
     location_print (*loc, stderr);
-  else
+  ಅನ್ಯಥಾ
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
 
-  if (sever != severity_disabled)
+  ಯದಿ (sever != severity_disabled)
     {
       begin_use_class (style, stderr);
       fprintf (stderr, "%s:", flags & note ? _("note") : severity_prefix (sever));
@@ -506,15 +506,15 @@ error_message (const location *loc, warnings flags,
   vfprintf (stderr, message, args);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
-  if (! (flags & silent) && sever != severity_disabled)
+  ಯದಿ (! (flags & silent) && sever != severity_disabled)
     warnings_print_categories (flags, stderr);
 
   size_t l = strlen (message);
-  if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+  ಯದಿ (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
     {
       putc ('\n', stderr);
       flush (stderr);
-      if (loc && !(flags & no_caret))
+      ಯದಿ (loc && !(flags & no_caret))
         location_caret (*loc, style, stderr);
     }
   flush (stderr);
@@ -522,27 +522,27 @@ error_message (const location *loc, warnings flags,
 
 /** Raise a complaint (fatal error, error or just warning).  */
 
-static void
-complains (const location *loc, warnings flags,
-           const char *message, va_list args)
+ಸ್ಥಿರ ಶೂನ್ಯ
+complains (ಧ್ರುವ location *loc, warnings flags,
+           ಧ್ರುವ ವರ್ಣ *message, va_list args)
 {
-  if ((flags & complaint) && complaint_status < status_complaint)
+  ಯದಿ ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
 
   severity s = warning_severity (flags);
-  if (severity_warning <= s)
+  ಯದಿ (severity_warning <= s)
     {
-      if (severity_error <= s && ! complaint_status)
+      ಯದಿ (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
       error_message (loc, flags, s, message, args);
     }
 
-  if (flags & fatal)
+  ಯದಿ (flags & fatal)
     exit (EXIT_FAILURE);
 }
 
-void
-complain (location const *loc, warnings flags, const char *message, ...)
+ಶೂನ್ಯ
+complain (location ಧ್ರುವ *loc, warnings flags, ಧ್ರುವ ವರ್ಣ *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -550,8 +550,8 @@ complain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-subcomplain (location const *loc, warnings flags, const char *message, ...)
+ಶೂನ್ಯ
+subcomplain (location ಧ್ರುವ *loc, warnings flags, ಧ್ರುವ ವರ್ಣ *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -559,45 +559,45 @@ subcomplain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-complain_args (location const *loc, warnings w,
-               int argc, char *argv[])
+ಶೂನ್ಯ
+complain_args (location ಧ್ರುವ *loc, warnings w,
+               ಪೂರ್ಣಾಙ್ಕ argc, ವರ್ಣ *argv[])
 {
-  switch (argc)
+  ವಿಕಲ್ಪ (argc)
   {
-  case 1:
+  ಪಕ್ಷ 1:
     complain (loc, w, "%s", _(argv[0]));
-    break;
-  case 2:
+    ಭಙ್ಗ;
+  ಪಕ್ಷ 2:
     complain (loc, w, _(argv[0]), argv[1]);
-    break;
-  case 3:
+    ಭಙ್ಗ;
+  ಪಕ್ಷ 3:
     complain (loc, w, _(argv[0]), argv[1], argv[2]);
-    break;
-  case 4:
+    ಭಙ್ಗ;
+  ಪಕ್ಷ 4:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3]);
-    break;
-  case 5:
+    ಭಙ್ಗ;
+  ಪಕ್ಷ 5:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3], argv[4]);
-    break;
-  default:
+    ಭಙ್ಗ;
+  ಸ್ವಭಾವ:
     complain (loc, fatal, "too many arguments for complains");
-    break;
+    ಭಙ್ಗ;
   }
 }
 
 
-void
-bison_directive (location const *loc, char const *directive)
+ಶೂನ್ಯ
+bison_directive (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *directive)
 {
   complain (loc, Wyacc,
             _("POSIX Yacc does not support %s"), directive);
 }
 
-void
-deprecated_directive (location const *loc, char const *old, char const *upd)
+ಶೂನ್ಯ
+deprecated_directive (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *old, ವರ್ಣ ಧ್ರುವ *upd)
 {
-  if (warning_is_enabled (Wdeprecated))
+  ಯದಿ (warning_is_enabled (Wdeprecated))
     {
       complain (loc, Wdeprecated,
                 _("deprecated directive: %s, use %s"),
@@ -608,20 +608,20 @@ deprecated_directive (location const *loc, char const *old, char const *upd)
     }
 }
 
-void
-duplicate_directive (char const *directive,
+ಶೂನ್ಯ
+duplicate_directive (ವರ್ಣ ಧ್ರುವ *directive,
                      location first, location second)
 {
-  if (feature_flag & feature_caret)
+  ಯದಿ (feature_flag & feature_caret)
     complain (&second, Wother, _("duplicate directive"));
-  else
+  ಅನ್ಯಥಾ
     complain (&second, Wother, _("duplicate directive: %s"), quote (directive));
   subcomplain (&first, Wother, _("previous declaration"));
   fixits_register (&second, "");
 }
 
-void
-duplicate_rule_directive (char const *directive,
+ಶೂನ್ಯ
+duplicate_rule_directive (ವರ್ಣ ಧ್ರುವ *directive,
                           location first, location second)
 {
   complain (&second, complaint, _("only one %s allowed per rule"), directive);
@@ -629,21 +629,21 @@ duplicate_rule_directive (char const *directive,
   fixits_register (&second, "");
 }
 
-void
+ಶೂನ್ಯ
 syntax_error (location loc,
-              int argc, const char* argv[])
+              ಪೂರ್ಣಾಙ್ಕ argc, ಧ್ರುವ ವರ್ಣ* argv[])
 {
-  if (complaint_status < status_complaint)
+  ಯದಿ (complaint_status < status_complaint)
     complaint_status = status_complaint;
-  assert (argc <= 5);
-  const char *format = NULL;
-  switch (argc)
+  ಪ್ರತಿಜ್ಞಾ (argc <= 5);
+  ಧ್ರುವ ವರ್ಣ *format = ರಿಕ್ತ;
+  ವಿಕಲ್ಪ (argc)
     {
 #define CASE(N, S)                          \
-      case N:                               \
+      ಪಕ್ಷ N:                               \
         format = S;                         \
-        break
-    default: /* Avoid compiler warnings. */
+        ಭಙ್ಗ
+    ಸ್ವಭಾವ: /* Avoid compiler warnings. */
       CASE (0, _("syntax error"));
       CASE (1, _("unexpected %0$s"));
       CASE (2, _("expected %1$s before %0$s"));
@@ -656,21 +656,21 @@ syntax_error (location loc,
   fputs (": ", stderr);
   severity_print (severity_error, stderr);
 
-  while (*format)
-    if (format[0] == '%'
+  ಯಾವತ್ (*format)
+    ಯದಿ (format[0] == '%'
         && c_isdigit (format[1])
         && format[2] == '$'
         && format[3] == 's'
         && (format[1] - '0') < argc)
       {
-        int i = format[1] - '0';
-        const char *style = i == 0 ? "unexpected" : "expected";
+        ಪೂರ್ಣಾಙ್ಕ i = format[1] - '0';
+        ಧ್ರುವ ವರ್ಣ *style = i == 0 ? "unexpected" : "expected";
         begin_use_class (style, stderr);
         fputs (argv[i], stderr);
         end_use_class (style, stderr);
         format += 4;
       }
-    else
+    ಅನ್ಯಥಾ
       {
         fputc (*format, stderr);
         ++format;

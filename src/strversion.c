@@ -17,51 +17,51 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include "strversion.h"
+#ಅನ್ತರ್ಭಾವ "strversion.h"
 
-#include <errno.h>
-#include <intprops.h>
+#ಅನ್ತರ್ಭಾವ <errno.h>
+#ಅನ್ತರ್ಭಾವ <intprops.h>
 
-int
-strversion_to_int (char const *version)
+ಪೂರ್ಣಾಙ್ಕ
+strversion_to_int (ವರ್ಣ ಧ್ರುವ *version)
 {
   IGNORE_TYPE_LIMITS_BEGIN
-  int res = 0;
+  ಪೂರ್ಣಾಙ್ಕ res = 0;
   errno = 0;
-  char *cp = NULL;
+  ವರ್ಣ *cp = ರಿಕ್ತ;
 
   {
     long major = strtol (version, &cp, 10);
-    if (errno || cp == version || *cp != '.' || major < 0
+    ಯದಿ (errno || cp == version || *cp != '.' || major < 0
         || INT_MULTIPLY_WRAPV (major, 10000, &res))
-      return -1;
+      ಪ್ರತ್ಯಾಗಮ -1;
   }
 
   {
     ++cp;
-    char *prev = cp;
+    ವರ್ಣ *prev = cp;
     long minor = strtol (cp, &cp, 10);
-    if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+    ಯದಿ (errno || cp == prev || (*cp != '\0' && *cp != '.')
         || ! (0 <= minor && minor < 100)
         || INT_MULTIPLY_WRAPV (minor, 100, &minor)
         || INT_ADD_WRAPV (minor, res, &res))
-      return -1;
+      ಪ್ರತ್ಯಾಗಮ -1;
   }
 
-  if (*cp == '.')
+  ಯದಿ (*cp == '.')
     {
       ++cp;
-      char *prev = cp;
+      ವರ್ಣ *prev = cp;
       long micro = strtol (cp, &cp, 10);
-      if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+      ಯದಿ (errno || cp == prev || (*cp != '\0' && *cp != '.')
           || ! (0 <= micro && micro < 100)
           || INT_ADD_WRAPV (micro, res, &res))
-        return -1;
+        ಪ್ರತ್ಯಾಗಮ -1;
     }
 
   IGNORE_TYPE_LIMITS_END
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }

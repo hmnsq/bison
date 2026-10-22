@@ -19,135 +19,135 @@
 
 %code requires
 {
-  #include "symlist.h"
-  #include "symtab.h"
+  #ಅನ್ತರ್ಭಾವ "symlist.h"
+  #ಅನ್ತರ್ಭಾವ "symtab.h"
 }
 
 %code provides
 {
   /* Initialize unquote.  */
-  void parser_init (void);
+  ಶೂನ್ಯ parser_init (ಶೂನ್ಯ);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  ಶೂನ್ಯ parser_free (ಶೂನ್ಯ);
 }
 
-%code top
+%code ತುದಿ_2
 {
   /* On column 0 to please syntax-check.  */
-#include <config.h>
+#ಅನ್ತರ್ಭಾವ <config.h>
 }
 
 %code
 {
-  #include "system.h"
+  #ಅನ್ತರ್ಭಾವ "system.h"
 
-  #include <c-ctype.h>
-  #include <quotearg.h>
-  #include <vasnprintf.h>
-  #include <xmemdup0.h>
+  #ಅನ್ತರ್ಭಾವ <c-ctype.h>
+  #ಅನ್ತರ್ಭಾವ <quotearg.h>
+  #ಅನ್ತರ್ಭಾವ <vasnprintf.h>
+  #ಅನ್ತರ್ಭಾವ <xmemdup0.h>
 
-  #include "complain.h"
-  #include "conflicts.h"
-  #include "files.h"
-  #include "getargs.h"
-  #include "gram.h"
-  #include "named-ref.h"
-  #include "reader.h"
-  #include "scan-code.h"
-  #include "scan-gram.h"
-  #include "strversion.h"
+  #ಅನ್ತರ್ಭಾವ "complain.h"
+  #ಅನ್ತರ್ಭಾವ "conflicts.h"
+  #ಅನ್ತರ್ಭಾವ "files.h"
+  #ಅನ್ತರ್ಭಾವ "getargs.h"
+  #ಅನ್ತರ್ಭಾವ "gram.h"
+  #ಅನ್ತರ್ಭಾವ "named-ref.h"
+  #ಅನ್ತರ್ಭಾವ "reader.h"
+  #ಅನ್ತರ್ಭಾವ "scan-code.h"
+  #ಅನ್ತರ್ಭಾವ "scan-gram.h"
+  #ಅನ್ತರ್ಭಾವ "strversion.h"
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ* api_version = "3.8";
 
-  static int current_prec = 0;
-  static location current_lhs_loc;
-  static named_ref *current_lhs_named_ref;
-  static symbol *current_lhs_symbol;
-  static symbol_class current_class = unknown_sym;
+  ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ current_prec = 0;
+  ಸ್ಥಿರ location current_lhs_loc;
+  ಸ್ಥಿರ named_ref *current_lhs_named_ref;
+  ಸ್ಥಿರ ಚಿಹ್ನೆ *current_lhs_ಚಿಹ್ನೆ;
+  ಸ್ಥಿರ ಚಿಹ್ನೆ_class current_class = unknown_sym;
 
   /** Set the new current left-hand side symbol, possibly common
    * to several right-hand side parts of rule.
    */
-  static void current_lhs (symbol *sym, location loc, named_ref *ref);
+  ಸ್ಥಿರ ಶೂನ್ಯ current_lhs (ಚಿಹ್ನೆ *sym, location loc, named_ref *ref);
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  ಸ್ಥಿರ YYLTYPE lloc_default (YYLTYPE ಧ್ರುವ *, ಪೂರ್ಣಾಙ್ಕ);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  ಸ್ಥಿರ ವರ್ಣ *strip_braces (ವರ್ಣ *code);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  ಸ್ಥಿರ ವರ್ಣ ಧ್ರುವ *translate_code (ವರ್ಣ *code, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  ಸ್ಥಿರ ವರ್ಣ ಧ್ರುವ *translate_code_braceless (ವರ್ಣ *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_header (ವರ್ಣ ಧ್ರುವ *ಮೌಲ್ಯ);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_error_verbose (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *directive);
 
   /* Handle a %file-prefix directive.  */
-  static void handle_file_prefix (location const *loc,
-                                  location const *dir_loc,
-                                  char const *directive, char const *value);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_file_prefix (location ಧ್ರುವ *loc,
+                                  location ಧ್ರುವ *dir_loc,
+                                  ವರ್ಣ ಧ್ರುವ *directive, ವರ್ಣ ಧ್ರುವ *ಮೌಲ್ಯ);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_language (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *lang);
 
   /* Handle a %name-prefix directive.  */
-  static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_name_prefix (location ಧ್ರುವ *loc,
+                                  ವರ್ಣ ಧ್ರುವ *directive, ವರ್ಣ ಧ್ರುವ *ಮೌಲ್ಯ);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_pure_parser (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_require (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *version);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_skeleton (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *skel);
 
   /* Handle a %yacc directive.  */
-  static void handle_yacc (location const *loc);
+  ಸ್ಥಿರ ಶೂನ್ಯ handle_yacc (location ಧ್ರುವ *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  ಸ್ಥಿರ ಶೂನ್ಯ gram_error (location ಧ್ರುವ *, ವರ್ಣ ಧ್ರುವ *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  ಸ್ಥಿರ ವರ್ಣ ಧ್ರುವ *char_name (ವರ್ಣ);
 
   /* Add style to semantic values in traces.  */
-  static void tron (FILE *yyo);
-  static void troff (FILE *yyo);
+  ಸ್ಥಿರ ಶೂನ್ಯ tron (FILE *yyo);
+  ಸ್ಥಿರ ಶೂನ್ಯ troff (FILE *yyo);
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  ಸ್ಥಿರ ವರ್ಣ *unquote (ಧ್ರುವ ವರ್ಣ *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  ಸ್ಥಿರ ಶೂನ್ಯ unquote_free (ವರ್ಣ *last_string);
 }
 
 %define api.header.include {"parse-gram.h"}
 %define api.prefix {gram_}
 %define api.pure full
 %define api.token.raw
-%define api.value.type union
+%define api.ಮೌಲ್ಯ.ಪ್ರಕಾರ ಸಙ್ಘ
 %define locations
 %define parse.error custom
 %define parse.lac full
@@ -175,8 +175,8 @@
   PERCENT_DESTRUCTOR  "%destructor"
   PERCENT_PRINTER     "%printer"
 
-  PERCENT_LEFT        "%left"
-  PERCENT_RIGHT       "%right"
+  PERCENT_ಎಡ        "%left"
+  PERCENT_ಬಲ       "%right"
   PERCENT_NONASSOC    "%nonassoc"
   PERCENT_PRECEDENCE  "%precedence"
 
@@ -198,7 +198,7 @@
   PERCENT_LANGUAGE        "%language"
   PERCENT_NAME_PREFIX     "%name-prefix"
   PERCENT_NO_DEFAULT_PREC "%no-default-prec"
-  PERCENT_NO_LINES        "%no-lines"
+  PERCENT_NO_ಸಾಲುಗಳು        "%no-lines"
   PERCENT_NONDETERMINISTIC_PARSER "%nondeterministic-parser"
   PERCENT_OUTPUT          "%output"
   PERCENT_PURE_PARSER     "%pure-parser"
@@ -230,13 +230,13 @@
 %code pre-printer  {tron (yyo);}
 %code post-printer {troff (yyo);}
 
-%type <unsigned char> CHAR_LITERAL
-%printer { fputs (char_name ($$), yyo); } <unsigned char>
+%ಪ್ರಕಾರ <unsigned ವರ್ಣ> CHAR_LITERAL
+%printer { fputs (char_name ($$), yyo); } <unsigned ವರ್ಣ>
 
-%type <char*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
-%printer { fputs ($$, yyo); } <char*>
+%ಪ್ರಕಾರ <ವರ್ಣ*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
+%printer { fputs ($$, yyo); } <ವರ್ಣ*>
 
-%type <uniqstr>
+%ಪ್ರಕಾರ <uniqstr>
   BRACKETED_ID ID ID_COLON
   PERCENT_ERROR_VERBOSE PERCENT_FILE_PREFIX PERCENT_FLAG PERCENT_NAME_PREFIX
   PERCENT_PURE_PARSER
@@ -247,26 +247,26 @@
 %printer { fprintf (yyo, "%%%s", $$); } PERCENT_FLAG
 %printer { fprintf (yyo, "<%s>", $$); } TAG tag
 
-%token <int> INT_LITERAL _("integer literal")
-%printer { fprintf (yyo, "%d", $$); } <int>
+%token <ಪೂರ್ಣಾಙ್ಕ> INT_LITERAL _("integer literal")
+%printer { fprintf (yyo, "%d", $$); } <ಪೂರ್ಣಾಙ್ಕ>
 
-%type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
-%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
+%ಪ್ರಕಾರ <ಚಿಹ್ನೆ*> id id_colon string_as_id ಚಿಹ್ನೆ token_decl token_decl_for_prec
+%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <ಚಿಹ್ನೆ*>
 %printer { fprintf (yyo, "%s:", $$->tag); } id_colon
 
-%type <assoc> precedence_declarator
+%ಪ್ರಕಾರ <assoc> precedence_declarator
 
-%destructor { symbol_list_free ($$); } <symbol_list*>
-%printer { symbol_list_syms_print ($$, yyo); } <symbol_list*>
+%destructor { ಚಿಹ್ನೆ_list_free ($$); } <ಚಿಹ್ನೆ_list*>
+%printer { ಚಿಹ್ನೆ_list_syms_print ($$, yyo); } <ಚಿಹ್ನೆ_list*>
 
-%type <named_ref*> named_ref.opt
+%ಪ್ರಕಾರ <named_ref*> named_ref.opt
 
 /*---------.
 | %param.  |
 `---------*/
 %code requires
 {
-  typedef enum
+  ಪ್ರಕಾರನಿರ್ದೇಶ ಗಣನಾ
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -282,21 +282,21 @@
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
-  static param_type current_param = param_none;
+  ಸ್ಥಿರ ಶೂನ್ಯ add_param (param_type ಪ್ರಕಾರ, ವರ್ಣ *decl, location loc);
+  ಸ್ಥಿರ param_type current_param = param_none;
 };
 %token <param_type> PERCENT_PARAM "%param";
 %printer
 {
-  switch ($$)
+  ವಿಕಲ್ಪ ($$)
     {
 #define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+      ಪಕ್ಷ param_ ## In: fputs ("%" #Out, yyo); ಭಙ್ಗ
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
 #undef CASE
-      case param_none: aver (false); break;
+      ಪಕ್ಷ param_none: aver (false); ಭಙ್ಗ;
     }
 } <param_type>;
 
@@ -306,7 +306,7 @@
                      \==========*/
 %%
 
-input:
+ಒಳಹರಿವು:
   prologue_declarations "%%" grammar epilogue.opt
 ;
 
@@ -332,9 +332,9 @@ prologue_declaration:
     {
       muscle_percent_define_ensure ($1, @1, true);
     }
-| "%define" variable value
+| "%define" variable ಮೌಲ್ಯ
     {
-      muscle_percent_define_insert ($2, @$, $3.kind, $3.chars,
+      muscle_percent_define_ಸೇರಿಸು ($2, @$, $3.kind, $3.chars,
                                     MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
 | "%header" string.opt             { handle_header ($2); }
@@ -354,7 +354,7 @@ prologue_declaration:
     }
 | "%language" STRING            { handle_language (&@1, $2); }
 | "%name-prefix" STRING         { handle_name_prefix (&@$, $1, $2); }
-| "%no-lines"                   { no_lines_flag = true; }
+| "%no-lines"                   { no_ಸಾಲುಗಳು_flag = true; }
 | "%nondeterministic-parser"    { nondeterministic_parser = true; }
 | "%output" STRING              { spec_outfile = unquote ($2); gram_scanner_last_string_free (); }
 | "%param" { current_param = $1; } params { current_param = param_none; }
@@ -379,7 +379,7 @@ params:
 `----------------------*/
 
 grammar_declaration:
-  symbol_declaration
+  ಚಿಹ್ನೆ_declaration
 | "%start" symbols.1
     {
       grammar_start_symbols_add ($2);
@@ -387,12 +387,12 @@ grammar_declaration:
 | code_props_type "{...}" generic_symlist
     {
       code_props code;
-      code_props_symbol_action_init (&code, $2, @2);
+      code_props_ಚಿಹ್ನೆ_action_init (&code, $2, @2);
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = $3; list; list = list->next)
-          symbol_list_code_props_set (list, $1, &code);
-        symbol_list_free ($3);
+        ಪ್ರತಿ (ಚಿಹ್ನೆ_list *list = $3; list; list = list->next)
+          ಚಿಹ್ನೆ_list_code_props_set (list, $1, &code);
+        ಚಿಹ್ನೆ_list_free ($3);
       }
     }
 | "%default-prec"
@@ -418,7 +418,7 @@ grammar_declaration:
     }
 ;
 
-%type <code_props_type> code_props_type;
+%ಪ್ರಕಾರ <code_props_type> code_props_type;
 %printer { fprintf (yyo, "%s", code_props_type_string ($$)); } <code_props_type>;
 code_props_type:
   "%destructor"  { $$ = destructor; }
@@ -433,7 +433,7 @@ code_props_type:
 
 union_name:
   %empty {}
-| ID     { muscle_percent_define_insert ("api.value.union.name",
+| ID     { muscle_percent_define_ಸೇರಿಸು ("api.value.union.name",
                                          @1, muscle_keyword, $1,
                                          MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE); }
 ;
@@ -448,61 +448,61 @@ grammar_declaration:
 ;
 
 
-%type <symbol_list*> nterm_decls symbol_decls symbols.1
+%ಪ್ರಕಾರ <ಚಿಹ್ನೆ_list*> nterm_decls ಚಿಹ್ನೆ_decls symbols.1
       token_decls token_decls_for_prec
       token_decl.1 token_decl_for_prec.1;
-symbol_declaration:
+ಚಿಹ್ನೆ_declaration:
   "%nterm" { current_class = nterm_sym; } nterm_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      ಚಿಹ್ನೆ_list_free ($syms);
     }
 | "%token" { current_class = token_sym; } token_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      ಚಿಹ್ನೆ_list_free ($syms);
     }
-| "%type" { current_class = pct_type_sym; } symbol_decls[syms]
+| "%type" { current_class = pct_type_sym; } ಚಿಹ್ನೆ_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      ಚಿಹ್ನೆ_list_free ($syms);
     }
 | precedence_declarator token_decls_for_prec[syms]
     {
       ++current_prec;
-      for (symbol_list *list = $syms; list; list = list->next)
-        symbol_precedence_set (list->content.sym, current_prec, $1, @1);
-      symbol_list_free ($syms);
+      ಪ್ರತಿ (ಚಿಹ್ನೆ_list *list = $syms; list; list = list->next)
+        ಚಿಹ್ನೆ_precedence_set (list->content.sym, current_prec, $1, @1);
+      ಚಿಹ್ನೆ_list_free ($syms);
     }
 ;
 
 precedence_declarator:
-  "%left"       { $$ = left_assoc; }
-| "%right"      { $$ = right_assoc; }
+  "%left"       { $$ = ಎಡ_assoc; }
+| "%right"      { $$ = ಬಲ_assoc; }
 | "%nonassoc"   { $$ = non_assoc; }
 | "%precedence" { $$ = precedence_assoc; }
 ;
 
-%type <char*> string.opt;
+%ಪ್ರಕಾರ <ವರ್ಣ*> string.opt;
 string.opt:
-  %empty  { $$ = NULL; }
+  %empty  { $$ = ರಿಕ್ತ; }
 | STRING  { $$ = $1; }
 ;
 
 tag.opt:
-  %empty { $$ = NULL; }
+  %empty { $$ = ರಿಕ್ತ; }
 | TAG    { $$ = $1; }
 ;
 
-%type <symbol_list*> generic_symlist generic_symlist_item;
+%ಪ್ರಕಾರ <ಚಿಹ್ನೆ_list*> generic_symlist generic_symlist_item;
 generic_symlist:
   generic_symlist_item
-| generic_symlist generic_symlist_item   { $$ = symbol_list_append ($1, $2); }
+| generic_symlist generic_symlist_item   { $$ = ಚಿಹ್ನೆ_list_append ($1, $2); }
 ;
 
 generic_symlist_item:
-  symbol    { $$ = symbol_list_sym_new ($1, @1); }
-| tag       { $$ = symbol_list_type_new ($1, @1); }
+  ಚಿಹ್ನೆ    { $$ = ಚಿಹ್ನೆ_list_sym_new ($1, @1); }
+| tag       { $$ = ಚಿಹ್ನೆ_list_type_new ($1, @1); }
 ;
 
 tag:
@@ -536,46 +536,46 @@ token_decls:
     }
 | TAG token_decl.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = ಚಿಹ್ನೆ_list_type_set ($syms, $TAG);
     }
 | token_decls TAG token_decl.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = ಚಿಹ್ನೆ_list_append ($1, ಚಿಹ್ನೆ_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbol declarations for %token or %nterm.
 token_decl.1:
-  token_decl                { $$ = symbol_list_sym_new ($1, @1); }
-| token_decl.1 token_decl   { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+  token_decl                { $$ = ಚಿಹ್ನೆ_list_sym_new ($1, @1); }
+| token_decl.1 token_decl   { $$ = ಚಿಹ್ನೆ_list_append ($1, ಚಿಹ್ನೆ_list_sym_new ($2, @2)); }
 
 // One symbol declaration for %token or %nterm.
 token_decl:
-  id int.opt[num] alias
+  id ಪೂರ್ಣಾಙ್ಕ.opt[num] alias
     {
       $$ = $id;
-      symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
-      if ($alias)
-        symbol_make_alias ($id, $alias, @alias);
+      ಚಿಹ್ನೆ_class_set ($id, current_class, @id, true);
+      ಯದಿ (0 <= $ಅಂಕೆ)
+        ಚಿಹ್ನೆ_code_set ($id, $ಅಂಕೆ, @ಅಂಕೆ);
+      ಯದಿ ($alias)
+        ಚಿಹ್ನೆ_make_alias ($id, $alias, @alias);
     }
 ;
 
-%type <int> int.opt;
-int.opt:
+%ಪ್ರಕಾರ <ಪೂರ್ಣಾಙ್ಕ> ಪೂರ್ಣಾಙ್ಕ.opt;
+ಪೂರ್ಣಾಙ್ಕ.opt:
   %empty  { $$ = -1; }
 | INT_LITERAL
 ;
 
-%type <symbol*> alias;
+%ಪ್ರಕಾರ <ಚಿಹ್ನೆ*> alias;
 alias:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = ರಿಕ್ತ; }
 | string_as_id   { $$ = $1; }
 | TSTRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = ಚಿಹ್ನೆ_get ($1, @1);
+      ಚಿಹ್ನೆ_class_set ($$, token_sym, @1, false);
       $$->translatable = true;
     }
 ;
@@ -596,29 +596,29 @@ token_decls_for_prec:
     }
 | TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = ಚಿಹ್ನೆ_list_type_set ($syms, $TAG);
     }
 | token_decls_for_prec TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = ಚಿಹ್ನೆ_list_append ($1, ಚಿಹ್ನೆ_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more token declarations for precedence declaration.
 token_decl_for_prec.1:
   token_decl_for_prec
-    { $$ = symbol_list_sym_new ($1, @1); }
+    { $$ = ಚಿಹ್ನೆ_list_sym_new ($1, @1); }
 | token_decl_for_prec.1 token_decl_for_prec
-    { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+    { $$ = ಚಿಹ್ನೆ_list_append ($1, ಚಿಹ್ನೆ_list_sym_new ($2, @2)); }
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
-  id int.opt[num]
+  id ಪೂರ್ಣಾಙ್ಕ.opt[num]
     {
       $$ = $id;
-      symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
+      ಚಿಹ್ನೆ_class_set ($id, token_sym, @id, false);
+      ಯದಿ (0 <= $ಅಂಕೆ)
+        ಚಿಹ್ನೆ_code_set ($id, $ಅಂಕೆ, @ಅಂಕೆ);
     }
 | string_as_id
 ;
@@ -629,34 +629,34 @@ token_decl_for_prec:
 `-----------------------------------*/
 
 // A non empty list of typed symbols (for %type).
-symbol_decls:
+ಚಿಹ್ನೆ_decls:
   symbols.1[syms]
     {
       $$ = $syms;
     }
 | TAG symbols.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = ಚಿಹ್ನೆ_list_type_set ($syms, $TAG);
     }
-| symbol_decls TAG symbols.1[syms]
+| ಚಿಹ್ನೆ_decls TAG symbols.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = ಚಿಹ್ನೆ_list_append ($1, ಚಿಹ್ನೆ_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbols.
 symbols.1:
-  symbol
+  ಚಿಹ್ನೆ
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_sym_new ($symbol, @symbol);
+      ಯದಿ (current_class != unknown_sym)
+        ಚಿಹ್ನೆ_class_set ($ಚಿಹ್ನೆ, current_class, @ಚಿಹ್ನೆ, false);
+      $$ = ಚಿಹ್ನೆ_list_sym_new ($ಚಿಹ್ನೆ, @ಚಿಹ್ನೆ);
     }
-  | symbols.1 symbol
+  | symbols.1 ಚಿಹ್ನೆ
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
+      ಯದಿ (current_class != unknown_sym)
+        ಚಿಹ್ನೆ_class_set ($ಚಿಹ್ನೆ, current_class, @ಚಿಹ್ನೆ, false);
+      $$ = ಚಿಹ್ನೆ_list_append ($1, ಚಿಹ್ನೆ_list_sym_new ($ಚಿಹ್ನೆ, @ಚಿಹ್ನೆ));
     }
 ;
 
@@ -697,17 +697,17 @@ rhses.1:
 %token PERCENT_EMPTY "%empty";
 rhs:
   %empty
-    { grammar_current_rule_begin (current_lhs_symbol, current_lhs_loc,
+    { grammar_current_rule_begin (current_lhs_ಚಿಹ್ನೆ, current_lhs_loc,
                                   current_lhs_named_ref); }
-| rhs symbol named_ref.opt
-    { grammar_current_rule_symbol_append ($2, @2, $3); }
+| rhs ಚಿಹ್ನೆ named_ref.opt
+    { grammar_current_rule_ಚಿಹ್ನೆ_append ($2, @2, $3); }
 | rhs tag.opt "{...}"[action] named_ref.opt[name]
     { grammar_current_rule_action_append ($action, @action, $name, $[tag.opt]); }
 | rhs "%?{...}"
     { grammar_current_rule_predicate_append ($2, @2); }
 | rhs "%empty"
     { grammar_current_rule_empty_set (@2); }
-| rhs "%prec" symbol
+| rhs "%prec" ಚಿಹ್ನೆ
     { grammar_current_rule_prec_set ($3, @3); }
 | rhs "%dprec" INT_LITERAL
     { grammar_current_rule_dprec_set ($3, @3); }
@@ -720,7 +720,7 @@ rhs:
 ;
 
 named_ref.opt:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = ರಿಕ್ತ; }
 | BRACKETED_ID   { $$ = named_ref_new ($1, @1); }
 ;
 
@@ -735,25 +735,25 @@ variable:
 
 /* Some content or empty by default. */
 %code requires {
-  #include "muscle-tab.h"
-  typedef struct
+  #ಅನ್ತರ್ಭಾವ "muscle-tab.h"
+  ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ
   {
-    char const *chars;
+    ವರ್ಣ ಧ್ರುವ *chars;
     muscle_kind kind;
-  } value_type;
+  } ಮೌಲ್ಯ_type;
 };
-%type <value_type> value;
+%ಪ್ರಕಾರ <ಮೌಲ್ಯ_type> ಮೌಲ್ಯ;
 %printer
 {
-  switch ($$.kind)
+  ವಿಕಲ್ಪ ($$.kind)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   $$.chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); break;
+    ಪಕ್ಷ muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); ಭಙ್ಗ;
+    ಪಕ್ಷ muscle_keyword: fprintf (yyo,   "%s",   $$.chars); ಭಙ್ಗ;
+    ಪಕ್ಷ muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); ಭಙ್ಗ;
     }
-} <value_type>;
+} <ಮೌಲ್ಯ_type>;
 
-value:
+ಮೌಲ್ಯ:
   %empty  { $$.kind = muscle_keyword; $$.chars = ""; }
 | ID      { $$.kind = muscle_keyword; $$.chars = $1; }
 | STRING  { $$.kind = muscle_string;  $$.chars = unquote ($1); gram_scanner_last_string_free ();}
@@ -770,17 +770,17 @@ value:
 
 id:
   ID
-    { $$ = symbol_from_uniqstr ($1, @1); }
+    { $$ = ಚಿಹ್ನೆ_from_uniqstr ($1, @1); }
 | CHAR_LITERAL
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      ಧ್ರುವ ವರ್ಣ *var = "api.token.raw";
+      ಯದಿ (current_class == nterm_sym)
         {
           complain (&@1, complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      ಯದಿ (muscle_percent_define_ifdef (var))
         {
           complain (&@1, complaint,
                     _("character literals cannot be used together"
@@ -788,18 +788,18 @@ id:
           location loc = muscle_percent_define_get_loc (var);
           subcomplain (&loc, complaint, _("definition of %s"), var);
         }
-      $$ = symbol_get (char_name ($1), @1);
-      symbol_class_set ($$, token_sym, @1, false);
-      symbol_code_set ($$, $1, @1);
+      $$ = ಚಿಹ್ನೆ_get (char_name ($1), @1);
+      ಚಿಹ್ನೆ_class_set ($$, token_sym, @1, false);
+      ಚಿಹ್ನೆ_code_set ($$, $1, @1);
     }
 ;
 
 id_colon:
-  ID_COLON { $$ = symbol_from_uniqstr ($1, @1); }
+  ID_COLON { $$ = ಚಿಹ್ನೆ_from_uniqstr ($1, @1); }
 ;
 
 
-symbol:
+ಚಿಹ್ನೆ:
   id
 | string_as_id
 ;
@@ -808,8 +808,8 @@ symbol:
 string_as_id:
   STRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = ಚಿಹ್ನೆ_get ($1, @1);
+      ಚಿಹ್ನೆ_class_set ($$, token_sym, @1, false);
     }
 ;
 
@@ -824,29 +824,29 @@ epilogue.opt:
 
 %%
 
-int
-yyreport_syntax_error (const yypcontext_t *ctx)
+ಪೂರ್ಣಾಙ್ಕ
+yyreport_syntax_error (ಧ್ರುವ yypcontext_t *ctx)
 {
-  int res = 0;
+  ಪೂರ್ಣಾಙ್ಕ res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
+  ಗಣನಾ { ARGS_MAX = 5 };
+  ಧ್ರುವ ವರ್ಣ *argv[ARGS_MAX];
+  ಪೂರ್ಣಾಙ್ಕ argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  ಯದಿ (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      ಪೂರ್ಣಾಙ್ಕ nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      ಯದಿ (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      ಅನ್ಯಥಾ
+        ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  ಪ್ರತ್ಯಾಗಮ res;
 }
 
 
@@ -855,8 +855,8 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    the right-hand side, and return an empty location equal to the end
    boundary of RHS[0] if the right-hand side is empty.  */
 
-static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+ಸ್ಥಿರ YYLTYPE
+lloc_default (YYLTYPE ಧ್ರುವ *rhs, ಪೂರ್ಣಾಙ್ಕ n)
 {
   YYLTYPE loc;
 
@@ -868,97 +868,97 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  ಪ್ರತಿ (ಪೂರ್ಣಾಙ್ಕ i = 1; i <= n; i++)
+    ಯದಿ (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
-        break;
+        ಭಙ್ಗ;
       }
 
-  return loc;
+  ಪ್ರತ್ಯಾಗಮ loc;
 }
 
-static
-char *strip_braces (char *code)
+ಸ್ಥಿರ
+ವರ್ಣ *strip_braces (ವರ್ಣ *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  ಪ್ರತ್ಯಾಗಮ code + 1;
 }
 
-static
-char const *
-translate_code (char *code, location loc, bool plain)
+ಸ್ಥಿರ
+ವರ್ಣ ಧ್ರುವ *
+translate_code (ವರ್ಣ *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  ಯದಿ (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
-    code_props_symbol_action_init (&plain_code, code, loc);
+  ಅನ್ಯಥಾ
+    code_props_ಚಿಹ್ನೆ_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  ಪ್ರತ್ಯಾಗಮ plain_code.code;
 }
 
-static
-char const *
-translate_code_braceless (char *code, location loc)
+ಸ್ಥಿರ
+ವರ್ಣ ಧ್ರುವ *
+translate_code_braceless (ವರ್ಣ *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  ಪ್ರತ್ಯಾಗಮ translate_code (strip_braces (code), loc, true);
 }
 
-static void
-add_param (param_type type, char *decl, location loc)
+ಸ್ಥಿರ ಶೂನ್ಯ
+add_param (param_type ಪ್ರಕಾರ, ವರ್ಣ *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  ಸ್ಥಿರ ವರ್ಣ ಧ್ರುವ alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  ವರ್ಣ ಧ್ರುವ *name_start = ರಿಕ್ತ;
   {
-    char *p;
+    ವರ್ಣ *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+    ಪ್ರತಿ (p = decl; p[1]; p++)
+      ಯದಿ ((p == decl
+           || ! memchr (alphanum, p[-1], ಪರಿಮಾಣ alphanum - 1))
+          && memchr (alphanum, p[0], ಪರಿಮಾಣ alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    ಯಾವತ್ (c_isspace ((unsigned ವರ್ಣ) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    ಯಾವತ್ (c_isspace ((unsigned ವರ್ಣ) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  ಯದಿ (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  ಅನ್ಯಥಾ
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      ವರ್ಣ *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      ಯದಿ (ಪ್ರಕಾರ & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      ಯದಿ (ಪ್ರಕಾರ & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
-      free (name);
+      ಮುಕ್ತ (name);
     }
 
   gram_scanner_last_string_free ();
 }
 
 
-static void
-handle_header (char const *value)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_header (ವರ್ಣ ಧ್ರುವ *ಮೌಲ್ಯ)
 {
   header_flag = true;
-  if (value)
+  ಯದಿ (ಮೌಲ್ಯ)
     {
-      char *file = unquote (value);
+      ವರ್ಣ *file = unquote (ಮೌಲ್ಯ);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -966,109 +966,109 @@ handle_header (char const *value)
 }
 
 
-static void
-handle_error_verbose (location const *loc, char const *directive)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_error_verbose (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *directive)
 {
   bison_directive (loc, directive);
-  muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
+  muscle_percent_define_ಸೇರಿಸು (directive, *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_file_prefix (location const *loc,
-                    location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_file_prefix (location ಧ್ರುವ *loc,
+                    location ಧ್ರುವ *dir_loc,
+                    ವರ್ಣ ಧ್ರುವ *directive, ವರ್ಣ ಧ್ರುವ *ಮೌಲ್ಯ_quoted)
 {
-  char *value = unquote (value_quoted);
+  ವರ್ಣ *ಮೌಲ್ಯ = unquote (ಮೌಲ್ಯ_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  ಯದಿ (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
-      spec_file_prefix = value;
+      spec_file_prefix = ಮೌಲ್ಯ;
     }
-  else
+  ಅನ್ಯಥಾ
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  ಯದಿ (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
-static void
-handle_language (location const *loc, char const *lang)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_language (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
 
 
-static void
-handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_name_prefix (location ಧ್ರುವ *loc,
+                    ವರ್ಣ ಧ್ರುವ *directive, ವರ್ಣ ಧ್ರುವ *ಮೌಲ್ಯ_quoted)
 {
-  char *value = unquote (value_quoted);
+  ವರ್ಣ *ಮೌಲ್ಯ = unquote (ಮೌಲ್ಯ_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  ವರ್ಣ buf1[1024];
+  size_t len1 = ಪರಿಮಾಣ (buf1);
+  ವರ್ಣ *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, ಮೌಲ್ಯ);
+  ಯದಿ (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  ಯದಿ (location_empty (spec_name_prefix_loc))
     {
-      spec_name_prefix = value;
+      spec_name_prefix = ಮೌಲ್ಯ;
       spec_name_prefix_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      ವರ್ಣ buf2[1024];
+      size_t len2 = ಪರಿಮಾಣ (buf2);
+      ವರ್ಣ *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", ಮೌಲ್ಯ);
+      ಯದಿ (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
-        free (new);
+      ಯದಿ (new != buf2)
+        ಮುಕ್ತ (new);
     }
-  else
+  ಅನ್ಯಥಾ
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
-    free (old);
+  ಯದಿ (old != buf1)
+    ಮುಕ್ತ (old);
 }
 
 
-static void
-handle_pure_parser (location const *loc, char const *directive)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_pure_parser (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
-  muscle_percent_define_insert ("api.pure", *loc, muscle_keyword, "",
+  muscle_percent_define_ಸೇರಿಸು ("api.pure", *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_require (location const *loc, char const *version_quoted)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_require (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *version_quoted)
 {
-  char *version = unquote (version_quoted);
+  ವರ್ಣ *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  ಯದಿ (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  ಅನ್ಯಥಾ
     {
-      const char* package_version =
+      ಧ್ರುವ ವರ್ಣ* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      ಯದಿ (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -1079,86 +1079,86 @@ handle_require (location const *loc, char const *version_quoted)
   gram_scanner_last_string_free ();
 }
 
-static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_skeleton (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  ವರ್ಣ *skel = unquote (skel_quoted);
+  ವರ್ಣ ಧ್ರುವ *skeleton_user = skel;
+  ಯದಿ (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      ಯಾವತ್ (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      ಯಾವತ್ (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
-      char *skeleton_build =
+      ವರ್ಣ *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      ಯದಿ (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
         }
       strcpy (skeleton_build + dir_length, skeleton_user);
       skeleton_user = uniqstr_new (skeleton_build);
-      free (skeleton_build);
+      ಮುಕ್ತ (skeleton_build);
     }
   skeleton_arg (skeleton_user, grammar_prio, *loc);
 }
 
 
-static void
-handle_yacc (location const *loc)
+ಸ್ಥಿರ ಶೂನ್ಯ
+handle_yacc (location ಧ್ರುವ *loc)
 {
-  const char *directive = "%yacc";
+  ಧ್ರುವ ವರ್ಣ *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  ಯದಿ (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  ಅನ್ಯಥಾ
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
-static void
-gram_error (location const *loc, char const *msg)
+ಸ್ಥಿರ ಶೂನ್ಯ
+gram_error (location ಧ್ರುವ *loc, ವರ್ಣ ಧ್ರುವ *ಸಂದೇಶ)
 {
-  complain (loc, complaint, "%s", msg);
+  complain (loc, complaint, "%s", ಸಂದೇಶ);
 }
 
-static char const *
-char_name (char c)
+ಸ್ಥಿರ ವರ್ಣ ಧ್ರುವ *
+char_name (ವರ್ಣ c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  ಯದಿ (c == '\'')
+    ಪ್ರತ್ಯಾಗಮ "'\\''";
+  ಅನ್ಯಥಾ
     {
-      char buf[4];
+      ವರ್ಣ buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      ಪ್ರತ್ಯಾಗಮ quotearg_style (escape_quoting_style, buf);
     }
 }
 
-static void
-current_lhs (symbol *sym, location loc, named_ref *ref)
+ಸ್ಥಿರ ಶೂನ್ಯ
+current_lhs (ಚಿಹ್ನೆ *sym, location loc, named_ref *ref)
 {
-  current_lhs_symbol = sym;
+  current_lhs_ಚಿಹ್ನೆ = sym;
   current_lhs_loc = loc;
-  if (sym)
-    symbol_location_as_lhs_set (sym, loc);
+  ಯದಿ (sym)
+    ಚಿಹ್ನೆ_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
      node.  This is because a single named-ref in the grammar may
      result in several uses when the user factors lhs between several
      rules using "|".  Therefore free the parser's original copy.  */
-  free (current_lhs_named_ref);
+  ಮುಕ್ತ (current_lhs_named_ref);
   current_lhs_named_ref = ref;
 }
 
-static void tron (FILE *yyo)
+ಸ್ಥಿರ ಶೂನ್ಯ tron (FILE *yyo)
 {
   begin_use_class ("value", yyo);
 }
 
-static void troff (FILE *yyo)
+ಸ್ಥಿರ ಶೂನ್ಯ troff (FILE *yyo)
 {
   end_use_class ("value", yyo);
 }
@@ -1168,70 +1168,70 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+ಸಂರಚನಾ obstack obstack_for_unquote;
 
-void
-parser_init (void)
+ಶೂನ್ಯ
+parser_init (ಶೂನ್ಯ)
 {
   obstack_init (&obstack_for_unquote);
 }
 
-void
-parser_free (void)
+ಶೂನ್ಯ
+parser_free (ಶೂನ್ಯ)
 {
   obstack_free (&obstack_for_unquote, 0);
 }
 
-static void
-unquote_free (char *last_string)
+ಸ್ಥಿರ ಶೂನ್ಯ
+unquote_free (ವರ್ಣ *last_string)
 {
   obstack_free (&obstack_for_unquote, last_string);
 }
 
-static char *
-unquote (const char *cp)
+ಸ್ಥಿರ ವರ್ಣ *
+unquote (ಧ್ರುವ ವರ್ಣ *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
-    switch (*cp)
+  ಪ್ರತಿ (++cp; *cp && *cp != '"'; ++cp)
+    ವಿಕಲ್ಪ (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      ಪಕ್ಷ '"':
+        ಭಙ್ಗ;
+      ಪಕ್ಷ '\\':
         ++cp;
-        switch (*cp)
+        ವಿಕಲ್ಪ (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          ಪಕ್ಷ '0': ಪಕ್ಷ '1': ಪಕ್ಷ '2': ಪಕ್ಷ '3': ಪಕ್ಷ '4':
+          ಪಕ್ಷ '5': ಪಕ್ಷ '6': ಪಕ್ಷ '7': ಪಕ್ಷ '8': ಪಕ್ಷ '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              ಪೂರ್ಣಾಙ್ಕ c = cp[0] - '0';
+              ಯದಿ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              ಯದಿ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            ಭಙ್ಗ;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          ಪಕ್ಷ 'a': GROW ('\a'); ಭಙ್ಗ;
+          ಪಕ್ಷ 'b': GROW ('\b'); ಭಙ್ಗ;
+          ಪಕ್ಷ 'f': GROW ('\f'); ಭಙ್ಗ;
+          ಪಕ್ಷ 'n': GROW ('\n'); ಭಙ್ಗ;
+          ಪಕ್ಷ 'r': GROW ('\r'); ಭಙ್ಗ;
+          ಪಕ್ಷ 't': GROW ('\t'); ಭಙ್ಗ;
+          ಪಕ್ಷ 'v': GROW ('\v'); ಭಙ್ಗ;
 
-          case 'x':
+          ಪಕ್ಷ 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              ಪೂರ್ಣಾಙ್ಕ c = 0;
+              ಯಾವತ್ (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -1239,18 +1239,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              ಭಙ್ಗ;
             }
           }
-        break;
+        ಭಙ್ಗ;
 
-      default:
+      ಸ್ವಭಾವ:
         GROW (*cp);
-        break;
+        ಭಙ್ಗ;
       }
-  assert (*cp == '"');
+  ಪ್ರತಿಜ್ಞಾ (*cp == '"');
   ++cp;
-  assert (*cp == '\0');
+  ಪ್ರತಿಜ್ಞಾ (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  ಪ್ರತ್ಯಾಗಮ obstack_finish0 (&obstack_for_unquote);
 }

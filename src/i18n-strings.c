@@ -28,9 +28,9 @@
   */
 
 // Please syntax-check.
-#include <config.h>
+#ಅನ್ತರ್ಭಾವ <config.h>
 
-static const char *const msgid[] =
+ಸ್ಥಿರ ಧ್ರುವ ವರ್ಣ *ಧ್ರುವ msgid[] =
   {
     N_("end of file"),
     N_("invalid token")

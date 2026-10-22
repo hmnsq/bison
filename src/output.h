@@ -22,6 +22,6 @@
 # define OUTPUT_H_
 
 /* Output the parsing tables and the parser code to FTABLE.  */
-void output (void);
+ಶೂನ್ಯ output (ಶೂನ್ಯ);
 
 #endif /* !OUTPUT_H_ */

@@ -23,14 +23,14 @@
 
 # include <stdio.h>
 
-void xml_indent (FILE *out, int level);
-void xml_puts (FILE *, int, char const *);
-void xml_printf (FILE *, int, char const *, ...);
-char const *xml_escape_n (int n, char const *str);
-char const *xml_escape (char const *str);
-void print_xml (void);
+ಶೂನ್ಯ xml_indent (FILE *out, ಪೂರ್ಣಾಙ್ಕ level);
+ಶೂನ್ಯ xml_puts (FILE *, ಪೂರ್ಣಾಙ್ಕ, ವರ್ಣ ಧ್ರುವ *);
+ಶೂನ್ಯ xml_printf (FILE *, ಪೂರ್ಣಾಙ್ಕ, ವರ್ಣ ಧ್ರುವ *, ...);
+ವರ್ಣ ಧ್ರುವ *xml_escape_n (ಪೂರ್ಣಾಙ್ಕ n, ವರ್ಣ ಧ್ರುವ *str);
+ವರ್ಣ ಧ್ರುವ *xml_escape (ವರ್ಣ ಧ್ರುವ *str);
+ಶೂನ್ಯ print_xml (ಶೂನ್ಯ);
 
 /* Use xsltproc to generate HTML from XML output.  */
-void print_html (void);
+ಶೂನ್ಯ print_html (ಶೂನ್ಯ);
 
 #endif /* !PRINT_XML_H_ */
