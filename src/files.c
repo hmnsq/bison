@@ -73,7 +73,7 @@ typedef struct generated_file
   bool is_source;
 } generated_file;
 static generated_file *generated_files = NULL;
-static int generated_files_size = 0;
+static цяло generated_files_size = 0;
 
 uniqstr grammar_file = NULL;
 
@@ -127,7 +127,7 @@ concat2 (char const *str1, char const *str2)
   char *cp;
   cp = stpcpy (res, str1);
   cp = stpcpy (cp, str2);
-  return res;
+  върни res;
 }
 
 /*-----------------------------------------------------------------.
@@ -139,11 +139,11 @@ FILE *
 xfopen (const char *name, const char *mode)
 {
   FILE *res = fopen_safer (name, mode);
-  if (!res)
+  ако (!res)
     error (EXIT_FAILURE, get_errno (),
            _("%s: cannot open"), quotearg_colon (name));
 
-  return res;
+  върни res;
 }
 
 /*-------------------------------------------------------------.
@@ -153,27 +153,27 @@ xfopen (const char *name, const char *mode)
 void
 xfclose (FILE *ptr)
 {
-  if (ptr == NULL)
-    return;
+  ако (ptr == NULL)
+    върни;
 
-  if (ferror (ptr))
+  ако (ferror (ptr))
     error (EXIT_FAILURE, 0, _("input/output error"));
 
-  if (fclose (ptr) != 0)
+  ако (fclose (ptr) != 0)
     error (EXIT_FAILURE, get_errno (), _("cannot close file"));
 }
 
 
 FILE *
-xfdopen (int fd, char const *mode)
+xfdopen (цяло fd, char const *mode)
 {
   FILE *res = fdopen (fd, mode);
-  if (! res)
+  ако (! res)
     error (EXIT_FAILURE, get_errno (),
            /* On a separate line to please the "unmarked_diagnostics"
               syntax-check. */
            "fdopen");
-  return res;
+  върни res;
 }
 
 /* The mapped name of FILENAME, allocated, if there are prefix maps.
@@ -186,18 +186,18 @@ map_file_name_alloc (char const *filename)
   {
     void const *ptr;
     gl_list_iterator_t iter = gl_list_iterator (prefix_maps);
-    while (gl_list_iterator_next (&iter, &ptr, NULL))
+    докато (gl_list_iterator_next (&iter, &ptr, NULL))
       {
         p = ptr;
-        if (strncmp (p->oldprefix, filename, strlen (p->oldprefix)) == 0)
+        ако (strncmp (p->oldprefix, filename, strlen (p->oldprefix)) == 0)
           break;
         p = NULL;
       }
     gl_list_iterator_free (&iter);
   }
 
-  if (!p)
-    return xstrdup (filename);
+  ако (!p)
+    върни xstrdup (filename);
 
   size_t oldprefix_len = strlen (p->oldprefix);
   size_t newprefix_len = strlen (p->newprefix);
@@ -206,7 +206,7 @@ map_file_name_alloc (char const *filename)
   char *end = stpcpy (res, p->newprefix);
   stpcpy (end, filename + oldprefix_len);
 
-  return res;
+  върни res;
 }
 
 static bool
@@ -214,7 +214,7 @@ string_equals (const void *x1, const void *x2)
 {
   const char *s1 = x1;
   const char *s2 = x2;
-  return STREQ (s1, s2);
+  върни STREQ (s1, s2);
 }
 
 /* A hash function for NUL-terminated char* strings using
@@ -228,10 +228,10 @@ string_hash (const void *x)
   const char *s = x;
   size_t h = 0;
 
-  for (; *s; s++)
+  за (; *s; s++)
     h = *s + ((h << 9) | (h >> (SIZE_BITS - 9)));
 
-  return h;
+  върни h;
 }
 
 static void
@@ -244,20 +244,20 @@ string_free (const void *cp)
 const char *
 map_file_name (char const *filename)
 {
-  if (!filename || !prefix_maps)
-    return filename;
-  if (!mapped_files)
+  ако (!filename || !prefix_maps)
+    върни filename;
+  ако (!mapped_files)
     mapped_files
       = gl_map_nx_create_empty (GL_HASH_MAP,
                                 string_equals, string_hash,
                                 string_free, string_free);
   const void *res = gl_map_get (mapped_files, filename);
-  if (!res)
+  ако (!res)
     {
       res = map_file_name_alloc (filename);
       gl_map_put (mapped_files, xstrdup (filename), res);
     }
-  return res;
+  върни res;
 }
 
 static void
@@ -271,7 +271,7 @@ prefix_map_free (struct prefix_map *p)
 void
 add_prefix_map (char const *oldprefix, char const *newprefix)
 {
-  if (!prefix_maps)
+  ако (!prefix_maps)
     prefix_maps
       = gl_list_create_empty (GL_ARRAY_LIST,
                               /* equals */ NULL,
@@ -294,12 +294,12 @@ add_prefix_map (char const *oldprefix, char const *newprefix)
 static void
 compute_exts_from_gf (const char *ext)
 {
-  if (STREQ (ext, ".y"))
+  ако (STREQ (ext, ".y"))
     {
       src_extension = xstrdup (language->src_extension);
       header_extension = xstrdup (language->header_extension);
     }
-  else
+  иначе
     {
       src_extension = xstrdup (ext);
       header_extension = xstrdup (ext);
@@ -364,11 +364,11 @@ file_name_split (const char *file_name,
 
   /* If there is an extension, check if there is a '.tab' part right
      before.  */
-  if (*ext)
+  ако (*ext)
     {
       size_t baselen = *ext - *base;
       size_t dottablen = sizeof (TAB_EXT) - 1;
-      if (dottablen < baselen
+      ако (dottablen < baselen
           && STRPREFIX_LIT (TAB_EXT, *ext - dottablen))
         *tab = *ext - dottablen;
     }
@@ -383,7 +383,7 @@ file_name_split (const char *file_name,
 static void
 compute_file_name_parts (void)
 {
-  if (spec_outfile)
+  ако (spec_outfile)
     {
       const char *base, *tab, *ext;
       file_name_split (spec_outfile, &base, &tab, &ext);
@@ -400,15 +400,15 @@ compute_file_name_parts (void)
                   (strlen (spec_outfile)
                    - (tab ? strlen (tab) : (ext ? strlen (ext) : 0))));
 
-      if (ext)
+      ако (ext)
         compute_exts_from_src (ext);
     }
-  else
+  иначе
     {
       const char *base, *tab, *ext;
       file_name_split (grammar_file, &base, &tab, &ext);
 
-      if (spec_file_prefix)
+      ако (spec_file_prefix)
         {
           /* If --file-prefix=foo was specified, ALL_BUT_TAB_EXT = 'foo'.  */
           dir_prefix =
@@ -416,13 +416,13 @@ compute_file_name_parts (void)
                       last_component (spec_file_prefix) - spec_file_prefix);
           all_but_tab_ext = xstrdup (spec_file_prefix);
         }
-      else if (! location_empty (yacc_loc))
+      иначе ако (! location_empty (yacc_loc))
         {
           /* If --yacc, then the output is 'y.tab.c'.  */
           dir_prefix = xstrdup ("");
           all_but_tab_ext = xstrdup ("y");
         }
-      else
+      иначе
         {
           /* Otherwise, ALL_BUT_TAB_EXT is computed from the input
              grammar: 'foo/bar.yy' => 'bar'.  */
@@ -431,13 +431,13 @@ compute_file_name_parts (void)
             xstrndup (base, (strlen (base) - (ext ? strlen (ext) : 0)));
         }
 
-      if (language->add_tab)
+      ако (language->add_tab)
         all_but_ext = concat2 (all_but_tab_ext, TAB_EXT);
-      else
+      иначе
         all_but_ext = xstrdup (all_but_tab_ext);
 
       /* Compute the extensions from the grammar file name.  */
-      if (ext && location_empty (yacc_loc))
+      ако (ext && location_empty (yacc_loc))
         compute_exts_from_gf (ext);
     }
 }
@@ -452,9 +452,9 @@ compute_output_file_names (void)
   compute_file_name_parts ();
 
   /* If not yet done. */
-  if (!src_extension)
+  ако (!src_extension)
     src_extension = xstrdup (".c");
-  if (!header_extension)
+  ако (!header_extension)
     header_extension = xstrdup (".h");
 
   parser_file_name =
@@ -462,36 +462,36 @@ compute_output_file_names (void)
      ? xstrdup (spec_outfile)
      : concat2 (all_but_ext, src_extension));
 
-  if (header_flag)
+  ако (header_flag)
     {
-      if (! spec_header_file)
+      ако (! spec_header_file)
         spec_header_file = concat2 (all_but_ext, header_extension);
     }
 
-  if (graph_flag)
+  ако (graph_flag)
     {
-      if (! spec_graph_file)
+      ако (! spec_graph_file)
         spec_graph_file = concat2 (all_but_tab_ext, ".gv");
       output_file_name_check (&spec_graph_file, false);
     }
 
-  if (html_flag)
+  ако (html_flag)
     {
-      if (! spec_html_file)
+      ако (! spec_html_file)
         spec_html_file = concat2 (all_but_tab_ext, ".html");
       output_file_name_check (&spec_html_file, false);
     }
 
-  if (xml_flag)
+  ако (xml_flag)
     {
-      if (! spec_xml_file)
+      ако (! spec_xml_file)
         spec_xml_file = concat2 (all_but_tab_ext, ".xml");
       output_file_name_check (&spec_xml_file, false);
     }
 
-  if (report_flag)
+  ако (report_flag)
     {
-      if (!spec_verbose_file)
+      ако (!spec_verbose_file)
         spec_verbose_file = concat2 (all_but_tab_ext, OUTPUT_EXT);
       output_file_name_check (&spec_verbose_file, false);
     }
@@ -505,26 +505,26 @@ void
 output_file_name_check (char **file_name, bool source)
 {
   bool conflict = false;
-  if (STREQ (*file_name, grammar_file))
+  ако (STREQ (*file_name, grammar_file))
     {
       complain (NULL, complaint, _("refusing to overwrite the input file %s"),
                 quote (*file_name));
       conflict = true;
     }
-  else
-    for (int i = 0; i < generated_files_size; i++)
-      if (STREQ (generated_files[i].name, *file_name))
+  иначе
+    за (цяло i = 0; i < generated_files_size; i++)
+      ако (STREQ (generated_files[i].name, *file_name))
         {
           complain (NULL, Wother, _("conflicting outputs to file %s"),
                     quote (generated_files[i].name));
           conflict = true;
         }
-  if (conflict)
+  ако (conflict)
     {
       free (*file_name);
       *file_name = strdup ("/dev/null");
     }
-  else
+  иначе
     {
       generated_files = xnrealloc (generated_files, ++generated_files_size,
                                    sizeof *generated_files);
@@ -536,8 +536,8 @@ output_file_name_check (char **file_name, bool source)
 void
 unlink_generated_sources (void)
 {
-  for (int i = 0; i < generated_files_size; i++)
-    if (generated_files[i].is_source)
+  за (цяло i = 0; i < generated_files_size; i++)
+    ако (generated_files[i].is_source)
       /* Ignore errors.  The file might not even exist.  */
       unlink (generated_files[i].name);
 }
@@ -548,12 +548,12 @@ static char *relocate_buffer = NULL;
 char const *
 pkgdatadir (void)
 {
-  if (relocate_buffer)
-    return relocate_buffer;
-  else
+  ако (relocate_buffer)
+    върни relocate_buffer;
+  иначе
     {
       char const *cp = getenv ("BISON_PKGDATADIR");
-      return cp ? cp : relocate2 (PKGDATADIR, &relocate_buffer);
+      върни cp ? cp : relocate2 (PKGDATADIR, &relocate_buffer);
     }
 }
 
@@ -561,17 +561,17 @@ char const *
 m4path (void)
 {
   char const *m4 = getenv ("M4");
-  if (m4)
-    return m4;
+  ако (m4)
+    върни m4;
 
   /* We don't use relocate2() to store the temporary buffer and re-use
      it, because m4path() is only called once.  */
   char const *m4_relocated = relocate (M4);
   struct stat buf;
-  if (stat (m4_relocated, &buf) == 0)
-    return m4_relocated;
+  ако (stat (m4_relocated, &buf) == 0)
+    върни m4_relocated;
 
-  return M4;
+  върни M4;
 }
 
 void
@@ -585,13 +585,13 @@ output_file_names_free (void)
   free (spec_header_file);
   free (parser_file_name);
   free (dir_prefix);
-  for (int i = 0; i < generated_files_size; i++)
+  за (цяло i = 0; i < generated_files_size; i++)
     free (generated_files[i].name);
   free (generated_files);
   free (relocate_buffer);
 
-  if (prefix_maps)
+  ако (prefix_maps)
     gl_list_free (prefix_maps);
-  if (mapped_files)
+  ако (mapped_files)
     gl_map_free (mapped_files);
 }

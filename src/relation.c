@@ -31,23 +31,23 @@ relation_print (const char *title,
                 relation r, relation_node size,
                 relation_node_print print, FILE *out)
 {
-  if (title)
+  ако (title)
     fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  за (relation_node i = 0; i < size; ++i)
+    ако (r[i])
       {
         fputs ("    ", out);
-        if (print)
+        ако (print)
           print (i, out);
-        else
+        иначе
           fprintf (out, "%3ld", (long) i);
         fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        за (relation_node j = 0; r[i][j] != END_NODE; ++j)
           {
             fputc (' ', out);
-            if (print)
+            ако (print)
               print (r[i][j], out);
-            else
+            иначе
               fprintf (out, "%3ld", (long) r[i][j]);
           }
         fputc ('\n', out);
@@ -76,25 +76,25 @@ traverse (relation_node i)
   vertices[++top] = i;
   relation_node height = indexes[i] = top;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  ако (R[i])
+    за (relation_node j = 0; R[i][j] != END_NODE; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        ако (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        ако (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  ако (indexes[i] == height)
+    за (;;)
       {
         relation_node j = vertices[top--];
         indexes[j] = infinity;
 
-        if (i == j)
+        ако (i == j)
           break;
 
         bitset_copy (F[j], F[i]);
@@ -113,8 +113,8 @@ relation_digraph (relation r, relation_node size, bitsetv function)
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  за (relation_node i = 0; i < size; i++)
+    ако (indexes[i] == 0 && R[i])
       traverse (i);
 
   free (indexes);
@@ -133,15 +133,15 @@ relation_transpose (relation *R_arg, relation_node size)
 {
   relation r = *R_arg;
 
-  if (trace_flag & trace_sets)
+  ако (trace_flag & trace_sets)
     relation_print ("relation_transpose", r, size, NULL, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
   size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  за (relation_node i = 0; i < size; i++)
+    ако (r[i])
+      за (relation_node j = 0; r[i][j] != END_NODE; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
@@ -149,10 +149,10 @@ relation_transpose (relation *R_arg, relation_node size)
   relation new_R = xnmalloc (size, sizeof *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
   relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  за (relation_node i = 0; i < size; i++)
     {
       relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      ако (nedges[i] > 0)
         {
           sp = xnmalloc (nedges[i] + 1, sizeof *sp);
           sp[nedges[i]] = END_NODE;
@@ -162,20 +162,20 @@ relation_transpose (relation *R_arg, relation_node size)
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  за (relation_node i = 0; i < size; i++)
+    ако (r[i])
+      за (relation_node j = 0; r[i][j] != END_NODE; ++j)
         *end_R[r[i][j]]++ = i;
 
   free (nedges);
   free (end_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
+  за (relation_node i = 0; i < size; i++)
     free (r[i]);
   free (r);
 
-  if (trace_flag & trace_sets)
+  ако (trace_flag & trace_sets)
     relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
 
   *R_arg = new_R;

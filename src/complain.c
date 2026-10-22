@@ -76,11 +76,11 @@ styled_ostream_t errstream = NULL;
 void
 begin_use_class (const char *s, FILE *out)
 {
-  if (out == stderr)
+  ако (out == stderr)
     {
-      if (color_debug)
+      ако (color_debug)
         fprintf (out, "<%s>", s);
-      else
+      иначе
         {
           styled_ostream_begin_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -91,11 +91,11 @@ begin_use_class (const char *s, FILE *out)
 void
 end_use_class (const char *s, FILE *out)
 {
-  if (out == stderr)
+  ако (out == stderr)
     {
-      if (color_debug)
+      ако (color_debug)
         fprintf (out, "</%s>", s);
-      else
+      иначе
         {
           styled_ostream_end_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -106,21 +106,21 @@ end_use_class (const char *s, FILE *out)
 static void
 begin_hyperlink (FILE *out, const char *ref)
 {
-  if (out == stderr)
+  ако (out == stderr)
     styled_ostream_set_hyperlink (errstream, ref, NULL);
 }
 
 static void
 end_hyperlink (FILE *out)
 {
-  if (out == stderr)
+  ако (out == stderr)
     styled_ostream_set_hyperlink (errstream, NULL, NULL);
 }
 
 void
 flush (FILE *out)
 {
-  if (out == stderr)
+  ако (out == stderr)
     ostream_flush (errstream, FLUSH_THIS_STREAM);
   fflush (out);
 }
@@ -128,16 +128,16 @@ flush (FILE *out)
 bool
 is_styled (FILE *out)
 {
-  if (out != stderr)
-    return false;
-  if (color_debug)
-    return true;
-#if HAVE_LIBTEXTSTYLE
-  return (color_mode == color_yes
+  ако (out != stderr)
+    върни false;
+  ако (color_debug)
+    върни true;
+#ако HAVE_LIBTEXTSTYLE
+  върни (color_mode == color_yes
           || color_mode == color_html
           || (color_mode == color_tty && isatty (STDERR_FILENO)));
-#else
-  return false;
+#иначе
+  върни false;
 #endif
 }
 
@@ -202,31 +202,31 @@ warning_usage (FILE *out)
 void
 warning_argmatch (char const *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  цяло value = *argmatch_warning_value ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  ако (!value)
     {
       value = Weverything;
       no = !no;
     }
 
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+  за (size_t b = 0; b < warnings_size; ++b)
+    ако (value & 1 << b)
       {
-        if (err && no)
+        ако (err && no)
           /* -Wno-error=foo.  */
           errority_flag[b] = errority_disabled;
-        else if (err && !no)
+        иначе ако (err && !no)
           {
             /* -Werror=foo: enables -Wfoo. */
             errority_flag[b] = errority_enabled;
             warnings_flag[b] = severity_warning;
           }
-        else if (no)
+        иначе ако (no)
           /* -Wno-foo.  */
           warnings_flag[b] = severity_disabled;
-        else
+        иначе
           /* -Wfoo. */
           warnings_flag[b] = severity_warning;
       }
@@ -241,20 +241,20 @@ warning_argmatch (char const *arg, size_t no, size_t err)
 void
 warnings_argmatch (char *args)
 {
-  if (!args)
+  ако (!args)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  иначе ако (STREQ (args, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+  иначе
+    за (args = strtok (args, ","); args; args = strtok (NULL, ","))
+      ако (STREQ (args, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      иначе ако (STREQ (args, "no-error"))
         warnings_are_errors = false;
-      else
+      иначе
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
           size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -274,12 +274,12 @@ severity_style (severity s)
     {
     case severity_disabled:
     case severity_unset:
-      return "note";
+      върни "note";
     case severity_warning:
-      return "warning";
+      върни "warning";
     case severity_error:
     case severity_fatal:
-      return "error";
+      върни "error";
     }
   abort ();
 }
@@ -292,13 +292,13 @@ severity_prefix (severity s)
     {
     case severity_disabled:
     case severity_unset:
-      return "";
+      върни "";
     case severity_warning:
-      return _("warning");
+      върни _("warning");
     case severity_error:
-      return  _("error");
+      върни  _("error");
     case severity_fatal:
-      return _("fatal error");
+      върни _("fatal error");
     }
   abort ();
 }
@@ -307,7 +307,7 @@ severity_prefix (severity s)
 static void
 severity_print (severity s, FILE *out)
 {
-  if (s != severity_disabled)
+  ако (s != severity_disabled)
     {
       const char* style = severity_style (s);
       begin_use_class (style, out);
@@ -325,18 +325,18 @@ severity_print (severity s, FILE *out)
 void
 complain_init_color (void)
 {
-#if HAVE_LIBTEXTSTYLE
-  if (is_styled (stderr))
+#ако HAVE_LIBTEXTSTYLE
+  ако (is_styled (stderr))
     {
       style_file_prepare ("BISON_STYLE", "BISON_STYLEDIR", pkgdatadir (),
                           "bison-default.css");
       /* As a fallback, use the default in the current directory.  */
       struct stat statbuf;
-      if ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
+      ако ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
           && stat ("bison-default.css", &statbuf) == 0)
         style_file_name = "bison-default.css";
     }
-  else
+  иначе
     /* No styling.  */
     style_file_name = NULL;
 #endif
@@ -347,7 +347,7 @@ complain_init_color (void)
      | src/complain.c:274:7: error: code will never be executed [-Werror,-Wunreachable-code]
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#if defined __clang__
+#ако defined __clang__
 # pragma clang diagnostic push
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
@@ -357,7 +357,7 @@ complain_init_color (void)
                                   style_file_name)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
-#if defined __clang__
+#ако defined __clang__
 # pragma clang diagnostic pop
 #endif
 }
@@ -370,7 +370,7 @@ complain_init (void)
   warnings warnings_default =
     Wconflicts_sr | Wconflicts_rr | Wdeprecated | Wother;
 
-  for (size_t b = 0; b < warnings_size; ++b)
+  за (size_t b = 0; b < warnings_size; ++b)
     {
       warnings_flag[b] = (1 << b & warnings_default
                           ? severity_warning
@@ -393,46 +393,46 @@ complain_free (void)
 static severity
 warning_severity (warnings flags)
 {
-  if (flags & fatal)
+  ако (flags & fatal)
     /* Diagnostics about fatal errors.  */
-    return severity_fatal;
-  else if (flags & complaint)
+    върни severity_fatal;
+  иначе ако (flags & complaint)
     /* Diagnostics about errors.  */
-    return severity_error;
-  else
+    върни severity_error;
+  иначе
     {
       /* Diagnostics about warnings.  */
       severity res = severity_disabled;
-      for (size_t b = 0; b < warnings_size; ++b)
-        if (flags & 1 << b)
+      за (size_t b = 0; b < warnings_size; ++b)
+        ако (flags & 1 << b)
           {
             res = res < warnings_flag[b] ? warnings_flag[b] : res;
             /* If the diagnostic is enabled, and -Werror is enabled,
                and -Wno-error=foo was not explicitly requested, this
                is an error. */
-            if (res == severity_warning
+            ако (res == severity_warning
                 && (errority_flag[b] == errority_enabled
                     || (warnings_are_errors
                         && errority_flag[b] != errority_disabled)))
               res = severity_error;
           }
-      return res;
+      върни res;
     }
 }
 
 bool
 warning_is_unset (warnings flags)
 {
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (flags & 1 << b && warnings_flag[b] != severity_unset)
-      return false;
-  return true;
+  за (size_t b = 0; b < warnings_size; ++b)
+    ако (flags & 1 << b && warnings_flag[b] != severity_unset)
+      върни false;
+  върни true;
 }
 
 bool
 warning_is_enabled (warnings flags)
 {
-  return severity_warning <= warning_severity (flags);
+  върни severity_warning <= warning_severity (flags);
 }
 
 /** Display a "[-Wyacc]" like message on \a out.  */
@@ -440,8 +440,8 @@ warning_is_enabled (warnings flags)
 static void
 warnings_print_categories (warnings warn_flags, FILE *out)
 {
-  for (int wbit = 0; wbit < warnings_size; ++wbit)
-    if (warn_flags & (1 << wbit))
+  за (цяло wbit = 0; wbit < warnings_size; ++wbit)
+    ако (warn_flags & (1 << wbit))
       {
         warnings w = 1 << wbit;
         severity s = warning_severity (w);
@@ -465,7 +465,7 @@ warnings_print_categories (warnings warn_flags, FILE *out)
         end_use_class (style, out);
         fputc (']', out);
         /* Display only the first match, the second is "-Wall".  */
-        return;
+        върни;
       }
 }
 
@@ -489,13 +489,13 @@ error_message (const location *loc, warnings flags,
 {
   const char* style = flags & note ? "note" : severity_style (sever);
 
-  if (loc)
+  ако (loc)
     location_print (*loc, stderr);
-  else
+  иначе
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
 
-  if (sever != severity_disabled)
+  ако (sever != severity_disabled)
     {
       begin_use_class (style, stderr);
       fprintf (stderr, "%s:", flags & note ? _("note") : severity_prefix (sever));
@@ -506,15 +506,15 @@ error_message (const location *loc, warnings flags,
   vfprintf (stderr, message, args);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
-  if (! (flags & silent) && sever != severity_disabled)
+  ако (! (flags & silent) && sever != severity_disabled)
     warnings_print_categories (flags, stderr);
 
   size_t l = strlen (message);
-  if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+  ако (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
     {
       putc ('\n', stderr);
       flush (stderr);
-      if (loc && !(flags & no_caret))
+      ако (loc && !(flags & no_caret))
         location_caret (*loc, style, stderr);
     }
   flush (stderr);
@@ -526,18 +526,18 @@ static void
 complains (const location *loc, warnings flags,
            const char *message, va_list args)
 {
-  if ((flags & complaint) && complaint_status < status_complaint)
+  ако ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
 
   severity s = warning_severity (flags);
-  if (severity_warning <= s)
+  ако (severity_warning <= s)
     {
-      if (severity_error <= s && ! complaint_status)
+      ако (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
       error_message (loc, flags, s, message, args);
     }
 
-  if (flags & fatal)
+  ако (flags & fatal)
     exit (EXIT_FAILURE);
 }
 
@@ -561,7 +561,7 @@ subcomplain (location const *loc, warnings flags, const char *message, ...)
 
 void
 complain_args (location const *loc, warnings w,
-               int argc, char *argv[])
+               цяло argc, char *argv[])
 {
   switch (argc)
   {
@@ -597,7 +597,7 @@ bison_directive (location const *loc, char const *directive)
 void
 deprecated_directive (location const *loc, char const *old, char const *upd)
 {
-  if (warning_is_enabled (Wdeprecated))
+  ако (warning_is_enabled (Wdeprecated))
     {
       complain (loc, Wdeprecated,
                 _("deprecated directive: %s, use %s"),
@@ -612,9 +612,9 @@ void
 duplicate_directive (char const *directive,
                      location first, location second)
 {
-  if (feature_flag & feature_caret)
+  ако (feature_flag & feature_caret)
     complain (&second, Wother, _("duplicate directive"));
-  else
+  иначе
     complain (&second, Wother, _("duplicate directive: %s"), quote (directive));
   subcomplain (&first, Wother, _("previous declaration"));
   fixits_register (&second, "");
@@ -631,9 +631,9 @@ duplicate_rule_directive (char const *directive,
 
 void
 syntax_error (location loc,
-              int argc, const char* argv[])
+              цяло argc, const char* argv[])
 {
-  if (complaint_status < status_complaint)
+  ако (complaint_status < status_complaint)
     complaint_status = status_complaint;
   assert (argc <= 5);
   const char *format = NULL;
@@ -656,21 +656,21 @@ syntax_error (location loc,
   fputs (": ", stderr);
   severity_print (severity_error, stderr);
 
-  while (*format)
-    if (format[0] == '%'
+  докато (*format)
+    ако (format[0] == '%'
         && c_isdigit (format[1])
         && format[2] == '$'
         && format[3] == 's'
         && (format[1] - '0') < argc)
       {
-        int i = format[1] - '0';
+        цяло i = format[1] - '0';
         const char *style = i == 0 ? "unexpected" : "expected";
         begin_use_class (style, stderr);
         fputs (argv[i], stderr);
         end_use_class (style, stderr);
         format += 4;
       }
-    else
+    иначе
       {
         fputc (*format, stderr);
         ++format;

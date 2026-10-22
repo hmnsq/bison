@@ -29,22 +29,22 @@ typedef char glyph_buffer_t[26];
 
 /* "→", separates the lhs of a rule from its rhs.  */
 extern glyph_buffer_t arrow;
-extern int arrow_width;
+extern цяло arrow_width;
 
 /* "•", a point in an item (aka, a dotted rule).  */
 extern glyph_buffer_t dot;
-extern int dot_width;
+extern цяло dot_width;
 
 /* "↳ ", below an lhs to announce the rhs.  */
 extern glyph_buffer_t down_arrow;
-extern int down_arrow_width;
+extern цяло down_arrow_width;
 
 /* "ε", an empty rhs.  */
 extern glyph_buffer_t empty;
-extern int empty_width;
+extern цяло empty_width;
 
 /* " ", separate symbols in the rhs of a derivation.  */
 extern const char *derivation_separator;
-extern int derivation_separator_width;
+extern цяло derivation_separator_width;
 
 #endif /* GLYPHS_H */

@@ -59,7 +59,7 @@ static struct escape_buf escape_bufs[num_escape_bufs];
 `--------------------------------*/
 
 static void
-print_core (FILE *out, int level, state *s)
+print_core (FILE *out, цяло level, state *s)
 {
   item_index *sitems = s->items;
   size_t snritems = s->nitems;
@@ -69,15 +69,15 @@ print_core (FILE *out, int level, state *s)
   sitems = itemset;
   snritems = nitemset;
 
-  if (!snritems)
+  ако (!snritems)
     {
       xml_puts (out, level, "<itemset/>");
-      return;
+      върни;
     }
 
   xml_puts (out, level, "<itemset>");
 
-  for (size_t i = 0; i < snritems; i++)
+  за (size_t i = 0; i < snritems; i++)
     {
       bool printed = false;
       item_number *sp1 = ritem + sitems[i];
@@ -85,12 +85,12 @@ print_core (FILE *out, int level, state *s)
       item_number *sp = r->rhs;
 
       /* Display the lookahead tokens?  */
-      if (item_number_is_rule_number (*sp1))
+      ако (item_number_is_rule_number (*sp1))
         {
           reductions *reds = s->reductions;
-          int red = state_reduction_find (s, r);
+          цяло red = state_reduction_find (s, r);
           /* Print item with lookaheads if there are. */
-          if (reds->lookaheads && red != -1)
+          ако (reds->lookaheads && red != -1)
             {
               xml_printf (out, level + 1,
                           "<item rule-number=\"%d\" dot=\"%d\">",
@@ -102,7 +102,7 @@ print_core (FILE *out, int level, state *s)
             }
         }
 
-      if (!printed)
+      ако (!printed)
         xml_printf (out, level + 1,
                     "<item rule-number=\"%d\" dot=\"%d\"/>",
                     r->number,
@@ -118,30 +118,30 @@ print_core (FILE *out, int level, state *s)
 `-----------------------------------------------------------*/
 
 static void
-print_transitions (state *s, FILE *out, int level)
+print_transitions (state *s, FILE *out, цяло level)
 {
   transitions *trans = s->transitions;
-  int n = 0;
-  int i;
+  цяло n = 0;
+  цяло i;
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  за (i = 0; i < trans->num; i++)
+    ако (!TRANSITION_IS_DISABLED (trans, i))
       {
         n++;
       }
 
   /* Nothing to report. */
-  if (!n)
+  ако (!n)
     {
       xml_puts (out, level, "<transitions/>");
-      return;
+      върни;
     }
 
   /* Report lookahead tokens and shifts.  */
   xml_puts (out, level, "<transitions>");
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  за (i = 0; i < trans->num; i++)
+    ако (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i))
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
@@ -153,8 +153,8 @@ print_transitions (state *s, FILE *out, int level)
                     xml_escape (tag), s1->number);
       }
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  за (i = 0; i < trans->num; i++)
+    ако (!TRANSITION_IS_DISABLED (trans, i)
         && !TRANSITION_IS_SHIFT (trans, i))
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
@@ -175,27 +175,27 @@ print_transitions (state *s, FILE *out, int level)
 `--------------------------------------------------------*/
 
 static void
-print_errs (FILE *out, int level, state *s)
+print_errs (FILE *out, цяло level, state *s)
 {
   errs *errp = s->errs;
   bool count = false;
-  int i;
+  цяло i;
 
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  за (i = 0; i < errp->num; ++i)
+    ако (errp->symbols[i])
       count = true;
 
   /* Nothing to report. */
-  if (!count)
+  ако (!count)
     {
       xml_puts (out, level, "<errors/>");
-      return;
+      върни;
     }
 
   /* Report lookahead tokens and errors.  */
   xml_puts (out, level, "<errors>");
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  за (i = 0; i < errp->num; ++i)
+    ако (errp->symbols[i])
       {
         char const *tag = errp->symbols[i]->tag;
         xml_printf (out, level + 1,
@@ -213,15 +213,15 @@ print_errs (FILE *out, int level, state *s)
 `-------------------------------------------------------------------*/
 
 static void
-print_reduction (FILE *out, int level, char const *lookahead,
+print_reduction (FILE *out, цяло level, char const *lookahead,
                  rule *r, bool enabled)
 {
-  if (rule_is_initial (r))
+  ако (rule_is_initial (r))
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"accept\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
                 enabled ? "true" : "false");
-  else
+  иначе
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"%d\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
@@ -235,48 +235,48 @@ print_reduction (FILE *out, int level, char const *lookahead,
 `-------------------------------------------*/
 
 static void
-print_reductions (FILE *out, int level, state *s)
+print_reductions (FILE *out, цяло level, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
   rule *default_reduction = NULL;
-  int report = false;
-  int i, j;
+  цяло report = false;
+  цяло i, j;
 
-  if (reds->num == 0)
+  ако (reds->num == 0)
     {
       xml_puts (out, level, "<reductions/>");
-      return;
+      върни;
     }
 
-  if (yydefact[s->number] != 0)
+  ако (yydefact[s->number] != 0)
     default_reduction = &rules[yydefact[s->number] - 1];
 
   bitset_zero (no_reduce_set);
   FOR_EACH_SHIFT (trans, i)
     bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
-  for (i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
+  за (i = 0; i < s->errs->num; ++i)
+    ако (s->errs->symbols[i])
       bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
 
-  if (default_reduction)
+  ако (default_reduction)
     report = true;
 
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  ако (reds->lookaheads)
+    за (i = 0; i < ntokens; i++)
       {
         bool count = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        за (j = 0; j < reds->num; ++j)
+          ако (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              ако (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  ако (reds->rules[j] != default_reduction)
                     report = true;
                   count = true;
                 }
-              else
+              иначе
                 {
                   report = true;
                 }
@@ -284,36 +284,36 @@ print_reductions (FILE *out, int level, state *s)
       }
 
   /* Nothing to report. */
-  if (!report)
+  ако (!report)
     {
       xml_puts (out, level, "<reductions/>");
-      return;
+      върни;
     }
 
   xml_puts (out, level, "<reductions>");
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  ако (reds->lookaheads)
+    за (i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
         bool count = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        за (j = 0; j < reds->num; ++j)
+          ако (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              ако (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  ако (reds->rules[j] != default_reduction)
                     print_reduction (out, level + 1, symbols[i]->tag,
                                      reds->rules[j], true);
-                  else
+                  иначе
                     defaulted = true;
                   count = true;
                 }
-              else
+              иначе
                 {
-                  if (defaulted)
+                  ако (defaulted)
                     print_reduction (out, level + 1, symbols[i]->tag,
                                      default_reduction, true);
                   defaulted = false;
@@ -323,7 +323,7 @@ print_reductions (FILE *out, int level, state *s)
             }
       }
 
-  if (default_reduction)
+  ако (default_reduction)
     print_reduction (out, level + 1,
                      "$default", default_reduction, true);
 
@@ -337,7 +337,7 @@ print_reductions (FILE *out, int level, state *s)
 `--------------------------------------------------------------*/
 
 static void
-print_actions (FILE *out, int level, state *s)
+print_actions (FILE *out, цяло level, state *s)
 {
   xml_puts (out, level, "<actions>");
   print_transitions (s, out, level + 1);
@@ -352,19 +352,19 @@ print_actions (FILE *out, int level, state *s)
 `----------------------------------*/
 
 static void
-print_state (FILE *out, int level, state *s)
+print_state (FILE *out, цяло level, state *s)
 {
   fputc ('\n', out);
   xml_printf (out, level, "<state number=\"%d\">", s->number);
   print_core (out, level + 1, s);
   print_actions (out, level + 1, s);
-  if (s->solved_conflicts_xml)
+  ако (s->solved_conflicts_xml)
     {
       xml_puts (out, level + 1, "<solved-conflicts>");
       fputs (s->solved_conflicts_xml, out);
       xml_puts (out, level + 1, "</solved-conflicts>");
     }
-  else
+  иначе
     xml_puts (out, level + 1, "<solved-conflicts/>");
   xml_puts (out, level, "</state>");
 }
@@ -375,7 +375,7 @@ print_state (FILE *out, int level, state *s)
 `-----------------------------------------*/
 
 static void
-print_grammar (FILE *out, int level)
+print_grammar (FILE *out, цяло level)
 {
   fputc ('\n', out);
   xml_puts (out, level, "<grammar>");
@@ -383,13 +383,13 @@ print_grammar (FILE *out, int level)
 
   /* Terminals */
   xml_puts (out, level + 1, "<terminals>");
-  for (int i = 0; i < max_code + 1; i++)
-    if (token_translations[i] != undeftoken->content->number)
+  за (цяло i = 0; i < max_code + 1; i++)
+    ако (token_translations[i] != undeftoken->content->number)
       {
         symbol const *sym = symbols[token_translations[i]];
         char const *tag = sym->tag;
         char const *type = sym->content->type_name;
-        int precedence = sym->content->prec;
+        цяло precedence = sym->content->prec;
         assoc associativity = sym->content->assoc;
         xml_indent (out, level + 2);
         fprintf (out,
@@ -399,9 +399,9 @@ print_grammar (FILE *out, int level)
                  type ? xml_escape_n (1, type) : "",
                  reduce_token_unused_in_grammar (token_translations[i])
                    ? "unused-in-grammar" : "useful");
-        if (precedence)
+        ако (precedence)
           fprintf (out, " prec=\"%d\"", precedence);
-        if (associativity != undef_assoc)
+        ако (associativity != undef_assoc)
           fprintf (out, " assoc=\"%s\"", assoc_to_string (associativity) + 1);
         fputs ("/>\n", out);
       }
@@ -409,7 +409,7 @@ print_grammar (FILE *out, int level)
 
   /* Nonterminals */
   xml_puts (out, level + 1, "<nonterminals>");
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
+  за (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
     {
       symbol const *sym = symbols[i];
       char const *tag = sym->tag;
@@ -428,14 +428,14 @@ print_grammar (FILE *out, int level)
 }
 
 void
-xml_indent (FILE *out, int level)
+xml_indent (FILE *out, цяло level)
 {
-  for (int i = 0; i < level; i++)
+  за (цяло i = 0; i < level; i++)
     fputs ("  ", out);
 }
 
 void
-xml_puts (FILE *out, int level, char const *s)
+xml_puts (FILE *out, цяло level, char const *s)
 {
   xml_indent (out, level);
   fputs (s, out);
@@ -443,7 +443,7 @@ xml_puts (FILE *out, int level, char const *s)
 }
 
 void
-xml_printf (FILE *out, int level, char const *fmt, ...)
+xml_printf (FILE *out, цяло level, char const *fmt, ...)
 {
   va_list arglist;
 
@@ -462,14 +462,14 @@ xml_escape_string (struct escape_buf *buf, char const *str)
   size_t len = strlen (str);
   size_t max_expansion = sizeof "&quot;" - 1;
 
-  if (buf->size <= max_expansion * len)
+  ако (buf->size <= max_expansion * len)
     {
       buf->size = max_expansion * len + 1;
       buf->ptr = x2realloc (buf->ptr, &buf->size);
     }
   char *p = buf->ptr;
 
-  for (; *str; str++)
+  за (; *str; str++)
     switch (*str)
       {
       default: *p++ = *str; break;
@@ -480,19 +480,19 @@ xml_escape_string (struct escape_buf *buf, char const *str)
       }
 
   *p = '\0';
-  return buf->ptr;
+  върни buf->ptr;
 }
 
 char const *
-xml_escape_n (int n, char const *str)
+xml_escape_n (цяло n, char const *str)
 {
-  return xml_escape_string (escape_bufs + n, str);
+  върни xml_escape_string (escape_bufs + n, str);
 }
 
 char const *
 xml_escape (char const *str)
 {
-  return xml_escape_n (0, str);
+  върни xml_escape_n (0, str);
 }
 
 void
@@ -502,7 +502,7 @@ print_xml (void)
 
   fputs ("<?xml version=\"1.0\"?>\n\n", out);
 
-  int level = 0;
+  цяло level = 0;
   xml_printf (out, level,
               "<bison-xml-report version=\"%s\" bug-report=\"%s\""
               " url=\"%s\">",
@@ -522,7 +522,7 @@ print_xml (void)
   /* print automaton */
   fputc ('\n', out);
   xml_puts (out, level + 1, "<automaton>");
-  for (state_number i = 0; i < nstates; i++)
+  за (state_number i = 0; i < nstates; i++)
     print_state (out, level + 2, states[i]);
   xml_puts (out, level + 1, "</automaton>");
 
@@ -530,7 +530,7 @@ print_xml (void)
 
   xml_puts (out, 0, "</bison-xml-report>");
 
-  for (int i = 0; i < num_escape_bufs; ++i)
+  за (цяло i = 0; i < num_escape_bufs; ++i)
     free (escape_bufs[i].ptr);
 
   xfclose (out);
@@ -545,7 +545,7 @@ print_html (void)
   char *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
   char *xsltproc = muscle_percent_define_get ("tool.xsltproc");
   char const *argv[11];
-  int i = 0;
+  цяло i = 0;
   argv[i++] = xsltproc;
   argv[i++] = "-o";
   argv[i++] = spec_html_file;
@@ -554,15 +554,15 @@ print_html (void)
   argv[i++] = NULL;
   aver (i <= ARRAY_CARDINALITY (argv));
 
-  if (trace_flag & trace_tools)
+  ако (trace_flag & trace_tools)
     {
       fputs ("running:", stderr);
-      for (int j = 0; argv[j]; ++j)
+      за (цяло j = 0; argv[j]; ++j)
         fprintf (stderr, " %s", argv[j]);
       fputc ('\n', stderr);
     }
 
-  int status
+  цяло status
     = execute (argv[0],
                argv[0], argv,
                /* directory */ NULL,
@@ -570,7 +570,7 @@ print_html (void)
                /* null_stdin, null_stdout, null_stderr */ true, true, true,
                /* slave_process */ true, /* exit_on_error */ false,
                /* termsigp */ NULL);
-  if (status)
+  ако (status)
     complain (NULL, complaint, _("%s failed with status %d"), argv[0], status);
   free (xsltproc);
   free (xml2html);
