@@ -142,7 +142,7 @@ void complain (location const *loc, warnings flags, char const *message, ...)
 
 /** Likewise, but with an \a argc/argv interface.  */
 void complain_args (location const *loc, warnings w,
-                    int argc, char *arg[]);
+                    целое argc, char *arg[]);
 
 /** Make a subcomplain with location and note.  */
 void subcomplain (location const *loc, warnings flags,
@@ -168,7 +168,7 @@ void duplicate_rule_directive (char const *directive,
 /** Report a syntax error, where argv[0] is the unexpected
     token, and argv[1...argc] are the expected ones.  */
 void syntax_error (location loc,
-                   int argc, const char* argv[]);
+                   целое argc, const char* argv[]);
 
 /** Warnings treated as errors shouldn't stop the execution as regular
     errors should (because due to their nature, it is safe to go

@@ -83,19 +83,19 @@
 #  ifdef __cplusplus
 #   define YY_CAST(Type, Val) static_cast<Type> (Val)
 #   define YY_REINTERPRET_CAST(Type, Val) reinterpret_cast<Type> (Val)
-#  else
+#  иначе
 #   define YY_CAST(Type, Val) ((Type) (Val))
 #   define YY_REINTERPRET_CAST(Type, Val) ((Type) (Val))
 #  endif
 # endif
 # ifndef YY_NULLPTR
-#  if defined __cplusplus
-#   if 201103L <= __cplusplus
+#  если defined __cplusplus
+#   если 201103L <= __cplusplus
 #    define YY_NULLPTR nullptr
-#   else
+#   иначе
 #    define YY_NULLPTR 0
 #   endif
-#  else
+#  иначе
 #   define YY_NULLPTR ((void*)0)
 #  endif
 # endif
@@ -239,7 +239,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
      in that version while developping it.  */
   static const char* api_version = "3.8";
 
-  static int current_prec = 0;
+  static целое current_prec = 0;
   static location current_lhs_loc;
   static named_ref *current_lhs_named_ref;
   static symbol *current_lhs_symbol;
@@ -252,7 +252,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  static YYLTYPE lloc_default (YYLTYPE const *, целое);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
@@ -340,7 +340,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 #ifndef __PTRDIFF_MAX__
 # include <limits.h> /* INFRINGES ON USER NAME SPACE */
-# if defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
+# если defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stdint.h> /* INFRINGES ON USER NAME SPACE */
 #  define YY_STDINT_H
 # endif
@@ -355,7 +355,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 typedef __INT_LEAST8_TYPE__ yytype_int8;
 #elif defined YY_STDINT_H
 typedef int_least8_t yytype_int8;
-#else
+#иначе
 typedef signed char yytype_int8;
 #endif
 
@@ -363,7 +363,7 @@ typedef signed char yytype_int8;
 typedef __INT_LEAST16_TYPE__ yytype_int16;
 #elif defined YY_STDINT_H
 typedef int_least16_t yytype_int16;
-#else
+#иначе
 typedef short yytype_int16;
 #endif
 
@@ -379,30 +379,30 @@ typedef short yytype_int16;
 # define UINT_LEAST16_MAX 65535
 #endif
 
-#if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
+#если defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
 typedef __UINT_LEAST8_TYPE__ yytype_uint8;
 #elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
        && UINT_LEAST8_MAX <= INT_MAX)
 typedef uint_least8_t yytype_uint8;
 #elif !defined __UINT_LEAST8_MAX__ && UCHAR_MAX <= INT_MAX
 typedef unsigned char yytype_uint8;
-#else
+#иначе
 typedef short yytype_uint8;
 #endif
 
-#if defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
+#если defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
 typedef __UINT_LEAST16_TYPE__ yytype_uint16;
 #elif (!defined __UINT_LEAST16_MAX__ && defined YY_STDINT_H \
        && UINT_LEAST16_MAX <= INT_MAX)
 typedef uint_least16_t yytype_uint16;
 #elif !defined __UINT_LEAST16_MAX__ && USHRT_MAX <= INT_MAX
 typedef unsigned short yytype_uint16;
-#else
-typedef int yytype_uint16;
+#иначе
+typedef целое yytype_uint16;
 #endif
 
 #ifndef YYPTRDIFF_T
-# if defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
+# если defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
 #  define YYPTRDIFF_T __PTRDIFF_TYPE__
 #  define YYPTRDIFF_MAXIMUM __PTRDIFF_MAX__
 # elif defined PTRDIFF_MAX
@@ -411,7 +411,7 @@ typedef int yytype_uint16;
 #  endif
 #  define YYPTRDIFF_T ptrdiff_t
 #  define YYPTRDIFF_MAXIMUM PTRDIFF_MAX
-# else
+# иначе
 #  define YYPTRDIFF_T long
 #  define YYPTRDIFF_MAXIMUM LONG_MAX
 # endif
@@ -425,7 +425,7 @@ typedef int yytype_uint16;
 # elif defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
-# else
+# иначе
 #  define YYSIZE_T unsigned
 # endif
 #endif
@@ -443,11 +443,11 @@ typedef int yytype_uint16;
 typedef yytype_uint8 yy_state_t;
 
 /* State numbers in computations.  */
-typedef int yy_state_fast_t;
+typedef целое yy_state_fast_t;
 
 #ifndef YY_
-# if defined YYENABLE_NLS && YYENABLE_NLS
-#  if ENABLE_NLS
+# если defined YYENABLE_NLS && YYENABLE_NLS
+#  если ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
@@ -463,35 +463,35 @@ typedef int yy_state_fast_t;
 
 
 #ifndef YY_ATTRIBUTE_PURE
-# if defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
+# если defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
 #  define YY_ATTRIBUTE_PURE __attribute__ ((__pure__))
-# else
+# иначе
 #  define YY_ATTRIBUTE_PURE
 # endif
 #endif
 
 #ifndef YY_ATTRIBUTE_UNUSED
-# if defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+# если defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
 #  define YY_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
-# else
+# иначе
 #  define YY_ATTRIBUTE_UNUSED
 # endif
 #endif
 
 /* Suppress unused-variable warnings by "using" E.  */
-#if ! defined lint || defined __GNUC__
+#если ! defined lint || defined __GNUC__
 # define YY_USE(E) ((void) (E))
-#else
+#иначе
 # define YY_USE(E) /* empty */
 #endif
 
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
-#if defined __GNUC__ && ! defined __ICC && 406 <= __GNUC__ * 100 + __GNUC_MINOR__
-# if __GNUC__ * 100 + __GNUC_MINOR__ < 407
+#если defined __GNUC__ && ! defined __ICC && 406 <= __GNUC__ * 100 + __GNUC_MINOR__
+# если __GNUC__ * 100 + __GNUC_MINOR__ < 407
 #  define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                           \
     _Pragma ("GCC diagnostic push")                                     \
     _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")
-# else
+# иначе
 #  define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                           \
     _Pragma ("GCC diagnostic push")                                     \
     _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")              \
@@ -499,7 +499,7 @@ typedef int yy_state_fast_t;
 # endif
 # define YY_IGNORE_MAYBE_UNINITIALIZED_END      \
     _Pragma ("GCC diagnostic pop")
-#else
+#иначе
 # define YY_INITIAL_VALUE(Value) Value
 #endif
 #ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
@@ -510,7 +510,7 @@ typedef int yy_state_fast_t;
 # define YY_INITIAL_VALUE(Value) /* Nothing. */
 #endif
 
-#if defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
+#если defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
 # define YY_IGNORE_USELESS_CAST_BEGIN                          \
     _Pragma ("GCC diagnostic push")                            \
     _Pragma ("GCC diagnostic ignored \"-Wuseless-cast\"")
@@ -525,13 +525,13 @@ typedef int yy_state_fast_t;
 
 #define YY_ASSERT(E) ((void) (0 && (E)))
 
-#if 1
+#если 1
 
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
 # ifdef YYSTACK_ALLOC
    /* Pacify GCC's 'empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } пока (0)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -539,13 +539,13 @@ typedef int yy_state_fast_t;
        to allow for a few compiler-allocated temporary stack slots.  */
 #   define YYSTACK_ALLOC_MAXIMUM 4032 /* reasonable circa 2006 */
 #  endif
-# else
+# иначе
 #  define YYSTACK_ALLOC YYMALLOC
 #  define YYSTACK_FREE YYFREE
 #  ifndef YYSTACK_ALLOC_MAXIMUM
 #   define YYSTACK_ALLOC_MAXIMUM YYSIZE_MAXIMUM
 #  endif
-#  if (defined __cplusplus && ! defined EXIT_SUCCESS \
+#  если (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
              && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
@@ -555,13 +555,13 @@ typedef int yy_state_fast_t;
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined EXIT_SUCCESS
+#   если ! defined malloc && ! defined EXIT_SUCCESS
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined EXIT_SUCCESS
+#   если ! defined free && ! defined EXIT_SUCCESS
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
@@ -569,7 +569,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 # define YYCOPY_NEEDED 1
 #endif /* 1 */
 
-#if (! defined yyoverflow \
+#если (! defined yyoverflow \
      && (! defined __cplusplus \
          || (defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL \
              && defined GRAM_STYPE_IS_TRIVIAL && GRAM_STYPE_IS_TRIVIAL)))
@@ -608,26 +608,26 @@ union yyalloc
         yynewbytes = yystacksize * YYSIZEOF (*Stack) + YYSTACK_GAP_MAXIMUM; \
         yyptr += yynewbytes / YYSIZEOF (*yyptr);                        \
       }                                                                 \
-    while (0)
+    пока (0)
 
 #endif
 
-#if defined YYCOPY_NEEDED && YYCOPY_NEEDED
+#если defined YYCOPY_NEEDED && YYCOPY_NEEDED
 /* Copy COUNT objects from SRC to DST.  The source and destination do
    not overlap.  */
 # ifndef YYCOPY
-#  if defined __GNUC__ && 1 < __GNUC__
+#  если defined __GNUC__ && 1 < __GNUC__
 #   define YYCOPY(Dst, Src, Count) \
       __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (Count)) * sizeof (*(Src)))
-#  else
+#  иначе
 #   define YYCOPY(Dst, Src, Count)              \
       do                                        \
         {                                       \
           YYPTRDIFF_T yyi;                      \
-          for (yyi = 0; yyi < (Count); yyi++)   \
+          для (yyi = 0; yyi < (Count); yyi++)   \
             (Dst)[yyi] = (Src)[yyi];            \
         }                                       \
-      while (0)
+      пока (0)
 #  endif
 # endif
 #endif /* !YYCOPY_NEEDED */
@@ -654,7 +654,7 @@ union yyalloc
    as returned by yylex, with out-of-bounds checking.  */
 #define YYTRANSLATE(YYX) YY_CAST (yysymbol_kind_t, YYX)
 
-#if GRAM_DEBUG
+#если GRAM_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
@@ -677,7 +677,7 @@ static const yytype_int16 yyrline[] =
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if 1
+#если 1
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
@@ -722,7 +722,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,
        0
   };
-  return (yysymbol < YYNTOKENS && yytranslatable[yysymbol]
+  вернуть (yysymbol < YYNTOKENS && yytranslatable[yysymbol]
           ? _(yy_sname[yysymbol])
           : yy_sname[yysymbol]);
 }
@@ -941,7 +941,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == GRAM_EMPTY)                                        \
+    если (yychar == GRAM_EMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -950,12 +950,12 @@ enum { YYENOMEM = -2 };
         YY_LAC_DISCARD ("YYBACKUP");                              \
         goto yybackup;                                            \
       }                                                           \
-    else                                                          \
+    иначе                                                          \
       {                                                           \
         yyerror (&yylloc, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
-  while (0)
+  пока (0)
 
 /* Backward compatibility with an undocumented macro.
    Use GRAM_error or GRAM_UNDEF. */
@@ -968,28 +968,28 @@ enum { YYENOMEM = -2 };
 #ifndef YYLLOC_DEFAULT
 # define YYLLOC_DEFAULT(Current, Rhs, N)                                \
     do                                                                  \
-      if (N)                                                            \
+      если (N)                                                            \
         {                                                               \
           (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;        \
           (Current).first_column = YYRHSLOC (Rhs, 1).first_column;      \
           (Current).last_line    = YYRHSLOC (Rhs, N).last_line;         \
           (Current).last_column  = YYRHSLOC (Rhs, N).last_column;       \
         }                                                               \
-      else                                                              \
+      иначе                                                              \
         {                                                               \
           (Current).first_line   = (Current).last_line   =              \
             YYRHSLOC (Rhs, 0).last_line;                                \
           (Current).first_column = (Current).last_column =              \
             YYRHSLOC (Rhs, 0).last_column;                              \
         }                                                               \
-    while (0)
+    пока (0)
 #endif
 
 #define YYRHSLOC(Rhs, K) ((Rhs)[K])
 
 
 /* Enable debugging if requested.  */
-#if GRAM_DEBUG
+#если GRAM_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -998,9 +998,9 @@ enum { YYENOMEM = -2 };
 
 # define YYDPRINTF(Args)                        \
 do {                                            \
-  if (yydebug)                                  \
+  если (yydebug)                                  \
     YYFPRINTF Args;                             \
-} while (0)
+} пока (0)
 
 
 /* YYLOCATION_PRINT -- Print the location on the stream.
@@ -1009,7 +1009,7 @@ do {                                            \
 
 # ifndef YYLOCATION_PRINT
 
-#  if defined YY_LOCATION_PRINT
+#  если defined YY_LOCATION_PRINT
 
    /* Temporary convenience wrapper in case some people defined the
       undocumented and private YY_LOCATION_PRINT macros.  */
@@ -1020,29 +1020,29 @@ do {                                            \
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
 YY_ATTRIBUTE_UNUSED
-static int
+static целое
 yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 {
-  int res = 0;
-  int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
-  if (0 <= yylocp->first_line)
+  целое res = 0;
+  целое end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
+  если (0 <= yylocp->first_line)
     {
       res += YYFPRINTF (yyo, "%d", yylocp->first_line);
-      if (0 <= yylocp->first_column)
+      если (0 <= yylocp->first_column)
         res += YYFPRINTF (yyo, ".%d", yylocp->first_column);
     }
-  if (0 <= yylocp->last_line)
+  если (0 <= yylocp->last_line)
     {
-      if (yylocp->first_line < yylocp->last_line)
+      если (yylocp->first_line < yylocp->last_line)
         {
           res += YYFPRINTF (yyo, "-%d", yylocp->last_line);
-          if (0 <= end_col)
+          если (0 <= end_col)
             res += YYFPRINTF (yyo, ".%d", end_col);
         }
-      else if (0 <= end_col && yylocp->first_column < end_col)
+      иначе если (0 <= end_col && yylocp->first_column < end_col)
         res += YYFPRINTF (yyo, "-%d", end_col);
     }
-  return res;
+  вернуть res;
 }
 
 #   define YYLOCATION_PRINT  yy_location_print_
@@ -1051,7 +1051,7 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
        undocumented and private YY_LOCATION_PRINT macros.  */
 #   define YY_LOCATION_PRINT(File, Loc)  YYLOCATION_PRINT(File, &(Loc))
 
-#  else
+#  иначе
 
 #   define YYLOCATION_PRINT(File, Loc) ((void) 0)
     /* Temporary convenience wrapper in case some people defined the
@@ -1064,14 +1064,14 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)                    \
 do {                                                                      \
-  if (yydebug)                                                            \
+  если (yydebug)                                                            \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
                   Kind, Value, Location); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
-} while (0)
+} пока (0)
 
 
 /*-----------------------------------.
@@ -1085,8 +1085,8 @@ yy_symbol_value_print (FILE *yyo,
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
   YY_USE (yylocationp);
-  if (!yyvaluep)
-    return;
+  если (!yyvaluep)
+    вернуть;
 /* "%code pre-printer" blocks.  */
 tron (yyo);
 
@@ -1311,9 +1311,9 @@ static void
 yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
 {
   YYFPRINTF (stderr, "Stack now");
-  for (; yybottom <= yytop; yybottom++)
+  для (; yybottom <= yytop; yybottom++)
     {
-      int yybot = *yybottom;
+      целое yybot = *yybottom;
       YYFPRINTF (stderr, " %d", yybot);
     }
   YYFPRINTF (stderr, "\n");
@@ -1321,9 +1321,9 @@ yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
 
 # define YY_STACK_PRINT(Bottom, Top)                            \
 do {                                                            \
-  if (yydebug)                                                  \
+  если (yydebug)                                                  \
     yy_stack_print ((Bottom), (Top));                           \
-} while (0)
+} пока (0)
 
 
 /*------------------------------------------------.
@@ -1332,15 +1332,15 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
-                 int yyrule)
+                 целое yyrule)
 {
-  int yylno = yyrline[yyrule];
-  int yynrhs = yyr2[yyrule];
-  int yyi;
+  целое yylno = yyrline[yyrule];
+  целое yynrhs = yyr2[yyrule];
+  целое yyi;
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %d):\n",
              yyrule - 1, yylno);
   /* The symbols being reduced.  */
-  for (yyi = 0; yyi < yynrhs; yyi++)
+  для (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
@@ -1353,14 +1353,14 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
 
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
-  if (yydebug)                          \
+  если (yydebug)                          \
     yy_reduce_print (yyssp, yyvsp, yylsp, Rule); \
-} while (0)
+} пока (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
-int yydebug;
-#else /* !GRAM_DEBUG */
+целое yydebug;
+#иначе /* !GRAM_DEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
@@ -1395,9 +1395,9 @@ int yydebug;
    location.  If *YYBOTTOM != YYBOTTOM_NO_FREE, then free the old stack
    using YYSTACK_FREE.  Return 0 if successful or if no reallocation is
    required.  Return YYENOMEM if memory is exhausted.  */
-static int
+static целое
 yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
-#if GRAM_DEBUG
+#если GRAM_DEBUG
                       char const *yydebug_prefix,
                       char const *yydebug_suffix,
 #endif
@@ -1408,42 +1408,42 @@ yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
   YYPTRDIFF_T yysize_old =
     *yytop == yytop_empty ? 0 : *yytop - *yybottom + 1;
   YYPTRDIFF_T yysize_new = yysize_old + yyadd;
-  if (*yycapacity < yysize_new)
+  если (*yycapacity < yysize_new)
     {
       YYPTRDIFF_T yyalloc = 2 * yysize_new;
       yy_state_t *yybottom_new;
       /* Use YYMAXDEPTH for maximum stack size given that the stack
          should never need to grow larger than the main state stack
          needs to grow without LAC.  */
-      if (YYMAXDEPTH < yysize_new)
+      если (YYMAXDEPTH < yysize_new)
         {
           YYDPRINTF ((stderr, "%smax size exceeded%s", yydebug_prefix,
                       yydebug_suffix));
-          return YYENOMEM;
+          вернуть YYENOMEM;
         }
-      if (YYMAXDEPTH < yyalloc)
+      если (YYMAXDEPTH < yyalloc)
         yyalloc = YYMAXDEPTH;
       yybottom_new =
         YY_CAST (yy_state_t *,
                  YYSTACK_ALLOC (YY_CAST (YYSIZE_T,
                                          yyalloc * YYSIZEOF (*yybottom_new))));
-      if (!yybottom_new)
+      если (!yybottom_new)
         {
           YYDPRINTF ((stderr, "%srealloc failed%s", yydebug_prefix,
                       yydebug_suffix));
-          return YYENOMEM;
+          вернуть YYENOMEM;
         }
-      if (*yytop != yytop_empty)
+      если (*yytop != yytop_empty)
         {
           YYCOPY (yybottom_new, *yybottom, yysize_old);
           *yytop = yybottom_new + (yysize_old - 1);
         }
-      if (*yybottom != yybottom_no_free)
+      если (*yybottom != yybottom_no_free)
         YYSTACK_FREE (*yybottom);
       *yybottom = yybottom_new;
       *yycapacity = yyalloc;
     }
-  return 0;
+  вернуть 0;
 }
 
 /* Establish the initial context for the current lookahead if no initial
@@ -1474,7 +1474,7 @@ yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
    Report a syntax error if it cannot.  */
 #define YY_LAC_ESTABLISH                                                \
 do {                                                                    \
-  if (!yy_lac_established)                                              \
+  если (!yy_lac_established)                                              \
     {                                                                   \
       YYDPRINTF ((stderr,                                               \
                   "LAC: initial context established for %s\n",          \
@@ -1488,7 +1488,7 @@ do {                                                                    \
           goto yyerrlab;                                                \
         }                                                               \
     }                                                                   \
-} while (0)
+} пока (0)
 
 /* Discard any previous initial lookahead context because of Event,
    which may be a lookahead change or an invalidation of the currently
@@ -1501,17 +1501,17 @@ do {                                                                    \
    the parser stacks to try to find a new initial context in which the
    current lookahead is syntactically acceptable.  If it fails to find
    such a context, it discards the lookahead.  */
-#if GRAM_DEBUG
+#если GRAM_DEBUG
 # define YY_LAC_DISCARD(Event)                                           \
 do {                                                                     \
-  if (yy_lac_established)                                                \
+  если (yy_lac_established)                                                \
     {                                                                    \
       YYDPRINTF ((stderr, "LAC: initial context discarded due to "       \
                   Event "\n"));                                          \
       yy_lac_established = 0;                                            \
     }                                                                    \
-} while (0)
-#else
+} пока (0)
+#иначе
 # define YY_LAC_DISCARD(Event) yy_lac_established = 0
 #endif
 
@@ -1523,7 +1523,7 @@ do {                                                                     \
    array allocated with YYSTACK_ALLOC.  yy_lac may overwrite the
    contents of either array, alter *YYES and *YYES_CAPACITY, and free
    any old *YYES other than YYESA.  */
-static int
+static целое
 yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
         YYPTRDIFF_T *yyes_capacity, yy_state_t *yyssp, yysymbol_kind_t yytoken)
 {
@@ -1531,39 +1531,39 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
   yy_state_t *yyesp = yyes_prev;
   /* Reduce until we encounter a shift and thereby accept the token.  */
   YYDPRINTF ((stderr, "LAC: checking lookahead %s:", yysymbol_name (yytoken)));
-  if (yytoken == YYSYMBOL_YYUNDEF)
+  если (yytoken == YYSYMBOL_YYUNDEF)
     {
       YYDPRINTF ((stderr, " Always Err\n"));
-      return 1;
+      вернуть 1;
     }
-  while (1)
+  пока (1)
     {
-      int yyrule = yypact[+*yyesp];
-      if (yypact_value_is_default (yyrule)
+      целое yyrule = yypact[+*yyesp];
+      если (yypact_value_is_default (yyrule)
           || (yyrule += yytoken) < 0 || YYLAST < yyrule
           || yycheck[yyrule] != yytoken)
         {
           /* Use the default action.  */
           yyrule = yydefact[+*yyesp];
-          if (yyrule == 0)
+          если (yyrule == 0)
             {
               YYDPRINTF ((stderr, " Err\n"));
-              return 1;
+              вернуть 1;
             }
         }
-      else
+      иначе
         {
           /* Use the action from yytable.  */
           yyrule = yytable[yyrule];
-          if (yytable_value_is_error (yyrule))
+          если (yytable_value_is_error (yyrule))
             {
               YYDPRINTF ((stderr, " Err\n"));
-              return 1;
+              вернуть 1;
             }
-          if (0 < yyrule)
+          если (0 < yyrule)
             {
               YYDPRINTF ((stderr, " S%d\n", yyrule));
-              return 0;
+              вернуть 0;
             }
           yyrule = -yyrule;
         }
@@ -1573,51 +1573,51 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
         /* Pop the corresponding number of values from the stack.  */
         YYPTRDIFF_T yylen = yyr2[yyrule];
         /* First pop from the LAC stack as many tokens as possible.  */
-        if (yyesp != yyes_prev)
+        если (yyesp != yyes_prev)
           {
             YYPTRDIFF_T yysize = yyesp - *yyes + 1;
-            if (yylen < yysize)
+            если (yylen < yysize)
               {
                 yyesp -= yylen;
                 yylen = 0;
               }
-            else
+            иначе
               {
                 yyesp = yyes_prev;
                 yylen -= yysize;
               }
           }
         /* Only afterwards look at the main stack.  */
-        if (yylen)
+        если (yylen)
           yyesp = yyes_prev -= yylen;
       }
       /* Push the resulting state of the reduction.  */
       {
         yy_state_fast_t yystate;
         {
-          const int yylhs = yyr1[yyrule] - YYNTOKENS;
-          const int yyi = yypgoto[yylhs] + *yyesp;
+          const целое yylhs = yyr1[yyrule] - YYNTOKENS;
+          const целое yyi = yypgoto[yylhs] + *yyesp;
           yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyesp
                      ? yytable[yyi]
                      : yydefgoto[yylhs]);
         }
-        if (yyesp == yyes_prev)
+        если (yyesp == yyes_prev)
           {
             yyesp = *yyes;
             YY_IGNORE_USELESS_CAST_BEGIN
             *yyesp = YY_CAST (yy_state_t, yystate);
             YY_IGNORE_USELESS_CAST_END
           }
-        else
+        иначе
           {
-            if (yy_lac_stack_realloc (yyes_capacity, 1,
-#if GRAM_DEBUG
+            если (yy_lac_stack_realloc (yyes_capacity, 1,
+#если GRAM_DEBUG
                                       " (", ")",
 #endif
                                       yyes, yyesa, &yyesp, yyes_prev))
               {
                 YYDPRINTF ((stderr, "\n"));
-                return YYENOMEM;
+                вернуть YYENOMEM;
               }
             YY_IGNORE_USELESS_CAST_BEGIN
             *++yyesp = YY_CAST (yy_state_t, yystate);
@@ -1645,36 +1645,36 @@ typedef struct
    be less than YYNTOKENS).  Return YYENOMEM on memory exhaustion.
    Return 0 if there are more than YYARGN expected tokens, yet fill
    YYARG up to YYARGN. */
-static int
+static целое
 yypcontext_expected_tokens (const yypcontext_t *yyctx,
-                            yysymbol_kind_t yyarg[], int yyargn)
+                            yysymbol_kind_t yyarg[], целое yyargn)
 {
   /* Actual size of YYARG. */
-  int yycount = 0;
+  целое yycount = 0;
 
-  int yyx;
-  for (yyx = 0; yyx < YYNTOKENS; ++yyx)
+  целое yyx;
+  для (yyx = 0; yyx < YYNTOKENS; ++yyx)
     {
       yysymbol_kind_t yysym = YY_CAST (yysymbol_kind_t, yyx);
-      if (yysym != YYSYMBOL_YYerror && yysym != YYSYMBOL_YYUNDEF)
+      если (yysym != YYSYMBOL_YYerror && yysym != YYSYMBOL_YYUNDEF)
         switch (yy_lac (yyctx->yyesa, yyctx->yyes, yyctx->yyes_capacity, yyctx->yyssp, yysym))
           {
           case YYENOMEM:
-            return YYENOMEM;
+            вернуть YYENOMEM;
           case 1:
             continue;
           default:
-            if (!yyarg)
+            если (!yyarg)
               ++yycount;
-            else if (yycount == yyargn)
-              return 0;
-            else
+            иначе если (yycount == yyargn)
+              вернуть 0;
+            иначе
               yyarg[yycount++] = yysym;
           }
     }
-  if (yyarg && yycount == 0 && 0 < yyargn)
+  если (yyarg && yycount == 0 && 0 < yyargn)
     yyarg[0] = YYSYMBOL_YYEMPTY;
-  return yycount;
+  вернуть yycount;
 }
 
 
@@ -1687,7 +1687,7 @@ yypcontext_token (const yypcontext_t *yyctx) YY_ATTRIBUTE_UNUSED;
 static yysymbol_kind_t
 yypcontext_token (const yypcontext_t *yyctx)
 {
-  return yyctx->yytoken;
+  вернуть yyctx->yytoken;
 }
 
 /* The location of the lookahead of this context.  */
@@ -1697,11 +1697,11 @@ yypcontext_location (const yypcontext_t *yyctx) YY_ATTRIBUTE_UNUSED;
 static YYLTYPE *
 yypcontext_location (const yypcontext_t *yyctx)
 {
-  return yyctx->yylloc;
+  вернуть yyctx->yylloc;
 }
 
 /* User defined function to report a syntax error.  */
-static int
+static целое
 yyreport_syntax_error (const yypcontext_t *yyctx);
 
 /*-----------------------------------------------.
@@ -1714,7 +1714,7 @@ yydestruct (const char *yymsg,
 {
   YY_USE (yyvaluep);
   YY_USE (yylocationp);
-  if (!yymsg)
+  если (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
@@ -1772,11 +1772,11 @@ yydestruct (const char *yymsg,
 | yyparse.  |
 `----------*/
 
-int
+целое
 yyparse (void)
 {
 /* Lookahead token kind.  */
-int yychar;
+целое yychar;
 
 
 /* The semantic value of the lookahead symbol.  */
@@ -1787,18 +1787,18 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
 /* Location data for the lookahead symbol.  */
 static YYLTYPE yyloc_default
-# if defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL
+# если defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL
   = { 1, 1, 1, 1 }
 # endif
 ;
 YYLTYPE yylloc = yyloc_default;
 
     /* Number of syntax errors so far.  */
-    int yynerrs YY_ATTRIBUTE_UNUSED = 0;
+    целое yynerrs YY_ATTRIBUTE_UNUSED = 0;
 
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
-    int yyerrstatus = 0;
+    целое yyerrstatus = 0;
 
     /* Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -1826,10 +1826,10 @@ YYLTYPE yylloc = yyloc_default;
     YYPTRDIFF_T yyes_capacity = 20 < YYMAXDEPTH ? 20 : YYMAXDEPTH;
 
   /* Whether LAC context is established.  A Boolean.  */
-  int yy_lac_established = 0;
-  int yyn;
+  целое yy_lac_established = 0;
+  целое yyn;
   /* The return value of yyparse.  */
-  int yyresult;
+  целое yyresult;
   /* Lookahead symbol kind.  */
   yysymbol_kind_t yytoken = YYSYMBOL_YYEMPTY;
   /* The variables used to return semantic value and location from the
@@ -1846,7 +1846,7 @@ YYLTYPE yylloc = yyloc_default;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
-  int yylen = 0;
+  целое yylen = 0;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
@@ -1886,15 +1886,15 @@ yysetstate:
   YY_IGNORE_USELESS_CAST_END
   YY_STACK_PRINT (yyss, yyssp);
 
-  if (yyss + yystacksize - 1 <= yyssp)
-#if !defined yyoverflow && !defined YYSTACK_RELOCATE
+  если (yyss + yystacksize - 1 <= yyssp)
+#если !defined yyoverflow && !defined YYSTACK_RELOCATE
     YYNOMEM;
-#else
+#иначе
     {
       /* Get the current used size of the three stacks, in elements.  */
       YYPTRDIFF_T yysize = yyssp - yyss + 1;
 
-# if defined yyoverflow
+# если defined yyoverflow
       {
         /* Give user a chance to reallocate the stack.  Use copies of
            these so that the &'s don't force the real ones into
@@ -1916,12 +1916,12 @@ yysetstate:
         yyvs = yyvs1;
         yyls = yyls1;
       }
-# else /* defined YYSTACK_RELOCATE */
+# иначе /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
-      if (YYMAXDEPTH <= yystacksize)
+      если (YYMAXDEPTH <= yystacksize)
         YYNOMEM;
       yystacksize *= 2;
-      if (YYMAXDEPTH < yystacksize)
+      если (YYMAXDEPTH < yystacksize)
         yystacksize = YYMAXDEPTH;
 
       {
@@ -1929,13 +1929,13 @@ yysetstate:
         union yyalloc *yyptr =
           YY_CAST (union yyalloc *,
                    YYSTACK_ALLOC (YY_CAST (YYSIZE_T, YYSTACK_BYTES (yystacksize))));
-        if (! yyptr)
+        если (! yyptr)
           YYNOMEM;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
         YYSTACK_RELOCATE (yyls_alloc, yyls);
 #  undef YYSTACK_RELOCATE
-        if (yyss1 != yyssa)
+        если (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
       }
 # endif
@@ -1949,13 +1949,13 @@ yysetstate:
                   YY_CAST (long, yystacksize)));
       YY_IGNORE_USELESS_CAST_END
 
-      if (yyss + yystacksize - 1 <= yyssp)
+      если (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
 #endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
 
 
-  if (yystate == YYFINAL)
+  если (yystate == YYFINAL)
     YYACCEPT;
 
   goto yybackup;
@@ -1970,25 +1970,25 @@ yybackup:
 
   /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
-  if (yypact_value_is_default (yyn))
+  если (yypact_value_is_default (yyn))
     goto yydefault;
 
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == GRAM_EMPTY)
+  если (yychar == GRAM_EMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, &yylloc);
     }
 
-  if (yychar <= GRAM_EOF)
+  если (yychar <= GRAM_EOF)
     {
       yychar = GRAM_EOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == GRAM_error)
+  иначе если (yychar == GRAM_error)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
@@ -1999,7 +1999,7 @@ yybackup:
       yyerror_range[1] = yylloc;
       goto yyerrlab1;
     }
-  else
+  иначе
     {
       yytoken = YYTRANSLATE (yychar);
       YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
@@ -2008,15 +2008,15 @@ yybackup:
   /* If the proper action on seeing token YYTOKEN is to reduce or to
      detect an error, take that action.  */
   yyn += yytoken;
-  if (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
+  если (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
     {
       YY_LAC_ESTABLISH;
       goto yydefault;
     }
   yyn = yytable[yyn];
-  if (yyn <= 0)
+  если (yyn <= 0)
     {
-      if (yytable_value_is_error (yyn))
+      если (yytable_value_is_error (yyn))
         goto yyerrlab;
       yyn = -yyn;
       YY_LAC_ESTABLISH;
@@ -2025,7 +2025,7 @@ yybackup:
 
   /* Count tokens shifted since error; after three, turn off error
      status.  */
-  if (yyerrstatus)
+  если (yyerrstatus)
     yyerrstatus--;
 
   /* Shift the lookahead token.  */
@@ -2047,7 +2047,7 @@ yybackup:
 `-----------------------------------------------------------*/
 yydefault:
   yyn = yydefact[yystate];
-  if (yyn == 0)
+  если (yyn == 0)
     goto yyerrlab;
   goto yyreduce;
 
@@ -2074,7 +2074,7 @@ yyreduce:
   yyerror_range[1] = yyloc;
   YY_REDUCE_PRINT (yyn);
   {
-    int yychar_backup = yychar;
+    целое yychar_backup = yychar;
     switch (yyn)
       {
   case 6: /* prologue_declaration: "%{...%}"  */
@@ -2208,7 +2208,7 @@ yyreduce:
       code_props_symbol_action_init (&code, (yyvsp[-1].BRACED_CODE), (yylsp[-1]));
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = (yyvsp[0].generic_symlist); list; list = list->next)
+        для (symbol_list *list = (yyvsp[0].generic_symlist); list; list = list->next)
           symbol_list_code_props_set (list, (yyvsp[-2].code_props_type), &code);
         symbol_list_free ((yyvsp[0].generic_symlist));
       }
@@ -2306,7 +2306,7 @@ yyreduce:
   case 51: /* symbol_declaration: precedence_declarator token_decls_for_prec  */
     {
       ++current_prec;
-      for (symbol_list *list = (yyvsp[0].token_decls_for_prec); list; list = list->next)
+      для (symbol_list *list = (yyvsp[0].token_decls_for_prec); list; list = list->next)
         symbol_precedence_set (list->content.sym, current_prec, (yyvsp[-1].precedence_declarator), (yylsp[-1]));
       symbol_list_free ((yyvsp[0].token_decls_for_prec));
     }
@@ -2394,9 +2394,9 @@ yyreduce:
     {
       (yyval.token_decl) = (yyvsp[-2].id);
       symbol_class_set ((yyvsp[-2].id), current_class, (yylsp[-2]), true);
-      if (0 <= (yyvsp[-1].yykind_84))
+      если (0 <= (yyvsp[-1].yykind_84))
         symbol_code_set ((yyvsp[-2].id), (yyvsp[-1].yykind_84), (yylsp[-1]));
-      if ((yyvsp[0].alias))
+      если ((yyvsp[0].alias))
         symbol_make_alias ((yyvsp[-2].id), (yyvsp[0].alias), (yylsp[0]));
     }
     break;
@@ -2451,7 +2451,7 @@ yyreduce:
     {
       (yyval.token_decl_for_prec) = (yyvsp[-1].id);
       symbol_class_set ((yyvsp[-1].id), token_sym, (yylsp[-1]), false);
-      if (0 <= (yyvsp[0].yykind_84))
+      если (0 <= (yyvsp[0].yykind_84))
         symbol_code_set ((yyvsp[-1].id), (yyvsp[0].yykind_84), (yylsp[0]));
     }
     break;
@@ -2476,7 +2476,7 @@ yyreduce:
 
   case 89: /* symbols.1: symbol  */
     {
-      if (current_class != unknown_sym)
+      если (current_class != unknown_sym)
         symbol_class_set ((yyvsp[0].symbol), current_class, (yylsp[0]), false);
       (yyval.yykind_90) = symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0]));
     }
@@ -2484,7 +2484,7 @@ yyreduce:
 
   case 90: /* symbols.1: symbols.1 symbol  */
     {
-      if (current_class != unknown_sym)
+      если (current_class != unknown_sym)
         symbol_class_set ((yyvsp[0].symbol), current_class, (yylsp[0]), false);
       (yyval.yykind_90) = symbol_list_append ((yyvsp[-1].yykind_90), symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0])));
     }
@@ -2587,13 +2587,13 @@ yyreduce:
   case 119: /* id: "character literal"  */
     {
       const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      если (current_class == nterm_sym)
         {
           complain (&(yylsp[0]), complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      если (muscle_percent_define_ifdef (var))
         {
           complain (&(yylsp[0]), complaint,
                     _("character literals cannot be used together"
@@ -2629,7 +2629,7 @@ yyreduce:
 
         default: break;
       }
-    if (yychar_backup != yychar)
+    если (yychar_backup != yychar)
       YY_LAC_DISCARD ("yychar change");
   }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2655,8 +2655,8 @@ yyreduce:
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
   {
-    const int yylhs = yyr1[yyn] - YYNTOKENS;
-    const int yyi = yypgoto[yylhs] + *yyssp;
+    const целое yylhs = yyr1[yyn] - YYNTOKENS;
+    const целое yyi = yypgoto[yylhs] + *yyssp;
     yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
                ? yytable[yyi]
                : yydefgoto[yylhs]);
@@ -2673,32 +2673,32 @@ yyerrlab:
      user semantic actions for why this is necessary.  */
   yytoken = yychar == GRAM_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
-  if (!yyerrstatus)
+  если (!yyerrstatus)
     {
       ++yynerrs;
       {
         yypcontext_t yyctx
           = {yyssp, yyesa, &yyes, &yyes_capacity, yytoken, &yylloc};
-        if (yychar != GRAM_EMPTY)
+        если (yychar != GRAM_EMPTY)
           YY_LAC_ESTABLISH;
-        if (yyreport_syntax_error (&yyctx) == 2)
+        если (yyreport_syntax_error (&yyctx) == 2)
           YYNOMEM;
       }
     }
 
   yyerror_range[1] = yylloc;
-  if (yyerrstatus == 3)
+  если (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= GRAM_EOF)
+      если (yychar <= GRAM_EOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == GRAM_EOF)
+          если (yychar == GRAM_EOF)
             YYABORT;
         }
-      else
+      иначе
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, &yylloc);
@@ -2717,7 +2717,7 @@ yyerrlab:
 yyerrorlab:
   /* Pacify compilers when the user code never invokes YYERROR and the
      label yyerrorlab therefore never appears in user code.  */
-  if (0)
+  если (0)
     YYERROR;
   ++yynerrs;
 
@@ -2737,22 +2737,22 @@ yyerrlab1:
   yyerrstatus = 3;      /* Each real token shifted decrements this.  */
 
   /* Pop stack until we find a state that shifts the error token.  */
-  for (;;)
+  для (;;)
     {
       yyn = yypact[yystate];
-      if (!yypact_value_is_default (yyn))
+      если (!yypact_value_is_default (yyn))
         {
           yyn += YYSYMBOL_YYerror;
-          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
+          если (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
             {
               yyn = yytable[yyn];
-              if (0 < yyn)
+              если (0 < yyn)
                 break;
             }
         }
 
       /* Pop the current state because it cannot handle the error token.  */
-      if (yyssp == yyss)
+      если (yyssp == yyss)
         YYABORT;
 
       yyerror_range[1] = *yylsp;
@@ -2811,7 +2811,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != GRAM_EMPTY)
+  если (yychar != GRAM_EMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */
@@ -2823,47 +2823,47 @@ yyreturnlab:
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
-  while (yyssp != yyss)
+  пока (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
                   YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, yylsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
-  if (yyss != yyssa)
+  если (yyss != yyssa)
     YYSTACK_FREE (yyss);
 #endif
-  if (yyes != yyesa)
+  если (yyes != yyesa)
     YYSTACK_FREE (yyes);
 
-  return yyresult;
+  вернуть yyresult;
 }
 
 
 
-int
+целое
 yyreport_syntax_error (const yypcontext_t *ctx)
 {
-  int res = 0;
+  целое res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
   enum { ARGS_MAX = 5 };
   const char *argv[ARGS_MAX];
-  int argc = 0;
+  целое argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  если (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      целое nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      если (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      иначе
+        для (целое i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  вернуть res;
 }
 
 
@@ -2873,7 +2873,7 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    boundary of RHS[0] if the right-hand side is empty.  */
 
 static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+lloc_default (YYLTYPE const *rhs, целое n)
 {
   YYLTYPE loc;
 
@@ -2885,21 +2885,21 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  для (целое i = 1; i <= n; i++)
+    если (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
         break;
       }
 
-  return loc;
+  вернуть loc;
 }
 
 static
 char *strip_braces (char *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  вернуть code + 1;
 }
 
 static
@@ -2907,20 +2907,20 @@ char const *
 translate_code (char *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  если (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
+  иначе
     code_props_symbol_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  вернуть plain_code.code;
 }
 
 static
 char const *
 translate_code_braceless (char *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  вернуть translate_code (strip_braces (code), loc, true);
 }
 
 static void
@@ -2936,8 +2936,8 @@ add_param (param_type type, char *decl, location loc)
   {
     char *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
+    для (p = decl; p[1]; p++)
+      если ((p == decl
            || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
           && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
         name_start = p;
@@ -2945,22 +2945,22 @@ add_param (param_type type, char *decl, location loc)
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    пока (c_isspace ((unsigned char) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    пока (c_isspace ((unsigned char) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  если (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  иначе
     {
       char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      если (type & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      если (type & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
       free (name);
     }
@@ -2973,7 +2973,7 @@ static void
 handle_header (char const *value)
 {
   header_flag = true;
-  if (value)
+  если (value)
     {
       char *file = unquote (value);
       spec_header_file = xstrdup (file);
@@ -3001,18 +3001,18 @@ handle_file_prefix (location const *loc,
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  если (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
       spec_file_prefix = value;
     }
-  else
+  иначе
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  если (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
@@ -3034,10 +3034,10 @@ handle_name_prefix (location const *loc,
   char buf1[1024];
   size_t len1 = sizeof (buf1);
   char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  если (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  если (location_empty (spec_name_prefix_loc))
     {
       spec_name_prefix = value;
       spec_name_prefix_loc = *loc;
@@ -3045,16 +3045,16 @@ handle_name_prefix (location const *loc,
       char buf2[1024];
       size_t len2 = sizeof (buf2);
       char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      если (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
+      если (new != buf2)
         free (new);
     }
-  else
+  иначе
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
+  если (old != buf1)
     free (old);
 }
 
@@ -3074,18 +3074,18 @@ handle_require (location const *loc, char const *version_quoted)
 {
   char *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  если (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  иначе
     {
       const char* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      если (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -3101,16 +3101,16 @@ handle_skeleton (location const *loc, char const *skel_quoted)
 {
   char *skel = unquote (skel_quoted);
   char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  если (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      пока (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      пока (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
       char *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      если (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
@@ -3128,9 +3128,9 @@ handle_yacc (location const *loc)
 {
   const char *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  если (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  иначе
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
@@ -3144,13 +3144,13 @@ gram_error (location const *loc, char const *msg)
 static char const *
 char_name (char c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  если (c == '\'')
+    вернуть "'\\''";
+  иначе
     {
       char buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      вернуть quotearg_style (escape_quoting_style, buf);
     }
 }
 
@@ -3159,7 +3159,7 @@ current_lhs (symbol *sym, location loc, named_ref *ref)
 {
   current_lhs_symbol = sym;
   current_lhs_loc = loc;
-  if (sym)
+  если (sym)
     symbol_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
@@ -3210,7 +3210,7 @@ unquote (const char *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
+  для (++cp; *cp && *cp != '"'; ++cp)
     switch (*cp)
       {
       case '"':
@@ -3222,13 +3222,13 @@ unquote (const char *cp)
           case '0': case '1': case '2': case '3': case '4':
           case '5': case '6': case '7': case '8': case '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              целое c = cp[0] - '0';
+              если (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              если (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
@@ -3247,8 +3247,8 @@ unquote (const char *cp)
 
           case 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              целое c = 0;
+              пока (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -3269,5 +3269,5 @@ unquote (const char *cp)
   ++cp;
   assert (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  вернуть obstack_finish0 (&obstack_for_unquote);
 }

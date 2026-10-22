@@ -47,7 +47,7 @@ AnnotationList__alloc_on_obstack (ContributionIndex contribution_count,
                        + contributions_size);
   res->next = NULL;
   res->inadequacyNode = NULL;
-  return res;
+  вернуть res;
 }
 
 /**
@@ -63,7 +63,7 @@ AnnotationList__isContributionAlways (AnnotationList const *self,
                                       ContributionIndex ci)
 {
   aver (0 <= ci && ci < self->inadequacyNode->contributionCount);
-  return self->contributions[ci] == NULL;
+  вернуть self->contributions[ci] == NULL;
 }
 
 /**
@@ -100,62 +100,62 @@ AnnotationList__insertInto (AnnotationList *self, AnnotationList **list,
                             size_t nitems)
 {
   AnnotationList **node;
-  for (node = list; *node; node = &(*node)->next)
+  для (node = list; *node; node = &(*node)->next)
     {
-      int cmp = 0;
-      if (self->inadequacyNode->id < (*node)->inadequacyNode->id)
+      целое cmp = 0;
+      если (self->inadequacyNode->id < (*node)->inadequacyNode->id)
         cmp = 1;
-      else if ((*node)->inadequacyNode->id < self->inadequacyNode->id)
+      иначе если ((*node)->inadequacyNode->id < self->inadequacyNode->id)
         cmp = -1;
-      else
-        for (ContributionIndex ci = 0;
+      иначе
+        для (ContributionIndex ci = 0;
              cmp == 0 && ci < self->inadequacyNode->contributionCount;
              ++ci)
           {
-            if (AnnotationList__isContributionAlways (self, ci))
+            если (AnnotationList__isContributionAlways (self, ci))
               {
-                if (!AnnotationList__isContributionAlways (*node, ci))
+                если (!AnnotationList__isContributionAlways (*node, ci))
                   cmp = -1;
               }
-            else if (AnnotationList__isContributionAlways (*node, ci))
+            иначе если (AnnotationList__isContributionAlways (*node, ci))
               cmp = 1;
-            else
-              for (size_t item = 0; cmp == 0 && item < nitems; ++item)
+            иначе
+              для (size_t item = 0; cmp == 0 && item < nitems; ++item)
                 {
-                  if (!Sbitset__test (self->contributions[ci], item))
+                  если (!Sbitset__test (self->contributions[ci], item))
                     {
-                      if (Sbitset__test ((*node)->contributions[ci], item))
+                      если (Sbitset__test ((*node)->contributions[ci], item))
                         cmp = -1;
                     }
-                  else if (!Sbitset__test ((*node)->contributions[ci], item))
+                  иначе если (!Sbitset__test ((*node)->contributions[ci], item))
                     cmp = 1;
                 }
           }
-      if (cmp < 0)
+      если (cmp < 0)
         {
           self->next = *node;
           *node = self;
           break;
         }
-      else if (cmp == 0)
+      иначе если (cmp == 0)
         {
           self = NULL;
           break;
         }
     }
-  if (!*node)
+  если (!*node)
     *node = self;
-  return self != NULL;
+  вернуть self != NULL;
 }
 
 static bitset
 AnnotationList__compute_shift_tokens (transitions *trans)
 {
   bitset shift_tokens = bitset_create (ntokens, BITSET_FIXED);
-  int i;
+  целое i;
   FOR_EACH_SHIFT (trans, i)
     bitset_set (shift_tokens, TRANSITION_SYMBOL (trans, i));
-  return shift_tokens;
+  вернуть shift_tokens;
 }
 
 static bitset
@@ -167,7 +167,7 @@ AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
   bitset tokens = bitset_create (ntokens, BITSET_FIXED);
 
   bitset_copy (tokens, shift_tokens);
-  for (int i = 0; i < reds->num; ++i)
+  для (целое i = 0; i < reds->num; ++i)
     {
       bitset_and (conflicted_tokens_rule, tokens, reds->lookaheads[i]);
       bitset_or (conflicted_tokens,
@@ -181,7 +181,7 @@ AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
   bitset_free (tokens);
   bitset_free (conflicted_tokens_rule);
 
-  return conflicted_tokens;
+  вернуть conflicted_tokens;
 }
 
 static bool
@@ -196,18 +196,18 @@ AnnotationList__compute_lhs_contributions (state *s, const rule *the_rule,
                                              *annotations_obstackp)
 {
   goto_number lhs_goto = map_goto (s->number, the_rule->lhs->number);
-  if (bitset_test (always_follows[lhs_goto], conflicted_token))
-    return true;
+  если (bitset_test (always_follows[lhs_goto], conflicted_token))
+    вернуть true;
   *items = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
   {
     bitset_iterator biter_item;
     bitset_bindex item;
     BITSET_FOR_EACH (biter_item, follow_kernel_items[lhs_goto], item, 0)
-      if (ielr_item_has_lookahead (s, 0, item, conflicted_token,
+      если (ielr_item_has_lookahead (s, 0, item, conflicted_token,
                                    predecessors, item_lookahead_sets))
         Sbitset__set (*items, item);
   }
-  return false;
+  вернуть false;
 }
 
 static void
@@ -221,7 +221,7 @@ AnnotationList__computePredecessorAnnotations (
   AnnotationIndex *annotation_counts,
   struct obstack *annotations_obstackp)
 {
-  for (state **predecessor = predecessors[s->number]; *predecessor; ++predecessor)
+  для (state **predecessor = predecessors[s->number]; *predecessor; ++predecessor)
     {
       AnnotationList *annotation_node =
         AnnotationList__alloc_on_obstack (
@@ -230,12 +230,12 @@ AnnotationList__computePredecessorAnnotations (
       bool potential_contribution = false;
       bitset *lookaheads = NULL;
 
-      for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+      для (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
         {
           symbol_number contribution_token =
             InadequacyList__getContributionToken (self->inadequacyNode, ci)
             ->content->number;
-          if (AnnotationList__isContributionAlways (self, ci))
+          если (AnnotationList__isContributionAlways (self, ci))
             {
               annotation_node->contributions[ci] = NULL;
               continue;
@@ -263,10 +263,10 @@ AnnotationList__computePredecessorAnnotations (
                 /* If this kernel item is next to the beginning of the RHS,
                    then check all of the predecessor's goto follows for the
                    LHS.  */
-                if (item_number_is_rule_number (ritem[s->items[self_item] - 2]))
+                если (item_number_is_rule_number (ritem[s->items[self_item] - 2]))
                   {
                     Sbitset items;
-                    if (AnnotationList__compute_lhs_contributions (
+                    если (AnnotationList__compute_lhs_contributions (
                           *predecessor,
                           item_rule (&ritem[s->items[self_item]]),
                           contribution_token,
@@ -279,7 +279,7 @@ AnnotationList__computePredecessorAnnotations (
                         // "Break" out of SBITSET__FOR_EACH.
                         goto after_sbitset__for_each;
                       }
-                    else
+                    иначе
                       {
                         Sbitset__or (annotation_node->contributions[ci],
                                      annotation_node->contributions[ci],
@@ -289,19 +289,19 @@ AnnotationList__computePredecessorAnnotations (
                   }
                 /* If this kernel item is later in the RHS, then check the
                    predecessor item's lookahead set.  */
-                else
+                иначе
                   {
                     /* We don't have to start the predecessor item search at
                        the beginning every time because items from both
                        states are sorted by their indices in ritem.  */
-                    for (;
+                    для (;
                          predecessor_item < (*predecessor)->nitems;
                          ++predecessor_item)
-                      if ((*predecessor)->items[predecessor_item]
+                      если ((*predecessor)->items[predecessor_item]
                           == s->items[self_item] - 1)
                         break;
                     aver (predecessor_item != (*predecessor)->nitems);
-                    if (ielr_item_has_lookahead (*predecessor, 0,
+                    если (ielr_item_has_lookahead (*predecessor, 0,
                                                  predecessor_item,
                                                  contribution_token,
                                                  predecessors,
@@ -312,7 +312,7 @@ AnnotationList__computePredecessorAnnotations (
               }
           after_sbitset__for_each:;
           }
-          if (annotation_node->contributions[ci])
+          если (annotation_node->contributions[ci])
             {
               Sbitset biter;
               Sbitset__Index i;
@@ -320,14 +320,14 @@ AnnotationList__computePredecessorAnnotations (
                                  (*predecessor)->nitems, biter, i)
                 {
                   potential_contribution = true;
-                  if (!lookaheads)
+                  если (!lookaheads)
                     {
                       lookaheads = xnmalloc ((*predecessor)->nitems,
                                              sizeof *lookaheads);
-                      for (size_t j = 0; j < (*predecessor)->nitems; ++j)
+                      для (size_t j = 0; j < (*predecessor)->nitems; ++j)
                         lookaheads[j] = NULL;
                     }
-                  if (!lookaheads[i])
+                  если (!lookaheads[i])
                     lookaheads[i] = bitset_create (ntokens, BITSET_FIXED);
                   bitset_set (lookaheads[i], contribution_token);
                 }
@@ -353,9 +353,9 @@ AnnotationList__computePredecessorAnnotations (
            to save space now plus time during state splitting.
          - Otherwise, record the annotation, and compute any resulting
            annotations needed on predecessor states.  */
-      if (potential_contribution)
+      если (potential_contribution)
         {
-          if (ContributionIndex__none
+          если (ContributionIndex__none
               != AnnotationList__computeDominantContribution (
                    annotation_node, (*predecessor)->nitems, lookaheads, true))
             {
@@ -363,14 +363,14 @@ AnnotationList__computePredecessorAnnotations (
               annotation_node = NULL;
             }
           {
-            for (size_t i = 0; i < (*predecessor)->nitems; ++i)
-              if (lookaheads[i])
+            для (size_t i = 0; i < (*predecessor)->nitems; ++i)
+              если (lookaheads[i])
                 bitset_free (lookaheads[i]);
             free (lookaheads);
           }
-          if (annotation_node)
+          если (annotation_node)
             {
-              if (AnnotationList__insertInto (annotation_node,
+              если (AnnotationList__insertInto (annotation_node,
                                               &annotation_lists[(*predecessor)
                                                                 ->number],
                                               (*predecessor)->nitems))
@@ -382,11 +382,11 @@ AnnotationList__computePredecessorAnnotations (
                     item_lookahead_sets, annotation_lists, annotation_counts,
                     annotations_obstackp);
                 }
-              else
+              иначе
                 obstack_free (annotations_obstackp, annotation_node);
             }
         }
-      else
+      иначе
         obstack_free (annotations_obstackp, annotation_node);
     }
 }
@@ -402,8 +402,8 @@ AnnotationList__compute_from_inadequacies (
   InadequacyListNodeCount *inadequacy_list_node_count)
 {
   /* Return an empty list if s->lookaheads = NULL.  */
-  if (s->consistent)
-    return;
+  если (s->consistent)
+    вернуть;
 
   bitsetv all_lookaheads = bitsetv_create (s->nitems, ntokens, BITSET_FIXED);
   bitsetv_ones (all_lookaheads);
@@ -421,11 +421,11 @@ AnnotationList__compute_from_inadequacies (
 
       /* Allocate the annotation node.  */
       {
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
-          if (bitset_test (s->reductions->lookaheads[rule_i],
+        для (целое rule_i = 0; rule_i < s->reductions->num; ++rule_i)
+          если (bitset_test (s->reductions->lookaheads[rule_i],
                            conflicted_token))
             ++contribution_count;
-        if (bitset_test (shift_tokens, conflicted_token))
+        если (bitset_test (shift_tokens, conflicted_token))
           ++contribution_count;
         annotation_node =
           AnnotationList__alloc_on_obstack (contribution_count,
@@ -441,23 +441,23 @@ AnnotationList__compute_from_inadequacies (
          lookahead.  */
       {
         ContributionIndex ci = 0;
-        int item_i = 0;
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
+        целое item_i = 0;
+        для (целое rule_i = 0; rule_i < s->reductions->num; ++rule_i)
           {
             rule *the_rule = s->reductions->rules[rule_i];
-            if (bitset_test (s->reductions->lookaheads[rule_i],
+            если (bitset_test (s->reductions->lookaheads[rule_i],
                              conflicted_token))
               {
                 bitset_set (actions, rule_i);
                 /* If this reduction is on a kernel item, just add it.  */
-                if (!item_number_is_rule_number (the_rule->rhs[0]))
+                если (!item_number_is_rule_number (the_rule->rhs[0]))
                   {
                     annotation_node->contributions[ci] =
                       Sbitset__new_on_obstack (s->nitems,
                                                annotations_obstackp);
                     /* Catch item_i up to rule_i.  This works because both are
                        sorted on rule number.  */
-                    while (!item_number_is_rule_number (ritem[s->items[item_i]])
+                    пока (!item_number_is_rule_number (ritem[s->items[item_i]])
                            || item_number_as_rule_number (ritem[s->items[item_i]]) != the_rule->number)
                       {
                         ++item_i;
@@ -468,7 +468,7 @@ AnnotationList__compute_from_inadequacies (
                 /* Otherwise, add the kernel items whose lookahead sets
                    contribute the conflicted token to this reduction's
                    lookahead set.  */
-                else if (AnnotationList__compute_lhs_contributions (
+                иначе если (AnnotationList__compute_lhs_contributions (
                            s, the_rule, conflicted_token, follow_kernel_items,
                            always_follows, predecessors, item_lookahead_sets,
                            &annotation_node->contributions[ci],
@@ -493,9 +493,9 @@ AnnotationList__compute_from_inadequacies (
            the inadequacy to save space now plus time during state splitting.
          - Otherwise, record the annotation and the inadequacy, and compute any
            resulting annotations needed on predecessor states.  */
-      if (potential_contribution)
+      если (potential_contribution)
         {
-          if (bitset_test (shift_tokens, conflicted_token))
+          если (bitset_test (shift_tokens, conflicted_token))
             {
               bitset_set (actions, s->reductions->num);
               annotation_node->contributions[contribution_count - 1] = NULL;
@@ -507,14 +507,14 @@ AnnotationList__compute_from_inadequacies (
                 inadequacy_list_node_count);
             actions = NULL;
             annotation_node->inadequacyNode = conflict_node;
-            if (ContributionIndex__none
+            если (ContributionIndex__none
                 != AnnotationList__computeDominantContribution (
                      annotation_node, s->nitems, all_lookaheads, true))
               {
                 obstack_free (annotations_obstackp, annotation_node);
                 InadequacyList__delete (conflict_node);
               }
-            else
+            иначе
               {
                 InadequacyList__prependTo (conflict_node,
                                            &inadequacy_lists[s->number]);
@@ -532,7 +532,7 @@ AnnotationList__compute_from_inadequacies (
                 aver (!bitset_test (shift_tokens, conflicted_token)
                       || symbols[conflicted_token]->content->prec);
                 ++annotation_counts[s->number];
-                if (contribution_count > *max_contributionsp)
+                если (contribution_count > *max_contributionsp)
                   *max_contributionsp = contribution_count;
                 AnnotationList__computePredecessorAnnotations (
                   annotation_node, s,
@@ -542,7 +542,7 @@ AnnotationList__compute_from_inadequacies (
               }
           }
         }
-      else
+      иначе
         {
           bitset_free (actions);
           obstack_free (annotations_obstackp, annotation_node);
@@ -555,27 +555,27 @@ AnnotationList__compute_from_inadequacies (
 }
 
 void
-AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
+AnnotationList__debug (AnnotationList const *self, size_t nitems, целое spaces)
 {
   AnnotationList const *a;
   AnnotationIndex ai;
-  for (a = self, ai = 0; a; a = a->next, ++ai)
+  для (a = self, ai = 0; a; a = a->next, ++ai)
     {
       fprintf (stderr, "%*sAnnotation %d (manifesting state %d):\n",
                spaces, "",
                ai, a->inadequacyNode->manifestingState->number);
       bitset_bindex rulei
         = bitset_first (a->inadequacyNode->inadequacy.conflict.actions);
-      for (ContributionIndex ci = 0; ci < a->inadequacyNode->contributionCount; ++ci)
+      для (ContributionIndex ci = 0; ci < a->inadequacyNode->contributionCount; ++ci)
         {
           symbol_number token =
             InadequacyList__getContributionToken (a->inadequacyNode, ci)
             ->content->number;
           fprintf (stderr, "%*s", spaces+2, "");
-          if (ci == InadequacyList__getShiftContributionIndex (
+          если (ci == InadequacyList__getShiftContributionIndex (
                                                                a->inadequacyNode))
             fprintf (stderr, "Contributes shift of token %d.\n", token);
-          else
+          иначе
             {
               fprintf (stderr, "Contributes token %d", token);
               aver (rulei != BITSET_BINDEX_MAX);
@@ -585,9 +585,9 @@ AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
               rulei =
                 bitset_next (a->inadequacyNode->inadequacy.conflict.actions,
                              rulei+1);
-              if (AnnotationList__isContributionAlways (a, ci))
+              если (AnnotationList__isContributionAlways (a, ci))
                 fprintf (stderr, " always.");
-              else
+              иначе
                 {
                   fprintf (stderr, ", items: ");
                   Sbitset__fprint (a->contributions[ci], nitems, stderr);
@@ -604,9 +604,9 @@ AnnotationList__computeLookaheadFilter (AnnotationList const *self,
                                         bitsetv lookahead_filter)
 {
   bitsetv_zero (lookahead_filter);
-  for (; self; self = self->next)
-    for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
-      if (!AnnotationList__isContributionAlways (self, ci))
+  для (; self; self = self->next)
+    для (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+      если (!AnnotationList__isContributionAlways (self, ci))
         {
           symbol_number token =
             InadequacyList__getContributionToken (self->inadequacyNode, ci)
@@ -640,10 +640,10 @@ AnnotationList__stateMakesContribution (AnnotationList const *self,
                                         size_t nitems, ContributionIndex ci,
                                         bitset *lookaheads)
 {
-  if (AnnotationList__isContributionAlways (self, ci))
-    return true;
-  if (!lookaheads)
-    return false;
+  если (AnnotationList__isContributionAlways (self, ci))
+    вернуть true;
+  если (!lookaheads)
+    вернуть false;
   {
     symbol_number token =
       InadequacyList__getContributionToken (self->inadequacyNode, ci)
@@ -651,10 +651,10 @@ AnnotationList__stateMakesContribution (AnnotationList const *self,
     Sbitset__Index item;
     Sbitset biter;
     SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
-      if (lookaheads[item] && bitset_test (lookaheads[item], token))
-        return true;
+      если (lookaheads[item] && bitset_test (lookaheads[item], token))
+        вернуть true;
   }
-  return false;
+  вернуть false;
 }
 
 ContributionIndex
@@ -668,24 +668,24 @@ AnnotationList__computeDominantContribution (AnnotationList const *self,
   symbol *token = self->inadequacyNode->inadequacy.conflict.token;
 
   /* S/R conflict.  */
-  if (ci_shift != ContributionIndex__none)
+  если (ci_shift != ContributionIndex__none)
     {
       bool find_stable_domination_over_shift = false;
       bool find_stable_error_action_domination = false;
       {
-        int shift_precedence = token->content->prec;
+        целое shift_precedence = token->content->prec;
 
         /* If the token has no precedence set, shift is always chosen.  */
-        if (!shift_precedence)
-          return ci_shift;
+        если (!shift_precedence)
+          вернуть ci_shift;
 
         /* Figure out which reductions contribute, which of those would
            dominate in a R/R comparison, and whether any reduction dominates
            the shift so that the R/R comparison is actually needed.  */
         ContributionIndex ci_rr_dominator = ContributionIndex__none;
-        int actioni;
+        целое actioni;
         ContributionIndex ci;
-        for (ci = 0,
+        для (ci = 0,
                actioni = bitset_first (self->inadequacyNode->inadequacy
                                        .conflict.actions);
              ci < self->inadequacyNode->contributionCount;
@@ -693,80 +693,80 @@ AnnotationList__computeDominantContribution (AnnotationList const *self,
                actioni = bitset_next (self->inadequacyNode->inadequacy
                                       .conflict.actions, actioni+1))
           {
-            int reduce_precedence = 0;
-            if (ci == ci_shift)
+            целое reduce_precedence = 0;
+            если (ci == ci_shift)
               continue;
             {
               rule *r = self->inadequacyNode->manifestingState
                           ->reductions->rules[actioni];
-              if (r->prec)
+              если (r->prec)
                 reduce_precedence = r->prec->prec;
             }
             /* If there's no need to check whether this reduction actually
                contributes because the shift eliminates it from the R/R
                comparison anyway, continue to the next reduction.  */
-            if (reduce_precedence
+            если (reduce_precedence
                 && (reduce_precedence < shift_precedence
                     || (reduce_precedence == shift_precedence
                         && token->content->assoc == right_assoc)))
               continue;
-            if (!AnnotationList__stateMakesContribution (self, nitems, ci,
+            если (!AnnotationList__stateMakesContribution (self, nitems, ci,
                                                          lookaheads))
               continue;
             /* This uneliminated reduction contributes, so see if it can cause
                an error action.  */
-            if (reduce_precedence == shift_precedence
+            если (reduce_precedence == shift_precedence
                  && token->content->assoc == non_assoc)
               {
                 /* It's not possible to find split-stable domination over
                    shift after a potential %nonassoc.  */
-                if (find_stable_domination_over_shift)
-                  return ContributionIndex__none;
-                if (!require_split_stable
+                если (find_stable_domination_over_shift)
+                  вернуть ContributionIndex__none;
+                если (!require_split_stable
                     || AnnotationList__isContributionAlways (self, ci))
-                  return ContributionIndex__error_action;
+                  вернуть ContributionIndex__error_action;
                 find_stable_error_action_domination = true;
               }
             /* Consider this uneliminated contributing reduction in the R/R
                comparison.  */
-            if (ci_rr_dominator == ContributionIndex__none)
+            если (ci_rr_dominator == ContributionIndex__none)
               ci_rr_dominator = ci;
             /* If precedence is set for this uneliminated contributing
                reduction, it dominates the shift, so try to figure out which
                reduction dominates the R/R comparison.  */
-            if (reduce_precedence)
+            если (reduce_precedence)
               {
                 /* It's not possible to find split-stable error action
                    domination after a potential reduction.  */
-                if (find_stable_error_action_domination)
-                  return ContributionIndex__none;
-                if (!require_split_stable)
-                  return ci_rr_dominator;
-                if (!AnnotationList__isContributionAlways (self,
+                если (find_stable_error_action_domination)
+                  вернуть ContributionIndex__none;
+                если (!require_split_stable)
+                  вернуть ci_rr_dominator;
+                если (!AnnotationList__isContributionAlways (self,
                                                            ci_rr_dominator))
-                  return ContributionIndex__none;
-                if (AnnotationList__isContributionAlways (self, ci))
-                  return ci_rr_dominator;
+                  вернуть ContributionIndex__none;
+                если (AnnotationList__isContributionAlways (self, ci))
+                  вернуть ci_rr_dominator;
                 find_stable_domination_over_shift = true;
               }
           }
       }
-      if (find_stable_domination_over_shift
+      если (find_stable_domination_over_shift
           || find_stable_error_action_domination)
-        return ContributionIndex__none;
+        вернуть ContributionIndex__none;
       /* No reduce or error action domination found, so shift dominates.  */
-      return ci_shift;
+      вернуть ci_shift;
     }
 
   /* R/R conflict, so the reduction with the lowest rule number dominates.
      Fortunately, contributions are sorted by rule number.  */
-  for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
-    if (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
+  для (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+    если (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
       {
-        if (require_split_stable
+        если (require_split_stable
             && !AnnotationList__isContributionAlways (self, ci))
-          return ContributionIndex__none;
-        return ci;
+          вернуть ContributionIndex__none;
+        вернуть ci;
       }
-  return ContributionIndex__none;
+  вернуть ContributionIndex__none;
 }

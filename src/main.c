@@ -60,12 +60,12 @@
 #include "uniqstr.h"
 
 
-int
-main (int argc, char *argv[])
+целое
+основной (целое argc, char *argv[])
 {
   {
     char *cp = getenv ("BISON_PROGRAM_NAME");
-    if (cp)
+    если (cp)
       argv[0] = cp;
   }
 
@@ -84,9 +84,9 @@ main (int argc, char *argv[])
 
   {
     char const *cp = getenv ("LC_CTYPE");
-    if (cp && STREQ (cp, "C"))
+    если (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
-    else
+    иначе
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
   }
 
@@ -100,14 +100,14 @@ main (int argc, char *argv[])
 
   getargs (argc, argv);
 
-  if (trace_flag)
+  если (trace_flag)
     fprintf (stderr, "bison (GNU Bison) %s\n", VERSION);
 
   timevar_enabled = trace_flag & trace_time;
   timevar_init ();
   timevar_start (tv_total);
 
-  if (trace_flag & trace_bitsets)
+  если (trace_flag & trace_bitsets)
     bitset_stats_enable ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
@@ -118,7 +118,7 @@ main (int argc, char *argv[])
   reader (grammar_file);
   timevar_pop (tv_reader);
 
-  if (complaint_status == status_complaint)
+  если (complaint_status == status_complaint)
     goto finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
@@ -149,7 +149,7 @@ main (int argc, char *argv[])
      declarations.  */
   timevar_push (tv_conflicts);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
+  если (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
       state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
       state_number nstates_old = nstates;
@@ -158,7 +158,7 @@ main (int argc, char *argv[])
       conflicts_update_state_numbers (old_to_new, nstates_old);
       free (old_to_new);
     }
-  if (report_flag & report_cex
+  если (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
   conflicts_print ();
@@ -176,13 +176,13 @@ main (int argc, char *argv[])
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
 
-  if (generate)
+  если (generate)
     {
       /* Output file names. */
       compute_output_file_names ();
 
       /* Output the detailed report on the grammar.  */
-      if (report_flag)
+      если (report_flag)
         {
           timevar_push (tv_report);
           print_results ();
@@ -190,7 +190,7 @@ main (int argc, char *argv[])
         }
 
       /* Output the graph.  */
-      if (graph_flag)
+      если (graph_flag)
         {
           timevar_push (tv_graph);
           print_graph ();
@@ -198,7 +198,7 @@ main (int argc, char *argv[])
         }
 
       /* Output xml.  */
-      if (html_flag || xml_flag)
+      если (html_flag || xml_flag)
         {
           timevar_push (tv_xml);
           print_xml ();
@@ -206,7 +206,7 @@ main (int argc, char *argv[])
         }
 
       /* Output html.  */
-      if (html_flag)
+      если (html_flag)
         {
           timevar_push (tv_html);
           print_html ();
@@ -216,7 +216,7 @@ main (int argc, char *argv[])
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_status == status_complaint)
+  если (complaint_status == status_complaint)
     goto finish;
 
   /* Lookahead tokens are no longer needed. */
@@ -225,7 +225,7 @@ main (int argc, char *argv[])
   timevar_pop (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
-  if (generate)
+  если (generate)
     {
       timevar_push (tv_parser);
       output ();
@@ -256,7 +256,7 @@ main (int argc, char *argv[])
   skel_scanner_free ();
   timevar_pop (tv_free);
 
-  if (trace_flag & trace_bitsets)
+  если (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
   /* Stop timing and print the times.  */
@@ -265,11 +265,11 @@ main (int argc, char *argv[])
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */
-  if (!fixits_empty ())
+  если (!fixits_empty ())
     {
-      if (update_flag)
+      если (update_flag)
         fixits_run ();
-      else
+      иначе
         complain (NULL, Wother,
                   _("fix-its can be applied.  Rerun with option '--update'."));
       fixits_free ();
@@ -279,5 +279,5 @@ main (int argc, char *argv[])
   complain_free ();
   quotearg_free ();
 
-  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
+  вернуть complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
 }

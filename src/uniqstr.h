@@ -37,7 +37,7 @@ uniqstr uniqstr_new (char const *str);
 
 /* Compare two uniqstr a la strcmp: negative for <, nul for =, and
    positive for >.  Undefined order, relies on addresses.  */
-int uniqstr_cmp (uniqstr u1, uniqstr u2);
+целое uniqstr_cmp (uniqstr u1, uniqstr u2);
 
 /* Die if STR is not a uniqstr.  */
 void uniqstr_assert (char const *str);
@@ -51,7 +51,7 @@ void uniqstr_assert (char const *str);
 # define UNIQSTR_CONCAT(...)                                            \
   uniqstr_concat (ARRAY_CARDINALITY (((char const *[]) {__VA_ARGS__})), \
                   __VA_ARGS__)
-uniqstr uniqstr_concat (int nargs, ...);
+uniqstr uniqstr_concat (целое nargs, ...);
 
 /*--------------------.
 | Table of uniqstrs.  |

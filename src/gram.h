@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+extern целое nsyms;
+extern целое ntokens;
+extern целое nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
+typedef целое item_number;
 # define ITEM_NUMBER_MAX INT_MAX
 extern item_number *ritem;
-extern int nritems;
+extern целое nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+typedef unsigned целое item_index;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -134,41 +134,41 @@ typedef unsigned int item_index;
 static inline item_number
 symbol_number_as_item_number (symbol_number sym)
 {
-  return sym;
+  вернуть sym;
 }
 
 static inline symbol_number
 item_number_as_symbol_number (item_number i)
 {
-  return i;
+  вернуть i;
 }
 
 static inline bool
 item_number_is_symbol_number (item_number i)
 {
-  return i >= 0;
+  вернуть i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
+typedef целое rule_number;
 # define RULE_NUMBER_MAX INT_MAX
 
 static inline item_number
 rule_number_as_item_number (rule_number r)
 {
-  return -1 - r;
+  вернуть -1 - r;
 }
 
 static inline rule_number
 item_number_as_rule_number (item_number i)
 {
-  return -1 - i;
+  вернуть -1 - i;
 }
 
 static inline bool
 item_number_is_rule_number (item_number i)
 {
-  return i < 0;
+  вернуть i < 0;
 }
 
 
@@ -192,8 +192,8 @@ typedef struct
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  целое dprec;
+  целое merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,8 +205,8 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  целое expected_sr_conflicts;
+  целое expected_rr_conflicts;
 
   const char *action;
   location action_loc;
@@ -221,10 +221,10 @@ static inline rule const *
 item_rule (item_number const *item)
 {
   item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  пока (!item_number_is_rule_number (*sp))
     ++sp;
   rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  вернуть &rules[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
@@ -248,7 +248,7 @@ rule_is_initial (rule const *r)
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  вернуть r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
@@ -271,7 +271,7 @@ bool rule_useless_chain_p (rule const *r);
    useless repetitions.  */
 void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
                      FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+void rule_lhs_print_xml (rule const *r, FILE *out, целое level);
 
 /* The length of the RHS.  */
 size_t rule_rhs_length (rule const *r);
@@ -292,7 +292,7 @@ extern symbol **symbols;
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
 extern symbol_number *token_translations;
-extern int max_code;
+extern целое max_code;
 
 
 
@@ -309,7 +309,7 @@ void grammar_rules_partial_print (FILE *out, const char *title,
 /* Print the grammar's useful rules on OUT.  */
 void grammar_rules_print (FILE *out);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+void grammar_rules_print_xml (FILE *out, целое level);
 
 /* Dump the grammar. */
 void grammar_dump (FILE *out, const char *title);
@@ -325,6 +325,6 @@ void grammar_free (void);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+extern целое required_version;
 
 #endif /* !GRAM_H_ */

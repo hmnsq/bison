@@ -26,7 +26,7 @@
 # include "InadequacyList.h"
 # include "state.h"
 
-typedef int AnnotationIndex;
+typedef целое AnnotationIndex;
 
 /**
  * A node in a list of annotations on a particular LR(0) state.  Each
@@ -126,7 +126,7 @@ AnnotationList__compute_from_inadequacies (
  *     stderr.  \c spaces spaces were printed before each line of the text.
  */
 void AnnotationList__debug (AnnotationList const *self, size_t nitems,
-                            int spaces);
+                            целое spaces);
 
 /**
  * \pre
