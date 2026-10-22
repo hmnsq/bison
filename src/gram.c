@@ -18,338 +18,338 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include "complain.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "print-xml.h"
-#include "reader.h"
-#include "reduce.h"
-#include "symtab.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "glyphs.h"
+#ಅನ್ತರ್ಭಾವ "gram.h"
+#ಅನ್ತರ್ಭಾವ "print-xml.h"
+#ಅನ್ತರ್ಭಾವ "reader.h"
+#ಅನ್ತರ್ಭಾವ "reduce.h"
+#ಅನ್ತರ್ಭಾವ "symtab.h"
 
 /* Comments for these variables are in gram.h.  */
 
-item_number *ritem = NULL;
-int nritems = 0;
+ಅಂಶ_ಸಂಖ್ಯೆ *ritem = ಖಾಲಿ;
+ಪೂರ್ಣಾಂಕ nritems = 0;
 
-rule *rules = NULL;
-rule_number nrules = 0;
+ನಿಯಮ *ನಿಯಮಗಳು = ಖಾಲಿ;
+ನಿಯಮ_ಸಂಖ್ಯೆ nrules = 0;
 
-symbol **symbols = NULL;
-int nsyms = 0;
-int ntokens = 1;
-int nnterms = 0;
+ಚಿಹ್ನೆ **symbols = ಖಾಲಿ;
+ಪೂರ್ಣಾಂಕ nsyms = 0;
+ಪೂರ್ಣಾಂಕ ntokens = 1;
+ಪೂರ್ಣಾಂಕ nnterms = 0;
 
-symbol_number *token_translations = NULL;
+ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ *token_translations = ಖಾಲಿ;
 
-int max_code = 256;
+ಪೂರ್ಣಾಂಕ max_ಸಂಕೇತ = 256;
 
-int required_version = 0;
+ಪೂರ್ಣಾಂಕ required_ಆವೃತ್ತಿ = 0;
 
-void
-item_print (item_number *item, rule const *previous_rule, FILE *out)
+ಶೂನ್ಯ
+ಅಂಶ_print (ಅಂಶ_ಸಂಖ್ಯೆ *ಅಂಶ, ನಿಯಮ ಸ್ಥಿರಾಂಕ *ಹಿಂದಿನ_ನಿಯಮ, FILE *ಹೊರಹೋಗು)
 {
-  rule const *r = item_rule (item);
-  rule_lhs_print (r, previous_rule ? previous_rule->lhs : NULL, out);
+  ನಿಯಮ ಸ್ಥಿರಾಂಕ *r = ಅಂಶ_ನಿಯಮ (ಅಂಶ);
+  ನಿಯಮ_lhs_print (r, ಹಿಂದಿನ_ನಿಯಮ ? ಹಿಂದಿನ_ನಿಯಮ->lhs : ಖಾಲಿ, ಹೊರಹೋಗು);
 
-  if (0 <= *r->rhs)
+  ಆದರೆ (0 <= *r->rhs)
     {
       // Non-empty rhs.
-      for (item_number *sp = r->rhs; sp < item; sp++)
-        fprintf (out, " %s", symbols[*sp]->tag);
-      fprintf (out, " %s", dot);
-      for (item_number *sp = item; 0 <= *sp; ++sp)
-        fprintf (out, " %s", symbols[*sp]->tag);
+      ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *sp = r->rhs; sp < ಅಂಶ; sp++)
+        fprintf (ಹೊರಹೋಗು, " %s", symbols[*sp]->ಟ್ಯಾಗ್);
+      fprintf (ಹೊರಹೋಗು, " %s", dot);
+      ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *sp = ಅಂಶ; 0 <= *sp; ++sp)
+        fprintf (ಹೊರಹೋಗು, " %s", symbols[*sp]->ಟ್ಯಾಗ್);
     }
-  else
-    fprintf (out, " %s %s", empty, dot);
+  ಇಲ್ಲದಿದ್ದರೆ
+    fprintf (ಹೊರಹೋಗು, " %s %s", ಖಾಲಿಗಳು, dot);
 }
 
 
 bool
-rule_useful_in_grammar_p (rule const *r)
+ನಿಯಮ_useful_ಒಳ_grammar_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r)
 {
-  return r->number < nrules;
+  ಹಿಂತಿರುಗಿ r->ಸಂಖ್ಯೆ < nrules;
 }
 
 bool
-rule_useless_in_grammar_p (rule const *r)
+ನಿಯಮ_useless_ಒಳ_grammar_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r)
 {
-  return !rule_useful_in_grammar_p (r);
+  ಹಿಂತಿರುಗಿ !ನಿಯಮ_useful_ಒಳ_grammar_p (r);
 }
 
 bool
-rule_useless_in_parser_p (rule const *r)
+ನಿಯಮ_useless_ಒಳ_parser_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r)
 {
-  return !r->useful && rule_useful_in_grammar_p (r);
+  ಹಿಂತಿರುಗಿ !r->useful && ನಿಯಮ_useful_ಒಳ_grammar_p (r);
 }
 
 bool
-rule_useless_chain_p (rule const *r)
+ನಿಯಮ_useless_chain_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r)
 {
-  return rule_rhs_length (r) == 1 && !r->action;
+  ಹಿಂತಿರುಗಿ ನಿಯಮ_rhs_ಉದ್ದಳತೆ (r) == 1 && !r->action;
 }
 
-void
-rule_lhs_print (rule const *r, sym_content const *previous_lhs, FILE *out)
+ಶೂನ್ಯ
+ನಿಯಮ_lhs_print (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, sym_content ಸ್ಥಿರಾಂಕ *ಹಿಂದಿನ_lhs, FILE *ಹೊರಹೋಗು)
 {
-  fprintf (out, "  %3d ", r->number);
-  if (previous_lhs != r->lhs)
-    fprintf (out, "%s:", r->lhs->symbol->tag);
-  else
-    fprintf (out, "%*s|", (int) strlen (previous_lhs->symbol->tag), "");
+  fprintf (ಹೊರಹೋಗು, "  %3d ", r->ಸಂಖ್ಯೆ);
+  ಆದರೆ (ಹಿಂದಿನ_lhs != r->lhs)
+    fprintf (ಹೊರಹೋಗು, "%s:", r->lhs->ಚಿಹ್ನೆ->ಟ್ಯಾಗ್);
+  ಇಲ್ಲದಿದ್ದರೆ
+    fprintf (ಹೊರಹೋಗು, "%*s|", (ಪೂರ್ಣಾಂಕ) ಅಕ್ಷರಸರಣಿ_ಉದ್ದ (ಹಿಂದಿನ_lhs->ಚಿಹ್ನೆ->ಟ್ಯಾಗ್), "");
 }
 
-void
-rule_lhs_print_xml (rule const *r, FILE *out, int level)
+ಶೂನ್ಯ
+ನಿಯಮ_lhs_print_xml (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ level)
 {
-  xml_printf (out, level, "<lhs>%s</lhs>", r->lhs->symbol->tag);
+  xml_printf (ಹೊರಹೋಗು, level, "<lhs>%s</lhs>", r->lhs->ಚಿಹ್ನೆ->ಟ್ಯಾಗ್);
 }
 
 size_t
-rule_rhs_length (rule const *r)
+ನಿಯಮ_rhs_ಉದ್ದಳತೆ (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r)
 {
   size_t res = 0;
-  for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
     ++res;
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-void
-rule_rhs_print (rule const *r, FILE *out)
+ಶೂನ್ಯ
+ನಿಯಮ_rhs_print (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, FILE *ಹೊರಹೋಗು)
 {
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
-      fprintf (out, " %s", symbols[*rhsp]->tag);
-  else
-    fprintf (out, " %s", empty);
+  ಆದರೆ (0 <= *r->rhs)
+    ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+      fprintf (ಹೊರಹೋಗು, " %s", symbols[*rhsp]->ಟ್ಯಾಗ್);
+  ಇಲ್ಲದಿದ್ದರೆ
+    fprintf (ಹೊರಹೋಗು, " %s", ಖಾಲಿಗಳು);
 }
 
-static void
-rule_rhs_print_xml (rule const *r, FILE *out, int level)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ನಿಯಮ_rhs_print_xml (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ level)
 {
-  if (*r->rhs >= 0)
+  ಆದರೆ (*r->rhs >= 0)
     {
-      xml_puts (out, level, "<rhs>");
-      for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
-        xml_printf (out, level + 1, "<symbol>%s</symbol>",
-                    xml_escape (symbols[*rhsp]->tag));
-      xml_puts (out, level, "</rhs>");
+      xml_puts (ಹೊರಹೋಗು, level, "<rhs>");
+      ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+        xml_printf (ಹೊರಹೋಗು, level + 1, "<symbol>%s</symbol>",
+                    xml_escape (symbols[*rhsp]->ಟ್ಯಾಗ್));
+      xml_puts (ಹೊರಹೋಗು, level, "</rhs>");
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      xml_puts (out, level, "<rhs>");
-      xml_puts (out, level + 1, "<empty/>");
-      xml_puts (out, level, "</rhs>");
+      xml_puts (ಹೊರಹೋಗು, level, "<rhs>");
+      xml_puts (ಹೊರಹೋಗು, level + 1, "<empty/>");
+      xml_puts (ಹೊರಹೋಗು, level, "</rhs>");
     }
 }
 
-void
-rule_print (rule const *r, rule const *prev_rule, FILE *out)
+ಶೂನ್ಯ
+ನಿಯಮ_print (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, ನಿಯಮ ಸ್ಥಿರಾಂಕ *prev_ನಿಯಮ, FILE *ಹೊರಹೋಗು)
 {
-  rule_lhs_print (r, prev_rule ? prev_rule->lhs : NULL, out);
-  rule_rhs_print (r, out);
+  ನಿಯಮ_lhs_print (r, prev_ನಿಯಮ ? prev_ನಿಯಮ->lhs : ಖಾಲಿ, ಹೊರಹೋಗು);
+  ನಿಯಮ_rhs_print (r, ಹೊರಹೋಗು);
 }
 
-void
-ritem_print (FILE *out)
+ಶೂನ್ಯ
+ritem_print (FILE *ಹೊರಹೋಗು)
 {
-  fputs ("RITEM\n", out);
-  bool first = true;
-  for (int i = 0; i < nritems; ++i)
+  fputs ("RITEM\n", ಹೊರಹೋಗು);
+  bool ಮೊದಲ = true;
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < nritems; ++i)
     {
-      if (first)
+      ಆದರೆ (ಮೊದಲ)
         {
-          fprintf (out, "  %d: ", i);
-          first = false;
+          fprintf (ಹೊರಹೋಗು, "  %d: ", i);
+          ಮೊದಲ = false;
         }
-      if (ritem[i] >= 0)
-        fprintf (out, "  %s", symbols[ritem[i]]->tag);
-      else
+      ಆದರೆ (ritem[i] >= 0)
+        fprintf (ಹೊರಹೋಗು, "  %s", symbols[ritem[i]]->ಟ್ಯಾಗ್);
+      ಇಲ್ಲದಿದ್ದರೆ
         {
-          fprintf (out, "  (rule %d)\n", item_number_as_rule_number (ritem[i]));
-          first = true;
+          fprintf (ಹೊರಹೋಗು, "  (rule %d)\n", ಅಂಶ_ಸಂಖ್ಯೆ_as_ನಿಯಮ_ಸಂಖ್ಯೆ (ritem[i]));
+          ಮೊದಲ = true;
         }
     }
-  fputs ("\n\n", out);
+  fputs ("\n\n", ಹೊರಹೋಗು);
 }
 
 size_t
-ritem_longest_rhs (void)
+ritem_longest_rhs (ಶೂನ್ಯ)
 {
-  int max = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  ಪೂರ್ಣಾಂಕ max = 0;
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules; ++r)
     {
-      size_t length = rule_rhs_length (&rules[r]);
-      if (length > max)
-        max = length;
+      size_t ಉದ್ದಳತೆ = ನಿಯಮ_rhs_ಉದ್ದಳತೆ (&ನಿಯಮಗಳು[r]);
+      ಆದರೆ (ಉದ್ದಳತೆ > max)
+        max = ಉದ್ದಳತೆ;
     }
 
-  return max;
+  ಹಿಂತಿರುಗಿ max;
 }
 
-void
-grammar_rules_partial_print (FILE *out, const char *title,
-                             rule_filter filter)
+ಶೂನ್ಯ
+grammar_ನಿಯಮಗಳು_partial_print (FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *title,
+                             ನಿಯಮ_filter filter)
 {
-  bool first = true;
-  rule *previous_rule = NULL;
+  bool ಮೊದಲ = true;
+  ನಿಯಮ *ಹಿಂದಿನ_ನಿಯಮ = ಖಾಲಿ;
 
   /* rule # : LHS -> RHS */
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (filter && !filter (&rules[r]))
-        continue;
-      if (first)
-        fprintf (out, "%s\n\n", title);
-      else if (previous_rule && previous_rule->lhs != rules[r].lhs)
-        putc ('\n', out);
-      first = false;
-      rule_print (&rules[r], previous_rule, out);
-      putc ('\n', out);
-      previous_rule = &rules[r];
+      ಆದರೆ (filter && !filter (&ನಿಯಮಗಳು[r]))
+        ಮುಂದುವರಿ;
+      ಆದರೆ (ಮೊದಲ)
+        fprintf (ಹೊರಹೋಗು, "%s\n\n", title);
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (ಹಿಂದಿನ_ನಿಯಮ && ಹಿಂದಿನ_ನಿಯಮ->lhs != ನಿಯಮಗಳು[r].lhs)
+        putc ('\n', ಹೊರಹೋಗು);
+      ಮೊದಲ = false;
+      ನಿಯಮ_print (&ನಿಯಮಗಳು[r], ಹಿಂದಿನ_ನಿಯಮ, ಹೊರಹೋಗು);
+      putc ('\n', ಹೊರಹೋಗು);
+      ಹಿಂದಿನ_ನಿಯಮ = &ನಿಯಮಗಳು[r];
     }
-  if (!first)
-    fputs ("\n\n", out);
+  ಆದರೆ (!ಮೊದಲ)
+    fputs ("\n\n", ಹೊರಹೋಗು);
 }
 
-void
-grammar_rules_print (FILE *out)
+ಶೂನ್ಯ
+grammar_ನಿಯಮಗಳು_print (FILE *ಹೊರಹೋಗು)
 {
-  grammar_rules_partial_print (out, _("Grammar"), rule_useful_in_grammar_p);
+  grammar_ನಿಯಮಗಳು_partial_print (ಹೊರಹೋಗು, _("Grammar"), ನಿಯಮ_useful_ಒಳ_grammar_p);
 }
 
-void
-grammar_rules_print_xml (FILE *out, int level)
+ಶೂನ್ಯ
+grammar_ನಿಯಮಗಳು_print_xml (FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ level)
 {
-  bool first = true;
+  bool ಮೊದಲ = true;
 
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (first)
-        xml_puts (out, level + 1, "<rules>");
-      first = false;
+      ಆದರೆ (ಮೊದಲ)
+        xml_puts (ಹೊರಹೋಗು, level + 1, "<rules>");
+      ಮೊದಲ = false;
       {
-        char const *usefulness
-          = rule_useless_in_grammar_p (&rules[r]) ? "useless-in-grammar"
-          : rule_useless_in_parser_p (&rules[r])  ? "useless-in-parser"
+        ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *usefulness
+          = ನಿಯಮ_useless_ಒಳ_grammar_p (&ನಿಯಮಗಳು[r]) ? "useless-in-grammar"
+          : ನಿಯಮ_useless_ಒಳ_parser_p (&ನಿಯಮಗಳು[r])  ? "useless-in-parser"
           :                                         "useful";
-        xml_indent (out, level + 2);
-        fprintf (out, "<rule number=\"%d\" usefulness=\"%s\"",
-                 rules[r].number, usefulness);
-        if (rules[r].precsym)
-          fprintf (out, " percent_prec=\"%s\"",
-                   xml_escape (rules[r].precsym->symbol->tag));
-        fputs (">\n", out);
+        xml_indent (ಹೊರಹೋಗು, level + 2);
+        fprintf (ಹೊರಹೋಗು, "<rule number=\"%d\" usefulness=\"%s\"",
+                 ನಿಯಮಗಳು[r].ಸಂಖ್ಯೆ, usefulness);
+        ಆದರೆ (ನಿಯಮಗಳು[r].precsym)
+          fprintf (ಹೊರಹೋಗು, " percent_prec=\"%s\"",
+                   xml_escape (ನಿಯಮಗಳು[r].precsym->ಚಿಹ್ನೆ->ಟ್ಯಾಗ್));
+        fputs (">\n", ಹೊರಹೋಗು);
       }
-      rule_lhs_print_xml (&rules[r], out, level + 3);
-      rule_rhs_print_xml (&rules[r], out, level + 3);
-      xml_puts (out, level + 2, "</rule>");
+      ನಿಯಮ_lhs_print_xml (&ನಿಯಮಗಳು[r], ಹೊರಹೋಗು, level + 3);
+      ನಿಯಮ_rhs_print_xml (&ನಿಯಮಗಳು[r], ಹೊರಹೋಗು, level + 3);
+      xml_puts (ಹೊರಹೋಗು, level + 2, "</rule>");
     }
-  if (!first)
-    xml_puts (out, level + 1, "</rules>");
-  else
-   xml_puts (out, level + 1, "<rules/>");
+  ಆದರೆ (!ಮೊದಲ)
+    xml_puts (ಹೊರಹೋಗು, level + 1, "</rules>");
+  ಇಲ್ಲದಿದ್ದರೆ
+   xml_puts (ಹೊರಹೋಗು, level + 1, "<rules/>");
 }
 
-static void
-section (FILE *out, const char *s)
+ಸ್ಥಿರ ಶೂನ್ಯ
+section (FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *s)
 {
-  fprintf (out, "%s\n", s);
-  for (int i = strlen (s); 0 < i; --i)
-    putc ('-', out);
-  putc ('\n', out);
-  putc ('\n', out);
+  fprintf (ಹೊರಹೋಗು, "%s\n", s);
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = ಅಕ್ಷರಸರಣಿ_ಉದ್ದ (s); 0 < i; --i)
+    putc ('-', ಹೊರಹೋಗು);
+  putc ('\n', ಹೊರಹೋಗು);
+  putc ('\n', ಹೊರಹೋಗು);
 }
 
-void
-grammar_dump (FILE *out, const char *title)
+ಶೂನ್ಯ
+grammar_dump (FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *title)
 {
-  fprintf (out, "%s\n\n", title);
-  fprintf (out,
+  fprintf (ಹೊರಹೋಗು, "%s\n\n", title);
+  fprintf (ಹೊರಹೋಗು,
            "ntokens = %d, nnterms = %d, nsyms = %d, nrules = %d, nritems = %d\n\n",
            ntokens, nnterms, nsyms, nrules, nritems);
 
-  section (out, "Tokens");
+  section (ಹೊರಹೋಗು, "Tokens");
   {
-    fprintf (out, "Value  Sprec  Sassoc  Tag\n");
+    fprintf (ಹೊರಹೋಗು, "Value  Sprec  Sassoc  Tag\n");
 
-    for (symbol_number i = 0; i < ntokens; i++)
-      fprintf (out, "%5d  %5d   %5d  %s\n",
+    ಗಾಗಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = 0; i < ntokens; i++)
+      fprintf (ಹೊರಹೋಗು, "%5d  %5d   %5d  %s\n",
                i,
                symbols[i]->content->prec, symbols[i]->content->assoc,
-               symbols[i]->tag);
-    fprintf (out, "\n\n");
+               symbols[i]->ಟ್ಯಾಗ್);
+    fprintf (ಹೊರಹೋಗು, "\n\n");
   }
 
-  section (out, "Nonterminals");
+  section (ಹೊರಹೋಗು, "Nonterminals");
   {
-    fprintf (out, "Value  Tag\n");
+    fprintf (ಹೊರಹೋಗು, "Value  Tag\n");
 
-    for (symbol_number i = ntokens; i < nsyms; i++)
-      fprintf (out, "%5d  %s\n",
-               i, symbols[i]->tag);
-    fprintf (out, "\n\n");
+    ಗಾಗಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms; i++)
+      fprintf (ಹೊರಹೋಗು, "%5d  %s\n",
+               i, symbols[i]->ಟ್ಯಾಗ್);
+    fprintf (ಹೊರಹೋಗು, "\n\n");
   }
 
-  section (out, "Rules");
+  section (ಹೊರಹೋಗು, "Rules");
   {
-    fprintf (out,
+    fprintf (ಹೊರಹೋಗು,
              "Num (Prec, Assoc, Useful, UselessChain) Lhs"
              " -> (Ritem Range) Rhs\n");
-    for (rule_number i = 0; i < nrules + nuseless_productions; ++i)
+    ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ i = 0; i < nrules + nuseless_productions; ++i)
       {
-        rule const *rule_i = &rules[i];
-        int const rhs_itemno = rule_i->rhs - ritem;
-        int length = rule_rhs_length (rule_i);
-        aver (item_number_as_rule_number (rule_i->rhs[length]) == i);
-        fprintf (out, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
+        ನಿಯಮ ಸ್ಥಿರಾಂಕ *ನಿಯಮ_i = &ನಿಯಮಗಳು[i];
+        ಪೂರ್ಣಾಂಕ ಸ್ಥಿರಾಂಕ rhs_itemno = ನಿಯಮ_i->rhs - ritem;
+        ಪೂರ್ಣಾಂಕ ಉದ್ದಳತೆ = ನಿಯಮ_rhs_ಉದ್ದಳತೆ (ನಿಯಮ_i);
+        aver (ಅಂಶ_ಸಂಖ್ಯೆ_as_ನಿಯಮ_ಸಂಖ್ಯೆ (ನಿಯಮ_i->rhs[ಉದ್ದಳತೆ]) == i);
+        fprintf (ಹೊರಹೋಗು, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
                  i,
-                 rule_i->prec ? rule_i->prec->prec : 0,
-                 rule_i->prec ? rule_i->prec->assoc : 0,
-                 rule_i->useful ? "t" : "f",
-                 rule_useless_chain_p (rule_i) ? "t" : "f",
-                 rule_i->lhs->number,
-                 rhs_itemno, rhs_itemno + length - 1);
+                 ನಿಯಮ_i->prec ? ನಿಯಮ_i->prec->prec : 0,
+                 ನಿಯಮ_i->prec ? ನಿಯಮ_i->prec->assoc : 0,
+                 ನಿಯಮ_i->useful ? "t" : "f",
+                 ನಿಯಮ_useless_chain_p (ನಿಯಮ_i) ? "t" : "f",
+                 ನಿಯಮ_i->lhs->ಸಂಖ್ಯೆ,
+                 rhs_itemno, rhs_itemno + ಉದ್ದಳತೆ - 1);
         /* Dumped the RHS. */
-        for (item_number *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
-          fprintf (out, " %3d", *rhsp);
-        putc ('\n', out);
+        ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *rhsp = ನಿಯಮ_i->rhs; 0 <= *rhsp; ++rhsp)
+          fprintf (ಹೊರಹೋಗು, " %3d", *rhsp);
+        putc ('\n', ಹೊರಹೋಗು);
       }
   }
-  fprintf (out, "\n\n");
+  fprintf (ಹೊರಹೋಗು, "\n\n");
 
-  section (out, "Rules interpreted");
-  for (rule_number r = 0; r < nrules + nuseless_productions; ++r)
+  section (ಹೊರಹೋಗು, "Rules interpreted");
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules + nuseless_productions; ++r)
     {
-      fprintf (out, "%-5d  %s:", r, rules[r].lhs->symbol->tag);
-      rule_rhs_print (&rules[r], out);
-      putc ('\n', out);
+      fprintf (ಹೊರಹೋಗು, "%-5d  %s:", r, ನಿಯಮಗಳು[r].lhs->ಚಿಹ್ನೆ->ಟ್ಯಾಗ್);
+      ನಿಯಮ_rhs_print (&ನಿಯಮಗಳು[r], ಹೊರಹೋಗು);
+      putc ('\n', ಹೊರಹೋಗು);
     }
-  fprintf (out, "\n\n");
+  fprintf (ಹೊರಹೋಗು, "\n\n");
 }
 
-void
-grammar_rules_useless_report (const char *message)
+ಶೂನ್ಯ
+grammar_ನಿಯಮಗಳು_useless_report (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಸಂದೇಶ)
 {
-  for (rule_number r = 0; r < nrules; ++r)
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules; ++r)
     /* Don't complain about rules whose LHS is useless, we already
        complained about it.  */
-    if (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
-        && !rules[r].useful)
-      complain (&rules[r].location, Wother, "%s", message);
+    ಆದರೆ (!reduce_nonterminal_useless_ಒಳ_grammar (ನಿಯಮಗಳು[r].lhs)
+        && !ನಿಯಮಗಳು[r].useful)
+      complain (&ನಿಯಮಗಳು[r].location, Wother, "%s", ಸಂದೇಶ);
 }
 
-void
-grammar_free (void)
+ಶೂನ್ಯ
+grammar_free (ಶೂನ್ಯ)
 {
-  if (ritem)
-    free (ritem - 1);
-  free (rules);
-  free (token_translations);
+  ಆದರೆ (ritem)
+    ಬಿಡುಗಡೆ (ritem - 1);
+  ಬಿಡುಗಡೆ (ನಿಯಮಗಳು);
+  ಬಿಡುಗಡೆ (token_translations);
   /* Free the symbol table data structure.  */
   symbols_free ();
   free_merger_functions ();

@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ PRINT_H_
 # define PRINT_H_
 
-void print_results (void);
+ಶೂನ್ಯ print_results (ಶೂನ್ಯ);
 
-#endif /* !PRINT_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !PRINT_H_ */

@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_XML_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ PRINT_XML_H_
 # define PRINT_XML_H_
 
 # include <stdio.h>
 
-void xml_indent (FILE *out, int level);
-void xml_puts (FILE *, int, char const *);
-void xml_printf (FILE *, int, char const *, ...);
-char const *xml_escape_n (int n, char const *str);
-char const *xml_escape (char const *str);
-void print_xml (void);
+ಶೂನ್ಯ xml_indent (FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ level);
+ಶೂನ್ಯ xml_puts (FILE *, ಪೂರ್ಣಾಂಕ, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *);
+ಶೂನ್ಯ xml_printf (FILE *, ಪೂರ್ಣಾಂಕ, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *, ...);
+ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *xml_escape_n (ಪೂರ್ಣಾಂಕ n, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *str);
+ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *xml_escape (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *str);
+ಶೂನ್ಯ print_xml (ಶೂನ್ಯ);
 
 /* Use xsltproc to generate HTML from XML output.  */
-void print_html (void);
+ಶೂನ್ಯ print_html (ಶೂನ್ಯ);
 
-#endif /* !PRINT_XML_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !PRINT_XML_H_ */

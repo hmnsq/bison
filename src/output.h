@@ -18,10 +18,10 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef OUTPUT_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ OUTPUT_H_
 # define OUTPUT_H_
 
 /* Output the parsing tables and the parser code to FTABLE.  */
-void output (void);
+ಶೂನ್ಯ output (ಶೂನ್ಯ);
 
-#endif /* !OUTPUT_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !OUTPUT_H_ */

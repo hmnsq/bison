@@ -16,7 +16,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef COMPLAIN_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ COMPLAIN_H_
 # define COMPLAIN_H_ 1
 
 # include <attribute.h>
@@ -28,43 +28,43 @@
 `---------------*/
 
 /** Enable a style on \a out provided it's stderr.  */
-void begin_use_class (const char *style, FILE *out);
+ಶೂನ್ಯ begin_use_class (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *style, FILE *ಹೊರಹೋಗು);
 
 /** Disable a style on \a out provided it's stderr.  */
-void end_use_class (const char *style, FILE *out);
+ಶೂನ್ಯ ಕೊನೆ_use_class (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *style, FILE *ಹೊರಹೋಗು);
 
 /** Flush \a out.  */
-void flush (FILE *out);
+ಶೂನ್ಯ flush (FILE *ಹೊರಹೋಗು);
 
 /** Whether there's styling on OUT.  */
-bool is_styled (FILE *out);
+bool is_styled (FILE *ಹೊರಹೋಗು);
 
 /*-------------.
 | --warnings.  |
 `-------------*/
 
 /** The bits assigned to each warning type.  */
-typedef enum
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಎಣಿಕೆ
   {
     warning_conflicts_rr,
     warning_conflicts_sr,
     warning_counterexamples,
     warning_dangling_alias,
     warning_deprecated,
-    warning_empty_rule,
-    warning_midrule_values,
+    warning_ಖಾಲಿಗಳು_ನಿಯಮ,
+    warning_midrule_ಮೌಲ್ಯಗಳು,
     warning_other,
     warning_precedence,
     warning_yacc,           /**< POSIXME.  */
 
-    warnings_size           /**< The number of warnings.  Must be last.  */
-  } warning_bit;
+    warnings_ಗಾತ್ರ           /**< The number of warnings.  Must be last.  */
+  } warning_ಬಿಟ್;
 
 /** Whether -Werror was set. */
-extern bool warnings_are_errors;
+ಬಾಹ್ಯ bool warnings_are_errors;
 
 /** Document --warning arguments.  */
-void warning_usage (FILE *out);
+ಶೂನ್ಯ warning_usage (FILE *ಹೊರಹೋಗು);
 
 /** Decode a single argument from -W.
  *
@@ -79,14 +79,14 @@ void warning_usage (FILE *out);
  *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
-void warning_argmatch (char const *arg, size_t no, size_t err);
+ಶೂನ್ಯ warning_argmatch (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *arg, size_t no, size_t err);
 
 /** Decode a comma-separated list of arguments from -W.
  *
  *  \param args     comma separated list of effective subarguments to decode.
  *                  If 0, then activate all the flags.
  */
-void warnings_argmatch (char *args);
+ಶೂನ್ಯ warnings_argmatch (ಅಕ್ಷರ *ವಾದಗಳು);
 
 
 /*-----------.
@@ -94,16 +94,16 @@ void warnings_argmatch (char *args);
 `-----------*/
 
 /** Initialize this module.  */
-void complain_init (void);
+ಶೂನ್ಯ complain_init (ಶೂನ್ಯ);
 
 /** Reclaim resources.  */
-void complain_free (void);
+ಶೂನ್ಯ complain_free (ಶೂನ್ಯ);
 
 /** Initialize support for colored messages.  */
-void complain_init_color (void);
+ಶೂನ್ಯ complain_init_color (ಶೂನ್ಯ);
 
 /** Flags passed to diagnostics functions.  */
-typedef enum
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಎಣಿಕೆ
   {
     Wnone             = 0,       /**< Issue no warnings.  */
 
@@ -112,8 +112,8 @@ typedef enum
     Wcounterexamples  = 1 << warning_counterexamples,
     Wdangling_alias   = 1 << warning_dangling_alias,
     Wdeprecated       = 1 << warning_deprecated,
-    Wempty_rule       = 1 << warning_empty_rule,
-    Wmidrule_values   = 1 << warning_midrule_values,
+    Wempty_ನಿಯಮ       = 1 << warning_ಖಾಲಿಗಳು_ನಿಯಮ,
+    Wmidrule_ಮೌಲ್ಯಗಳು   = 1 << warning_midrule_ಮೌಲ್ಯಗಳು,
     Wother            = 1 << warning_other,
     Wprecedence       = 1 << warning_precedence,
     Wyacc             = 1 << warning_yacc,
@@ -137,50 +137,50 @@ bool warning_is_unset (warnings flags);
 bool warning_is_enabled (warnings flags);
 
 /** Make a complaint, with maybe a location.  */
-void complain (location const *loc, warnings flags, char const *message, ...)
+ಶೂನ್ಯ complain (location ಸ್ಥಿರಾಂಕ *loc, warnings flags, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಸಂದೇಶ, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 /** Likewise, but with an \a argc/argv interface.  */
-void complain_args (location const *loc, warnings w,
-                    int argc, char *arg[]);
+ಶೂನ್ಯ complain_ವಾದಗಳು (location ಸ್ಥಿರಾಂಕ *loc, warnings w,
+                    ಪೂರ್ಣಾಂಕ argc, ಅಕ್ಷರ *arg[]);
 
 /** Make a subcomplain with location and note.  */
-void subcomplain (location const *loc, warnings flags,
-                  char const *message, ...)
+ಶೂನ್ಯ subcomplain (location ಸ್ಥಿರಾಂಕ *loc, warnings flags,
+                  ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಸಂದೇಶ, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 
 /** GNU Bison extension not valid with POSIX Yacc.  */
-void bison_directive (location const *loc, char const *directive);
+ಶೂನ್ಯ bison_directive (location ಸ್ಥಿರಾಂಕ *loc, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *directive);
 
 /** Report an obsolete syntax, suggest the updated one.  */
-void deprecated_directive (location const *loc,
-                           char const *obsolete, char const *updated);
+ಶೂನ್ಯ deprecated_directive (location ಸ್ಥಿರಾಂಕ *loc,
+                           ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *obsolete, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *updated);
 
 /** Report a repeated directive.  */
-void duplicate_directive (char const *directive,
-                          location first, location second);
+ಶೂನ್ಯ duplicate_directive (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *directive,
+                          location ಮೊದಲ, location ಎರಡನೇ);
 
 /** Report a repeated directive for a rule.  */
-void duplicate_rule_directive (char const *directive,
-                               location first, location second);
+ಶೂನ್ಯ duplicate_ನಿಯಮ_directive (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *directive,
+                               location ಮೊದಲ, location ಎರಡನೇ);
 
 /** Report a syntax error, where argv[0] is the unexpected
     token, and argv[1...argc] are the expected ones.  */
-void syntax_error (location loc,
-                   int argc, const char* argv[]);
+ಶೂನ್ಯ syntax_error (location loc,
+                   ಪೂರ್ಣಾಂಕ argc, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ* argv[]);
 
 /** Warnings treated as errors shouldn't stop the execution as regular
     errors should (because due to their nature, it is safe to go
     on). Thus, there are three possible execution statuses.  */
-typedef enum
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಎಣಿಕೆ
   {
-    status_none,             /**< No diagnostic issued so far.  */
-    status_warning_as_error, /**< A warning was issued (but no error).  */
-    status_complaint         /**< An error was issued.  */
-  } err_status;
+    ಸ್ಥಿತಿ_none,             /**< No diagnostic issued so far.  */
+    ಸ್ಥಿತಿ_warning_as_error, /**< A warning was issued (but no error).  */
+    ಸ್ಥಿತಿ_complaint         /**< An error was issued.  */
+  } err_ಸ್ಥಿತಿ;
 
 /** Whether an error was reported.  */
-extern err_status complaint_status;
+ಬಾಹ್ಯ err_ಸ್ಥಿತಿ complaint_ಸ್ಥಿತಿ;
 
-#endif /* !COMPLAIN_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !COMPLAIN_H_ */

@@ -18,33 +18,33 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include <filename.h> /* IS_PATH_WITH_DIR */
-#include <get-errno.h>
-#include <mbswidth.h>
-#include <path-join.h>
-#include <quotearg.h>
-#include <spawn-pipe.h>
-#include <timevar.h>
-#include <wait-process.h>
+#ಅನ್ತರ್ಭಾವ <filename.h> /* IS_PATH_WITH_DIR */
+#ಅನ್ತರ್ಭಾವ <get-errno.h>
+#ಅನ್ತರ್ಭಾವ <mbswidth.h>
+#ಅನ್ತರ್ಭಾವ <path-join.h>
+#ಅನ್ತರ್ಭಾವ <quotearg.h>
+#ಅನ್ತರ್ಭಾವ <spawn-pipe.h>
+#ಅನ್ತರ್ಭಾವ <timevar.h>
+#ಅನ್ತರ್ಭಾವ <wait-process.h>
 
-#include "complain.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "muscle-tab.h"
-#include "output.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"    /* max_left_semantic_context */
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "strversion.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
+#ಅನ್ತರ್ಭಾವ "files.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "gram.h"
+#ಅನ್ತರ್ಭಾವ "muscle-tab.h"
+#ಅನ್ತರ್ಭಾವ "output.h"
+#ಅನ್ತರ್ಭಾವ "reader.h"
+#ಅನ್ತರ್ಭಾವ "reduce.h"
+#ಅನ್ತರ್ಭಾವ "scan-code.h"    /* max_left_semantic_context */
+#ಅನ್ತರ್ಭಾವ "scan-skel.h"
+#ಅನ್ತರ್ಭಾವ "symtab.h"
+#ಅನ್ತರ್ಭಾವ "tables.h"
+#ಅನ್ತರ್ಭಾವ "strversion.h"
 
-static struct obstack format_obstack;
+ಸ್ಥಿರ ರಚನೆ obstack format_obstack;
 
 
 /*-------------------------------------------------------------------.
@@ -59,50 +59,50 @@ static struct obstack format_obstack;
 `-------------------------------------------------------------------*/
 
 
-#define GENERATE_MUSCLE_INSERT_TABLE(Name, Type)                        \
+#ವ್ಯಾಖ್ಯಾನಿಸು GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ(Name, Type)                        \
                                                                         \
-static void                                                             \
-Name (char const *name, Type *table_data, Type first,                   \
-      int begin, int end)                                               \
+ಸ್ಥಿರ ಶೂನ್ಯ                                                             \
+Name (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *name, Type *ಕೋಷ್ಟಕ_ದತ್ತಾಂಶ, Type ಮೊದಲ,                   \
+      ಪೂರ್ಣಾಂಕ begin, ಪೂರ್ಣಾಂಕ ಕೊನೆ)                                               \
 {                                                                       \
-  Type min = first;                                                     \
-  Type max = first;                                                     \
-  int j = 1;                                                            \
+  Type min = ಮೊದಲ;                                                     \
+  Type max = ಮೊದಲ;                                                     \
+  ಪೂರ್ಣಾಂಕ j = 1;                                                            \
                                                                         \
-  obstack_printf (&format_obstack, "%6d", first);                       \
-  for (int i = begin; i < end; ++i)                                     \
+  obstack_printf (&format_obstack, "%6d", ಮೊದಲ);                       \
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = begin; i < ಕೊನೆ; ++i)                                     \
     {                                                                   \
       obstack_1grow (&format_obstack, ',');                             \
-      if (j >= 10)                                                      \
+      ಆದರೆ (j >= 10)                                                      \
         {                                                               \
           obstack_sgrow (&format_obstack, "\n  ");                      \
           j = 1;                                                        \
         }                                                               \
-      else                                                              \
+      ಇಲ್ಲದಿದ್ದರೆ                                                              \
         ++j;                                                            \
-      obstack_printf (&format_obstack, "%6d", table_data[i]);           \
-      if (table_data[i] < min)                                          \
-        min = table_data[i];                                            \
-      if (max < table_data[i])                                          \
-        max = table_data[i];                                            \
+      obstack_printf (&format_obstack, "%6d", ಕೋಷ್ಟಕ_ದತ್ತಾಂಶ[i]);           \
+      ಆದರೆ (ಕೋಷ್ಟಕ_ದತ್ತಾಂಶ[i] < min)                                          \
+        min = ಕೋಷ್ಟಕ_ದತ್ತಾಂಶ[i];                                            \
+      ಆದರೆ (max < ಕೋಷ್ಟಕ_ದತ್ತಾಂಶ[i])                                          \
+        max = ಕೋಷ್ಟಕ_ದತ್ತಾಂಶ[i];                                            \
     }                                                                   \
-  muscle_insert (name, obstack_finish0 (&format_obstack));              \
+  muscle_ಸೇರಿಸು (name, obstack_finish0 (&format_obstack));              \
                                                                         \
-  long lmin = min;                                                      \
-  long lmax = max;                                                      \
+  ದೀರ್ಘ lmin = min;                                                      \
+  ದೀರ್ಘ lmax = max;                                                      \
   /* Build 'NAME_min' and 'NAME_max' in the obstack. */                 \
   obstack_printf (&format_obstack, "%s_min", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
+  MUSCLE_ಸೇರಿಸು_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
   obstack_printf (&format_obstack, "%s_max", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
+  MUSCLE_ಸೇರಿಸು_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
 }
 
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_int_table, int)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_base_table, base_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_rule_number_table, rule_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_symbol_number_table, symbol_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_item_number_table, item_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
+GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ (muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ, ಪೂರ್ಣಾಂಕ)
+GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ (muscle_ಸೇರಿಸು_ತಳ_ಕೋಷ್ಟಕ, ತಳ_ಸಂಖ್ಯೆ)
+GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ (muscle_ಸೇರಿಸು_ನಿಯಮ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ, ನಿಯಮ_ಸಂಖ್ಯೆ)
+GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ (muscle_ಸೇರಿಸು_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ, ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ)
+GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ (muscle_ಸೇರಿಸು_ಅಂಶ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ, ಅಂಶ_ಸಂಖ್ಯೆ)
+GENERATE_MUSCLE_ಸೇರಿಸು_ಕೋಷ್ಟಕ (muscle_ಸೇರಿಸು_state_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ, state_ಸಂಖ್ಯೆ)
 
 
 /*----------------------------------------------------------------.
@@ -111,48 +111,48 @@ GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
 | Keep sync'ed with obstack_escape.                               |
 `----------------------------------------------------------------*/
 
-static void
-output_escaped (FILE *out, const char *cp)
+ಸ್ಥಿರ ಶೂನ್ಯ
+output_escaped (FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *cp)
 {
-  for (; *cp; ++cp)
-    switch (*cp)
+  ಗಾಗಿ (; *cp; ++cp)
+    ಆಯ್ಕೆ (*cp)
       {
-      case '$': fputs ("$][", out); break;
-      case '@': fputs ("@@",  out); break;
-      case '[': fputs ("@{",  out); break;
-      case ']': fputs ("@}",  out); break;
+      ಸ್ಥಿತಿ '$': fputs ("$][", ಹೊರಹೋಗು); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ '@': fputs ("@@",  ಹೊರಹೋಗು); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ '[': fputs ("@{",  ಹೊರಹೋಗು); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ ']': fputs ("@}",  ಹೊರಹೋಗು); ನಿಲ್ಲಿಸು;
 
-      case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+      ಸ್ಥಿತಿ 'b':
+        ಆದರೆ (STRPREFIX_LIT ("b4_", cp))
           {
-            fputs ("b4@'_", out);
-            cp += strlen ("b4_") - 1;
-            break;
+            fputs ("b4@'_", ಹೊರಹೋಗು);
+            cp += ಅಕ್ಷರಸರಣಿ_ಉದ್ದ ("b4_") - 1;
+            ನಿಲ್ಲಿಸು;
           }
-        else
-          goto append;
+        ಇಲ್ಲದಿದ್ದರೆ
+          ಹೋಗು append;
 
-      case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+      ಸ್ಥಿತಿ 'm':
+        ಆದರೆ (STRPREFIX_LIT ("m4_", cp))
           {
-            fputs ("m4@'_", out);
-            cp += strlen ("m4_") - 1;
-            break;
+            fputs ("m4@'_", ಹೊರಹೋಗು);
+            cp += ಅಕ್ಷರಸರಣಿ_ಉದ್ದ ("m4_") - 1;
+            ನಿಲ್ಲಿಸು;
           }
-        else
-          goto append;
+        ಇಲ್ಲದಿದ್ದರೆ
+          ಹೋಗು append;
 
       append:
-      default:  fputc (*cp,   out); break;
+      ಪೂರ್ವನಿಯೋಜಿತ:  fputc (*cp,   ಹೊರಹೋಗು); ನಿಲ್ಲಿಸು;
       }
 }
 
-static void
-output_quoted (FILE *out, char const *cp)
+ಸ್ಥಿರ ಶೂನ್ಯ
+output_quoted (FILE *ಹೊರಹೋಗು, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *cp)
 {
-  fprintf (out, "[[");
-  output_escaped (out, cp);
-  fprintf (out, "]]");
+  fprintf (ಹೊರಹೋಗು, "[[");
+  output_escaped (ಹೊರಹೋಗು, cp);
+  fprintf (ಹೊರಹೋಗು, "]]");
 }
 
 /*----------------------------------------------------------------.
@@ -160,137 +160,137 @@ output_quoted (FILE *out, char const *cp)
 | for C and M4.                                                   |
 `----------------------------------------------------------------*/
 
-static void
-string_output (FILE *out, char const *string)
+ಸ್ಥಿರ ಶೂನ್ಯ
+string_output (FILE *ಹೊರಹೋಗು, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *string)
 {
-  output_quoted (out, quotearg_style (c_quoting_style, string));
+  output_quoted (ಹೊರಹೋಗು, quotearg_style (c_quoting_style, string));
 }
 
 
 /* Store in BUFFER a copy of SRC where trigraphs are escaped, return
    the size of the result (including the final NUL).  If called with
    BUFFERSIZE = 0, returns the needed size for BUFFER.  */
-static ptrdiff_t
-escape_trigraphs (char *buffer, ptrdiff_t buffersize, const char *src)
+ಸ್ಥಿರ ptrdiff_t
+escape_trigraphs (ಅಕ್ಷರ *ಬಫರ್, ptrdiff_t buffersize, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *src)
 {
-#define STORE(c)                                \
-  do                                            \
+#ವ್ಯಾಖ್ಯಾನಿಸು STORE(c)                                \
+  ಮಾಡು                                            \
     {                                           \
-      if (res < buffersize)                     \
-        buffer[res] = (c);                      \
+      ಆದರೆ (res < buffersize)                     \
+        ಬಫರ್[res] = (c);                      \
       ++res;                                    \
     }                                           \
-  while (0)
+  ಆಗ (0)
   ptrdiff_t res = 0;
-  for (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
+  ಗಾಗಿ (ptrdiff_t i = 0, len = ಅಕ್ಷರಸರಣಿ_ಉದ್ದ (src); i < len; ++i)
     {
-      if (i + 2 < len
+      ಆದರೆ (i + 2 < len
           && src[i] == '?' && src[i+1] == '?')
         {
-          switch (src[i+2])
+          ಆಯ್ಕೆ (src[i+2])
             {
-            case '!': case '\'':
-            case '(': case ')': case '-': case '/':
-            case '<': case '=': case '>':
+            ಸ್ಥಿತಿ '!': ಸ್ಥಿತಿ '\'':
+            ಸ್ಥಿತಿ '(': ಸ್ಥಿತಿ ')': ಸ್ಥಿತಿ '-': ಸ್ಥಿತಿ '/':
+            ಸ್ಥಿತಿ '<': ಸ್ಥಿತಿ '=': ಸ್ಥಿತಿ '>':
               i += 1;
               STORE ('?');
               STORE ('"');
               STORE ('"');
               STORE ('?');
-              continue;
+              ಮುಂದುವರಿ;
             }
         }
       STORE (src[i]);
     }
   STORE ('\0');
-#undef STORE
-  return res;
+#ವ್ಯಾಖ್ಯಾನ_ರದ್ದು STORE
+  ಹಿಂತಿರುಗಿ res;
 }
 
 /* Same as xstrdup, except that trigraphs are escaped.  */
-static char *
-xescape_trigraphs (const char *src)
+ಸ್ಥಿರ ಅಕ್ಷರ *
+xescape_trigraphs (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *src)
 {
-  ptrdiff_t bufsize = escape_trigraphs (NULL, 0, src);
-  char *buf = xcharalloc (bufsize);
+  ptrdiff_t bufsize = escape_trigraphs (ಖಾಲಿ, 0, src);
+  ಅಕ್ಷರ *buf = xcharalloc (bufsize);
   escape_trigraphs (buf, bufsize, src);
-  return buf;
+  ಹಿಂತಿರುಗಿ buf;
 }
 
 /* The tag to show in the generated parsers.  Use "end of file" rather
    than "$end".  But keep "$end" in the reports, it's shorter and more
    consistent.  Support i18n if the user already uses it.  */
-static const char *
-symbol_tag (const symbol *sym)
+ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *
+ಚಿಹ್ನೆ_ಟ್ಯಾಗ್ (ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym)
 {
-  const bool eof_is_user_defined
-    = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
+  ಸ್ಥಿರಾಂಕ bool eof_is_user_defined
+    = !eoftoken->alias || STRNEQ (eoftoken->alias->ಟ್ಯಾಗ್, "$end");
 
-  if (!eof_is_user_defined && sym->content == eoftoken->content)
-    return "\"end of file\"";
-  else if (sym->content == undeftoken->content)
-    return "\"invalid token\"";
-  else
-    return sym->tag;
+  ಆದರೆ (!eof_is_user_defined && sym->content == eoftoken->content)
+    ಹಿಂತಿರುಗಿ "\"end of file\"";
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (sym->content == undeftoken->content)
+    ಹಿಂತಿರುಗಿ "\"invalid token\"";
+  ಇಲ್ಲದಿದ್ದರೆ
+    ಹಿಂತಿರುಗಿ sym->ಟ್ಯಾಗ್;
 }
 
 /* Generate the b4_<MUSCLE_NAME> (e.g., b4_tname) table with the
    symbol names (aka tags). */
 
-static void
-prepare_symbol_names (char const *muscle_name)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_ಚಿಹ್ನೆ_ಹೆಸರುಗಳು (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *muscle_name)
 {
   // Whether to add a pair of quotes around the name.
-  const bool quote = STREQ (muscle_name, "tname");
+  ಸ್ಥಿರಾಂಕ bool quote = STREQ (muscle_name, "tname");
   bool has_translations = false;
 
   /* We assume that the table will be output starting at column 2. */
-  int col = 2;
-  struct quoting_options *qo = clone_quoting_options (0);
-  set_quoting_style (qo, c_quoting_style);
-  set_quoting_flags (qo, QA_SPLIT_TRIGRAPHS);
-  for (int i = 0; i < nsyms; i++)
+  ಪೂರ್ಣಾಂಕ ಲಂಬಸಾಲು = 2;
+  ರಚನೆ quoting_options *qo = clone_quoting_options (0);
+  ಗಣ_quoting_style (qo, c_quoting_style);
+  ಗಣ_quoting_flags (qo, QA_ವಿಭಜಿಸು_TRIGRAPHS);
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < nsyms; i++)
     {
-      const char *tag = symbol_tag (symbols[i]);
+      ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಟ್ಯಾಗ್ = ಚಿಹ್ನೆ_ಟ್ಯಾಗ್ (symbols[i]);
       bool translatable = !quote && symbols[i]->translatable;
-      if (translatable)
+      ಆದರೆ (translatable)
         has_translations = true;
 
-      char *cp
-        = tag[0] == '"' && !quote
-        ? xescape_trigraphs (tag)
-        : quotearg_alloc (tag, -1, qo);
+      ಅಕ್ಷರ *cp
+        = ಟ್ಯಾಗ್[0] == '"' && !quote
+        ? xescape_trigraphs (ಟ್ಯಾಗ್)
+        : quotearg_alloc (ಟ್ಯಾಗ್, -1, qo);
       /* Width of the next token, including the two quotes, the
          comma and the space.  */
-      int width
+      ಪೂರ್ಣಾಂಕ ಅಗಲ
         = mbswidth (cp, 0) + 2
-        + (translatable ? strlen ("N_()") : 0);
+        + (translatable ? ಅಕ್ಷರಸರಣಿ_ಉದ್ದ ("N_()") : 0);
 
-      if (col + width > 75)
+      ಆದರೆ (ಲಂಬಸಾಲು + ಅಗಲ > 75)
         {
           obstack_sgrow (&format_obstack, "\n ");
-          col = 1;
+          ಲಂಬಸಾಲು = 1;
         }
 
-      if (i)
+      ಆದರೆ (i)
         obstack_1grow (&format_obstack, ' ');
-      if (translatable)
+      ಆದರೆ (translatable)
         obstack_sgrow (&format_obstack, "]b4_symbol_translate""([");
       obstack_escape (&format_obstack, cp);
-      if (translatable)
+      ಆದರೆ (translatable)
         obstack_sgrow (&format_obstack, "])[");
-      free (cp);
+      ಬಿಡುಗಡೆ (cp);
       obstack_1grow (&format_obstack, ',');
-      col += width;
+      ಲಂಬಸಾಲು += ಅಗಲ;
     }
-  free (qo);
+  ಬಿಡುಗಡೆ (qo);
   obstack_sgrow (&format_obstack, " ]b4_null[");
 
   /* Finish table and store. */
-  muscle_insert (muscle_name, obstack_finish0 (&format_obstack));
+  muscle_ಸೇರಿಸು (muscle_name, obstack_finish0 (&format_obstack));
 
   /* Announce whether translation support is needed.  */
-  MUSCLE_INSERT_BOOL ("has_translations_flag", has_translations);
+  MUSCLE_ಸೇರಿಸು_BOOL ("has_translations_flag", has_translations);
 }
 
 
@@ -299,51 +299,51 @@ prepare_symbol_names (char const *muscle_name)
 | toknum.                                                           |
 `------------------------------------------------------------------*/
 
-static void
-prepare_symbols (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_symbols (ಶೂನ್ಯ)
 {
-  MUSCLE_INSERT_INT ("tokens_number", ntokens);
-  MUSCLE_INSERT_INT ("nterms_number", nnterms);
-  MUSCLE_INSERT_INT ("symbols_number", nsyms);
-  MUSCLE_INSERT_INT ("code_max", max_code);
+  MUSCLE_ಸೇರಿಸು_INT ("tokens_number", ntokens);
+  MUSCLE_ಸೇರಿಸು_INT ("nterms_number", nnterms);
+  MUSCLE_ಸೇರಿಸು_INT ("symbols_number", nsyms);
+  MUSCLE_ಸೇರಿಸು_INT ("code_max", max_ಸಂಕೇತ);
 
-  muscle_insert_symbol_number_table ("translate",
+  muscle_ಸೇರಿಸು_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ ("translate",
                                      token_translations,
                                      token_translations[0],
-                                     1, max_code + 1);
+                                     1, max_ಸಂಕೇತ + 1);
 
   /* tname -- token names.  */
-  prepare_symbol_names ("tname");
-  prepare_symbol_names ("symbol_names");
+  prepare_ಚಿಹ್ನೆ_ಹೆಸರುಗಳು ("tname");
+  prepare_ಚಿಹ್ನೆ_ಹೆಸರುಗಳು ("symbol_names");
 
   /* translatable -- whether a token is translatable. */
   {
     bool translatable = false;
-    for (int i = 0; i < ntokens; ++i)
-      if (symbols[i]->translatable)
+    ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < ntokens; ++i)
+      ಆದರೆ (symbols[i]->translatable)
         {
           translatable = true;
-          break;
+          ನಿಲ್ಲಿಸು;
         }
-    if (translatable)
+    ಆದರೆ (translatable)
       {
-        int *values = xnmalloc (nsyms, sizeof *values);
-        for (int i = 0; i < ntokens; ++i)
-          values[i] = symbols[i]->translatable;
-        muscle_insert_int_table ("translatable", values,
-                                 values[0], 1, ntokens);
-        free (values);
+        ಪೂರ್ಣಾಂಕ *ಮೌಲ್ಯಗಳು = xnmalloc (nsyms, ಗಾತ್ರ *ಮೌಲ್ಯಗಳು);
+        ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < ntokens; ++i)
+          ಮೌಲ್ಯಗಳು[i] = symbols[i]->translatable;
+        muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("translatable", ಮೌಲ್ಯಗಳು,
+                                 ಮೌಲ್ಯಗಳು[0], 1, ntokens);
+        ಬಿಡುಗಡೆ (ಮೌಲ್ಯಗಳು);
       }
   }
 
   /* Output YYTOKNUM. */
   {
-    int *values = xnmalloc (ntokens, sizeof *values);
-    for (int i = 0; i < ntokens; ++i)
-      values[i] = symbols[i]->content->code;
-    muscle_insert_int_table ("toknum", values,
-                             values[0], 1, ntokens);
-    free (values);
+    ಪೂರ್ಣಾಂಕ *ಮೌಲ್ಯಗಳು = xnmalloc (ntokens, ಗಾತ್ರ *ಮೌಲ್ಯಗಳು);
+    ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < ntokens; ++i)
+      ಮೌಲ್ಯಗಳು[i] = symbols[i]->content->ಸಂಕೇತ_2;
+    muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("toknum", ಮೌಲ್ಯಗಳು,
+                             ಮೌಲ್ಯಗಳು[0], 1, ntokens);
+    ಬಿಡುಗಡೆ (ಮೌಲ್ಯಗಳು);
   }
 }
 
@@ -353,84 +353,84 @@ prepare_symbols (void)
 | rline, dprec, merger, immediate.                             |
 `-------------------------------------------------------------*/
 
-static void
-prepare_rules (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_ನಿಯಮಗಳು (ಶೂನ್ಯ)
 {
-  int *prhs = xnmalloc (nrules, sizeof *prhs);
-  item_number *rhs = xnmalloc (nritems, sizeof *rhs);
-  int *rline = xnmalloc (nrules, sizeof *rline);
-  symbol_number *r1 = xnmalloc (nrules, sizeof *r1);
-  int *r2 = xnmalloc (nrules, sizeof *r2);
-  int *dprec = xnmalloc (nrules, sizeof *dprec);
-  int *merger = xnmalloc (nrules, sizeof *merger);
-  int *immediate = xnmalloc (nrules, sizeof *immediate);
+  ಪೂರ್ಣಾಂಕ *prhs = xnmalloc (nrules, ಗಾತ್ರ *prhs);
+  ಅಂಶ_ಸಂಖ್ಯೆ *rhs = xnmalloc (nritems, ಗಾತ್ರ *rhs);
+  ಪೂರ್ಣಾಂಕ *rline = xnmalloc (nrules, ಗಾತ್ರ *rline);
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ *r1 = xnmalloc (nrules, ಗಾತ್ರ *r1);
+  ಪೂರ್ಣಾಂಕ *r2 = xnmalloc (nrules, ಗಾತ್ರ *r2);
+  ಪೂರ್ಣಾಂಕ *dprec = xnmalloc (nrules, ಗಾತ್ರ *dprec);
+  ಪೂರ್ಣಾಂಕ *merger = xnmalloc (nrules, ಗಾತ್ರ *merger);
+  ಪೂರ್ಣಾಂಕ *ತಕ್ಷಣ = xnmalloc (nrules, ಗಾತ್ರ *ತಕ್ಷಣ);
 
   /* Index in RHS.  */
-  int i = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  ಪೂರ್ಣಾಂಕ i = 0;
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules; ++r)
     {
       /* Index of rule R in RHS. */
       prhs[r] = i;
       /* RHS of the rule R. */
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+      ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *rhsp = ನಿಯಮಗಳು[r].rhs; 0 <= *rhsp; ++rhsp)
         rhs[i++] = *rhsp;
       /* Separator in RHS. */
       rhs[i++] = -1;
 
       /* Line where rule was defined. */
-      rline[r] = rules[r].location.start.line;
+      rline[r] = ನಿಯಮಗಳು[r].location.ಆರಂಭ.ಸಾಲು;
       /* LHS of the rule R. */
-      r1[r] = rules[r].lhs->number;
+      r1[r] = ನಿಯಮಗಳು[r].lhs->ಸಂಖ್ಯೆ;
       /* Length of rule R's RHS. */
-      r2[r] = rule_rhs_length (&rules[r]);
+      r2[r] = ನಿಯಮ_rhs_ಉದ್ದಳತೆ (&ನಿಯಮಗಳು[r]);
       /* Dynamic precedence (GLR).  */
-      dprec[r] = rules[r].dprec;
+      dprec[r] = ನಿಯಮಗಳು[r].dprec;
       /* Merger-function index (GLR).  */
-      merger[r] = rules[r].merger;
+      merger[r] = ನಿಯಮಗಳು[r].merger;
       /* Immediate reduction flags (GLR).  */
-      immediate[r] = rules[r].is_predicate;
+      ತಕ್ಷಣ[r] = ನಿಯಮಗಳು[r].is_predicate;
     }
   aver (i == nritems);
 
-  muscle_insert_item_number_table ("rhs", rhs, ritem[0], 1, nritems);
-  muscle_insert_int_table ("prhs", prhs, 0, 0, nrules);
-  muscle_insert_int_table ("rline", rline, 0, 0, nrules);
-  muscle_insert_symbol_number_table ("r1", r1, 0, 0, nrules);
-  muscle_insert_int_table ("r2", r2, 0, 0, nrules);
-  muscle_insert_int_table ("dprec", dprec, 0, 0, nrules);
-  muscle_insert_int_table ("merger", merger, 0, 0, nrules);
-  muscle_insert_int_table ("immediate", immediate, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_ಅಂಶ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ ("rhs", rhs, ritem[0], 1, nritems);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("prhs", prhs, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("rline", rline, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ ("r1", r1, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("r2", r2, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("dprec", dprec, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("merger", merger, 0, 0, nrules);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("immediate", ತಕ್ಷಣ, 0, 0, nrules);
 
-  MUSCLE_INSERT_INT ("rules_number", nrules);
-  MUSCLE_INSERT_INT ("max_left_semantic_context", max_left_semantic_context);
+  MUSCLE_ಸೇರಿಸು_INT ("rules_number", nrules);
+  MUSCLE_ಸೇರಿಸು_INT ("max_left_semantic_context", max_ಎಡ_semantic_context);
 
-  free (prhs);
-  free (rhs);
-  free (rline);
-  free (r1);
-  free (r2);
-  free (dprec);
-  free (merger);
-  free (immediate);
+  ಬಿಡುಗಡೆ (prhs);
+  ಬಿಡುಗಡೆ (rhs);
+  ಬಿಡುಗಡೆ (rline);
+  ಬಿಡುಗಡೆ (r1);
+  ಬಿಡುಗಡೆ (r2);
+  ಬಿಡುಗಡೆ (dprec);
+  ಬಿಡುಗಡೆ (merger);
+  ಬಿಡುಗಡೆ (ತಕ್ಷಣ);
 }
 
 /*--------------------------------------------.
 | Prepare the muscles related to the states.  |
 `--------------------------------------------*/
 
-static void
-prepare_states (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_ಸ್ಥಿತಿಗಳು (ಶೂನ್ಯ)
 {
-  symbol_number *values = xnmalloc (nstates, sizeof *values);
-  for (state_number i = 0; i < nstates; ++i)
-    values[i] = states[i]->accessing_symbol;
-  muscle_insert_symbol_number_table ("stos", values,
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ *ಮೌಲ್ಯಗಳು = xnmalloc (nstates, ಗಾತ್ರ *ಮೌಲ್ಯಗಳು);
+  ಗಾಗಿ (state_ಸಂಖ್ಯೆ i = 0; i < nstates; ++i)
+    ಮೌಲ್ಯಗಳು[i] = ಸ್ಥಿತಿಗಳು[i]->accessing_ಚಿಹ್ನೆ;
+  muscle_ಸೇರಿಸು_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ ("stos", ಮೌಲ್ಯಗಳು,
                                      0, 1, nstates);
-  free (values);
+  ಬಿಡುಗಡೆ (ಮೌಲ್ಯಗಳು);
 
-  MUSCLE_INSERT_INT ("last", high);
-  MUSCLE_INSERT_INT ("final_state_number", final_state->number);
-  MUSCLE_INSERT_INT ("states_number", nstates);
+  MUSCLE_ಸೇರಿಸು_INT ("last", ಮೇಲಿನ);
+  MUSCLE_ಸೇರಿಸು_INT ("final_state_number", final_state->ಸಂಖ್ಯೆ);
+  MUSCLE_ಸೇರಿಸು_INT ("states_number", nstates);
 }
 
 
@@ -438,13 +438,13 @@ prepare_states (void)
 | Compare two symbols by type-name, and then by number.  |
 `-------------------------------------------------------*/
 
-static int
-symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+ಚಿಹ್ನೆ_type_name_cmp (ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ **lhs, ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ **rhs)
 {
-  int res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
-  if (!res)
-    res = (*lhs)->content->number - (*rhs)->content->number;
-  return res;
+  ಪೂರ್ಣಾಂಕ res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
+  ಆದರೆ (!res)
+    res = (*lhs)->content->ಸಂಖ್ಯೆ - (*rhs)->content->ಸಂಖ್ಯೆ;
+  ಹಿಂತಿರುಗಿ res;
 }
 
 
@@ -452,13 +452,13 @@ symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
 | Return a (malloc'ed) table of the symbols sorted by type-name.  |
 `----------------------------------------------------------------*/
 
-static symbol **
-symbols_by_type_name (void)
+ಸ್ಥಿರ ಚಿಹ್ನೆ **
+symbols_by_type_name (ಶೂನ್ಯ)
 {
-  typedef int (*qcmp_type) (const void *, const void *);
-  symbol **res = xmemdup (symbols, nsyms * sizeof *res);
-  qsort (res, nsyms, sizeof *res, (qcmp_type) &symbol_type_name_cmp);
-  return res;
+  ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಪೂರ್ಣಾಂಕ (*qcmp_type) (ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *);
+  ಚಿಹ್ನೆ **res = xmemdup (symbols, nsyms * ಗಾತ್ರ *res);
+  qsort (res, nsyms, ಗಾತ್ರ *res, (qcmp_type) &ಚಿಹ್ನೆ_type_name_cmp);
+  ಹಿಂತಿರುಗಿ res;
 }
 
 
@@ -467,43 +467,43 @@ symbols_by_type_name (void)
 | symbols with same type-name).                                     |
 `------------------------------------------------------------------*/
 
-static void
-type_names_output (FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+type_ಹೆಸರುಗಳು_output (FILE *ಹೊರಹೋಗು)
 {
-  symbol **syms = symbols_by_type_name ();
-  fputs ("m4_define([b4_type_names],\n[", out);
-  for (int i = 0; i < nsyms; /* nothing */)
+  ಚಿಹ್ನೆ **syms = symbols_by_type_name ();
+  fputs ("m4_define([b4_type_names],\n[", ಹೊರಹೋಗು);
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < nsyms; /* nothing */)
     {
       /* The index of the first symbol of the current type-name.  */
-      int i0 = i;
-      fputs (i ? ",\n[" : "[", out);
-      for (; i < nsyms
+      ಪೂರ್ಣಾಂಕ i0 = i;
+      fputs (i ? ",\n[" : "[", ಹೊರಹೋಗು);
+      ಗಾಗಿ (; i < nsyms
            && syms[i]->content->type_name == syms[i0]->content->type_name; ++i)
-        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->number);
-      fputs ("]", out);
+        fprintf (ಹೊರಹೋಗು, "%s%d", i != i0 ? ", " : "", syms[i]->content->ಸಂಖ್ಯೆ);
+      fputs ("]", ಹೊರಹೋಗು);
     }
-  fputs ("])\n\n", out);
-  free (syms);
+  fputs ("])\n\n", ಹೊರಹೋಗು);
+  ಬಿಡುಗಡೆ (syms);
 }
 
 
 /* Define the list of start symbols *if* there are several.  Define
    them by pairs: [START-SYMBOL-NUM, SWITCHING-TOKEN-SYMBOL-NUM]. */
-static void
-start_symbols_output (FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಆರಂಭ_symbols_output (FILE *ಹೊರಹೋಗು)
 {
-  if (start_symbols && start_symbols->next)
+  ಆದರೆ (ಆರಂಭ_symbols && ಆರಂಭ_symbols->ಮುಂದಿನ)
     {
-      fputs ("m4_define([b4_start_symbols],\n[", out);
-      for (symbol_list *list = start_symbols; list; list = list->next)
+      fputs ("m4_define([b4_start_symbols],\n[", ಹೊರಹೋಗು);
+      ಗಾಗಿ (ಚಿಹ್ನೆ_list *list = ಆರಂಭ_symbols; list; list = list->ಮುಂದಿನ)
         {
-          const symbol *start = list->content.sym;
-          const symbol *swtok = switching_token (start);
-          fprintf (out, "%s[%d, %d]",
-                   list == start_symbols ? "" : ", ",
-                   start->content->number, swtok->content->number);
+          ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *ಆರಂಭ = list->content.sym;
+          ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *swtok = switching_token (ಆರಂಭ);
+          fprintf (ಹೊರಹೋಗು, "%s[%d, %d]",
+                   list == ಆರಂಭ_symbols ? "" : ", ",
+                   ಆರಂಭ->content->ಸಂಖ್ಯೆ, swtok->content->ಸಂಖ್ಯೆ);
         }
-      fputs ("])\n\n", out);
+      fputs ("])\n\n", ಹೊರಹೋಗು);
     }
 }
 
@@ -512,13 +512,13 @@ start_symbols_output (FILE *out)
 | The list of all the symbol numbers.  |
 `-------------------------------------*/
 
-static void
-symbol_numbers_output (FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ಚಿಹ್ನೆ_numbers_output (FILE *ಹೊರಹೋಗು)
 {
-  fputs ("m4_define([b4_symbol_numbers],\n[", out);
-  for (int i = 0; i < nsyms; ++i)
-    fprintf (out, "%s[%d]", i ? ", " : "", i);
-  fputs ("])\n\n", out);
+  fputs ("m4_define([b4_symbol_numbers],\n[", ಹೊರಹೋಗು);
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < nsyms; ++i)
+    fprintf (ಹೊರಹೋಗು, "%s[%d]", i ? ", " : "", i);
+  fputs ("])\n\n", ಹೊರಹೋಗು);
 }
 
 
@@ -526,62 +526,62 @@ symbol_numbers_output (FILE *out)
 | Output the user reduction actions to OUT.  |
 `-------------------------------------------*/
 
-static void
-rule_output (const rule *r, FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ನಿಯಮ_output (ಸ್ಥಿರಾಂಕ ನಿಯಮ *r, FILE *ಹೊರಹೋಗು)
 {
-  output_escaped (out, r->lhs->symbol->tag);
-  fputc (':', out);
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  output_escaped (ಹೊರಹೋಗು, r->lhs->ಚಿಹ್ನೆ->ಟ್ಯಾಗ್);
+  fputc (':', ಹೊರಹೋಗು);
+  ಆದರೆ (0 <= *r->rhs)
+    ಗಾಗಿ (ಅಂಶ_ಸಂಖ್ಯೆ *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       {
-        fputc (' ', out);
-        output_escaped (out, symbols[*rhsp]->tag);
+        fputc (' ', ಹೊರಹೋಗು);
+        output_escaped (ಹೊರಹೋಗು, symbols[*rhsp]->ಟ್ಯಾಗ್);
       }
-  else
-    fputs (" %empty", out);
+  ಇಲ್ಲದಿದ್ದರೆ
+    fputs (" %empty", ಹೊರಹೋಗು);
 }
 
-static void
-user_actions_output (FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+user_actions_output (FILE *ಹೊರಹೋಗು)
 {
-  fputs ("m4_define([b4_actions], \n[", out);
-  for (rule_number r = 0; r < nrules; ++r)
-    if (rules[r].action)
+  fputs ("m4_define([b4_actions], \n[", ಹೊರಹೋಗು);
+  ಗಾಗಿ (ನಿಯಮ_ಸಂಖ್ಯೆ r = 0; r < nrules; ++r)
+    ಆದರೆ (ನಿಯಮಗಳು[r].action)
       {
         /* The useless "" is there to pacify syntax-check.  */
-        fprintf (out, "%s""(%d, [",
-                 rules[r].is_predicate ? "b4_predicate_case" : "b4_case",
+        fprintf (ಹೊರಹೋಗು, "%s""(%d, [",
+                 ನಿಯಮಗಳು[r].is_predicate ? "b4_predicate_case" : "b4_case",
                  r + 1);
-        if (!no_lines_flag)
+        ಆದರೆ (!no_ಸಾಲುಗಳು_flag)
           {
-            fprintf (out, "b4_syncline(%d, ",
-                     rules[r].action_loc.start.line);
-            string_output (out, map_file_name (rules[r].action_loc.start.file));
-            fprintf (out, ")dnl\n");
+            fprintf (ಹೊರಹೋಗು, "b4_syncline(%d, ",
+                     ನಿಯಮಗಳು[r].action_loc.ಆರಂಭ.ಸಾಲು);
+            string_output (ಹೊರಹೋಗು, map_file_name (ನಿಯಮಗಳು[r].action_loc.ಆರಂಭ.file));
+            fprintf (ಹೊರಹೋಗು, ")dnl\n");
           }
-        fprintf (out, "[%*s%s]],\n[[",
-                 rules[r].action_loc.start.column - 1, "",
-                 rules[r].action);
-        rule_output (&rules[r], out);
-        fprintf (out, "]])\n\n");
+        fprintf (ಹೊರಹೋಗು, "[%*s%s]],\n[[",
+                 ನಿಯಮಗಳು[r].action_loc.ಆರಂಭ.ಸ್ತಂಭ - 1, "",
+                 ನಿಯಮಗಳು[r].action);
+        ನಿಯಮ_output (&ನಿಯಮಗಳು[r], ಹೊರಹೋಗು);
+        fprintf (ಹೊರಹೋಗು, "]])\n\n");
       }
-  fputs ("])\n\n", out);
+  fputs ("])\n\n", ಹೊರಹೋಗು);
 }
 
 /*------------------------------------.
 | Output the merge functions to OUT.  |
 `------------------------------------*/
 
-static void
-merger_output (FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+merger_output (FILE *ಹೊರಹೋಗು)
 {
-  fputs ("m4_define([b4_mergers], \n[[", out);
-  int n;
+  fputs ("m4_define([b4_mergers], \n[[", ಹೊರಹೋಗು);
+  ಪೂರ್ಣಾಂಕ n;
   merger_list* p;
-  for (n = 1, p = merge_functions; p != NULL; n += 1, p = p->next)
-    fprintf (out, "]b4_call_merger""([%d], [%s], [%d])[\n",
-             n, p->name, p->sym->content->number);
-  fputs ("]])\n\n", out);
+  ಗಾಗಿ (n = 1, p = ವಿಲೀನ_functions; p != ಖಾಲಿ; n += 1, p = p->ಮುಂದಿನ)
+    fprintf (ಹೊರಹೋಗು, "]b4_call_merger""([%d], [%s], [%d])[\n",
+             n, p->name, p->sym->content->ಸಂಖ್ಯೆ);
+  fputs ("]])\n\n", ಹೊರಹೋಗು);
 }
 
 
@@ -589,121 +589,121 @@ merger_output (FILE *out)
 | Prepare the muscles for symbol definitions.  |
 `---------------------------------------------*/
 
-static void
-prepare_symbol_definitions (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_ಚಿಹ್ನೆ_definitions (ಶೂನ್ಯ)
 {
   /* Map "orig NUM" to new numbers.  See data/README.  */
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
+  ಗಾಗಿ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
     {
       obstack_printf (&format_obstack, "symbol""(orig %d, number)", i);
-      const char *key = obstack_finish0 (&format_obstack);
-      MUSCLE_INSERT_INT (key, nterm_map ? nterm_map[i - ntokens] : i);
+      ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಕೀಲಿ = obstack_finish0 (&format_obstack);
+      MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, nterm_map ? nterm_map[i - ntokens] : i);
     }
 
-  for (int i = 0; i < nsyms; ++i)
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < nsyms; ++i)
     {
-      symbol *sym = symbols[i];
-      const char *key;
+      ಚಿಹ್ನೆ *sym = symbols[i];
+      ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಕೀಲಿ;
 
-#define SET_KEY(Entry)                                          \
+#ವ್ಯಾಖ್ಯಾನಿಸು ಗಣ_ಕೀಲಿ(ನಮೂದು_2)                                          \
       obstack_printf (&format_obstack, "symbol""(%d, %s)",        \
-                      i, Entry);                                \
-      key = obstack_finish0 (&format_obstack);
+                      i, ನಮೂದು_2);                                \
+      ಕೀಲಿ = obstack_finish0 (&format_obstack);
 
-#define SET_KEY2(Entry, Suffix)                                 \
+#ವ್ಯಾಖ್ಯಾನಿಸು ಗಣ_KEY2(ನಮೂದು_2, Suffix)                                 \
       obstack_printf (&format_obstack, "symbol""(%d, %s_%s)",     \
-                      i, Entry, Suffix);                        \
-      key = obstack_finish0 (&format_obstack);
+                      i, ನಮೂದು_2, Suffix);                        \
+      ಕೀಲಿ = obstack_finish0 (&format_obstack);
 
       /* Whether the symbol has an identifier.  */
-      const char *id = symbol_id_get (sym);
-      SET_KEY ("has_id");
-      MUSCLE_INSERT_INT (key, !!id);
+      ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *id = ಚಿಹ್ನೆ_id_get (sym);
+      ಗಣ_ಕೀಲಿ ("has_id");
+      MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, !!id);
 
       /* Its identifier.  */
-      SET_KEY ("id");
-      MUSCLE_INSERT_STRING (key, id ? id : "");
+      ಗಣ_ಕೀಲಿ ("id");
+      MUSCLE_ಸೇರಿಸು_STRING (ಕೀಲಿ, id ? id : "");
 
       /* Its tag.  Typically for documentation purpose.  */
-      SET_KEY ("tag");
-      MUSCLE_INSERT_STRING (key, symbol_tag (sym));
+      ಗಣ_ಕೀಲಿ ("tag");
+      MUSCLE_ಸೇರಿಸು_STRING (ಕೀಲಿ, ಚಿಹ್ನೆ_ಟ್ಯಾಗ್ (sym));
 
-      SET_KEY ("code");
-      MUSCLE_INSERT_INT (key, sym->content->code);
+      ಗಣ_ಕೀಲಿ ("code");
+      MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, sym->content->ಸಂಕೇತ_2);
 
-      SET_KEY ("is_token");
-      MUSCLE_INSERT_INT (key, i < ntokens);
+      ಗಣ_ಕೀಲಿ ("is_token");
+      MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, i < ntokens);
 
-      SET_KEY ("number");
-      MUSCLE_INSERT_INT (key, sym->content->number);
+      ಗಣ_ಕೀಲಿ ("number");
+      MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, sym->content->ಸಂಖ್ಯೆ);
 
-      SET_KEY ("has_type");
-      MUSCLE_INSERT_INT (key, !!sym->content->type_name);
+      ಗಣ_ಕೀಲಿ ("has_type");
+      MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, !!sym->content->type_name);
 
-      SET_KEY ("type");
-      MUSCLE_INSERT_STRING (key, sym->content->type_name
+      ಗಣ_ಕೀಲಿ ("type");
+      MUSCLE_ಸೇರಿಸು_STRING (ಕೀಲಿ, sym->content->type_name
                             ? sym->content->type_name : "");
 
-      for (int j = 0; j < CODE_PROPS_SIZE; ++j)
+      ಗಾಗಿ (ಪೂರ್ಣಾಂಕ j = 0; j < ಸಂಕೇತ_PROPS_ಗಾತ್ರ; ++j)
         {
           /* "printer", not "%printer".  */
-          char const *pname = code_props_type_string (j) + 1;
-          code_props const *p = symbol_code_props_get (sym, j);
-          SET_KEY2 ("has", pname);
-          MUSCLE_INSERT_INT (key, !!p->code);
+          ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *pname = ಸಂಕೇತ_props_type_string (j) + 1;
+          ಸಂಕೇತ_props ಸ್ಥಿರಾಂಕ *p = ಚಿಹ್ನೆ_ಸಂಕೇತ_props_get (sym, j);
+          ಗಣ_KEY2 ("has", pname);
+          MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, !!p->ಸಂಕೇತ_2);
 
-          if (p->code)
+          ಆದರೆ (p->ಸಂಕೇತ_2)
             {
-              SET_KEY2 (pname, "file");
-              MUSCLE_INSERT_C_STRING (key, map_file_name (p->location.start.file));
+              ಗಣ_KEY2 (pname, "file");
+              MUSCLE_ಸೇರಿಸು_C_STRING (ಕೀಲಿ, map_file_name (p->location.ಆರಂಭ.file));
 
-              SET_KEY2 (pname, "line");
-              MUSCLE_INSERT_INT (key, p->location.start.line);
+              ಗಣ_KEY2 (pname, "line");
+              MUSCLE_ಸೇರಿಸು_INT (ಕೀಲಿ, p->location.ಆರಂಭ.ಸಾಲು);
 
-              SET_KEY2 (pname, "loc");
-              muscle_location_grow (key, p->location);
+              ಗಣ_KEY2 (pname, "loc");
+              muscle_location_grow (ಕೀಲಿ, p->location);
 
-              SET_KEY (pname);
+              ಗಣ_ಕೀಲಿ (pname);
               obstack_printf (&muscle_obstack,
-                              "%*s%s", p->location.start.column - 1, "", p->code);
-              muscle_insert (key, obstack_finish0 (&muscle_obstack));
+                              "%*s%s", p->location.ಆರಂಭ.ಸ್ತಂಭ - 1, "", p->ಸಂಕೇತ_2);
+              muscle_ಸೇರಿಸು (ಕೀಲಿ, obstack_finish0 (&muscle_obstack));
             }
         }
-#undef SET_KEY2
-#undef SET_KEY
+#ವ್ಯಾಖ್ಯಾನ_ರದ್ದು ಗಣ_KEY2
+#ವ್ಯಾಖ್ಯಾನ_ರದ್ದು ಗಣ_ಕೀಲಿ
     }
 }
 
 
-static void
-prepare_actions (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_actions (ಶೂನ್ಯ)
 {
   /* Figure out the actions for the specified state.  */
-  muscle_insert_rule_number_table ("defact", yydefact,
+  muscle_ಸೇರಿಸು_ನಿಯಮ_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ ("defact", yydefact,
                                    yydefact[0], 1, nstates);
 
   /* Figure out what to do after reducing with each rule, depending on
      the saved state from before the beginning of parsing the data
      that matched this rule.  */
-  muscle_insert_state_number_table ("defgoto", yydefgoto,
+  muscle_ಸೇರಿಸು_state_ಸಂಖ್ಯೆ_ಕೋಷ್ಟಕ ("defgoto", yydefgoto,
                                     yydefgoto[0], 1, nsyms - ntokens);
 
 
   /* Output PACT. */
-  muscle_insert_base_table ("pact", base,
-                             base[0], 1, nstates);
-  MUSCLE_INSERT_INT ("pact_ninf", base_ninf);
+  muscle_ಸೇರಿಸು_ತಳ_ಕೋಷ್ಟಕ ("pact", ತಳ,
+                             ತಳ[0], 1, nstates);
+  MUSCLE_ಸೇರಿಸು_INT ("pact_ninf", ತಳ_ninf);
 
   /* Output PGOTO. */
-  muscle_insert_base_table ("pgoto", base,
-                             base[nstates], nstates + 1, nvectors);
+  muscle_ಸೇರಿಸು_ತಳ_ಕೋಷ್ಟಕ ("pgoto", ತಳ,
+                             ತಳ[nstates], nstates + 1, nvectors);
 
-  muscle_insert_base_table ("table", table,
-                            table[0], 1, high + 1);
-  MUSCLE_INSERT_INT ("table_ninf", table_ninf);
+  muscle_ಸೇರಿಸು_ತಳ_ಕೋಷ್ಟಕ ("table", ಕೋಷ್ಟಕ,
+                            ಕೋಷ್ಟಕ[0], 1, ಮೇಲಿನ + 1);
+  MUSCLE_ಸೇರಿಸು_INT ("table_ninf", ಕೋಷ್ಟಕ_ninf);
 
-  muscle_insert_base_table ("check", check,
-                            check[0], 1, high + 1);
+  muscle_ಸೇರಿಸು_ತಳ_ಕೋಷ್ಟಕ ("check", check,
+                            check[0], 1, ಮೇಲಿನ + 1);
 
   /* GLR parsing slightly modifies YYTABLE and YYCHECK (and thus
      YYPACT) so that in states with unresolved conflicts, the default
@@ -714,9 +714,9 @@ prepare_actions (void)
      parser, so we could avoid accidents by not writing them out in
      that case.  Nevertheless, it seems even better to be able to use
      the GLR skeletons even without the non-deterministic tables.  */
-  muscle_insert_int_table ("conflict_list_heads", conflict_table,
-                           conflict_table[0], 1, high + 1);
-  muscle_insert_int_table ("conflicting_rules", conflict_list,
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("conflict_list_heads", conflict_ಕೋಷ್ಟಕ,
+                           conflict_ಕೋಷ್ಟಕ[0], 1, ಮೇಲಿನ + 1);
+  muscle_ಸೇರಿಸು_int_ಕೋಷ್ಟಕ ("conflicting_rules", conflict_list,
                            0, 1, conflict_list_cnt);
 }
 
@@ -725,34 +725,34 @@ prepare_actions (void)
 | Output the definitions of all the muscles.  |
 `--------------------------------------------*/
 
-static void
-muscles_output (FILE *out)
+ಸ್ಥಿರ ಶೂನ್ಯ
+muscles_output (FILE *ಹೊರಹೋಗು)
 {
-  fputs ("m4_init()\n", out);
-  merger_output (out);
-  symbol_numbers_output (out);
-  type_names_output (out);
-  start_symbols_output (out);
-  user_actions_output (out);
+  fputs ("m4_init()\n", ಹೊರಹೋಗು);
+  merger_output (ಹೊರಹೋಗು);
+  ಚಿಹ್ನೆ_numbers_output (ಹೊರಹೋಗು);
+  type_ಹೆಸರುಗಳು_output (ಹೊರಹೋಗು);
+  ಆರಂಭ_symbols_output (ಹೊರಹೋಗು);
+  user_actions_output (ಹೊರಹೋಗು);
   /* Must be last.  */
-  muscles_m4_output (out);
+  muscles_m4_output (ಹೊರಹೋಗು);
 }
 
 /*---------------------------.
 | Call the skeleton parser.  |
 `---------------------------*/
 
-static void
-output_skeleton (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+output_skeleton (ಶೂನ್ಯ)
 {
   /* Compute the names of the package data dir and skeleton files.  */
-  char const *m4 = m4path ();
-  char const *datadir = pkgdatadir ();
-  char *skeldir = xpath_join (datadir, "skeletons");
-  char *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
-  char *m4bison = xpath_join (skeldir, "bison.m4");
-  char *traceon = xpath_join (skeldir, "traceon.m4");
-  char *skel = (IS_PATH_WITH_DIR (skeleton)
+  ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *m4 = m4path ();
+  ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *datadir = pkgdatadir ();
+  ಅಕ್ಷರ *skeldir = xpath_join (datadir, "skeletons");
+  ಅಕ್ಷರ *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
+  ಅಕ್ಷರ *m4bison = xpath_join (skeldir, "bison.m4");
+  ಅಕ್ಷರ *traceon = xpath_join (skeldir, "traceon.m4");
+  ಅಕ್ಷರ *skel = (IS_ಮಾರ್ಗ_WITH_DIR (skeleton)
                 ? xstrdup (skeleton)
                 : xpath_join (skeldir, skeleton));
 
@@ -763,11 +763,11 @@ output_skeleton (void)
 
   /* Create an m4 subprocess connected to us via two pipes.  */
 
-  int filter_fd[2];
+  ಪೂರ್ಣಾಂಕ filter_fd[2];
   pid_t pid;
   {
-    char const *argv[11];
-    int i = 0;
+    ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *argv[11];
+    ಪೂರ್ಣಾಂಕ i = 0;
     argv[i++] = m4;
 
     /* When POSIXLY_CORRECT is set, GNU M4 1.6 and later disable GNU
@@ -779,7 +779,7 @@ output_skeleton (void)
        See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (*M4_GNU_OPTION)
+    ಆದರೆ (*M4_GNU_OPTION)
       argv[i++] = M4_GNU_OPTION;
 
     argv[i++] = "-I";
@@ -788,111 +788,111 @@ output_skeleton (void)
        -dV in a position-dependent manner.  See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (trace_flag & trace_m4_early)
+    ಆದರೆ (trace_flag & trace_m4_early)
       argv[i++] = "-dV";
     argv[i++] = m4sugar;
     argv[i++] = "-";
     argv[i++] = m4bison;
-    if (trace_flag & trace_m4)
+    ಆದರೆ (trace_flag & trace_m4)
       argv[i++] = traceon;
     argv[i++] = skel;
-    argv[i++] = NULL;
+    argv[i++] = ಖಾಲಿ;
     aver (i <= ARRAY_CARDINALITY (argv));
 
-    if (trace_flag & trace_tools)
+    ಆದರೆ (trace_flag & trace_tools)
       {
         fputs ("running:", stderr);
-        for (int j = 0; argv[j]; ++j)
+        ಗಾಗಿ (ಪೂರ್ಣಾಂಕ j = 0; argv[j]; ++j)
           fprintf (stderr, " %s", argv[j]);
         fputc ('\n', stderr);
       }
 
     pid = create_pipe_bidi ("m4", m4, argv,
-                            /* directory */ NULL,
+                            /* directory */ ಖಾಲಿ,
                             /* null_stderr */ false,
                             /* slave_process */ true,
                             /* exit_on_error */ true,
                             filter_fd);
   }
 
-  free (skeldir);
-  free (m4sugar);
-  free (m4bison);
-  free (traceon);
-  free (skel);
+  ಬಿಡುಗಡೆ (skeldir);
+  ಬಿಡುಗಡೆ (m4sugar);
+  ಬಿಡುಗಡೆ (m4bison);
+  ಬಿಡುಗಡೆ (traceon);
+  ಬಿಡುಗಡೆ (skel);
 
-  if (trace_flag & trace_muscles)
+  ಆದರೆ (trace_flag & trace_muscles)
     muscles_output (stderr);
   {
-    FILE *out = xfdopen (filter_fd[1], "w");
-    muscles_output (out);
-    xfclose (out);
+    FILE *ಹೊರಹೋಗು = xfdopen (filter_fd[1], "w");
+    muscles_output (ಹೊರಹೋಗು);
+    xfclose (ಹೊರಹೋಗು);
   }
 
   /* Read and process m4's output.  */
-  timevar_push (tv_m4);
+  timevar_ತಳ್ಳು (tv_m4);
   {
-    FILE *in = xfdopen (filter_fd[0], "r");
-    scan_skel (in);
+    FILE *ಒಳ = xfdopen (filter_fd[0], "r");
+    ಪರಿಶೀಲನೆ_skel (ಒಳ);
     /* scan_skel should have read all of M4's output.  Otherwise, when we
        close the pipe, we risk letting M4 report a broken-pipe to the
        Bison user.  */
-    aver (feof (in));
-    xfclose (in);
+    aver (feof (ಒಳ));
+    xfclose (ಒಳ);
   }
-  wait_subprocess (pid, "m4", false, false, true, true, NULL);
-  timevar_pop (tv_m4);
+  wait_subprocess (pid, "m4", false, false, true, true, ಖಾಲಿ);
+  timevar_ತೆಗೆ (tv_m4);
 }
 
-static void
-prepare (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare (ಶೂನ್ಯ)
 {
   /* BISON_USE_PUSH_FOR_PULL is for the test suite and should not be
      documented for the user.  */
-  char const *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
-  bool use_push_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
+  ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
+  bool use_ತಳ್ಳು_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
 
   /* Versions.  */
-  MUSCLE_INSERT_STRING ("version_string", VERSION);
-  MUSCLE_INSERT_INT ("version", strversion_to_int (VERSION));
-  MUSCLE_INSERT_INT ("required_version", required_version);
+  MUSCLE_ಸೇರಿಸು_STRING ("version_string", ಆವೃತ್ತಿ_2);
+  MUSCLE_ಸೇರಿಸು_INT ("version", strversion_ಗಮ್ಯ_int (ಆವೃತ್ತಿ_2));
+  MUSCLE_ಸೇರಿಸು_INT ("required_version", required_ಆವೃತ್ತಿ);
 
   /* Flags. */
-  MUSCLE_INSERT_BOOL ("header_flag", header_flag);
-  MUSCLE_INSERT_BOOL ("glr_flag", glr_parser);
-  MUSCLE_INSERT_BOOL ("nondeterministic_flag", nondeterministic_parser);
-  MUSCLE_INSERT_BOOL ("synclines_flag", !no_lines_flag);
-  MUSCLE_INSERT_BOOL ("tag_seen_flag", tag_seen);
-  MUSCLE_INSERT_BOOL ("token_table_flag", token_table_flag);
-  MUSCLE_INSERT_BOOL ("use_push_for_pull_flag", use_push_for_pull_flag);
-  MUSCLE_INSERT_BOOL ("yacc_flag", !location_empty (yacc_loc));
+  MUSCLE_ಸೇರಿಸು_BOOL ("header_flag", ಶೀರ್ಷಿಕೆ_flag);
+  MUSCLE_ಸೇರಿಸು_BOOL ("glr_flag", glr_parser);
+  MUSCLE_ಸೇರಿಸು_BOOL ("nondeterministic_flag", nondeterministic_parser);
+  MUSCLE_ಸೇರಿಸು_BOOL ("synclines_flag", !no_ಸಾಲುಗಳು_flag);
+  MUSCLE_ಸೇರಿಸು_BOOL ("tag_seen_flag", ಟ್ಯಾಗ್_ನೋಡಿದ);
+  MUSCLE_ಸೇರಿಸು_BOOL ("token_table_flag", token_ಕೋಷ್ಟಕ_flag);
+  MUSCLE_ಸೇರಿಸು_BOOL ("use_push_for_pull_flag", use_ತಳ್ಳು_for_pull_flag);
+  MUSCLE_ಸೇರಿಸು_BOOL ("yacc_flag", !location_ಖಾಲಿಗಳು (yacc_loc));
 
   /* File names.  */
-  if (spec_name_prefix)
-    MUSCLE_INSERT_STRING ("prefix", spec_name_prefix);
+  ಆದರೆ (spec_name_ಪೂರ್ವಪ್ರತ್ಯಯ)
+    MUSCLE_ಸೇರಿಸು_STRING ("prefix", spec_name_ಪೂರ್ವಪ್ರತ್ಯಯ);
 
-  MUSCLE_INSERT_STRING ("file_name_all_but_ext", all_but_ext);
+  MUSCLE_ಸೇರಿಸು_STRING ("file_name_all_but_ext", all_but_ext);
 
-  const char *spec_mapped_header_file = map_file_name (spec_header_file);
-  const char *mapped_dir_prefix = map_file_name (dir_prefix);
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *spec_mapped_ಶೀರ್ಷಿಕೆ_file = map_file_name (spec_ಶೀರ್ಷಿಕೆ_file);
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *mapped_dir_ಪೂರ್ವಪ್ರತ್ಯಯ = map_file_name (dir_ಪೂರ್ವಪ್ರತ್ಯಯ);
 
-#define DEFINE(Name) MUSCLE_INSERT_STRING (#Name, Name ? Name : "")
-  DEFINE (dir_prefix);
-  DEFINE (mapped_dir_prefix);
+#ವ್ಯಾಖ್ಯಾನಿಸು DEFINE(Name) MUSCLE_ಸೇರಿಸು_STRING (#Name, Name ? Name : "")
+  DEFINE (dir_ಪೂರ್ವಪ್ರತ್ಯಯ);
+  DEFINE (mapped_dir_ಪೂರ್ವಪ್ರತ್ಯಯ);
   DEFINE (parser_file_name);
-  DEFINE (spec_header_file);
-  DEFINE (spec_mapped_header_file);
-  DEFINE (spec_file_prefix);
-  DEFINE (spec_graph_file);
-  DEFINE (spec_name_prefix);
+  DEFINE (spec_ಶೀರ್ಷಿಕೆ_file);
+  DEFINE (spec_mapped_ಶೀರ್ಷಿಕೆ_file);
+  DEFINE (spec_file_ಪೂರ್ವಪ್ರತ್ಯಯ);
+  DEFINE (spec_ನಕ್ಷೆ_file);
+  DEFINE (spec_name_ಪೂರ್ವಪ್ರತ್ಯಯ);
   DEFINE (spec_outfile);
   DEFINE (spec_verbose_file);
-#undef DEFINE
+#ವ್ಯಾಖ್ಯಾನ_ರದ್ದು DEFINE
 
   /* Find the right skeleton file, and add muscles about the skeletons.  */
-  if (skeleton)
-    MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
-  else
+  ಆದರೆ (skeleton)
+    MUSCLE_ಸೇರಿಸು_C_STRING ("skeleton", skeleton);
+  ಇಲ್ಲದಿದ್ದರೆ
     skeleton = language->skeleton;
 
   /* About the skeletons.  */
@@ -900,9 +900,9 @@ prepare (void)
     /* b4_skeletonsdir is used inside m4_include in the skeletons, so digraphs
        would never be expanded.  Hopefully no one has M4-special characters in
        his Bison installation path.  */
-    char *skeldir = xpath_join (pkgdatadir (), "skeletons");
-    MUSCLE_INSERT_STRING_RAW ("skeletonsdir", skeldir);
-    free (skeldir);
+    ಅಕ್ಷರ *skeldir = xpath_join (pkgdatadir (), "skeletons");
+    MUSCLE_ಸೇರಿಸು_STRING_RAW ("skeletonsdir", skeldir);
+    ಬಿಡುಗಡೆ (skeldir);
   }
 }
 
@@ -911,16 +911,16 @@ prepare (void)
 | Output the parsing tables and the parser code to ftable.  |
 `----------------------------------------------------------*/
 
-void
-output (void)
+ಶೂನ್ಯ
+output (ಶೂನ್ಯ)
 {
   obstack_init (&format_obstack);
 
   prepare_symbols ();
-  prepare_rules ();
-  prepare_states ();
+  prepare_ನಿಯಮಗಳು ();
+  prepare_ಸ್ಥಿತಿಗಳು ();
   prepare_actions ();
-  prepare_symbol_definitions ();
+  prepare_ಚಿಹ್ನೆ_definitions ();
 
   prepare ();
 
@@ -929,8 +929,8 @@ output (void)
 
   /* If late errors were generated, destroy the generated source
      files. */
-  if (complaint_status)
+  ಆದರೆ (complaint_ಸ್ಥಿತಿ)
     unlink_generated_sources ();
 
-  obstack_free (&format_obstack, NULL);
+  obstack_free (&format_obstack, ಖಾಲಿ);
 }

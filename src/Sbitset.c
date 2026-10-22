@@ -17,64 +17,64 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include "Sbitset.h"
+#ಅನ್ತರ್ಭಾವ "Sbitset.h"
 
 Sbitset
-Sbitset__new (Sbitset__Index nbits)
+Sbitset__new (Sbitset_ಸೂಚ್ಯಂಕ nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  ಹಿಂತಿರುಗಿ xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
-Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
+Sbitset__new_on_obstack (Sbitset_ಸೂಚ್ಯಂಕ nbits, ರಚನೆ obstack *obstackp)
 {
-  Sbitset result;
+  Sbitset ಫಲಿತಾಂಶ;
   Sbitset ptr;
-  Sbitset end;
+  Sbitset ಕೊನೆ;
   aver (nbits);
-  result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
-  for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
+  ಫಲಿತಾಂಶ = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
+  ಗಾಗಿ (ptr = ಫಲಿತಾಂಶ, ಕೊನೆ = ಫಲಿತಾಂಶ + Sbitset__nbytes (nbits); ptr < ಕೊನೆ; ++ptr)
     *ptr = 0;
-  return result;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
-void
+ಶೂನ್ಯ
 Sbitset__delete (Sbitset self)
 {
-  free (self);
+  ಬಿಡುಗಡೆ (self);
 }
 
 bool
-Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
+Sbitset_is_ಖಾಲಿಗಳು (Sbitset self, Sbitset_ಸೂಚ್ಯಂಕ nbits)
 {
-  Sbitset last = self + Sbitset__nbytes (nbits) - 1;
-  for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+  Sbitset ಕೊನೆಯ = self + Sbitset__nbytes (nbits) - 1;
+  ಗಾಗಿ (; self < ಕೊನೆಯ; ++self)
+    ಆದರೆ (*self != 0)
+      ಹಿಂತಿರುಗಿ false;
+  ಹಿಂತಿರುಗಿ ((*ಕೊನೆಯ) & Sbitset_ಕೊನೆಯ_byte_ಮುಖವಾಡ (nbits)) == 0;
 }
 
-void
-Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
+ಶೂನ್ಯ
+Sbitset__fprint (Sbitset self, Sbitset_ಸೂಚ್ಯಂಕ nbits, FILE *file)
 {
-  Sbitset__Index i;
+  Sbitset_ಸೂಚ್ಯಂಕ i;
   Sbitset itr;
-  bool first = true;
+  bool ಮೊದಲ = true;
   fprintf (file,
-           "nbits = %" SBITSET__INDEX__CONVERSION_SPEC ", set = {",
+           "nbits = %" SBITSET_ಸೂಚ್ಯಂಕ_CONVERSION_SPEC ", set = {",
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
-        first = false;
-      else
+      ಆದರೆ (ಮೊದಲ)
+        ಮೊದಲ = false;
+      ಇಲ್ಲದಿದ್ದರೆ
         fprintf (file, ",");
-      fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
+      fprintf (file, " %" SBITSET_ಸೂಚ್ಯಂಕ_CONVERSION_SPEC, i);
     }
   fprintf (file, " }");
 }

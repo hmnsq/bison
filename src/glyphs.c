@@ -17,77 +17,77 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ಅನ್ತರ್ಭಾವ <config.h>
 
-#include "glyphs.h"
+#ಅನ್ತರ್ಭಾವ "glyphs.h"
 
-#include <assert.h>
-#include <attribute.h>
-#include <stdbool.h>
-#include <string.h>
-#include <mbswidth.h>
-#include <unicodeio.h>
+#ಅನ್ತರ್ಭಾವ <assert.h>
+#ಅನ್ತರ್ಭಾವ <attribute.h>
+#ಅನ್ತರ್ಭಾವ <stdbool.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <mbswidth.h>
+#ಅನ್ತರ್ಭಾವ <unicodeio.h>
 
 
-glyph_buffer_t arrow;
-int arrow_width;
+glyph_ಬಫರ್_t arrow;
+ಪೂರ್ಣಾಂಕ arrow_ಅಗಲ;
 
-glyph_buffer_t down_arrow;
-int down_arrow_width;
+glyph_ಬಫರ್_t ಕೆಳಕ್ಕೆ_arrow;
+ಪೂರ್ಣಾಂಕ ಕೆಳಕ್ಕೆ_arrow_ಅಗಲ;
 
-glyph_buffer_t dot;
-int dot_width;
+glyph_ಬಫರ್_t dot;
+ಪೂರ್ಣಾಂಕ dot_ಅಗಲ;
 
-glyph_buffer_t empty;
-int empty_width;
+glyph_ಬಫರ್_t ಖಾಲಿಗಳು;
+ಪೂರ್ಣಾಂಕ ಖಾಲಿಗಳು_ಅಗಲ;
 
-const char *derivation_separator = " ";
-int derivation_separator_width = 1;
+ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *derivation_separator = " ";
+ಪೂರ್ಣಾಂಕ derivation_separator_ಅಗಲ = 1;
 
-typedef struct
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ
 {
-  glyph_buffer_t *pbuf;
-  const char *fallback;
+  glyph_ಬಫರ್_t *pbuf;
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *fallback;
 } callback_arg_t;
 
 
-static long
-on_success (const char *buf, size_t buflen, void *callback_arg)
+ಸ್ಥಿರ ದೀರ್ಘ
+on_success (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *buf, size_t buflen, ಶೂನ್ಯ *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (buflen + 1 < sizeof *arg->pbuf);
+  ಪ್ರತಿಜ್ಞಾ (buflen + 1 < ಗಾತ್ರ *arg->pbuf);
   *stpncpy (*arg->pbuf, buf, buflen) = '\0';
-  return 1;
+  ಹಿಂತಿರುಗಿ 1;
 }
 
-static long
-on_failure (unsigned code MAYBE_UNUSED, const char *msg MAYBE_UNUSED,
-            void *callback_arg)
+ಸ್ಥಿರ ದೀರ್ಘ
+on_failure (ಚಿಹ್ನೆರಹಿತ ಸಂಕೇತ_2 MAYBE_ಬಳಸದ, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಸಂದೇಶ_2 MAYBE_ಬಳಸದ,
+            ಶೂನ್ಯ *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (strlen (arg->fallback) + 1 < sizeof *arg->pbuf);
+  ಪ್ರತಿಜ್ಞಾ (ಅಕ್ಷರಸರಣಿ_ಉದ್ದ (arg->fallback) + 1 < ಗಾತ್ರ *arg->pbuf);
   strcpy (*arg->pbuf, arg->fallback);
-  return 0;
+  ಹಿಂತಿರುಗಿ 0;
 }
 
-static bool
-glyph_set (glyph_buffer_t *glyph, int *width,
-           unsigned code, const char *fallback)
+ಸ್ಥಿರ bool
+glyph_ಗಣ (glyph_ಬಫರ್_t *glyph, ಪೂರ್ಣಾಂಕ *ಅಗಲ,
+           ಚಿಹ್ನೆರಹಿತ ಸಂಕೇತ_2, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *fallback)
 {
   callback_arg_t arg = { glyph, fallback };
-  int res = unicode_to_mb (code, on_success, on_failure, &arg);
-  *width = mbswidth (*glyph, 0);
-  return res;
+  ಪೂರ್ಣಾಂಕ res = unicode_ಗಮ್ಯ_mb (ಸಂಕೇತ_2, on_success, on_failure, &arg);
+  *ಅಗಲ = mbswidth (*glyph, 0);
+  ಹಿಂತಿರುಗಿ res;
 }
 
-void
-glyphs_init (void)
+ಶೂನ್ಯ
+glyphs_init (ಶೂನ್ಯ)
 {
-  glyph_set (&arrow,      &arrow_width,      0x2192, "->");
-  glyph_set (&dot,        &dot_width,        0x2022, ".");
-  glyph_set (&down_arrow, &down_arrow_width, 0x21b3, "`->");
-  glyph_set (&empty,      &empty_width,      0x03b5, "%empty");
+  glyph_ಗಣ (&arrow,      &arrow_ಅಗಲ,      0x2192, "->");
+  glyph_ಗಣ (&dot,        &dot_ಅಗಲ,        0x2022, ".");
+  glyph_ಗಣ (&ಕೆಳಕ್ಕೆ_arrow, &ಕೆಳಕ್ಕೆ_arrow_ಅಗಲ, 0x21b3, "`->");
+  glyph_ಗಣ (&ಖಾಲಿಗಳು,      &ಖಾಲಿಗಳು_ಅಗಲ,      0x03b5, "%empty");
 
-  strncat (down_arrow, " ", sizeof down_arrow - strlen (down_arrow) - 1);
-  down_arrow_width += 1;
+  strncat (ಕೆಳಕ್ಕೆ_arrow, " ", ಗಾತ್ರ ಕೆಳಕ್ಕೆ_arrow - ಅಕ್ಷರಸರಣಿ_ಉದ್ದ (ಕೆಳಕ್ಕೆ_arrow) - 1);
+  ಕೆಳಕ್ಕೆ_arrow_ಅಗಲ += 1;
 }

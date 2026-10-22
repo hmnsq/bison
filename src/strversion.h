@@ -17,12 +17,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef STRVERSION_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STRVERSION_H_
 # define STRVERSION_H_
 
 /* Convert VERSION into an int (MAJOR * 10000 + MINOR * 100 + MICRO).
    E.g., "3.7.4" => 30704, "3.8" => 30800.
    Return -1 on errors. */
-int strversion_to_int (char const *version);
+ಪೂರ್ಣಾಂಕ strversion_ಗಮ್ಯ_int (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಆವೃತ್ತಿ);
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

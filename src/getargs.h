@@ -18,65 +18,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef GETARGS_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ GETARGS_H_
 # define GETARGS_H_
 
 # include "location.h"
 
-enum { command_line_prio, grammar_prio, default_prio };
+ಎಣಿಕೆ { command_ಸಾಲು_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */
 
 /* for -S */
-extern char const *skeleton;
-extern int skeleton_prio;
+ಬಾಹ್ಯ ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *skeleton;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ skeleton_prio;
 
 /* for -I */
-extern char const *include;
+ಬಾಹ್ಯ ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *include;
 
-extern bool header_flag;                /* for -d/-H */
-extern bool graph_flag;                 /* for -g */
-extern bool html_flag;                  /* for --html */
-extern bool xml_flag;                   /* for -x */
-extern bool no_lines_flag;              /* for -l */
-extern bool token_table_flag;           /* for -k */
-extern location yacc_loc;               /* for -y */
-extern bool update_flag;                /* for -u */
-extern bool color_debug;                /* --color=debug. */
+ಬಾಹ್ಯ bool ಶೀರ್ಷಿಕೆ_flag;                /* for -d/-H */
+ಬಾಹ್ಯ bool ನಕ್ಷೆ_flag;                 /* for -g */
+ಬಾಹ್ಯ bool html_flag;                  /* for --html */
+ಬಾಹ್ಯ bool xml_flag;                   /* for -x */
+ಬಾಹ್ಯ bool no_ಸಾಲುಗಳು_flag;              /* for -l */
+ಬಾಹ್ಯ bool token_ಕೋಷ್ಟಕ_flag;           /* for -k */
+ಬಾಹ್ಯ location yacc_loc;               /* for -y */
+ಬಾಹ್ಯ bool update_flag;                /* for -u */
+ಬಾಹ್ಯ bool color_debug;                /* --color=debug. */
 /* GLR_PARSER is true if the input file says to use the GLR
    (Generalized LR) parser, and to output some additional information
    used by the GLR algorithm.  */
 
-extern bool glr_parser;
+ಬಾಹ್ಯ bool glr_parser;
 
 /* NONDETERMINISTIC_PARSER is true iff conflicts are accepted.  This
    is used by the GLR parser, and might be used in BackTracking
    parsers too.  */
 
-extern bool nondeterministic_parser;
+ಬಾಹ್ಯ bool nondeterministic_parser;
 
 
 /* --language.  */
-struct bison_language
+ರಚನೆ bison_language
 {
-  char language[sizeof "Java"];
-  char skeleton[sizeof "java-skel.m4"];
-  char src_extension[sizeof ".java"];
-  char header_extension[sizeof ".java"];
-  bool add_tab;
+  ಅಕ್ಷರ language[ಗಾತ್ರ "Java"];
+  ಅಕ್ಷರ skeleton[ಗಾತ್ರ "java-skel.m4"];
+  ಅಕ್ಷರ src_extension[ಗಾತ್ರ ".java"];
+  ಅಕ್ಷರ ಶೀರ್ಷಿಕೆ_extension[ಗಾತ್ರ ".java"];
+  bool ಕೂಡಿಸು_tab;
 };
 
-extern int language_prio;
-extern struct bison_language const *language;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ language_prio;
+ಬಾಹ್ಯ ರಚನೆ bison_language ಸ್ಥಿರಾಂಕ *language;
 
 /*-----------.
 | --report.  |
 `-----------*/
 
-enum report
+ಎಣಿಕೆ report
   {
     report_none             = 0,
-    report_states           = 1 << 0,
+    report_ಸ್ಥಿತಿಗಳು           = 1 << 0,
     report_itemsets         = 1 << 1,
     report_lookaheads       = 1 << 2,
     report_solved_conflicts = 1 << 3,
@@ -84,15 +84,15 @@ enum report
     report_all              = ~0
   };
 /** What appears in the *.output file.  */
-extern int report_flag;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ report_flag;
 
 /*----------.
 | --trace.  |
 `----------*/
-enum trace
+ಎಣಿಕೆ trace
   {
     trace_none      = 0,       /**< No traces. */
-    trace_scan      = 1 << 0,  /**< Grammar scanner traces. */
+    trace_ಪರಿಶೀಲನೆ      = 1 << 0,  /**< Grammar scanner traces. */
     trace_parse     = 1 << 1,  /**< Grammar parser traces. */
     trace_resource  = 1 << 2,  /**< Memory allocation. */
     trace_sets      = 1 << 3,  /**< Grammar sets: firsts, nullable etc. */
@@ -100,25 +100,25 @@ enum trace
     trace_tools     = 1 << 5,  /**< m4 invocation. */
     trace_automaton = 1 << 6,  /**< Construction of the automaton. */
     trace_grammar   = 1 << 7,  /**< Reading, reducing the grammar. */
-    trace_time      = 1 << 8,  /**< Time consumption. */
+    trace_ಸಮಯ      = 1 << 8,  /**< Time consumption. */
     trace_skeleton  = 1 << 9,  /**< Skeleton postprocessing. */
     trace_m4_early  = 1 << 10, /**< M4 early traces. */
     trace_m4        = 1 << 11, /**< M4 traces. */
     trace_muscles   = 1 << 12, /**< M4 definitions of the muscles. */
     trace_ielr      = 1 << 13, /**< IELR conversion. */
-    trace_closure   = 1 << 14, /**< Input/output of closure(). */
+    trace_ಆವರಣ   = 1 << 14, /**< Input/output of closure(). */
     trace_locations = 1 << 15, /**< Full display of locations. */
     trace_cex       = 1 << 16, /**< Counterexample generation */
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
-extern int trace_flag;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ trace_flag;
 
 /*-------------.
 | --features.  |
 `-------------*/
 
-enum feature
+ಎಣಿಕೆ feature
   {
     feature_none             = 0,      /**< No additional feature.  */
     feature_caret            = 1 << 0, /**< Output errors with carets.  */
@@ -127,7 +127,7 @@ enum feature
     feature_all              = ~0      /**< All above features.  */
   };
 /** What additional features to use.  */
-extern int feature_flag;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ feature_flag;
 
 
 /** Process the command line arguments.
@@ -135,14 +135,14 @@ extern int feature_flag;
  *  \param argc   size of \a argv
  *  \param argv   list of arguments.
  */
-void getargs (int argc, char *argv[]);
+ಶೂನ್ಯ getargs (ಪೂರ್ಣಾಂಕ argc, ಅಕ್ಷರ *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location loc);
-void skeleton_arg (const char *arg, int prio, location loc);
-void set_yacc (location loc);
+ಶೂನ್ಯ language_argmatch (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *arg, ಪೂರ್ಣಾಂಕ prio, location loc);
+ಶೂನ್ಯ skeleton_arg (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *arg, ಪೂರ್ಣಾಂಕ prio, location loc);
+ಶೂನ್ಯ ಗಣ_yacc (location loc);
 
 /** In the string \c s, replace all characters \c from by \c to.  */
-void tr (char *s, char from, char to);
+ಶೂನ್ಯ tr (ಅಕ್ಷರ *s, ಅಕ್ಷರ from, ಅಕ್ಷರ ಗಮ್ಯ);
 
-#endif /* !GETARGS_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !GETARGS_H_ */

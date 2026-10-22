@@ -17,155 +17,155 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ಅನ್ತರ್ಭಾವ <config.h>
 
-#include "derivation.h"
-#include "glyphs.h"
+#ಅನ್ತರ್ಭಾವ "derivation.h"
+#ಅನ್ತರ್ಭಾವ "glyphs.h"
 
-#include <c-ctype.h>
-#include <gl_linked_list.h>
-#include <mbswidth.h>
-#include <vasnprintf.h>
+#ಅನ್ತರ್ಭಾವ <c-ctype.h>
+#ಅನ್ತರ್ಭಾವ <gl_linked_list.h>
+#ಅನ್ತರ್ಭಾವ <mbswidth.h>
+#ಅನ್ತರ್ಭಾವ <vasnprintf.h>
 
-#include "system.h"
-#include "complain.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
 
-struct derivation
+ರಚನೆ derivation
 {
-  symbol_number sym;
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym;
   derivation_list children;
-  int reference_count;
+  ಪೂರ್ಣಾಂಕ reference_ಎಣಿಕೆ;
   // The rule SYM -> CHILDREN.
-  const rule *rule;
+  ಸ್ಥಿರಾಂಕ ನಿಯಮ *ನಿಯಮ;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  ಪೂರ್ಣಾಂಕ color;
 };
 
-static derivation d_dot = { -1, NULL, -1, NULL, -1 };
+ಸ್ಥಿರ derivation d_dot = { -1, ಖಾಲಿ, -1, ಖಾಲಿ, -1 };
 
 derivation *
-derivation_dot (void)
+derivation_dot (ಶೂನ್ಯ)
 {
-  return &d_dot;
+  ಹಿಂತಿರುಗಿ &d_dot;
 }
 
-void
+ಶೂನ್ಯ
 derivation_list_append (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
-  gl_list_add_last (dl, d);
+  gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (dl, d);
 }
 
-void
+ಶೂನ್ಯ
 derivation_list_prepend (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
-  gl_list_add_first (dl, d);
+  gl_list_ಕೂಡಿಸು_ಮೊದಲ (dl, d);
 }
 
-void derivation_list_free (derivation_list dl)
+ಶೂನ್ಯ derivation_list_free (derivation_list dl)
 {
-  derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
-       derivation_list_next (&it, &d);
+  derivation *d = ಖಾಲಿ;
+  ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (dl);
+       derivation_list_ಮುಂದಿನ (&it, &d);
        )
-    if (d != &d_dot)
+    ಆದರೆ (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r)
+derivation_new (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym, derivation_list children,
+                ಸ್ಥಿರಾಂಕ ನಿಯಮ *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (ಗಾತ್ರ *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
-  res->rule = r;
+  res->reference_ಎಣಿಕೆ = 0;
+  res->ನಿಯಮ = r;
   res->color = -1;
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-void
+ಶೂನ್ಯ
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_ಎಣಿಕೆ;
 }
 
-void
+ಶೂನ್ಯ
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
-  derivation_list free_queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
-                    1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+  ಆದರೆ (!d)
+    ಹಿಂತಿರುಗಿ;
+  derivation_list free_ಸರತಿ =
+    gl_list_create (GL_LINKED_LIST, ಖಾಲಿ, ಖಾಲಿ, ಖಾಲಿ, true,
+                    1, (ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ **)&d);
+  ಆಗ (gl_list_ಗಾತ್ರ (free_ಸರತಿ) > 0)
     {
-      derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      derivation *deriv = (derivation *) gl_list_get_at (free_ಸರತಿ, 0);
+      ಆದರೆ (--deriv->reference_ಎಣಿಕೆ == 0)
         {
-          if (deriv->children)
+          ಆದರೆ (deriv->children)
             {
-              derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              derivation *ಮಗು = ಖಾಲಿ;
+              ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_ಮುಂದಿನ (&it, &ಮಗು);
                    )
-                if (child != &d_dot)
-                  gl_list_add_last (free_queue, child);
+                ಆದರೆ (ಮಗು != &d_dot)
+                  gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (free_ಸರತಿ, ಮಗು);
               gl_list_free (deriv->children);
             }
-          free (deriv);
+          ಬಿಡುಗಡೆ (deriv);
         }
-      gl_list_remove_at (free_queue, 0);
+      gl_list_remove_at (free_ಸರತಿ, 0);
     }
-  gl_list_free (free_queue);
+  gl_list_free (free_ಸರತಿ);
 }
 
 size_t
-derivation_size (const derivation *deriv)
+derivation_ಗಾತ್ರ (ಸ್ಥಿರಾಂಕ derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
-  derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-       derivation_list_next (&it, &child);
+  ಆದರೆ (!deriv->children)
+    ಹಿಂತಿರುಗಿ 1;
+  ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2 = 1;
+  derivation *ಮಗು = ಖಾಲಿ;
+  ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+       derivation_list_ಮುಂದಿನ (&it, &ಮಗು);
        )
-    size += derivation_size (child);
-  return size;
+    ಗಾತ್ರ_2 += derivation_ಗಾತ್ರ (ಮಗು);
+  ಹಿಂತಿರುಗಿ ಗಾತ್ರ_2;
 }
 
 
 // Longest distance from root to leaf.
-static int
-derivation_depth (const derivation *deriv)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+derivation_ಆಳ (ಸ್ಥಿರಾಂಕ derivation *deriv)
 {
-  if (deriv->children)
+  ಆದರೆ (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
-      derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      ಪೂರ್ಣಾಂಕ res = 1;
+      derivation *ಮಗು;
+      ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_ಮುಂದಿನ (&it, &ಮಗು);
            )
-        res = max_int (res, derivation_depth (child));
-      return res + 1;
+        res = max_int (res, derivation_ಆಳ (ಮಗು));
+      ಹಿಂತಿರುಗಿ res + 1;
     }
-  else
-    return 1;
+  ಇಲ್ಲದಿದ್ದರೆ
+    ಹಿಂತಿರುಗಿ 1;
 }
 
-static bool
-all_spaces (const char *s)
+ಸ್ಥಿರ bool
+all_spaces (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *s)
 {
-  while (c_isspace (*s))
+  ಆಗ (c_isspace (*s))
     s++;
-  return *s == '\0';
+  ಹಿಂತಿರುಗಿ *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,83 +194,83 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+fputs_if (bool cond, FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ *padding, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  ಪೂರ್ಣಾಂಕ res = mbswidth (s, 0);
+  ಆದರೆ (cond && !all_spaces (s))
     {
-      fprintf (out, "%*s%s", *padding, "", s);
+      fprintf (ಹೊರಹೋಗು, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       *padding += res;
     }
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+fprintf_if (bool cond, FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ *padding, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
-  va_list args;
-  va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
-  va_end (args);
-  if (!cp)
+  ಅಕ್ಷರ buf[256];
+  size_t len = ಗಾತ್ರ (buf);
+  va_list ವಾದಗಳು;
+  va_ಆರಂಭ (ವಾದಗಳು, fmt);
+  ಅಕ್ಷರ *cp = vasnprintf (buf, &len, fmt, ವಾದಗಳು);
+  va_ಕೊನೆ (ವಾದಗಳು);
+  ಆದರೆ (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
-    free (cp);
-  return res;
+  ಪೂರ್ಣಾಂಕ res = fputs_if (cond, ಹೊರಹೋಗು, padding, cp);
+  ಆದರೆ (cp != buf)
+    ಬಿಡುಗಡೆ (cp);
+  ಹಿಂತಿರುಗಿ res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
-derivation_width (const derivation *deriv)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+derivation_ಅಗಲ (ಸ್ಥಿರಾಂಕ derivation *deriv)
 {
-  if (deriv->children)
+  ಆದರೆ (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym = symbols[deriv->sym];
+      ಪೂರ್ಣಾಂಕ self_ಅಗಲ = mbswidth (sym->ಟ್ಯಾಗ್, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      ಪೂರ್ಣಾಂಕ children_ಅಗಲ = ಕೆಳಕ್ಕೆ_arrow_ಅಗಲ;
+      children_ಅಗಲ += snprintf (ಖಾಲಿ, 0, "%d: ", deriv->ನಿಯಮ->ಸಂಖ್ಯೆ);
+      ಆದರೆ (gl_list_ಗಾತ್ರ (deriv->children) == 0)
         // Empty rhs.
-        children_width += empty_width;
-      else
+        children_ಅಗಲ += ಖಾಲಿಗಳು_ಅಗಲ;
+      ಇಲ್ಲದಿದ್ದರೆ
         {
-          if (gl_list_size (deriv->children) == 1
-              && gl_list_get_first (deriv->children) == &d_dot)
+          ಆದರೆ (gl_list_ಗಾತ್ರ (deriv->children) == 1
+              && gl_list_get_ಮೊದಲ (deriv->children) == &d_dot)
             {
-              children_width += empty_width;
-              children_width += derivation_separator_width;
+              children_ಅಗಲ += ಖಾಲಿಗಳು_ಅಗಲ;
+              children_ಅಗಲ += derivation_separator_ಅಗಲ;
             }
 
-          derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-               derivation_list_next (&it, &child);
+          derivation *ಮಗು;
+          ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+               derivation_list_ಮುಂದಿನ (&it, &ಮಗು);
                )
-            children_width
-              += derivation_separator_width + derivation_width (child);
+            children_ಅಗಲ
+              += derivation_separator_ಅಗಲ + derivation_ಅಗಲ (ಮಗು);
           // No separator at the beginning.
-          children_width -= derivation_separator_width;
+          children_ಅಗಲ -= derivation_separator_ಅಗಲ;
         }
-      return max_int (self_width, children_width);
+      ಹಿಂತಿರುಗಿ max_int (self_ಅಗಲ, children_ಅಗಲ);
     }
-  else if (deriv == &d_dot)
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (deriv == &d_dot)
     {
-      return dot_width;
+      ಹಿಂತಿರುಗಿ dot_ಅಗಲ;
     }
-  else // leaf.
+  ಇಲ್ಲದಿದ್ದರೆ // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym = symbols[deriv->sym];
+      ಹಿಂತಿರುಗಿ mbswidth (sym->ಟ್ಯಾಗ್, 0);
     }
 }
 
@@ -286,191 +286,191 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+derivation_print_ವೃಕ್ಷ_impl (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು,
+                            ಪೂರ್ಣಾಂಕ ಆಳ, ಪೂರ್ಣಾಂಕ *padding)
 {
-  const int width = derivation_width (deriv);
+  ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ ಅಗಲ = derivation_ಅಗಲ (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  ಪೂರ್ಣಾಂಕ res = 0;
+  ಆದರೆ (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym = symbols[deriv->sym];
+      ಅಕ್ಷರ style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      ಆದರೆ (ಆಳ == 0 || ಆಳ == 1)
         {
-          begin_use_class (style, out);
-          begin_use_class ("cex-step", out);
+          begin_use_class (style, ಹೊರಹೋಗು);
+          begin_use_class ("cex-step", ಹೊರಹೋಗು);
         }
-      if (depth == 0)
+      ಆದರೆ (ಆಳ == 0)
         {
-          res += fputs_if (true, out, padding, sym->tag);
+          res += fputs_if (true, ಹೊರಹೋಗು, padding, sym->ಟ್ಯಾಗ್);
         }
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
         {
-          res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          res += fputs_if (ಆಳ == 1, ಹೊರಹೋಗು, padding, ಕೆಳಕ್ಕೆ_arrow);
+          res += fprintf_if (ಆಳ == 1, ಹೊರಹೋಗು, padding, "%d: ", deriv->ನಿಯಮ->ಸಂಖ್ಯೆ);
+          ಆದರೆ (gl_list_ಗಾತ್ರ (deriv->children) == 0)
             // Empty rhs.
-            res += fputs_if (depth == 1, out, padding, empty);
-          else
+            res += fputs_if (ಆಳ == 1, ಹೊರಹೋಗು, padding, ಖಾಲಿಗಳು);
+          ಇಲ್ಲದಿದ್ದರೆ
             {
-              if (gl_list_size (deriv->children) == 1
-                  && gl_list_get_first (deriv->children) == &d_dot)
+              ಆದರೆ (gl_list_ಗಾತ್ರ (deriv->children) == 1
+                  && gl_list_get_ಮೊದಲ (deriv->children) == &d_dot)
                 {
-                  res += fputs_if (depth == 1, out, padding, empty);
-                  res += fputs_if (depth == 1, out, padding, derivation_separator);
+                  res += fputs_if (ಆಳ == 1, ಹೊರಹೋಗು, padding, ಖಾಲಿಗಳು);
+                  res += fputs_if (ಆಳ == 1, ಹೊರಹೋಗು, padding, derivation_separator);
                 }
 
-              bool first = true;
-              derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              bool ಮೊದಲ = true;
+              derivation *ಮಗು;
+              ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_ಮುಂದಿನ (&it, &ಮಗು);
                    )
                 {
-                  if (!first)
-                    res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
-                  first = false;
+                  ಆದರೆ (!ಮೊದಲ)
+                    res += fputs_if (ಆಳ == 1, ಹೊರಹೋಗು, padding, derivation_separator);
+                  res += derivation_print_ವೃಕ್ಷ_impl (ಮಗು, ಹೊರಹೋಗು, ಆಳ - 1, padding);
+                  ಮೊದಲ = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      ಆದರೆ (ಆಳ == 0 || ಆಳ == 1)
         {
-          end_use_class ("cex-step", out);
-          end_use_class (style, out);
+          ಕೊನೆ_use_class ("cex-step", ಹೊರಹೋಗು);
+          ಕೊನೆ_use_class (style, ಹೊರಹೋಗು);
         }
-      *padding += width - res;
-      res = width;
+      *padding += ಅಗಲ - res;
+      res = ಅಗಲ;
     }
-  else if (deriv == &d_dot)
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (deriv == &d_dot)
     {
-      if (depth == 0)
-        begin_use_class ("cex-dot", out);
-      res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
-        end_use_class ("cex-dot", out);
+      ಆದರೆ (ಆಳ == 0)
+        begin_use_class ("cex-dot", ಹೊರಹೋಗು);
+      res += fputs_if (ಆಳ == 0, ಹೊರಹೋಗು, padding, dot);
+      ಆದರೆ (ಆಳ == 0)
+        ಕೊನೆ_use_class ("cex-dot", ಹೊರಹೋಗು);
     }
-  else // leaf.
+  ಇಲ್ಲದಿದ್ದರೆ // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
-        begin_use_class ("cex-leaf", out);
-      res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
-        end_use_class ("cex-leaf", out);
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym = symbols[deriv->sym];
+      ಆದರೆ (ಆಳ == 0)
+        begin_use_class ("cex-leaf", ಹೊರಹೋಗು);
+      res += fputs_if (ಆಳ == 0, ಹೊರಹೋಗು, padding, sym->ಟ್ಯಾಗ್);
+      ಆದರೆ (ಆಳ == 0)
+        ಕೊನೆ_use_class ("cex-leaf", ಹೊರಹೋಗು);
     }
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+ಸ್ಥಿರ ಶೂನ್ಯ
+derivation_print_ವೃಕ್ಷ (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ)
 {
-  fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
-       depth < max_depth; ++depth)
+  fputc ('\n', ಹೊರಹೋಗು);
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ ಆಳ = 0, max_ಆಳ = derivation_ಆಳ (deriv);
+       ಆಳ < max_ಆಳ; ++ಆಳ)
     {
-      int padding = 0;
-      fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
-      fputc ('\n', out);
+      ಪೂರ್ಣಾಂಕ padding = 0;
+      fprintf (ಹೊರಹೋಗು, "    %s", ಪೂರ್ವಪ್ರತ್ಯಯ);
+      derivation_print_ವೃಕ್ಷ_impl (deriv, ಹೊರಹೋಗು, ಆಳ, &padding);
+      fputc ('\n', ಹೊರಹೋಗು);
     }
 }
 
 
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
-static bool
-derivation_print_flat_impl (derivation *deriv, FILE *out,
+ಸ್ಥಿರ bool
+derivation_print_flat_impl (derivation *deriv, FILE *ಹೊರಹೋಗು,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            ಪೂರ್ಣಾಂಕ *counter, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ)
 {
-  if (deriv->children)
+  ಆದರೆ (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      ಅಕ್ಷರ style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
-      begin_use_class (style, out);
+      begin_use_class (style, ಹೊರಹೋಗು);
 
-      if (!leaves_only)
+      ಆದರೆ (!leaves_only)
         {
-          fputs (prefix, out);
-          begin_use_class ("cex-step", out);
-          fprintf (out, "%s %s [ ", sym->tag, arrow);
-          end_use_class ("cex-step", out);
-          prefix = "";
+          fputs (ಪೂರ್ವಪ್ರತ್ಯಯ, ಹೊರಹೋಗು);
+          begin_use_class ("cex-step", ಹೊರಹೋಗು);
+          fprintf (ಹೊರಹೋಗು, "%s %s [ ", sym->ಟ್ಯಾಗ್, arrow);
+          ಕೊನೆ_use_class ("cex-step", ಹೊರಹೋಗು);
+          ಪೂರ್ವಪ್ರತ್ಯಯ = "";
         }
       bool res = false;
-      derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      derivation *ಮಗು;
+      ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_ಮುಂದಿನ (&it, &ಮಗು);
            )
         {
-          if (derivation_print_flat_impl (child, out,
-                                          leaves_only, counter, prefix))
+          ಆದರೆ (derivation_print_flat_impl (ಮಗು, ಹೊರಹೋಗು,
+                                          leaves_only, counter, ಪೂರ್ವಪ್ರತ್ಯಯ))
             {
-              prefix = " ";
+              ಪೂರ್ವಪ್ರತ್ಯಯ = " ";
               res = true;
             }
-          else if (!leaves_only)
-            prefix = " ";
+          ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (!leaves_only)
+            ಪೂರ್ವಪ್ರತ್ಯಯ = " ";
         }
-      if (!leaves_only)
+      ಆದರೆ (!leaves_only)
         {
-          begin_use_class ("cex-step", out);
-          if (res)
-            fputs (" ]", out);
-          else
-            fputs ("]", out);
-          end_use_class ("cex-step", out);
+          begin_use_class ("cex-step", ಹೊರಹೋಗು);
+          ಆದರೆ (res)
+            fputs (" ]", ಹೊರಹೋಗು);
+          ಇಲ್ಲದಿದ್ದರೆ
+            fputs ("]", ಹೊರಹೋಗು);
+          ಕೊನೆ_use_class ("cex-step", ಹೊರಹೋಗು);
         }
-      end_use_class (style, out);
-      return res;
+      ಕೊನೆ_use_class (style, ಹೊರಹೋಗು);
+      ಹಿಂತಿರುಗಿ res;
     }
-  else if (deriv == &d_dot)
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (deriv == &d_dot)
     {
-      fputs (prefix, out);
-      begin_use_class ("cex-dot", out);
-      fputs (dot, out);
-      end_use_class ("cex-dot", out);
+      fputs (ಪೂರ್ವಪ್ರತ್ಯಯ, ಹೊರಹೋಗು);
+      begin_use_class ("cex-dot", ಹೊರಹೋಗು);
+      fputs (dot, ಹೊರಹೋಗು);
+      ಕೊನೆ_use_class ("cex-dot", ಹೊರಹೋಗು);
     }
-  else // leaf.
+  ಇಲ್ಲದಿದ್ದರೆ // leaf.
     {
-      fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
-      begin_use_class ("cex-leaf", out);
-      fprintf (out, "%s", sym->tag);
-      end_use_class ("cex-leaf", out);
+      fputs (ಪೂರ್ವಪ್ರತ್ಯಯ, ಹೊರಹೋಗು);
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym = symbols[deriv->sym];
+      begin_use_class ("cex-leaf", ಹೊರಹೋಗು);
+      fprintf (ಹೊರಹೋಗು, "%s", sym->ಟ್ಯಾಗ್);
+      ಕೊನೆ_use_class ("cex-leaf", ಹೊರಹೋಗು);
     }
-  return true;
+  ಹಿಂತಿರುಗಿ true;
 }
 
-static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+ಸ್ಥಿರ ಶೂನ್ಯ
+derivation_print_flat (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ)
 {
-  int counter = 0;
-  fputs (prefix, out);
-  derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
-  fputc ('\n', out);
+  ಪೂರ್ಣಾಂಕ counter = 0;
+  fputs (ಪೂರ್ವಪ್ರತ್ಯಯ, ಹೊರಹೋಗು);
+  derivation_print_flat_impl ((derivation *)deriv, ಹೊರಹೋಗು, false, &counter, "");
+  fputc ('\n', ಹೊರಹೋಗು);
 }
 
-void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+ಶೂನ್ಯ
+derivation_print_leaves (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು)
 {
-  int counter = 0;
-  derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
-  fputc ('\n', out);
+  ಪೂರ್ಣಾಂಕ counter = 0;
+  derivation_print_flat_impl ((derivation *)deriv, ಹೊರಹೋಗು, true, &counter, "");
+  fputc ('\n', ಹೊರಹೋಗು);
 }
 
-void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+ಶೂನ್ಯ
+derivation_print (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ)
 {
-  if (getenv ("YYFLAT"))
-    derivation_print_flat (deriv, out, prefix);
-  else
-    derivation_print_tree (deriv, out, prefix);
+  ಆದರೆ (getenv ("YYFLAT"))
+    derivation_print_flat (deriv, ಹೊರಹೋಗು, ಪೂರ್ವಪ್ರತ್ಯಯ);
+  ಇಲ್ಲದಿದ್ದರೆ
+    derivation_print_ವೃಕ್ಷ (deriv, ಹೊರಹೋಗು, ಪೂರ್ವಪ್ರತ್ಯಯ);
 }

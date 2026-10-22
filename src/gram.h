@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef GRAM_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ GRAM_H_
 # define GRAM_H_
 
 /* Representation of the grammar rules:
@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ nsyms;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ntokens;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
-# define ITEM_NUMBER_MAX INT_MAX
-extern item_number *ritem;
-extern int nritems;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಪೂರ್ಣಾಂಕ ಅಂಶ_ಸಂಖ್ಯೆ;
+# define ಅಂಶ_ಸಂಖ್ಯೆ_MAX ಗರಿಷ್ಠ_ಪೂರ್ಣಾಂಕ
+ಬಾಹ್ಯ ಅಂಶ_ಸಂಖ್ಯೆ *ritem;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ ಅಂಶ_ಸೂಚ್ಯಂಕ;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
-symbol_number_as_item_number (symbol_number sym)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಅಂಶ_ಸಂಖ್ಯೆ
+ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_as_ಅಂಶ_ಸಂಖ್ಯೆ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym)
 {
-  return sym;
+  ಹಿಂತಿರುಗಿ sym;
 }
 
-static inline symbol_number
-item_number_as_symbol_number (item_number i)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ
+ಅಂಶ_ಸಂಖ್ಯೆ_as_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ (ಅಂಶ_ಸಂಖ್ಯೆ i)
 {
-  return i;
+  ಹಿಂತಿರುಗಿ i;
 }
 
-static inline bool
-item_number_is_symbol_number (item_number i)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ bool
+ಅಂಶ_ಸಂಖ್ಯೆ_is_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ (ಅಂಶ_ಸಂಖ್ಯೆ i)
 {
-  return i >= 0;
+  ಹಿಂತಿರುಗಿ i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
-# define RULE_NUMBER_MAX INT_MAX
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಪೂರ್ಣಾಂಕ ನಿಯಮ_ಸಂಖ್ಯೆ;
+# define ನಿಯಮ_ಸಂಖ್ಯೆ_MAX ಗರಿಷ್ಠ_ಪೂರ್ಣಾಂಕ
 
-static inline item_number
-rule_number_as_item_number (rule_number r)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಅಂಶ_ಸಂಖ್ಯೆ
+ನಿಯಮ_ಸಂಖ್ಯೆ_as_ಅಂಶ_ಸಂಖ್ಯೆ (ನಿಯಮ_ಸಂಖ್ಯೆ r)
 {
-  return -1 - r;
+  ಹಿಂತಿರುಗಿ -1 - r;
 }
 
-static inline rule_number
-item_number_as_rule_number (item_number i)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ನಿಯಮ_ಸಂಖ್ಯೆ
+ಅಂಶ_ಸಂಖ್ಯೆ_as_ನಿಯಮ_ಸಂಖ್ಯೆ (ಅಂಶ_ಸಂಖ್ಯೆ i)
 {
-  return -1 - i;
+  ಹಿಂತಿರುಗಿ -1 - i;
 }
 
-static inline bool
-item_number_is_rule_number (item_number i)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ bool
+ಅಂಶ_ಸಂಖ್ಯೆ_is_ನಿಯಮ_ಸಂಖ್ಯೆ (ಅಂಶ_ಸಂಖ್ಯೆ i)
 {
-  return i < 0;
+  ಹಿಂತಿರುಗಿ i < 0;
 }
 
 
@@ -176,24 +176,24 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number code;
+  ನಿಯಮ_ಸಂಖ್ಯೆ ಸಂಕೇತ_2;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number number;
+  ನಿಯಮ_ಸಂಖ್ಯೆ ಸಂಖ್ಯೆ;
 
   sym_content *lhs;
-  item_number *rhs;
+  ಅಂಶ_ಸಂಖ್ಯೆ *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  ಪೂರ್ಣಾಂಕ dprec;
+  ಪೂರ್ಣಾಂಕ merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,126 +205,126 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  ಪೂರ್ಣಾಂಕ expected_sr_conflicts;
+  ಪೂರ್ಣಾಂಕ expected_rr_conflicts;
 
-  const char *action;
+  ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *action;
   location action_loc;
-} rule;
+} ನಿಯಮ;
 
 /* The used rules (size NRULES).  */
-extern rule *rules;
-extern rule_number nrules;
+ಬಾಹ್ಯ ನಿಯಮ *ನಿಯಮಗಳು;
+ಬಾಹ್ಯ ನಿಯಮ_ಸಂಖ್ಯೆ nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
-item_rule (item_number const *item)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ನಿಯಮ ಸ್ಥಿರಾಂಕ *
+ಅಂಶ_ನಿಯಮ (ಅಂಶ_ಸಂಖ್ಯೆ ಸ್ಥಿರಾಂಕ *ಅಂಶ)
 {
-  item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  ಅಂಶ_ಸಂಖ್ಯೆ ಸ್ಥಿರಾಂಕ *sp = ಅಂಶ;
+  ಆಗ (!ಅಂಶ_ಸಂಖ್ಯೆ_is_ನಿಯಮ_ಸಂಖ್ಯೆ (*sp))
     ++sp;
-  rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  ನಿಯಮ_ಸಂಖ್ಯೆ r = ಅಂಶ_ಸಂಖ್ಯೆ_as_ನಿಯಮ_ಸಂಖ್ಯೆ (*sp);
+  ಹಿಂತಿರುಗಿ &ನಿಯಮಗಳು[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
    RITEM.  PREVIOUS_RULE is used to see if the lhs is common, in which
    case LHS is factored.  Passing NULL is fine.  */
-void item_print (item_number *item, rule const *previous_rule,
-                 FILE *out);
+ಶೂನ್ಯ ಅಂಶ_print (ಅಂಶ_ಸಂಖ್ಯೆ *ಅಂಶ, ನಿಯಮ ಸ್ಥಿರಾಂಕ *ಹಿಂದಿನ_ನಿಯಮ,
+                 FILE *ಹೊರಹೋಗು);
 
 /*--------.
 | Rules.  |
 `--------*/
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter) (rule const *);
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ bool (*ನಿಯಮ_filter) (ನಿಯಮ ಸ್ಥಿರಾಂಕ *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
-rule_is_initial (rule const *r)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ bool
+ನಿಯಮ_is_initial (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  ಹಿಂತಿರುಗಿ r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
    is useful in the grammar.  */
-bool rule_useful_in_grammar_p (rule const *r);
+bool ನಿಯಮ_useful_ಒಳ_grammar_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r);
 
 /* Whether the rule has a 'number' higher than NRULES.  That is, it is
    useless in the grammar.  */
-bool rule_useless_in_grammar_p (rule const *r);
+bool ನಿಯಮ_useless_ಒಳ_grammar_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r);
 
 /* Whether the rule is not flagged as useful but is useful in the
    grammar.  In other words, it was discarded because of conflicts.  */
-bool rule_useless_in_parser_p (rule const *r);
+bool ನಿಯಮ_useless_ಒಳ_parser_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r);
 
 /* Whether the rule has a single RHS, and no user action. */
-bool rule_useless_chain_p (rule const *r);
+bool ನಿಯಮ_useless_chain_p (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r);
 
 /* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
-                     FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+ಶೂನ್ಯ ನಿಯಮ_lhs_print (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, sym_content ಸ್ಥಿರಾಂಕ *ಹಿಂದಿನ_lhs,
+                     FILE *ಹೊರಹೋಗು);
+ಶೂನ್ಯ ನಿಯಮ_lhs_print_xml (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ level);
 
 /* The length of the RHS.  */
-size_t rule_rhs_length (rule const *r);
+size_t ನಿಯಮ_rhs_ಉದ್ದಳತೆ (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r);
 
 /* Print this rule's RHS on OUT.  */
-void rule_rhs_print (rule const *r, FILE *out);
+ಶೂನ್ಯ ನಿಯಮ_rhs_print (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, FILE *ಹೊರಹೋಗು);
 
 /* Print this rule on OUT.  If a PREVIOUS_RULE was already displayed,
    avoid useless repetitions of their LHS. */
-void rule_print (rule const *r, rule const *prev_rule, FILE *out);
+ಶೂನ್ಯ ನಿಯಮ_print (ನಿಯಮ ಸ್ಥಿರಾಂಕ *r, ನಿಯಮ ಸ್ಥಿರಾಂಕ *prev_ನಿಯಮ, FILE *ಹೊರಹೋಗು);
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol **symbols;
+ಬಾಹ್ಯ ಚಿಹ್ನೆ **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number *token_translations;
-extern int max_code;
+ಬಾಹ್ಯ ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ *token_translations;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ max_ಸಂಕೇತ;
 
 
 
 /* Dump RITEM for traces. */
-void ritem_print (FILE *out);
+ಶೂನ್ಯ ritem_print (FILE *ಹೊರಹೋಗು);
 
 /* The size of the longest rule RHS.  */
-size_t ritem_longest_rhs (void);
+size_t ritem_longest_rhs (ಶೂನ್ಯ);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
-                                  rule_filter filter);
+ಶೂನ್ಯ grammar_ನಿಯಮಗಳು_partial_print (FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *title,
+                                  ನಿಯಮ_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
-void grammar_rules_print (FILE *out);
+ಶೂನ್ಯ grammar_ನಿಯಮಗಳು_print (FILE *ಹೊರಹೋಗು);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+ಶೂನ್ಯ grammar_ನಿಯಮಗಳು_print_xml (FILE *ಹೊರಹೋಗು, ಪೂರ್ಣಾಂಕ level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+ಶೂನ್ಯ grammar_dump (FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+ಶೂನ್ಯ grammar_ನಿಯಮಗಳು_useless_report (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಸಂದೇಶ);
 
 /* Free the packed grammar. */
-void grammar_free (void);
+ಶೂನ್ಯ grammar_free (ಶೂನ್ಯ);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ required_ಆವೃತ್ತಿ;
 
-#endif /* !GRAM_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !GRAM_H_ */

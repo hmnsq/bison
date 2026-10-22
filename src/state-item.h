@@ -17,8 +17,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef STATE_ITEM_H
-# define STATE_ITEM_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STATE_ಅಂಶ_H
+# define STATE_ಅಂಶ_H
 
 # include <bitsetv.h>
 # include <gl_list.h>
@@ -53,62 +53,62 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_ವಸ್ತುಗಳು[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_ವಸ್ತುಗಳು || *((Si)->ಅಂಶ - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_ವಸ್ತುಗಳು && *((Si)->ಅಂಶ - 1) >= 0)
 
-typedef int state_item_number;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಪೂರ್ಣಾಂಕ state_ಅಂಶ_ಸಂಖ್ಯೆ;
 
-typedef struct
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  ಸ್ಥಿರಾಂಕ state *state;
+  ಅಂಶ_ಸಂಖ್ಯೆ *ಅಂಶ;
+  state_ಅಂಶ_ಸಂಖ್ಯೆ trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
-} state_item;
+} state_ಅಂಶ;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ gl_list_t state_ಅಂಶ_list;
 
-extern bitsetv firsts;
+ಬಾಹ್ಯ bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+ಬಾಹ್ಯ size_t nstate_ವಸ್ತುಗಳು;
+ಬಾಹ್ಯ state_ಅಂಶ_ಸಂಖ್ಯೆ *state_ಅಂಶ_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+ಬಾಹ್ಯ state_ಅಂಶ *state_ವಸ್ತುಗಳು;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_ಅಂಶ *state_ಅಂಶ_lookup (state_ಸಂಖ್ಯೆ s, state_ಅಂಶ_ಸಂಖ್ಯೆ off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ state_ಅಂಶ_ಸಂಖ್ಯೆ
+state_ಅಂಶ_ಸೂಚ್ಯಂಕ_lookup (state_ಸಂಖ್ಯೆ s, state_ಅಂಶ_ಸಂಖ್ಯೆ off)
 {
-  return state_item_map[s] + off;
+  ಹಿಂತಿರುಗಿ state_ಅಂಶ_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+ಶೂನ್ಯ state_ವಸ್ತುಗಳು_init (ಶೂನ್ಯ);
+ಶೂನ್ಯ state_ವಸ್ತುಗಳು_free (ಶೂನ್ಯ);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+ಶೂನ್ಯ state_ಅಂಶ_print (ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si, FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ);
+ಸ್ಥಿರಾಂಕ ನಿಯಮ *state_ಅಂಶ_ನಿಯಮ (ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si, ಸ್ಥಿರಾಂಕ state_ಅಂಶ *ಮುಂದಿನ);
 
 // Iterating on a state_item_list.
-static inline bool
-state_item_list_next (gl_list_iterator_t *it, state_item **si)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ bool
+state_ಅಂಶ_list_ಮುಂದಿನ (gl_list_iterator_t *it, state_ಅಂಶ **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
-    *si = (state_item *) p;
-  else
+  ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *p = ಖಾಲಿ;
+  bool res = gl_list_iterator_ಮುಂದಿನ (it, &p, ಖಾಲಿ);
+  ಆದರೆ (res)
+    *si = (state_ಅಂಶ *) p;
+  ಇಲ್ಲದಿದ್ದರೆ
     gl_list_iterator_free (it);
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
 
-#endif /* STATE_ITEM_H */
+#ಆದರೆ_ಅಂತ್ಯ /* STATE_ITEM_H */

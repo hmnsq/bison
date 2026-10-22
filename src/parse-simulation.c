@@ -17,41 +17,41 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ಅನ್ತರ್ಭಾವ <config.h>
 
-#include "parse-simulation.h"
+#ಅನ್ತರ್ಭಾವ "parse-simulation.h"
 
-#include <gl_linked_list.h>
-#include <gl_xlist.h>
-#include <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <gl_linked_list.h>
+#ಅನ್ತರ್ಭಾವ <gl_xlist.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
 
-#include "lssi.h"
-#include "nullable.h"
+#ಅನ್ತರ್ಭಾವ "lssi.h"
+#ಅನ್ತರ್ಭಾವ "nullable.h"
 
-struct parse_state
+ರಚನೆ parse_state
 {
   // Path of state-items the parser has traversed.
-  struct si_chunk
+  ರಚನೆ si_chunk
   {
     // Elements newly added in this chunk.
-    state_item_list contents;
+    state_ಅಂಶ_list contents;
     // Properties of the linked list this chunk represents.
-    const state_item *head_elt;
-    const state_item *tail_elt;
-    size_t total_size;
-  } state_items;
+    ಸ್ಥಿರಾಂಕ state_ಅಂಶ *ತಲೆ_elt;
+    ಸ್ಥಿರಾಂಕ state_ಅಂಶ *ಬಾಲ_elt;
+    size_t ಒಟ್ಟು_ಗಾತ್ರ;
+  } state_ವಸ್ತುಗಳು;
   // List of derivations of the symbols.
-  struct deriv_chunk
+  ರಚನೆ deriv_chunk
   {
     derivation_list contents;
-    const derivation *head_elt;
-    const derivation *tail_elt;
-    size_t total_size;
+    ಸ್ಥಿರಾಂಕ derivation *ತಲೆ_elt;
+    ಸ್ಥಿರಾಂಕ derivation *ಬಾಲ_elt;
+    size_t ಒಟ್ಟು_ಗಾತ್ರ;
   } derivs;
-  struct parse_state *parent;
-  int reference_count;
+  ರಚನೆ parse_state *ಪೋಷಕ;
+  ಪೂರ್ಣಾಂಕ reference_ಎಣಿಕೆ;
   // Incremented during productions, decremented during reductions.
-  int depth;
+  ಪೂರ್ಣಾಂಕ ಆಳ;
   // Whether the contents of the chunks should be prepended or
   // appended to the list the chunks represent.
   bool prepend;
@@ -61,244 +61,244 @@ struct parse_state
 };
 
 
-static void
-ps_si_prepend (parse_state *ps, const state_item *si)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ps_si_prepend (parse_state *ps, ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si)
 {
-  struct si_chunk *sic = &ps->state_items;
-  gl_list_add_first (sic->contents, si);
-  sic->head_elt = si;
-  ++sic->total_size;
-  if (!sic->tail_elt)
-    sic->tail_elt = si;
+  ರಚನೆ si_chunk *sic = &ps->state_ವಸ್ತುಗಳು;
+  gl_list_ಕೂಡಿಸು_ಮೊದಲ (sic->contents, si);
+  sic->ತಲೆ_elt = si;
+  ++sic->ಒಟ್ಟು_ಗಾತ್ರ;
+  ಆದರೆ (!sic->ಬಾಲ_elt)
+    sic->ಬಾಲ_elt = si;
 }
 
-static void
-ps_si_append (parse_state *ps, const state_item *si)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ps_si_append (parse_state *ps, ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si)
 {
-  struct si_chunk *sic = &ps->state_items;
-  gl_list_add_last (sic->contents, si);
-  sic->tail_elt = si;
-  ++sic->total_size;
-  if (!sic->head_elt)
-    sic->head_elt = si;
+  ರಚನೆ si_chunk *sic = &ps->state_ವಸ್ತುಗಳು;
+  gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (sic->contents, si);
+  sic->ಬಾಲ_elt = si;
+  ++sic->ಒಟ್ಟು_ಗಾತ್ರ;
+  ಆದರೆ (!sic->ತಲೆ_elt)
+    sic->ತಲೆ_elt = si;
 }
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 ps_derivs_prepend (parse_state *ps, derivation *d)
 {
-  struct deriv_chunk *dc = &ps->derivs;
+  ರಚನೆ deriv_chunk *dc = &ps->derivs;
   derivation_list_prepend (dc->contents, d);
-  dc->head_elt = d;
-  ++dc->total_size;
-  if (!dc->tail_elt)
-    dc->tail_elt = d;
+  dc->ತಲೆ_elt = d;
+  ++dc->ಒಟ್ಟು_ಗಾತ್ರ;
+  ಆದರೆ (!dc->ಬಾಲ_elt)
+    dc->ಬಾಲ_elt = d;
 }
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 ps_derivs_append (parse_state *ps, derivation *d)
 {
-  struct deriv_chunk *dc = &ps->derivs;
+  ರಚನೆ deriv_chunk *dc = &ps->derivs;
   derivation_list_append (dc->contents, d);
-  dc->tail_elt = d;
-  ++dc->total_size;
-  if (!dc->head_elt)
-    dc->head_elt = d;
+  dc->ಬಾಲ_elt = d;
+  ++dc->ಒಟ್ಟು_ಗಾತ್ರ;
+  ಆದರೆ (!dc->ತಲೆ_elt)
+    dc->ತಲೆ_elt = d;
 }
 
-static int allocs = 0;
-static int frees = 0;
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ allocs = 0;
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ frees = 0;
 
-static parse_state *
-empty_parse_state (void)
+ಸ್ಥಿರ parse_state *
+ಖಾಲಿಗಳು_parse_state (ಶೂನ್ಯ)
 {
-  parse_state *res = xcalloc (1, sizeof *res);
-  res->state_items.contents
-    = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  parse_state *res = xcalloc (1, ಗಾತ್ರ *res);
+  res->state_ವಸ್ತುಗಳು.contents
+    = gl_list_create_ಖಾಲಿಗಳು (GL_LINKED_LIST, ಖಾಲಿ, ಖಾಲಿ, ಖಾಲಿ, true);
   res->derivs.contents = derivation_list_new ();
   ++allocs;
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
 parse_state *
-new_parse_state (const state_item *si)
+new_parse_state (ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si)
 {
-  parse_state *res = empty_parse_state ();
+  parse_state *res = ಖಾಲಿಗಳು_parse_state ();
   ps_si_append (res, si);
   ps_derivs_append (res, derivation_dot ());
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-static parse_state *
-copy_parse_state (bool prepend, parse_state *parent)
+ಸ್ಥಿರ parse_state *
+copy_parse_state (bool prepend, parse_state *ಪೋಷಕ)
 {
-  parse_state *res = xmalloc (sizeof *res);
-  *res = *parent;
-  res->state_items.contents
-    = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  parse_state *res = xmalloc (ಗಾತ್ರ *res);
+  *res = *ಪೋಷಕ;
+  res->state_ವಸ್ತುಗಳು.contents
+    = gl_list_create_ಖಾಲಿಗಳು (GL_LINKED_LIST, ಖಾಲಿ, ಖಾಲಿ, ಖಾಲಿ, true);
   res->derivs.contents = derivation_list_new ();
-  res->parent = parent;
+  res->ಪೋಷಕ = ಪೋಷಕ;
   res->prepend = prepend;
-  res->reference_count = 0;
+  res->reference_ಎಣಿಕೆ = 0;
   res->free_contents_early = false;
-  parse_state_retain (parent);
+  parse_state_retain (ಪೋಷಕ);
   ++allocs;
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
 bool
-parse_state_derivation_completed (const parse_state *ps)
+parse_state_derivation_completed (ಸ್ಥಿರಾಂಕ parse_state *ps)
 {
-  return ps->derivs.total_size == 1;
+  ಹಿಂತಿರುಗಿ ps->derivs.ಒಟ್ಟು_ಗಾತ್ರ == 1;
 }
 
 derivation *
-parse_state_derivation (const parse_state *ps)
+parse_state_derivation (ಸ್ಥಿರಾಂಕ parse_state *ps)
 {
-  return (derivation *) ps->derivs.head_elt;
+  ಹಿಂತಿರುಗಿ (derivation *) ps->derivs.ತಲೆ_elt;
 }
 
-const state_item *
-parse_state_head (const parse_state *ps)
+ಸ್ಥಿರಾಂಕ state_ಅಂಶ *
+parse_state_ತಲೆ (ಸ್ಥಿರಾಂಕ parse_state *ps)
 {
-  return ps->state_items.head_elt;
+  ಹಿಂತಿರುಗಿ ps->state_ವಸ್ತುಗಳು.ತಲೆ_elt;
 }
 
-const state_item *
-parse_state_tail (const parse_state *ps)
+ಸ್ಥಿರಾಂಕ state_ಅಂಶ *
+parse_state_ಬಾಲ (ಸ್ಥಿರಾಂಕ parse_state *ps)
 {
-  return ps->state_items.tail_elt;
+  ಹಿಂತಿರುಗಿ ps->state_ವಸ್ತುಗಳು.ಬಾಲ_elt;
 }
 
-int
-parse_state_length (const parse_state *ps)
+ಪೂರ್ಣಾಂಕ
+parse_state_ಉದ್ದಳತೆ (ಸ್ಥಿರಾಂಕ parse_state *ps)
 {
-  return ps->state_items.total_size;
+  ಹಿಂತಿರುಗಿ ps->state_ವಸ್ತುಗಳು.ಒಟ್ಟು_ಗಾತ್ರ;
 }
 
-int
-parse_state_depth (const parse_state *ps)
+ಪೂರ್ಣಾಂಕ
+parse_state_ಆಳ (ಸ್ಥಿರಾಂಕ parse_state *ps)
 {
-  return ps->depth;
+  ಹಿಂತಿರುಗಿ ps->ಆಳ;
 }
 
-void
+ಶೂನ್ಯ
 parse_state_retain (parse_state *ps)
 {
-  ++ps->reference_count;
+  ++ps->reference_ಎಣಿಕೆ;
 }
 
-void
+ಶೂನ್ಯ
 parse_state_free_contents_early (parse_state *ps)
 {
   ps->free_contents_early = true;
 }
 
-void
+ಶೂನ್ಯ
 free_parse_state (parse_state *original_ps)
 {
   bool free_contents = true;
-  parse_state *parent_ps = NULL;
-  for (parse_state *ps = original_ps; ps && free_contents; ps = parent_ps)
+  parse_state *ಪೋಷಕ_ps = ಖಾಲಿ;
+  ಗಾಗಿ (parse_state *ps = original_ps; ps && free_contents; ps = ಪೋಷಕ_ps)
     {
-      --ps->reference_count;
-      free_contents = (ps->reference_count == 1 && ps->free_contents_early)
-        || (ps->reference_count == 0 && !ps->free_contents_early);
+      --ps->reference_ಎಣಿಕೆ;
+      free_contents = (ps->reference_ಎಣಿಕೆ == 1 && ps->free_contents_early)
+        || (ps->reference_ಎಣಿಕೆ == 0 && !ps->free_contents_early);
       // need to keep the parse state around for visited hash set,
       // but its contents and parent can be freed
-      if (free_contents)
+      ಆದರೆ (free_contents)
         {
-          if (ps->state_items.contents)
-            gl_list_free (ps->state_items.contents);
-          if (ps->derivs.contents)
+          ಆದರೆ (ps->state_ವಸ್ತುಗಳು.contents)
+            gl_list_free (ps->state_ವಸ್ತುಗಳು.contents);
+          ಆದರೆ (ps->derivs.contents)
             derivation_list_free (ps->derivs.contents);
         }
-      parent_ps = ps->parent;
-      if (ps->reference_count <= 0)
+      ಪೋಷಕ_ps = ps->ಪೋಷಕ;
+      ಆದರೆ (ps->reference_ಎಣಿಕೆ <= 0)
         {
-          free (ps);
+          ಬಿಡುಗಡೆ (ps);
           ++frees;
         }
     }
 }
 
 size_t
-parse_state_hasher (const parse_state *ps, size_t max)
+parse_state_hasher (ಸ್ಥಿರಾಂಕ parse_state *ps, size_t max)
 {
-  const struct si_chunk *sis = &ps->state_items;
-  return ((state_item *) sis->head_elt - state_items +
-          (state_item *) sis->tail_elt - state_items + sis->total_size) % max;
+  ಸ್ಥಿರಾಂಕ ರಚನೆ si_chunk *sis = &ps->state_ವಸ್ತುಗಳು;
+  ಹಿಂತಿರುಗಿ ((state_ಅಂಶ *) sis->ತಲೆ_elt - state_ವಸ್ತುಗಳು +
+          (state_ಅಂಶ *) sis->ಬಾಲ_elt - state_ವಸ್ತುಗಳು + sis->ಒಟ್ಟು_ಗಾತ್ರ) % max;
 }
 
 bool
-parse_state_comparator (const parse_state *ps1, const parse_state *ps2)
+parse_state_comparator (ಸ್ಥಿರಾಂಕ parse_state *ps1, ಸ್ಥಿರಾಂಕ parse_state *ps2)
 {
-  const struct si_chunk *sis1 = &ps1->state_items;
-  const struct si_chunk *sis2 = &ps2->state_items;
-  return sis1->head_elt == sis2->head_elt
-    && sis1->tail_elt == sis2->tail_elt
-    && sis1->total_size == sis2->total_size;
+  ಸ್ಥಿರಾಂಕ ರಚನೆ si_chunk *sis1 = &ps1->state_ವಸ್ತುಗಳು;
+  ಸ್ಥಿರಾಂಕ ರಚನೆ si_chunk *sis2 = &ps2->state_ವಸ್ತುಗಳು;
+  ಹಿಂತಿರುಗಿ sis1->ತಲೆ_elt == sis2->ತಲೆ_elt
+    && sis1->ಬಾಲ_elt == sis2->ಬಾಲ_elt
+    && sis1->ಒಟ್ಟು_ಗಾತ್ರ == sis2->ಒಟ್ಟು_ಗಾತ್ರ;
 }
 
 
-void
-parse_state_completed_steps (const parse_state *ps, int *shifts, int *productions)
+ಶೂನ್ಯ
+parse_state_completed_ಹೆಜ್ಜೆಗಳು (ಸ್ಥಿರಾಂಕ parse_state *ps, ಪೂರ್ಣಾಂಕ *shifts, ಪೂರ್ಣಾಂಕ *productions)
 {
   // traverse to the root parse_state,
   // which will have a list of all completed productions.
-  const parse_state *root_ps = ps;
-  while (root_ps->parent)
-    root_ps = root_ps->parent;
+  ಸ್ಥಿರಾಂಕ parse_state *ಬೇರು_ps = ps;
+  ಆಗ (ಬೇರು_ps->ಪೋಷಕ)
+    ಬೇರು_ps = ಬೇರು_ps->ಪೋಷಕ;
 
-  state_item_list sis = root_ps->state_items.contents;
-  int count = 0;
+  state_ಅಂಶ_list sis = ಬೇರು_ps->state_ವಸ್ತುಗಳು.contents;
+  ಪೂರ್ಣಾಂಕ ಎಣಿಕೆ_2 = 0;
 
-  state_item *last = NULL;
-  state_item *next = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (sis);
-       state_item_list_next (&it, &next);
+  state_ಅಂಶ *ಕೊನೆಯ = ಖಾಲಿ;
+  state_ಅಂಶ *ಮುಂದಿನ = ಖಾಲಿ;
+  ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (sis);
+       state_ಅಂಶ_list_ಮುಂದಿನ (&it, &ಮುಂದಿನ);
        )
     {
-      if (last && last->state == next->state)
-        ++count;
-      last = next;
+      ಆದರೆ (ಕೊನೆಯ && ಕೊನೆಯ->state == ಮುಂದಿನ->state)
+        ++ಎಣಿಕೆ_2;
+      ಕೊನೆಯ = ಮುಂದಿನ;
     }
-  *productions = count;
-  *shifts = root_ps->state_items.total_size - count;
+  *productions = ಎಣಿಕೆ_2;
+  *shifts = ಬೇರು_ps->state_ವಸ್ತುಗಳು.ಒಟ್ಟು_ಗಾತ್ರ - ಎಣಿಕೆ_2;
 }
 
-typedef void (*chunk_append_fn) (gl_list_t, const void *);
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಶೂನ್ಯ (*chunk_append_fn) (gl_list_t, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *);
 
 // A version of gl_list_add_last which has the chunk_append_fn
 // signature.
-static void
-list_add_last (gl_list_t list, const void *elt)
+ಸ್ಥಿರ ಶೂನ್ಯ
+list_ಕೂಡಿಸು_ಕೊನೆಯ (gl_list_t list, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *elt)
 {
-  gl_list_add_last (list, elt);
+  gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (list, elt);
 }
 
 // takes an array of n gl_lists and flattens them into two list
 // based off of the index split
-static void
-list_flatten_and_split (gl_list_t *list, gl_list_t *rets, int split, int n,
+ಸ್ಥಿರ ಶೂನ್ಯ
+list_flatten_and_ವಿಭಜಿಸು (gl_list_t *list, gl_list_t *rets, ಪೂರ್ಣಾಂಕ ವಿಭಜಿಸು, ಪೂರ್ಣಾಂಕ n,
                         chunk_append_fn append_fn)
 {
-  int ret_index = 0;
-  int ret_array = 0;
-  for (int i = 0; i < n; ++i)
+  ಪೂರ್ಣಾಂಕ ret_ಸೂಚ್ಯಂಕ = 0;
+  ಪೂರ್ಣಾಂಕ ret_array = 0;
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < n; ++i)
     {
-      const void *p = NULL;
+      ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *p = ಖಾಲಿ;
       gl_list_iterator_t it = gl_list_iterator (list[i]);
-      while (gl_list_iterator_next (&it, &p, NULL))
-        if (p)
+      ಆಗ (gl_list_iterator_ಮುಂದಿನ (&it, &p, ಖಾಲಿ))
+        ಆದರೆ (p)
           {
             gl_list_t l = (gl_list_t) p;
-            const void *si = NULL;
+            ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *si = ಖಾಲಿ;
             gl_list_iterator_t it2 = gl_list_iterator (l);
-            while (gl_list_iterator_next (&it2, &si, NULL))
+            ಆಗ (gl_list_iterator_ಮುಂದಿನ (&it2, &si, ಖಾಲಿ))
               {
-                if (ret_index++ == split)
+                ಆದರೆ (ret_ಸೂಚ್ಯಂಕ++ == ವಿಭಜಿಸು)
                   ++ret_array;
-                if (rets[ret_array])
+                ಆದರೆ (rets[ret_array])
                   append_fn (rets[ret_array], si);
               }
             gl_list_iterator_free (&it2);
@@ -307,97 +307,97 @@ list_flatten_and_split (gl_list_t *list, gl_list_t *rets, int split, int n,
     }
 }
 
-static parse_state_list
-parse_state_list_new (void)
+ಸ್ಥಿರ parse_state_list
+parse_state_list_new (ಶೂನ್ಯ)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
+  ಹಿಂತಿರುಗಿ gl_list_create_ಖಾಲಿಗಳು (GL_LINKED_LIST, ಖಾಲಿ, ಖಾಲಿ,
                                (gl_listelement_dispose_fn)free_parse_state,
                                true);
 }
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 parse_state_list_append (parse_state_list pl, parse_state *ps)
 {
   parse_state_retain (ps);
-  gl_list_add_last (pl, ps);
+  gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (pl, ps);
 }
 
 // Emulates a reduction on a parse state by popping some amount of
 // derivations and state_items off of the parse_state and returning
 // the result in ret. Returns the derivation of what's popped.
-static derivation_list
-parser_pop (parse_state *ps, int deriv_index,
-            int si_index, parse_state *ret)
+ಸ್ಥಿರ derivation_list
+parser_ತೆಗೆ (parse_state *ps, ಪೂರ್ಣಾಂಕ deriv_ಸೂಚ್ಯಂಕ,
+            ಪೂರ್ಣಾಂಕ si_ಸೂಚ್ಯಂಕ, parse_state *ret)
 {
   // prepend sis, append sis, prepend derivs, append derivs
   gl_list_t chunks[4];
-  for (int i = 0; i < 4; ++i)
-    chunks[i] = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  for (parse_state *pn = ps; pn != NULL; pn = pn->parent)
-    if (pn->prepend)
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < 4; ++i)
+    chunks[i] = gl_list_create_ಖಾಲಿಗಳು (GL_LINKED_LIST, ಖಾಲಿ, ಖಾಲಿ, ಖಾಲಿ, true);
+  ಗಾಗಿ (parse_state *pn = ps; pn != ಖಾಲಿ; pn = pn->ಪೋಷಕ)
+    ಆದರೆ (pn->prepend)
       {
-        gl_list_add_last (chunks[0], pn->state_items.contents);
-        gl_list_add_last (chunks[2], pn->derivs.contents);
+        gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (chunks[0], pn->state_ವಸ್ತುಗಳು.contents);
+        gl_list_ಕೂಡಿಸು_ಕೊನೆಯ (chunks[2], pn->derivs.contents);
       }
-    else
+    ಇಲ್ಲದಿದ್ದರೆ
       {
-        gl_list_add_first (chunks[1], pn->state_items.contents);
-        gl_list_add_first (chunks[3], pn->derivs.contents);
+        gl_list_ಕೂಡಿಸು_ಮೊದಲ (chunks[1], pn->state_ವಸ್ತುಗಳು.contents);
+        gl_list_ಕೂಡಿಸು_ಮೊದಲ (chunks[3], pn->derivs.contents);
       }
   derivation_list popped_derivs = derivation_list_new ();
-  gl_list_t ret_chunks[4] = { ret->state_items.contents, NULL,
+  gl_list_t ret_chunks[4] = { ret->state_ವಸ್ತುಗಳು.contents, ಖಾಲಿ,
     ret->derivs.contents, popped_derivs
   };
-  list_flatten_and_split (chunks, ret_chunks, si_index, 2,
-                          list_add_last);
-  list_flatten_and_split (chunks + 2, ret_chunks + 2, deriv_index, 2,
+  list_flatten_and_ವಿಭಜಿಸು (chunks, ret_chunks, si_ಸೂಚ್ಯಂಕ, 2,
+                          list_ಕೂಡಿಸು_ಕೊನೆಯ);
+  list_flatten_and_ವಿಭಜಿಸು (chunks + 2, ret_chunks + 2, deriv_ಸೂಚ್ಯಂಕ, 2,
                           (chunk_append_fn)derivation_list_append);
-  size_t s_size = gl_list_size (ret->state_items.contents);
-  ret->state_items.total_size = s_size;
-  if (s_size > 0)
+  size_t s_ಗಾತ್ರ = gl_list_ಗಾತ್ರ (ret->state_ವಸ್ತುಗಳು.contents);
+  ret->state_ವಸ್ತುಗಳು.ಒಟ್ಟು_ಗಾತ್ರ = s_ಗಾತ್ರ;
+  ಆದರೆ (s_ಗಾತ್ರ > 0)
     {
-      ret->state_items.tail_elt = gl_list_get_at (ret->state_items.contents,
-                                                  s_size - 1);
-      ret->state_items.head_elt =
-        gl_list_get_at (ret->state_items.contents, 0);
+      ret->state_ವಸ್ತುಗಳು.ಬಾಲ_elt = gl_list_get_at (ret->state_ವಸ್ತುಗಳು.contents,
+                                                  s_ಗಾತ್ರ - 1);
+      ret->state_ವಸ್ತುಗಳು.ತಲೆ_elt =
+        gl_list_get_at (ret->state_ವಸ್ತುಗಳು.contents, 0);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      ret->state_items.tail_elt = NULL;
-      ret->state_items.head_elt = NULL;
+      ret->state_ವಸ್ತುಗಳು.ಬಾಲ_elt = ಖಾಲಿ;
+      ret->state_ವಸ್ತುಗಳು.ತಲೆ_elt = ಖಾಲಿ;
     }
-  size_t d_size = gl_list_size (ret->derivs.contents);
-  ret->derivs.total_size = d_size;
-  if (d_size > 0)
+  size_t d_ಗಾತ್ರ = gl_list_ಗಾತ್ರ (ret->derivs.contents);
+  ret->derivs.ಒಟ್ಟು_ಗಾತ್ರ = d_ಗಾತ್ರ;
+  ಆದರೆ (d_ಗಾತ್ರ > 0)
     {
-      ret->derivs.tail_elt = gl_list_get_at (ret->derivs.contents,
-                                             d_size - 1);
-      ret->derivs.head_elt = gl_list_get_at (ret->derivs.contents, 0);
+      ret->derivs.ಬಾಲ_elt = gl_list_get_at (ret->derivs.contents,
+                                             d_ಗಾತ್ರ - 1);
+      ret->derivs.ತಲೆ_elt = gl_list_get_at (ret->derivs.contents, 0);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      ret->derivs.tail_elt = NULL;
-      ret->derivs.head_elt = NULL;
+      ret->derivs.ಬಾಲ_elt = ಖಾಲಿ;
+      ret->derivs.ತಲೆ_elt = ಖಾಲಿ;
     }
-  for (int i = 0; i < 4; ++i)
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < 4; ++i)
     gl_list_free (chunks[i]);
-  return popped_derivs;
+  ಹಿಂತಿರುಗಿ popped_derivs;
 }
 
-void
-parse_state_lists (parse_state *ps, state_item_list *sitems,
+ಶೂನ್ಯ
+parse_state_lists (parse_state *ps, state_ಅಂಶ_list *sitems,
                    derivation_list *derivs)
 {
-  parse_state *temp = empty_parse_state ();
-  size_t si_size = ps->state_items.total_size;
-  size_t deriv_size = ps->derivs.total_size;
-  derivation_list dl = parser_pop (ps, si_size, deriv_size, temp);
-  *sitems = temp->state_items.contents;
-  *derivs = temp->derivs.contents;
+  parse_state *ತಾತ್ಕಾಲಿಕ = ಖಾಲಿಗಳು_parse_state ();
+  size_t si_ಗಾತ್ರ = ps->state_ವಸ್ತುಗಳು.ಒಟ್ಟು_ಗಾತ್ರ;
+  size_t deriv_ಗಾತ್ರ = ps->derivs.ಒಟ್ಟು_ಗಾತ್ರ;
+  derivation_list dl = parser_ತೆಗೆ (ps, si_ಗಾತ್ರ, deriv_ಗಾತ್ರ, ತಾತ್ಕಾಲಿಕ);
+  *sitems = ತಾತ್ಕಾಲಿಕ->state_ವಸ್ತುಗಳು.contents;
+  *derivs = ತಾತ್ಕಾಲಿಕ->derivs.contents;
   // prevent the return lists from being freed
-  temp->state_items.contents = NULL;
-  temp->derivs.contents = NULL;
-  free_parse_state (temp);
+  ತಾತ್ಕಾಲಿಕ->state_ವಸ್ತುಗಳು.contents = ಖಾಲಿ;
+  ತಾತ್ಕಾಲಿಕ->derivs.contents = ಖಾಲಿ;
+  free_parse_state (ತಾತ್ಕಾಲಿಕ);
   derivation_list_free (dl);
 }
 
@@ -405,25 +405,25 @@ parse_state_lists (parse_state *ps, state_item_list *sitems,
  * Compute the parse states that result from taking a transition on
  * nullable symbols whenever possible from the given state_item.
  */
-static void
-nullable_closure (parse_state *ps, state_item *si, parse_state_list state_list)
+ಸ್ಥಿರ ಶೂನ್ಯ
+nullable_ಆವರಣ (parse_state *ps, state_ಅಂಶ *si, parse_state_list state_list)
 {
   parse_state *current_ps = ps;
-  state_item_number prev_sin = si - state_items;
-  for (state_item_number sin = si->trans; sin != -1;
-       prev_sin = sin, sin = state_items[sin].trans)
+  state_ಅಂಶ_ಸಂಖ್ಯೆ prev_sin = si - state_ವಸ್ತುಗಳು;
+  ಗಾಗಿ (state_ಅಂಶ_ಸಂಖ್ಯೆ ಜ್ಯಾ = si->trans; ಜ್ಯಾ != -1;
+       prev_sin = ಜ್ಯಾ, ಜ್ಯಾ = state_ವಸ್ತುಗಳು[ಜ್ಯಾ].trans)
     {
-      state_item *psi = &state_items[prev_sin];
-      symbol_number sp = item_number_as_symbol_number (*psi->item);
-      if (ISTOKEN (sp) || !nullable[sp - ntokens])
-        break;
+      state_ಅಂಶ *psi = &state_ವಸ್ತುಗಳು[prev_sin];
+      ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sp = ಅಂಶ_ಸಂಖ್ಯೆ_as_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ (*psi->ಅಂಶ);
+      ಆದರೆ (ISTOKEN (sp) || !nullable[sp - ntokens])
+        ನಿಲ್ಲಿಸು;
 
-      state_item *nsi = &state_items[sin];
+      state_ಅಂಶ *nsi = &state_ವಸ್ತುಗಳು[ಜ್ಯಾ];
       current_ps = copy_parse_state (false, current_ps);
       ps_si_append (current_ps, nsi);
       ps_derivs_append (current_ps,
                         derivation_new (sp, derivation_list_new (),
-                                        state_item_rule (nsi)));
+                                        state_ಅಂಶ_ನಿಯಮ (nsi)));
       parse_state_list_append (state_list, current_ps);
     }
 }
@@ -431,170 +431,170 @@ nullable_closure (parse_state *ps, state_item *si, parse_state_list state_list)
 parse_state_list
 simulate_transition (parse_state *ps)
 {
-  const state_item *si = ps->state_items.tail_elt;
-  symbol_number sym = item_number_as_symbol_number (*si->item);
+  ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si = ps->state_ವಸ್ತುಗಳು.ಬಾಲ_elt;
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym = ಅಂಶ_ಸಂಖ್ಯೆ_as_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ (*si->ಅಂಶ);
   // Transition on the same next symbol, taking nullable
   // symbols into account.
-  parse_state_list result = parse_state_list_new ();
-  state_item_number si_next = si->trans;
+  parse_state_list ಫಲಿತಾಂಶ = parse_state_list_new ();
+  state_ಅಂಶ_ಸಂಖ್ಯೆ si_ಮುಂದಿನ = si->trans;
   // Check for disabled transition, shouldn't happen as any
   // state_items that lead to these should be disabled.
-  if (si_next < 0)
-    return result;
-  parse_state *next_ps = copy_parse_state (false, ps);
-  ps_si_append (next_ps, &state_items[si_next]);
-  ps_derivs_append (next_ps, derivation_new_leaf (sym));
-  parse_state_list_append (result, next_ps);
+  ಆದರೆ (si_ಮುಂದಿನ < 0)
+    ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
+  parse_state *ಮುಂದಿನ_ps = copy_parse_state (false, ps);
+  ps_si_append (ಮುಂದಿನ_ps, &state_ವಸ್ತುಗಳು[si_ಮುಂದಿನ]);
+  ps_derivs_append (ಮುಂದಿನ_ps, derivation_new_ಎಲೆ (sym));
+  parse_state_list_append (ಫಲಿತಾಂಶ, ಮುಂದಿನ_ps);
 
-  nullable_closure (next_ps, &state_items[si_next], result);
-  return result;
+  nullable_ಆವರಣ (ಮುಂದಿನ_ps, &state_ವಸ್ತುಗಳು[si_ಮುಂದಿನ], ಫಲಿತಾಂಶ);
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
 /**
  * Determine if the given symbols are equal or their first sets
  * intersect.
  */
-static bool
-compatible (symbol_number sym1, symbol_number sym2)
+ಸ್ಥಿರ bool
+compatible (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym1, ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym2)
 {
-  if (sym1 == sym2)
-    return true;
-  if (ISTOKEN (sym1) && ISVAR (sym2))
-    return bitset_test (FIRSTS (sym2), sym1);
-  else if (ISVAR (sym1) && ISTOKEN (sym2))
-    return bitset_test (FIRSTS (sym1), sym2);
-  else if (ISVAR (sym1) && ISVAR (sym2))
-    return !bitset_disjoint_p (FIRSTS (sym1), FIRSTS (sym2));
-  else
-    return false;
+  ಆದರೆ (sym1 == sym2)
+    ಹಿಂತಿರುಗಿ true;
+  ಆದರೆ (ISTOKEN (sym1) && ISVAR (sym2))
+    ಹಿಂತಿರುಗಿ bitset_test (FIRSTS (sym2), sym1);
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (ISVAR (sym1) && ISTOKEN (sym2))
+    ಹಿಂತಿರುಗಿ bitset_test (FIRSTS (sym1), sym2);
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (ISVAR (sym1) && ISVAR (sym2))
+    ಹಿಂತಿರುಗಿ !bitset_disjoint_p (FIRSTS (sym1), FIRSTS (sym2));
+  ಇಲ್ಲದಿದ್ದರೆ
+    ಹಿಂತಿರುಗಿ false;
 }
 
 parse_state_list
-simulate_production (parse_state *ps, symbol_number compat_sym)
+simulate_production (parse_state *ps, ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ compat_sym)
 {
-  parse_state_list result = parse_state_list_new ();
-  const state_item *si = parse_state_tail (ps);
-  if (si->prods)
+  parse_state_list ಫಲಿತಾಂಶ = parse_state_list_new ();
+  ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si = parse_state_ಬಾಲ (ps);
+  ಆದರೆ (si->prods)
     {
       bitset_iterator biter;
-      state_item_number sin;
-      BITSET_FOR_EACH (biter, si->prods, sin, 0)
+      state_ಅಂಶ_ಸಂಖ್ಯೆ ಜ್ಯಾ;
+      BITSET_FOR_EACH (biter, si->prods, ಜ್ಯಾ, 0)
         {
           // Take production step only if lhs is not nullable and
           // if first rhs symbol is compatible with compat_sym
-          state_item *next = &state_items[sin];
-          item_number *itm1 = next->item;
-          if (!compatible (*itm1, compat_sym) || !production_allowed (si, next))
-            continue;
-          parse_state *next_ps = copy_parse_state (false, ps);
-          ps_si_append (next_ps, next);
-          parse_state_list_append (result, next_ps);
-          if (next_ps->depth >= 0)
-            ++next_ps->depth;
-          nullable_closure (next_ps, next, result);
+          state_ಅಂಶ *ಮುಂದಿನ = &state_ವಸ್ತುಗಳು[ಜ್ಯಾ];
+          ಅಂಶ_ಸಂಖ್ಯೆ *itm1 = ಮುಂದಿನ->ಅಂಶ;
+          ಆದರೆ (!compatible (*itm1, compat_sym) || !production_allowed (si, ಮುಂದಿನ))
+            ಮುಂದುವರಿ;
+          parse_state *ಮುಂದಿನ_ps = copy_parse_state (false, ps);
+          ps_si_append (ಮುಂದಿನ_ps, ಮುಂದಿನ);
+          parse_state_list_append (ಫಲಿತಾಂಶ, ಮುಂದಿನ_ps);
+          ಆದರೆ (ಮುಂದಿನ_ps->ಆಳ >= 0)
+            ++ಮುಂದಿನ_ps->ಆಳ;
+          nullable_ಆವರಣ (ಮುಂದಿನ_ps, ಮುಂದಿನ, ಫಲಿತಾಂಶ);
         }
     }
-  return result;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
 // simulates a reduction on the given parse state, conflict_item is the
 // item associated with ps's conflict. symbol_set is a lookahead set this
 // reduction must be compatible with
 parse_state_list
-simulate_reduction (parse_state *ps, int rule_len, bitset symbol_set)
+simulate_reduction (parse_state *ps, ಪೂರ್ಣಾಂಕ ನಿಯಮ_len, bitset ಚಿಹ್ನೆ_ಗಣ)
 {
-  parse_state_list result = parse_state_list_new ();
+  parse_state_list ಫಲಿತಾಂಶ = parse_state_list_new ();
 
-  int s_size = ps->state_items.total_size;
-  int d_size = ps->derivs.total_size;
-  if (ps->depth >= 0)
-    d_size--;                   // account for dot
-  parse_state *new_root = empty_parse_state ();
+  ಪೂರ್ಣಾಂಕ s_ಗಾತ್ರ = ps->state_ವಸ್ತುಗಳು.ಒಟ್ಟು_ಗಾತ್ರ;
+  ಪೂರ್ಣಾಂಕ d_ಗಾತ್ರ = ps->derivs.ಒಟ್ಟು_ಗಾತ್ರ;
+  ಆದರೆ (ps->ಆಳ >= 0)
+    d_ಗಾತ್ರ--;                   // account for dot
+  parse_state *new_ಬೇರು = ಖಾಲಿಗಳು_parse_state ();
   derivation_list popped_derivs =
-    parser_pop (ps, d_size - rule_len,
-                s_size - rule_len - 1, new_root);
+    parser_ತೆಗೆ (ps, d_ಗಾತ್ರ - ನಿಯಮ_len,
+                s_ಗಾತ್ರ - ನಿಯಮ_len - 1, new_ಬೇರು);
 
   // update derivation
-  state_item *si = (state_item *) ps->state_items.tail_elt;
-  const rule *r = item_rule (si->item);
-  symbol_number lhs = r->lhs->number;
-  derivation *deriv = derivation_new (lhs, popped_derivs, state_item_rule (si));
-  --new_root->depth;
-  ps_derivs_append (new_root, deriv);
+  state_ಅಂಶ *si = (state_ಅಂಶ *) ps->state_ವಸ್ತುಗಳು.ಬಾಲ_elt;
+  ಸ್ಥಿರಾಂಕ ನಿಯಮ *r = ಅಂಶ_ನಿಯಮ (si->ಅಂಶ);
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ lhs = r->lhs->ಸಂಖ್ಯೆ;
+  derivation *deriv = derivation_new (lhs, popped_derivs, state_ಅಂಶ_ನಿಯಮ (si));
+  --new_ಬೇರು->ಆಳ;
+  ps_derivs_append (new_ಬೇರು, deriv);
 
-  if (s_size != rule_len + 1)
+  ಆದರೆ (s_ಗಾತ್ರ != ನಿಯಮ_len + 1)
     {
-      state_item *tail = (state_item *) new_root->state_items.tail_elt;
-      ps_si_append (new_root, &state_items[tail->trans]);
-      parse_state_list_append (result, new_root);
+      state_ಅಂಶ *ಬಾಲ = (state_ಅಂಶ *) new_ಬೇರು->state_ವಸ್ತುಗಳು.ಬಾಲ_elt;
+      ps_si_append (new_ಬೇರು, &state_ವಸ್ತುಗಳು[ಬಾಲ->trans]);
+      parse_state_list_append (ಫಲಿತಾಂಶ, new_ಬೇರು);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
       // The head state_item is a production item, so we need to prepend
       // with possible source state-items.
-      const state_item *head = ps->state_items.head_elt;
-      state_item_list prev = lssi_reverse_production (head, symbol_set);
+      ಸ್ಥಿರಾಂಕ state_ಅಂಶ *ತಲೆ = ps->state_ವಸ್ತುಗಳು.ತಲೆ_elt;
+      state_ಅಂಶ_list prev = lssi_ಹಿಮ್ಮುಖ_production (ತಲೆ, ಚಿಹ್ನೆ_ಗಣ);
       // TODO: better understand what causes this case.
-      if (gl_list_size (prev) == 0)
+      ಆದರೆ (gl_list_ಗಾತ್ರ (prev) == 0)
         {
           // new_root needs to have an RC of 1 to be freed correctly here.
-          parse_state_retain (new_root);
-          free_parse_state (new_root);
+          parse_state_retain (new_ಬೇರು);
+          free_parse_state (new_ಬೇರು);
         }
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
         {
-          state_item *psis = NULL;
-          for (gl_list_iterator_t it = gl_list_iterator (prev);
-               state_item_list_next (&it, &psis);
+          state_ಅಂಶ *psis = ಖಾಲಿ;
+          ಗಾಗಿ (gl_list_iterator_t it = gl_list_iterator (prev);
+               state_ಅಂಶ_list_ಮುಂದಿನ (&it, &psis);
                )
             {
               // Prepend the result from the reverse production.
-              parse_state *copy = copy_parse_state (true, new_root);
+              parse_state *copy = copy_parse_state (true, new_ಬೇರು);
               ps_si_prepend (copy, psis);
 
               // Append the left hand side to the end of the parser state
               copy = copy_parse_state (false, copy);
-              struct si_chunk *sis = &copy->state_items;
-              const state_item *tail = sis->tail_elt;
-              ps_si_append (copy, &state_items[tail->trans]);
-              parse_state_list_append (result, copy);
-              nullable_closure (copy, (state_item *) sis->tail_elt, result);
+              ರಚನೆ si_chunk *sis = &copy->state_ವಸ್ತುಗಳು;
+              ಸ್ಥಿರಾಂಕ state_ಅಂಶ *ಬಾಲ = sis->ಬಾಲ_elt;
+              ps_si_append (copy, &state_ವಸ್ತುಗಳು[ಬಾಲ->trans]);
+              parse_state_list_append (ಫಲಿತಾಂಶ, copy);
+              nullable_ಆವರಣ (copy, (state_ಅಂಶ *) sis->ಬಾಲ_elt, ಫಲಿತಾಂಶ);
             }
         }
       gl_list_free (prev);
     }
-  return result;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
 parse_state_list
 parser_prepend (parse_state *ps)
 {
   parse_state_list res = parse_state_list_new ();
-  const state_item *head = ps->state_items.head_elt;
-  symbol_number prepend_sym =
-    item_number_as_symbol_number (*(head->item - 1));
+  ಸ್ಥಿರಾಂಕ state_ಅಂಶ *ತಲೆ = ps->state_ವಸ್ತುಗಳು.ತಲೆ_elt;
+  ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ prepend_sym =
+    ಅಂಶ_ಸಂಖ್ಯೆ_as_ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ (*(ತಲೆ->ಅಂಶ - 1));
   bitset_iterator biter;
-  state_item_number sin;
-  BITSET_FOR_EACH (biter, head->revs, sin, 0)
+  state_ಅಂಶ_ಸಂಖ್ಯೆ ಜ್ಯಾ;
+  BITSET_FOR_EACH (biter, ತಲೆ->revs, ಜ್ಯಾ, 0)
   {
     parse_state *copy = copy_parse_state (true, ps);
-    ps_si_prepend (copy, &state_items[sin]);
-    if (SI_TRANSITION (head))
-      ps_derivs_prepend (copy, derivation_new_leaf (prepend_sym));
+    ps_si_prepend (copy, &state_ವಸ್ತುಗಳು[ಜ್ಯಾ]);
+    ಆದರೆ (SI_TRANSITION (ತಲೆ))
+      ps_derivs_prepend (copy, derivation_new_ಎಲೆ (prepend_sym));
     parse_state_list_append (res, copy);
   }
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-void
+ಶೂನ್ಯ
 print_parse_state (parse_state *ps)
 {
-  FILE *out = stderr;
-  fprintf (out, "(size %zu depth %d rc %d)\n",
-          ps->state_items.total_size, ps->depth, ps->reference_count);
-  state_item_print (ps->state_items.head_elt, out, "");
-  state_item_print (ps->state_items.tail_elt, out, "");
-  if (ps->derivs.total_size > 0)
-    derivation_print (ps->derivs.head_elt, out, "");
-  putc ('\n', out);
+  FILE *ಹೊರಹೋಗು = stderr;
+  fprintf (ಹೊರಹೋಗು, "(size %zu depth %d rc %d)\n",
+          ps->state_ವಸ್ತುಗಳು.ಒಟ್ಟು_ಗಾತ್ರ, ps->ಆಳ, ps->reference_ಎಣಿಕೆ);
+  state_ಅಂಶ_print (ps->state_ವಸ್ತುಗಳು.ತಲೆ_elt, ಹೊರಹೋಗು, "");
+  state_ಅಂಶ_print (ps->state_ವಸ್ತುಗಳು.ಬಾಲ_elt, ಹೊರಹೋಗು, "");
+  ಆದರೆ (ps->derivs.ಒಟ್ಟು_ಗಾತ್ರ > 0)
+    derivation_print (ps->derivs.ತಲೆ_elt, ಹೊರಹೋಗು, "");
+  putc ('\n', ಹೊರಹೋಗು);
 }

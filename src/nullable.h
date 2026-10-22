@@ -18,16 +18,16 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef NULLABLE_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ NULLABLE_H_
 # define NULLABLE_H_
 
 /* A vector saying which nonterminals can expand into the null string.
    NULLABLE[I - NTOKENS] is nonzero if symbol I can do so.  */
-extern bool *nullable;
+ಬಾಹ್ಯ bool *nullable;
 
 /* Set up NULLABLE. */
-extern void nullable_compute (void);
+ಬಾಹ್ಯ ಶೂನ್ಯ nullable_compute (ಶೂನ್ಯ);
 
 /* Free NULLABLE. */
-extern void nullable_free (void);
-#endif /* !NULLABLE_H_ */
+ಬಾಹ್ಯ ಶೂನ್ಯ nullable_free (ಶೂನ್ಯ);
+#ಆದರೆ_ಅಂತ್ಯ /* !NULLABLE_H_ */

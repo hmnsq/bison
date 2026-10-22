@@ -17,20 +17,20 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef COUNTEREXAMPLE_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ COUNTEREXAMPLE_H
 # define COUNTEREXAMPLE_H
 
 # include "state.h"
 
 // Init/deinit this module.
-void counterexample_init (void);
-void counterexample_free (void);
+ಶೂನ್ಯ counterexample_init (ಶೂನ್ಯ);
+ಶೂನ್ಯ counterexample_free (ಶೂನ್ಯ);
 
 // Print the counterexamples for the conflicts of state S.
 //
 // Used both for the warnings on the terminal (OUT = stderr, PREFIX =
 // ""), and for the reports (OUT != stderr, PREFIX != "").
-void
-counterexample_report_state (const state *s, FILE *out, const char *prefix);
+ಶೂನ್ಯ
+counterexample_report_state (ಸ್ಥಿರಾಂಕ state *s, FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ);
 
-#endif /* COUNTEREXAMPLE_H */
+#ಆದರೆ_ಅಂತ್ಯ /* COUNTEREXAMPLE_H */

@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef TABLES_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ TABLES_H_
 # define TABLES_H_
 
 # include "state.h"
@@ -113,30 +113,30 @@
    summary, forget about zero values in YYTABLE.
 */
 
-extern int nvectors;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ nvectors;
 
-typedef int base_number;
-extern base_number *base;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಪೂರ್ಣಾಂಕ ತಳ_ಸಂಖ್ಯೆ;
+ಬಾಹ್ಯ ತಳ_ಸಂಖ್ಯೆ *ತಳ;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-extern base_number base_ninf;
+ಬಾಹ್ಯ ತಳ_ಸಂಖ್ಯೆ ತಳ_ninf;
 
-extern int *conflict_table;
-extern int *conflict_list;
-extern int conflict_list_cnt;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ *conflict_ಕೋಷ್ಟಕ;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ *conflict_list;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ conflict_list_cnt;
 
-extern base_number *table;
-extern base_number *check;
+ಬಾಹ್ಯ ತಳ_ಸಂಖ್ಯೆ *ಕೋಷ್ಟಕ;
+ಬಾಹ್ಯ ತಳ_ಸಂಖ್ಯೆ *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  */
-extern base_number table_ninf;
+ಬಾಹ್ಯ ತಳ_ಸಂಖ್ಯೆ ಕೋಷ್ಟಕ_ninf;
 
-extern state_number *yydefgoto;
-extern rule_number *yydefact;
-extern int high;
+ಬಾಹ್ಯ state_ಸಂಖ್ಯೆ *yydefgoto;
+ಬಾಹ್ಯ ನಿಯಮ_ಸಂಖ್ಯೆ *yydefact;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಮೇಲಿನ;
 
-void tables_generate (void);
-void tables_free (void);
+ಶೂನ್ಯ tables_generate (ಶೂನ್ಯ);
+ಶೂನ್ಯ tables_free (ಶೂನ್ಯ);
 
-#endif /* !TABLES_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !TABLES_H_ */

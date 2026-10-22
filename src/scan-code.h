@@ -18,26 +18,26 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SCAN_CODE_H_
-# define SCAN_CODE_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ ಪರಿಶೀಲನೆ_ಸಂಕೇತ_H
+# define ಪರಿಶೀಲನೆ_ಸಂಕೇತ_H
 
 # include "location.h"
 # include "named-ref.h"
 # include "uniqstr.h"
 
-struct symbol_list;
+ರಚನೆ ಚಿಹ್ನೆ_list;
 
 /**
  * Keeps track of the maximum number of semantic values to the left of a handle
  * (those referenced by $0, $-1, etc.) that are required by the semantic
  * actions of this grammar.
  */
-extern int max_left_semantic_context;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ max_ಎಡ_semantic_context;
 
 /**
  * The obstack used to store the translated actions.
  */
-extern struct obstack *obstack_for_actions;
+ಬಾಹ್ಯ ರಚನೆ obstack *obstack_for_actions;
 
 /**
  * A code passage captured from the grammar file and possibly translated,
@@ -45,18 +45,18 @@ extern struct obstack *obstack_for_actions;
  * encapsulation by modifying the fields directly.  Use the provided interface
  * functions.
  */
-typedef struct code_props {
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ ಸಂಕೇತ_props {
   /** Set by the init functions.  */
-  enum {
-    CODE_PROPS_NONE, CODE_PROPS_PLAIN,
-    CODE_PROPS_SYMBOL_ACTION, CODE_PROPS_RULE_ACTION
-  } kind;
+  ಎಣಿಕೆ {
+    ಸಂಕೇತ_PROPS_NONE, ಸಂಕೇತ_PROPS_PLAIN,
+    ಸಂಕೇತ_PROPS_ಚಿಹ್ನೆ_ACTION, ಸಂಕೇತ_PROPS_ನಿಯಮ_ACTION
+  } ಬಗೆ;
 
   /**
    * \c NULL iff \c code_props::kind is \c CODE_PROPS_NONE.
    * Memory is allocated in an obstack freed elsewhere.
    */
-  char const *code;
+  ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಸಂಕೇತ_2;
   /** Undefined iff \c code_props::code is \c NULL.  */
   location location;
 
@@ -71,7 +71,7 @@ typedef struct code_props {
    *     but the symbol value associated with this \c code_props was not
    *     referenced in the code passage.
    */
-  bool is_value_used;
+  bool is_ಮೌಲ್ಯ_ಬಳಸಿದ;
 
   /**
    * \c true iff this code is an action that is not to be deferred in
@@ -82,17 +82,17 @@ typedef struct code_props {
   /**
    * Whether this is actually used (i.e., not completely masked by
    * other code props).  */
-  bool is_used;
+  bool is_ಬಳಸಿದ;
 
   /** \c NULL iff \c code_props::kind is not \c CODE_PROPS_RULE_ACTION.  */
-  struct symbol_list *rule;
+  ರಚನೆ ಚಿಹ್ನೆ_list *ನಿಯಮ;
 
   /** Named reference. */
   named_ref *named_ref;
 
   /** Type, for midrule actions.  */
   uniqstr type;
-} code_props;
+} ಸಂಕೇತ_props;
 
 /**
  * \pre
@@ -100,24 +100,24 @@ typedef struct code_props {
  * \post
  *   - \c self has been overwritten to contain no code.
  */
-void code_props_none_init (code_props *self);
+ಶೂನ್ಯ ಸಂಕೇತ_props_none_init (ಸಂಕೇತ_props *self);
 
 /** Equivalent to \c code_props_none_init.  */
-# define CODE_PROPS_NONE_INIT                   \
+# define ಸಂಕೇತ_PROPS_NONE_INIT                   \
   {                                             \
-    /* .kind = */ CODE_PROPS_NONE,              \
-    /* .code = */ NULL,                         \
-    /* .location = */ EMPTY_LOCATION_INIT,      \
+    /* .kind = */ ಸಂಕೇತ_PROPS_NONE,              \
+    /* .code = */ ಖಾಲಿ,                         \
+    /* .location = */ ಖಾಲಿಗಳು_LOCATION_INIT,      \
     /* .is_value_used = */ false,               \
     /* .is_predicate = */ false,                \
     /* .is_used = */ false,                     \
-    /* .rule = */ NULL,                         \
-    /* .named_ref = */ NULL,                    \
-    /* .type = */ NULL,                         \
+    /* .rule = */ ಖಾಲಿ,                         \
+    /* .named_ref = */ ಖಾಲಿ,                    \
+    /* .type = */ ಖಾಲಿ,                         \
   }
 
 /** Initialized by \c CODE_PROPS_NONE_INIT with no further modification.  */
-extern code_props code_props_none;
+ಬಾಹ್ಯ ಸಂಕೇತ_props ಸಂಕೇತ_props_none;
 
 /**
  * \pre
@@ -131,8 +131,8 @@ extern code_props code_props_none;
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_plain_init (code_props *self, char const *code,
-                            location code_loc);
+ಶೂನ್ಯ ಸಂಕೇತ_props_plain_init (ಸಂಕೇತ_props *self, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಸಂಕೇತ_2,
+                            location ಸಂಕೇತ_loc);
 
 /**
  * \pre
@@ -146,8 +146,8 @@ void code_props_plain_init (code_props *self, char const *code,
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_symbol_action_init (code_props *self, char const *code,
-                                    location code_loc);
+ಶೂನ್ಯ ಸಂಕೇತ_props_ಚಿಹ್ನೆ_action_init (ಸಂಕೇತ_props *self, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಸಂಕೇತ_2,
+                                    location ಸಂಕೇತ_loc);
 
 /**
  * \param  type   type for midrule actions
@@ -167,8 +167,8 @@ void code_props_symbol_action_init (code_props *self, char const *code,
  *       on \c self.
  *     - The caller frees \c rule.
  */
-void code_props_rule_action_init (code_props *self, char const *code,
-                                  location code_loc, struct symbol_list *rule,
+ಶೂನ್ಯ ಸಂಕೇತ_props_ನಿಯಮ_action_init (ಸಂಕೇತ_props *self, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಸಂಕೇತ_2,
+                                  location ಸಂಕೇತ_loc, ರಚನೆ ಚಿಹ್ನೆ_list *ನಿಯಮ,
                                   named_ref *name, uniqstr type,
                                   bool is_predicate);
 
@@ -183,7 +183,7 @@ void code_props_rule_action_init (code_props *self, char const *code,
  *   - <tt>self->code != self->code\@pre</tt> unless
  *     <tt>self->code\@pre = NULL</tt>.
  */
-void code_props_translate_code (code_props *self);
+ಶೂನ್ಯ ಸಂಕೇತ_props_translate_ಸಂಕೇತ (ಸಂಕೇತ_props *self);
 
 /**
  * \pre
@@ -194,9 +194,9 @@ void code_props_translate_code (code_props *self);
  *     instance for which \c code_props_translate_code was invoked is now
  *     invalid.
  */
-void code_scanner_last_string_free (void);
+ಶೂನ್ಯ ಸಂಕೇತ_scanner_ಕೊನೆಯ_string_free (ಶೂನ್ಯ);
 
-void code_scanner_init (void);
+ಶೂನ್ಯ ಸಂಕೇತ_scanner_init (ಶೂನ್ಯ);
 
 /**
  * \pre
@@ -206,6 +206,6 @@ void code_scanner_init (void);
  *     \c code_props_translate_code (if any) has been freed.  All \c code_props
  *     instances may now be invalid.
  */
-void code_scanner_free (void);
+ಶೂನ್ಯ ಸಂಕೇತ_scanner_free (ಶೂನ್ಯ);
 
-#endif /* !SCAN_CODE_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !SCAN_CODE_H_ */

@@ -17,68 +17,68 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include "InadequacyList.h"
+#ಅನ್ತರ್ಭಾವ "InadequacyList.h"
 
-#include <intprops.h>
+#ಅನ್ತರ್ಭಾವ <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+Contribution_ಸೂಚ್ಯಂಕ ಸ್ಥಿರಾಂಕ Contribution_ಸೂಚ್ಯಂಕ_none = -1;
+Contribution_ಸೂಚ್ಯಂಕ ಸ್ಥಿರಾಂಕ Contribution_ಸೂಚ್ಯಂಕ_error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, ಚಿಹ್ನೆ *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_ಗಂಟು_ಎಣಿಕೆ *ಗಂಟು_ಎಣಿಕೆ)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *ಫಲಿತಾಂಶ = xmalloc (ಗಾತ್ರ *ಫಲಿತಾಂಶ);
+  ಫಲಿತಾಂಶ->id = *ಗಂಟು_ಎಣಿಕೆ;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  ಆದರೆ (INT_ಕೂಡಿಸು_WRAPV (*ಗಂಟು_ಎಣಿಕೆ, 1, ಗಂಟು_ಎಣಿಕೆ))
     aver (false);
-  IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
-  result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
-  result->inadequacy.conflict.token = token;
-  result->inadequacy.conflict.actions = actions;
-  return result;
+  IGNORE_TYPE_LIMITS_ಕೊನೆ
+  ಫಲಿತಾಂಶ->ಮುಂದಿನ = ಖಾಲಿ;
+  ಫಲಿತಾಂಶ->manifestingState = manifesting_state;
+  ಫಲಿತಾಂಶ->contribution_ಎಣಿಕೆ_2 = bitset_ಎಣಿಕೆ (actions);
+  ಫಲಿತಾಂಶ->inadequacy.conflict.token = token;
+  ಫಲಿತಾಂಶ->inadequacy.conflict.actions = actions;
+  ಹಿಂತಿರುಗಿ ಫಲಿತಾಂಶ;
 }
 
-void
+ಶೂನ್ಯ
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  ಆಗ (self)
     {
-      InadequacyList *node = self;
-      self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      InadequacyList *ಗಂಟು = self;
+      self = self->ಮುಂದಿನ;
+      bitset_free (ಗಂಟು->inadequacy.conflict.actions);
+      ಬಿಡುಗಡೆ (ಗಂಟು);
     }
 }
 
-ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+Contribution_ಸೂಚ್ಯಂಕ
+Inadequacy_List_get_ಸರಿಸು_Contribution_ಸೂಚ್ಯಂಕ (InadequacyList ಸ್ಥಿರಾಂಕ *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  ಆದರೆ (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->ಅಂಕೆ))
+    ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
+  ಹಿಂತಿರುಗಿ self->contribution_ಎಣಿಕೆ_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
-                                      ContributionIndex i)
+ಚಿಹ್ನೆ *
+InadequacyList__getContributionToken (InadequacyList ಸ್ಥಿರಾಂಕ *self,
+                                      Contribution_ಸೂಚ್ಯಂಕ i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_ಎಣಿಕೆ_2); (ಶೂನ್ಯ) i;
+  ಹಿಂತಿರುಗಿ self->inadequacy.conflict.token;
 }
 
-void
-InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
+ಶೂನ್ಯ
+Inadequacy_List_prepend_ಗಮ್ಯ (InadequacyList *self, InadequacyList **list)
 {
-  InadequacyList *head_old = *list;
+  InadequacyList *ತಲೆ_old = *list;
   *list = self;
-  self->next = head_old;
+  self->ಮುಂದಿನ = ತಲೆ_old;
 }

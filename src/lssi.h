@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef LSSI_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ LSSI_H
 # define LSSI_H
 
 # include "state-item.h"
@@ -32,14 +32,14 @@
  * find shortest lookahead-sensitive path of state-items to target such that
  * next_sym is in the follow_L set of target in that position.
 */
-state_item_list shortest_path_from_start (state_item_number target,
-                                          symbol_number next_sym);
+state_ಅಂಶ_list ಅತಿಹ್ರಸ್ವ_ಮಾರ್ಗ_from_ಆರಂಭ (state_ಅಂಶ_ಸಂಖ್ಯೆ ಗುರಿ,
+                                          ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ ಮುಂದಿನ_sym);
 
 /**
  * Determine if the given terminal is in the given symbol set or can begin
  * a nonterminal in the given symbol set.
  */
-bool intersect_symbol (symbol_number sym, bitset syms);
+bool intersect_ಚಿಹ್ನೆ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym, bitset syms);
 
 /**
  * Determine if any symbol in ts is in syms
@@ -52,6 +52,6 @@ bool intersect (bitset ts, bitset syms);
  * to this state-item such that the resulting possible lookahead symbols are
  * as given.
  */
-state_item_list lssi_reverse_production (const state_item *si, bitset lookahead);
+state_ಅಂಶ_list lssi_ಹಿಮ್ಮುಖ_production (ಸ್ಥಿರಾಂಕ state_ಅಂಶ *si, bitset lookahead);
 
-#endif /* LSSI_H */
+#ಆದರೆ_ಅಂತ್ಯ /* LSSI_H */

@@ -17,34 +17,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef GLYPHS_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ GLYPHS_H
 # define GLYPHS_H
 
 /* Initialize the following variables.  */
-void glyphs_init (void);
+ಶೂನ್ಯ glyphs_init (ಶೂನ್ಯ);
 
 /* In gnulib/lib/unicodeio.h unicode_to_mb uses a buffer of 25 bytes.
    In down_arrow, we append one space.  */
-typedef char glyph_buffer_t[26];
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಅಕ್ಷರ glyph_ಬಫರ್_t[26];
 
 /* "→", separates the lhs of a rule from its rhs.  */
-extern glyph_buffer_t arrow;
-extern int arrow_width;
+ಬಾಹ್ಯ glyph_ಬಫರ್_t arrow;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ arrow_ಅಗಲ;
 
 /* "•", a point in an item (aka, a dotted rule).  */
-extern glyph_buffer_t dot;
-extern int dot_width;
+ಬಾಹ್ಯ glyph_ಬಫರ್_t dot;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ dot_ಅಗಲ;
 
 /* "↳ ", below an lhs to announce the rhs.  */
-extern glyph_buffer_t down_arrow;
-extern int down_arrow_width;
+ಬಾಹ್ಯ glyph_ಬಫರ್_t ಕೆಳಕ್ಕೆ_arrow;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಕೆಳಕ್ಕೆ_arrow_ಅಗಲ;
 
 /* "ε", an empty rhs.  */
-extern glyph_buffer_t empty;
-extern int empty_width;
+ಬಾಹ್ಯ glyph_ಬಫರ್_t ಖಾಲಿಗಳು;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ ಖಾಲಿಗಳು_ಅಗಲ;
 
 /* " ", separate symbols in the rhs of a derivation.  */
-extern const char *derivation_separator;
-extern int derivation_separator_width;
+ಬಾಹ್ಯ ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *derivation_separator;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ derivation_separator_ಅಗಲ;
 
-#endif /* GLYPHS_H */
+#ಆದರೆ_ಅಂತ್ಯ /* GLYPHS_H */

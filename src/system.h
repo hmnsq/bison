@@ -16,14 +16,14 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef BISON_SYSTEM_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ BISON_SYSTEM_H
 # define BISON_SYSTEM_H
 
 /* flex 2.5.31 gratuitously defines macros like INT8_MIN.  But this
    runs afoul of pre-C99 compilers that have <inttypes.h> or
    <stdint.h>, which are included below if available.  It also runs
    afoul of pre-C99 compilers that define these macros in <limits.h>.  */
-# if ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
+# ಆದರೆ ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
 #  undef INT8_MIN
 #  undef INT16_MIN
 #  undef INT32_MIN
@@ -40,14 +40,14 @@
 # include <stdlib.h>
 # include <string.h>
 
-# define ARRAY_CARDINALITY(Array) (sizeof (Array) / sizeof *(Array))
+# define ARRAY_CARDINALITY(Array) (ಗಾತ್ರ (Array) / ಗಾತ್ರ *(Array))
 # define STREQ(L, R)  (strcmp(L, R) == 0)
 # define STRNEQ(L, R) (!STREQ(L, R))
 
 /* Just like strncmp, but the second argument must be a literal string
    and you don't specify the length.  */
 # define STRNCMP_LIT(S, Literal)                        \
-  strncmp (S, "" Literal "", sizeof (Literal) - 1)
+  ಅಕ್ಷರಸರಣಿ_ಹೋಲಿಕೆ (S, "" Literal "", ಗಾತ್ರ (Literal) - 1)
 
 /* Whether Literal is a prefix of S.  */
 # define STRPREFIX_LIT(Literal, S)              \
@@ -59,7 +59,7 @@
 # ifndef UINTPTR_MAX
 /* This isn't perfect, but it's good enough for Bison, which needs
    only to hash pointers.  */
-typedef size_t uintptr_t;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ size_t uintptr_t;
 # endif
 
 /* Version mismatch. */
@@ -74,21 +74,21 @@ typedef size_t uintptr_t;
 # include <xalloc.h>
 
 // Clang and ICC like to pretend they are GCC.
-# if defined __GNUC__ && !defined __clang__ && !defined __ICC
-#  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
+# ಆದರೆ defined __GNUC__ && !defined __clang__ && !defined __ICC
+#  define GCC_ಆವೃತ್ತಿ (__GNUC__ * 100 + __GNUC_MINOR__)
 # endif
 
 // See https://lists.gnu.org/r/bug-bison/2019-10/msg00061.html
 // and https://trac.macports.org/ticket/59927.
-# if defined GCC_VERSION && 405 <= GCC_VERSION
+# ಆದರೆ defined GCC_ಆವೃತ್ತಿ && 405 <= GCC_ಆವೃತ್ತಿ
 #  define IGNORE_TYPE_LIMITS_BEGIN \
      _Pragma ("GCC diagnostic push") \
      _Pragma ("GCC diagnostic ignored \"-Wtype-limits\"")
-#  define IGNORE_TYPE_LIMITS_END \
+#  define IGNORE_TYPE_LIMITS_ಕೊನೆ \
      _Pragma ("GCC diagnostic pop")
-# else
+# ಇಲ್ಲದಿದ್ದರೆ
 #  define IGNORE_TYPE_LIMITS_BEGIN
-#  define IGNORE_TYPE_LIMITS_END
+#  define IGNORE_TYPE_LIMITS_ಕೊನೆ
 # endif
 
 
@@ -108,7 +108,7 @@ typedef size_t uintptr_t;
    and safer logic than it would for users.  Due to the overhead of M4,
    suppressing Code is unlikely to offer any significant improvement in
    Bison's performance anyway.  */
-# define PACIFY_CC(Code) Code
+# define PACIFY_CC(ಸಂಕೇತ_5) ಸಂಕೇತ_5
 
 # include <attribute.h>
 
@@ -135,16 +135,16 @@ typedef size_t uintptr_t;
 | Integers.  |
 `-----------*/
 
-static inline int
-min_int (int a, int b)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಪೂರ್ಣಾಂಕ
+min_int (ಪೂರ್ಣಾಂಕ a, ಪೂರ್ಣಾಂಕ b)
 {
-  return a < b ? a : b;
+  ಹಿಂತಿರುಗಿ a < b ? a : b;
 }
 
-static inline int
-max_int (int a, int b)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಪೂರ್ಣಾಂಕ
+max_int (ಪೂರ್ಣಾಂಕ a, ಪೂರ್ಣಾಂಕ b)
 {
-  return a >= b ? a : b;
+  ಹಿಂತಿರುಗಿ a >= b ? a : b;
 }
 
 
@@ -171,7 +171,7 @@ max_int (int a, int b)
    we later wish to try another scheme.
 */
 # include <assert.h>
-# define aver assert
+# define aver ಪ್ರತಿಜ್ಞಾ
 
 
 /*-----------.
@@ -179,29 +179,29 @@ max_int (int a, int b)
 `-----------*/
 
 # define obstack_chunk_alloc xmalloc
-# define obstack_chunk_free  free
+# define obstack_chunk_free  ಬಿಡುಗಡೆ
 # include <obstack.h>
 
 /* String-grow: append Str to Obs.  */
 
 # define obstack_sgrow(Obs, Str) \
-  obstack_grow (Obs, Str, strlen (Str))
+  obstack_grow (Obs, Str, ಅಕ್ಷರಸರಣಿ_ಉದ್ದ (Str))
 
 /* Output Str escaped to be a string.
 
    For instance "\"foo\"" -> "\\\"foo\\\"".  */
 
 # define obstack_backslash(Obs, Str)                    \
-  do {                                                  \
-    char const *p__;                                    \
-    for (p__ = Str; *p__; p__++)                        \
-      switch (*p__)                                     \
+  ಮಾಡು {                                                  \
+    ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *p__;                                    \
+    ಗಾಗಿ (p__ = Str; *p__; p__++)                        \
+      ಆಯ್ಕೆ (*p__)                                     \
         {                                               \
-        case '"':  obstack_sgrow (Obs, "\\\""); break;  \
-        case '\\': obstack_sgrow (Obs, "\\\\"); break;  \
-        default:   obstack_1grow (Obs, *p__);   break;  \
+        ಸ್ಥಿತಿ '"':  obstack_sgrow (Obs, "\\\""); ನಿಲ್ಲಿಸು;  \
+        ಸ್ಥಿತಿ '\\': obstack_sgrow (Obs, "\\\\"); ನಿಲ್ಲಿಸು;  \
+        ಪೂರ್ವನಿಯೋಜಿತ:   obstack_1grow (Obs, *p__);   ನಿಲ್ಲಿಸು;  \
         }                                               \
-  } while (0)
+  } ಆಗ (0)
 
 
 /* Output CP escaped for our postprocessing (i.e., escape M4 special
@@ -217,38 +217,38 @@ max_int (int a, int b)
    Keep output_escaped and obstack_escape sync'ed.
  */
 
-static inline void
-obstack_escape (struct obstack* obs, const char *cp)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ಶೂನ್ಯ
+obstack_escape (ರಚನೆ obstack* obs, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *cp)
 {
-  for (; *cp; ++cp)
-    switch (*cp)
+  ಗಾಗಿ (; *cp; ++cp)
+    ಆಯ್ಕೆ (*cp)
       {
-      case '$': obstack_sgrow (obs, "$]["); break;
-      case '@': obstack_sgrow (obs, "@@" ); break;
-      case '[': obstack_sgrow (obs, "@{" ); break;
-      case ']': obstack_sgrow (obs, "@}" ); break;
-      case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+      ಸ್ಥಿತಿ '$': obstack_sgrow (obs, "$]["); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ '@': obstack_sgrow (obs, "@@" ); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ '[': obstack_sgrow (obs, "@{" ); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ ']': obstack_sgrow (obs, "@}" ); ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ 'b':
+        ಆದರೆ (STRPREFIX_LIT ("b4_", cp))
           {
             obstack_sgrow (obs, "b4@'_");
-            cp += strlen ("b4_") - 1;
-            break;
+            cp += ಅಕ್ಷರಸರಣಿ_ಉದ್ದ ("b4_") - 1;
+            ನಿಲ್ಲಿಸು;
           }
-        else
-          goto append;
+        ಇಲ್ಲದಿದ್ದರೆ
+          ಹೋಗು append;
 
-      case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+      ಸ್ಥಿತಿ 'm':
+        ಆದರೆ (STRPREFIX_LIT ("m4_", cp))
           {
             obstack_sgrow (obs, "m4@'_");
-            cp += strlen ("m4_") - 1;
-            break;
+            cp += ಅಕ್ಷರಸರಣಿ_ಉದ್ದ ("m4_") - 1;
+            ನಿಲ್ಲಿಸು;
           }
-        else
-          goto append;
+        ಇಲ್ಲದಿದ್ದರೆ
+          ಹೋಗು append;
 
       append:
-      default:  obstack_1grow (obs, *cp); break;
+      ಪೂರ್ವನಿಯೋಜಿತ:  obstack_1grow (obs, *cp); ನಿಲ್ಲಿಸು;
       }
 }
 
@@ -261,23 +261,23 @@ obstack_escape (struct obstack* obs, const char *cp)
    For instance "[foo]" -> "[[@{foo@}]]", "$$" -> "[[$][$][]]".  */
 
 # define obstack_quote(Obs, Str)                \
-  do {                                          \
-    char const* obstack_quote_p = Str;          \
-    if (obstack_quote_p && obstack_quote_p[0])  \
+  ಮಾಡು {                                          \
+    ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ* obstack_quote_p = Str;          \
+    ಆದರೆ (obstack_quote_p && obstack_quote_p[0])  \
       {                                         \
         obstack_sgrow (Obs, "[[");              \
         obstack_escape (Obs, obstack_quote_p);  \
         obstack_sgrow (Obs, "]]");              \
       }                                         \
-    else                                        \
+    ಇಲ್ಲದಿದ್ದರೆ                                        \
       obstack_sgrow (Obs, "[]");                \
-  } while (0)
+  } ಆಗ (0)
 
 
 /* Append the ending 0, finish Obs, and return the string.  */
 
 # define obstack_finish0(Obs)                                   \
-  (obstack_1grow (Obs, '\0'), (char *) obstack_finish (Obs))
+  (obstack_1grow (Obs, '\0'), (ಅಕ್ಷರ *) obstack_ಮುಕ್ತಾಯ (Obs))
 
 
 /*-----------------------------------------.
@@ -299,13 +299,13 @@ obstack_escape (struct obstack* obs, const char *cp)
 `---------------------*/
 
 # define LIST_FREE(Type, List)                  \
-  do {                                          \
-    Type *_node, *_next;                        \
-    for (_node = List; _node; _node = _next)    \
+  ಮಾಡು {                                          \
+    Type *ಗಂಟು_2, *ಮುಂದಿನ_2;                        \
+    ಗಾಗಿ (ಗಂಟು_2 = List; ಗಂಟು_2; ಗಂಟು_2 = ಮುಂದಿನ_2)    \
       {                                         \
-        _next = _node->next;                    \
-        free (_node);                           \
+        ಮುಂದಿನ_2 = ಗಂಟು_2->ಮುಂದಿನ;                    \
+        ಬಿಡುಗಡೆ (ಗಂಟು_2);                           \
       }                                         \
-  } while (0)
+  } ಆಗ (0)
 
-#endif  /* ! BISON_SYSTEM_H */
+#ಆದರೆ_ಅಂತ್ಯ  /* ! BISON_SYSTEM_H */

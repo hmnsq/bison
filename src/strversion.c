@@ -17,51 +17,51 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include "strversion.h"
+#ಅನ್ತರ್ಭಾವ "strversion.h"
 
-#include <errno.h>
-#include <intprops.h>
+#ಅನ್ತರ್ಭಾವ <errno.h>
+#ಅನ್ತರ್ಭಾವ <intprops.h>
 
-int
-strversion_to_int (char const *version)
+ಪೂರ್ಣಾಂಕ
+strversion_ಗಮ್ಯ_int (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *ಆವೃತ್ತಿ)
 {
   IGNORE_TYPE_LIMITS_BEGIN
-  int res = 0;
+  ಪೂರ್ಣಾಂಕ res = 0;
   errno = 0;
-  char *cp = NULL;
+  ಅಕ್ಷರ *cp = ಖಾಲಿ;
 
   {
-    long major = strtol (version, &cp, 10);
-    if (errno || cp == version || *cp != '.' || major < 0
+    ದೀರ್ಘ major = strtol (ಆವೃತ್ತಿ, &cp, 10);
+    ಆದರೆ (errno || cp == ಆವೃತ್ತಿ || *cp != '.' || major < 0
         || INT_MULTIPLY_WRAPV (major, 10000, &res))
-      return -1;
+      ಹಿಂತಿರುಗಿ -1;
   }
 
   {
     ++cp;
-    char *prev = cp;
-    long minor = strtol (cp, &cp, 10);
-    if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+    ಅಕ್ಷರ *prev = cp;
+    ದೀರ್ಘ minor = strtol (cp, &cp, 10);
+    ಆದರೆ (errno || cp == prev || (*cp != '\0' && *cp != '.')
         || ! (0 <= minor && minor < 100)
         || INT_MULTIPLY_WRAPV (minor, 100, &minor)
-        || INT_ADD_WRAPV (minor, res, &res))
-      return -1;
+        || INT_ಕೂಡಿಸು_WRAPV (minor, res, &res))
+      ಹಿಂತಿರುಗಿ -1;
   }
 
-  if (*cp == '.')
+  ಆದರೆ (*cp == '.')
     {
       ++cp;
-      char *prev = cp;
-      long micro = strtol (cp, &cp, 10);
-      if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+      ಅಕ್ಷರ *prev = cp;
+      ದೀರ್ಘ micro = strtol (cp, &cp, 10);
+      ಆದರೆ (errno || cp == prev || (*cp != '\0' && *cp != '.')
           || ! (0 <= micro && micro < 100)
-          || INT_ADD_WRAPV (micro, res, &res))
-        return -1;
+          || INT_ಕೂಡಿಸು_WRAPV (micro, res, &res))
+        ಹಿಂತಿರುಗಿ -1;
     }
 
-  IGNORE_TYPE_LIMITS_END
-  return res;
+  IGNORE_TYPE_LIMITS_ಕೊನೆ
+  ಹಿಂತಿರುಗಿ res;
 }

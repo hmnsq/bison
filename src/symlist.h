@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SYMLIST_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ SYMLIST_H_
 # define SYMLIST_H_
 
 # include "location.h"
@@ -29,22 +29,22 @@
 /* A list of symbols, used during the parsing for many different
    purposes: rules, symbol declarations or properties (such as
    %destructor, etc.)...  */
-typedef struct symbol_list
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ ಚಿಹ್ನೆ_list
 {
   /**
    * Whether this node contains a symbol, a semantic type, a \c <*>, or a
    * \c <>.
    */
-  enum {
-    SYMLIST_SYMBOL,
+  ಎಣಿಕೆ {
+    SYMLIST_ಚಿಹ್ನೆ,
     SYMLIST_TYPE
   } content_type;
-  union {
+  ಒಕ್ಕೂಟ {
     /**
      * The symbol or \c NULL iff
      * <tt>symbol_list::content_type = SYMLIST_SYMBOL</tt>.
      */
-    symbol *sym;
+    ಚಿಹ್ನೆ *sym;
     /**
      * The semantic type iff <tt>symbol_list::content_type = SYMLIST_TYPE</tt>.
      */
@@ -59,14 +59,14 @@ typedef struct symbol_list
 
   /* If this symbol is the generated lhs for a midrule but this is the rule in
      whose rhs it appears, MIDRULE = a pointer to that midrule.  */
-  struct symbol_list *midrule;
+  ರಚನೆ ಚಿಹ್ನೆ_list *midrule;
 
   /* If this symbol is the generated lhs for a midrule and this is that
      midrule, MIDRULE_PARENT_RULE = a pointer to the rule in whose rhs it
      appears, and MIDRULE_PARENT_RHS_INDEX = its rhs index (1-origin) in the
      parent rule.  */
-  struct symbol_list *midrule_parent_rule;
-  int midrule_parent_rhs_index;
+  ರಚನೆ ಚಿಹ್ನೆ_list *midrule_ಪೋಷಕ_ನಿಯಮ;
+  ಪೂರ್ಣಾಂಕ midrule_ಪೋಷಕ_rhs_ಸೂಚ್ಯಂಕ;
 
   /*--------------------------------------------------------------.
   | Used for rules only (attached to the "LHS", one per rule even |
@@ -77,80 +77,80 @@ typedef struct symbol_list
   location rhs_loc;
 
   /* Precedence/associativity.  */
-  symbol *ruleprec;
+  ಚಿಹ್ನೆ *ruleprec;
 
   /* The action is attached to the LHS of a rule, but action properties for
    * each RHS are also stored here.  */
-  code_props action_props;
+  ಸಂಕೇತ_props action_props;
 
   /* The location of the first %empty for this rule, or \a
      empty_loc.  */
-  location percent_empty_loc;
+  location percent_ಖಾಲಿಗಳು_loc;
 
-  int dprec;
+  ಪೂರ್ಣಾಂಕ dprec;
   location dprec_loc;
-  int merger;
+  ಪೂರ್ಣಾಂಕ merger;
   location merger_declaration_loc;
 
   /* Counts of the number of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  ಪೂರ್ಣಾಂಕ expected_sr_conflicts;
+  ಪೂರ್ಣಾಂಕ expected_rr_conflicts;
 
   /* The list.  */
-  struct symbol_list *next;
-} symbol_list;
+  ರಚನೆ ಚಿಹ್ನೆ_list *ಮುಂದಿನ;
+} ಚಿಹ್ನೆ_list;
 
 
 /** Create a list containing \c sym at \c loc.  */
-symbol_list *symbol_list_sym_new (symbol *sym, location loc);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_sym_new (ಚಿಹ್ನೆ *sym, location loc);
 
 /** Create a list containing \c type_name at \c loc.  */
-symbol_list *symbol_list_type_new (uniqstr type_name, location loc);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_type_new (uniqstr type_name, location loc);
 
 /** Assign the type \c type_name to all the members of \c syms.
  ** \returns \c syms */
-symbol_list *symbol_list_type_set (symbol_list *syms, uniqstr type_name);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_type_ಗಣ (ಚಿಹ್ನೆ_list *syms, uniqstr type_name);
 
 /** Find a symbol with the same content as \c sym within \c syms.  */
-symbol_list *symbol_list_find_symbol (symbol_list *syms, const symbol *sym);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_ಕಂಡುಹಿಡಿ_ಚಿಹ್ನೆ (ಚಿಹ್ನೆ_list *syms, ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *sym);
 
 /** Print this list.
 
   \pre For every node \c n in the list, <tt>n->content_type =
   SYMLIST_SYMBOL</tt>.  */
-void symbol_list_syms_print (const symbol_list *l, FILE *f);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_list_syms_print (ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ_list *l, FILE *f);
 
 /** Prepend \c node to \c list.  */
-symbol_list *symbol_list_prepend (symbol_list *list, symbol_list *node);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_prepend (ಚಿಹ್ನೆ_list *list, ಚಿಹ್ನೆ_list *ಗಂಟು);
 
 /** The last node of this list. */
-symbol_list *symbol_list_last (symbol_list *list);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_ಕೊನೆಯ (ಚಿಹ್ನೆ_list *list);
 
 /** Append \c node to \c list.  */
-symbol_list *symbol_list_append (symbol_list *list, symbol_list *node);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_append (ಚಿಹ್ನೆ_list *list, ಚಿಹ್ನೆ_list *ಗಂಟು);
 
 /** Free \c list, but not the items it contains.  */
-void symbol_list_free (symbol_list *list);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_list_free (ಚಿಹ್ನೆ_list *list);
 
 /** Return the length of \c l. */
-int symbol_list_length (symbol_list const *l);
+ಪೂರ್ಣಾಂಕ ಚಿಹ್ನೆ_list_ಉದ್ದಳತೆ (ಚಿಹ್ನೆ_list ಸ್ಥಿರಾಂಕ *l);
 
 /** Get item \c n in symbol list \c l.
  ** \pre  0 <= n
  ** \post res != NULL
  **/
-symbol_list *symbol_list_n_get (symbol_list *l, int n);
+ಚಿಹ್ನೆ_list *ಚಿಹ್ನೆ_list_n_get (ಚಿಹ್ನೆ_list *l, ಪೂರ್ಣಾಂಕ n);
 
 /** Get the data type (alternative in the union) of the value for
     symbol N in rule RULE.  */
-uniqstr symbol_list_n_type_name_get (symbol_list *l, int n);
+uniqstr ಚಿಹ್ನೆ_list_n_type_name_get (ಚಿಹ್ನೆ_list *l, ಪೂರ್ಣಾಂಕ n);
 
 /** Check whether the node is a border element of a rule. */
-bool symbol_list_null (symbol_list *node);
+bool ಚಿಹ್ನೆ_list_null (ಚಿಹ್ನೆ_list *ಗಂಟು);
 
 /** Set the \c \%destructor or \c \%printer for \c node as \c cprops.  */
-void symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                                 code_props const *cprops);
+ಶೂನ್ಯ ಚಿಹ್ನೆ_list_ಸಂಕೇತ_props_ಗಣ (ಚಿಹ್ನೆ_list *ಗಂಟು, ಸಂಕೇತ_props_type ಬಗೆ,
+                                 ಸಂಕೇತ_props ಸ್ಥಿರಾಂಕ *cprops);
 
-#endif /* !SYMLIST_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !SYMLIST_H_ */

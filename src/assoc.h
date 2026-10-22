@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef ASSOC_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ ASSOC_H_
 # define ASSOC_H_
 
 /* Associativity values for tokens and rules.  */
-typedef enum
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಎಣಿಕೆ
 {
   undef_assoc,     /** Not defined. */
-  right_assoc,     /** %right */
-  left_assoc,      /** %left */
+  ಬಲ_assoc,     /** %right */
+  ಎಡ_assoc,      /** %left */
   non_assoc,       /** %nonassoc */
   precedence_assoc /** %precedence */
 } assoc;
 
-char const *assoc_to_string (assoc a);
+ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *assoc_ಗಮ್ಯ_string (assoc a);
 
-#endif /* !ASSOC_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !ASSOC_H_ */

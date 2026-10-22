@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SCAN_GRAM_H_
-# define SCAN_GRAM_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ ಪರಿಶೀಲನೆ_GRAM_H
+# define ಪರಿಶೀಲನೆ_GRAM_H
 
 /* Initialize the scanner to read file GRAM. */
-void gram_scanner_open (const char *gram);
+ಶೂನ್ಯ gram_scanner_open (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *gram);
 /* Close the open files.  */
-void gram_scanner_close (void);
+ಶೂನ್ಯ gram_scanner_close (ಶೂನ್ಯ);
 
 /* Free all the memory allocated to the scanner. */
-void gram_scanner_free (void);
-void gram_scanner_last_string_free (void);
+ಶೂನ್ಯ gram_scanner_free (ಶೂನ್ಯ);
+ಶೂನ್ಯ gram_scanner_ಕೊನೆಯ_string_free (ಶೂನ್ಯ);
 
-# define GRAM_LEX_DECL int gram_lex (GRAM_STYPE *val, location *loc)
+# define GRAM_LEX_DECL ಪೂರ್ಣಾಂಕ gram_lex (GRAM_STYPE *val, location *loc)
 GRAM_LEX_DECL;
 
-#endif /* !SCAN_GRAM_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !SCAN_GRAM_H_ */

@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef DERIVATION_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ DERIVATION_H
 # define DERIVATION_H
 
 # include <gl_linked_list.h>
@@ -30,48 +30,48 @@
    relevant to the counterexample.  The leaves of a derivation form a
    counterexample when printed.  */
 
-typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ gl_list_t derivation_list;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ derivation_list derivation_list_new (ಶೂನ್ಯ)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  ಹಿಂತಿರುಗಿ gl_list_create_ಖಾಲಿಗಳು (GL_LINKED_LIST, ಖಾಲಿ, ಖಾಲಿ, ಖಾಲಿ, true);
 }
 
-static inline bool
-derivation_list_next (gl_list_iterator_t *it, derivation **d)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ bool
+derivation_list_ಮುಂದಿನ (gl_list_iterator_t *it, derivation **d)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *p = ಖಾಲಿ;
+  bool res = gl_list_iterator_ಮುಂದಿನ (it, &p, ಖಾಲಿ);
+  ಆದರೆ (res)
     *d = (derivation *) p;
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     gl_list_iterator_free (it);
-  return res;
+  ಹಿಂತಿರುಗಿ res;
 }
 
-void derivation_list_append (derivation_list dl, derivation *d);
-void derivation_list_prepend (derivation_list dl, derivation *d);
-void derivation_list_free (derivation_list dl);
+ಶೂನ್ಯ derivation_list_append (derivation_list dl, derivation *d);
+ಶೂನ್ಯ derivation_list_prepend (derivation_list dl, derivation *d);
+ಶೂನ್ಯ derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r);
+derivation_new (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym, derivation_list children,
+                ಸ್ಥಿರಾಂಕ ನಿಯಮ *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ derivation *derivation_new_ಎಲೆ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  ಹಿಂತಿರುಗಿ derivation_new (sym, ಖಾಲಿ, ಖಾಲಿ);
 }
 
 // Number of symbols.
-size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
-void derivation_free (derivation *deriv);
-void derivation_retain (derivation *deriv);
+size_t derivation_ಗಾತ್ರ (ಸ್ಥಿರಾಂಕ derivation *deriv);
+ಶೂನ್ಯ derivation_print (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *ಪೂರ್ವಪ್ರತ್ಯಯ);
+ಶೂನ್ಯ derivation_print_leaves (ಸ್ಥಿರಾಂಕ derivation *deriv, FILE *ಹೊರಹೋಗು);
+ಶೂನ್ಯ derivation_free (derivation *deriv);
+ಶೂನ್ಯ derivation_retain (derivation *deriv);
 
 // A derivation denoting the position of the dot.
-derivation *derivation_dot (void);
+derivation *derivation_dot (ಶೂನ್ಯ);
 
-#endif /* DERIVATION_H */
+#ಆದರೆ_ಅಂತ್ಯ /* DERIVATION_H */

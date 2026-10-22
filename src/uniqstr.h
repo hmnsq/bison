@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef UNIQSTR_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ UNIQSTR_H_
 # define UNIQSTR_H_
 
 # include <stdio.h>
@@ -27,20 +27,20 @@
 | Pointers to unique copies of C strings.  |
 `-----------------------------------------*/
 
-typedef char const *uniqstr;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *uniqstr;
 
 /* Return the uniqstr for STR.  */
-uniqstr uniqstr_new (char const *str);
+uniqstr uniqstr_new (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *str);
 
 /* Two uniqstr values have the same value iff they are the same.  */
 # define UNIQSTR_EQ(Ustr1, Ustr2) (!!((Ustr1) == (Ustr2)))
 
 /* Compare two uniqstr a la strcmp: negative for <, nul for =, and
    positive for >.  Undefined order, relies on addresses.  */
-int uniqstr_cmp (uniqstr u1, uniqstr u2);
+ಪೂರ್ಣಾಂಕ uniqstr_cmp (uniqstr u1, uniqstr u2);
 
 /* Die if STR is not a uniqstr.  */
-void uniqstr_assert (char const *str);
+ಶೂನ್ಯ uniqstr_assert (ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *str);
 
 /*----------------.
 | Concatenation.  |
@@ -49,21 +49,21 @@ void uniqstr_assert (char const *str);
 /* Concatenate strings and return a uniqstr.  The goal of
    this macro is to make the caller's code a little more succinct.  */
 # define UNIQSTR_CONCAT(...)                                            \
-  uniqstr_concat (ARRAY_CARDINALITY (((char const *[]) {__VA_ARGS__})), \
+  uniqstr_concat (ARRAY_CARDINALITY (((ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *[]) {__VA_ARGS__})), \
                   __VA_ARGS__)
-uniqstr uniqstr_concat (int nargs, ...);
+uniqstr uniqstr_concat (ಪೂರ್ಣಾಂಕ nargs, ...);
 
 /*--------------------.
 | Table of uniqstrs.  |
 `--------------------*/
 
 /* Create the string table.  */
-void uniqstrs_new (void);
+ಶೂನ್ಯ uniqstrs_new (ಶೂನ್ಯ);
 
 /* Free all the memory allocated for symbols.  */
-void uniqstrs_free (void);
+ಶೂನ್ಯ uniqstrs_free (ಶೂನ್ಯ);
 
 /* Report them all.  */
-void uniqstrs_print (void);
+ಶೂನ್ಯ uniqstrs_print (ಶೂನ್ಯ);
 
-#endif /* ! defined UNIQSTR_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* ! defined UNIQSTR_H_ */

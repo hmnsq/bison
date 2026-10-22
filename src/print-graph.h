@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_GRAPH_H_
-# define PRINT_GRAPH_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ PRINT_ನಕ್ಷೆ_H
+# define PRINT_ನಕ್ಷೆ_H
 
-void print_graph (void);
+ಶೂನ್ಯ print_ನಕ್ಷೆ (ಶೂನ್ಯ);
 
-#endif /* !PRINT_GRAPH_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !PRINT_GRAPH_H_ */

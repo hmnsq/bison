@@ -17,14 +17,14 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ಅನ್ತರ್ಭಾವ <config.h>
 
-#include "AnnotationList.h"
+#ಅನ್ತರ್ಭಾವ "AnnotationList.h"
 
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include "ielr.h"
-#include "lalr.h"
+#ಅನ್ತರ್ಭಾವ "ielr.h"
+#ಅನ್ತರ್ಭಾವ "lalr.h"
 
 /**
  * \pre
@@ -36,18 +36,18 @@
  *       uninitialized elements.
  *   - All memory was allocated on \c annotations_obstackp.
  */
-static AnnotationList*
-AnnotationList__alloc_on_obstack (ContributionIndex contribution_count,
-                                  struct obstack *annotations_obstackp)
+ಸ್ಥಿರ AnnotationList*
+AnnotationList__alloc_on_obstack (Contribution_ಸೂಚ್ಯಂಕ contribution_ಎಣಿಕೆ,
+                                  ರಚನೆ obstack *annotations_obstackp)
 {
   AnnotationList *res;
-  size_t contributions_size = contribution_count * sizeof res->contributions[0];
+  size_t contributions_ಗಾತ್ರ = contribution_ಎಣಿಕೆ * ಗಾತ್ರ res->contributions[0];
   res = obstack_alloc (annotations_obstackp,
                        offsetof (AnnotationList, contributions)
-                       + contributions_size);
-  res->next = NULL;
-  res->inadequacyNode = NULL;
-  return res;
+                       + contributions_ಗಾತ್ರ);
+  res->ಮುಂದಿನ = ಖಾಲಿ;
+  res->inadequacy_ಗಂಟು = ಖಾಲಿ;
+  ಹಿಂತಿರುಗಿ res;
 }
 
 /**
@@ -58,12 +58,12 @@ AnnotationList__alloc_on_obstack (ContributionIndex contribution_count,
  *   - \c result = true iff contribution \c ci in \c self represents an
  *     "always" contribution.
  */
-static bool
-AnnotationList__isContributionAlways (AnnotationList const *self,
-                                      ContributionIndex ci)
+ಸ್ಥಿರ bool
+AnnotationList__isContributionAlways (AnnotationList ಸ್ಥಿರಾಂಕ *self,
+                                      Contribution_ಸೂಚ್ಯಂಕ ci)
 {
-  aver (0 <= ci && ci < self->inadequacyNode->contributionCount);
-  return self->contributions[ci] == NULL;
+  aver (0 <= ci && ci < self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2);
+  ಹಿಂತಿರುಗಿ self->contributions[ci] == ಖಾಲಿ;
 }
 
 /**
@@ -95,160 +95,160 @@ AnnotationList__isContributionAlways (AnnotationList const *self,
  *    - It determines how the output of \c AnnotationList__debug is sorted.
  *    - Other than that, it's probably not important.
  */
-static bool
-AnnotationList__insertInto (AnnotationList *self, AnnotationList **list,
+ಸ್ಥಿರ bool
+Annotation_List_ಸೇರಿಸು_Into (AnnotationList *self, AnnotationList **list,
                             size_t nitems)
 {
-  AnnotationList **node;
-  for (node = list; *node; node = &(*node)->next)
+  AnnotationList **ಗಂಟು;
+  ಗಾಗಿ (ಗಂಟು = list; *ಗಂಟು; ಗಂಟು = &(*ಗಂಟು)->ಮುಂದಿನ)
     {
-      int cmp = 0;
-      if (self->inadequacyNode->id < (*node)->inadequacyNode->id)
+      ಪೂರ್ಣಾಂಕ cmp = 0;
+      ಆದರೆ (self->inadequacy_ಗಂಟು->id < (*ಗಂಟು)->inadequacy_ಗಂಟು->id)
         cmp = 1;
-      else if ((*node)->inadequacyNode->id < self->inadequacyNode->id)
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ ((*ಗಂಟು)->inadequacy_ಗಂಟು->id < self->inadequacy_ಗಂಟು->id)
         cmp = -1;
-      else
-        for (ContributionIndex ci = 0;
-             cmp == 0 && ci < self->inadequacyNode->contributionCount;
+      ಇಲ್ಲದಿದ್ದರೆ
+        ಗಾಗಿ (Contribution_ಸೂಚ್ಯಂಕ ci = 0;
+             cmp == 0 && ci < self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2;
              ++ci)
           {
-            if (AnnotationList__isContributionAlways (self, ci))
+            ಆದರೆ (AnnotationList__isContributionAlways (self, ci))
               {
-                if (!AnnotationList__isContributionAlways (*node, ci))
+                ಆದರೆ (!AnnotationList__isContributionAlways (*ಗಂಟು, ci))
                   cmp = -1;
               }
-            else if (AnnotationList__isContributionAlways (*node, ci))
+            ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (AnnotationList__isContributionAlways (*ಗಂಟು, ci))
               cmp = 1;
-            else
-              for (size_t item = 0; cmp == 0 && item < nitems; ++item)
+            ಇಲ್ಲದಿದ್ದರೆ
+              ಗಾಗಿ (size_t ಅಂಶ = 0; cmp == 0 && ಅಂಶ < nitems; ++ಅಂಶ)
                 {
-                  if (!Sbitset__test (self->contributions[ci], item))
+                  ಆದರೆ (!Sbitset__test (self->contributions[ci], ಅಂಶ))
                     {
-                      if (Sbitset__test ((*node)->contributions[ci], item))
+                      ಆದರೆ (Sbitset__test ((*ಗಂಟು)->contributions[ci], ಅಂಶ))
                         cmp = -1;
                     }
-                  else if (!Sbitset__test ((*node)->contributions[ci], item))
+                  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (!Sbitset__test ((*ಗಂಟು)->contributions[ci], ಅಂಶ))
                     cmp = 1;
                 }
           }
-      if (cmp < 0)
+      ಆದರೆ (cmp < 0)
         {
-          self->next = *node;
-          *node = self;
-          break;
+          self->ಮುಂದಿನ = *ಗಂಟು;
+          *ಗಂಟು = self;
+          ನಿಲ್ಲಿಸು;
         }
-      else if (cmp == 0)
+      ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (cmp == 0)
         {
-          self = NULL;
-          break;
+          self = ಖಾಲಿ;
+          ನಿಲ್ಲಿಸು;
         }
     }
-  if (!*node)
-    *node = self;
-  return self != NULL;
+  ಆದರೆ (!*ಗಂಟು)
+    *ಗಂಟು = self;
+  ಹಿಂತಿರುಗಿ self != ಖಾಲಿ;
 }
 
-static bitset
-AnnotationList__compute_shift_tokens (transitions *trans)
+ಸ್ಥಿರ bitset
+Annotation_List_compute_ಸರಿಸು_ಟೋಕನುಗಳು (transitions *trans)
 {
-  bitset shift_tokens = bitset_create (ntokens, BITSET_FIXED);
-  int i;
-  FOR_EACH_SHIFT (trans, i)
-    bitset_set (shift_tokens, TRANSITION_SYMBOL (trans, i));
-  return shift_tokens;
+  bitset ಸರಿಸು_ಟೋಕನುಗಳು = bitset_create (ntokens, BITSET_FIXED);
+  ಪೂರ್ಣಾಂಕ i;
+  FOR_EACH_ಸರಿಸು (trans, i)
+    bitset_ಗಣ (ಸರಿಸು_ಟೋಕನುಗಳು, TRANSITION_ಚಿಹ್ನೆ (trans, i));
+  ಹಿಂತಿರುಗಿ ಸರಿಸು_ಟೋಕನುಗಳು;
 }
 
-static bitset
-AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
+ಸ್ಥಿರ bitset
+Annotation_List_compute_conflicted_ಟೋಕನುಗಳು (bitset ಸರಿಸು_ಟೋಕನುಗಳು,
                                            reductions *reds)
 {
-  bitset conflicted_tokens = bitset_create (ntokens, BITSET_FIXED);
-  bitset conflicted_tokens_rule = bitset_create (ntokens, BITSET_FIXED);
-  bitset tokens = bitset_create (ntokens, BITSET_FIXED);
+  bitset conflicted_ಟೋಕನುಗಳು = bitset_create (ntokens, BITSET_FIXED);
+  bitset conflicted_ಟೋಕನುಗಳು_ನಿಯಮ = bitset_create (ntokens, BITSET_FIXED);
+  bitset ಟೋಕನುಗಳು = bitset_create (ntokens, BITSET_FIXED);
 
-  bitset_copy (tokens, shift_tokens);
-  for (int i = 0; i < reds->num; ++i)
+  bitset_copy (ಟೋಕನುಗಳು, ಸರಿಸು_ಟೋಕನುಗಳು);
+  ಗಾಗಿ (ಪೂರ್ಣಾಂಕ i = 0; i < reds->ಅಂಕೆ; ++i)
     {
-      bitset_and (conflicted_tokens_rule, tokens, reds->lookaheads[i]);
-      bitset_or (conflicted_tokens,
-                 conflicted_tokens, conflicted_tokens_rule);
-      bitset_or (tokens, tokens, reds->lookaheads[i]);
+      bitset_and (conflicted_ಟೋಕನುಗಳು_ನಿಯಮ, ಟೋಕನುಗಳು, reds->lookaheads[i]);
+      bitset_or (conflicted_ಟೋಕನುಗಳು,
+                 conflicted_ಟೋಕನುಗಳು, conflicted_ಟೋಕನುಗಳು_ನಿಯಮ);
+      bitset_or (ಟೋಕನುಗಳು, ಟೋಕನುಗಳು, reds->lookaheads[i]);
       /* Check that rules are sorted on rule number or the next step in
          AnnotationList__compute_from_inadequacies will misbehave.  */
-      aver (i == 0 || reds->rules[i-1] < reds->rules[i]);
+      aver (i == 0 || reds->ನಿಯಮಗಳು[i-1] < reds->ನಿಯಮಗಳು[i]);
     }
 
-  bitset_free (tokens);
-  bitset_free (conflicted_tokens_rule);
+  bitset_free (ಟೋಕನುಗಳು);
+  bitset_free (conflicted_ಟೋಕನುಗಳು_ನಿಯಮ);
 
-  return conflicted_tokens;
+  ಹಿಂತಿರುಗಿ conflicted_ಟೋಕನುಗಳು;
 }
 
-static bool
-AnnotationList__compute_lhs_contributions (state *s, const rule *the_rule,
-                                           symbol_number conflicted_token,
-                                           bitsetv follow_kernel_items,
+ಸ್ಥಿರ bool
+AnnotationList__compute_lhs_contributions (state *s, ಸ್ಥಿರಾಂಕ ನಿಯಮ *the_ನಿಯಮ,
+                                           ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ conflicted_token,
+                                           bitsetv follow_kernel_ವಸ್ತುಗಳು,
                                            bitsetv always_follows,
                                            state ***predecessors,
-                                           bitset **item_lookahead_sets,
-                                           Sbitset *items,
-                                           struct obstack
+                                           bitset **ಅಂಶ_lookahead_sets,
+                                           Sbitset *ವಸ್ತುಗಳು,
+                                           ರಚನೆ obstack
                                              *annotations_obstackp)
 {
-  goto_number lhs_goto = map_goto (s->number, the_rule->lhs->number);
-  if (bitset_test (always_follows[lhs_goto], conflicted_token))
-    return true;
-  *items = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
+  goto_ಸಂಖ್ಯೆ lhs_goto = map_goto (s->ಸಂಖ್ಯೆ, the_ನಿಯಮ->lhs->ಸಂಖ್ಯೆ);
+  ಆದರೆ (bitset_test (always_follows[lhs_goto], conflicted_token))
+    ಹಿಂತಿರುಗಿ true;
+  *ವಸ್ತುಗಳು = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
   {
-    bitset_iterator biter_item;
-    bitset_bindex item;
-    BITSET_FOR_EACH (biter_item, follow_kernel_items[lhs_goto], item, 0)
-      if (ielr_item_has_lookahead (s, 0, item, conflicted_token,
-                                   predecessors, item_lookahead_sets))
-        Sbitset__set (*items, item);
+    bitset_iterator biter_ಅಂಶ;
+    bitset_bindex ಅಂಶ;
+    BITSET_FOR_EACH (biter_ಅಂಶ, follow_kernel_ವಸ್ತುಗಳು[lhs_goto], ಅಂಶ, 0)
+      ಆದರೆ (ielr_ಅಂಶ_has_lookahead (s, 0, ಅಂಶ, conflicted_token,
+                                   predecessors, ಅಂಶ_lookahead_sets))
+        Sbitset_ಗಣ (*ವಸ್ತುಗಳು, ಅಂಶ);
   }
-  return false;
+  ಹಿಂತಿರುಗಿ false;
 }
 
-static void
+ಸ್ಥಿರ ಶೂನ್ಯ
 AnnotationList__computePredecessorAnnotations (
   AnnotationList *self, state *s,
-  bitsetv follow_kernel_items,
+  bitsetv follow_kernel_ವಸ್ತುಗಳು,
   bitsetv always_follows,
   state ***predecessors,
-  bitset **item_lookahead_sets,
+  bitset **ಅಂಶ_lookahead_sets,
   AnnotationList **annotation_lists,
-  AnnotationIndex *annotation_counts,
-  struct obstack *annotations_obstackp)
+  Annotation_ಸೂಚ್ಯಂಕ *annotation_counts,
+  ರಚನೆ obstack *annotations_obstackp)
 {
-  for (state **predecessor = predecessors[s->number]; *predecessor; ++predecessor)
+  ಗಾಗಿ (state **predecessor = predecessors[s->ಸಂಖ್ಯೆ]; *predecessor; ++predecessor)
     {
-      AnnotationList *annotation_node =
+      AnnotationList *annotation_ಗಂಟು =
         AnnotationList__alloc_on_obstack (
-          self->inadequacyNode->contributionCount, annotations_obstackp);
-      annotation_node->inadequacyNode = self->inadequacyNode;
+          self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2, annotations_obstackp);
+      annotation_ಗಂಟು->inadequacy_ಗಂಟು = self->inadequacy_ಗಂಟು;
       bool potential_contribution = false;
-      bitset *lookaheads = NULL;
+      bitset *lookaheads = ಖಾಲಿ;
 
-      for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+      ಗಾಗಿ (Contribution_ಸೂಚ್ಯಂಕ ci = 0; ci < self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2; ++ci)
         {
-          symbol_number contribution_token =
-            InadequacyList__getContributionToken (self->inadequacyNode, ci)
-            ->content->number;
-          if (AnnotationList__isContributionAlways (self, ci))
+          ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ contribution_token =
+            InadequacyList__getContributionToken (self->inadequacy_ಗಂಟು, ci)
+            ->content->ಸಂಖ್ಯೆ;
+          ಆದರೆ (AnnotationList__isContributionAlways (self, ci))
             {
-              annotation_node->contributions[ci] = NULL;
-              continue;
+              annotation_ಗಂಟು->contributions[ci] = ಖಾಲಿ;
+              ಮುಂದುವರಿ;
             }
-          annotation_node->contributions[ci] =
+          annotation_ಗಂಟು->contributions[ci] =
             Sbitset__new_on_obstack ((*predecessor)->nitems,
                                      annotations_obstackp);
           {
-            size_t predecessor_item = 0;
-            Sbitset sbiter_item;
-            Sbitset__Index self_item;
+            size_t predecessor_ಅಂಶ = 0;
+            Sbitset sbiter_ಅಂಶ;
+            Sbitset_ಸೂಚ್ಯಂಕ self_ಅಂಶ;
             SBITSET__FOR_EACH (self->contributions[ci], s->nitems,
-                               sbiter_item, self_item)
+                               sbiter_ಅಂಶ, self_ಅಂಶ)
               {
                 /* If this kernel item is the beginning of a RHS, it must be
                    the kernel item in the start state, and so it has an empty
@@ -259,77 +259,77 @@ AnnotationList__computePredecessorAnnotations (
                    set is still empty, and so it also should never have been
                    identified as a contribution.  This situation is fortunate
                    because we want to avoid the - 2 below in both cases.  */
-                aver (s->items[self_item] > 1);
+                aver (s->ವಸ್ತುಗಳು[self_ಅಂಶ] > 1);
                 /* If this kernel item is next to the beginning of the RHS,
                    then check all of the predecessor's goto follows for the
                    LHS.  */
-                if (item_number_is_rule_number (ritem[s->items[self_item] - 2]))
+                ಆದರೆ (ಅಂಶ_ಸಂಖ್ಯೆ_is_ನಿಯಮ_ಸಂಖ್ಯೆ (ritem[s->ವಸ್ತುಗಳು[self_ಅಂಶ] - 2]))
                   {
-                    Sbitset items;
-                    if (AnnotationList__compute_lhs_contributions (
+                    Sbitset ವಸ್ತುಗಳು;
+                    ಆದರೆ (AnnotationList__compute_lhs_contributions (
                           *predecessor,
-                          item_rule (&ritem[s->items[self_item]]),
+                          ಅಂಶ_ನಿಯಮ (&ritem[s->ವಸ್ತುಗಳು[self_ಅಂಶ]]),
                           contribution_token,
-                          follow_kernel_items, always_follows, predecessors,
-                          item_lookahead_sets, &items, annotations_obstackp))
+                          follow_kernel_ವಸ್ತುಗಳು, always_follows, predecessors,
+                          ಅಂಶ_lookahead_sets, &ವಸ್ತುಗಳು, annotations_obstackp))
                       {
                         obstack_free (annotations_obstackp,
-                                      annotation_node->contributions[ci]);
-                        annotation_node->contributions[ci] = NULL;
+                                      annotation_ಗಂಟು->contributions[ci]);
+                        annotation_ಗಂಟು->contributions[ci] = ಖಾಲಿ;
                         // "Break" out of SBITSET__FOR_EACH.
-                        goto after_sbitset__for_each;
+                        ಹೋಗು after_sbitset__for_each;
                       }
-                    else
+                    ಇಲ್ಲದಿದ್ದರೆ
                       {
-                        Sbitset__or (annotation_node->contributions[ci],
-                                     annotation_node->contributions[ci],
-                                     items, (*predecessor)->nitems);
-                        obstack_free (annotations_obstackp, items);
+                        Sbitset__or (annotation_ಗಂಟು->contributions[ci],
+                                     annotation_ಗಂಟು->contributions[ci],
+                                     ವಸ್ತುಗಳು, (*predecessor)->nitems);
+                        obstack_free (annotations_obstackp, ವಸ್ತುಗಳು);
                       }
                   }
                 /* If this kernel item is later in the RHS, then check the
                    predecessor item's lookahead set.  */
-                else
+                ಇಲ್ಲದಿದ್ದರೆ
                   {
                     /* We don't have to start the predecessor item search at
                        the beginning every time because items from both
                        states are sorted by their indices in ritem.  */
-                    for (;
-                         predecessor_item < (*predecessor)->nitems;
-                         ++predecessor_item)
-                      if ((*predecessor)->items[predecessor_item]
-                          == s->items[self_item] - 1)
-                        break;
-                    aver (predecessor_item != (*predecessor)->nitems);
-                    if (ielr_item_has_lookahead (*predecessor, 0,
-                                                 predecessor_item,
+                    ಗಾಗಿ (;
+                         predecessor_ಅಂಶ < (*predecessor)->nitems;
+                         ++predecessor_ಅಂಶ)
+                      ಆದರೆ ((*predecessor)->ವಸ್ತುಗಳು[predecessor_ಅಂಶ]
+                          == s->ವಸ್ತುಗಳು[self_ಅಂಶ] - 1)
+                        ನಿಲ್ಲಿಸು;
+                    aver (predecessor_ಅಂಶ != (*predecessor)->nitems);
+                    ಆದರೆ (ielr_ಅಂಶ_has_lookahead (*predecessor, 0,
+                                                 predecessor_ಅಂಶ,
                                                  contribution_token,
                                                  predecessors,
-                                                 item_lookahead_sets))
-                      Sbitset__set (annotation_node->contributions[ci],
-                                    predecessor_item);
+                                                 ಅಂಶ_lookahead_sets))
+                      Sbitset_ಗಣ (annotation_ಗಂಟು->contributions[ci],
+                                    predecessor_ಅಂಶ);
                   }
               }
           after_sbitset__for_each:;
           }
-          if (annotation_node->contributions[ci])
+          ಆದರೆ (annotation_ಗಂಟು->contributions[ci])
             {
               Sbitset biter;
-              Sbitset__Index i;
-              SBITSET__FOR_EACH (annotation_node->contributions[ci],
+              Sbitset_ಸೂಚ್ಯಂಕ i;
+              SBITSET__FOR_EACH (annotation_ಗಂಟು->contributions[ci],
                                  (*predecessor)->nitems, biter, i)
                 {
                   potential_contribution = true;
-                  if (!lookaheads)
+                  ಆದರೆ (!lookaheads)
                     {
                       lookaheads = xnmalloc ((*predecessor)->nitems,
-                                             sizeof *lookaheads);
-                      for (size_t j = 0; j < (*predecessor)->nitems; ++j)
-                        lookaheads[j] = NULL;
+                                             ಗಾತ್ರ *lookaheads);
+                      ಗಾಗಿ (size_t j = 0; j < (*predecessor)->nitems; ++j)
+                        lookaheads[j] = ಖಾಲಿ;
                     }
-                  if (!lookaheads[i])
+                  ಆದರೆ (!lookaheads[i])
                     lookaheads[i] = bitset_create (ntokens, BITSET_FIXED);
-                  bitset_set (lookaheads[i], contribution_token);
+                  bitset_ಗಣ (lookaheads[i], contribution_token);
                 }
             }
         }
@@ -353,132 +353,132 @@ AnnotationList__computePredecessorAnnotations (
            to save space now plus time during state splitting.
          - Otherwise, record the annotation, and compute any resulting
            annotations needed on predecessor states.  */
-      if (potential_contribution)
+      ಆದರೆ (potential_contribution)
         {
-          if (ContributionIndex__none
+          ಆದರೆ (Contribution_ಸೂಚ್ಯಂಕ_none
               != AnnotationList__computeDominantContribution (
-                   annotation_node, (*predecessor)->nitems, lookaheads, true))
+                   annotation_ಗಂಟು, (*predecessor)->nitems, lookaheads, true))
             {
-              obstack_free (annotations_obstackp, annotation_node);
-              annotation_node = NULL;
+              obstack_free (annotations_obstackp, annotation_ಗಂಟು);
+              annotation_ಗಂಟು = ಖಾಲಿ;
             }
           {
-            for (size_t i = 0; i < (*predecessor)->nitems; ++i)
-              if (lookaheads[i])
+            ಗಾಗಿ (size_t i = 0; i < (*predecessor)->nitems; ++i)
+              ಆದರೆ (lookaheads[i])
                 bitset_free (lookaheads[i]);
-            free (lookaheads);
+            ಬಿಡುಗಡೆ (lookaheads);
           }
-          if (annotation_node)
+          ಆದರೆ (annotation_ಗಂಟು)
             {
-              if (AnnotationList__insertInto (annotation_node,
+              ಆದರೆ (Annotation_List_ಸೇರಿಸು_Into (annotation_ಗಂಟು,
                                               &annotation_lists[(*predecessor)
-                                                                ->number],
+                                                                ->ಸಂಖ್ಯೆ],
                                               (*predecessor)->nitems))
                 {
-                  ++annotation_counts[(*predecessor)->number];
+                  ++annotation_counts[(*predecessor)->ಸಂಖ್ಯೆ];
                   AnnotationList__computePredecessorAnnotations (
-                    annotation_node, *predecessor,
-                    follow_kernel_items, always_follows, predecessors,
-                    item_lookahead_sets, annotation_lists, annotation_counts,
+                    annotation_ಗಂಟು, *predecessor,
+                    follow_kernel_ವಸ್ತುಗಳು, always_follows, predecessors,
+                    ಅಂಶ_lookahead_sets, annotation_lists, annotation_counts,
                     annotations_obstackp);
                 }
-              else
-                obstack_free (annotations_obstackp, annotation_node);
+              ಇಲ್ಲದಿದ್ದರೆ
+                obstack_free (annotations_obstackp, annotation_ಗಂಟು);
             }
         }
-      else
-        obstack_free (annotations_obstackp, annotation_node);
+      ಇಲ್ಲದಿದ್ದರೆ
+        obstack_free (annotations_obstackp, annotation_ಗಂಟು);
     }
 }
 
-void
+ಶೂನ್ಯ
 AnnotationList__compute_from_inadequacies (
-  state *s, bitsetv follow_kernel_items, bitsetv always_follows,
-  state ***predecessors, bitset **item_lookahead_sets,
+  state *s, bitsetv follow_kernel_ವಸ್ತುಗಳು, bitsetv always_follows,
+  state ***predecessors, bitset **ಅಂಶ_lookahead_sets,
   InadequacyList **inadequacy_lists, AnnotationList **annotation_lists,
-  AnnotationIndex *annotation_counts,
-  ContributionIndex *max_contributionsp,
-  struct obstack *annotations_obstackp,
-  InadequacyListNodeCount *inadequacy_list_node_count)
+  Annotation_ಸೂಚ್ಯಂಕ *annotation_counts,
+  Contribution_ಸೂಚ್ಯಂಕ *max_contributionsp,
+  ರಚನೆ obstack *annotations_obstackp,
+  Inadequacy_List_ಗಂಟು_ಎಣಿಕೆ *inadequacy_list_ಗಂಟು_ಎಣಿಕೆ)
 {
   /* Return an empty list if s->lookaheads = NULL.  */
-  if (s->consistent)
-    return;
+  ಆದರೆ (s->consistent)
+    ಹಿಂತಿರುಗಿ;
 
   bitsetv all_lookaheads = bitsetv_create (s->nitems, ntokens, BITSET_FIXED);
   bitsetv_ones (all_lookaheads);
-  bitset shift_tokens = AnnotationList__compute_shift_tokens (s->transitions);
-  bitset conflicted_tokens =
-    AnnotationList__compute_conflicted_tokens (shift_tokens, s->reductions);
+  bitset ಸರಿಸು_ಟೋಕನುಗಳು = Annotation_List_compute_ಸರಿಸು_ಟೋಕನುಗಳು (s->transitions);
+  bitset conflicted_ಟೋಕನುಗಳು =
+    Annotation_List_compute_conflicted_ಟೋಕನುಗಳು (ಸರಿಸು_ಟೋಕನುಗಳು, s->reductions);
 
   /* Add an inadequacy annotation for each conflicted_token.  */
   bitset_iterator biter_conflict;
   bitset_bindex conflicted_token;
-  BITSET_FOR_EACH (biter_conflict, conflicted_tokens, conflicted_token, 0)
+  BITSET_FOR_EACH (biter_conflict, conflicted_ಟೋಕನುಗಳು, conflicted_token, 0)
     {
-      AnnotationList *annotation_node;
-      ContributionIndex contribution_count = 0;
+      AnnotationList *annotation_ಗಂಟು;
+      Contribution_ಸೂಚ್ಯಂಕ contribution_ಎಣಿಕೆ = 0;
 
       /* Allocate the annotation node.  */
       {
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
-          if (bitset_test (s->reductions->lookaheads[rule_i],
+        ಗಾಗಿ (ಪೂರ್ಣಾಂಕ ನಿಯಮ_i = 0; ನಿಯಮ_i < s->reductions->ಅಂಕೆ; ++ನಿಯಮ_i)
+          ಆದರೆ (bitset_test (s->reductions->lookaheads[ನಿಯಮ_i],
                            conflicted_token))
-            ++contribution_count;
-        if (bitset_test (shift_tokens, conflicted_token))
-          ++contribution_count;
-        annotation_node =
-          AnnotationList__alloc_on_obstack (contribution_count,
+            ++contribution_ಎಣಿಕೆ;
+        ಆದರೆ (bitset_test (ಸರಿಸು_ಟೋಕನುಗಳು, conflicted_token))
+          ++contribution_ಎಣಿಕೆ;
+        annotation_ಗಂಟು =
+          AnnotationList__alloc_on_obstack (contribution_ಎಣಿಕೆ,
                                             annotations_obstackp);
       }
 
       /* FIXME: Would a BITSET_FRUGAL or BITEST_SPARSE be more efficient?  Now
          or convert it inside InadequacyList__new_conflict?  */
-      bitset actions = bitset_create (s->reductions->num + 1, BITSET_FIXED);
+      bitset actions = bitset_create (s->reductions->ಅಂಕೆ + 1, BITSET_FIXED);
       bool potential_contribution = false;
 
       /* Add a contribution for each reduction that has conflicted_token as a
          lookahead.  */
       {
-        ContributionIndex ci = 0;
-        int item_i = 0;
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
+        Contribution_ಸೂಚ್ಯಂಕ ci = 0;
+        ಪೂರ್ಣಾಂಕ ಅಂಶ_i = 0;
+        ಗಾಗಿ (ಪೂರ್ಣಾಂಕ ನಿಯಮ_i = 0; ನಿಯಮ_i < s->reductions->ಅಂಕೆ; ++ನಿಯಮ_i)
           {
-            rule *the_rule = s->reductions->rules[rule_i];
-            if (bitset_test (s->reductions->lookaheads[rule_i],
+            ನಿಯಮ *the_ನಿಯಮ = s->reductions->ನಿಯಮಗಳು[ನಿಯಮ_i];
+            ಆದರೆ (bitset_test (s->reductions->lookaheads[ನಿಯಮ_i],
                              conflicted_token))
               {
-                bitset_set (actions, rule_i);
+                bitset_ಗಣ (actions, ನಿಯಮ_i);
                 /* If this reduction is on a kernel item, just add it.  */
-                if (!item_number_is_rule_number (the_rule->rhs[0]))
+                ಆದರೆ (!ಅಂಶ_ಸಂಖ್ಯೆ_is_ನಿಯಮ_ಸಂಖ್ಯೆ (the_ನಿಯಮ->rhs[0]))
                   {
-                    annotation_node->contributions[ci] =
+                    annotation_ಗಂಟು->contributions[ci] =
                       Sbitset__new_on_obstack (s->nitems,
                                                annotations_obstackp);
                     /* Catch item_i up to rule_i.  This works because both are
                        sorted on rule number.  */
-                    while (!item_number_is_rule_number (ritem[s->items[item_i]])
-                           || item_number_as_rule_number (ritem[s->items[item_i]]) != the_rule->number)
+                    ಆಗ (!ಅಂಶ_ಸಂಖ್ಯೆ_is_ನಿಯಮ_ಸಂಖ್ಯೆ (ritem[s->ವಸ್ತುಗಳು[ಅಂಶ_i]])
+                           || ಅಂಶ_ಸಂಖ್ಯೆ_as_ನಿಯಮ_ಸಂಖ್ಯೆ (ritem[s->ವಸ್ತುಗಳು[ಅಂಶ_i]]) != the_ನಿಯಮ->ಸಂಖ್ಯೆ)
                       {
-                        ++item_i;
-                        aver (item_i < s->nitems);
+                        ++ಅಂಶ_i;
+                        aver (ಅಂಶ_i < s->nitems);
                       }
-                    Sbitset__set (annotation_node->contributions[ci], item_i);
+                    Sbitset_ಗಣ (annotation_ಗಂಟು->contributions[ci], ಅಂಶ_i);
                   }
                 /* Otherwise, add the kernel items whose lookahead sets
                    contribute the conflicted token to this reduction's
                    lookahead set.  */
-                else if (AnnotationList__compute_lhs_contributions (
-                           s, the_rule, conflicted_token, follow_kernel_items,
-                           always_follows, predecessors, item_lookahead_sets,
-                           &annotation_node->contributions[ci],
+                ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (AnnotationList__compute_lhs_contributions (
+                           s, the_ನಿಯಮ, conflicted_token, follow_kernel_ವಸ್ತುಗಳು,
+                           always_follows, predecessors, ಅಂಶ_lookahead_sets,
+                           &annotation_ಗಂಟು->contributions[ci],
                            annotations_obstackp))
                   {
-                    annotation_node->contributions[ci++] = NULL;
-                    continue;
+                    annotation_ಗಂಟು->contributions[ci++] = ಖಾಲಿ;
+                    ಮುಂದುವರಿ;
                   }
                 /* The lookahead token has to come from somewhere.  */
-                aver (!Sbitset__isEmpty (annotation_node->contributions[ci],
+                aver (!Sbitset_is_ಖಾಲಿಗಳು (annotation_ಗಂಟು->contributions[ci],
                                          s->nitems));
                 ++ci;
                 potential_contribution = true;
@@ -493,101 +493,101 @@ AnnotationList__compute_from_inadequacies (
            the inadequacy to save space now plus time during state splitting.
          - Otherwise, record the annotation and the inadequacy, and compute any
            resulting annotations needed on predecessor states.  */
-      if (potential_contribution)
+      ಆದರೆ (potential_contribution)
         {
-          if (bitset_test (shift_tokens, conflicted_token))
+          ಆದರೆ (bitset_test (ಸರಿಸು_ಟೋಕನುಗಳು, conflicted_token))
             {
-              bitset_set (actions, s->reductions->num);
-              annotation_node->contributions[contribution_count - 1] = NULL;
+              bitset_ಗಣ (actions, s->reductions->ಅಂಕೆ);
+              annotation_ಗಂಟು->contributions[contribution_ಎಣಿಕೆ - 1] = ಖಾಲಿ;
             }
           {
-            InadequacyList *conflict_node =
+            InadequacyList *conflict_ಗಂಟು =
               InadequacyList__new_conflict (
                 s, symbols[conflicted_token], actions,
-                inadequacy_list_node_count);
-            actions = NULL;
-            annotation_node->inadequacyNode = conflict_node;
-            if (ContributionIndex__none
+                inadequacy_list_ಗಂಟು_ಎಣಿಕೆ);
+            actions = ಖಾಲಿ;
+            annotation_ಗಂಟು->inadequacy_ಗಂಟು = conflict_ಗಂಟು;
+            ಆದರೆ (Contribution_ಸೂಚ್ಯಂಕ_none
                 != AnnotationList__computeDominantContribution (
-                     annotation_node, s->nitems, all_lookaheads, true))
+                     annotation_ಗಂಟು, s->nitems, all_lookaheads, true))
               {
-                obstack_free (annotations_obstackp, annotation_node);
-                InadequacyList__delete (conflict_node);
+                obstack_free (annotations_obstackp, annotation_ಗಂಟು);
+                InadequacyList__delete (conflict_ಗಂಟು);
               }
-            else
+            ಇಲ್ಲದಿದ್ದರೆ
               {
-                InadequacyList__prependTo (conflict_node,
-                                           &inadequacy_lists[s->number]);
+                Inadequacy_List_prepend_ಗಮ್ಯ (conflict_ಗಂಟು,
+                                           &inadequacy_lists[s->ಸಂಖ್ಯೆ]);
                 {
                   bool b =
-                    AnnotationList__insertInto (annotation_node,
-                                                &annotation_lists[s->number],
+                    Annotation_List_ಸೇರಿಸು_Into (annotation_ಗಂಟು,
+                                                &annotation_lists[s->ಸಂಖ್ಯೆ],
                                                 s->nitems);
-                  aver (b); (void) b;
+                  aver (b); (ಶೂನ್ಯ) b;
                 }
                 /* This aver makes sure the
                    AnnotationList__computeDominantContribution check above
                    does discard annotations in the simplest case of a S/R
                    conflict with no token precedence.  */
-                aver (!bitset_test (shift_tokens, conflicted_token)
+                aver (!bitset_test (ಸರಿಸು_ಟೋಕನುಗಳು, conflicted_token)
                       || symbols[conflicted_token]->content->prec);
-                ++annotation_counts[s->number];
-                if (contribution_count > *max_contributionsp)
-                  *max_contributionsp = contribution_count;
+                ++annotation_counts[s->ಸಂಖ್ಯೆ];
+                ಆದರೆ (contribution_ಎಣಿಕೆ > *max_contributionsp)
+                  *max_contributionsp = contribution_ಎಣಿಕೆ;
                 AnnotationList__computePredecessorAnnotations (
-                  annotation_node, s,
-                  follow_kernel_items, always_follows, predecessors,
-                  item_lookahead_sets, annotation_lists, annotation_counts,
+                  annotation_ಗಂಟು, s,
+                  follow_kernel_ವಸ್ತುಗಳು, always_follows, predecessors,
+                  ಅಂಶ_lookahead_sets, annotation_lists, annotation_counts,
                   annotations_obstackp);
               }
           }
         }
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
         {
           bitset_free (actions);
-          obstack_free (annotations_obstackp, annotation_node);
+          obstack_free (annotations_obstackp, annotation_ಗಂಟು);
         }
     }
 
   bitsetv_free (all_lookaheads);
-  bitset_free (shift_tokens);
-  bitset_free (conflicted_tokens);
+  bitset_free (ಸರಿಸು_ಟೋಕನುಗಳು);
+  bitset_free (conflicted_ಟೋಕನುಗಳು);
 }
 
-void
-AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
+ಶೂನ್ಯ
+AnnotationList__debug (AnnotationList ಸ್ಥಿರಾಂಕ *self, size_t nitems, ಪೂರ್ಣಾಂಕ spaces)
 {
-  AnnotationList const *a;
-  AnnotationIndex ai;
-  for (a = self, ai = 0; a; a = a->next, ++ai)
+  AnnotationList ಸ್ಥಿರಾಂಕ *a;
+  Annotation_ಸೂಚ್ಯಂಕ ai;
+  ಗಾಗಿ (a = self, ai = 0; a; a = a->ಮುಂದಿನ, ++ai)
     {
       fprintf (stderr, "%*sAnnotation %d (manifesting state %d):\n",
                spaces, "",
-               ai, a->inadequacyNode->manifestingState->number);
+               ai, a->inadequacy_ಗಂಟು->manifestingState->ಸಂಖ್ಯೆ);
       bitset_bindex rulei
-        = bitset_first (a->inadequacyNode->inadequacy.conflict.actions);
-      for (ContributionIndex ci = 0; ci < a->inadequacyNode->contributionCount; ++ci)
+        = bitset_ಮೊದಲ (a->inadequacy_ಗಂಟು->inadequacy.conflict.actions);
+      ಗಾಗಿ (Contribution_ಸೂಚ್ಯಂಕ ci = 0; ci < a->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2; ++ci)
         {
-          symbol_number token =
-            InadequacyList__getContributionToken (a->inadequacyNode, ci)
-            ->content->number;
+          ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ token =
+            InadequacyList__getContributionToken (a->inadequacy_ಗಂಟು, ci)
+            ->content->ಸಂಖ್ಯೆ;
           fprintf (stderr, "%*s", spaces+2, "");
-          if (ci == InadequacyList__getShiftContributionIndex (
-                                                               a->inadequacyNode))
+          ಆದರೆ (ci == Inadequacy_List_get_ಸರಿಸು_Contribution_ಸೂಚ್ಯಂಕ (
+                                                               a->inadequacy_ಗಂಟು))
             fprintf (stderr, "Contributes shift of token %d.\n", token);
-          else
+          ಇಲ್ಲದಿದ್ದರೆ
             {
               fprintf (stderr, "Contributes token %d", token);
               aver (rulei != BITSET_BINDEX_MAX);
               fprintf (stderr, " as lookahead, rule number %d",
-                       a->inadequacyNode->manifestingState
-                       ->reductions->rules[rulei]->number);
+                       a->inadequacy_ಗಂಟು->manifestingState
+                       ->reductions->ನಿಯಮಗಳು[rulei]->ಸಂಖ್ಯೆ);
               rulei =
-                bitset_next (a->inadequacyNode->inadequacy.conflict.actions,
+                bitset_ಮುಂದಿನ (a->inadequacy_ಗಂಟು->inadequacy.conflict.actions,
                              rulei+1);
-              if (AnnotationList__isContributionAlways (a, ci))
+              ಆದರೆ (AnnotationList__isContributionAlways (a, ci))
                 fprintf (stderr, " always.");
-              else
+              ಇಲ್ಲದಿದ್ದರೆ
                 {
                   fprintf (stderr, ", items: ");
                   Sbitset__fprint (a->contributions[ci], nitems, stderr);
@@ -598,23 +598,23 @@ AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
     }
 }
 
-void
-AnnotationList__computeLookaheadFilter (AnnotationList const *self,
+ಶೂನ್ಯ
+AnnotationList__computeLookaheadFilter (AnnotationList ಸ್ಥಿರಾಂಕ *self,
                                         size_t nitems,
                                         bitsetv lookahead_filter)
 {
   bitsetv_zero (lookahead_filter);
-  for (; self; self = self->next)
-    for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
-      if (!AnnotationList__isContributionAlways (self, ci))
+  ಗಾಗಿ (; self; self = self->ಮುಂದಿನ)
+    ಗಾಗಿ (Contribution_ಸೂಚ್ಯಂಕ ci = 0; ci < self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2; ++ci)
+      ಆದರೆ (!AnnotationList__isContributionAlways (self, ci))
         {
-          symbol_number token =
-            InadequacyList__getContributionToken (self->inadequacyNode, ci)
-            ->content->number;
-          Sbitset__Index item;
+          ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ token =
+            InadequacyList__getContributionToken (self->inadequacy_ಗಂಟು, ci)
+            ->content->ಸಂಖ್ಯೆ;
+          Sbitset_ಸೂಚ್ಯಂಕ ಅಂಶ;
           Sbitset biter;
-          SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
-            bitset_set (lookahead_filter[item], token);
+          SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, ಅಂಶ)
+            bitset_ಗಣ (lookahead_filter[ಅಂಶ], token);
         }
 }
 
@@ -635,138 +635,138 @@ AnnotationList__computeLookaheadFilter (AnnotationList const *self,
  *   - \c result = true iff contribution \c ci in \c self is made by the state
  *     described by \c lookaheads.
  */
-static bool
-AnnotationList__stateMakesContribution (AnnotationList const *self,
-                                        size_t nitems, ContributionIndex ci,
+ಸ್ಥಿರ bool
+AnnotationList__stateMakesContribution (AnnotationList ಸ್ಥಿರಾಂಕ *self,
+                                        size_t nitems, Contribution_ಸೂಚ್ಯಂಕ ci,
                                         bitset *lookaheads)
 {
-  if (AnnotationList__isContributionAlways (self, ci))
-    return true;
-  if (!lookaheads)
-    return false;
+  ಆದರೆ (AnnotationList__isContributionAlways (self, ci))
+    ಹಿಂತಿರುಗಿ true;
+  ಆದರೆ (!lookaheads)
+    ಹಿಂತಿರುಗಿ false;
   {
-    symbol_number token =
-      InadequacyList__getContributionToken (self->inadequacyNode, ci)
-      ->content->number;
-    Sbitset__Index item;
+    ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ token =
+      InadequacyList__getContributionToken (self->inadequacy_ಗಂಟು, ci)
+      ->content->ಸಂಖ್ಯೆ;
+    Sbitset_ಸೂಚ್ಯಂಕ ಅಂಶ;
     Sbitset biter;
-    SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
-      if (lookaheads[item] && bitset_test (lookaheads[item], token))
-        return true;
+    SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, ಅಂಶ)
+      ಆದರೆ (lookaheads[ಅಂಶ] && bitset_test (lookaheads[ಅಂಶ], token))
+        ಹಿಂತಿರುಗಿ true;
   }
-  return false;
+  ಹಿಂತಿರುಗಿ false;
 }
 
-ContributionIndex
-AnnotationList__computeDominantContribution (AnnotationList const *self,
+Contribution_ಸೂಚ್ಯಂಕ
+AnnotationList__computeDominantContribution (AnnotationList ಸ್ಥಿರಾಂಕ *self,
                                              size_t nitems, bitset *lookaheads,
-                                             bool require_split_stable)
+                                             bool require_ವಿಭಜಿಸು_stable)
 {
-  ContributionIndex const ci_shift =
-    InadequacyList__getShiftContributionIndex (self->inadequacyNode);
+  Contribution_ಸೂಚ್ಯಂಕ ಸ್ಥಿರಾಂಕ ci_ಸರಿಸು =
+    Inadequacy_List_get_ಸರಿಸು_Contribution_ಸೂಚ್ಯಂಕ (self->inadequacy_ಗಂಟು);
 
-  symbol *token = self->inadequacyNode->inadequacy.conflict.token;
+  ಚಿಹ್ನೆ *token = self->inadequacy_ಗಂಟು->inadequacy.conflict.token;
 
   /* S/R conflict.  */
-  if (ci_shift != ContributionIndex__none)
+  ಆದರೆ (ci_ಸರಿಸು != Contribution_ಸೂಚ್ಯಂಕ_none)
     {
-      bool find_stable_domination_over_shift = false;
-      bool find_stable_error_action_domination = false;
+      bool ಕಂಡುಹಿಡಿ_stable_domination_over_ಸರಿಸು = false;
+      bool ಕಂಡುಹಿಡಿ_stable_error_action_domination = false;
       {
-        int shift_precedence = token->content->prec;
+        ಪೂರ್ಣಾಂಕ ಸರಿಸು_precedence = token->content->prec;
 
         /* If the token has no precedence set, shift is always chosen.  */
-        if (!shift_precedence)
-          return ci_shift;
+        ಆದರೆ (!ಸರಿಸು_precedence)
+          ಹಿಂತಿರುಗಿ ci_ಸರಿಸು;
 
         /* Figure out which reductions contribute, which of those would
            dominate in a R/R comparison, and whether any reduction dominates
            the shift so that the R/R comparison is actually needed.  */
-        ContributionIndex ci_rr_dominator = ContributionIndex__none;
-        int actioni;
-        ContributionIndex ci;
-        for (ci = 0,
-               actioni = bitset_first (self->inadequacyNode->inadequacy
+        Contribution_ಸೂಚ್ಯಂಕ ci_rr_dominator = Contribution_ಸೂಚ್ಯಂಕ_none;
+        ಪೂರ್ಣಾಂಕ actioni;
+        Contribution_ಸೂಚ್ಯಂಕ ci;
+        ಗಾಗಿ (ci = 0,
+               actioni = bitset_ಮೊದಲ (self->inadequacy_ಗಂಟು->inadequacy
                                        .conflict.actions);
-             ci < self->inadequacyNode->contributionCount;
+             ci < self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2;
              ++ci,
-               actioni = bitset_next (self->inadequacyNode->inadequacy
+               actioni = bitset_ಮುಂದಿನ (self->inadequacy_ಗಂಟು->inadequacy
                                       .conflict.actions, actioni+1))
           {
-            int reduce_precedence = 0;
-            if (ci == ci_shift)
-              continue;
+            ಪೂರ್ಣಾಂಕ reduce_precedence = 0;
+            ಆದರೆ (ci == ci_ಸರಿಸು)
+              ಮುಂದುವರಿ;
             {
-              rule *r = self->inadequacyNode->manifestingState
-                          ->reductions->rules[actioni];
-              if (r->prec)
+              ನಿಯಮ *r = self->inadequacy_ಗಂಟು->manifestingState
+                          ->reductions->ನಿಯಮಗಳು[actioni];
+              ಆದರೆ (r->prec)
                 reduce_precedence = r->prec->prec;
             }
             /* If there's no need to check whether this reduction actually
                contributes because the shift eliminates it from the R/R
                comparison anyway, continue to the next reduction.  */
-            if (reduce_precedence
-                && (reduce_precedence < shift_precedence
-                    || (reduce_precedence == shift_precedence
-                        && token->content->assoc == right_assoc)))
-              continue;
-            if (!AnnotationList__stateMakesContribution (self, nitems, ci,
+            ಆದರೆ (reduce_precedence
+                && (reduce_precedence < ಸರಿಸು_precedence
+                    || (reduce_precedence == ಸರಿಸು_precedence
+                        && token->content->assoc == ಬಲ_assoc)))
+              ಮುಂದುವರಿ;
+            ಆದರೆ (!AnnotationList__stateMakesContribution (self, nitems, ci,
                                                          lookaheads))
-              continue;
+              ಮುಂದುವರಿ;
             /* This uneliminated reduction contributes, so see if it can cause
                an error action.  */
-            if (reduce_precedence == shift_precedence
+            ಆದರೆ (reduce_precedence == ಸರಿಸು_precedence
                  && token->content->assoc == non_assoc)
               {
                 /* It's not possible to find split-stable domination over
                    shift after a potential %nonassoc.  */
-                if (find_stable_domination_over_shift)
-                  return ContributionIndex__none;
-                if (!require_split_stable
+                ಆದರೆ (ಕಂಡುಹಿಡಿ_stable_domination_over_ಸರಿಸು)
+                  ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
+                ಆದರೆ (!require_ವಿಭಜಿಸು_stable
                     || AnnotationList__isContributionAlways (self, ci))
-                  return ContributionIndex__error_action;
-                find_stable_error_action_domination = true;
+                  ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_error_action;
+                ಕಂಡುಹಿಡಿ_stable_error_action_domination = true;
               }
             /* Consider this uneliminated contributing reduction in the R/R
                comparison.  */
-            if (ci_rr_dominator == ContributionIndex__none)
+            ಆದರೆ (ci_rr_dominator == Contribution_ಸೂಚ್ಯಂಕ_none)
               ci_rr_dominator = ci;
             /* If precedence is set for this uneliminated contributing
                reduction, it dominates the shift, so try to figure out which
                reduction dominates the R/R comparison.  */
-            if (reduce_precedence)
+            ಆದರೆ (reduce_precedence)
               {
                 /* It's not possible to find split-stable error action
                    domination after a potential reduction.  */
-                if (find_stable_error_action_domination)
-                  return ContributionIndex__none;
-                if (!require_split_stable)
-                  return ci_rr_dominator;
-                if (!AnnotationList__isContributionAlways (self,
+                ಆದರೆ (ಕಂಡುಹಿಡಿ_stable_error_action_domination)
+                  ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
+                ಆದರೆ (!require_ವಿಭಜಿಸು_stable)
+                  ಹಿಂತಿರುಗಿ ci_rr_dominator;
+                ಆದರೆ (!AnnotationList__isContributionAlways (self,
                                                            ci_rr_dominator))
-                  return ContributionIndex__none;
-                if (AnnotationList__isContributionAlways (self, ci))
-                  return ci_rr_dominator;
-                find_stable_domination_over_shift = true;
+                  ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
+                ಆದರೆ (AnnotationList__isContributionAlways (self, ci))
+                  ಹಿಂತಿರುಗಿ ci_rr_dominator;
+                ಕಂಡುಹಿಡಿ_stable_domination_over_ಸರಿಸು = true;
               }
           }
       }
-      if (find_stable_domination_over_shift
-          || find_stable_error_action_domination)
-        return ContributionIndex__none;
+      ಆದರೆ (ಕಂಡುಹಿಡಿ_stable_domination_over_ಸರಿಸು
+          || ಕಂಡುಹಿಡಿ_stable_error_action_domination)
+        ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
       /* No reduce or error action domination found, so shift dominates.  */
-      return ci_shift;
+      ಹಿಂತಿರುಗಿ ci_ಸರಿಸು;
     }
 
   /* R/R conflict, so the reduction with the lowest rule number dominates.
      Fortunately, contributions are sorted by rule number.  */
-  for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
-    if (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
+  ಗಾಗಿ (Contribution_ಸೂಚ್ಯಂಕ ci = 0; ci < self->inadequacy_ಗಂಟು->contribution_ಎಣಿಕೆ_2; ++ci)
+    ಆದರೆ (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
       {
-        if (require_split_stable
+        ಆದರೆ (require_ವಿಭಜಿಸು_stable
             && !AnnotationList__isContributionAlways (self, ci))
-          return ContributionIndex__none;
-        return ci;
+          ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
+        ಹಿಂತಿರುಗಿ ci;
       }
-  return ContributionIndex__none;
+  ಹಿಂತಿರುಗಿ Contribution_ಸೂಚ್ಯಂಕ_none;
 }

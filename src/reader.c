@@ -18,71 +18,71 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ಅನ್ತರ್ಭಾವ <config.h>
+#ಅನ್ತರ್ಭಾವ "system.h"
 
-#include <quote.h>
-#include <vasnprintf.h>
+#ಅನ್ತರ್ಭಾವ <quote.h>
+#ಅನ್ತರ್ಭಾವ <vasnprintf.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "gram.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "symlist.h"
-#include "symtab.h"
-#include "scan-gram.h"
-#include "scan-code.h"
+#ಅನ್ತರ್ಭಾವ "complain.h"
+#ಅನ್ತರ್ಭಾವ "conflicts.h"
+#ಅನ್ತರ್ಭಾವ "files.h"
+#ಅನ್ತರ್ಭಾವ "fixits.h"
+#ಅನ್ತರ್ಭಾವ "getargs.h"
+#ಅನ್ತರ್ಭಾವ "gram.h"
+#ಅನ್ತರ್ಭಾವ "muscle-tab.h"
+#ಅನ್ತರ್ಭಾವ "reader.h"
+#ಅನ್ತರ್ಭಾವ "symlist.h"
+#ಅನ್ತರ್ಭಾವ "symtab.h"
+#ಅನ್ತರ್ಭಾವ "scan-gram.h"
+#ಅನ್ತರ್ಭಾವ "scan-code.h"
 
-static void prepare_percent_define_front_end_variables (void);
-static void check_and_convert_grammar (void);
+ಸ್ಥಿರ ಶೂನ್ಯ prepare_percent_define_front_ಕೊನೆ_variables (ಶೂನ್ಯ);
+ಸ್ಥಿರ ಶೂನ್ಯ check_and_convert_grammar (ಶೂನ್ಯ);
 
-static symbol_list *grammar = NULL;
-symbol_list *start_symbols = NULL;
-merger_list *merge_functions = NULL;
+ಸ್ಥಿರ ಚಿಹ್ನೆ_list *grammar = ಖಾಲಿ;
+ಚಿಹ್ನೆ_list *ಆರಂಭ_symbols = ಖಾಲಿ;
+merger_list *ವಿಲೀನ_functions = ಖಾಲಿ;
 
 /* Was %union seen?  */
-bool union_seen = false;
+bool union_ನೋಡಿದ = false;
 
 /* Should rules have a default precedence?  */
 bool default_prec = true;
 
 
-void
-grammar_start_symbols_add (symbol_list *syms)
+ಶೂನ್ಯ
+grammar_ಆರಂಭ_symbols_ಕೂಡಿಸು (ಚಿಹ್ನೆ_list *syms)
 {
   /* Report and ignore duplicates.  Append the others to START_SYMBOLS.  */
-  symbol_list *last = symbol_list_last (start_symbols);
-  for (symbol_list *l = syms; l && l->content.sym; /* nothing */)
+  ಚಿಹ್ನೆ_list *ಕೊನೆಯ = ಚಿಹ್ನೆ_list_ಕೊನೆಯ (ಆರಂಭ_symbols);
+  ಗಾಗಿ (ಚಿಹ್ನೆ_list *l = syms; l && l->content.sym; /* nothing */)
     {
       /* Is there a previous definition?  */
-      symbol_list *first = symbol_list_find_symbol (start_symbols, l->content.sym);
-      if (first)
+      ಚಿಹ್ನೆ_list *ಮೊದಲ = ಚಿಹ್ನೆ_list_ಕಂಡುಹಿಡಿ_ಚಿಹ್ನೆ (ಆರಂಭ_symbols, l->content.sym);
+      ಆದರೆ (ಮೊದಲ)
         {
-          duplicate_directive ("%start", first->sym_loc, l->sym_loc);
-          symbol_list *dupl = l;
-          l = l->next;
-          dupl->next = NULL;
-          symbol_list_free (dupl);
+          duplicate_directive ("%start", ಮೊದಲ->sym_loc, l->sym_loc);
+          ಚಿಹ್ನೆ_list *dupl = l;
+          l = l->ಮುಂದಿನ;
+          dupl->ಮುಂದಿನ = ಖಾಲಿ;
+          ಚಿಹ್ನೆ_list_free (dupl);
         }
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
         {
-          if (last)
+          ಆದರೆ (ಕೊನೆಯ)
             {
-              last->next = l;
-              last = l;
+              ಕೊನೆಯ->ಮುಂದಿನ = l;
+              ಕೊನೆಯ = l;
             }
-          else
+          ಇಲ್ಲದಿದ್ದರೆ
             {
-              last = l;
-              start_symbols = last;
+              ಕೊನೆಯ = l;
+              ಆರಂಭ_symbols = ಕೊನೆಯ;
             }
-          symbol_list *next = l->next;
-          l->next = NULL;
-          l = next;
+          ಚಿಹ್ನೆ_list *ಮುಂದಿನ = l->ಮುಂದಿನ;
+          l->ಮುಂದಿನ = ಖಾಲಿ;
+          l = ಮುಂದಿನ;
         }
     }
 }
@@ -94,31 +94,31 @@ grammar_start_symbols_add (symbol_list *syms)
 | function, if new, in MERGER_LIST.                                       |
 `------------------------------------------------------------------------*/
 
-static int
-get_merge_function (uniqstr name)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ
+get_ವಿಲೀನ_function (uniqstr name)
 {
-  if (! glr_parser)
-    return 0;
+  ಆದರೆ (! glr_parser)
+    ಹಿಂತಿರುಗಿ 0;
 
   merger_list *syms;
-  merger_list head;
-  int n;
+  merger_list ತಲೆ;
+  ಪೂರ್ಣಾಂಕ n;
 
-  head.next = merge_functions;
-  for (syms = &head, n = 1; syms->next; syms = syms->next, n += 1)
-    if (UNIQSTR_EQ (name, syms->next->name))
-      break;
-  if (syms->next == NULL)
+  ತಲೆ.ಮುಂದಿನ = ವಿಲೀನ_functions;
+  ಗಾಗಿ (syms = &ತಲೆ, n = 1; syms->ಮುಂದಿನ; syms = syms->ಮುಂದಿನ, n += 1)
+    ಆದರೆ (UNIQSTR_EQ (name, syms->ಮುಂದಿನ->name))
+      ನಿಲ್ಲಿಸು;
+  ಆದರೆ (syms->ಮುಂದಿನ == ಖಾಲಿ)
     {
-      syms->next = xmalloc (sizeof syms->next[0]);
-      syms->next->name = uniqstr_new (name);
+      syms->ಮುಂದಿನ = xmalloc (ಗಾತ್ರ syms->ಮುಂದಿನ[0]);
+      syms->ಮುಂದಿನ->name = uniqstr_new (name);
       /* After all symbol type declarations have been parsed, packgram invokes
          record_merge_function_type to set the type.  */
-      syms->next->sym = NULL;
-      syms->next->next = NULL;
-      merge_functions = head.next;
+      syms->ಮುಂದಿನ->sym = ಖಾಲಿ;
+      syms->ಮುಂದಿನ->ಮುಂದಿನ = ಖಾಲಿ;
+      ವಿಲೀನ_functions = ತಲೆ.ಮುಂದಿನ;
     }
-  return n;
+  ಹಿಂತಿರುಗಿ n;
 }
 
 /*-------------------------------------------------------------------.
@@ -127,39 +127,39 @@ get_merge_function (uniqstr name)
 | of the rule whose %merge declaration is at DECLARATION_LOC.        |
 `-------------------------------------------------------------------*/
 
-static void
-record_merge_function_type (int merger, symbol *sym, location declaration_loc)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ದಾಖಲೆ_ವಿಲೀನ_function_type (ಪೂರ್ಣಾಂಕ merger, ಚಿಹ್ನೆ *sym, location declaration_loc)
 {
-  if (merger <= 0)
-    return;
+  ಆದರೆ (merger <= 0)
+    ಹಿಂತಿರುಗಿ;
 
   uniqstr type
     = sym->content->type_name ? sym->content->type_name : uniqstr_new ("");
 
-  merger_list *merge_function;
-  int merger_find = 1;
-  for (merge_function = merge_functions;
-       merge_function != NULL && merger_find != merger;
-       merge_function = merge_function->next)
-    merger_find += 1;
-  aver (merge_function != NULL && merger_find == merger);
-  if (merge_function->sym && merge_function->sym->content->type_name)
+  merger_list *ವಿಲೀನ_function;
+  ಪೂರ್ಣಾಂಕ merger_ಕಂಡುಹಿಡಿ = 1;
+  ಗಾಗಿ (ವಿಲೀನ_function = ವಿಲೀನ_functions;
+       ವಿಲೀನ_function != ಖಾಲಿ && merger_ಕಂಡುಹಿಡಿ != merger;
+       ವಿಲೀನ_function = ವಿಲೀನ_function->ಮುಂದಿನ)
+    merger_ಕಂಡುಹಿಡಿ += 1;
+  aver (ವಿಲೀನ_function != ಖಾಲಿ && merger_ಕಂಡುಹಿಡಿ == merger);
+  ಆದರೆ (ವಿಲೀನ_function->sym && ವಿಲೀನ_function->sym->content->type_name)
     {
-      if (!UNIQSTR_EQ (merge_function->sym->content->type_name, type))
+      ಆದರೆ (!UNIQSTR_EQ (ವಿಲೀನ_function->sym->content->type_name, type))
         {
           complain (&declaration_loc, complaint,
                     _("result type clash on merge function %s: "
                       "<%s> != <%s>"),
-                    quote (merge_function->name), type,
-                    merge_function->sym->content->type_name);
-          subcomplain (&merge_function->type_declaration_loc, complaint,
+                    quote (ವಿಲೀನ_function->name), type,
+                    ವಿಲೀನ_function->sym->content->type_name);
+          subcomplain (&ವಿಲೀನ_function->type_declaration_loc, complaint,
                        _("previous declaration"));
         }
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      merge_function->sym = sym;
-      merge_function->type_declaration_loc = declaration_loc;
+      ವಿಲೀನ_function->sym = sym;
+      ವಿಲೀನ_function->type_declaration_loc = declaration_loc;
     }
 }
 
@@ -167,14 +167,14 @@ record_merge_function_type (int merger, symbol *sym, location declaration_loc)
 | Free all merge-function definitions.  |
 `--------------------------------------*/
 
-void
-free_merger_functions (void)
+ಶೂನ್ಯ
+free_merger_functions (ಶೂನ್ಯ)
 {
-  merger_list *L0 = merge_functions;
-  while (L0)
+  merger_list *L0 = ವಿಲೀನ_functions;
+  ಆಗ (L0)
     {
-      merger_list *L1 = L0->next;
-      free (L0);
+      merger_list *L1 = L0->ಮುಂದಿನ;
+      ಬಿಡುಗಡೆ (L0);
       L0 = L1;
     }
 }
@@ -192,42 +192,42 @@ free_merger_functions (void)
 `-------------------------------------------------------------------*/
 
 /* The (currently) last symbol of GRAMMAR. */
-static symbol_list *grammar_end = NULL;
+ಸ್ಥಿರ ಚಿಹ್ನೆ_list *grammar_ಕೊನೆ = ಖಾಲಿ;
 
 /* Append SYM to the grammar.  */
-static symbol_list *
-grammar_symbol_append (symbol *sym, location loc)
+ಸ್ಥಿರ ಚಿಹ್ನೆ_list *
+grammar_ಚಿಹ್ನೆ_append (ಚಿಹ್ನೆ *sym, location loc)
 {
-  symbol_list *p = symbol_list_sym_new (sym, loc);
+  ಚಿಹ್ನೆ_list *p = ಚಿಹ್ನೆ_list_sym_new (sym, loc);
 
-  if (grammar_end)
-    grammar_end->next = p;
-  else
+  ಆದರೆ (grammar_ಕೊನೆ)
+    grammar_ಕೊನೆ->ಮುಂದಿನ = p;
+  ಇಲ್ಲದಿದ್ದರೆ
     grammar = p;
 
-  grammar_end = p;
+  grammar_ಕೊನೆ = p;
 
   /* A null SYM stands for an end of rule; it is not an actual
      part of it.  */
-  if (sym)
+  ಆದರೆ (sym)
     ++nritems;
 
-  return p;
+  ಹಿಂತಿರುಗಿ p;
 }
 
-static void
-assign_named_ref (symbol_list *p, named_ref *name)
+ಸ್ಥಿರ ಶೂನ್ಯ
+ನಿಯೋಜಿಸು_named_ref (ಚಿಹ್ನೆ_list *p, named_ref *name)
 {
-  symbol *sym = p->content.sym;
+  ಚಿಹ್ನೆ *sym = p->content.sym;
 
-  if (name->id == sym->tag)
+  ಆದರೆ (name->id == sym->ಟ್ಯಾಗ್)
     {
       complain (&name->loc, Wother,
                 _("duplicated symbol name for %s ignored"),
-                quote (sym->tag));
+                quote (sym->ಟ್ಯಾಗ್));
       named_ref_free (name);
     }
-  else
+  ಇಲ್ಲದಿದ್ದರೆ
     p->named_ref = name;
 }
 
@@ -235,32 +235,32 @@ assign_named_ref (symbol_list *p, named_ref *name)
 /* The rule currently being defined, and the previous rule.
    CURRENT_RULE points to the first LHS of the current rule, while
    PREVIOUS_RULE_END points to the *end* of the previous rule (NULL).  */
-static symbol_list *current_rule = NULL;
-static symbol_list *previous_rule_end = NULL;
+ಸ್ಥಿರ ಚಿಹ್ನೆ_list *current_ನಿಯಮ = ಖಾಲಿ;
+ಸ್ಥಿರ ಚಿಹ್ನೆ_list *ಹಿಂದಿನ_ನಿಯಮ_ಕೊನೆ = ಖಾಲಿ;
 
 
 /*----------------------------------------------.
 | Create a new rule for LHS in to the GRAMMAR.  |
 `----------------------------------------------*/
 
-void
-grammar_current_rule_begin (symbol *lhs, location loc,
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_begin (ಚಿಹ್ನೆ *lhs, location loc,
                             named_ref *lhs_name)
 {
   /* Start a new rule and record its lhs.  */
   ++nrules;
-  previous_rule_end = grammar_end;
+  ಹಿಂದಿನ_ನಿಯಮ_ಕೊನೆ = grammar_ಕೊನೆ;
 
-  current_rule = grammar_symbol_append (lhs, loc);
-  if (lhs_name)
-    assign_named_ref (current_rule, named_ref_copy (lhs_name));
+  current_ನಿಯಮ = grammar_ಚಿಹ್ನೆ_append (lhs, loc);
+  ಆದರೆ (lhs_name)
+    ನಿಯೋಜಿಸು_named_ref (current_ನಿಯಮ, named_ref_copy (lhs_name));
 
   /* Mark the rule's lhs as a nonterminal if not already so.  */
-  if (lhs->content->class == unknown_sym || lhs->content->class == pct_type_sym)
-    symbol_class_set (lhs, nterm_sym, empty_loc, false);
-  else if (lhs->content->class == token_sym)
+  ಆದರೆ (lhs->content->class == unknown_sym || lhs->content->class == pct_type_sym)
+    ಚಿಹ್ನೆ_class_ಗಣ (lhs, nterm_sym, ಖಾಲಿಗಳು_loc, false);
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (lhs->content->class == token_sym)
     complain (&loc, complaint, _("rule given for %s, which is a token"),
-              lhs->tag);
+              lhs->ಟ್ಯಾಗ್);
 }
 
 
@@ -272,21 +272,21 @@ grammar_current_rule_begin (symbol *lhs, location loc,
 |      "exp: { $$ = 1; } { $$ = $1; }".                                 |
 `----------------------------------------------------------------------*/
 
-static bool
-symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
+ಸ್ಥಿರ bool
+ಚಿಹ್ನೆ_should_be_ಬಳಸಿದ (ಚಿಹ್ನೆ_list ಸ್ಥಿರಾಂಕ *s, bool *midrule_warning)
 {
-  if (symbol_code_props_get (s->content.sym, destructor)->code)
-    return true;
-  if ((s->midrule && s->midrule->action_props.is_value_used)
-      || (s->midrule_parent_rule
-          && (symbol_list_n_get (s->midrule_parent_rule,
-                                 s->midrule_parent_rhs_index)
-              ->action_props.is_value_used)))
+  ಆದರೆ (ಚಿಹ್ನೆ_ಸಂಕೇತ_props_get (s->content.sym, destructor)->ಸಂಕೇತ_2)
+    ಹಿಂತಿರುಗಿ true;
+  ಆದರೆ ((s->midrule && s->midrule->action_props.is_ಮೌಲ್ಯ_ಬಳಸಿದ)
+      || (s->midrule_ಪೋಷಕ_ನಿಯಮ
+          && (ಚಿಹ್ನೆ_list_n_get (s->midrule_ಪೋಷಕ_ನಿಯಮ,
+                                 s->midrule_ಪೋಷಕ_rhs_ಸೂಚ್ಯಂಕ)
+              ->action_props.is_ಮೌಲ್ಯ_ಬಳಸಿದ)))
     {
       *midrule_warning = true;
-      return true;
+      ಹಿಂತಿರುಗಿ true;
     }
-  return false;
+  ಹಿಂತಿರುಗಿ false;
 }
 
 /*-----------------------------------------------------------------.
@@ -295,11 +295,11 @@ symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
 | the default action.                                              |
 `-----------------------------------------------------------------*/
 
-static void
-grammar_rule_check_and_complete (symbol_list *r)
+ಸ್ಥಿರ ಶೂನ್ಯ
+grammar_ನಿಯಮ_check_and_complete (ಚಿಹ್ನೆ_list *r)
 {
-  const symbol *lhs = r->content.sym;
-  const symbol *first_rhs = r->next->content.sym;
+  ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *lhs = r->content.sym;
+  ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *ಮೊದಲ_rhs = r->ಮುಂದಿನ->content.sym;
 
   /* Type check.
 
@@ -308,39 +308,39 @@ grammar_rule_check_and_complete (symbol_list *r)
 
      Don't worry about the default action if $$ is untyped, since $$'s
      value can't be used.  */
-  if (!r->action_props.code && lhs->content->type_name)
+  ಆದರೆ (!r->action_props.ಸಂಕೇತ_2 && lhs->content->type_name)
     {
       /* If $$ is being set in default way, report if any type mismatch.  */
-      if (first_rhs)
+      ಆದರೆ (ಮೊದಲ_rhs)
         {
-          char const *lhs_type = lhs->content->type_name;
-          char const *rhs_type =
-            first_rhs->content->type_name ? first_rhs->content->type_name : "";
-          if (!UNIQSTR_EQ (lhs_type, rhs_type))
+          ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *lhs_type = lhs->content->type_name;
+          ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *rhs_type =
+            ಮೊದಲ_rhs->content->type_name ? ಮೊದಲ_rhs->content->type_name : "";
+          ಆದರೆ (!UNIQSTR_EQ (lhs_type, rhs_type))
             complain (&r->rhs_loc, Wother,
                       _("type clash on default action: <%s> != <%s>"),
                       lhs_type, rhs_type);
-          else
+          ಇಲ್ಲದಿದ್ದರೆ
             {
               /* Install the default action only for C++.  */
-              const bool is_cxx =
+              ಸ್ಥಿರಾಂಕ bool is_cxx =
                 STREQ (language->language, "c++")
                 || (skeleton && (STREQ (skeleton, "glr.cc")
                                  || STREQ (skeleton, "glr2.cc")
                                  || STREQ (skeleton, "lalr1.cc")));
-              if (is_cxx)
+              ಆದರೆ (is_cxx)
                 {
-                  code_props_rule_action_init (&r->action_props, "{ $$ = $1; }",
+                  ಸಂಕೇತ_props_ನಿಯಮ_action_init (&r->action_props, "{ $$ = $1; }",
                                                r->rhs_loc, r,
-                                               /* name */ NULL,
-                                               /* type */ NULL,
+                                               /* name */ ಖಾಲಿ,
+                                               /* type */ ಖಾಲಿ,
                                                /* is_predicate */ false);
-                  code_props_translate_code (&r->action_props);
+                  ಸಂಕೇತ_props_translate_ಸಂಕೇತ (&r->action_props);
                 }
             }
         }
       /* Warn if there is no default for $$ but we need one.  */
-      else
+      ಇಲ್ಲದಿದ್ದರೆ
         complain (&r->rhs_loc, Wother,
                   _("empty rule for typed nonterminal, and no action"));
     }
@@ -348,23 +348,23 @@ grammar_rule_check_and_complete (symbol_list *r)
   /* For each start symbol, build the action of its start rule.  Use
      the same obstack as the one used by scan-code, which is in charge
      of actions. */
-  const bool multistart = start_symbols && start_symbols->next;
-  if (multistart && lhs == acceptsymbol)
+  ಸ್ಥಿರಾಂಕ bool multistart = ಆರಂಭ_symbols && ಆರಂಭ_symbols->ಮುಂದಿನ;
+  ಆದರೆ (multistart && lhs == acceptsymbol)
     {
-      const symbol *start = r->next->next->content.sym;
-      if (start->content->type_name)
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *ಆರಂಭ = r->ಮುಂದಿನ->ಮುಂದಿನ->content.sym;
+      ಆದರೆ (ಆರಂಭ->content->type_name)
         obstack_printf (obstack_for_actions,
                         "{ ]b4_accept""([%s%d])[; }",
-                        start->content->class == nterm_sym ? "orig " : "",
-                        start->content->number);
-      else
+                        ಆರಂಭ->content->class == nterm_sym ? "orig " : "",
+                        ಆರಂಭ->content->ಸಂಖ್ಯೆ);
+      ಇಲ್ಲದಿದ್ದರೆ
         obstack_printf (obstack_for_actions,
                         "{ ]b4_accept[; }");
-      code_props_rule_action_init (&r->action_props,
+      ಸಂಕೇತ_props_ನಿಯಮ_action_init (&r->action_props,
                                    obstack_finish0 (obstack_for_actions),
                                    r->rhs_loc, r,
-                                   /* name */ NULL,
-                                   /* type */ NULL,
+                                   /* name */ ಖಾಲಿ,
+                                   /* type */ ಖಾಲಿ,
                                    /* is_predicate */ false);
     }
 
@@ -373,61 +373,61 @@ grammar_rule_check_and_complete (symbol_list *r)
      Don't check the generated start rules.  It has no action, so some
      rhs symbols may appear unused, but the parsing algorithm ensures
      that %destructor's are invoked appropriately.  */
-  if (lhs != acceptsymbol)
+  ಆದರೆ (lhs != acceptsymbol)
     {
-      int n = 0;
-      for (symbol_list const *l = r; l && l->content.sym; l = l->next, ++n)
+      ಪೂರ್ಣಾಂಕ n = 0;
+      ಗಾಗಿ (ಚಿಹ್ನೆ_list ಸ್ಥಿರಾಂಕ *l = r; l && l->content.sym; l = l->ಮುಂದಿನ, ++n)
         {
           bool midrule_warning = false;
-          if (!l->action_props.is_value_used
-              && symbol_should_be_used (l, &midrule_warning)
+          ಆದರೆ (!l->action_props.is_ಮೌಲ್ಯ_ಬಳಸಿದ
+              && ಚಿಹ್ನೆ_should_be_ಬಳಸಿದ (l, &midrule_warning)
               /* The default action, $$ = $1, 'uses' both.  */
-              && (r->action_props.code || (n != 0 && n != 1)))
+              && (r->action_props.ಸಂಕೇತ_2 || (n != 0 && n != 1)))
             {
-              warnings warn_flag = midrule_warning ? Wmidrule_values : Wother;
-              if (n)
+              warnings warn_flag = midrule_warning ? Wmidrule_ಮೌಲ್ಯಗಳು : Wother;
+              ಆದರೆ (n)
                 complain (&l->sym_loc, warn_flag, _("unused value: $%d"), n);
-              else
+              ಇಲ್ಲದಿದ್ದರೆ
                 complain (&l->rhs_loc, warn_flag, _("unset value: $$"));
             }
         }
     }
 
   /* Check that %empty => empty rule.  */
-  if (r->percent_empty_loc.start.file
-      && r->next && r->next->content.sym)
+  ಆದರೆ (r->percent_ಖಾಲಿಗಳು_loc.ಆರಂಭ.file
+      && r->ಮುಂದಿನ && r->ಮುಂದಿನ->content.sym)
     {
-      complain (&r->percent_empty_loc, complaint,
+      complain (&r->percent_ಖಾಲಿಗಳು_loc, complaint,
                 _("%%empty on non-empty rule"));
-      fixits_register (&r->percent_empty_loc, "");
+      fixits_ರಿಜಿಸ್ಟರ್ (&r->percent_ಖಾಲಿಗಳು_loc, "");
     }
 
   /* Check that empty rule => %empty.  */
-  if (!(r->next && r->next->content.sym)
-      && !r->midrule_parent_rule
-      && !r->percent_empty_loc.start.file
-      && warning_is_enabled (Wempty_rule))
+  ಆದರೆ (!(r->ಮುಂದಿನ && r->ಮುಂದಿನ->content.sym)
+      && !r->midrule_ಪೋಷಕ_ನಿಯಮ
+      && !r->percent_ಖಾಲಿಗಳು_loc.ಆರಂಭ.file
+      && warning_is_enabled (Wempty_ನಿಯಮ))
     {
-      complain (&r->rhs_loc, Wempty_rule, _("empty rule without %%empty"));
-      if (feature_flag & feature_caret)
+      complain (&r->rhs_loc, Wempty_ನಿಯಮ, _("empty rule without %%empty"));
+      ಆದರೆ (feature_flag & feature_caret)
         location_caret_suggestion (r->rhs_loc, "%empty", stderr);
       location loc = r->rhs_loc;
-      loc.end = loc.start;
-      fixits_register (&loc, " %empty ");
+      loc.ಕೊನೆ = loc.ಆರಂಭ;
+      fixits_ರಿಜಿಸ್ಟರ್ (&loc, " %empty ");
     }
 
   /* See comments in grammar_current_rule_prec_set for how POSIX
      mandates this complaint.  It's only for identifiers, so skip
      it for char literals and strings, which are always tokens.  */
-  if (r->ruleprec
-      && r->ruleprec->tag[0] != '\'' && r->ruleprec->tag[0] != '"'
-      && r->ruleprec->content->status != declared
+  ಆದರೆ (r->ruleprec
+      && r->ruleprec->ಟ್ಯಾಗ್[0] != '\'' && r->ruleprec->ಟ್ಯಾಗ್[0] != '"'
+      && r->ruleprec->content->ಸ್ಥಿತಿ_2 != declared
       && !r->ruleprec->content->prec)
     complain (&r->rhs_loc, Wother,
-              _("token for %%prec is not defined: %s"), r->ruleprec->tag);
+              _("token for %%prec is not defined: %s"), r->ruleprec->ಟ್ಯಾಗ್);
 
   /* Check that the (main) action was not typed.  */
-  if (r->action_props.type)
+  ಆದರೆ (r->action_props.type)
     complain (&r->rhs_loc, Wother,
               _("only midrule actions can be typed: %s"), r->action_props.type);
 }
@@ -437,12 +437,12 @@ grammar_rule_check_and_complete (symbol_list *r)
 | End the currently being grown rule.  |
 `-------------------------------------*/
 
-void
-grammar_current_rule_end (location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_ಕೊನೆ (location loc)
 {
   /* Put an empty link in the list to mark the end of this rule  */
-  grammar_symbol_append (NULL, grammar_end->rhs_loc);
-  current_rule->rhs_loc = loc;
+  grammar_ಚಿಹ್ನೆ_append (ಖಾಲಿ, grammar_ಕೊನೆ->rhs_loc);
+  current_ನಿಯಮ->rhs_loc = loc;
 }
 
 
@@ -453,8 +453,8 @@ grammar_current_rule_end (location loc)
 | rule.                                                              |
 `-------------------------------------------------------------------*/
 
-void
-grammar_midrule_action (void)
+ಶೂನ್ಯ
+grammar_midrule_action (ಶೂನ್ಯ)
 {
   /* Since the action was written out with this rule's number, we must
      give the new rule this number by inserting the new rule before
@@ -462,14 +462,14 @@ grammar_midrule_action (void)
 
   /* Make a DUMMY nonterminal, whose location is that of the midrule
      action.  Create the MIDRULE.  */
-  location dummy_loc = current_rule->action_props.location;
-  symbol *dummy = dummy_symbol_get (dummy_loc);
-  symbol_type_set (dummy,
-                   current_rule->action_props.type, current_rule->action_props.location);
-  symbol_list *midrule = symbol_list_sym_new (dummy, dummy_loc);
+  location dummy_loc = current_ನಿಯಮ->action_props.location;
+  ಚಿಹ್ನೆ *dummy = dummy_ಚಿಹ್ನೆ_get (dummy_loc);
+  ಚಿಹ್ನೆ_type_ಗಣ (dummy,
+                   current_ನಿಯಮ->action_props.type, current_ನಿಯಮ->action_props.location);
+  ಚಿಹ್ನೆ_list *midrule = ಚಿಹ್ನೆ_list_sym_new (dummy, dummy_loc);
 
   /* Remember named_ref of previous action. */
-  named_ref *action_name = current_rule->action_props.named_ref;
+  named_ref *action_name = current_ನಿಯಮ->action_props.named_ref;
 
   /* Make a new rule, whose body is empty, before the current one, so
      that the action just read can belong to it.  */
@@ -477,44 +477,44 @@ grammar_midrule_action (void)
   ++nritems;
   /* Attach its location and actions to that of the DUMMY.  */
   midrule->rhs_loc = dummy_loc;
-  code_props_rule_action_init (&midrule->action_props,
-                               current_rule->action_props.code,
-                               current_rule->action_props.location,
+  ಸಂಕೇತ_props_ನಿಯಮ_action_init (&midrule->action_props,
+                               current_ನಿಯಮ->action_props.ಸಂಕೇತ_2,
+                               current_ನಿಯಮ->action_props.location,
                                midrule,
-                               /* name_ref */ NULL,
-                               /* type */ NULL,
-                               current_rule->action_props.is_predicate);
-  code_props_none_init (&current_rule->action_props);
+                               /* name_ref */ ಖಾಲಿ,
+                               /* type */ ಖಾಲಿ,
+                               current_ನಿಯಮ->action_props.is_predicate);
+  ಸಂಕೇತ_props_none_init (&current_ನಿಯಮ->action_props);
 
-  midrule->expected_sr_conflicts = current_rule->expected_sr_conflicts;
-  midrule->expected_rr_conflicts = current_rule->expected_rr_conflicts;
-  current_rule->expected_sr_conflicts = -1;
-  current_rule->expected_rr_conflicts = -1;
+  midrule->expected_sr_conflicts = current_ನಿಯಮ->expected_sr_conflicts;
+  midrule->expected_rr_conflicts = current_ನಿಯಮ->expected_rr_conflicts;
+  current_ನಿಯಮ->expected_sr_conflicts = -1;
+  current_ನಿಯಮ->expected_rr_conflicts = -1;
 
-  if (previous_rule_end)
-    previous_rule_end->next = midrule;
-  else
+  ಆದರೆ (ಹಿಂದಿನ_ನಿಯಮ_ಕೊನೆ)
+    ಹಿಂದಿನ_ನಿಯಮ_ಕೊನೆ->ಮುಂದಿನ = midrule;
+  ಇಲ್ಲದಿದ್ದರೆ
     grammar = midrule;
 
   /* End the dummy's rule.  */
-  midrule->next = symbol_list_sym_new (NULL, dummy_loc);
-  midrule->next->next = current_rule;
+  midrule->ಮುಂದಿನ = ಚಿಹ್ನೆ_list_sym_new (ಖಾಲಿ, dummy_loc);
+  midrule->ಮುಂದಿನ->ಮುಂದಿನ = current_ನಿಯಮ;
 
-  previous_rule_end = midrule->next;
+  ಹಿಂದಿನ_ನಿಯಮ_ಕೊನೆ = midrule->ಮುಂದಿನ;
 
   /* Insert the dummy nonterminal replacing the midrule action into
      the current rule.  Bind it to its dedicated rule.  */
-  grammar_current_rule_symbol_append (dummy, dummy_loc,
+  grammar_current_ನಿಯಮ_ಚಿಹ್ನೆ_append (dummy, dummy_loc,
                                       action_name);
-  grammar_end->midrule = midrule;
-  midrule->midrule_parent_rule = current_rule;
-  midrule->midrule_parent_rhs_index = symbol_list_length (current_rule->next);
+  grammar_ಕೊನೆ->midrule = midrule;
+  midrule->midrule_ಪೋಷಕ_ನಿಯಮ = current_ನಿಯಮ;
+  midrule->midrule_ಪೋಷಕ_rhs_ಸೂಚ್ಯಂಕ = ಚಿಹ್ನೆ_list_ಉದ್ದಳತೆ (current_ನಿಯಮ->ಮುಂದಿನ);
 }
 
 /* Set the precedence symbol of the current rule to PRECSYM. */
 
-void
-grammar_current_rule_prec_set (symbol *precsym, location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_prec_ಗಣ (ಚಿಹ್ನೆ *precsym, location loc)
 {
   /* POSIX says that any identifier is a nonterminal if it does not
      appear on the LHS of a grammar rule and is not defined by %token
@@ -526,111 +526,111 @@ grammar_current_rule_prec_set (symbol *precsym, location loc)
      believe is the real intent of POSIX here: that an error be
      reported for any identifier that appears after %prec but that is
      not defined separately as a token.  */
-  symbol_class_set (precsym, token_sym, loc, false);
-  if (current_rule->ruleprec)
-    duplicate_rule_directive ("%prec",
-                              current_rule->ruleprec->location, loc);
-  else
-    current_rule->ruleprec = precsym;
+  ಚಿಹ್ನೆ_class_ಗಣ (precsym, token_sym, loc, false);
+  ಆದರೆ (current_ನಿಯಮ->ruleprec)
+    duplicate_ನಿಯಮ_directive ("%prec",
+                              current_ನಿಯಮ->ruleprec->location, loc);
+  ಇಲ್ಲದಿದ್ದರೆ
+    current_ನಿಯಮ->ruleprec = precsym;
 }
 
 /* Set %empty for the current rule. */
 
-void
-grammar_current_rule_empty_set (location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_ಖಾಲಿಗಳು_ಗಣ (location loc)
 {
   /* If %empty is used and -Wno-empty-rule is not, then enable
      -Wempty-rule.  */
-  if (warning_is_unset (Wempty_rule))
+  ಆದರೆ (warning_is_unset (Wempty_ನಿಯಮ))
     warning_argmatch ("empty-rule", 0, 0);
-  if (current_rule->percent_empty_loc.start.file)
-    duplicate_rule_directive ("%empty",
-                              current_rule->percent_empty_loc, loc);
-  else
-    current_rule->percent_empty_loc = loc;
+  ಆದರೆ (current_ನಿಯಮ->percent_ಖಾಲಿಗಳು_loc.ಆರಂಭ.file)
+    duplicate_ನಿಯಮ_directive ("%empty",
+                              current_ನಿಯಮ->percent_ಖಾಲಿಗಳು_loc, loc);
+  ಇಲ್ಲದಿದ್ದರೆ
+    current_ನಿಯಮ->percent_ಖಾಲಿಗಳು_loc = loc;
 }
 
 /* Attach dynamic precedence DPREC to the current rule. */
 
-void
-grammar_current_rule_dprec_set (int dprec, location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_dprec_ಗಣ (ಪೂರ್ಣಾಂಕ dprec, location loc)
 {
-  if (! glr_parser)
+  ಆದರೆ (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%dprec");
-  if (dprec <= 0)
+  ಆದರೆ (dprec <= 0)
     complain (&loc, complaint, _("%s must be followed by positive number"),
               "%dprec");
-  else if (current_rule->dprec != 0)
-    duplicate_rule_directive ("%dprec",
-                              current_rule->dprec_loc, loc);
-  else
+  ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (current_ನಿಯಮ->dprec != 0)
+    duplicate_ನಿಯಮ_directive ("%dprec",
+                              current_ನಿಯಮ->dprec_loc, loc);
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      current_rule->dprec = dprec;
-      current_rule->dprec_loc = loc;
+      current_ನಿಯಮ->dprec = dprec;
+      current_ನಿಯಮ->dprec_loc = loc;
     }
 }
 
 /* Attach a merge function NAME with argument type TYPE to current
    rule. */
 
-void
-grammar_current_rule_merge_set (uniqstr name, location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_ವಿಲೀನ_ಗಣ (uniqstr name, location loc)
 {
-  if (! glr_parser)
+  ಆದರೆ (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%merge");
-  if (current_rule->merger != 0)
-    duplicate_rule_directive ("%merge",
-                              current_rule->merger_declaration_loc, loc);
-  else
+  ಆದರೆ (current_ನಿಯಮ->merger != 0)
+    duplicate_ನಿಯಮ_directive ("%merge",
+                              current_ನಿಯಮ->merger_declaration_loc, loc);
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      current_rule->merger = get_merge_function (name);
-      current_rule->merger_declaration_loc = loc;
+      current_ನಿಯಮ->merger = get_ವಿಲೀನ_function (name);
+      current_ನಿಯಮ->merger_declaration_loc = loc;
     }
 }
 
 /* Attach SYM to the current rule.  If needed, move the previous
    action as a midrule action.  */
 
-void
-grammar_current_rule_symbol_append (symbol *sym, location loc,
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_ಚಿಹ್ನೆ_append (ಚಿಹ್ನೆ *sym, location loc,
                                     named_ref *name)
 {
-  if (current_rule->action_props.code)
+  ಆದರೆ (current_ನಿಯಮ->action_props.ಸಂಕೇತ_2)
     grammar_midrule_action ();
-  symbol_list *p = grammar_symbol_append (sym, loc);
-  if (name)
-    assign_named_ref (p, name);
-  if (sym->content->status == undeclared || sym->content->status == used)
-    sym->content->status = needed;
+  ಚಿಹ್ನೆ_list *p = grammar_ಚಿಹ್ನೆ_append (sym, loc);
+  ಆದರೆ (name)
+    ನಿಯೋಜಿಸು_named_ref (p, name);
+  ಆದರೆ (sym->content->ಸ್ಥಿತಿ_2 == undeclared || sym->content->ಸ್ಥಿತಿ_2 == ಬಳಸಿದ)
+    sym->content->ಸ್ಥಿತಿ_2 = needed;
 }
 
-void
-grammar_current_rule_action_append (const char *action, location loc,
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_action_append (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *action, location loc,
                                     named_ref *name, uniqstr type)
 {
-  if (current_rule->action_props.code)
+  ಆದರೆ (current_ನಿಯಮ->action_props.ಸಂಕೇತ_2)
     grammar_midrule_action ();
-  if (type)
+  ಆದರೆ (type)
     complain (&loc, Wyacc,
               _("POSIX Yacc does not support typed midrule actions"));
   /* After all symbol declarations have been parsed, packgram invokes
      code_props_translate_code.  */
-  code_props_rule_action_init (&current_rule->action_props, action, loc,
-                               current_rule,
+  ಸಂಕೇತ_props_ನಿಯಮ_action_init (&current_ನಿಯಮ->action_props, action, loc,
+                               current_ನಿಯಮ,
                                name, type,
                                /* is_predicate */ false);
 }
 
-void
-grammar_current_rule_predicate_append (const char *pred, location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_predicate_append (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *pred, location loc)
 {
-  if (current_rule->action_props.code)
+  ಆದರೆ (current_ನಿಯಮ->action_props.ಸಂಕೇತ_2)
     grammar_midrule_action ();
-  code_props_rule_action_init (&current_rule->action_props, pred, loc,
-                               current_rule,
-                               NULL, NULL,
+  ಸಂಕೇತ_props_ನಿಯಮ_action_init (&current_ನಿಯಮ->action_props, pred, loc,
+                               current_ನಿಯಮ,
+                               ಖಾಲಿ, ಖಾಲಿ,
                                /* is_predicate */ true);
 }
 
@@ -638,21 +638,21 @@ grammar_current_rule_predicate_append (const char *pred, location loc)
  * for the current rule.  If a midrule is encountered later, the count
  * is transferred to it and reset in the current rule to -1. */
 
-void
-grammar_current_rule_expect_sr (int count, location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_expect_sr (ಪೂರ್ಣಾಂಕ ಎಣಿಕೆ_2, location loc)
 {
-  (void) loc;
-  current_rule->expected_sr_conflicts = count;
+  (ಶೂನ್ಯ) loc;
+  current_ನಿಯಮ->expected_sr_conflicts = ಎಣಿಕೆ_2;
 }
 
-void
-grammar_current_rule_expect_rr (int count, location loc)
+ಶೂನ್ಯ
+grammar_current_ನಿಯಮ_expect_rr (ಪೂರ್ಣಾಂಕ ಎಣಿಕೆ_2, location loc)
 {
-  if (! glr_parser)
+  ಆದರೆ (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%expect-rr");
-  else
-    current_rule->expected_rr_conflicts = count;
+  ಇಲ್ಲದಿದ್ದರೆ
+    current_ನಿಯಮ->expected_rr_conflicts = ಎಣಿಕೆ_2;
 }
 
 
@@ -660,91 +660,91 @@ grammar_current_rule_expect_rr (int count, location loc)
 | Build RULES and RITEM from what was parsed.  |
 `---------------------------------------------*/
 
-static void
-packgram (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+packgram (ಶೂನ್ಯ)
 {
-  int itemno = 0;
-  ritem = xnmalloc (nritems + 1, sizeof *ritem);
+  ಪೂರ್ಣಾಂಕ itemno = 0;
+  ritem = xnmalloc (nritems + 1, ಗಾತ್ರ *ritem);
   /* This sentinel is used by build_relations() in lalr.c.  */
   *ritem++ = 0;
 
-  rule_number ruleno = 0;
-  rules = xnmalloc (nrules, sizeof *rules);
+  ನಿಯಮ_ಸಂಖ್ಯೆ ruleno = 0;
+  ನಿಯಮಗಳು = xnmalloc (nrules, ಗಾತ್ರ *ನಿಯಮಗಳು);
 
-  for (symbol_list *p = grammar; p; p = p->next)
+  ಗಾಗಿ (ಚಿಹ್ನೆ_list *p = grammar; p; p = p->ಮುಂದಿನ)
     {
-      symbol_list *lhs = p;
-      record_merge_function_type (lhs->merger, lhs->content.sym,
+      ಚಿಹ್ನೆ_list *lhs = p;
+      ದಾಖಲೆ_ವಿಲೀನ_function_type (lhs->merger, lhs->content.sym,
                                   lhs->merger_declaration_loc);
       /* If the midrule's $$ is set or its $n is used, remove the '$' from the
          symbol name so that it's a user-defined symbol so that the default
          %destructor and %printer apply.  */
-      if (lhs->midrule_parent_rule /* i.e., symbol_is_dummy (lhs->content.sym).  */
-          && (lhs->action_props.is_value_used
-              || (symbol_list_n_get (lhs->midrule_parent_rule,
-                                     lhs->midrule_parent_rhs_index)
-                  ->action_props.is_value_used)))
-        lhs->content.sym->tag += 1;
+      ಆದರೆ (lhs->midrule_ಪೋಷಕ_ನಿಯಮ /* i.e., symbol_is_dummy (lhs->content.sym).  */
+          && (lhs->action_props.is_ಮೌಲ್ಯ_ಬಳಸಿದ
+              || (ಚಿಹ್ನೆ_list_n_get (lhs->midrule_ಪೋಷಕ_ನಿಯಮ,
+                                     lhs->midrule_ಪೋಷಕ_rhs_ಸೂಚ್ಯಂಕ)
+                  ->action_props.is_ಮೌಲ್ಯ_ಬಳಸಿದ)))
+        lhs->content.sym->ಟ್ಯಾಗ್ += 1;
 
-      grammar_rule_check_and_complete (lhs);
+      grammar_ನಿಯಮ_check_and_complete (lhs);
 
-      rules[ruleno].code = ruleno;
-      rules[ruleno].number = ruleno;
-      rules[ruleno].lhs = lhs->content.sym->content;
-      rules[ruleno].rhs = ritem + itemno;
-      rules[ruleno].prec = NULL;
-      rules[ruleno].dprec = lhs->dprec;
-      rules[ruleno].merger = lhs->merger;
-      rules[ruleno].precsym = NULL;
-      rules[ruleno].location = lhs->rhs_loc;
-      rules[ruleno].useful = true;
-      rules[ruleno].action = lhs->action_props.code;
-      rules[ruleno].action_loc = lhs->action_props.location;
-      rules[ruleno].is_predicate = lhs->action_props.is_predicate;
-      rules[ruleno].expected_sr_conflicts = lhs->expected_sr_conflicts;
-      rules[ruleno].expected_rr_conflicts = lhs->expected_rr_conflicts;
+      ನಿಯಮಗಳು[ruleno].ಸಂಕೇತ_2 = ruleno;
+      ನಿಯಮಗಳು[ruleno].ಸಂಖ್ಯೆ = ruleno;
+      ನಿಯಮಗಳು[ruleno].lhs = lhs->content.sym->content;
+      ನಿಯಮಗಳು[ruleno].rhs = ritem + itemno;
+      ನಿಯಮಗಳು[ruleno].prec = ಖಾಲಿ;
+      ನಿಯಮಗಳು[ruleno].dprec = lhs->dprec;
+      ನಿಯಮಗಳು[ruleno].merger = lhs->merger;
+      ನಿಯಮಗಳು[ruleno].precsym = ಖಾಲಿ;
+      ನಿಯಮಗಳು[ruleno].location = lhs->rhs_loc;
+      ನಿಯಮಗಳು[ruleno].useful = true;
+      ನಿಯಮಗಳು[ruleno].action = lhs->action_props.ಸಂಕೇತ_2;
+      ನಿಯಮಗಳು[ruleno].action_loc = lhs->action_props.location;
+      ನಿಯಮಗಳು[ruleno].is_predicate = lhs->action_props.is_predicate;
+      ನಿಯಮಗಳು[ruleno].expected_sr_conflicts = lhs->expected_sr_conflicts;
+      ನಿಯಮಗಳು[ruleno].expected_rr_conflicts = lhs->expected_rr_conflicts;
 
       /* Traverse the rhs.  */
       {
-        size_t rule_length = 0;
-        for (p = lhs->next; p->content.sym; p = p->next)
+        size_t ನಿಯಮ_ಉದ್ದಳತೆ = 0;
+        ಗಾಗಿ (p = lhs->ಮುಂದಿನ; p->content.sym; p = p->ಮುಂದಿನ)
           {
-            ++rule_length;
+            ++ನಿಯಮ_ಉದ್ದಳತೆ;
 
             /* Don't allow rule_length == INT_MAX, since that might
                cause confusion with strtol if INT_MAX == LONG_MAX.  */
-            if (rule_length == INT_MAX)
-              complain (&rules[ruleno].location, fatal, _("rule is too long"));
+            ಆದರೆ (ನಿಯಮ_ಉದ್ದಳತೆ == ಗರಿಷ್ಠ_ಪೂರ್ಣಾಂಕ)
+              complain (&ನಿಯಮಗಳು[ruleno].location, fatal, _("rule is too long"));
 
             /* item_number = symbol_number.
                But the former needs to contain more: negative rule numbers. */
             ritem[itemno++] =
-              symbol_number_as_item_number (p->content.sym->content->number);
+              ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_as_ಅಂಶ_ಸಂಖ್ಯೆ (p->content.sym->content->ಸಂಖ್ಯೆ);
             /* A rule gets by default the precedence and associativity
                of its last token.  */
-            if (p->content.sym->content->class == token_sym && default_prec)
-              rules[ruleno].prec = p->content.sym->content;
+            ಆದರೆ (p->content.sym->content->class == token_sym && default_prec)
+              ನಿಯಮಗಳು[ruleno].prec = p->content.sym->content;
           }
       }
 
       /* If this rule has a %prec,
          the specified symbol's precedence replaces the default.  */
-      if (lhs->ruleprec)
+      ಆದರೆ (lhs->ruleprec)
         {
-          rules[ruleno].precsym = lhs->ruleprec->content;
-          rules[ruleno].prec = lhs->ruleprec->content;
+          ನಿಯಮಗಳು[ruleno].precsym = lhs->ruleprec->content;
+          ನಿಯಮಗಳು[ruleno].prec = lhs->ruleprec->content;
         }
 
       /* An item ends by the rule number (negated).  */
-      ritem[itemno++] = rule_number_as_item_number (ruleno);
-      aver (itemno < ITEM_NUMBER_MAX);
+      ritem[itemno++] = ನಿಯಮ_ಸಂಖ್ಯೆ_as_ಅಂಶ_ಸಂಖ್ಯೆ (ruleno);
+      aver (itemno < ಅಂಶ_ಸಂಖ್ಯೆ_MAX);
       ++ruleno;
-      aver (ruleno < RULE_NUMBER_MAX);
+      aver (ruleno < ನಿಯಮ_ಸಂಖ್ಯೆ_MAX);
     }
 
   aver (itemno == nritems);
 
-  if (trace_flag & trace_sets)
+  ಆದರೆ (trace_flag & trace_sets)
     ritem_print (stderr);
 }
 
@@ -754,8 +754,8 @@ packgram (void)
 | described in gram.h.                                          |
 `--------------------------------------------------------------*/
 
-void
-reader (const char *gram)
+ಶೂನ್ಯ
+reader (ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *gram)
 {
   /* Set up symbol_table, semantic_type_table, and the built-in
      symbols.  */
@@ -766,14 +766,14 @@ reader (const char *gram)
   gram_parse ();
   gram_scanner_close ();
 
-  prepare_percent_define_front_end_variables ();
+  prepare_percent_define_front_ಕೊನೆ_variables ();
 
-  if (complaint_status  < status_complaint)
+  ಆದರೆ (complaint_ಸ್ಥಿತಿ  < ಸ್ಥಿತಿ_complaint)
     check_and_convert_grammar ();
 }
 
-static void
-prepare_percent_define_front_end_variables (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+prepare_percent_define_front_ಕೊನೆ_variables (ಶೂನ್ಯ)
 {
   /* Set %define front-end variable defaults.  */
   muscle_percent_define_default ("lr.keep-unreachable-state", "false");
@@ -781,39 +781,39 @@ prepare_percent_define_front_end_variables (void)
     /* IELR would be a better default, but LALR is historically the
        default.  */
     muscle_percent_define_default ("lr.type", "lalr");
-    char *lr_type = muscle_percent_define_get ("lr.type");
-    if (STRNEQ (lr_type, "canonical-lr"))
+    ಅಕ್ಷರ *lr_type = muscle_percent_define_get ("lr.type");
+    ಆದರೆ (STRNEQ (lr_type, "canonical-lr"))
       muscle_percent_define_default ("lr.default-reduction", "most");
-    else
+    ಇಲ್ಲದಿದ್ದರೆ
       muscle_percent_define_default ("lr.default-reduction", "accepting");
-    free (lr_type);
+    ಬಿಡುಗಡೆ (lr_type);
   }
   muscle_percent_define_default ("tool.xsltproc", "xsltproc");
 
   /* Check %define front-end variables.  */
   {
-    static char const * const values[] =
+    ಸ್ಥಿರ ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ * ಸ್ಥಿರಾಂಕ ಮೌಲ್ಯಗಳು[] =
       {
-       "lr.type", "lr""(0)", "lalr", "ielr", "canonical-lr", NULL,
-       "lr.default-reduction", "most", "consistent", "accepting", NULL,
-       NULL
+       "lr.type", "lr""(0)", "lalr", "ielr", "canonical-lr", ಖಾಲಿ,
+       "lr.default-reduction", "most", "consistent", "accepting", ಖಾಲಿ,
+       ಖಾಲಿ
       };
-    muscle_percent_define_check_values (values);
+    muscle_percent_define_check_ಮೌಲ್ಯಗಳು (ಮೌಲ್ಯಗಳು);
   }
 }
 
 /* Find the first LHS which is not a dummy.  */
 
-static symbol *
-find_start_symbol (void)
+ಸ್ಥಿರ ಚಿಹ್ನೆ *
+ಕಂಡುಹಿಡಿ_ಆರಂಭ_ಚಿಹ್ನೆ (ಶೂನ್ಯ)
 {
-  symbol_list *res = grammar;
+  ಚಿಹ್ನೆ_list *res = grammar;
   /* Skip all the possible dummy rules of the first rule.  */
-  for (; symbol_is_dummy (res->content.sym); res = res->next)
+  ಗಾಗಿ (; ಚಿಹ್ನೆ_is_dummy (res->content.sym); res = res->ಮುಂದಿನ)
     /* Skip the LHS, and then all the RHS of the dummy rule.  */
-    for (res = res->next; res->content.sym; res = res->next)
-      continue;
-  return res->content.sym;
+    ಗಾಗಿ (res = res->ಮುಂದಿನ; res->content.sym; res = res->ಮುಂದಿನ)
+      ಮುಂದುವರಿ;
+  ಹಿಂತಿರುಗಿ res->content.sym;
 }
 
 
@@ -821,32 +821,32 @@ find_start_symbol (void)
    (not that of the start symbol):
 
    $accept: SWITCHING_TOKEN START $end.  */
-static void
-create_start_rule (symbol *swtok, symbol *start)
+ಸ್ಥಿರ ಶೂನ್ಯ
+create_ಆರಂಭ_ನಿಯಮ (ಚಿಹ್ನೆ *swtok, ಚಿಹ್ನೆ *ಆರಂಭ)
 {
-  symbol_list *initial_rule = symbol_list_sym_new (acceptsymbol, empty_loc);
-  initial_rule->rhs_loc = grammar->rhs_loc;
-  symbol_list *p = initial_rule;
-  if (swtok)
+  ಚಿಹ್ನೆ_list *initial_ನಿಯಮ = ಚಿಹ್ನೆ_list_sym_new (acceptsymbol, ಖಾಲಿಗಳು_loc);
+  initial_ನಿಯಮ->rhs_loc = grammar->rhs_loc;
+  ಚಿಹ್ನೆ_list *p = initial_ನಿಯಮ;
+  ಆದರೆ (swtok)
     {
       // Cannot create the action now, as the symbols have not yet
       // been assigned their number (by symbol_pack), which we need to
       // know the type name.  So the action is created in
       // grammar_rule_check_and_complete, which is run after
       // symbol_pack.
-      p->next = symbol_list_sym_new (swtok, empty_loc);
-      p = p->next;
+      p->ಮುಂದಿನ = ಚಿಹ್ನೆ_list_sym_new (swtok, ಖಾಲಿಗಳು_loc);
+      p = p->ಮುಂದಿನ;
     }
-  p->next = symbol_list_sym_new (start, empty_loc);
-  p = p->next;
-  p->next = symbol_list_sym_new (eoftoken, empty_loc);
-  p = p->next;
-  p->next = symbol_list_sym_new (NULL, empty_loc);
-  p = p->next;
-  p->next = grammar;
+  p->ಮುಂದಿನ = ಚಿಹ್ನೆ_list_sym_new (ಆರಂಭ, ಖಾಲಿಗಳು_loc);
+  p = p->ಮುಂದಿನ;
+  p->ಮುಂದಿನ = ಚಿಹ್ನೆ_list_sym_new (eoftoken, ಖಾಲಿಗಳು_loc);
+  p = p->ಮುಂದಿನ;
+  p->ಮುಂದಿನ = ಚಿಹ್ನೆ_list_sym_new (ಖಾಲಿ, ಖಾಲಿಗಳು_loc);
+  p = p->ಮುಂದಿನ;
+  p->ಮುಂದಿನ = grammar;
   nrules += 1;
   nritems += 3 + !!swtok;
-  grammar = initial_rule;
+  grammar = initial_ನಿಯಮ;
 }
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
@@ -855,86 +855,86 @@ create_start_rule (symbol *swtok, symbol *start)
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *
-switching_token (const symbol *start)
+ಚಿಹ್ನೆ *
+switching_token (ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *ಆರಂಭ)
 {
-  char buf[100];
-  size_t len = sizeof buf;
-  char *name = asnprintf (buf, &len, "YY_PARSE_%s", symbol_id_get (start));
-  if (!name)
+  ಅಕ್ಷರ buf[100];
+  size_t len = ಗಾತ್ರ buf;
+  ಅಕ್ಷರ *name = asnprintf (buf, &len, "YY_PARSE_%s", ಚಿಹ್ನೆ_id_get (ಆರಂಭ));
+  ಆದರೆ (!name)
     xalloc_die ();
   // Setting the location ensures deterministic symbol numbers.
-  symbol *res = symbol_get (name, start->location);
-  if (name != buf)
-    free (name);
-  symbol_class_set (res, token_sym, start->location, false);
-  return res;
+  ಚಿಹ್ನೆ *res = ಚಿಹ್ನೆ_get (name, ಆರಂಭ->location);
+  ಆದರೆ (name != buf)
+    ಬಿಡುಗಡೆ (name);
+  ಚಿಹ್ನೆ_class_ಗಣ (res, token_sym, ಆರಂಭ->location, false);
+  ಹಿಂತಿರುಗಿ res;
 }
 
 /* Create the start rules in reverse order, since they are inserted at
    the top of the grammar.  That way the rules follow the order of
    declaration to %start.  */
 
-static void
-create_multiple_start_rules (symbol_list *start_syms)
+ಸ್ಥಿರ ಶೂನ್ಯ
+create_ಅಪವರ್ತ್ಯ_ಆರಂಭ_ನಿಯಮಗಳು (ಚಿಹ್ನೆ_list *ಆರಂಭ_syms)
 {
-  if (start_syms)
+  ಆದರೆ (ಆರಂಭ_syms)
     {
-      create_multiple_start_rules (start_syms->next);
-      assert (start_syms->content_type == SYMLIST_SYMBOL);
-      symbol *start = start_syms->content.sym;
-      symbol *swtok = switching_token (start);
-      create_start_rule (swtok, start);
+      create_ಅಪವರ್ತ್ಯ_ಆರಂಭ_ನಿಯಮಗಳು (ಆರಂಭ_syms->ಮುಂದಿನ);
+      ಪ್ರತಿಜ್ಞಾ (ಆರಂಭ_syms->content_type == SYMLIST_ಚಿಹ್ನೆ);
+      ಚಿಹ್ನೆ *ಆರಂಭ = ಆರಂಭ_syms->content.sym;
+      ಚಿಹ್ನೆ *swtok = switching_token (ಆರಂಭ);
+      create_ಆರಂಭ_ನಿಯಮ (swtok, ಆರಂಭ);
     }
 }
 
 /* For each start symbol "foo", create the rule "$accept: YY_FOO
    foo $end". */
-static void
-create_start_rules (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+create_ಆರಂಭ_ನಿಯಮಗಳು (ಶೂನ್ಯ)
 {
-  if (!start_symbols)
+  ಆದರೆ (!ಆರಂಭ_symbols)
     {
-      symbol *start = find_start_symbol ();
-      start_symbols = symbol_list_sym_new (start, start->location);
+      ಚಿಹ್ನೆ *ಆರಂಭ = ಕಂಡುಹಿಡಿ_ಆರಂಭ_ಚಿಹ್ನೆ ();
+      ಆರಂಭ_symbols = ಚಿಹ್ನೆ_list_sym_new (ಆರಂಭ, ಆರಂಭ->location);
     }
 
-  const bool several = start_symbols->next;
-  if (several)
-    create_multiple_start_rules (start_symbols);
-  else
+  ಸ್ಥಿರಾಂಕ bool several = ಆರಂಭ_symbols->ಮುಂದಿನ;
+  ಆದರೆ (several)
+    create_ಅಪವರ್ತ್ಯ_ಆರಂಭ_ನಿಯಮಗಳು (ಆರಂಭ_symbols);
+  ಇಲ್ಲದಿದ್ದರೆ
     {
-      symbol *start = start_symbols->content.sym;
-      create_start_rule (NULL, start);
+      ಚಿಹ್ನೆ *ಆರಂಭ = ಆರಂಭ_symbols->content.sym;
+      create_ಆರಂಭ_ನಿಯಮ (ಖಾಲಿ, ಆರಂಭ);
     }
 }
 
-static void
-check_start_symbols (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+check_ಆರಂಭ_symbols (ಶೂನ್ಯ)
 {
-  const bool multistart = start_symbols && start_symbols->next;
+  ಸ್ಥಿರಾಂಕ bool multistart = ಆರಂಭ_symbols && ಆರಂಭ_symbols->ಮುಂದಿನ;
   // Sanity checks on the start symbols.
-  for (symbol_list *list = start_symbols; list; list = list->next)
+  ಗಾಗಿ (ಚಿಹ್ನೆ_list *list = ಆರಂಭ_symbols; list; list = list->ಮುಂದಿನ)
     {
-      const symbol *start = list->content.sym;
-      if (start->content->class == unknown_sym)
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆ *ಆರಂಭ = list->content.sym;
+      ಆದರೆ (ಆರಂಭ->content->class == unknown_sym)
         {
-          complain (&start->location, complaint,
+          complain (&ಆರಂಭ->location, complaint,
                     _("the start symbol %s is undefined"),
-                    start->tag);
+                    ಆರಂಭ->ಟ್ಯಾಗ್);
           // I claim this situation is unreachable.  This is caught
           // before, and we get "symbol 'foo' is used, but is not
           // defined as a token and has no rules".
           abort ();
         }
       // If your only start symbol is a token, you're weird.
-      if (!multistart && start->content->class == token_sym)
-        complain (&start->location, complaint,
+      ಆದರೆ (!multistart && ಆರಂಭ->content->class == token_sym)
+        complain (&ಆರಂಭ->location, complaint,
                   _("the start symbol %s is a token"),
-                  start->tag);
+                  ಆರಂಭ->ಟ್ಯಾಗ್);
     }
-  if (complaint_status == status_complaint)
-    exit (EXIT_FAILURE);
+  ಆದರೆ (complaint_ಸ್ಥಿತಿ == ಸ್ಥಿತಿ_complaint)
+    ನಿರ್ಗಮಿಸು (EXIT_FAILURE);
 }
 
 
@@ -943,48 +943,48 @@ check_start_symbols (void)
 | internal form.                                               |
 `-------------------------------------------------------------*/
 
-static void
-check_and_convert_grammar (void)
+ಸ್ಥಿರ ಶೂನ್ಯ
+check_and_convert_grammar (ಶೂನ್ಯ)
 {
   /* Grammar has been read.  Do some checking.  */
-  if (nrules == 0)
-    complain (NULL, fatal, _("no rules in the input grammar"));
+  ಆದರೆ (nrules == 0)
+    complain (ಖಾಲಿ, fatal, _("no rules in the input grammar"));
 
   /* If the user did not define her EOFTOKEN, do it now. */
-  if (!eoftoken)
+  ಆದರೆ (!eoftoken)
     {
-      eoftoken = symbol_get ("YYEOF", empty_loc);
-      if (eoftoken->content->class == nterm_sym)
+      eoftoken = ಚಿಹ್ನೆ_get ("YYEOF", ಖಾಲಿಗಳು_loc);
+      ಆದರೆ (eoftoken->content->class == nterm_sym)
         complain (&eoftoken->location, complaint,
                   _("rule given for %s, which is a token"),
-                  eoftoken->tag);
+                  eoftoken->ಟ್ಯಾಗ್);
       eoftoken->content->class = token_sym;
-      eoftoken->content->number = 0;
+      eoftoken->content->ಸಂಖ್ಯೆ = 0;
       /* Value specified by POSIX.  */
-      eoftoken->content->code = 0;
+      eoftoken->content->ಸಂಕೇತ_2 = 0;
       {
-        symbol *alias = symbol_get ("$end", empty_loc);
-        symbol_class_set (alias, token_sym, empty_loc, false);
-        symbol_make_alias (eoftoken, alias, empty_loc);
+        ಚಿಹ್ನೆ *alias = ಚಿಹ್ನೆ_get ("$end", ಖಾಲಿಗಳು_loc);
+        ಚಿಹ್ನೆ_class_ಗಣ (alias, token_sym, ಖಾಲಿಗಳು_loc, false);
+        ಚಿಹ್ನೆ_make_alias (eoftoken, alias, ಖಾಲಿಗಳು_loc);
       }
     }
 
   /* Insert the initial rule(s).  */
-  create_start_rules ();
+  create_ಆರಂಭ_ನಿಯಮಗಳು ();
 
   /* Report any undefined symbols and consider them nonterminals.  */
   symbols_check_defined ();
 
-  if (SYMBOL_NUMBER_MAXIMUM - nnterms < ntokens)
-    complain (NULL, fatal, "too many symbols in input grammar (limit is %d)",
-              SYMBOL_NUMBER_MAXIMUM);
+  ಆದರೆ (ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_ಗರಿಷ್ಠ - nnterms < ntokens)
+    complain (ಖಾಲಿ, fatal, "too many symbols in input grammar (limit is %d)",
+              ಚಿಹ್ನೆ_ಸಂಖ್ಯೆ_ಗರಿಷ್ಠ);
 
   nsyms = ntokens + nnterms;
 
   /* Assign the symbols their symbol numbers.  */
   symbols_pack ();
 
-  check_start_symbols ();
+  check_ಆರಂಭ_symbols ();
 
   /* Scan rule actions after invoking symbol_check_alias_consistency
      (in symbols_pack above) so that token types are set correctly
@@ -998,12 +998,12 @@ check_and_convert_grammar (void)
      the same reason, all the 'used' flags must be set before checking
      whether to remove '$' from any midrule symbol name (also in
      packgram).  */
-  for (symbol_list *sym = grammar; sym; sym = sym->next)
-    code_props_translate_code (&sym->action_props);
+  ಗಾಗಿ (ಚಿಹ್ನೆ_list *sym = grammar; sym; sym = sym->ಮುಂದಿನ)
+    ಸಂಕೇತ_props_translate_ಸಂಕೇತ (&sym->action_props);
 
   /* Convert the grammar into the format described in gram.h.  */
   packgram ();
 
   /* The grammar as a symbol_list is no longer needed. */
-  symbol_list_free (grammar);
+  ಚಿಹ್ನೆ_list_free (grammar);
 }

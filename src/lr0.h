@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef LR0_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ LR0_H_
 # define LR0_H_
 
-void generate_states (void);
+ಶೂನ್ಯ generate_ಸ್ಥಿತಿಗಳು (ಶೂನ್ಯ);
 
-#endif /* !LR0_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* !LR0_H_ */

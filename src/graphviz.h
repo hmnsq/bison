@@ -20,7 +20,7 @@
 
 /* Written by Paul Eggert and Satya Kiran Popuri.  */
 
-#ifndef GRAPHVIZ_H_
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ GRAPHVIZ_H_
 # define GRAPHVIZ_H_
 
 # include "state.h"
@@ -29,7 +29,7 @@
  *
  * \param fout   output stream.
  */
-void start_graph (FILE *fout);
+ಶೂನ್ಯ ಆರಂಭ_ನಕ್ಷೆ (FILE *fout);
 
 /** Output a Dot node.
  *
@@ -37,7 +37,7 @@ void start_graph (FILE *fout);
  * \param label  human readable label of the node (no Dot escaping needed).
  * \param fout   output stream.
  */
-void output_node (int id, char const *label, FILE *fout);
+ಶೂನ್ಯ output_ಗಂಟು (ಪೂರ್ಣಾಂಕ id, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *label, FILE *fout);
 
 /** Output a Dot edge.
  * \param source       id of the source node
@@ -47,20 +47,20 @@ void output_node (int id, char const *label, FILE *fout);
  * \param style        Dot style of the edge (e.g., "dotted" or "solid").
  * \param fout         output stream.
  */
-void output_edge (int source, int destination, char const *label,
-                  char const *style, FILE *fout);
+ಶೂನ್ಯ output_ಅಂಚು (ಪೂರ್ಣಾಂಕ ಮೂಲ, ಪೂರ್ಣಾಂಕ destination, ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *label,
+                  ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *style, FILE *fout);
 
 /** Output a reduction.
  * \param s            current state
  * \param reds         the set of reductions
  * \param fout         output stream.
  */
-void output_red (state const *s, reductions const *reds, FILE *fout);
+ಶೂನ್ಯ output_red (state ಸ್ಥಿರಾಂಕ *s, reductions ಸ್ಥಿರಾಂಕ *reds, FILE *fout);
 
 /** End a Dot graph.
  *
  * \param fout  output stream.
  */
-void finish_graph (FILE *fout);
+ಶೂನ್ಯ ಮುಕ್ತಾಯ_ನಕ್ಷೆ (FILE *fout);
 
-#endif /* ! GRAPHVIZ_H_ */
+#ಆದರೆ_ಅಂತ್ಯ /* ! GRAPHVIZ_H_ */
