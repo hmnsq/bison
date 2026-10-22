@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_GRAPH_H_
+#यदि_अपरिभाषितम् PRINT_GRAPH_H_
 # define PRINT_GRAPH_H_
 
-void print_graph (void);
+शून्य print_graph (शून्य);
 
-#endif /* !PRINT_GRAPH_H_ */
+#यदि_अन्तः /* !PRINT_GRAPH_H_ */

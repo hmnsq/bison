@@ -18,41 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <bitsetv.h>
+#अन्तर्भाव <bitsetv.h>
 
-#include "getargs.h"
-#include "relation.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "relation.h"
 
-void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+शून्य
+सम्बन्धः_print (ध्रुव वर्ण *title,
+                सम्बन्धः r, सम्बन्धः_ग्रन्थिः आकार,
+                सम्बन्धः_ग्रन्थिः_print print, FILE *बहिर्गमनम्)
 {
-  if (title)
-    fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  यदि (title)
+    fprintf (बहिर्गमनम्, "%s:\n", title);
+  प्रति (सम्बन्धः_ग्रन्थिः i = 0; i < आकार; ++i)
+    यदि (r[i])
       {
-        fputs ("    ", out);
-        if (print)
-          print (i, out);
-        else
-          fprintf (out, "%3ld", (long) i);
-        fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        fputs ("    ", बहिर्गमनम्);
+        यदि (print)
+          print (i, बहिर्गमनम्);
+        अन्यथा
+          fprintf (बहिर्गमनम्, "%3ld", (दीर्घ) i);
+        fputc (':', बहिर्गमनम्);
+        प्रति (सम्बन्धः_ग्रन्थिः j = 0; r[i][j] != अन्तः_ग्रन्थिः; ++j)
           {
-            fputc (' ', out);
-            if (print)
-              print (r[i][j], out);
-            else
-              fprintf (out, "%3ld", (long) r[i][j]);
+            fputc (' ', बहिर्गमनम्);
+            यदि (print)
+              print (r[i][j], बहिर्गमनम्);
+            अन्यथा
+              fprintf (बहिर्गमनम्, "%3ld", (दीर्घ) r[i][j]);
           }
-        fputc ('\n', out);
+        fputc ('\n', बहिर्गमनम्);
       }
-  fputc ('\n', out);
+  fputc ('\n', बहिर्गमनम्);
 }
 
 
@@ -63,62 +63,62 @@ relation_print (const char *title,
 | two.                                                           |
 `---------------------------------------------------------------*/
 
-static relation R;
-static relation_nodes indexes;
-static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
-static bitsetv F;
+स्थिर सम्बन्धः R;
+स्थिर सम्बन्धः_nodes indexes;
+स्थिर सम्बन्धः_nodes vertices;
+स्थिर सम्बन्धः_ग्रन्थिः शिखरम्_2;
+स्थिर सम्बन्धः_ग्रन्थिः infinity;
+स्थिर bitsetv F;
 
-static void
-traverse (relation_node i)
+स्थिर शून्य
+traverse (सम्बन्धः_ग्रन्थिः i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++शिखरम्_2] = i;
+  सम्बन्धः_ग्रन्थिः height = indexes[i] = शिखरम्_2;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  यदि (R[i])
+    प्रति (सम्बन्धः_ग्रन्थिः j = 0; R[i][j] != अन्तः_ग्रन्थिः; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        यदि (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        यदि (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  यदि (indexes[i] == height)
+    प्रति (;;)
       {
-        relation_node j = vertices[top--];
+        सम्बन्धः_ग्रन्थिः j = vertices[शिखरम्_2--];
         indexes[j] = infinity;
 
-        if (i == j)
-          break;
+        यदि (i == j)
+          भङ्ग;
 
         bitset_copy (F[j], F[i]);
       }
 }
 
 
-void
-relation_digraph (relation r, relation_node size, bitsetv function)
+शून्य
+सम्बन्धः_digraph (सम्बन्धः r, सम्बन्धः_ग्रन्थिः आकार, bitsetv function)
 {
-  infinity = size + 2;
-  indexes = xcalloc (size + 1, sizeof *indexes);
-  vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  infinity = आकार + 2;
+  indexes = xcalloc (आकार + 1, परिमाण *indexes);
+  vertices = xnmalloc (आकार + 1, परिमाण *vertices);
+  शिखरम्_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  प्रति (सम्बन्धः_ग्रन्थिः i = 0; i < आकार; i++)
+    यदि (indexes[i] == 0 && R[i])
       traverse (i);
 
-  free (indexes);
-  free (vertices);
+  मुक्त (indexes);
+  मुक्त (vertices);
 
   function = F;
 }
@@ -128,55 +128,55 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 | Destructively transpose R_ARG, of size N.  |
 `-------------------------------------------*/
 
-void
-relation_transpose (relation *R_arg, relation_node size)
+शून्य
+सम्बन्धः_transpose (सम्बन्धः *R_arg, सम्बन्धः_ग्रन्थिः आकार)
 {
-  relation r = *R_arg;
+  सम्बन्धः r = *R_arg;
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+  यदि (trace_flag & trace_sets)
+    सम्बन्धः_print ("relation_transpose", r, आकार, रिक्त, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
-  size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  size_t *nedges = xcalloc (आकार, परिमाण *nedges);
+  प्रति (सम्बन्धः_ग्रन्थिः i = 0; i < आकार; i++)
+    यदि (r[i])
+      प्रति (सम्बन्धः_ग्रन्थिः j = 0; r[i][j] != अन्तः_ग्रन्थिः; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
   /* The result. */
-  relation new_R = xnmalloc (size, sizeof *new_R);
+  सम्बन्धः new_R = xnmalloc (आकार, परिमाण *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
-  relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  सम्बन्धः अन्तः_R = xnmalloc (आकार, परिमाण *अन्तः_R);
+  प्रति (सम्बन्धः_ग्रन्थिः i = 0; i < आकार; i++)
     {
-      relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      सम्बन्धः_ग्रन्थिः *sp = रिक्त;
+      यदि (nedges[i] > 0)
         {
-          sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp = xnmalloc (nedges[i] + 1, परिमाण *sp);
+          sp[nedges[i]] = अन्तः_ग्रन्थिः;
         }
       new_R[i] = sp;
-      end_R[i] = sp;
+      अन्तः_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
-        *end_R[r[i][j]]++ = i;
+  प्रति (सम्बन्धः_ग्रन्थिः i = 0; i < आकार; i++)
+    यदि (r[i])
+      प्रति (सम्बन्धः_ग्रन्थिः j = 0; r[i][j] != अन्तः_ग्रन्थिः; ++j)
+        *अन्तः_R[r[i][j]]++ = i;
 
-  free (nedges);
-  free (end_R);
+  मुक्त (nedges);
+  मुक्त (अन्तः_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
-    free (r[i]);
-  free (r);
+  प्रति (सम्बन्धः_ग्रन्थिः i = 0; i < आकार; i++)
+    मुक्त (r[i]);
+  मुक्त (r);
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+  यदि (trace_flag & trace_sets)
+    सम्बन्धः_print ("relation_transpose: output", new_R, आकार, रिक्त, stderr);
 
   *R_arg = new_R;
 }

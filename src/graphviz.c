@@ -20,26 +20,26 @@
 
 /* Written by Paul Eggert and Satya Kiran Popuri.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <quotearg.h>
+#अन्तर्भाव <quotearg.h>
 
-#include "files.h"
-#include "gram.h"
-#include "graphviz.h"
-#include "tables.h"
+#अन्तर्भाव "files.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "graphviz.h"
+#अन्तर्भाव "tables.h"
 
 /* Return an unambiguous printable representation for NAME, suitable
    for C strings.  Use slot 2 since the user may use slots 0 and 1.  */
 
-static char *
-quote (char const *name)
+स्थिर वर्ण *
+quote (वर्ण ध्रुव *name)
 {
-  return quotearg_n_style (2, c_quoting_style, name);
+  प्रत्यागम quotearg_n_style (2, c_quoting_style, name);
 }
 
-void
+शून्य
 start_graph (FILE *fout)
 {
   fprintf (fout,
@@ -60,59 +60,59 @@ start_graph (FILE *fout)
            "\n");
 }
 
-void
-output_node (int id, char const *label, FILE *fout)
+शून्य
+output_ग्रन्थिः (पूर्णाङ्क id, वर्ण ध्रुव *label, FILE *fout)
 {
   fprintf (fout, "  %d [label=\"%s\"]\n", id, label);
 }
 
-void
-output_edge (int source, int destination, char const *label,
-             char const *style, FILE *fout)
+शून्य
+output_edge (पूर्णाङ्क source, पूर्णाङ्क destination, वर्ण ध्रुव *label,
+             वर्ण ध्रुव *style, FILE *fout)
 {
   fprintf (fout, "  %d -> %d [style=%s", source, destination, style);
-  if (label)
+  यदि (label)
     {
       fputs (" label=\"", fout);
-      for (const char *cp = label; *cp; ++cp)
-        switch (*cp)
+      प्रति (ध्रुव वर्ण *cp = label; *cp; ++cp)
+        विकल्प (*cp)
         {
-        case '"':  fputs ("\\\"", fout); break;
-        case '\\': fputs ("\\\\", fout); break;
-        default:   fputc (*cp,    fout); break;
+        पक्ष '"':  fputs ("\\\"", fout); भङ्ग;
+        पक्ष '\\': fputs ("\\\\", fout); भङ्ग;
+        स्वभाव:   fputc (*cp,    fout); भङ्ग;
         }
       fputc ('"', fout);
     }
   fputs ("]\n", fout);
 }
 
-static void
-no_reduce_bitset_init (state const *s, bitset *no_reduce_set)
+स्थिर शून्य
+no_reduce_bitset_init (state ध्रुव *s, bitset *no_reduce_समुच्चयः)
 {
-  *no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
-  bitset_zero (*no_reduce_set);
+  *no_reduce_समुच्चयः = bitset_create (ntokens, BITSET_FIXED);
+  bitset_zero (*no_reduce_समुच्चयः);
   {
-    int n;
-    FOR_EACH_SHIFT (s->transitions, n)
-      bitset_set (*no_reduce_set, TRANSITION_SYMBOL (s->transitions, n));
+    पूर्णाङ्क n;
+    FOR_EACH_सरणम् (s->transitions, n)
+      bitset_समुच्चयः (*no_reduce_समुच्चयः, TRANSITION_चिह्नम् (s->transitions, n));
   }
-  for (int n = 0; n < s->errs->num; ++n)
-    if (s->errs->symbols[n])
-      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->number);
+  प्रति (पूर्णाङ्क n = 0; n < s->errs->अङ्कः; ++n)
+    यदि (s->errs->symbols[n])
+      bitset_समुच्चयः (*no_reduce_समुच्चयः, s->errs->symbols[n]->content->सङ्ख्या);
 }
 
 /* Show the reductions from state SOURCE on rule RULENO. */
-static void
-conclude_red (struct obstack *out, int source, rule_number ruleno,
+स्थिर शून्य
+conclude_red (संरचना obstack *बहिर्गमनम्, पूर्णाङ्क source, नियमः_सङ्ख्या ruleno,
               bool enabled, bool first, FILE *fout)
 {
   /* If no lookahead tokens were valid transitions, this reduction is
      actually hidden, so cancel everything. */
-  if (first)
-    (void) obstack_finish0 (out);
-  else
+  यदि (first)
+    (शून्य) obstack_finish0 (बहिर्गमनम्);
+  अन्यथा
     {
-      char const *ed = enabled ? "" : "d";
+      वर्ण ध्रुव *ed = enabled ? "" : "d";
       /* First, build the edge's head. The name of reduction nodes is "nRm",
          with n the source state and m the rule number. This is because we
          don't want all the reductions bearing a same rule number to point to
@@ -122,11 +122,11 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
 
       /* (The lookahead tokens have been added to the beginning of the
          obstack, in the caller function.) */
-      if (! obstack_empty_p (out))
+      यदि (! obstack_रिक्तानि_p (बहिर्गमनम्))
         {
-          char *label = obstack_finish0 (out);
+          वर्ण *label = obstack_finish0 (बहिर्गमनम्);
           fprintf (fout, "label=\"[%s]\", ", label);
-          obstack_free (out, label);
+          obstack_free (बहिर्गमनम्, label);
         }
 
       /* Then, the edge's tail. */
@@ -135,13 +135,13 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
       /* Build the associated diamond representation of the target rule. */
       fprintf (fout, " \"%dR%d%s\" [label=\"",
                source, ruleno, ed);
-      bool const final = rule_is_initial (&rules[ruleno]);
-      if (final)
+      bool ध्रुव final = नियमः_is_initial (&नियमाः[ruleno]);
+      यदि (final)
         fprintf (fout, "Acc");
-      else
+      अन्यथा
         fprintf (fout, "R%d", ruleno);
 
-      char const *color
+      वर्ण ध्रुव *color
         = !enabled ? "5"
         : final    ? "1"
         :            "3";
@@ -150,55 +150,55 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
     }
 }
 
-static bool
-print_token (struct obstack *out, bool first, char const *tok)
+स्थिर bool
+print_token (संरचना obstack *बहिर्गमनम्, bool first, वर्ण ध्रुव *tok)
 {
-  if (! first)
-    obstack_sgrow (out, ", ");
-  obstack_backslash (out, tok);
-  return false;
+  यदि (! first)
+    obstack_sgrow (बहिर्गमनम्, ", ");
+  obstack_backslash (बहिर्गमनम्, tok);
+  प्रत्यागम false;
 }
 
-void
-output_red (state const *s, reductions const *reds, FILE *fout)
+शून्य
+output_red (state ध्रुव *s, reductions ध्रुव *reds, FILE *fout)
 {
-  bitset no_reduce_set;
-  no_reduce_bitset_init (s, &no_reduce_set);
+  bitset no_reduce_समुच्चयः;
+  no_reduce_bitset_init (s, &no_reduce_समुच्चयः);
 
-  rule *default_reduction
-    = yydefact[s->number] ? &rules[yydefact[s->number] - 1] : NULL;
+  नियमः *default_reduction
+    = yydefact[s->सङ्ख्या] ? &नियमाः[yydefact[s->सङ्ख्या] - 1] : रिक्त;
 
   /* Two obstacks are needed: one for the enabled reductions, and one
      for the disabled reductions, because in the end we want two
      separate edges, even though in most cases only one will actually
      be printed. */
-  struct obstack dout;
-  struct obstack eout;
+  संरचना obstack dout;
+  संरचना obstack eout;
   obstack_init (&dout);
   obstack_init (&eout);
 
-  const int source = s->number;
-  for (int j = 0; j < reds->num; ++j)
+  ध्रुव पूर्णाङ्क source = s->सङ्ख्या;
+  प्रति (पूर्णाङ्क j = 0; j < reds->अङ्कः; ++j)
     {
-      bool defaulted = default_reduction && default_reduction == reds->rules[j];
+      bool defaulted = default_reduction && default_reduction == reds->नियमाः[j];
 
       /* Build the lookahead tokens lists, one for enabled transitions
          and one for disabled transitions. */
       bool firstd = true;
       bool firste = true;
-      rule_number ruleno = reds->rules[j]->number;
+      नियमः_सङ्ख्या ruleno = reds->नियमाः[j]->सङ्ख्या;
 
-      if (reds->lookaheads)
-        for (int i = 0; i < ntokens; i++)
-          if (bitset_test (reds->lookaheads[j], i))
+      यदि (reds->lookaheads)
+        प्रति (पूर्णाङ्क i = 0; i < ntokens; i++)
+          यदि (bitset_test (reds->lookaheads[j], i))
             {
-              if (bitset_test (no_reduce_set, i))
-                firstd = print_token (&dout, firstd, symbols[i]->tag);
-              else
+              यदि (bitset_test (no_reduce_समुच्चयः, i))
+                firstd = print_token (&dout, firstd, symbols[i]->चिह्नकम्);
+              अन्यथा
                 {
-                  if (! defaulted)
-                    firste = print_token (&eout, firste, symbols[i]->tag);
-                  bitset_set (no_reduce_set, i);
+                  यदि (! defaulted)
+                    firste = print_token (&eout, firste, symbols[i]->चिह्नकम्);
+                  bitset_समुच्चयः (no_reduce_समुच्चयः, i);
                 }
             }
 
@@ -208,10 +208,10 @@ output_red (state const *s, reductions const *reds, FILE *fout)
     }
   obstack_free (&dout, 0);
   obstack_free (&eout, 0);
-  bitset_free (no_reduce_set);
+  bitset_free (no_reduce_समुच्चयः);
 }
 
-void
+शून्य
 finish_graph (FILE *fout)
 {
   fputs ("}\n", fout);

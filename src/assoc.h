@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef ASSOC_H_
+#यदि_अपरिभाषितम् ASSOC_H_
 # define ASSOC_H_
 
 /* Associativity values for tokens and rules.  */
-typedef enum
+प्रकारनिर्देश गणना
 {
   undef_assoc,     /** Not defined. */
-  right_assoc,     /** %right */
-  left_assoc,      /** %left */
+  दक्षिणः_assoc,     /** %right */
+  वामः_assoc,      /** %left */
   non_assoc,       /** %nonassoc */
   precedence_assoc /** %precedence */
 } assoc;
 
-char const *assoc_to_string (assoc a);
+वर्ण ध्रुव *assoc_गन्तव्यम्_string (assoc a);
 
-#endif /* !ASSOC_H_ */
+#यदि_अन्तः /* !ASSOC_H_ */

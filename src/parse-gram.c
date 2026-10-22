@@ -46,63 +46,63 @@
    USER NAME SPACE" below.  */
 
 /* Identify Bison output, and Bison version.  */
-#define YYBISON 30802
+#परिभाषय YYBISON 30802
 
 /* Bison version string.  */
-#define YYBISON_VERSION "3.8.2.30-82269"
+#परिभाषय YYBISON_संस्करणम् "3.8.2.30-82269"
 
 /* Skeleton name.  */
-#define YYSKELETON_NAME "yacc.c"
+#परिभाषय YYSKELETON_NAME "yacc.c"
 
 /* Pure parsers.  */
-#define YYPURE 2
+#परिभाषय YYPURE 2
 
 /* Push parsers.  */
-#define YYPUSH 0
+#परिभाषय YYPUSH 0
 
 /* Pull parsers.  */
-#define YYPULL 1
+#परिभाषय YYPULL 1
 
 /* "%code top" blocks.  */
 
   /* On column 0 to please syntax-check.  */
-#include <config.h>
+#अन्तर्भाव <config.h>
 
 /* Substitute the type names.  */
-#define YYSTYPE         GRAM_STYPE
-#define YYLTYPE         GRAM_LTYPE
+#परिभाषय YYSTYPE         GRAM_STYPE
+#परिभाषय YYLTYPE         GRAM_LTYPE
 /* Substitute the variable and function names.  */
-#define yyparse         gram_parse
-#define yylex           gram_lex
-#define yyerror         gram_error
-#define yydebug         gram_debug
-#define yynerrs         gram_nerrs
+#परिभाषय yyparse         gram_parse
+#परिभाषय yylex           gram_lex
+#परिभाषय yyerror         gram_error
+#परिभाषय yydebug         gram_debug
+#परिभाषय yynerrs         gram_nerrs
 
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
 #   define YY_CAST(Type, Val) static_cast<Type> (Val)
 #   define YY_REINTERPRET_CAST(Type, Val) reinterpret_cast<Type> (Val)
-#  else
+#  अन्यथा
 #   define YY_CAST(Type, Val) ((Type) (Val))
 #   define YY_REINTERPRET_CAST(Type, Val) ((Type) (Val))
 #  endif
 # endif
 # ifndef YY_NULLPTR
-#  if defined __cplusplus
-#   if 201103L <= __cplusplus
+#  यदि defined __cplusplus
+#   यदि 201103L <= __cplusplus
 #    define YY_NULLPTR nullptr
-#   else
+#   अन्यथा
 #    define YY_NULLPTR 0
 #   endif
-#  else
-#   define YY_NULLPTR ((void*)0)
+#  अन्यथा
+#   define YY_NULLPTR ((शून्य*)0)
 #  endif
 # endif
 
-#include "src/parse-gram.h"
+#अन्तर्भाव "src/parse-gram.h"
 /* Symbol kind.  */
-enum yysymbol_kind_t
+गणना yysymbol_विधा_t
 {
   YYSYMBOL_YYEMPTY = -2,
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
@@ -115,38 +115,38 @@ enum yysymbol_kind_t
   YYSYMBOL_PERCENT_TYPE = 7,               /* "%type"  */
   YYSYMBOL_PERCENT_DESTRUCTOR = 8,         /* "%destructor"  */
   YYSYMBOL_PERCENT_PRINTER = 9,            /* "%printer"  */
-  YYSYMBOL_PERCENT_LEFT = 10,              /* "%left"  */
-  YYSYMBOL_PERCENT_RIGHT = 11,             /* "%right"  */
+  YYSYMBOL_PERCENT_वामः = 10,              /* "%left"  */
+  YYSYMBOL_PERCENT_दक्षिणः = 11,             /* "%right"  */
   YYSYMBOL_PERCENT_NONASSOC = 12,          /* "%nonassoc"  */
   YYSYMBOL_PERCENT_PRECEDENCE = 13,        /* "%precedence"  */
   YYSYMBOL_PERCENT_PREC = 14,              /* "%prec"  */
   YYSYMBOL_PERCENT_DPREC = 15,             /* "%dprec"  */
   YYSYMBOL_PERCENT_MERGE = 16,             /* "%merge"  */
-  YYSYMBOL_PERCENT_CODE = 17,              /* "%code"  */
+  YYSYMBOL_PERCENT_संहिता = 17,              /* "%code"  */
   YYSYMBOL_PERCENT_DEFAULT_PREC = 18,      /* "%default-prec"  */
   YYSYMBOL_PERCENT_DEFINE = 19,            /* "%define"  */
   YYSYMBOL_PERCENT_ERROR_VERBOSE = 20,     /* "%error-verbose"  */
   YYSYMBOL_PERCENT_EXPECT = 21,            /* "%expect"  */
   YYSYMBOL_PERCENT_EXPECT_RR = 22,         /* "%expect-rr"  */
-  YYSYMBOL_PERCENT_FILE_PREFIX = 23,       /* "%file-prefix"  */
+  YYSYMBOL_PERCENT_FILE_उपसर्गः = 23,       /* "%file-prefix"  */
   YYSYMBOL_PERCENT_FLAG = 24,              /* "%<flag>"  */
   YYSYMBOL_PERCENT_GLR_PARSER = 25,        /* "%glr-parser"  */
-  YYSYMBOL_PERCENT_HEADER = 26,            /* "%header"  */
+  YYSYMBOL_PERCENT_शीर्षकम् = 26,            /* "%header"  */
   YYSYMBOL_PERCENT_INITIAL_ACTION = 27,    /* "%initial-action"  */
   YYSYMBOL_PERCENT_LANGUAGE = 28,          /* "%language"  */
-  YYSYMBOL_PERCENT_NAME_PREFIX = 29,       /* "%name-prefix"  */
+  YYSYMBOL_PERCENT_NAME_उपसर्गः = 29,       /* "%name-prefix"  */
   YYSYMBOL_PERCENT_NO_DEFAULT_PREC = 30,   /* "%no-default-prec"  */
-  YYSYMBOL_PERCENT_NO_LINES = 31,          /* "%no-lines"  */
+  YYSYMBOL_PERCENT_NO_पङ्क्तयः = 31,          /* "%no-lines"  */
   YYSYMBOL_PERCENT_NONDETERMINISTIC_PARSER = 32, /* "%nondeterministic-parser"  */
   YYSYMBOL_PERCENT_OUTPUT = 33,            /* "%output"  */
-  YYSYMBOL_PERCENT_PURE_PARSER = 34,       /* "%pure-parser"  */
+  YYSYMBOL_PERCENT_विशुद्धम्_PARSER = 34,       /* "%pure-parser"  */
   YYSYMBOL_PERCENT_REQUIRE = 35,           /* "%require"  */
   YYSYMBOL_PERCENT_SKELETON = 36,          /* "%skeleton"  */
   YYSYMBOL_PERCENT_START = 37,             /* "%start"  */
-  YYSYMBOL_PERCENT_TOKEN_TABLE = 38,       /* "%token-table"  */
+  YYSYMBOL_PERCENT_TOKEN_सारणी = 38,       /* "%token-table"  */
   YYSYMBOL_PERCENT_VERBOSE = 39,           /* "%verbose"  */
   YYSYMBOL_PERCENT_YACC = 40,              /* "%yacc"  */
-  YYSYMBOL_BRACED_CODE = 41,               /* "{...}"  */
+  YYSYMBOL_BRACED_संहिता = 41,               /* "{...}"  */
   YYSYMBOL_BRACED_PREDICATE = 42,          /* "%?{...}"  */
   YYSYMBOL_BRACKETED_ID = 43,              /* "[identifier]"  */
   YYSYMBOL_CHAR_LITERAL = 44,              /* "character literal"  */
@@ -159,32 +159,32 @@ enum yysymbol_kind_t
   YYSYMBOL_PIPE = 51,                      /* "|"  */
   YYSYMBOL_PROLOGUE = 52,                  /* "%{...%}"  */
   YYSYMBOL_SEMICOLON = 53,                 /* ";"  */
-  YYSYMBOL_TAG = 54,                       /* "<tag>"  */
-  YYSYMBOL_TAG_ANY = 55,                   /* "<*>"  */
-  YYSYMBOL_TAG_NONE = 56,                  /* "<>"  */
+  YYSYMBOL_चिह्नकम् = 54,                       /* "<tag>"  */
+  YYSYMBOL_चिह्नकम्_ANY = 55,                   /* "<*>"  */
+  YYSYMBOL_चिह्नकम्_NONE = 56,                  /* "<>"  */
   YYSYMBOL_INT_LITERAL = 57,               /* "integer literal"  */
   YYSYMBOL_PERCENT_PARAM = 58,             /* "%param"  */
   YYSYMBOL_PERCENT_UNION = 59,             /* "%union"  */
-  YYSYMBOL_PERCENT_EMPTY = 60,             /* "%empty"  */
+  YYSYMBOL_PERCENT_रिक्तानि = 60,             /* "%empty"  */
   YYSYMBOL_YYACCEPT = 61,                  /* $accept  */
-  YYSYMBOL_input = 62,                     /* input  */
+  YYSYMBOL_निवेशः = 62,                     /*निवेशः*/
   YYSYMBOL_prologue_declarations = 63,     /* prologue_declarations  */
   YYSYMBOL_prologue_declaration = 64,      /* prologue_declaration  */
   YYSYMBOL_65_1 = 65,                      /* $@1  */
   YYSYMBOL_params = 66,                    /* params  */
   YYSYMBOL_grammar_declaration = 67,       /* grammar_declaration  */
-  YYSYMBOL_code_props_type = 68,           /* code_props_type  */
+  YYSYMBOL_संहिता_props_type = 68,           /* code_props_type  */
   YYSYMBOL_union_name = 69,                /* union_name  */
-  YYSYMBOL_symbol_declaration = 70,        /* symbol_declaration  */
+  YYSYMBOL_चिह्नम्_declaration = 70,        /* symbol_declaration  */
   YYSYMBOL_71_2 = 71,                      /* $@2  */
   YYSYMBOL_72_3 = 72,                      /* $@3  */
   YYSYMBOL_73_4 = 73,                      /* $@4  */
   YYSYMBOL_precedence_declarator = 74,     /* precedence_declarator  */
   YYSYMBOL_75_string_opt = 75,             /* string.opt  */
-  YYSYMBOL_76_tag_opt = 76,                /* tag.opt  */
+  YYSYMBOL_76_चिह्नकम्_opt = 76,                /* tag.opt  */
   YYSYMBOL_generic_symlist = 77,           /* generic_symlist  */
   YYSYMBOL_generic_symlist_item = 78,      /* generic_symlist_item  */
-  YYSYMBOL_tag = 79,                       /* tag  */
+  YYSYMBOL_चिह्नकम्_2 = 79,                       /*चिह्नकम्*/
   YYSYMBOL_nterm_decls = 80,               /* nterm_decls  */
   YYSYMBOL_token_decls = 81,               /* token_decls  */
   YYSYMBOL_82_token_decl_1 = 82,           /* token_decl.1  */
@@ -194,131 +194,131 @@ enum yysymbol_kind_t
   YYSYMBOL_token_decls_for_prec = 86,      /* token_decls_for_prec  */
   YYSYMBOL_87_token_decl_for_prec_1 = 87,  /* token_decl_for_prec.1  */
   YYSYMBOL_token_decl_for_prec = 88,       /* token_decl_for_prec  */
-  YYSYMBOL_symbol_decls = 89,              /* symbol_decls  */
+  YYSYMBOL_चिह्नम्_decls = 89,              /* symbol_decls  */
   YYSYMBOL_90_symbols_1 = 90,              /* symbols.1  */
   YYSYMBOL_grammar = 91,                   /* grammar  */
-  YYSYMBOL_rules_or_grammar_declaration = 92, /* rules_or_grammar_declaration  */
-  YYSYMBOL_rules = 93,                     /* rules  */
+  YYSYMBOL_नियमाः_or_grammar_declaration = 92, /* rules_or_grammar_declaration  */
+  YYSYMBOL_नियमाः = 93,                     /*नियमाः*/
   YYSYMBOL_94_5 = 94,                      /* $@5  */
   YYSYMBOL_95_rhses_1 = 95,                /* rhses.1  */
   YYSYMBOL_rhs = 96,                       /* rhs  */
   YYSYMBOL_97_named_ref_opt = 97,          /* named_ref.opt  */
   YYSYMBOL_variable = 98,                  /* variable  */
-  YYSYMBOL_value = 99,                     /* value  */
+  YYSYMBOL_मानम् = 99,                     /*मानम्*/
   YYSYMBOL_id = 100,                       /* id  */
   YYSYMBOL_id_colon = 101,                 /* id_colon  */
-  YYSYMBOL_symbol = 102,                   /* symbol  */
+  YYSYMBOL_चिह्नम् = 102,                   /*चिह्नम्*/
   YYSYMBOL_string_as_id = 103,             /* string_as_id  */
   YYSYMBOL_104_epilogue_opt = 104          /* epilogue.opt  */
 };
-typedef enum yysymbol_kind_t yysymbol_kind_t;
+प्रकारनिर्देश गणना yysymbol_विधा_t yysymbol_विधा_t;
 
 
 
 /* Unqualified %code blocks.  */
 
-  #include "system.h"
+  #अन्तर्भाव "system.h"
 
-  #include <c-ctype.h>
-  #include <quotearg.h>
-  #include <vasnprintf.h>
-  #include <xmemdup0.h>
+  #अन्तर्भाव <c-ctype.h>
+  #अन्तर्भाव <quotearg.h>
+  #अन्तर्भाव <vasnprintf.h>
+  #अन्तर्भाव <xmemdup0.h>
 
-  #include "complain.h"
-  #include "conflicts.h"
-  #include "files.h"
-  #include "getargs.h"
-  #include "gram.h"
-  #include "named-ref.h"
-  #include "reader.h"
-  #include "scan-code.h"
-  #include "scan-gram.h"
-  #include "strversion.h"
+  #अन्तर्भाव "complain.h"
+  #अन्तर्भाव "conflicts.h"
+  #अन्तर्भाव "files.h"
+  #अन्तर्भाव "getargs.h"
+  #अन्तर्भाव "gram.h"
+  #अन्तर्भाव "named-ref.h"
+  #अन्तर्भाव "reader.h"
+  #अन्तर्भाव "scan-code.h"
+  #अन्तर्भाव "scan-gram.h"
+  #अन्तर्भाव "strversion.h"
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  स्थिर ध्रुव वर्ण* api_संस्करणम् = "3.8";
 
-  static int current_prec = 0;
-  static location current_lhs_loc;
-  static named_ref *current_lhs_named_ref;
-  static symbol *current_lhs_symbol;
-  static symbol_class current_class = unknown_sym;
+  स्थिर पूर्णाङ्क current_prec = 0;
+  स्थिर location current_lhs_loc;
+  स्थिर named_ref *current_lhs_named_ref;
+  स्थिर चिह्नम् *current_lhs_चिह्नम्;
+  स्थिर चिह्नम्_class current_class = unknown_sym;
 
   /** Set the new current left-hand side symbol, possibly common
    * to several right-hand side parts of rule.
    */
-  static void current_lhs (symbol *sym, location loc, named_ref *ref);
+  स्थिर शून्य current_lhs (चिह्नम् *sym, location loc, named_ref *ref);
 
-  #define YYLLOC_DEFAULT(Current, Rhs, N)         \
+  #परिभाषय YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  स्थिर YYLTYPE lloc_default (YYLTYPE ध्रुव *, पूर्णाङ्क);
 
-  #define YY_LOCATION_PRINT(File, Loc)            \
+  #परिभाषय YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  स्थिर वर्ण *strip_braces (वर्ण *संहिता);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  स्थिर वर्ण ध्रुव *translate_संहिता (वर्ण *संहिता, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  स्थिर वर्ण ध्रुव *translate_संहिता_braceless (वर्ण *संहिता, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  स्थिर शून्य handle_शीर्षकम् (वर्ण ध्रुव *मानम्);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  स्थिर शून्य handle_error_verbose (location ध्रुव *loc, वर्ण ध्रुव *directive);
 
   /* Handle a %file-prefix directive.  */
-  static void handle_file_prefix (location const *loc,
-                                  location const *dir_loc,
-                                  char const *directive, char const *value);
+  स्थिर शून्य handle_file_उपसर्गः (location ध्रुव *loc,
+                                  location ध्रुव *dir_loc,
+                                  वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  स्थिर शून्य handle_language (location ध्रुव *loc, वर्ण ध्रुव *lang);
 
   /* Handle a %name-prefix directive.  */
-  static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+  स्थिर शून्य handle_name_उपसर्गः (location ध्रुव *loc,
+                                  वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  स्थिर शून्य handle_विशुद्धम्_parser (location ध्रुव *loc, वर्ण ध्रुव *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  स्थिर शून्य handle_require (location ध्रुव *loc, वर्ण ध्रुव *संस्करणम्);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  स्थिर शून्य handle_skeleton (location ध्रुव *loc, वर्ण ध्रुव *skel);
 
   /* Handle a %yacc directive.  */
-  static void handle_yacc (location const *loc);
+  स्थिर शून्य handle_yacc (location ध्रुव *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  स्थिर शून्य gram_error (location ध्रुव *, वर्ण ध्रुव *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  स्थिर वर्ण ध्रुव *char_name (वर्ण);
 
   /* Add style to semantic values in traces.  */
-  static void tron (FILE *yyo);
-  static void troff (FILE *yyo);
+  स्थिर शून्य tron (FILE *yyo);
+  स्थिर शून्य troff (FILE *yyo);
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  स्थिर वर्ण *unquote (ध्रुव वर्ण *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  स्थिर शून्य unquote_free (वर्ण *चरमः_string);
 
   /** Add a lex-param and/or a parse-param.
    *
@@ -326,98 +326,98 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
-  static param_type current_param = param_none;
+  स्थिर शून्य सङ्कलय_param (param_type type, वर्ण *decl, location loc);
+  स्थिर param_type current_param = param_none;
 
 
-#ifdef short
-# undef short
-#endif
+#यदि_परिभाषितम् ह्रस्व
+# undef ह्रस्व
+#यदि_अन्तः
 
 /* On compilers that do not define __PTRDIFF_MAX__ etc., make sure
    <limits.h> and (if available) <stdint.h> are included
    so that the code can choose integer types of a good width.  */
 
-#ifndef __PTRDIFF_MAX__
+#यदि_अपरिभाषितम् __PTRDIFF_MAX__
 # include <limits.h> /* INFRINGES ON USER NAME SPACE */
-# if defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
+# यदि defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stdint.h> /* INFRINGES ON USER NAME SPACE */
 #  define YY_STDINT_H
 # endif
-#endif
+#यदि_अन्तः
 
 /* Narrow types that promote to a signed type and that can represent a
    signed or unsigned integer of at least N bits.  In tables they can
    save space and decrease cache pressure.  Promoting to a signed type
    helps avoid bugs in integer arithmetic.  */
 
-#ifdef __INT_LEAST8_MAX__
-typedef __INT_LEAST8_TYPE__ yytype_int8;
-#elif defined YY_STDINT_H
-typedef int_least8_t yytype_int8;
-#else
-typedef signed char yytype_int8;
-#endif
+#यदि_परिभाषितम् __INT_LEAST8_MAX__
+प्रकारनिर्देश __INT_LEAST8_TYPE__ yytype_int8;
+#नोचेद्यदि defined YY_STDINT_H
+प्रकारनिर्देश int_least8_t yytype_int8;
+#अन्यथा
+प्रकारनिर्देश चिह्नित वर्ण yytype_int8;
+#यदि_अन्तः
 
-#ifdef __INT_LEAST16_MAX__
-typedef __INT_LEAST16_TYPE__ yytype_int16;
-#elif defined YY_STDINT_H
-typedef int_least16_t yytype_int16;
-#else
-typedef short yytype_int16;
-#endif
+#यदि_परिभाषितम् __INT_LEAST16_MAX__
+प्रकारनिर्देश __INT_LEAST16_TYPE__ yytype_int16;
+#नोचेद्यदि defined YY_STDINT_H
+प्रकारनिर्देश int_least16_t yytype_int16;
+#अन्यथा
+प्रकारनिर्देश ह्रस्व yytype_int16;
+#यदि_अन्तः
 
 /* Work around bug in HP-UX 11.23, which defines these macros
    incorrectly for preprocessor constants.  This workaround can likely
    be removed in 2023, as HPE has promised support for HP-UX 11.23
    (aka HP-UX 11i v2) only through the end of 2022; see Table 2 of
    <https://h20195.www2.hpe.com/V2/getpdf.aspx/4AA4-7673ENW.pdf>.  */
-#ifdef __hpux
+#यदि_परिभाषितम् __hpux
 # undef UINT_LEAST8_MAX
 # undef UINT_LEAST16_MAX
 # define UINT_LEAST8_MAX 255
 # define UINT_LEAST16_MAX 65535
-#endif
+#यदि_अन्तः
 
-#if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
-typedef __UINT_LEAST8_TYPE__ yytype_uint8;
-#elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
-       && UINT_LEAST8_MAX <= INT_MAX)
-typedef uint_least8_t yytype_uint8;
-#elif !defined __UINT_LEAST8_MAX__ && UCHAR_MAX <= INT_MAX
-typedef unsigned char yytype_uint8;
-#else
-typedef short yytype_uint8;
-#endif
+#यदि defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
+प्रकारनिर्देश __UINT_LEAST8_TYPE__ yytype_uint8;
+#नोचेद्यदि (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
+       && UINT_LEAST8_MAX <= अधिकतम_पूर्णाङ्कः)
+प्रकारनिर्देश uint_least8_t yytype_uint8;
+#नोचेद्यदि !defined __UINT_LEAST8_MAX__ && UCHAR_MAX <= अधिकतम_पूर्णाङ्कः
+प्रकारनिर्देश अचिह्नित वर्ण yytype_uint8;
+#अन्यथा
+प्रकारनिर्देश ह्रस्व yytype_uint8;
+#यदि_अन्तः
 
-#if defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
-typedef __UINT_LEAST16_TYPE__ yytype_uint16;
-#elif (!defined __UINT_LEAST16_MAX__ && defined YY_STDINT_H \
-       && UINT_LEAST16_MAX <= INT_MAX)
-typedef uint_least16_t yytype_uint16;
-#elif !defined __UINT_LEAST16_MAX__ && USHRT_MAX <= INT_MAX
-typedef unsigned short yytype_uint16;
-#else
-typedef int yytype_uint16;
-#endif
+#यदि defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
+प्रकारनिर्देश __UINT_LEAST16_TYPE__ yytype_uint16;
+#नोचेद्यदि (!defined __UINT_LEAST16_MAX__ && defined YY_STDINT_H \
+       && UINT_LEAST16_MAX <= अधिकतम_पूर्णाङ्कः)
+प्रकारनिर्देश uint_least16_t yytype_uint16;
+#नोचेद्यदि !defined __UINT_LEAST16_MAX__ && USHRT_MAX <= अधिकतम_पूर्णाङ्कः
+प्रकारनिर्देश अचिह्नित ह्रस्व yytype_uint16;
+#अन्यथा
+प्रकारनिर्देश पूर्णाङ्क yytype_uint16;
+#यदि_अन्तः
 
-#ifndef YYPTRDIFF_T
-# if defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
+#यदि_अपरिभाषितम् YYPTRDIFF_T
+# यदि defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
 #  define YYPTRDIFF_T __PTRDIFF_TYPE__
-#  define YYPTRDIFF_MAXIMUM __PTRDIFF_MAX__
+#  define YYPTRDIFF_अधिकतमम् __PTRDIFF_MAX__
 # elif defined PTRDIFF_MAX
 #  ifndef ptrdiff_t
 #   include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  endif
 #  define YYPTRDIFF_T ptrdiff_t
-#  define YYPTRDIFF_MAXIMUM PTRDIFF_MAX
-# else
-#  define YYPTRDIFF_T long
-#  define YYPTRDIFF_MAXIMUM LONG_MAX
+#  define YYPTRDIFF_अधिकतमम् PTRDIFF_MAX
+# अन्यथा
+#  define YYPTRDIFF_T दीर्घ
+#  define YYPTRDIFF_अधिकतमम् LONG_MAX
 # endif
-#endif
+#यदि_अन्तः
 
-#ifndef YYSIZE_T
+#यदि_अपरिभाषितम् YYSIZE_T
 # ifdef __SIZE_TYPE__
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
@@ -425,29 +425,29 @@ typedef int yytype_uint16;
 # elif defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
-# else
-#  define YYSIZE_T unsigned
+# अन्यथा
+#  define YYSIZE_T अचिह्नित
 # endif
-#endif
+#यदि_अन्तः
 
-#define YYSIZE_MAXIMUM                                  \
+#परिभाषय YYSIZE_अधिकतमम्                                  \
   YY_CAST (YYPTRDIFF_T,                                 \
-           (YYPTRDIFF_MAXIMUM < YY_CAST (YYSIZE_T, -1)  \
-            ? YYPTRDIFF_MAXIMUM                         \
+           (YYPTRDIFF_अधिकतमम् < YY_CAST (YYSIZE_T, -1)  \
+            ? YYPTRDIFF_अधिकतमम्                         \
             : YY_CAST (YYSIZE_T, -1)))
 
-#define YYSIZEOF(X) YY_CAST (YYPTRDIFF_T, sizeof (X))
+#परिभाषय YYSIZEOF(X) YY_CAST (YYPTRDIFF_T, परिमाण (X))
 
 
 /* Stored state numbers (used for stacks). */
-typedef yytype_uint8 yy_state_t;
+प्रकारनिर्देश yytype_uint8 yy_state_t;
 
 /* State numbers in computations.  */
-typedef int yy_state_fast_t;
+प्रकारनिर्देश पूर्णाङ्क yy_state_fast_t;
 
-#ifndef YY_
-# if defined YYENABLE_NLS && YYENABLE_NLS
-#  if ENABLE_NLS
+#यदि_अपरिभाषितम् YY_
+# यदि defined YYENABLE_NLS && YYENABLE_NLS
+#  यदि ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
@@ -455,127 +455,127 @@ typedef int yy_state_fast_t;
 # ifndef YY_
 #  define YY_(Msgid) Msgid
 # endif
-#endif
+#यदि_अन्तः
 
-#ifndef N_
+#यदि_अपरिभाषितम् N_
 # define N_(Msgid) Msgid
-#endif
+#यदि_अन्तः
 
 
-#ifndef YY_ATTRIBUTE_PURE
-# if defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
-#  define YY_ATTRIBUTE_PURE __attribute__ ((__pure__))
-# else
-#  define YY_ATTRIBUTE_PURE
+#यदि_अपरिभाषितम् YY_ATTRIBUTE_विशुद्धम्
+# यदि defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
+#  define YY_ATTRIBUTE_विशुद्धम् __attribute__ ((__pure__))
+# अन्यथा
+#  define YY_ATTRIBUTE_विशुद्धम्
 # endif
-#endif
+#यदि_अन्तः
 
-#ifndef YY_ATTRIBUTE_UNUSED
-# if defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
-#  define YY_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
-# else
-#  define YY_ATTRIBUTE_UNUSED
+#यदि_अपरिभाषितम् YY_ATTRIBUTE_अप्रयुक्तम्
+# यदि defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+#  define YY_ATTRIBUTE_अप्रयुक्तम् __attribute__ ((__unused__))
+# अन्यथा
+#  define YY_ATTRIBUTE_अप्रयुक्तम्
 # endif
-#endif
+#यदि_अन्तः
 
 /* Suppress unused-variable warnings by "using" E.  */
-#if ! defined lint || defined __GNUC__
-# define YY_USE(E) ((void) (E))
-#else
-# define YY_USE(E) /* empty */
-#endif
+#यदि ! defined lint || defined __GNUC__
+# define YY_USE(E) ((शून्य) (E))
+#अन्यथा
+# define YY_USE(E) /*रिक्तानि*/
+#यदि_अन्तः
 
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
-#if defined __GNUC__ && ! defined __ICC && 406 <= __GNUC__ * 100 + __GNUC_MINOR__
-# if __GNUC__ * 100 + __GNUC_MINOR__ < 407
+#यदि defined __GNUC__ && ! defined __ICC && 406 <= __GNUC__ * 100 + __GNUC_MINOR__
+# यदि __GNUC__ * 100 + __GNUC_MINOR__ < 407
 #  define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                           \
     _Pragma ("GCC diagnostic push")                                     \
     _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")
-# else
+# अन्यथा
 #  define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                           \
     _Pragma ("GCC diagnostic push")                                     \
     _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")              \
     _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
 # endif
-# define YY_IGNORE_MAYBE_UNINITIALIZED_END      \
+# define YY_IGNORE_MAYBE_UNINITIALIZED_अन्तः      \
     _Pragma ("GCC diagnostic pop")
-#else
-# define YY_INITIAL_VALUE(Value) Value
-#endif
-#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+#अन्यथा
+# define YY_INITIAL_मानम्(मानम्_4) मानम्_4
+#यदि_अन्तः
+#यदि_अपरिभाषितम् YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
 # define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-# define YY_IGNORE_MAYBE_UNINITIALIZED_END
-#endif
-#ifndef YY_INITIAL_VALUE
-# define YY_INITIAL_VALUE(Value) /* Nothing. */
-#endif
+# define YY_IGNORE_MAYBE_UNINITIALIZED_अन्तः
+#यदि_अन्तः
+#यदि_अपरिभाषितम् YY_INITIAL_मानम्
+# define YY_INITIAL_मानम्(मानम्_4) /* Nothing. */
+#यदि_अन्तः
 
-#if defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
+#यदि defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
 # define YY_IGNORE_USELESS_CAST_BEGIN                          \
     _Pragma ("GCC diagnostic push")                            \
     _Pragma ("GCC diagnostic ignored \"-Wuseless-cast\"")
-# define YY_IGNORE_USELESS_CAST_END            \
+# define YY_IGNORE_USELESS_CAST_अन्तः            \
     _Pragma ("GCC diagnostic pop")
-#endif
-#ifndef YY_IGNORE_USELESS_CAST_BEGIN
+#यदि_अन्तः
+#यदि_अपरिभाषितम् YY_IGNORE_USELESS_CAST_BEGIN
 # define YY_IGNORE_USELESS_CAST_BEGIN
-# define YY_IGNORE_USELESS_CAST_END
-#endif
+# define YY_IGNORE_USELESS_CAST_अन्तः
+#यदि_अन्तः
 
 
-#define YY_ASSERT(E) ((void) (0 && (E)))
+#परिभाषय YY_ASSERT(E) ((शून्य) (0 && (E)))
 
-#if 1
+#यदि 1
 
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
 # ifdef YYSTACK_ALLOC
    /* Pacify GCC's 'empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
-#  ifndef YYSTACK_ALLOC_MAXIMUM
+#  define YYSTACK_FREE(Ptr) कुरु { /*रिक्तानि*/; } यावत् (0)
+#  ifndef YYSTACK_ALLOC_अधिकतमम्
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
        invoke alloca (N) if N exceeds 4096.  Use a slightly smaller number
        to allow for a few compiler-allocated temporary stack slots.  */
-#   define YYSTACK_ALLOC_MAXIMUM 4032 /* reasonable circa 2006 */
+#   define YYSTACK_ALLOC_अधिकतमम् 4032 /* reasonable circa 2006 */
 #  endif
-# else
+# अन्यथा
 #  define YYSTACK_ALLOC YYMALLOC
 #  define YYSTACK_FREE YYFREE
-#  ifndef YYSTACK_ALLOC_MAXIMUM
-#   define YYSTACK_ALLOC_MAXIMUM YYSIZE_MAXIMUM
+#  ifndef YYSTACK_ALLOC_अधिकतमम्
+#   define YYSTACK_ALLOC_अधिकतमम् YYSIZE_अधिकतमम्
 #  endif
-#  if (defined __cplusplus && ! defined EXIT_SUCCESS \
-       && ! ((defined YYMALLOC || defined malloc) \
-             && (defined YYFREE || defined free)))
+#  यदि (defined __cplusplus && ! defined EXIT_SUCCESS \
+       && ! ((defined YYMALLOC || defined स्मृतिं_देहि) \
+             && (defined YYFREE || defined मुक्त)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   ifndef EXIT_SUCCESS
 #    define EXIT_SUCCESS 0
 #   endif
 #  endif
 #  ifndef YYMALLOC
-#   define YYMALLOC malloc
-#   if ! defined malloc && ! defined EXIT_SUCCESS
-void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
+#   define YYMALLOC स्मृतिं_देहि
+#   यदि ! defined स्मृतिं_देहि && ! defined EXIT_SUCCESS
+शून्य *स्मृतिं_देहि (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
-#   define YYFREE free
-#   if ! defined free && ! defined EXIT_SUCCESS
-void free (void *); /* INFRINGES ON USER NAME SPACE */
+#   define YYFREE मुक्त
+#   यदि ! defined मुक्त && ! defined EXIT_SUCCESS
+शून्य मुक्त (शून्य *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 # endif
 # define YYCOPY_NEEDED 1
-#endif /* 1 */
+#यदि_अन्तः /* 1 */
 
-#if (! defined yyoverflow \
+#यदि (! defined yyoverflow \
      && (! defined __cplusplus \
          || (defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL \
              && defined GRAM_STYPE_IS_TRIVIAL && GRAM_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
-union yyalloc
+सङ्घ yyalloc
 {
   yy_state_t yyss_alloc;
   YYSTYPE yyvs_alloc;
@@ -583,14 +583,14 @@ union yyalloc
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
-# define YYSTACK_GAP_MAXIMUM (YYSIZEOF (union yyalloc) - 1)
+# define YYSTACK_GAP_अधिकतमम् (YYSIZEOF (सङ्घ yyalloc) - 1)
 
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
-# define YYSTACK_BYTES(N) \
+# define YYSTACK_अष्टकानि(N) \
      ((N) * (YYSIZEOF (yy_state_t) + YYSIZEOF (YYSTYPE) \
              + YYSIZEOF (YYLTYPE)) \
-      + 2 * YYSTACK_GAP_MAXIMUM)
+      + 2 * YYSTACK_GAP_अधिकतमम्)
 
 # define YYCOPY_NEEDED 1
 
@@ -599,64 +599,64 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
-    do                                                                  \
+# define YYSTACK_RELOCATE(राशिः_alloc, राशिः)                           \
+    कुरु                                                                  \
       {                                                                 \
         YYPTRDIFF_T yynewbytes;                                         \
-        YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
-        Stack = &yyptr->Stack_alloc;                                    \
-        yynewbytes = yystacksize * YYSIZEOF (*Stack) + YYSTACK_GAP_MAXIMUM; \
+        YYCOPY (&yyptr->राशिः_alloc, राशिः, yysize);                    \
+        राशिः = &yyptr->राशिः_alloc;                                    \
+        yynewbytes = yystacksize * YYSIZEOF (*राशिः) + YYSTACK_GAP_अधिकतमम्; \
         yyptr += yynewbytes / YYSIZEOF (*yyptr);                        \
       }                                                                 \
-    while (0)
+    यावत् (0)
 
-#endif
+#यदि_अन्तः
 
-#if defined YYCOPY_NEEDED && YYCOPY_NEEDED
+#यदि defined YYCOPY_NEEDED && YYCOPY_NEEDED
 /* Copy COUNT objects from SRC to DST.  The source and destination do
    not overlap.  */
 # ifndef YYCOPY
-#  if defined __GNUC__ && 1 < __GNUC__
-#   define YYCOPY(Dst, Src, Count) \
-      __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (Count)) * sizeof (*(Src)))
-#  else
-#   define YYCOPY(Dst, Src, Count)              \
-      do                                        \
+#  यदि defined __GNUC__ && 1 < __GNUC__
+#   define YYCOPY(Dst, Src, गणनम्_2) \
+      __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (गणनम्_2)) * परिमाण (*(Src)))
+#  अन्यथा
+#   define YYCOPY(Dst, Src, गणनम्_2)              \
+      कुरु                                        \
         {                                       \
           YYPTRDIFF_T yyi;                      \
-          for (yyi = 0; yyi < (Count); yyi++)   \
+          प्रति (yyi = 0; yyi < (गणनम्_2); yyi++)   \
             (Dst)[yyi] = (Src)[yyi];            \
         }                                       \
-      while (0)
+      यावत् (0)
 #  endif
 # endif
-#endif /* !YYCOPY_NEEDED */
+#यदि_अन्तः /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  3
+#परिभाषय YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   240
+#परिभाषय YYLAST   240
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  61
+#परिभाषय YYNTOKENS  61
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  44
+#परिभाषय YYNNTS  44
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  125
+#परिभाषय YYNRULES  125
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  169
+#परिभाषय YYNSTATES  169
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   315
+#परिभाषय YYMAXUTOK   315
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
    as returned by yylex, with out-of-bounds checking.  */
-#define YYTRANSLATE(YYX) YY_CAST (yysymbol_kind_t, YYX)
+#परिभाषय YYTRANSLATE(YYX) YY_CAST (yysymbol_विधा_t, YYX)
 
-#if GRAM_DEBUG
+#यदि GRAM_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int16 yyrline[] =
+स्थिर ध्रुव yytype_int16 yyrline[] =
 {
        0,   310,   310,   319,   320,   324,   325,   331,   335,   340,
      341,   342,   343,   344,   345,   350,   355,   356,   357,   358,
@@ -672,20 +672,20 @@ static const yytype_int16 yyrline[] =
      718,   723,   724,   733,   757,   758,   759,   760,   772,   774,
      798,   803,   804,   809,   817,   818
 };
-#endif
+#यदि_अन्तः
 
 /** Accessing symbol of state STATE.  */
-#define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
+#परिभाषय YY_ACCESSING_चिह्नम्(State) YY_CAST (yysymbol_विधा_t, yystos[State])
 
-#if 1
+#यदि 1
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
-static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
+स्थिर ध्रुव वर्ण *yysymbol_name (yysymbol_विधा_t yysymbol) YY_ATTRIBUTE_अप्रयुक्तम्;
 
-static const char *
-yysymbol_name (yysymbol_kind_t yysymbol)
+स्थिर ध्रुव वर्ण *
+yysymbol_name (yysymbol_विधा_t yysymbol)
 {
-  static const char *const yy_sname[] =
+  स्थिर ध्रुव वर्ण *ध्रुव yy_sname[] =
   {
   N_("end of file"), N_("error"), N_("invalid token"), N_("string"),
   N_("translatable string"), "%token", "%nterm", "%type", "%destructor",
@@ -712,7 +712,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
   };
   /* YYTRANSLATABLE[SYMBOL-NUM] -- Whether YY_SNAME[SYMBOL-NUM] is
      internationalizable.  */
-  static yytype_int8 yytranslatable[] =
+  स्थिर yytype_int8 yytranslatable[] =
   {
        1,     1,     1,     1,     1,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
@@ -722,25 +722,25 @@ yysymbol_name (yysymbol_kind_t yysymbol)
        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,
        0
   };
-  return (yysymbol < YYNTOKENS && yytranslatable[yysymbol]
+  प्रत्यागम (yysymbol < YYNTOKENS && yytranslatable[yysymbol]
           ? _(yy_sname[yysymbol])
           : yy_sname[yysymbol]);
 }
-#endif
+#यदि_अन्तः
 
-#define YYPACT_NINF (-148)
+#परिभाषय YYPACT_NINF (-148)
 
-#define yypact_value_is_default(Yyn) \
+#परिभाषय yypact_मानम्_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-125)
+#परिभाषय YYTABLE_NINF (-125)
 
-#define yytable_value_is_error(Yyn) \
+#परिभाषय yytable_मानम्_is_error(Yyn) \
   0
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-static const yytype_int16 yypact[] =
+स्थिर ध्रुव yytype_int16 yypact[] =
 {
     -148,    13,   113,  -148,   -27,  -148,  -148,  -148,  -148,  -148,
     -148,  -148,  -148,  -148,   -33,  -148,   -21,  -148,   -29,   -26,
@@ -764,7 +764,7 @@ static const yytype_int16 yypact[] =
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
    Performed when YYTABLE does not specify something else to do.  Zero
    means the default is an error.  */
-static const yytype_int8 yydefact[] =
+स्थिर ध्रुव yytype_int8 yydefact[] =
 {
        3,     0,     0,     1,     0,    47,    45,    49,    40,    41,
       52,    53,    54,    55,     0,    36,     0,    10,     0,     0,
@@ -786,7 +786,7 @@ static const yytype_int8 yydefact[] =
 };
 
 /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int16 yypgoto[] =
+स्थिर ध्रुव yytype_int16 yypgoto[] =
 {
     -148,  -148,  -148,  -148,  -148,  -148,   109,  -148,  -148,  -148,
     -148,  -148,  -148,  -148,  -148,  -148,  -148,    -7,  -148,  -148,
@@ -796,7 +796,7 @@ static const yytype_int16 yypgoto[] =
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_uint8 yydefgoto[] =
+स्थिर ध्रुव yytype_uint8 yydefgoto[] =
 {
        0,     1,     2,    43,    81,   115,    76,    45,    83,    46,
       50,    49,    51,    47,    60,   158,   120,   121,   122,    96,
@@ -808,7 +808,7 @@ static const yytype_uint8 yydefgoto[] =
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule whose
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_int16 yytable[] =
+स्थिर ध्रुव yytype_int16 yytable[] =
 {
       89,   100,    95,    95,   126,   102,   131,    68,    52,    90,
       67,    69,   167,     3,   124,    53,    68,    91,   129,   168,
@@ -837,7 +837,7 @@ static const yytype_int16 yytable[] =
      157
 };
 
-static const yytype_int16 yycheck[] =
+स्थिर ध्रुव yytype_int16 yycheck[] =
 {
       47,    51,    49,    50,    87,     3,    93,    44,    41,    47,
        3,    48,   159,     0,    85,    48,    44,    54,    91,   166,
@@ -868,7 +868,7 @@ static const yytype_int16 yycheck[] =
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
-static const yytype_int8 yystos[] =
+स्थिर ध्रुव yytype_int8 yystos[] =
 {
        0,    62,    63,     0,     1,     5,     6,     7,     8,     9,
       10,    11,    12,    13,    17,    18,    19,    20,    21,    22,
@@ -890,7 +890,7 @@ static const yytype_int8 yystos[] =
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
-static const yytype_int8 yyr1[] =
+स्थिर ध्रुव yytype_int8 yyr1[] =
 {
        0,    61,    62,    63,    63,    64,    64,    64,    64,    64,
       64,    64,    64,    64,    64,    64,    64,    64,    64,    64,
@@ -908,7 +908,7 @@ static const yytype_int8 yyr1[] =
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
-static const yytype_int8 yyr2[] =
+स्थिर ध्रुव yytype_int8 yyr2[] =
 {
        0,     2,     4,     0,     2,     1,     1,     1,     3,     2,
        1,     2,     2,     2,     1,     2,     2,     2,     1,     1,
@@ -926,81 +926,81 @@ static const yytype_int8 yyr2[] =
 };
 
 
-enum { YYENOMEM = -2 };
+गणना { YYENOMEM = -2 };
 
-#define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = GRAM_EMPTY)
+#परिभाषय yyerrok         (yyerrstatus = 0)
+#परिभाषय yyclearin       (yychar = GRAM_रिक्तानि)
 
-#define YYACCEPT        goto yyacceptlab
-#define YYABORT         goto yyabortlab
-#define YYERROR         goto yyerrorlab
-#define YYNOMEM         goto yyexhaustedlab
+#परिभाषय YYACCEPT        गच्छ yyacceptlab
+#परिभाषय YYABORT         गच्छ yyabortlab
+#परिभाषय YYERROR         गच्छ yyerrorlab
+#परिभाषय YYNOMEM         गच्छ yyexhaustedlab
 
 
-#define YYRECOVERING()  (!!yyerrstatus)
+#परिभाषय YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)                                    \
-  do                                                              \
-    if (yychar == GRAM_EMPTY)                                        \
+#परिभाषय YYBACKUP(Token, मानम्_4)                                    \
+  कुरु                                                              \
+    यदि (yychar == GRAM_रिक्तानि)                                        \
       {                                                           \
         yychar = (Token);                                         \
-        yylval = (Value);                                         \
+        yylval = (मानम्_4);                                         \
         YYPOPSTACK (yylen);                                       \
         yystate = *yyssp;                                         \
         YY_LAC_DISCARD ("YYBACKUP");                              \
-        goto yybackup;                                            \
+        गच्छ yybackup;                                            \
       }                                                           \
-    else                                                          \
+    अन्यथा                                                          \
       {                                                           \
         yyerror (&yylloc, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
-  while (0)
+  यावत् (0)
 
 /* Backward compatibility with an undocumented macro.
    Use GRAM_error or GRAM_UNDEF. */
-#define YYERRCODE GRAM_UNDEF
+#परिभाषय YYERRCODE GRAM_UNDEF
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
    If N is 0, then set CURRENT to the empty location which ends
    the previous symbol: RHS[0] (always defined).  */
 
-#ifndef YYLLOC_DEFAULT
+#यदि_अपरिभाषितम् YYLLOC_DEFAULT
 # define YYLLOC_DEFAULT(Current, Rhs, N)                                \
-    do                                                                  \
-      if (N)                                                            \
+    कुरु                                                                  \
+      यदि (N)                                                            \
         {                                                               \
-          (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;        \
+          (Current).first_पङ्क्तिः   = YYRHSLOC (Rhs, 1).first_पङ्क्तिः;        \
           (Current).first_column = YYRHSLOC (Rhs, 1).first_column;      \
-          (Current).last_line    = YYRHSLOC (Rhs, N).last_line;         \
-          (Current).last_column  = YYRHSLOC (Rhs, N).last_column;       \
+          (Current).चरमः_पङ्क्तिः    = YYRHSLOC (Rhs, N).चरमः_पङ्क्तिः;         \
+          (Current).चरमः_column  = YYRHSLOC (Rhs, N).चरमः_column;       \
         }                                                               \
-      else                                                              \
+      अन्यथा                                                              \
         {                                                               \
-          (Current).first_line   = (Current).last_line   =              \
-            YYRHSLOC (Rhs, 0).last_line;                                \
-          (Current).first_column = (Current).last_column =              \
-            YYRHSLOC (Rhs, 0).last_column;                              \
+          (Current).first_पङ्क्तिः   = (Current).चरमः_पङ्क्तिः   =              \
+            YYRHSLOC (Rhs, 0).चरमः_पङ्क्तिः;                                \
+          (Current).first_column = (Current).चरमः_column =              \
+            YYRHSLOC (Rhs, 0).चरमः_column;                              \
         }                                                               \
-    while (0)
-#endif
+    यावत् (0)
+#यदि_अन्तः
 
-#define YYRHSLOC(Rhs, K) ((Rhs)[K])
+#परिभाषय YYRHSLOC(Rhs, K) ((Rhs)[K])
 
 
 /* Enable debugging if requested.  */
-#if GRAM_DEBUG
+#यदि GRAM_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)                        \
-do {                                            \
-  if (yydebug)                                  \
-    YYFPRINTF Args;                             \
-} while (0)
+# define YYDPRINTF(तर्काः_2)                        \
+कुरु {                                            \
+  यदि (yydebug)                                  \
+    YYFPRINTF तर्काः_2;                             \
+} यावत् (0)
 
 
 /* YYLOCATION_PRINT -- Print the location on the stream.
@@ -1009,7 +1009,7 @@ do {                                            \
 
 # ifndef YYLOCATION_PRINT
 
-#  if defined YY_LOCATION_PRINT
+#  यदि defined YY_LOCATION_PRINT
 
    /* Temporary convenience wrapper in case some people defined the
       undocumented and private YY_LOCATION_PRINT macros.  */
@@ -1019,30 +1019,30 @@ do {                                            \
 
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
-YY_ATTRIBUTE_UNUSED
-static int
-yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
+YY_ATTRIBUTE_अप्रयुक्तम्
+स्थिर पूर्णाङ्क
+yy_location_print_ (FILE *yyo, YYLTYPE ध्रुव * ध्रुव yylocp)
 {
-  int res = 0;
-  int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
-  if (0 <= yylocp->first_line)
+  पूर्णाङ्क res = 0;
+  पूर्णाङ्क अन्तः_col = 0 != yylocp->चरमः_column ? yylocp->चरमः_column - 1 : 0;
+  यदि (0 <= yylocp->first_पङ्क्तिः)
     {
-      res += YYFPRINTF (yyo, "%d", yylocp->first_line);
-      if (0 <= yylocp->first_column)
+      res += YYFPRINTF (yyo, "%d", yylocp->first_पङ्क्तिः);
+      यदि (0 <= yylocp->first_column)
         res += YYFPRINTF (yyo, ".%d", yylocp->first_column);
     }
-  if (0 <= yylocp->last_line)
+  यदि (0 <= yylocp->चरमः_पङ्क्तिः)
     {
-      if (yylocp->first_line < yylocp->last_line)
+      यदि (yylocp->first_पङ्क्तिः < yylocp->चरमः_पङ्क्तिः)
         {
-          res += YYFPRINTF (yyo, "-%d", yylocp->last_line);
-          if (0 <= end_col)
-            res += YYFPRINTF (yyo, ".%d", end_col);
+          res += YYFPRINTF (yyo, "-%d", yylocp->चरमः_पङ्क्तिः);
+          यदि (0 <= अन्तः_col)
+            res += YYFPRINTF (yyo, ".%d", अन्तः_col);
         }
-      else if (0 <= end_col && yylocp->first_column < end_col)
-        res += YYFPRINTF (yyo, "-%d", end_col);
+      अन्यथा यदि (0 <= अन्तः_col && yylocp->first_column < अन्तः_col)
+        res += YYFPRINTF (yyo, "-%d", अन्तः_col);
     }
-  return res;
+  प्रत्यागम res;
 }
 
 #   define YYLOCATION_PRINT  yy_location_print_
@@ -1051,9 +1051,9 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
        undocumented and private YY_LOCATION_PRINT macros.  */
 #   define YY_LOCATION_PRINT(File, Loc)  YYLOCATION_PRINT(File, &(Loc))
 
-#  else
+#  अन्यथा
 
-#   define YYLOCATION_PRINT(File, Loc) ((void) 0)
+#   define YYLOCATION_PRINT(File, Loc) ((शून्य) 0)
     /* Temporary convenience wrapper in case some people defined the
        undocumented and private YY_LOCATION_PRINT macros.  */
 #   define YY_LOCATION_PRINT  YYLOCATION_PRINT
@@ -1062,223 +1062,223 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 # endif /* !defined YYLOCATION_PRINT */
 
 
-# define YY_SYMBOL_PRINT(Title, Kind, Value, Location)                    \
-do {                                                                      \
-  if (yydebug)                                                            \
+# define YY_चिह्नम्_PRINT(Title, विधा_2, मानम्_4, Location)                    \
+कुरु {                                                                      \
+  यदि (yydebug)                                                            \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
-      yy_symbol_print (stderr,                                            \
-                  Kind, Value, Location); \
+      yy_चिह्नम्_print (stderr,                                            \
+                  विधा_2, मानम्_4, Location); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
-} while (0)
+} यावत् (0)
 
 
 /*-----------------------------------.
 | Print this symbol's value on YYO.  |
 `-----------------------------------*/
 
-static void
-yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp)
+स्थिर शून्य
+yy_चिह्नम्_मानम्_print (FILE *yyo,
+                       yysymbol_विधा_t yykind, YYSTYPE ध्रुव * ध्रुव yyvaluep, YYLTYPE ध्रुव * ध्रुव yylocationp)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
   YY_USE (yylocationp);
-  if (!yyvaluep)
-    return;
+  यदि (!yyvaluep)
+    प्रत्यागम;
 /* "%code pre-printer" blocks.  */
 tron (yyo);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  switch (yykind)
+  विकल्प (yykind)
     {
-    case YYSYMBOL_STRING: /* "string"  */
+    पक्ष YYSYMBOL_STRING: /* "string"  */
          { fputs (((*yyvaluep).STRING), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_TSTRING: /* "translatable string"  */
+    पक्ष YYSYMBOL_TSTRING: /* "translatable string"  */
          { fputs (((*yyvaluep).TSTRING), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_PERCENT_ERROR_VERBOSE: /* "%error-verbose"  */
+    पक्ष YYSYMBOL_PERCENT_ERROR_VERBOSE: /* "%error-verbose"  */
          { fputs (((*yyvaluep).PERCENT_ERROR_VERBOSE), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_PERCENT_FILE_PREFIX: /* "%file-prefix"  */
-         { fputs (((*yyvaluep).PERCENT_FILE_PREFIX), yyo); }
-        break;
+    पक्ष YYSYMBOL_PERCENT_FILE_उपसर्गः: /* "%file-prefix"  */
+         { fputs (((*yyvaluep).PERCENT_FILE_उपसर्गः), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_PERCENT_FLAG: /* "%<flag>"  */
+    पक्ष YYSYMBOL_PERCENT_FLAG: /* "%<flag>"  */
          { fprintf (yyo, "%%%s", ((*yyvaluep).PERCENT_FLAG)); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_PERCENT_NAME_PREFIX: /* "%name-prefix"  */
-         { fputs (((*yyvaluep).PERCENT_NAME_PREFIX), yyo); }
-        break;
+    पक्ष YYSYMBOL_PERCENT_NAME_उपसर्गः: /* "%name-prefix"  */
+         { fputs (((*yyvaluep).PERCENT_NAME_उपसर्गः), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_PERCENT_PURE_PARSER: /* "%pure-parser"  */
-         { fputs (((*yyvaluep).PERCENT_PURE_PARSER), yyo); }
-        break;
+    पक्ष YYSYMBOL_PERCENT_विशुद्धम्_PARSER: /* "%pure-parser"  */
+         { fputs (((*yyvaluep).PERCENT_विशुद्धम्_PARSER), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_BRACED_CODE: /* "{...}"  */
-         { fputs (((*yyvaluep).BRACED_CODE), yyo); }
-        break;
+    पक्ष YYSYMBOL_BRACED_संहिता: /* "{...}"  */
+         { fputs (((*yyvaluep).BRACED_संहिता), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_BRACED_PREDICATE: /* "%?{...}"  */
+    पक्ष YYSYMBOL_BRACED_PREDICATE: /* "%?{...}"  */
          { fputs (((*yyvaluep).BRACED_PREDICATE), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_BRACKETED_ID: /* "[identifier]"  */
+    पक्ष YYSYMBOL_BRACKETED_ID: /* "[identifier]"  */
          { fprintf (yyo, "[%s]", ((*yyvaluep).BRACKETED_ID)); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_CHAR_LITERAL: /* "character literal"  */
+    पक्ष YYSYMBOL_CHAR_LITERAL: /* "character literal"  */
          { fputs (char_name (((*yyvaluep).CHAR_LITERAL)), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_EPILOGUE: /* "epilogue"  */
+    पक्ष YYSYMBOL_EPILOGUE: /* "epilogue"  */
          { fputs (((*yyvaluep).EPILOGUE), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_ID: /* "identifier"  */
+    पक्ष YYSYMBOL_ID: /* "identifier"  */
          { fputs (((*yyvaluep).ID), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_ID_COLON: /* "identifier:"  */
+    पक्ष YYSYMBOL_ID_COLON: /* "identifier:"  */
          { fprintf (yyo, "%s:", ((*yyvaluep).ID_COLON)); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_PROLOGUE: /* "%{...%}"  */
+    पक्ष YYSYMBOL_PROLOGUE: /* "%{...%}"  */
          { fputs (((*yyvaluep).PROLOGUE), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_TAG: /* "<tag>"  */
-         { fprintf (yyo, "<%s>", ((*yyvaluep).TAG)); }
-        break;
+    पक्ष YYSYMBOL_चिह्नकम्: /* "<tag>"  */
+         { fprintf (yyo, "<%s>", ((*yyvaluep).चिह्नकम्_2)); }
+        भङ्ग;
 
-    case YYSYMBOL_INT_LITERAL: /* "integer literal"  */
+    पक्ष YYSYMBOL_INT_LITERAL: /* "integer literal"  */
          { fprintf (yyo, "%d", ((*yyvaluep).INT_LITERAL)); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_PERCENT_PARAM: /* "%param"  */
+    पक्ष YYSYMBOL_PERCENT_PARAM: /* "%param"  */
 {
-  switch (((*yyvaluep).PERCENT_PARAM))
+  विकल्प (((*yyvaluep).PERCENT_PARAM))
     {
-#define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+#परिभाषय CASE(अन्तर्_2, बहिर्गमनम्_2)                                           \
+      पक्ष param_ ## अन्तर्_2: fputs ("%" #Out, yyo); भङ्ग
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
-#undef CASE
-      case param_none: aver (false); break;
+#अपरिभाषय CASE
+      पक्ष param_none: aver (false); भङ्ग;
     }
 }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_code_props_type: /* code_props_type  */
-         { fprintf (yyo, "%s", code_props_type_string (((*yyvaluep).code_props_type))); }
-        break;
+    पक्ष YYSYMBOL_संहिता_props_type: /* code_props_type  */
+         { fprintf (yyo, "%s", संहिता_props_type_string (((*yyvaluep).संहिता_props_type))); }
+        भङ्ग;
 
-    case YYSYMBOL_75_string_opt: /* string.opt  */
+    पक्ष YYSYMBOL_75_string_opt: /* string.opt  */
          { fputs (((*yyvaluep).yykind_75), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_76_tag_opt: /* tag.opt  */
+    पक्ष YYSYMBOL_76_चिह्नकम्_opt: /* tag.opt  */
          { fputs (((*yyvaluep).yykind_76), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_generic_symlist: /* generic_symlist  */
-         { symbol_list_syms_print (((*yyvaluep).generic_symlist), yyo); }
-        break;
+    पक्ष YYSYMBOL_generic_symlist: /* generic_symlist  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).generic_symlist), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
-         { symbol_list_syms_print (((*yyvaluep).generic_symlist_item), yyo); }
-        break;
+    पक्ष YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).generic_symlist_item), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_tag: /* tag  */
-         { fprintf (yyo, "<%s>", ((*yyvaluep).tag)); }
-        break;
+    पक्ष YYSYMBOL_चिह्नकम्_2: /*चिह्नकम्*/
+         { fprintf (yyo, "<%s>", ((*yyvaluep).चिह्नकम्)); }
+        भङ्ग;
 
-    case YYSYMBOL_nterm_decls: /* nterm_decls  */
-         { symbol_list_syms_print (((*yyvaluep).nterm_decls), yyo); }
-        break;
+    पक्ष YYSYMBOL_nterm_decls: /* nterm_decls  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).nterm_decls), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_token_decls: /* token_decls  */
-         { symbol_list_syms_print (((*yyvaluep).token_decls), yyo); }
-        break;
+    पक्ष YYSYMBOL_token_decls: /* token_decls  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).token_decls), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_82_token_decl_1: /* token_decl.1  */
-         { symbol_list_syms_print (((*yyvaluep).yykind_82), yyo); }
-        break;
+    पक्ष YYSYMBOL_82_token_decl_1: /* token_decl.1  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).yykind_82), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_token_decl: /* token_decl  */
-         { fprintf (yyo, "%s", ((*yyvaluep).token_decl) ? ((*yyvaluep).token_decl)->tag : "<NULL>"); }
-        break;
+    पक्ष YYSYMBOL_token_decl: /* token_decl  */
+         { fprintf (yyo, "%s", ((*yyvaluep).token_decl) ? ((*yyvaluep).token_decl)->चिह्नकम् : "<NULL>"); }
+        भङ्ग;
 
-    case YYSYMBOL_84_int_opt: /* int.opt  */
+    पक्ष YYSYMBOL_84_int_opt: /* int.opt  */
          { fprintf (yyo, "%d", ((*yyvaluep).yykind_84)); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_alias: /* alias  */
-         { fprintf (yyo, "%s", ((*yyvaluep).alias) ? ((*yyvaluep).alias)->tag : "<NULL>"); }
-        break;
+    पक्ष YYSYMBOL_alias: /* alias  */
+         { fprintf (yyo, "%s", ((*yyvaluep).alias) ? ((*yyvaluep).alias)->चिह्नकम् : "<NULL>"); }
+        भङ्ग;
 
-    case YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
-         { symbol_list_syms_print (((*yyvaluep).token_decls_for_prec), yyo); }
-        break;
+    पक्ष YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).token_decls_for_prec), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
-         { symbol_list_syms_print (((*yyvaluep).yykind_87), yyo); }
-        break;
+    पक्ष YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).yykind_87), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_token_decl_for_prec: /* token_decl_for_prec  */
-         { fprintf (yyo, "%s", ((*yyvaluep).token_decl_for_prec) ? ((*yyvaluep).token_decl_for_prec)->tag : "<NULL>"); }
-        break;
+    पक्ष YYSYMBOL_token_decl_for_prec: /* token_decl_for_prec  */
+         { fprintf (yyo, "%s", ((*yyvaluep).token_decl_for_prec) ? ((*yyvaluep).token_decl_for_prec)->चिह्नकम् : "<NULL>"); }
+        भङ्ग;
 
-    case YYSYMBOL_symbol_decls: /* symbol_decls  */
-         { symbol_list_syms_print (((*yyvaluep).symbol_decls), yyo); }
-        break;
+    पक्ष YYSYMBOL_चिह्नम्_decls: /* symbol_decls  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).चिह्नम्_decls), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_90_symbols_1: /* symbols.1  */
-         { symbol_list_syms_print (((*yyvaluep).yykind_90), yyo); }
-        break;
+    पक्ष YYSYMBOL_90_symbols_1: /* symbols.1  */
+         { चिह्नम्_list_syms_print (((*yyvaluep).yykind_90), yyo); }
+        भङ्ग;
 
-    case YYSYMBOL_variable: /* variable  */
+    पक्ष YYSYMBOL_variable: /* variable  */
          { fputs (((*yyvaluep).variable), yyo); }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_value: /* value  */
+    पक्ष YYSYMBOL_मानम्: /*मानम्*/
 {
-  switch (((*yyvaluep).value).kind)
+  विकल्प (((*yyvaluep).मानम्).विधा)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  ((*yyvaluep).value).chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   ((*yyvaluep).value).chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", ((*yyvaluep).value).chars); break;
+    पक्ष muscle_संहिता:    fprintf (yyo,  "{%s}",  ((*yyvaluep).मानम्).chars); भङ्ग;
+    पक्ष muscle_keyword: fprintf (yyo,   "%s",   ((*yyvaluep).मानम्).chars); भङ्ग;
+    पक्ष muscle_string:  fprintf (yyo, "\"%s\"", ((*yyvaluep).मानम्).chars); भङ्ग;
     }
 }
-        break;
+        भङ्ग;
 
-    case YYSYMBOL_id: /* id  */
-         { fprintf (yyo, "%s", ((*yyvaluep).id) ? ((*yyvaluep).id)->tag : "<NULL>"); }
-        break;
+    पक्ष YYSYMBOL_id: /* id  */
+         { fprintf (yyo, "%s", ((*yyvaluep).id) ? ((*yyvaluep).id)->चिह्नकम् : "<NULL>"); }
+        भङ्ग;
 
-    case YYSYMBOL_id_colon: /* id_colon  */
-         { fprintf (yyo, "%s:", ((*yyvaluep).id_colon)->tag); }
-        break;
+    पक्ष YYSYMBOL_id_colon: /* id_colon  */
+         { fprintf (yyo, "%s:", ((*yyvaluep).id_colon)->चिह्नकम्); }
+        भङ्ग;
 
-    case YYSYMBOL_symbol: /* symbol  */
-         { fprintf (yyo, "%s", ((*yyvaluep).symbol) ? ((*yyvaluep).symbol)->tag : "<NULL>"); }
-        break;
+    पक्ष YYSYMBOL_चिह्नम्: /*चिह्नम्*/
+         { fprintf (yyo, "%s", ((*yyvaluep).चिह्नम्) ? ((*yyvaluep).चिह्नम्)->चिह्नकम् : "<NULL>"); }
+        भङ्ग;
 
-    case YYSYMBOL_string_as_id: /* string_as_id  */
-         { fprintf (yyo, "%s", ((*yyvaluep).string_as_id) ? ((*yyvaluep).string_as_id)->tag : "<NULL>"); }
-        break;
+    पक्ष YYSYMBOL_string_as_id: /* string_as_id  */
+         { fprintf (yyo, "%s", ((*yyvaluep).string_as_id) ? ((*yyvaluep).string_as_id)->चिह्नकम् : "<NULL>"); }
+        भङ्ग;
 
-      default:
-        break;
+      स्वभाव:
+        भङ्ग;
     }
-  YY_IGNORE_MAYBE_UNINITIALIZED_END
+  YY_IGNORE_MAYBE_UNINITIALIZED_अन्तः
 /* "%code post-printer" blocks.  */
 troff (yyo);
 
@@ -1289,16 +1289,16 @@ troff (yyo);
 | Print this symbol on YYO.  |
 `---------------------------*/
 
-static void
-yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp)
+स्थिर शून्य
+yy_चिह्नम्_print (FILE *yyo,
+                 yysymbol_विधा_t yykind, YYSTYPE ध्रुव * ध्रुव yyvaluep, YYLTYPE ध्रुव * ध्रुव yylocationp)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
   YYLOCATION_PRINT (yyo, yylocationp);
   YYFPRINTF (yyo, ": ");
-  yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp);
+  yy_चिह्नम्_मानम्_print (yyo, yykind, yyvaluep, yylocationp);
   YYFPRINTF (yyo, ")");
 }
 
@@ -1307,71 +1307,71 @@ yy_symbol_print (FILE *yyo,
 | TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
-static void
-yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
+स्थिर शून्य
+yy_राशिः_print (yy_state_t *yybottom, yy_state_t *yytop)
 {
   YYFPRINTF (stderr, "Stack now");
-  for (; yybottom <= yytop; yybottom++)
+  प्रति (; yybottom <= yytop; yybottom++)
     {
-      int yybot = *yybottom;
+      पूर्णाङ्क yybot = *yybottom;
       YYFPRINTF (stderr, " %d", yybot);
     }
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)                            \
-do {                                                            \
-  if (yydebug)                                                  \
-    yy_stack_print ((Bottom), (Top));                           \
-} while (0)
+# define YY_राशिः_PRINT(Bottom, शिखरम्)                            \
+कुरु {                                                            \
+  यदि (yydebug)                                                  \
+    yy_राशिः_print ((Bottom), (शिखरम्));                           \
+} यावत् (0)
 
 
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
 
-static void
+स्थिर शून्य
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
-                 int yyrule)
+                 पूर्णाङ्क yyrule)
 {
-  int yylno = yyrline[yyrule];
-  int yynrhs = yyr2[yyrule];
-  int yyi;
+  पूर्णाङ्क yylno = yyrline[yyrule];
+  पूर्णाङ्क yynrhs = yyr2[yyrule];
+  पूर्णाङ्क yyi;
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %d):\n",
              yyrule - 1, yylno);
   /* The symbols being reduced.  */
-  for (yyi = 0; yyi < yynrhs; yyi++)
+  प्रति (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr,
-                       YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
+      yy_चिह्नम्_print (stderr,
+                       YY_ACCESSING_चिह्नम् (+yyssp[yyi + 1 - yynrhs]),
                        &yyvsp[(yyi + 1) - (yynrhs)],
                        &(yylsp[(yyi + 1) - (yynrhs)]));
       YYFPRINTF (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)          \
-do {                                    \
-  if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, yylsp, Rule); \
-} while (0)
+# define YY_REDUCE_PRINT(नियमः_2)          \
+कुरु {                                    \
+  यदि (yydebug)                          \
+    yy_reduce_print (yyssp, yyvsp, yylsp, नियमः_2); \
+} यावत् (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
-int yydebug;
-#else /* !GRAM_DEBUG */
-# define YYDPRINTF(Args) ((void) 0)
-# define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
-# define YY_STACK_PRINT(Bottom, Top)
-# define YY_REDUCE_PRINT(Rule)
-#endif /* !GRAM_DEBUG */
+पूर्णाङ्क yydebug;
+#अन्यथा /* !GRAM_DEBUG */
+# define YYDPRINTF(तर्काः_2) ((शून्य) 0)
+# define YY_चिह्नम्_PRINT(Title, विधा_2, मानम्_4, Location)
+# define YY_राशिः_PRINT(Bottom, शिखरम्)
+# define YY_REDUCE_PRINT(नियमः_2)
+#यदि_अन्तः /* !GRAM_DEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef YYINITDEPTH
+#यदि_अपरिभाषितम् YYINITDEPTH
 # define YYINITDEPTH 200
-#endif
+#यदि_अन्तः
 
 /* YYMAXDEPTH -- maximum size the stacks can grow to (effective only
    if the built-in stack extension method is used).
@@ -1380,9 +1380,9 @@ int yydebug;
    YYSTACK_ALLOC_MAXIMUM < YYSTACK_BYTES (YYMAXDEPTH)
    evaluated with infinite-precision integer arithmetic.  */
 
-#ifndef YYMAXDEPTH
+#यदि_अपरिभाषितम् YYMAXDEPTH
 # define YYMAXDEPTH 10000
-#endif
+#यदि_अन्तः
 
 
 /* Given a state stack such that *YYBOTTOM is its bottom, such that
@@ -1395,55 +1395,55 @@ int yydebug;
    location.  If *YYBOTTOM != YYBOTTOM_NO_FREE, then free the old stack
    using YYSTACK_FREE.  Return 0 if successful or if no reallocation is
    required.  Return YYENOMEM if memory is exhausted.  */
-static int
-yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
-#if GRAM_DEBUG
-                      char const *yydebug_prefix,
-                      char const *yydebug_suffix,
-#endif
+स्थिर पूर्णाङ्क
+yy_lac_राशिः_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
+#यदि GRAM_DEBUG
+                      वर्ण ध्रुव *yydebug_उपसर्गः,
+                      वर्ण ध्रुव *yydebug_suffix,
+#यदि_अन्तः
                       yy_state_t **yybottom,
                       yy_state_t *yybottom_no_free,
-                      yy_state_t **yytop, yy_state_t *yytop_empty)
+                      yy_state_t **yytop, yy_state_t *yytop_रिक्तानि)
 {
   YYPTRDIFF_T yysize_old =
-    *yytop == yytop_empty ? 0 : *yytop - *yybottom + 1;
+    *yytop == yytop_रिक्तानि ? 0 : *yytop - *yybottom + 1;
   YYPTRDIFF_T yysize_new = yysize_old + yyadd;
-  if (*yycapacity < yysize_new)
+  यदि (*yycapacity < yysize_new)
     {
       YYPTRDIFF_T yyalloc = 2 * yysize_new;
       yy_state_t *yybottom_new;
       /* Use YYMAXDEPTH for maximum stack size given that the stack
          should never need to grow larger than the main state stack
          needs to grow without LAC.  */
-      if (YYMAXDEPTH < yysize_new)
+      यदि (YYMAXDEPTH < yysize_new)
         {
-          YYDPRINTF ((stderr, "%smax size exceeded%s", yydebug_prefix,
+          YYDPRINTF ((stderr, "%smax size exceeded%s", yydebug_उपसर्गः,
                       yydebug_suffix));
-          return YYENOMEM;
+          प्रत्यागम YYENOMEM;
         }
-      if (YYMAXDEPTH < yyalloc)
+      यदि (YYMAXDEPTH < yyalloc)
         yyalloc = YYMAXDEPTH;
       yybottom_new =
         YY_CAST (yy_state_t *,
                  YYSTACK_ALLOC (YY_CAST (YYSIZE_T,
                                          yyalloc * YYSIZEOF (*yybottom_new))));
-      if (!yybottom_new)
+      यदि (!yybottom_new)
         {
-          YYDPRINTF ((stderr, "%srealloc failed%s", yydebug_prefix,
+          YYDPRINTF ((stderr, "%srealloc failed%s", yydebug_उपसर्गः,
                       yydebug_suffix));
-          return YYENOMEM;
+          प्रत्यागम YYENOMEM;
         }
-      if (*yytop != yytop_empty)
+      यदि (*yytop != yytop_रिक्तानि)
         {
           YYCOPY (yybottom_new, *yybottom, yysize_old);
           *yytop = yybottom_new + (yysize_old - 1);
         }
-      if (*yybottom != yybottom_no_free)
+      यदि (*yybottom != yybottom_no_free)
         YYSTACK_FREE (*yybottom);
       *yybottom = yybottom_new;
       *yycapacity = yyalloc;
     }
-  return 0;
+  प्रत्यागम 0;
 }
 
 /* Establish the initial context for the current lookahead if no initial
@@ -1472,23 +1472,23 @@ yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
    current lookahead, then check if that lookahead can eventually be
    shifted if syntactic actions continue from the current context.
    Report a syntax error if it cannot.  */
-#define YY_LAC_ESTABLISH                                                \
-do {                                                                    \
-  if (!yy_lac_established)                                              \
+#परिभाषय YY_LAC_ESTABLISH                                                \
+कुरु {                                                                    \
+  यदि (!yy_lac_established)                                              \
     {                                                                   \
       YYDPRINTF ((stderr,                                               \
                   "LAC: initial context established for %s\n",          \
                   yysymbol_name (yytoken)));                            \
       yy_lac_established = 1;                                           \
-      switch (yy_lac (yyesa, &yyes, &yyes_capacity, yyssp, yytoken))    \
+      विकल्प (yy_lac (yyesa, &yyes, &yyes_क्षमता, yyssp, yytoken))    \
         {                                                               \
-        case YYENOMEM:                                                  \
+        पक्ष YYENOMEM:                                                  \
           YYNOMEM;                                                      \
-        case 1:                                                         \
-          goto yyerrlab;                                                \
+        पक्ष 1:                                                         \
+          गच्छ yyerrlab;                                                \
         }                                                               \
     }                                                                   \
-} while (0)
+} यावत् (0)
 
 /* Discard any previous initial lookahead context because of Event,
    which may be a lookahead change or an invalidation of the currently
@@ -1501,19 +1501,19 @@ do {                                                                    \
    the parser stacks to try to find a new initial context in which the
    current lookahead is syntactically acceptable.  If it fails to find
    such a context, it discards the lookahead.  */
-#if GRAM_DEBUG
+#यदि GRAM_DEBUG
 # define YY_LAC_DISCARD(Event)                                           \
-do {                                                                     \
-  if (yy_lac_established)                                                \
+कुरु {                                                                     \
+  यदि (yy_lac_established)                                                \
     {                                                                    \
       YYDPRINTF ((stderr, "LAC: initial context discarded due to "       \
                   Event "\n"));                                          \
       yy_lac_established = 0;                                            \
     }                                                                    \
-} while (0)
-#else
+} यावत् (0)
+#अन्यथा
 # define YY_LAC_DISCARD(Event) yy_lac_established = 0
-#endif
+#यदि_अन्तः
 
 /* Given the stack whose top is *YYSSP, return 0 iff YYTOKEN can
    eventually (after perhaps some reductions) be shifted, return 1 if
@@ -1523,47 +1523,47 @@ do {                                                                     \
    array allocated with YYSTACK_ALLOC.  yy_lac may overwrite the
    contents of either array, alter *YYES and *YYES_CAPACITY, and free
    any old *YYES other than YYESA.  */
-static int
+स्थिर पूर्णाङ्क
 yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
-        YYPTRDIFF_T *yyes_capacity, yy_state_t *yyssp, yysymbol_kind_t yytoken)
+        YYPTRDIFF_T *yyes_क्षमता, yy_state_t *yyssp, yysymbol_विधा_t yytoken)
 {
-  yy_state_t *yyes_prev = yyssp;
-  yy_state_t *yyesp = yyes_prev;
+  yy_state_t *yyes_पूर्व = yyssp;
+  yy_state_t *yyesp = yyes_पूर्व;
   /* Reduce until we encounter a shift and thereby accept the token.  */
   YYDPRINTF ((stderr, "LAC: checking lookahead %s:", yysymbol_name (yytoken)));
-  if (yytoken == YYSYMBOL_YYUNDEF)
+  यदि (yytoken == YYSYMBOL_YYUNDEF)
     {
       YYDPRINTF ((stderr, " Always Err\n"));
-      return 1;
+      प्रत्यागम 1;
     }
-  while (1)
+  यावत् (1)
     {
-      int yyrule = yypact[+*yyesp];
-      if (yypact_value_is_default (yyrule)
+      पूर्णाङ्क yyrule = yypact[+*yyesp];
+      यदि (yypact_मानम्_is_default (yyrule)
           || (yyrule += yytoken) < 0 || YYLAST < yyrule
           || yycheck[yyrule] != yytoken)
         {
           /* Use the default action.  */
           yyrule = yydefact[+*yyesp];
-          if (yyrule == 0)
+          यदि (yyrule == 0)
             {
               YYDPRINTF ((stderr, " Err\n"));
-              return 1;
+              प्रत्यागम 1;
             }
         }
-      else
+      अन्यथा
         {
           /* Use the action from yytable.  */
           yyrule = yytable[yyrule];
-          if (yytable_value_is_error (yyrule))
+          यदि (yytable_मानम्_is_error (yyrule))
             {
               YYDPRINTF ((stderr, " Err\n"));
-              return 1;
+              प्रत्यागम 1;
             }
-          if (0 < yyrule)
+          यदि (0 < yyrule)
             {
               YYDPRINTF ((stderr, " S%d\n", yyrule));
-              return 0;
+              प्रत्यागम 0;
             }
           yyrule = -yyrule;
         }
@@ -1573,55 +1573,55 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
         /* Pop the corresponding number of values from the stack.  */
         YYPTRDIFF_T yylen = yyr2[yyrule];
         /* First pop from the LAC stack as many tokens as possible.  */
-        if (yyesp != yyes_prev)
+        यदि (yyesp != yyes_पूर्व)
           {
             YYPTRDIFF_T yysize = yyesp - *yyes + 1;
-            if (yylen < yysize)
+            यदि (yylen < yysize)
               {
                 yyesp -= yylen;
                 yylen = 0;
               }
-            else
+            अन्यथा
               {
-                yyesp = yyes_prev;
+                yyesp = yyes_पूर्व;
                 yylen -= yysize;
               }
           }
         /* Only afterwards look at the main stack.  */
-        if (yylen)
-          yyesp = yyes_prev -= yylen;
+        यदि (yylen)
+          yyesp = yyes_पूर्व -= yylen;
       }
       /* Push the resulting state of the reduction.  */
       {
         yy_state_fast_t yystate;
         {
-          const int yylhs = yyr1[yyrule] - YYNTOKENS;
-          const int yyi = yypgoto[yylhs] + *yyesp;
+          ध्रुव पूर्णाङ्क yylhs = yyr1[yyrule] - YYNTOKENS;
+          ध्रुव पूर्णाङ्क yyi = yypgoto[yylhs] + *yyesp;
           yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyesp
                      ? yytable[yyi]
                      : yydefgoto[yylhs]);
         }
-        if (yyesp == yyes_prev)
+        यदि (yyesp == yyes_पूर्व)
           {
             yyesp = *yyes;
             YY_IGNORE_USELESS_CAST_BEGIN
             *yyesp = YY_CAST (yy_state_t, yystate);
-            YY_IGNORE_USELESS_CAST_END
+            YY_IGNORE_USELESS_CAST_अन्तः
           }
-        else
+        अन्यथा
           {
-            if (yy_lac_stack_realloc (yyes_capacity, 1,
-#if GRAM_DEBUG
+            यदि (yy_lac_राशिः_realloc (yyes_क्षमता, 1,
+#यदि GRAM_DEBUG
                                       " (", ")",
-#endif
-                                      yyes, yyesa, &yyesp, yyes_prev))
+#यदि_अन्तः
+                                      yyes, yyesa, &yyesp, yyes_पूर्व))
               {
                 YYDPRINTF ((stderr, "\n"));
-                return YYENOMEM;
+                प्रत्यागम YYENOMEM;
               }
             YY_IGNORE_USELESS_CAST_BEGIN
             *++yyesp = YY_CAST (yy_state_t, yystate);
-            YY_IGNORE_USELESS_CAST_END
+            YY_IGNORE_USELESS_CAST_अन्तः
           }
         YYDPRINTF ((stderr, " G%d", yystate));
       }
@@ -1629,13 +1629,13 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
 }
 
 /* Context of a parse error.  */
-typedef struct
+प्रकारनिर्देश संरचना
 {
   yy_state_t *yyssp;
   yy_state_t *yyesa;
   yy_state_t **yyes;
-  YYPTRDIFF_T *yyes_capacity;
-  yysymbol_kind_t yytoken;
+  YYPTRDIFF_T *yyes_क्षमता;
+  yysymbol_विधा_t yytoken;
   YYLTYPE *yylloc;
 } yypcontext_t;
 
@@ -1645,122 +1645,122 @@ typedef struct
    be less than YYNTOKENS).  Return YYENOMEM on memory exhaustion.
    Return 0 if there are more than YYARGN expected tokens, yet fill
    YYARG up to YYARGN. */
-static int
-yypcontext_expected_tokens (const yypcontext_t *yyctx,
-                            yysymbol_kind_t yyarg[], int yyargn)
+स्थिर पूर्णाङ्क
+yypcontext_expected_tokens (ध्रुव yypcontext_t *yyctx,
+                            yysymbol_विधा_t yyarg[], पूर्णाङ्क yyargn)
 {
   /* Actual size of YYARG. */
-  int yycount = 0;
+  पूर्णाङ्क yycount = 0;
 
-  int yyx;
-  for (yyx = 0; yyx < YYNTOKENS; ++yyx)
+  पूर्णाङ्क yyx;
+  प्रति (yyx = 0; yyx < YYNTOKENS; ++yyx)
     {
-      yysymbol_kind_t yysym = YY_CAST (yysymbol_kind_t, yyx);
-      if (yysym != YYSYMBOL_YYerror && yysym != YYSYMBOL_YYUNDEF)
-        switch (yy_lac (yyctx->yyesa, yyctx->yyes, yyctx->yyes_capacity, yyctx->yyssp, yysym))
+      yysymbol_विधा_t yysym = YY_CAST (yysymbol_विधा_t, yyx);
+      यदि (yysym != YYSYMBOL_YYerror && yysym != YYSYMBOL_YYUNDEF)
+        विकल्प (yy_lac (yyctx->yyesa, yyctx->yyes, yyctx->yyes_क्षमता, yyctx->yyssp, yysym))
           {
-          case YYENOMEM:
-            return YYENOMEM;
-          case 1:
-            continue;
-          default:
-            if (!yyarg)
+          पक्ष YYENOMEM:
+            प्रत्यागम YYENOMEM;
+          पक्ष 1:
+            अनुवर्त;
+          स्वभाव:
+            यदि (!yyarg)
               ++yycount;
-            else if (yycount == yyargn)
-              return 0;
-            else
+            अन्यथा यदि (yycount == yyargn)
+              प्रत्यागम 0;
+            अन्यथा
               yyarg[yycount++] = yysym;
           }
     }
-  if (yyarg && yycount == 0 && 0 < yyargn)
+  यदि (yyarg && yycount == 0 && 0 < yyargn)
     yyarg[0] = YYSYMBOL_YYEMPTY;
-  return yycount;
+  प्रत्यागम yycount;
 }
 
 
 
 
 /* The kind of the lookahead of this context.  */
-static yysymbol_kind_t
-yypcontext_token (const yypcontext_t *yyctx) YY_ATTRIBUTE_UNUSED;
+स्थिर yysymbol_विधा_t
+yypcontext_token (ध्रुव yypcontext_t *yyctx) YY_ATTRIBUTE_अप्रयुक्तम्;
 
-static yysymbol_kind_t
-yypcontext_token (const yypcontext_t *yyctx)
+स्थिर yysymbol_विधा_t
+yypcontext_token (ध्रुव yypcontext_t *yyctx)
 {
-  return yyctx->yytoken;
+  प्रत्यागम yyctx->yytoken;
 }
 
 /* The location of the lookahead of this context.  */
-static YYLTYPE *
-yypcontext_location (const yypcontext_t *yyctx) YY_ATTRIBUTE_UNUSED;
+स्थिर YYLTYPE *
+yypcontext_location (ध्रुव yypcontext_t *yyctx) YY_ATTRIBUTE_अप्रयुक्तम्;
 
-static YYLTYPE *
-yypcontext_location (const yypcontext_t *yyctx)
+स्थिर YYLTYPE *
+yypcontext_location (ध्रुव yypcontext_t *yyctx)
 {
-  return yyctx->yylloc;
+  प्रत्यागम yyctx->yylloc;
 }
 
 /* User defined function to report a syntax error.  */
-static int
-yyreport_syntax_error (const yypcontext_t *yyctx);
+स्थिर पूर्णाङ्क
+yyreport_syntax_error (ध्रुव yypcontext_t *yyctx);
 
 /*-----------------------------------------------.
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
 
-static void
-yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp)
+स्थिर शून्य
+yydestruct (ध्रुव वर्ण *yymsg,
+            yysymbol_विधा_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp)
 {
   YY_USE (yyvaluep);
   YY_USE (yylocationp);
-  if (!yymsg)
+  यदि (!yymsg)
     yymsg = "Deleting";
-  YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
+  YY_चिह्नम्_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  switch (yykind)
+  विकल्प (yykind)
     {
-    case YYSYMBOL_generic_symlist: /* generic_symlist  */
-            { symbol_list_free (((*yyvaluep).generic_symlist)); }
-        break;
+    पक्ष YYSYMBOL_generic_symlist: /* generic_symlist  */
+            { चिह्नम्_list_free (((*yyvaluep).generic_symlist)); }
+        भङ्ग;
 
-    case YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
-            { symbol_list_free (((*yyvaluep).generic_symlist_item)); }
-        break;
+    पक्ष YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
+            { चिह्नम्_list_free (((*yyvaluep).generic_symlist_item)); }
+        भङ्ग;
 
-    case YYSYMBOL_nterm_decls: /* nterm_decls  */
-            { symbol_list_free (((*yyvaluep).nterm_decls)); }
-        break;
+    पक्ष YYSYMBOL_nterm_decls: /* nterm_decls  */
+            { चिह्नम्_list_free (((*yyvaluep).nterm_decls)); }
+        भङ्ग;
 
-    case YYSYMBOL_token_decls: /* token_decls  */
-            { symbol_list_free (((*yyvaluep).token_decls)); }
-        break;
+    पक्ष YYSYMBOL_token_decls: /* token_decls  */
+            { चिह्नम्_list_free (((*yyvaluep).token_decls)); }
+        भङ्ग;
 
-    case YYSYMBOL_82_token_decl_1: /* token_decl.1  */
-            { symbol_list_free (((*yyvaluep).yykind_82)); }
-        break;
+    पक्ष YYSYMBOL_82_token_decl_1: /* token_decl.1  */
+            { चिह्नम्_list_free (((*yyvaluep).yykind_82)); }
+        भङ्ग;
 
-    case YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
-            { symbol_list_free (((*yyvaluep).token_decls_for_prec)); }
-        break;
+    पक्ष YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
+            { चिह्नम्_list_free (((*yyvaluep).token_decls_for_prec)); }
+        भङ्ग;
 
-    case YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
-            { symbol_list_free (((*yyvaluep).yykind_87)); }
-        break;
+    पक्ष YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
+            { चिह्नम्_list_free (((*yyvaluep).yykind_87)); }
+        भङ्ग;
 
-    case YYSYMBOL_symbol_decls: /* symbol_decls  */
-            { symbol_list_free (((*yyvaluep).symbol_decls)); }
-        break;
+    पक्ष YYSYMBOL_चिह्नम्_decls: /* symbol_decls  */
+            { चिह्नम्_list_free (((*yyvaluep).चिह्नम्_decls)); }
+        भङ्ग;
 
-    case YYSYMBOL_90_symbols_1: /* symbols.1  */
-            { symbol_list_free (((*yyvaluep).yykind_90)); }
-        break;
+    पक्ष YYSYMBOL_90_symbols_1: /* symbols.1  */
+            { चिह्नम्_list_free (((*yyvaluep).yykind_90)); }
+        भङ्ग;
 
-      default:
-        break;
+      स्वभाव:
+        भङ्ग;
     }
-  YY_IGNORE_MAYBE_UNINITIALIZED_END
+  YY_IGNORE_MAYBE_UNINITIALIZED_अन्तः
 }
 
 
@@ -1772,33 +1772,33 @@ yydestruct (const char *yymsg,
 | yyparse.  |
 `----------*/
 
-int
-yyparse (void)
+पूर्णाङ्क
+yyparse (शून्य)
 {
 /* Lookahead token kind.  */
-int yychar;
+पूर्णाङ्क yychar;
 
 
 /* The semantic value of the lookahead symbol.  */
 /* Default value used for initialization, for pacifying older GCCs
    or non-GCC compilers.  */
-YY_INITIAL_VALUE (static YYSTYPE yyval_default;)
-YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
+YY_INITIAL_मानम् (स्थिर YYSTYPE yyval_default;)
+YYSTYPE yylval YY_INITIAL_मानम् (= yyval_default);
 
 /* Location data for the lookahead symbol.  */
-static YYLTYPE yyloc_default
-# if defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL
+स्थिर YYLTYPE yyloc_default
+# यदि defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL
   = { 1, 1, 1, 1 }
 # endif
 ;
 YYLTYPE yylloc = yyloc_default;
 
     /* Number of syntax errors so far.  */
-    int yynerrs YY_ATTRIBUTE_UNUSED = 0;
+    पूर्णाङ्क yynerrs YY_ATTRIBUTE_अप्रयुक्तम् = 0;
 
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
-    int yyerrstatus = 0;
+    पूर्णाङ्क yyerrstatus = 0;
 
     /* Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -1823,15 +1823,15 @@ YYLTYPE yylloc = yyloc_default;
 
     yy_state_t yyesa[20];
     yy_state_t *yyes = yyesa;
-    YYPTRDIFF_T yyes_capacity = 20 < YYMAXDEPTH ? 20 : YYMAXDEPTH;
+    YYPTRDIFF_T yyes_क्षमता = 20 < YYMAXDEPTH ? 20 : YYMAXDEPTH;
 
   /* Whether LAC context is established.  A Boolean.  */
-  int yy_lac_established = 0;
-  int yyn;
+  पूर्णाङ्क yy_lac_established = 0;
+  पूर्णाङ्क yyn;
   /* The return value of yyparse.  */
-  int yyresult;
+  पूर्णाङ्क yyresult;
   /* Lookahead symbol kind.  */
-  yysymbol_kind_t yytoken = YYSYMBOL_YYEMPTY;
+  yysymbol_विधा_t yytoken = YYSYMBOL_YYEMPTY;
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
@@ -1842,28 +1842,28 @@ YYLTYPE yylloc = yyloc_default;
 
 
 
-#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
+#परिभाषय YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
-  int yylen = 0;
+  पूर्णाङ्क yylen = 0;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yychar = GRAM_EMPTY; /* Cause a token to be read.  */
+  yychar = GRAM_रिक्तानि; /* Cause a token to be read.  */
 
 
 /* User initialization code.  */
 {
   /* Bison's grammar can initial empty locations, hence a default
      location is needed. */
-  boundary_set (&yylloc.start, grammar_file, 1, 1, 1);
-  boundary_set (&yylloc.end, grammar_file, 1, 1, 1);
+  boundary_समुच्चयः (&yylloc.start, grammar_file, 1, 1, 1);
+  boundary_समुच्चयः (&yylloc.अन्तः, grammar_file, 1, 1, 1);
 }
 
 
   yylsp[0] = yylloc;
-  goto yysetstate;
+  गच्छ yysetstate;
 
 
 /*------------------------------------------------------------.
@@ -1883,18 +1883,18 @@ yysetstate:
   YY_ASSERT (0 <= yystate && yystate < YYNSTATES);
   YY_IGNORE_USELESS_CAST_BEGIN
   *yyssp = YY_CAST (yy_state_t, yystate);
-  YY_IGNORE_USELESS_CAST_END
-  YY_STACK_PRINT (yyss, yyssp);
+  YY_IGNORE_USELESS_CAST_अन्तः
+  YY_राशिः_PRINT (yyss, yyssp);
 
-  if (yyss + yystacksize - 1 <= yyssp)
-#if !defined yyoverflow && !defined YYSTACK_RELOCATE
+  यदि (yyss + yystacksize - 1 <= yyssp)
+#यदि !defined yyoverflow && !defined YYSTACK_RELOCATE
     YYNOMEM;
-#else
+#अन्यथा
     {
       /* Get the current used size of the three stacks, in elements.  */
       YYPTRDIFF_T yysize = yyssp - yyss + 1;
 
-# if defined yyoverflow
+# यदि defined yyoverflow
       {
         /* Give user a chance to reallocate the stack.  Use copies of
            these so that the &'s don't force the real ones into
@@ -1916,26 +1916,26 @@ yysetstate:
         yyvs = yyvs1;
         yyls = yyls1;
       }
-# else /* defined YYSTACK_RELOCATE */
+# अन्यथा /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
-      if (YYMAXDEPTH <= yystacksize)
+      यदि (YYMAXDEPTH <= yystacksize)
         YYNOMEM;
       yystacksize *= 2;
-      if (YYMAXDEPTH < yystacksize)
+      यदि (YYMAXDEPTH < yystacksize)
         yystacksize = YYMAXDEPTH;
 
       {
         yy_state_t *yyss1 = yyss;
-        union yyalloc *yyptr =
-          YY_CAST (union yyalloc *,
-                   YYSTACK_ALLOC (YY_CAST (YYSIZE_T, YYSTACK_BYTES (yystacksize))));
-        if (! yyptr)
+        सङ्घ yyalloc *yyptr =
+          YY_CAST (सङ्घ yyalloc *,
+                   YYSTACK_ALLOC (YY_CAST (YYSIZE_T, YYSTACK_अष्टकानि (yystacksize))));
+        यदि (! yyptr)
           YYNOMEM;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
         YYSTACK_RELOCATE (yyls_alloc, yyls);
 #  undef YYSTACK_RELOCATE
-        if (yyss1 != yyssa)
+        यदि (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
       }
 # endif
@@ -1946,19 +1946,19 @@ yysetstate:
 
       YY_IGNORE_USELESS_CAST_BEGIN
       YYDPRINTF ((stderr, "Stack size increased to %ld\n",
-                  YY_CAST (long, yystacksize)));
-      YY_IGNORE_USELESS_CAST_END
+                  YY_CAST (दीर्घ, yystacksize)));
+      YY_IGNORE_USELESS_CAST_अन्तः
 
-      if (yyss + yystacksize - 1 <= yyssp)
+      यदि (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
-#endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
+#यदि_अन्तः /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
 
 
-  if (yystate == YYFINAL)
+  यदि (yystate == YYFINAL)
     YYACCEPT;
 
-  goto yybackup;
+  गच्छ yybackup;
 
 
 /*-----------.
@@ -1970,25 +1970,25 @@ yybackup:
 
   /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
-  if (yypact_value_is_default (yyn))
-    goto yydefault;
+  यदि (yypact_मानम्_is_default (yyn))
+    गच्छ yydefault;
 
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == GRAM_EMPTY)
+  यदि (yychar == GRAM_रिक्तानि)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, &yylloc);
     }
 
-  if (yychar <= GRAM_EOF)
+  यदि (yychar <= GRAM_EOF)
     {
       yychar = GRAM_EOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == GRAM_error)
+  अन्यथा यदि (yychar == GRAM_error)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
@@ -1997,49 +1997,49 @@ yybackup:
       yychar = GRAM_UNDEF;
       yytoken = YYSYMBOL_YYerror;
       yyerror_range[1] = yylloc;
-      goto yyerrlab1;
+      गच्छ yyerrlab1;
     }
-  else
+  अन्यथा
     {
       yytoken = YYTRANSLATE (yychar);
-      YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
+      YY_चिह्नम्_PRINT ("Next token is", yytoken, &yylval, &yylloc);
     }
 
   /* If the proper action on seeing token YYTOKEN is to reduce or to
      detect an error, take that action.  */
   yyn += yytoken;
-  if (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
+  यदि (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
     {
       YY_LAC_ESTABLISH;
-      goto yydefault;
+      गच्छ yydefault;
     }
   yyn = yytable[yyn];
-  if (yyn <= 0)
+  यदि (yyn <= 0)
     {
-      if (yytable_value_is_error (yyn))
-        goto yyerrlab;
+      यदि (yytable_मानम्_is_error (yyn))
+        गच्छ yyerrlab;
       yyn = -yyn;
       YY_LAC_ESTABLISH;
-      goto yyreduce;
+      गच्छ yyreduce;
     }
 
   /* Count tokens shifted since error; after three, turn off error
      status.  */
-  if (yyerrstatus)
+  यदि (yyerrstatus)
     yyerrstatus--;
 
   /* Shift the lookahead token.  */
-  YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
+  YY_चिह्नम्_PRINT ("Shifting", yytoken, &yylval, &yylloc);
   yystate = yyn;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
-  YY_IGNORE_MAYBE_UNINITIALIZED_END
+  YY_IGNORE_MAYBE_UNINITIALIZED_अन्तः
   *++yylsp = yylloc;
 
   /* Discard the shifted token.  */
-  yychar = GRAM_EMPTY;
+  yychar = GRAM_रिक्तानि;
   YY_LAC_DISCARD ("shift");
-  goto yynewstate;
+  गच्छ yynewstate;
 
 
 /*-----------------------------------------------------------.
@@ -2047,9 +2047,9 @@ yybackup:
 `-----------------------------------------------------------*/
 yydefault:
   yyn = yydefact[yystate];
-  if (yyn == 0)
-    goto yyerrlab;
-  goto yyreduce;
+  यदि (yyn == 0)
+    गच्छ yyerrlab;
+  गच्छ yyreduce;
 
 
 /*-----------------------------.
@@ -2074,526 +2074,526 @@ yyreduce:
   yyerror_range[1] = yyloc;
   YY_REDUCE_PRINT (yyn);
   {
-    int yychar_backup = yychar;
-    switch (yyn)
+    पूर्णाङ्क yychar_backup = yychar;
+    विकल्प (yyn)
       {
-  case 6: /* prologue_declaration: "%{...%}"  */
+  पक्ष 6: /* prologue_declaration: "%{...%}"  */
     {
-      muscle_code_grow (union_seen ? "post_prologue" : "pre_prologue",
-                        translate_code ((yyvsp[0].PROLOGUE), (yylsp[0]), true), (yylsp[0]));
-      code_scanner_last_string_free ();
+      muscle_संहिता_grow (union_आलोकितम् ? "post_prologue" : "pre_prologue",
+                        translate_संहिता ((yyvsp[0].PROLOGUE), (yylsp[0]), true), (yylsp[0]));
+      संहिता_scanner_चरमः_string_free ();
     }
-    break;
+    भङ्ग;
 
-  case 7: /* prologue_declaration: "%<flag>"  */
+  पक्ष 7: /* prologue_declaration: "%<flag>"  */
     {
       muscle_percent_define_ensure ((yyvsp[0].PERCENT_FLAG), (yylsp[0]), true);
     }
-    break;
+    भङ्ग;
 
-  case 8: /* prologue_declaration: "%define" variable value  */
+  पक्ष 8: /* prologue_declaration: "%define" variable value  */
     {
-      muscle_percent_define_insert ((yyvsp[-1].variable), (yyloc), (yyvsp[0].value).kind, (yyvsp[0].value).chars,
+      muscle_percent_define_निवेशय ((yyvsp[-1].variable), (yyloc), (yyvsp[0].मानम्).विधा, (yyvsp[0].मानम्).chars,
                                     MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
-    break;
+    भङ्ग;
 
-  case 9: /* prologue_declaration: "%header" string.opt  */
-                                   { handle_header ((yyvsp[0].yykind_75)); }
-    break;
+  पक्ष 9: /* prologue_declaration: "%header" string.opt  */
+                                   { handle_शीर्षकम् ((yyvsp[0].yykind_75)); }
+    भङ्ग;
 
-  case 10: /* prologue_declaration: "%error-verbose"  */
+  पक्ष 10: /* prologue_declaration: "%error-verbose"  */
                                    { handle_error_verbose (&(yyloc), (yyvsp[0].PERCENT_ERROR_VERBOSE)); }
-    break;
+    भङ्ग;
 
-  case 11: /* prologue_declaration: "%expect" "integer literal"  */
+  पक्ष 11: /* prologue_declaration: "%expect" "integer literal"  */
                                    { expected_sr_conflicts = (yyvsp[0].INT_LITERAL); }
-    break;
+    भङ्ग;
 
-  case 12: /* prologue_declaration: "%expect-rr" "integer literal"  */
+  पक्ष 12: /* prologue_declaration: "%expect-rr" "integer literal"  */
                                    { expected_rr_conflicts = (yyvsp[0].INT_LITERAL); }
-    break;
+    भङ्ग;
 
-  case 13: /* prologue_declaration: "%file-prefix" "string"  */
-                                   { handle_file_prefix (&(yyloc), &(yylsp[-1]), (yyvsp[-1].PERCENT_FILE_PREFIX), (yyvsp[0].STRING)); }
-    break;
+  पक्ष 13: /* prologue_declaration: "%file-prefix" "string"  */
+                                   { handle_file_उपसर्गः (&(yyloc), &(yylsp[-1]), (yyvsp[-1].PERCENT_FILE_उपसर्गः), (yyvsp[0].STRING)); }
+    भङ्ग;
 
-  case 14: /* prologue_declaration: "%glr-parser"  */
+  पक्ष 14: /* prologue_declaration: "%glr-parser"  */
     {
       nondeterministic_parser = true;
       glr_parser = true;
     }
-    break;
+    भङ्ग;
 
-  case 15: /* prologue_declaration: "%initial-action" "{...}"  */
+  पक्ष 15: /* prologue_declaration: "%initial-action" "{...}"  */
     {
-      muscle_code_grow ("initial_action", translate_code ((yyvsp[0].BRACED_CODE), (yylsp[0]), false), (yylsp[0]));
-      code_scanner_last_string_free ();
+      muscle_संहिता_grow ("initial_action", translate_संहिता ((yyvsp[0].BRACED_संहिता), (yylsp[0]), false), (yylsp[0]));
+      संहिता_scanner_चरमः_string_free ();
     }
-    break;
+    भङ्ग;
 
-  case 16: /* prologue_declaration: "%language" "string"  */
+  पक्ष 16: /* prologue_declaration: "%language" "string"  */
                                 { handle_language (&(yylsp[-1]), (yyvsp[0].STRING)); }
-    break;
+    भङ्ग;
 
-  case 17: /* prologue_declaration: "%name-prefix" "string"  */
-                                { handle_name_prefix (&(yyloc), (yyvsp[-1].PERCENT_NAME_PREFIX), (yyvsp[0].STRING)); }
-    break;
+  पक्ष 17: /* prologue_declaration: "%name-prefix" "string"  */
+                                { handle_name_उपसर्गः (&(yyloc), (yyvsp[-1].PERCENT_NAME_उपसर्गः), (yyvsp[0].STRING)); }
+    भङ्ग;
 
-  case 18: /* prologue_declaration: "%no-lines"  */
-                                { no_lines_flag = true; }
-    break;
+  पक्ष 18: /* prologue_declaration: "%no-lines"  */
+                                { no_पङ्क्तयः_flag = true; }
+    भङ्ग;
 
-  case 19: /* prologue_declaration: "%nondeterministic-parser"  */
+  पक्ष 19: /* prologue_declaration: "%nondeterministic-parser"  */
                                 { nondeterministic_parser = true; }
-    break;
+    भङ्ग;
 
-  case 20: /* prologue_declaration: "%output" "string"  */
-                                { spec_outfile = unquote ((yyvsp[0].STRING)); gram_scanner_last_string_free (); }
-    break;
+  पक्ष 20: /* prologue_declaration: "%output" "string"  */
+                                { spec_outfile = unquote ((yyvsp[0].STRING)); gram_scanner_चरमः_string_free (); }
+    भङ्ग;
 
-  case 21: /* $@1: %empty  */
+  पक्ष 21: /* $@1: %empty  */
            { current_param = (yyvsp[0].PERCENT_PARAM); }
-    break;
+    भङ्ग;
 
-  case 22: /* prologue_declaration: "%param" $@1 params  */
+  पक्ष 22: /* prologue_declaration: "%param" $@1 params  */
                                           { current_param = param_none; }
-    break;
+    भङ्ग;
 
-  case 23: /* prologue_declaration: "%pure-parser"  */
-                                { handle_pure_parser (&(yyloc), (yyvsp[0].PERCENT_PURE_PARSER)); }
-    break;
+  पक्ष 23: /* prologue_declaration: "%pure-parser"  */
+                                { handle_विशुद्धम्_parser (&(yyloc), (yyvsp[0].PERCENT_विशुद्धम्_PARSER)); }
+    भङ्ग;
 
-  case 24: /* prologue_declaration: "%require" "string"  */
+  पक्ष 24: /* prologue_declaration: "%require" "string"  */
                                 { handle_require (&(yylsp[0]), (yyvsp[0].STRING)); }
-    break;
+    भङ्ग;
 
-  case 25: /* prologue_declaration: "%skeleton" "string"  */
+  पक्ष 25: /* prologue_declaration: "%skeleton" "string"  */
                                 { handle_skeleton (&(yylsp[0]), (yyvsp[0].STRING)); }
-    break;
+    भङ्ग;
 
-  case 26: /* prologue_declaration: "%token-table"  */
-                                { token_table_flag = true; }
-    break;
+  पक्ष 26: /* prologue_declaration: "%token-table"  */
+                                { token_सारणी_flag = true; }
+    भङ्ग;
 
-  case 27: /* prologue_declaration: "%verbose"  */
-                                { report_flag |= report_states; }
-    break;
+  पक्ष 27: /* prologue_declaration: "%verbose"  */
+                                { report_flag |= report_अवस्थाः; }
+    भङ्ग;
 
-  case 28: /* prologue_declaration: "%yacc"  */
+  पक्ष 28: /* prologue_declaration: "%yacc"  */
                                 { handle_yacc (&(yyloc)); }
-    break;
+    भङ्ग;
 
-  case 29: /* prologue_declaration: error ";"  */
+  पक्ष 29: /* prologue_declaration: error ";"  */
                                 { current_class = unknown_sym; yyerrok; }
-    break;
+    भङ्ग;
 
-  case 31: /* params: params "{...}"  */
-                   { add_param (current_param, (yyvsp[0].BRACED_CODE), (yylsp[0])); }
-    break;
+  पक्ष 31: /* params: params "{...}"  */
+                   { सङ्कलय_param (current_param, (yyvsp[0].BRACED_संहिता), (yylsp[0])); }
+    भङ्ग;
 
-  case 32: /* params: "{...}"  */
-                   { add_param (current_param, (yyvsp[0].BRACED_CODE), (yylsp[0])); }
-    break;
+  पक्ष 32: /* params: "{...}"  */
+                   { सङ्कलय_param (current_param, (yyvsp[0].BRACED_संहिता), (yylsp[0])); }
+    भङ्ग;
 
-  case 34: /* grammar_declaration: "%start" symbols.1  */
+  पक्ष 34: /* grammar_declaration: "%start" symbols.1  */
     {
-      grammar_start_symbols_add ((yyvsp[0].yykind_90));
+      grammar_start_symbols_सङ्कलय ((yyvsp[0].yykind_90));
     }
-    break;
+    भङ्ग;
 
-  case 35: /* grammar_declaration: code_props_type "{...}" generic_symlist  */
+  पक्ष 35: /* grammar_declaration: code_props_type "{...}" generic_symlist  */
     {
-      code_props code;
-      code_props_symbol_action_init (&code, (yyvsp[-1].BRACED_CODE), (yylsp[-1]));
-      code_props_translate_code (&code);
+      संहिता_props संहिता;
+      संहिता_props_चिह्नम्_action_init (&संहिता, (yyvsp[-1].BRACED_संहिता), (yylsp[-1]));
+      संहिता_props_translate_संहिता (&संहिता);
       {
-        for (symbol_list *list = (yyvsp[0].generic_symlist); list; list = list->next)
-          symbol_list_code_props_set (list, (yyvsp[-2].code_props_type), &code);
-        symbol_list_free ((yyvsp[0].generic_symlist));
+        प्रति (चिह्नम्_list *list = (yyvsp[0].generic_symlist); list; list = list->अग्र)
+          चिह्नम्_list_संहिता_props_समुच्चयः (list, (yyvsp[-2].संहिता_props_type), &संहिता);
+        चिह्नम्_list_free ((yyvsp[0].generic_symlist));
       }
     }
-    break;
+    भङ्ग;
 
-  case 36: /* grammar_declaration: "%default-prec"  */
+  पक्ष 36: /* grammar_declaration: "%default-prec"  */
     {
       default_prec = true;
     }
-    break;
+    भङ्ग;
 
-  case 37: /* grammar_declaration: "%no-default-prec"  */
+  पक्ष 37: /* grammar_declaration: "%no-default-prec"  */
     {
       default_prec = false;
     }
-    break;
+    भङ्ग;
 
-  case 38: /* grammar_declaration: "%code" "{...}"  */
+  पक्ष 38: /* grammar_declaration: "%code" "{...}"  */
     {
       /* Do not invoke muscle_percent_code_grow here since it invokes
          muscle_user_name_list_grow.  */
-      muscle_code_grow ("percent_code()",
-                        translate_code_braceless ((yyvsp[0].BRACED_CODE), (yylsp[0])), (yylsp[0]));
-      code_scanner_last_string_free ();
+      muscle_संहिता_grow ("percent_code()",
+                        translate_संहिता_braceless ((yyvsp[0].BRACED_संहिता), (yylsp[0])), (yylsp[0]));
+      संहिता_scanner_चरमः_string_free ();
     }
-    break;
+    भङ्ग;
 
-  case 39: /* grammar_declaration: "%code" "identifier" "{...}"  */
+  पक्ष 39: /* grammar_declaration: "%code" "identifier" "{...}"  */
     {
-      muscle_percent_code_grow ((yyvsp[-1].ID), (yylsp[-1]), translate_code_braceless ((yyvsp[0].BRACED_CODE), (yylsp[0])), (yylsp[0]));
-      code_scanner_last_string_free ();
+      muscle_percent_संहिता_grow ((yyvsp[-1].ID), (yylsp[-1]), translate_संहिता_braceless ((yyvsp[0].BRACED_संहिता), (yylsp[0])), (yylsp[0]));
+      संहिता_scanner_चरमः_string_free ();
     }
-    break;
+    भङ्ग;
 
-  case 40: /* code_props_type: "%destructor"  */
-                 { (yyval.code_props_type) = destructor; }
-    break;
+  पक्ष 40: /* code_props_type: "%destructor"  */
+                 { (yyval.संहिता_props_type) = destructor; }
+    भङ्ग;
 
-  case 41: /* code_props_type: "%printer"  */
-                 { (yyval.code_props_type) = printer; }
-    break;
+  पक्ष 41: /* code_props_type: "%printer"  */
+                 { (yyval.संहिता_props_type) = printer; }
+    भङ्ग;
 
-  case 42: /* union_name: %empty  */
+  पक्ष 42: /* union_name: %empty  */
          {}
-    break;
+    भङ्ग;
 
-  case 43: /* union_name: "identifier"  */
-         { muscle_percent_define_insert ("api.value.union.name",
+  पक्ष 43: /* union_name: "identifier"  */
+         { muscle_percent_define_निवेशय ("api.value.union.name",
                                          (yylsp[0]), muscle_keyword, (yyvsp[0].ID),
                                          MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE); }
-    break;
+    भङ्ग;
 
-  case 44: /* grammar_declaration: "%union" union_name "{...}"  */
+  पक्ष 44: /* grammar_declaration: "%union" union_name "{...}"  */
     {
-      union_seen = true;
-      muscle_code_grow ("union_members", translate_code_braceless ((yyvsp[0].BRACED_CODE), (yylsp[0])), (yylsp[0]));
-      code_scanner_last_string_free ();
+      union_आलोकितम् = true;
+      muscle_संहिता_grow ("union_members", translate_संहिता_braceless ((yyvsp[0].BRACED_संहिता), (yylsp[0])), (yylsp[0]));
+      संहिता_scanner_चरमः_string_free ();
     }
-    break;
+    भङ्ग;
 
-  case 45: /* $@2: %empty  */
+  पक्ष 45: /* $@2: %empty  */
            { current_class = nterm_sym; }
-    break;
+    भङ्ग;
 
-  case 46: /* symbol_declaration: "%nterm" $@2 nterm_decls  */
+  पक्ष 46: /* symbol_declaration: "%nterm" $@2 nterm_decls  */
     {
       current_class = unknown_sym;
-      symbol_list_free ((yyvsp[0].nterm_decls));
+      चिह्नम्_list_free ((yyvsp[0].nterm_decls));
     }
-    break;
+    भङ्ग;
 
-  case 47: /* $@3: %empty  */
+  पक्ष 47: /* $@3: %empty  */
            { current_class = token_sym; }
-    break;
+    भङ्ग;
 
-  case 48: /* symbol_declaration: "%token" $@3 token_decls  */
+  पक्ष 48: /* symbol_declaration: "%token" $@3 token_decls  */
     {
       current_class = unknown_sym;
-      symbol_list_free ((yyvsp[0].token_decls));
+      चिह्नम्_list_free ((yyvsp[0].token_decls));
     }
-    break;
+    भङ्ग;
 
-  case 49: /* $@4: %empty  */
+  पक्ष 49: /* $@4: %empty  */
           { current_class = pct_type_sym; }
-    break;
+    भङ्ग;
 
-  case 50: /* symbol_declaration: "%type" $@4 symbol_decls  */
+  पक्ष 50: /* symbol_declaration: "%type" $@4 symbol_decls  */
     {
       current_class = unknown_sym;
-      symbol_list_free ((yyvsp[0].symbol_decls));
+      चिह्नम्_list_free ((yyvsp[0].चिह्नम्_decls));
     }
-    break;
+    भङ्ग;
 
-  case 51: /* symbol_declaration: precedence_declarator token_decls_for_prec  */
+  पक्ष 51: /* symbol_declaration: precedence_declarator token_decls_for_prec  */
     {
       ++current_prec;
-      for (symbol_list *list = (yyvsp[0].token_decls_for_prec); list; list = list->next)
-        symbol_precedence_set (list->content.sym, current_prec, (yyvsp[-1].precedence_declarator), (yylsp[-1]));
-      symbol_list_free ((yyvsp[0].token_decls_for_prec));
+      प्रति (चिह्नम्_list *list = (yyvsp[0].token_decls_for_prec); list; list = list->अग्र)
+        चिह्नम्_precedence_समुच्चयः (list->content.sym, current_prec, (yyvsp[-1].precedence_declarator), (yylsp[-1]));
+      चिह्नम्_list_free ((yyvsp[0].token_decls_for_prec));
     }
-    break;
+    भङ्ग;
 
-  case 52: /* precedence_declarator: "%left"  */
-                { (yyval.precedence_declarator) = left_assoc; }
-    break;
+  पक्ष 52: /* precedence_declarator: "%left"  */
+                { (yyval.precedence_declarator) = वामः_assoc; }
+    भङ्ग;
 
-  case 53: /* precedence_declarator: "%right"  */
-                { (yyval.precedence_declarator) = right_assoc; }
-    break;
+  पक्ष 53: /* precedence_declarator: "%right"  */
+                { (yyval.precedence_declarator) = दक्षिणः_assoc; }
+    भङ्ग;
 
-  case 54: /* precedence_declarator: "%nonassoc"  */
+  पक्ष 54: /* precedence_declarator: "%nonassoc"  */
                 { (yyval.precedence_declarator) = non_assoc; }
-    break;
+    भङ्ग;
 
-  case 55: /* precedence_declarator: "%precedence"  */
+  पक्ष 55: /* precedence_declarator: "%precedence"  */
                 { (yyval.precedence_declarator) = precedence_assoc; }
-    break;
+    भङ्ग;
 
-  case 56: /* string.opt: %empty  */
-          { (yyval.yykind_75) = NULL; }
-    break;
+  पक्ष 56: /* string.opt: %empty  */
+          { (yyval.yykind_75) = रिक्त; }
+    भङ्ग;
 
-  case 57: /* string.opt: "string"  */
+  पक्ष 57: /* string.opt: "string"  */
           { (yyval.yykind_75) = (yyvsp[0].STRING); }
-    break;
+    भङ्ग;
 
-  case 58: /* tag.opt: %empty  */
-         { (yyval.yykind_76) = NULL; }
-    break;
+  पक्ष 58: /* tag.opt: %empty  */
+         { (yyval.yykind_76) = रिक्त; }
+    भङ्ग;
 
-  case 59: /* tag.opt: "<tag>"  */
-         { (yyval.yykind_76) = (yyvsp[0].TAG); }
-    break;
+  पक्ष 59: /* tag.opt: "<tag>"  */
+         { (yyval.yykind_76) = (yyvsp[0].चिह्नकम्_2); }
+    भङ्ग;
 
-  case 61: /* generic_symlist: generic_symlist generic_symlist_item  */
-                                         { (yyval.generic_symlist) = symbol_list_append ((yyvsp[-1].generic_symlist), (yyvsp[0].generic_symlist_item)); }
-    break;
+  पक्ष 61: /* generic_symlist: generic_symlist generic_symlist_item  */
+                                         { (yyval.generic_symlist) = चिह्नम्_list_append ((yyvsp[-1].generic_symlist), (yyvsp[0].generic_symlist_item)); }
+    भङ्ग;
 
-  case 62: /* generic_symlist_item: symbol  */
-            { (yyval.generic_symlist_item) = symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0])); }
-    break;
+  पक्ष 62: /* generic_symlist_item: symbol  */
+            { (yyval.generic_symlist_item) = चिह्नम्_list_sym_new ((yyvsp[0].चिह्नम्), (yylsp[0])); }
+    भङ्ग;
 
-  case 63: /* generic_symlist_item: tag  */
-            { (yyval.generic_symlist_item) = symbol_list_type_new ((yyvsp[0].tag), (yylsp[0])); }
-    break;
+  पक्ष 63: /* generic_symlist_item: tag  */
+            { (yyval.generic_symlist_item) = चिह्नम्_list_type_new ((yyvsp[0].चिह्नकम्), (yylsp[0])); }
+    भङ्ग;
 
-  case 65: /* tag: "<*>"  */
-        { (yyval.tag) = uniqstr_new ("*"); }
-    break;
+  पक्ष 65: /* tag: "<*>"  */
+        { (yyval.चिह्नकम्) = uniqstr_new ("*"); }
+    भङ्ग;
 
-  case 66: /* tag: "<>"  */
-        { (yyval.tag) = uniqstr_new (""); }
-    break;
+  पक्ष 66: /* tag: "<>"  */
+        { (yyval.चिह्नकम्) = uniqstr_new (""); }
+    भङ्ग;
 
-  case 68: /* token_decls: token_decl.1  */
+  पक्ष 68: /* token_decls: token_decl.1  */
     {
       (yyval.token_decls) = (yyvsp[0].yykind_82);
     }
-    break;
+    भङ्ग;
 
-  case 69: /* token_decls: "<tag>" token_decl.1  */
+  पक्ष 69: /* token_decls: "<tag>" token_decl.1  */
     {
-      (yyval.token_decls) = symbol_list_type_set ((yyvsp[0].yykind_82), (yyvsp[-1].TAG));
+      (yyval.token_decls) = चिह्नम्_list_type_समुच्चयः ((yyvsp[0].yykind_82), (yyvsp[-1].चिह्नकम्_2));
     }
-    break;
+    भङ्ग;
 
-  case 70: /* token_decls: token_decls "<tag>" token_decl.1  */
+  पक्ष 70: /* token_decls: token_decls "<tag>" token_decl.1  */
     {
-      (yyval.token_decls) = symbol_list_append ((yyvsp[-2].token_decls), symbol_list_type_set ((yyvsp[0].yykind_82), (yyvsp[-1].TAG)));
+      (yyval.token_decls) = चिह्नम्_list_append ((yyvsp[-2].token_decls), चिह्नम्_list_type_समुच्चयः ((yyvsp[0].yykind_82), (yyvsp[-1].चिह्नकम्_2)));
     }
-    break;
+    भङ्ग;
 
-  case 71: /* token_decl.1: token_decl  */
-                            { (yyval.yykind_82) = symbol_list_sym_new ((yyvsp[0].token_decl), (yylsp[0])); }
-    break;
+  पक्ष 71: /* token_decl.1: token_decl  */
+                            { (yyval.yykind_82) = चिह्नम्_list_sym_new ((yyvsp[0].token_decl), (yylsp[0])); }
+    भङ्ग;
 
-  case 72: /* token_decl.1: token_decl.1 token_decl  */
-                            { (yyval.yykind_82) = symbol_list_append ((yyvsp[-1].yykind_82), symbol_list_sym_new ((yyvsp[0].token_decl), (yylsp[0]))); }
-    break;
+  पक्ष 72: /* token_decl.1: token_decl.1 token_decl  */
+                            { (yyval.yykind_82) = चिह्नम्_list_append ((yyvsp[-1].yykind_82), चिह्नम्_list_sym_new ((yyvsp[0].token_decl), (yylsp[0]))); }
+    भङ्ग;
 
-  case 73: /* token_decl: id int.opt alias  */
+  पक्ष 73: /* token_decl: id int.opt alias  */
     {
       (yyval.token_decl) = (yyvsp[-2].id);
-      symbol_class_set ((yyvsp[-2].id), current_class, (yylsp[-2]), true);
-      if (0 <= (yyvsp[-1].yykind_84))
-        symbol_code_set ((yyvsp[-2].id), (yyvsp[-1].yykind_84), (yylsp[-1]));
-      if ((yyvsp[0].alias))
-        symbol_make_alias ((yyvsp[-2].id), (yyvsp[0].alias), (yylsp[0]));
+      चिह्नम्_class_समुच्चयः ((yyvsp[-2].id), current_class, (yylsp[-2]), true);
+      यदि (0 <= (yyvsp[-1].yykind_84))
+        चिह्नम्_संहिता_समुच्चयः ((yyvsp[-2].id), (yyvsp[-1].yykind_84), (yylsp[-1]));
+      यदि ((yyvsp[0].alias))
+        चिह्नम्_make_alias ((yyvsp[-2].id), (yyvsp[0].alias), (yylsp[0]));
     }
-    break;
+    भङ्ग;
 
-  case 74: /* int.opt: %empty  */
+  पक्ष 74: /* int.opt: %empty  */
           { (yyval.yykind_84) = -1; }
-    break;
+    भङ्ग;
 
-  case 76: /* alias: %empty  */
-                 { (yyval.alias) = NULL; }
-    break;
+  पक्ष 76: /* alias: %empty  */
+                 { (yyval.alias) = रिक्त; }
+    भङ्ग;
 
-  case 77: /* alias: string_as_id  */
+  पक्ष 77: /* alias: string_as_id  */
                  { (yyval.alias) = (yyvsp[0].string_as_id); }
-    break;
+    भङ्ग;
 
-  case 78: /* alias: "translatable string"  */
+  पक्ष 78: /* alias: "translatable string"  */
     {
-      (yyval.alias) = symbol_get ((yyvsp[0].TSTRING), (yylsp[0]));
-      symbol_class_set ((yyval.alias), token_sym, (yylsp[0]), false);
+      (yyval.alias) = चिह्नम्_get ((yyvsp[0].TSTRING), (yylsp[0]));
+      चिह्नम्_class_समुच्चयः ((yyval.alias), token_sym, (yylsp[0]), false);
       (yyval.alias)->translatable = true;
     }
-    break;
+    भङ्ग;
 
-  case 79: /* token_decls_for_prec: token_decl_for_prec.1  */
+  पक्ष 79: /* token_decls_for_prec: token_decl_for_prec.1  */
     {
       (yyval.token_decls_for_prec) = (yyvsp[0].yykind_87);
     }
-    break;
+    भङ्ग;
 
-  case 80: /* token_decls_for_prec: "<tag>" token_decl_for_prec.1  */
+  पक्ष 80: /* token_decls_for_prec: "<tag>" token_decl_for_prec.1  */
     {
-      (yyval.token_decls_for_prec) = symbol_list_type_set ((yyvsp[0].yykind_87), (yyvsp[-1].TAG));
+      (yyval.token_decls_for_prec) = चिह्नम्_list_type_समुच्चयः ((yyvsp[0].yykind_87), (yyvsp[-1].चिह्नकम्_2));
     }
-    break;
+    भङ्ग;
 
-  case 81: /* token_decls_for_prec: token_decls_for_prec "<tag>" token_decl_for_prec.1  */
+  पक्ष 81: /* token_decls_for_prec: token_decls_for_prec "<tag>" token_decl_for_prec.1  */
     {
-      (yyval.token_decls_for_prec) = symbol_list_append ((yyvsp[-2].token_decls_for_prec), symbol_list_type_set ((yyvsp[0].yykind_87), (yyvsp[-1].TAG)));
+      (yyval.token_decls_for_prec) = चिह्नम्_list_append ((yyvsp[-2].token_decls_for_prec), चिह्नम्_list_type_समुच्चयः ((yyvsp[0].yykind_87), (yyvsp[-1].चिह्नकम्_2)));
     }
-    break;
+    भङ्ग;
 
-  case 82: /* token_decl_for_prec.1: token_decl_for_prec  */
-    { (yyval.yykind_87) = symbol_list_sym_new ((yyvsp[0].token_decl_for_prec), (yylsp[0])); }
-    break;
+  पक्ष 82: /* token_decl_for_prec.1: token_decl_for_prec  */
+    { (yyval.yykind_87) = चिह्नम्_list_sym_new ((yyvsp[0].token_decl_for_prec), (yylsp[0])); }
+    भङ्ग;
 
-  case 83: /* token_decl_for_prec.1: token_decl_for_prec.1 token_decl_for_prec  */
-    { (yyval.yykind_87) = symbol_list_append ((yyvsp[-1].yykind_87), symbol_list_sym_new ((yyvsp[0].token_decl_for_prec), (yylsp[0]))); }
-    break;
+  पक्ष 83: /* token_decl_for_prec.1: token_decl_for_prec.1 token_decl_for_prec  */
+    { (yyval.yykind_87) = चिह्नम्_list_append ((yyvsp[-1].yykind_87), चिह्नम्_list_sym_new ((yyvsp[0].token_decl_for_prec), (yylsp[0]))); }
+    भङ्ग;
 
-  case 84: /* token_decl_for_prec: id int.opt  */
+  पक्ष 84: /* token_decl_for_prec: id int.opt  */
     {
       (yyval.token_decl_for_prec) = (yyvsp[-1].id);
-      symbol_class_set ((yyvsp[-1].id), token_sym, (yylsp[-1]), false);
-      if (0 <= (yyvsp[0].yykind_84))
-        symbol_code_set ((yyvsp[-1].id), (yyvsp[0].yykind_84), (yylsp[0]));
+      चिह्नम्_class_समुच्चयः ((yyvsp[-1].id), token_sym, (yylsp[-1]), false);
+      यदि (0 <= (yyvsp[0].yykind_84))
+        चिह्नम्_संहिता_समुच्चयः ((yyvsp[-1].id), (yyvsp[0].yykind_84), (yylsp[0]));
     }
-    break;
+    भङ्ग;
 
-  case 86: /* symbol_decls: symbols.1  */
+  पक्ष 86: /* symbol_decls: symbols.1  */
     {
-      (yyval.symbol_decls) = (yyvsp[0].yykind_90);
+      (yyval.चिह्नम्_decls) = (yyvsp[0].yykind_90);
     }
-    break;
+    भङ्ग;
 
-  case 87: /* symbol_decls: "<tag>" symbols.1  */
+  पक्ष 87: /* symbol_decls: "<tag>" symbols.1  */
     {
-      (yyval.symbol_decls) = symbol_list_type_set ((yyvsp[0].yykind_90), (yyvsp[-1].TAG));
+      (yyval.चिह्नम्_decls) = चिह्नम्_list_type_समुच्चयः ((yyvsp[0].yykind_90), (yyvsp[-1].चिह्नकम्_2));
     }
-    break;
+    भङ्ग;
 
-  case 88: /* symbol_decls: symbol_decls "<tag>" symbols.1  */
+  पक्ष 88: /* symbol_decls: symbol_decls "<tag>" symbols.1  */
     {
-      (yyval.symbol_decls) = symbol_list_append ((yyvsp[-2].symbol_decls), symbol_list_type_set ((yyvsp[0].yykind_90), (yyvsp[-1].TAG)));
+      (yyval.चिह्नम्_decls) = चिह्नम्_list_append ((yyvsp[-2].चिह्नम्_decls), चिह्नम्_list_type_समुच्चयः ((yyvsp[0].yykind_90), (yyvsp[-1].चिह्नकम्_2)));
     }
-    break;
+    भङ्ग;
 
-  case 89: /* symbols.1: symbol  */
+  पक्ष 89: /* symbols.1: symbol  */
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ((yyvsp[0].symbol), current_class, (yylsp[0]), false);
-      (yyval.yykind_90) = symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0]));
+      यदि (current_class != unknown_sym)
+        चिह्नम्_class_समुच्चयः ((yyvsp[0].चिह्नम्), current_class, (yylsp[0]), false);
+      (yyval.yykind_90) = चिह्नम्_list_sym_new ((yyvsp[0].चिह्नम्), (yylsp[0]));
     }
-    break;
+    भङ्ग;
 
-  case 90: /* symbols.1: symbols.1 symbol  */
+  पक्ष 90: /* symbols.1: symbols.1 symbol  */
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ((yyvsp[0].symbol), current_class, (yylsp[0]), false);
-      (yyval.yykind_90) = symbol_list_append ((yyvsp[-1].yykind_90), symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0])));
+      यदि (current_class != unknown_sym)
+        चिह्नम्_class_समुच्चयः ((yyvsp[0].चिह्नम्), current_class, (yylsp[0]), false);
+      (yyval.yykind_90) = चिह्नम्_list_append ((yyvsp[-1].yykind_90), चिह्नम्_list_sym_new ((yyvsp[0].चिह्नम्), (yylsp[0])));
     }
-    break;
+    भङ्ग;
 
-  case 95: /* rules_or_grammar_declaration: error ";"  */
+  पक्ष 95: /* rules_or_grammar_declaration: error ";"  */
     {
       yyerrok;
     }
-    break;
+    भङ्ग;
 
-  case 96: /* $@5: %empty  */
+  पक्ष 96: /* $@5: %empty  */
                          { current_lhs ((yyvsp[-1].id_colon), (yylsp[-1]), (yyvsp[0].yykind_97)); }
-    break;
+    भङ्ग;
 
-  case 97: /* rules: id_colon named_ref.opt $@5 ":" rhses.1  */
+  पक्ष 97: /* rules: id_colon named_ref.opt $@5 ":" rhses.1  */
     {
       /* Free the current lhs. */
       current_lhs (0, (yylsp[-4]), 0);
     }
-    break;
+    भङ्ग;
 
-  case 98: /* rhses.1: rhs  */
-                     { grammar_current_rule_end ((yylsp[0])); }
-    break;
+  पक्ष 98: /* rhses.1: rhs  */
+                     { grammar_current_नियमः_अन्तः ((yylsp[0])); }
+    भङ्ग;
 
-  case 99: /* rhses.1: rhses.1 "|" rhs  */
-                     { grammar_current_rule_end ((yylsp[0])); }
-    break;
+  पक्ष 99: /* rhses.1: rhses.1 "|" rhs  */
+                     { grammar_current_नियमः_अन्तः ((yylsp[0])); }
+    भङ्ग;
 
-  case 101: /* rhs: %empty  */
-    { grammar_current_rule_begin (current_lhs_symbol, current_lhs_loc,
+  पक्ष 101: /* rhs: %empty  */
+    { grammar_current_नियमः_begin (current_lhs_चिह्नम्, current_lhs_loc,
                                   current_lhs_named_ref); }
-    break;
+    भङ्ग;
 
-  case 102: /* rhs: rhs symbol named_ref.opt  */
-    { grammar_current_rule_symbol_append ((yyvsp[-1].symbol), (yylsp[-1]), (yyvsp[0].yykind_97)); }
-    break;
+  पक्ष 102: /* rhs: rhs symbol named_ref.opt  */
+    { grammar_current_नियमः_चिह्नम्_append ((yyvsp[-1].चिह्नम्), (yylsp[-1]), (yyvsp[0].yykind_97)); }
+    भङ्ग;
 
-  case 103: /* rhs: rhs tag.opt "{...}" named_ref.opt  */
-    { grammar_current_rule_action_append ((yyvsp[-1].BRACED_CODE), (yylsp[-1]), (yyvsp[0].yykind_97), (yyvsp[-2].yykind_76)); }
-    break;
+  पक्ष 103: /* rhs: rhs tag.opt "{...}" named_ref.opt  */
+    { grammar_current_नियमः_action_append ((yyvsp[-1].BRACED_संहिता), (yylsp[-1]), (yyvsp[0].yykind_97), (yyvsp[-2].yykind_76)); }
+    भङ्ग;
 
-  case 104: /* rhs: rhs "%?{...}"  */
-    { grammar_current_rule_predicate_append ((yyvsp[0].BRACED_PREDICATE), (yylsp[0])); }
-    break;
+  पक्ष 104: /* rhs: rhs "%?{...}"  */
+    { grammar_current_नियमः_predicate_append ((yyvsp[0].BRACED_PREDICATE), (yylsp[0])); }
+    भङ्ग;
 
-  case 105: /* rhs: rhs "%empty"  */
-    { grammar_current_rule_empty_set ((yylsp[0])); }
-    break;
+  पक्ष 105: /* rhs: rhs "%empty"  */
+    { grammar_current_नियमः_रिक्तानि_समुच्चयः ((yylsp[0])); }
+    भङ्ग;
 
-  case 106: /* rhs: rhs "%prec" symbol  */
-    { grammar_current_rule_prec_set ((yyvsp[0].symbol), (yylsp[0])); }
-    break;
+  पक्ष 106: /* rhs: rhs "%prec" symbol  */
+    { grammar_current_नियमः_prec_समुच्चयः ((yyvsp[0].चिह्नम्), (yylsp[0])); }
+    भङ्ग;
 
-  case 107: /* rhs: rhs "%dprec" "integer literal"  */
-    { grammar_current_rule_dprec_set ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
-    break;
+  पक्ष 107: /* rhs: rhs "%dprec" "integer literal"  */
+    { grammar_current_नियमः_dprec_समुच्चयः ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
+    भङ्ग;
 
-  case 108: /* rhs: rhs "%merge" "<tag>"  */
-    { grammar_current_rule_merge_set ((yyvsp[0].TAG), (yylsp[0])); }
-    break;
+  पक्ष 108: /* rhs: rhs "%merge" "<tag>"  */
+    { grammar_current_नियमः_merge_समुच्चयः ((yyvsp[0].चिह्नकम्_2), (yylsp[0])); }
+    भङ्ग;
 
-  case 109: /* rhs: rhs "%expect" "integer literal"  */
-    { grammar_current_rule_expect_sr ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
-    break;
+  पक्ष 109: /* rhs: rhs "%expect" "integer literal"  */
+    { grammar_current_नियमः_expect_sr ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
+    भङ्ग;
 
-  case 110: /* rhs: rhs "%expect-rr" "integer literal"  */
-    { grammar_current_rule_expect_rr ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
-    break;
+  पक्ष 110: /* rhs: rhs "%expect-rr" "integer literal"  */
+    { grammar_current_नियमः_expect_rr ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
+    भङ्ग;
 
-  case 111: /* named_ref.opt: %empty  */
-                 { (yyval.yykind_97) = NULL; }
-    break;
+  पक्ष 111: /* named_ref.opt: %empty  */
+                 { (yyval.yykind_97) = रिक्त; }
+    भङ्ग;
 
-  case 112: /* named_ref.opt: "[identifier]"  */
+  पक्ष 112: /* named_ref.opt: "[identifier]"  */
                  { (yyval.yykind_97) = named_ref_new ((yyvsp[0].BRACKETED_ID), (yylsp[0])); }
-    break;
+    भङ्ग;
 
-  case 114: /* value: %empty  */
-          { (yyval.value).kind = muscle_keyword; (yyval.value).chars = ""; }
-    break;
+  पक्ष 114: /* value: %empty  */
+          { (yyval.मानम्).विधा = muscle_keyword; (yyval.मानम्).chars = ""; }
+    भङ्ग;
 
-  case 115: /* value: "identifier"  */
-          { (yyval.value).kind = muscle_keyword; (yyval.value).chars = (yyvsp[0].ID); }
-    break;
+  पक्ष 115: /* value: "identifier"  */
+          { (yyval.मानम्).विधा = muscle_keyword; (yyval.मानम्).chars = (yyvsp[0].ID); }
+    भङ्ग;
 
-  case 116: /* value: "string"  */
-          { (yyval.value).kind = muscle_string;  (yyval.value).chars = unquote ((yyvsp[0].STRING)); gram_scanner_last_string_free ();}
-    break;
+  पक्ष 116: /* value: "string"  */
+          { (yyval.मानम्).विधा = muscle_string;  (yyval.मानम्).chars = unquote ((yyvsp[0].STRING)); gram_scanner_चरमः_string_free ();}
+    भङ्ग;
 
-  case 117: /* value: "{...}"  */
-          { (yyval.value).kind = muscle_code;    (yyval.value).chars = strip_braces ((yyvsp[0].BRACED_CODE)); gram_scanner_last_string_free (); }
-    break;
+  पक्ष 117: /* value: "{...}"  */
+          { (yyval.मानम्).विधा = muscle_संहिता;    (yyval.मानम्).chars = strip_braces ((yyvsp[0].BRACED_संहिता)); gram_scanner_चरमः_string_free (); }
+    भङ्ग;
 
-  case 118: /* id: "identifier"  */
-    { (yyval.id) = symbol_from_uniqstr ((yyvsp[0].ID), (yylsp[0])); }
-    break;
+  पक्ष 118: /* id: "identifier"  */
+    { (yyval.id) = चिह्नम्_from_uniqstr ((yyvsp[0].ID), (yylsp[0])); }
+    भङ्ग;
 
-  case 119: /* id: "character literal"  */
+  पक्ष 119: /* id: "character literal"  */
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      ध्रुव वर्ण *var = "api.token.raw";
+      यदि (current_class == nterm_sym)
         {
           complain (&(yylsp[0]), complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      यदि (muscle_percent_define_ifdef (var))
         {
           complain (&(yylsp[0]), complaint,
                     _("character literals cannot be used together"
@@ -2601,35 +2601,35 @@ yyreduce:
           location loc = muscle_percent_define_get_loc (var);
           subcomplain (&loc, complaint, _("definition of %s"), var);
         }
-      (yyval.id) = symbol_get (char_name ((yyvsp[0].CHAR_LITERAL)), (yylsp[0]));
-      symbol_class_set ((yyval.id), token_sym, (yylsp[0]), false);
-      symbol_code_set ((yyval.id), (yyvsp[0].CHAR_LITERAL), (yylsp[0]));
+      (yyval.id) = चिह्नम्_get (char_name ((yyvsp[0].CHAR_LITERAL)), (yylsp[0]));
+      चिह्नम्_class_समुच्चयः ((yyval.id), token_sym, (yylsp[0]), false);
+      चिह्नम्_संहिता_समुच्चयः ((yyval.id), (yyvsp[0].CHAR_LITERAL), (yylsp[0]));
     }
-    break;
+    भङ्ग;
 
-  case 120: /* id_colon: "identifier:"  */
-           { (yyval.id_colon) = symbol_from_uniqstr ((yyvsp[0].ID_COLON), (yylsp[0])); }
-    break;
+  पक्ष 120: /* id_colon: "identifier:"  */
+           { (yyval.id_colon) = चिह्नम्_from_uniqstr ((yyvsp[0].ID_COLON), (yylsp[0])); }
+    भङ्ग;
 
-  case 123: /* string_as_id: "string"  */
+  पक्ष 123: /* string_as_id: "string"  */
     {
-      (yyval.string_as_id) = symbol_get ((yyvsp[0].STRING), (yylsp[0]));
-      symbol_class_set ((yyval.string_as_id), token_sym, (yylsp[0]), false);
+      (yyval.string_as_id) = चिह्नम्_get ((yyvsp[0].STRING), (yylsp[0]));
+      चिह्नम्_class_समुच्चयः ((yyval.string_as_id), token_sym, (yylsp[0]), false);
     }
-    break;
+    भङ्ग;
 
-  case 125: /* epilogue.opt: "%%" "epilogue"  */
+  पक्ष 125: /* epilogue.opt: "%%" "epilogue"  */
     {
-      muscle_code_grow ("epilogue", translate_code ((yyvsp[0].EPILOGUE), (yylsp[0]), true), (yylsp[0]));
-      code_scanner_last_string_free ();
+      muscle_संहिता_grow ("epilogue", translate_संहिता ((yyvsp[0].EPILOGUE), (yylsp[0]), true), (yylsp[0]));
+      संहिता_scanner_चरमः_string_free ();
     }
-    break;
+    भङ्ग;
 
 
 
-        default: break;
+        स्वभाव: भङ्ग;
       }
-    if (yychar_backup != yychar)
+    यदि (yychar_backup != yychar)
       YY_LAC_DISCARD ("yychar change");
   }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2643,7 +2643,7 @@ yyreduce:
      case of YYERROR or YYBACKUP, subsequent parser actions might lead
      to an incorrect destructor call or verbose syntax error message
      before the lookahead is translated.  */
-  YY_SYMBOL_PRINT ("-> $$ =", YY_CAST (yysymbol_kind_t, yyr1[yyn]), &yyval, &yyloc);
+  YY_चिह्नम्_PRINT ("-> $$ =", YY_CAST (yysymbol_विधा_t, yyr1[yyn]), &yyval, &yyloc);
 
   YYPOPSTACK (yylen);
   yylen = 0;
@@ -2655,14 +2655,14 @@ yyreduce:
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
   {
-    const int yylhs = yyr1[yyn] - YYNTOKENS;
-    const int yyi = yypgoto[yylhs] + *yyssp;
+    ध्रुव पूर्णाङ्क yylhs = yyr1[yyn] - YYNTOKENS;
+    ध्रुव पूर्णाङ्क yyi = yypgoto[yylhs] + *yyssp;
     yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
                ? yytable[yyi]
                : yydefgoto[yylhs]);
   }
 
-  goto yynewstate;
+  गच्छ yynewstate;
 
 
 /*--------------------------------------.
@@ -2671,44 +2671,44 @@ yyreduce:
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
-  yytoken = yychar == GRAM_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
+  yytoken = yychar == GRAM_रिक्तानि ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
-  if (!yyerrstatus)
+  यदि (!yyerrstatus)
     {
       ++yynerrs;
       {
         yypcontext_t yyctx
-          = {yyssp, yyesa, &yyes, &yyes_capacity, yytoken, &yylloc};
-        if (yychar != GRAM_EMPTY)
+          = {yyssp, yyesa, &yyes, &yyes_क्षमता, yytoken, &yylloc};
+        यदि (yychar != GRAM_रिक्तानि)
           YY_LAC_ESTABLISH;
-        if (yyreport_syntax_error (&yyctx) == 2)
+        यदि (yyreport_syntax_error (&yyctx) == 2)
           YYNOMEM;
       }
     }
 
   yyerror_range[1] = yylloc;
-  if (yyerrstatus == 3)
+  यदि (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= GRAM_EOF)
+      यदि (yychar <= GRAM_EOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == GRAM_EOF)
+          यदि (yychar == GRAM_EOF)
             YYABORT;
         }
-      else
+      अन्यथा
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, &yylloc);
-          yychar = GRAM_EMPTY;
+          yychar = GRAM_रिक्तानि;
         }
     }
 
   /* Else will try to reuse lookahead token after shifting the error
      token.  */
-  goto yyerrlab1;
+  गच्छ yyerrlab1;
 
 
 /*---------------------------------------------------.
@@ -2717,7 +2717,7 @@ yyerrlab:
 yyerrorlab:
   /* Pacify compilers when the user code never invokes YYERROR and the
      label yyerrorlab therefore never appears in user code.  */
-  if (0)
+  यदि (0)
     YYERROR;
   ++yynerrs;
 
@@ -2725,9 +2725,9 @@ yyerrorlab:
      this YYERROR.  */
   YYPOPSTACK (yylen);
   yylen = 0;
-  YY_STACK_PRINT (yyss, yyssp);
+  YY_राशिः_PRINT (yyss, yyssp);
   yystate = *yyssp;
-  goto yyerrlab1;
+  गच्छ yyerrlab1;
 
 
 /*-------------------------------------------------------------.
@@ -2737,30 +2737,30 @@ yyerrlab1:
   yyerrstatus = 3;      /* Each real token shifted decrements this.  */
 
   /* Pop stack until we find a state that shifts the error token.  */
-  for (;;)
+  प्रति (;;)
     {
       yyn = yypact[yystate];
-      if (!yypact_value_is_default (yyn))
+      यदि (!yypact_मानम्_is_default (yyn))
         {
           yyn += YYSYMBOL_YYerror;
-          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
+          यदि (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
             {
               yyn = yytable[yyn];
-              if (0 < yyn)
-                break;
+              यदि (0 < yyn)
+                भङ्ग;
             }
         }
 
       /* Pop the current state because it cannot handle the error token.  */
-      if (yyssp == yyss)
+      यदि (yyssp == yyss)
         YYABORT;
 
       yyerror_range[1] = *yylsp;
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp, yylsp);
+                  YY_ACCESSING_चिह्नम् (yystate), yyvsp, yylsp);
       YYPOPSTACK (1);
       yystate = *yyssp;
-      YY_STACK_PRINT (yyss, yyssp);
+      YY_राशिः_PRINT (yyss, yyssp);
     }
 
   /* If the stack popping above didn't lose the initial context for the
@@ -2769,17 +2769,17 @@ yyerrlab1:
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
-  YY_IGNORE_MAYBE_UNINITIALIZED_END
+  YY_IGNORE_MAYBE_UNINITIALIZED_अन्तः
 
   yyerror_range[2] = yylloc;
   ++yylsp;
   YYLLOC_DEFAULT (*yylsp, yyerror_range, 2);
 
   /* Shift the error token.  */
-  YY_SYMBOL_PRINT ("Shifting", YY_ACCESSING_SYMBOL (yyn), yyvsp, yylsp);
+  YY_चिह्नम्_PRINT ("Shifting", YY_ACCESSING_चिह्नम् (yyn), yyvsp, yylsp);
 
   yystate = yyn;
-  goto yynewstate;
+  गच्छ yynewstate;
 
 
 /*-------------------------------------.
@@ -2787,7 +2787,7 @@ yyerrlab1:
 `-------------------------------------*/
 yyacceptlab:
   yyresult = 0;
-  goto yyreturnlab;
+  गच्छ yyreturnlab;
 
 
 /*-----------------------------------.
@@ -2795,7 +2795,7 @@ yyacceptlab:
 `-----------------------------------*/
 yyabortlab:
   yyresult = 1;
-  goto yyreturnlab;
+  गच्छ yyreturnlab;
 
 
 /*-----------------------------------------------------------.
@@ -2804,14 +2804,14 @@ yyabortlab:
 yyexhaustedlab:
   yyerror (&yylloc, YY_("memory exhausted"));
   yyresult = 2;
-  goto yyreturnlab;
+  गच्छ yyreturnlab;
 
 
 /*----------------------------------------------------------.
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != GRAM_EMPTY)
+  यदि (yychar != GRAM_रिक्तानि)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */
@@ -2822,48 +2822,48 @@ yyreturnlab:
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
-  YY_STACK_PRINT (yyss, yyssp);
-  while (yyssp != yyss)
+  YY_राशिः_PRINT (yyss, yyssp);
+  यावत् (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, yylsp);
+                  YY_ACCESSING_चिह्नम् (+*yyssp), yyvsp, yylsp);
       YYPOPSTACK (1);
     }
-#ifndef yyoverflow
-  if (yyss != yyssa)
+#यदि_अपरिभाषितम् yyoverflow
+  यदि (yyss != yyssa)
     YYSTACK_FREE (yyss);
-#endif
-  if (yyes != yyesa)
+#यदि_अन्तः
+  यदि (yyes != yyesa)
     YYSTACK_FREE (yyes);
 
-  return yyresult;
+  प्रत्यागम yyresult;
 }
 
 
 
-int
-yyreport_syntax_error (const yypcontext_t *ctx)
+पूर्णाङ्क
+yyreport_syntax_error (ध्रुव yypcontext_t *ctx)
 {
-  int res = 0;
+  पूर्णाङ्क res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
-  yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  गणना { तर्काः_MAX = 5 };
+  ध्रुव वर्ण *argv[तर्काः_MAX];
+  पूर्णाङ्क argc = 0;
+  yysymbol_विधा_t unexpected = yypcontext_token (ctx);
+  यदि (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
-      yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      yysymbol_विधा_t expected[तर्काः_MAX - 1];
+      पूर्णाङ्क nexpected = yypcontext_expected_tokens (ctx, expected, तर्काः_MAX - 1);
+      यदि (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      अन्यथा
+        प्रति (पूर्णाङ्क i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  प्रत्यागम res;
 }
 
 
@@ -2872,312 +2872,312 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    the right-hand side, and return an empty location equal to the end
    boundary of RHS[0] if the right-hand side is empty.  */
 
-static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+स्थिर YYLTYPE
+lloc_default (YYLTYPE ध्रुव *rhs, पूर्णाङ्क n)
 {
   YYLTYPE loc;
 
   /* SGI MIPSpro 7.4.1m miscompiles "loc.start = loc.end = rhs[n].end;".
      The bug is fixed in 7.4.2m, but play it safe for now.  */
-  loc.start = rhs[n].end;
-  loc.end = rhs[n].end;
+  loc.start = rhs[n].अन्तः;
+  loc.अन्तः = rhs[n].अन्तः;
 
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  प्रति (पूर्णाङ्क i = 1; i <= n; i++)
+    यदि (! equal_boundaries (rhs[i].start, rhs[i].अन्तः))
       {
         loc.start = rhs[i].start;
-        break;
+        भङ्ग;
       }
 
-  return loc;
+  प्रत्यागम loc;
 }
 
-static
-char *strip_braces (char *code)
+स्थिर
+वर्ण *strip_braces (वर्ण *संहिता)
 {
-  code[strlen (code) - 1] = 0;
-  return code + 1;
+  संहिता[वाक्यदैर्घ्यम् (संहिता) - 1] = 0;
+  प्रत्यागम संहिता + 1;
 }
 
-static
-char const *
-translate_code (char *code, location loc, bool plain)
+स्थिर
+वर्ण ध्रुव *
+translate_संहिता (वर्ण *संहिता, location loc, bool plain)
 {
-  code_props plain_code;
-  if (plain)
-    code_props_plain_init (&plain_code, code, loc);
-  else
-    code_props_symbol_action_init (&plain_code, code, loc);
-  code_props_translate_code (&plain_code);
-  gram_scanner_last_string_free ();
-  return plain_code.code;
+  संहिता_props plain_संहिता;
+  यदि (plain)
+    संहिता_props_plain_init (&plain_संहिता, संहिता, loc);
+  अन्यथा
+    संहिता_props_चिह्नम्_action_init (&plain_संहिता, संहिता, loc);
+  संहिता_props_translate_संहिता (&plain_संहिता);
+  gram_scanner_चरमः_string_free ();
+  प्रत्यागम plain_संहिता.संहिता;
 }
 
-static
-char const *
-translate_code_braceless (char *code, location loc)
+स्थिर
+वर्ण ध्रुव *
+translate_संहिता_braceless (वर्ण *संहिता, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  प्रत्यागम translate_संहिता (strip_braces (संहिता), loc, true);
 }
 
-static void
-add_param (param_type type, char *decl, location loc)
+स्थिर शून्य
+सङ्कलय_param (param_type type, वर्ण *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  स्थिर वर्ण ध्रुव alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  वर्ण ध्रुव *name_start = रिक्त;
   {
-    char *p;
+    वर्ण *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+    प्रति (p = decl; p[1]; p++)
+      यदि ((p == decl
+           || ! memchr (alphanum, p[-1], परिमाण alphanum - 1))
+          && memchr (alphanum, p[0], परिमाण alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    यावत् (c_isspace ((अचिह्नित वर्ण) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    यावत् (c_isspace ((अचिह्नित वर्ण) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  यदि (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  अन्यथा
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      वर्ण *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      यदि (type & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      यदि (type & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
-      free (name);
+      मुक्त (name);
     }
 
-  gram_scanner_last_string_free ();
+  gram_scanner_चरमः_string_free ();
 }
 
 
-static void
-handle_header (char const *value)
+स्थिर शून्य
+handle_शीर्षकम् (वर्ण ध्रुव *मानम्)
 {
-  header_flag = true;
-  if (value)
+  शीर्षकम्_flag = true;
+  यदि (मानम्)
     {
-      char *file = unquote (value);
-      spec_header_file = xstrdup (file);
-      gram_scanner_last_string_free ();
+      वर्ण *file = unquote (मानम्);
+      spec_शीर्षकम्_file = xstrdup (file);
+      gram_scanner_चरमः_string_free ();
       unquote_free (file);
     }
 }
 
 
-static void
-handle_error_verbose (location const *loc, char const *directive)
+स्थिर शून्य
+handle_error_verbose (location ध्रुव *loc, वर्ण ध्रुव *directive)
 {
   bison_directive (loc, directive);
-  muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
+  muscle_percent_define_निवेशय (directive, *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_file_prefix (location const *loc,
-                    location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+स्थिर शून्य
+handle_file_उपसर्गः (location ध्रुव *loc,
+                    location ध्रुव *dir_loc,
+                    वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्_quoted)
 {
-  char *value = unquote (value_quoted);
+  वर्ण *मानम् = unquote (मानम्_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  यदि (location_रिक्तानि (spec_file_उपसर्गः_loc))
     {
-      spec_file_prefix_loc = *loc;
-      spec_file_prefix = value;
+      spec_file_उपसर्गः_loc = *loc;
+      spec_file_उपसर्गः = मानम्;
     }
-  else
+  अन्यथा
     {
-      duplicate_directive (directive, spec_file_prefix_loc, *loc);
+      duplicate_directive (directive, spec_file_उपसर्गः_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  यदि (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
-static void
-handle_language (location const *loc, char const *lang)
+स्थिर शून्य
+handle_language (location ध्रुव *loc, वर्ण ध्रुव *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
 
 
-static void
-handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+स्थिर शून्य
+handle_name_उपसर्गः (location ध्रुव *loc,
+                    वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्_quoted)
 {
-  char *value = unquote (value_quoted);
+  वर्ण *मानम् = unquote (मानम्_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  वर्ण buf1[1024];
+  size_t len1 = परिमाण (buf1);
+  वर्ण *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, मानम्);
+  यदि (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  यदि (location_रिक्तानि (spec_name_उपसर्गः_loc))
     {
-      spec_name_prefix = value;
-      spec_name_prefix_loc = *loc;
+      spec_name_उपसर्गः = मानम्;
+      spec_name_उपसर्गः_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      वर्ण buf2[1024];
+      size_t len2 = परिमाण (buf2);
+      वर्ण *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", मानम्);
+      यदि (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
-        free (new);
+      यदि (new != buf2)
+        मुक्त (new);
     }
-  else
-    duplicate_directive (old, spec_file_prefix_loc, *loc);
+  अन्यथा
+    duplicate_directive (old, spec_file_उपसर्गः_loc, *loc);
 
-  if (old != buf1)
-    free (old);
+  यदि (old != buf1)
+    मुक्त (old);
 }
 
 
-static void
-handle_pure_parser (location const *loc, char const *directive)
+स्थिर शून्य
+handle_विशुद्धम्_parser (location ध्रुव *loc, वर्ण ध्रुव *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
-  muscle_percent_define_insert ("api.pure", *loc, muscle_keyword, "",
+  muscle_percent_define_निवेशय ("api.pure", *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_require (location const *loc, char const *version_quoted)
+स्थिर शून्य
+handle_require (location ध्रुव *loc, वर्ण ध्रुव *संस्करणम्_quoted)
 {
-  char *version = unquote (version_quoted);
-  required_version = strversion_to_int (version);
-  if (required_version == -1)
+  वर्ण *संस्करणम् = unquote (संस्करणम्_quoted);
+  required_संस्करणम् = strversion_गन्तव्यम्_int (संस्करणम्);
+  यदि (required_संस्करणम् == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
-                version);
-      required_version = 0;
+                संस्करणम्);
+      required_संस्करणम् = 0;
     }
-  else
+  अन्यथा
     {
-      const char* package_version =
-        0 < strverscmp (api_version, PACKAGE_VERSION)
-        ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      ध्रुव वर्ण* package_संस्करणम् =
+        0 < strverscmp (api_संस्करणम्, PACKAGE_संस्करणम्)
+        ? api_संस्करणम् : PACKAGE_संस्करणम्;
+      यदि (0 < strverscmp (संस्करणम्, package_संस्करणम्))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
-                    version, package_version);
-          exit (EX_MISMATCH);
+                    संस्करणम्, package_संस्करणम्);
+          निर्गच्छ (EX_MISMATCH);
         }
     }
-  unquote_free (version);
-  gram_scanner_last_string_free ();
+  unquote_free (संस्करणम्);
+  gram_scanner_चरमः_string_free ();
 }
 
-static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+स्थिर शून्य
+handle_skeleton (location ध्रुव *loc, वर्ण ध्रुव *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  वर्ण *skel = unquote (skel_quoted);
+  वर्ण ध्रुव *skeleton_user = skel;
+  यदि (strchr (skeleton_user, '/'))
     {
-      size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
-        --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
-        --dir_length;
-      char *skeleton_build =
-        xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      size_t dir_दीर्घता = वाक्यदैर्घ्यम् (grammar_file);
+      यावत् (dir_दीर्घता && grammar_file[dir_दीर्घता - 1] != '/')
+        --dir_दीर्घता;
+      यावत् (dir_दीर्घता && grammar_file[dir_दीर्घता - 1] == '/')
+        --dir_दीर्घता;
+      वर्ण *skeleton_build =
+        xmalloc (dir_दीर्घता + 1 + वाक्यदैर्घ्यम् (skeleton_user) + 1);
+      यदि (dir_दीर्घता > 0)
         {
-          memcpy (skeleton_build, grammar_file, dir_length);
-          skeleton_build[dir_length++] = '/';
+          स्मृतिं_प्रतिलिख (skeleton_build, grammar_file, dir_दीर्घता);
+          skeleton_build[dir_दीर्घता++] = '/';
         }
-      strcpy (skeleton_build + dir_length, skeleton_user);
+      वाक्यं_प्रतिलिख (skeleton_build + dir_दीर्घता, skeleton_user);
       skeleton_user = uniqstr_new (skeleton_build);
-      free (skeleton_build);
+      मुक्त (skeleton_build);
     }
   skeleton_arg (skeleton_user, grammar_prio, *loc);
 }
 
 
-static void
-handle_yacc (location const *loc)
+स्थिर शून्य
+handle_yacc (location ध्रुव *loc)
 {
-  const char *directive = "%yacc";
+  ध्रुव वर्ण *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
-    set_yacc (*loc);
-  else
+  यदि (location_रिक्तानि (yacc_loc))
+    समुच्चयः_yacc (*loc);
+  अन्यथा
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
-static void
-gram_error (location const *loc, char const *msg)
+स्थिर शून्य
+gram_error (location ध्रुव *loc, वर्ण ध्रुव *सन्देशः_2)
 {
-  complain (loc, complaint, "%s", msg);
+  complain (loc, complaint, "%s", सन्देशः_2);
 }
 
-static char const *
-char_name (char c)
+स्थिर वर्ण ध्रुव *
+char_name (वर्ण c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  यदि (c == '\'')
+    प्रत्यागम "'\\''";
+  अन्यथा
     {
-      char buf[4];
+      वर्ण buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      प्रत्यागम quotearg_style (escape_quoting_style, buf);
     }
 }
 
-static void
-current_lhs (symbol *sym, location loc, named_ref *ref)
+स्थिर शून्य
+current_lhs (चिह्नम् *sym, location loc, named_ref *ref)
 {
-  current_lhs_symbol = sym;
+  current_lhs_चिह्नम् = sym;
   current_lhs_loc = loc;
-  if (sym)
-    symbol_location_as_lhs_set (sym, loc);
+  यदि (sym)
+    चिह्नम्_location_as_lhs_समुच्चयः (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
      node.  This is because a single named-ref in the grammar may
      result in several uses when the user factors lhs between several
      rules using "|".  Therefore free the parser's original copy.  */
-  free (current_lhs_named_ref);
+  मुक्त (current_lhs_named_ref);
   current_lhs_named_ref = ref;
 }
 
-static void tron (FILE *yyo)
+स्थिर शून्य tron (FILE *yyo)
 {
   begin_use_class ("value", yyo);
 }
 
-static void troff (FILE *yyo)
+स्थिर शून्य troff (FILE *yyo)
 {
-  end_use_class ("value", yyo);
+  अन्तः_use_class ("value", yyo);
 }
 
 
@@ -3185,70 +3185,70 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+संरचना obstack obstack_for_unquote;
 
-void
-parser_init (void)
+शून्य
+parser_init (शून्य)
 {
   obstack_init (&obstack_for_unquote);
 }
 
-void
-parser_free (void)
+शून्य
+parser_free (शून्य)
 {
   obstack_free (&obstack_for_unquote, 0);
 }
 
-static void
-unquote_free (char *last_string)
+स्थिर शून्य
+unquote_free (वर्ण *चरमः_string)
 {
-  obstack_free (&obstack_for_unquote, last_string);
+  obstack_free (&obstack_for_unquote, चरमः_string);
 }
 
-static char *
-unquote (const char *cp)
+स्थिर वर्ण *
+unquote (ध्रुव वर्ण *cp)
 {
-#define GROW(Char)                              \
+#परिभाषय GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
-    switch (*cp)
+  प्रति (++cp; *cp && *cp != '"'; ++cp)
+    विकल्प (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      पक्ष '"':
+        भङ्ग;
+      पक्ष '\\':
         ++cp;
-        switch (*cp)
+        विकल्प (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          पक्ष '0': पक्ष '1': पक्ष '2': पक्ष '3': पक्ष '4':
+          पक्ष '5': पक्ष '6': पक्ष '7': पक्ष '8': पक्ष '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              पूर्णाङ्क c = cp[0] - '0';
+              यदि (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              यदि (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            भङ्ग;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          पक्ष 'a': GROW ('\a'); भङ्ग;
+          पक्ष 'b': GROW ('\b'); भङ्ग;
+          पक्ष 'f': GROW ('\f'); भङ्ग;
+          पक्ष 'n': GROW ('\n'); भङ्ग;
+          पक्ष 'r': GROW ('\r'); भङ्ग;
+          पक्ष 't': GROW ('\t'); भङ्ग;
+          पक्ष 'v': GROW ('\v'); भङ्ग;
 
-          case 'x':
+          पक्ष 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              पूर्णाङ्क c = 0;
+              यावत् (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -3256,18 +3256,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              भङ्ग;
             }
           }
-        break;
+        भङ्ग;
 
-      default:
+      स्वभाव:
         GROW (*cp);
-        break;
+        भङ्ग;
       }
-  assert (*cp == '"');
+  प्रतिज्ञा (*cp == '"');
   ++cp;
-  assert (*cp == '\0');
-#undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  प्रतिज्ञा (*cp == '\0');
+#अपरिभाषय GROW
+  प्रत्यागम obstack_finish0 (&obstack_for_unquote);
 }

@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef INADEQUACY_LIST_H_
+#यदि_अपरिभाषितम् INADEQUACY_LIST_H_
 # define INADEQUACY_LIST_H_
 
 # include <bitset.h>
@@ -28,7 +28,7 @@
 /**
  * A unique ID assigned to every \c InadequacyList node.
  */
-typedef long long InadequacyListNodeCount;
+प्रकारनिर्देश दीर्घ दीर्घ Inadequacy_List_ग्रन्थिः_गणनम्;
 
 /**
  * For a conflict, each rule in the grammar can have at most one contributing
@@ -41,25 +41,25 @@ typedef long long InadequacyListNodeCount;
  * sync with this type.  Whatever the type, it must support negatives for sake
  * of the special values below.
  */
-typedef rule_number ContributionIndex;
+प्रकारनिर्देश नियमः_सङ्ख्या Contribution_सूचकांक;
 
 /* Special \c ContributionIndex used to indicate null result when looking for a
    contribution.  */
-extern ContributionIndex const ContributionIndex__none;
+बाह्य Contribution_सूचकांक ध्रुव Contribution_सूचकांक_none;
 
 /* Special \c ContributionIndex used by
    \c AnnotationList__computeDominantContribution to signal when the action
    chosen in a conflict is a syntax error because of a %nonassoc.  */
-extern ContributionIndex const ContributionIndex__error_action;
+बाह्य Contribution_सूचकांक ध्रुव Contribution_सूचकांक_error_action;
 
 /**
  * The description of a conflict.  Don't break encapsulation by modifying the
  * fields directly.  Use the provided interface functions for
  * \c InadequacyList.
  */
-typedef struct {
+प्रकारनिर्देश संरचना {
   /** The \c token passed to \c InadequacyList__new_conflict.  */
-  symbol *token;
+  चिह्नम् *token;
   /** The \c actions passed to \c InadequacyList__new_conflict.  */
   bitset actions;
 } Conflict;
@@ -69,12 +69,12 @@ typedef struct {
  * particular state.  Don't break encapsulation by modifying the fields
  * directly.  Use the provided interface functions.
  */
-typedef struct InadequacyList {
-  struct InadequacyList *next;
-  InadequacyListNodeCount id;
+प्रकारनिर्देश संरचना InadequacyList {
+  संरचना InadequacyList *अग्र;
+  Inadequacy_List_ग्रन्थिः_गणनम् id;
   state *manifestingState;
-  ContributionIndex contributionCount;
-  union {
+  Contribution_सूचकांक contribution_गणनम्_2;
+  सङ्घ {
     Conflict conflict;
   } inadequacy;
 } InadequacyList;
@@ -108,14 +108,14 @@ typedef struct InadequacyList {
  *   - \c result assumes responsibility for the memory of \c actions.
  */
 InadequacyList *InadequacyList__new_conflict (
-  state *manifesting_state, symbol *token, bitset actions,
-  InadequacyListNodeCount *node_count);
+  state *manifesting_state, चिह्नम् *token, bitset actions,
+  Inadequacy_List_ग्रन्थिः_गणनम् *ग्रन्थिः_गणनम्);
 
 /**
  * \post
  *   - All memory associated with all nodes in the list \c self was freed.
  */
-void InadequacyList__delete (InadequacyList *self);
+शून्य InadequacyList__delete (InadequacyList *self);
 
 /**
  * \pre
@@ -126,8 +126,8 @@ void InadequacyList__delete (InadequacyList *self);
  *       \c self (perhaps because \c self isn't a conflict).
  *     - The index of the shift contribution, otherwise.
  */
-ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self);
+Contribution_सूचकांक
+Inadequacy_List_get_सरणम्_Contribution_सूचकांक (InadequacyList ध्रुव *self);
 
 /**
  * \pre
@@ -137,8 +137,8 @@ InadequacyList__getShiftContributionIndex (InadequacyList const *self);
  *   - \c result = the token associated with contribution \c i in the
  *     inadequacy described by the node \c self.
  */
-symbol *InadequacyList__getContributionToken (InadequacyList const *self,
-                                              ContributionIndex i);
+चिह्नम् *InadequacyList__getContributionToken (InadequacyList ध्रुव *self,
+                                              Contribution_सूचकांक i);
 
 /**
  * \pre
@@ -148,6 +148,6 @@ symbol *InadequacyList__getContributionToken (InadequacyList const *self,
  *   - \c list now contains \c self as its first node.
  *   - \c list assumes responsibility for the memory of \c self.
  */
-void InadequacyList__prependTo (InadequacyList *self, InadequacyList **list);
+शून्य Inadequacy_List_prepend_गन्तव्यम् (InadequacyList *self, InadequacyList **list);
 
-#endif /* !INADEQUACY_LIST_H_ */
+#यदि_अन्तः /* !INADEQUACY_LIST_H_ */

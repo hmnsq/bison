@@ -17,68 +17,68 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include "InadequacyList.h"
+#अन्तर्भाव "InadequacyList.h"
 
-#include <intprops.h>
+#अन्तर्भाव <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+Contribution_सूचकांक ध्रुव Contribution_सूचकांक_none = -1;
+Contribution_सूचकांक ध्रुव Contribution_सूचकांक_error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, चिह्नम् *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_ग्रन्थिः_गणनम् *ग्रन्थिः_गणनम्)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *परिणाम = xmalloc (परिमाण *परिणाम);
+  परिणाम->id = *ग्रन्थिः_गणनम्;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  यदि (INT_सङ्कलय_WRAPV (*ग्रन्थिः_गणनम्, 1, ग्रन्थिः_गणनम्))
     aver (false);
-  IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
-  result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
-  result->inadequacy.conflict.token = token;
-  result->inadequacy.conflict.actions = actions;
-  return result;
+  IGNORE_TYPE_LIMITS_अन्तः
+  परिणाम->अग्र = रिक्त;
+  परिणाम->manifestingState = manifesting_state;
+  परिणाम->contribution_गणनम्_2 = bitset_गणनम् (actions);
+  परिणाम->inadequacy.conflict.token = token;
+  परिणाम->inadequacy.conflict.actions = actions;
+  प्रत्यागम परिणाम;
 }
 
-void
+शून्य
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  यावत् (self)
     {
-      InadequacyList *node = self;
-      self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      InadequacyList *ग्रन्थिः = self;
+      self = self->अग्र;
+      bitset_free (ग्रन्थिः->inadequacy.conflict.actions);
+      मुक्त (ग्रन्थिः);
     }
 }
 
-ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+Contribution_सूचकांक
+Inadequacy_List_get_सरणम्_Contribution_सूचकांक (InadequacyList ध्रुव *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  यदि (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->अङ्कः))
+    प्रत्यागम Contribution_सूचकांक_none;
+  प्रत्यागम self->contribution_गणनम्_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
-                                      ContributionIndex i)
+चिह्नम् *
+InadequacyList__getContributionToken (InadequacyList ध्रुव *self,
+                                      Contribution_सूचकांक i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_गणनम्_2); (शून्य) i;
+  प्रत्यागम self->inadequacy.conflict.token;
 }
 
-void
-InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
+शून्य
+Inadequacy_List_prepend_गन्तव्यम् (InadequacyList *self, InadequacyList **list)
 {
-  InadequacyList *head_old = *list;
+  InadequacyList *शीर्ष_old = *list;
   *list = self;
-  self->next = head_old;
+  self->अग्र = शीर्ष_old;
 }

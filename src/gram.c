@@ -18,338 +18,338 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include "complain.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "print-xml.h"
-#include "reader.h"
-#include "reduce.h"
-#include "symtab.h"
+#अन्तर्भाव "complain.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "glyphs.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "print-xml.h"
+#अन्तर्भाव "reader.h"
+#अन्तर्भाव "reduce.h"
+#अन्तर्भाव "symtab.h"
 
 /* Comments for these variables are in gram.h.  */
 
-item_number *ritem = NULL;
-int nritems = 0;
+item_सङ्ख्या *ritem = रिक्त;
+पूर्णाङ्क nritems = 0;
 
-rule *rules = NULL;
-rule_number nrules = 0;
+नियमः *नियमाः = रिक्त;
+नियमः_सङ्ख्या nrules = 0;
 
-symbol **symbols = NULL;
-int nsyms = 0;
-int ntokens = 1;
-int nnterms = 0;
+चिह्नम् **symbols = रिक्त;
+पूर्णाङ्क nsyms = 0;
+पूर्णाङ्क ntokens = 1;
+पूर्णाङ्क nnterms = 0;
 
-symbol_number *token_translations = NULL;
+चिह्नम्_सङ्ख्या *token_translations = रिक्त;
 
-int max_code = 256;
+पूर्णाङ्क max_संहिता = 256;
 
-int required_version = 0;
+पूर्णाङ्क required_संस्करणम् = 0;
 
-void
-item_print (item_number *item, rule const *previous_rule, FILE *out)
+शून्य
+item_print (item_सङ्ख्या *item, नियमः ध्रुव *previous_नियमः, FILE *बहिर्गमनम्)
 {
-  rule const *r = item_rule (item);
-  rule_lhs_print (r, previous_rule ? previous_rule->lhs : NULL, out);
+  नियमः ध्रुव *r = item_नियमः (item);
+  नियमः_lhs_print (r, previous_नियमः ? previous_नियमः->lhs : रिक्त, बहिर्गमनम्);
 
-  if (0 <= *r->rhs)
+  यदि (0 <= *r->rhs)
     {
       // Non-empty rhs.
-      for (item_number *sp = r->rhs; sp < item; sp++)
-        fprintf (out, " %s", symbols[*sp]->tag);
-      fprintf (out, " %s", dot);
-      for (item_number *sp = item; 0 <= *sp; ++sp)
-        fprintf (out, " %s", symbols[*sp]->tag);
+      प्रति (item_सङ्ख्या *sp = r->rhs; sp < item; sp++)
+        fprintf (बहिर्गमनम्, " %s", symbols[*sp]->चिह्नकम्);
+      fprintf (बहिर्गमनम्, " %s", dot);
+      प्रति (item_सङ्ख्या *sp = item; 0 <= *sp; ++sp)
+        fprintf (बहिर्गमनम्, " %s", symbols[*sp]->चिह्नकम्);
     }
-  else
-    fprintf (out, " %s %s", empty, dot);
+  अन्यथा
+    fprintf (बहिर्गमनम्, " %s %s", रिक्तानि, dot);
 }
 
 
 bool
-rule_useful_in_grammar_p (rule const *r)
+नियमः_useful_अन्तर्_grammar_p (नियमः ध्रुव *r)
 {
-  return r->number < nrules;
+  प्रत्यागम r->सङ्ख्या < nrules;
 }
 
 bool
-rule_useless_in_grammar_p (rule const *r)
+नियमः_useless_अन्तर्_grammar_p (नियमः ध्रुव *r)
 {
-  return !rule_useful_in_grammar_p (r);
+  प्रत्यागम !नियमः_useful_अन्तर्_grammar_p (r);
 }
 
 bool
-rule_useless_in_parser_p (rule const *r)
+नियमः_useless_अन्तर्_parser_p (नियमः ध्रुव *r)
 {
-  return !r->useful && rule_useful_in_grammar_p (r);
+  प्रत्यागम !r->useful && नियमः_useful_अन्तर्_grammar_p (r);
 }
 
 bool
-rule_useless_chain_p (rule const *r)
+नियमः_useless_chain_p (नियमः ध्रुव *r)
 {
-  return rule_rhs_length (r) == 1 && !r->action;
+  प्रत्यागम नियमः_rhs_दीर्घता (r) == 1 && !r->action;
 }
 
-void
-rule_lhs_print (rule const *r, sym_content const *previous_lhs, FILE *out)
+शून्य
+नियमः_lhs_print (नियमः ध्रुव *r, sym_content ध्रुव *previous_lhs, FILE *बहिर्गमनम्)
 {
-  fprintf (out, "  %3d ", r->number);
-  if (previous_lhs != r->lhs)
-    fprintf (out, "%s:", r->lhs->symbol->tag);
-  else
-    fprintf (out, "%*s|", (int) strlen (previous_lhs->symbol->tag), "");
+  fprintf (बहिर्गमनम्, "  %3d ", r->सङ्ख्या);
+  यदि (previous_lhs != r->lhs)
+    fprintf (बहिर्गमनम्, "%s:", r->lhs->चिह्नम्->चिह्नकम्);
+  अन्यथा
+    fprintf (बहिर्गमनम्, "%*s|", (पूर्णाङ्क) वाक्यदैर्घ्यम् (previous_lhs->चिह्नम्->चिह्नकम्), "");
 }
 
-void
-rule_lhs_print_xml (rule const *r, FILE *out, int level)
+शून्य
+नियमः_lhs_print_xml (नियमः ध्रुव *r, FILE *बहिर्गमनम्, पूर्णाङ्क level)
 {
-  xml_printf (out, level, "<lhs>%s</lhs>", r->lhs->symbol->tag);
+  xml_printf (बहिर्गमनम्, level, "<lhs>%s</lhs>", r->lhs->चिह्नम्->चिह्नकम्);
 }
 
 size_t
-rule_rhs_length (rule const *r)
+नियमः_rhs_दीर्घता (नियमः ध्रुव *r)
 {
   size_t res = 0;
-  for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  प्रति (item_सङ्ख्या *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
     ++res;
-  return res;
+  प्रत्यागम res;
 }
 
-void
-rule_rhs_print (rule const *r, FILE *out)
+शून्य
+नियमः_rhs_print (नियमः ध्रुव *r, FILE *बहिर्गमनम्)
 {
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
-      fprintf (out, " %s", symbols[*rhsp]->tag);
-  else
-    fprintf (out, " %s", empty);
+  यदि (0 <= *r->rhs)
+    प्रति (item_सङ्ख्या *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+      fprintf (बहिर्गमनम्, " %s", symbols[*rhsp]->चिह्नकम्);
+  अन्यथा
+    fprintf (बहिर्गमनम्, " %s", रिक्तानि);
 }
 
-static void
-rule_rhs_print_xml (rule const *r, FILE *out, int level)
+स्थिर शून्य
+नियमः_rhs_print_xml (नियमः ध्रुव *r, FILE *बहिर्गमनम्, पूर्णाङ्क level)
 {
-  if (*r->rhs >= 0)
+  यदि (*r->rhs >= 0)
     {
-      xml_puts (out, level, "<rhs>");
-      for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
-        xml_printf (out, level + 1, "<symbol>%s</symbol>",
-                    xml_escape (symbols[*rhsp]->tag));
-      xml_puts (out, level, "</rhs>");
+      xml_puts (बहिर्गमनम्, level, "<rhs>");
+      प्रति (item_सङ्ख्या *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+        xml_printf (बहिर्गमनम्, level + 1, "<symbol>%s</symbol>",
+                    xml_escape (symbols[*rhsp]->चिह्नकम्));
+      xml_puts (बहिर्गमनम्, level, "</rhs>");
     }
-  else
+  अन्यथा
     {
-      xml_puts (out, level, "<rhs>");
-      xml_puts (out, level + 1, "<empty/>");
-      xml_puts (out, level, "</rhs>");
+      xml_puts (बहिर्गमनम्, level, "<rhs>");
+      xml_puts (बहिर्गमनम्, level + 1, "<empty/>");
+      xml_puts (बहिर्गमनम्, level, "</rhs>");
     }
 }
 
-void
-rule_print (rule const *r, rule const *prev_rule, FILE *out)
+शून्य
+नियमः_print (नियमः ध्रुव *r, नियमः ध्रुव *पूर्व_नियमः, FILE *बहिर्गमनम्)
 {
-  rule_lhs_print (r, prev_rule ? prev_rule->lhs : NULL, out);
-  rule_rhs_print (r, out);
+  नियमः_lhs_print (r, पूर्व_नियमः ? पूर्व_नियमः->lhs : रिक्त, बहिर्गमनम्);
+  नियमः_rhs_print (r, बहिर्गमनम्);
 }
 
-void
-ritem_print (FILE *out)
+शून्य
+ritem_print (FILE *बहिर्गमनम्)
 {
-  fputs ("RITEM\n", out);
+  fputs ("RITEM\n", बहिर्गमनम्);
   bool first = true;
-  for (int i = 0; i < nritems; ++i)
+  प्रति (पूर्णाङ्क i = 0; i < nritems; ++i)
     {
-      if (first)
+      यदि (first)
         {
-          fprintf (out, "  %d: ", i);
+          fprintf (बहिर्गमनम्, "  %d: ", i);
           first = false;
         }
-      if (ritem[i] >= 0)
-        fprintf (out, "  %s", symbols[ritem[i]]->tag);
-      else
+      यदि (ritem[i] >= 0)
+        fprintf (बहिर्गमनम्, "  %s", symbols[ritem[i]]->चिह्नकम्);
+      अन्यथा
         {
-          fprintf (out, "  (rule %d)\n", item_number_as_rule_number (ritem[i]));
+          fprintf (बहिर्गमनम्, "  (rule %d)\n", item_सङ्ख्या_as_नियमः_सङ्ख्या (ritem[i]));
           first = true;
         }
     }
-  fputs ("\n\n", out);
+  fputs ("\n\n", बहिर्गमनम्);
 }
 
 size_t
-ritem_longest_rhs (void)
+ritem_longest_rhs (शून्य)
 {
-  int max = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  पूर्णाङ्क max = 0;
+  प्रति (नियमः_सङ्ख्या r = 0; r < nrules; ++r)
     {
-      size_t length = rule_rhs_length (&rules[r]);
-      if (length > max)
-        max = length;
+      size_t दीर्घता = नियमः_rhs_दीर्घता (&नियमाः[r]);
+      यदि (दीर्घता > max)
+        max = दीर्घता;
     }
 
-  return max;
+  प्रत्यागम max;
 }
 
-void
-grammar_rules_partial_print (FILE *out, const char *title,
-                             rule_filter filter)
+शून्य
+grammar_नियमाः_partial_print (FILE *बहिर्गमनम्, ध्रुव वर्ण *title,
+                             नियमः_filter filter)
 {
   bool first = true;
-  rule *previous_rule = NULL;
+  नियमः *previous_नियमः = रिक्त;
 
   /* rule # : LHS -> RHS */
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  प्रति (नियमः_सङ्ख्या r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (filter && !filter (&rules[r]))
-        continue;
-      if (first)
-        fprintf (out, "%s\n\n", title);
-      else if (previous_rule && previous_rule->lhs != rules[r].lhs)
-        putc ('\n', out);
+      यदि (filter && !filter (&नियमाः[r]))
+        अनुवर्त;
+      यदि (first)
+        fprintf (बहिर्गमनम्, "%s\n\n", title);
+      अन्यथा यदि (previous_नियमः && previous_नियमः->lhs != नियमाः[r].lhs)
+        putc ('\n', बहिर्गमनम्);
       first = false;
-      rule_print (&rules[r], previous_rule, out);
-      putc ('\n', out);
-      previous_rule = &rules[r];
+      नियमः_print (&नियमाः[r], previous_नियमः, बहिर्गमनम्);
+      putc ('\n', बहिर्गमनम्);
+      previous_नियमः = &नियमाः[r];
     }
-  if (!first)
-    fputs ("\n\n", out);
+  यदि (!first)
+    fputs ("\n\n", बहिर्गमनम्);
 }
 
-void
-grammar_rules_print (FILE *out)
+शून्य
+grammar_नियमाः_print (FILE *बहिर्गमनम्)
 {
-  grammar_rules_partial_print (out, _("Grammar"), rule_useful_in_grammar_p);
+  grammar_नियमाः_partial_print (बहिर्गमनम्, _("Grammar"), नियमः_useful_अन्तर्_grammar_p);
 }
 
-void
-grammar_rules_print_xml (FILE *out, int level)
+शून्य
+grammar_नियमाः_print_xml (FILE *बहिर्गमनम्, पूर्णाङ्क level)
 {
   bool first = true;
 
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  प्रति (नियमः_सङ्ख्या r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (first)
-        xml_puts (out, level + 1, "<rules>");
+      यदि (first)
+        xml_puts (बहिर्गमनम्, level + 1, "<rules>");
       first = false;
       {
-        char const *usefulness
-          = rule_useless_in_grammar_p (&rules[r]) ? "useless-in-grammar"
-          : rule_useless_in_parser_p (&rules[r])  ? "useless-in-parser"
+        वर्ण ध्रुव *usefulness
+          = नियमः_useless_अन्तर्_grammar_p (&नियमाः[r]) ? "useless-in-grammar"
+          : नियमः_useless_अन्तर्_parser_p (&नियमाः[r])  ? "useless-in-parser"
           :                                         "useful";
-        xml_indent (out, level + 2);
-        fprintf (out, "<rule number=\"%d\" usefulness=\"%s\"",
-                 rules[r].number, usefulness);
-        if (rules[r].precsym)
-          fprintf (out, " percent_prec=\"%s\"",
-                   xml_escape (rules[r].precsym->symbol->tag));
-        fputs (">\n", out);
+        xml_indent (बहिर्गमनम्, level + 2);
+        fprintf (बहिर्गमनम्, "<rule number=\"%d\" usefulness=\"%s\"",
+                 नियमाः[r].सङ्ख्या, usefulness);
+        यदि (नियमाः[r].precsym)
+          fprintf (बहिर्गमनम्, " percent_prec=\"%s\"",
+                   xml_escape (नियमाः[r].precsym->चिह्नम्->चिह्नकम्));
+        fputs (">\n", बहिर्गमनम्);
       }
-      rule_lhs_print_xml (&rules[r], out, level + 3);
-      rule_rhs_print_xml (&rules[r], out, level + 3);
-      xml_puts (out, level + 2, "</rule>");
+      नियमः_lhs_print_xml (&नियमाः[r], बहिर्गमनम्, level + 3);
+      नियमः_rhs_print_xml (&नियमाः[r], बहिर्गमनम्, level + 3);
+      xml_puts (बहिर्गमनम्, level + 2, "</rule>");
     }
-  if (!first)
-    xml_puts (out, level + 1, "</rules>");
-  else
-   xml_puts (out, level + 1, "<rules/>");
+  यदि (!first)
+    xml_puts (बहिर्गमनम्, level + 1, "</rules>");
+  अन्यथा
+   xml_puts (बहिर्गमनम्, level + 1, "<rules/>");
 }
 
-static void
-section (FILE *out, const char *s)
+स्थिर शून्य
+section (FILE *बहिर्गमनम्, ध्रुव वर्ण *s)
 {
-  fprintf (out, "%s\n", s);
-  for (int i = strlen (s); 0 < i; --i)
-    putc ('-', out);
-  putc ('\n', out);
-  putc ('\n', out);
+  fprintf (बहिर्गमनम्, "%s\n", s);
+  प्रति (पूर्णाङ्क i = वाक्यदैर्घ्यम् (s); 0 < i; --i)
+    putc ('-', बहिर्गमनम्);
+  putc ('\n', बहिर्गमनम्);
+  putc ('\n', बहिर्गमनम्);
 }
 
-void
-grammar_dump (FILE *out, const char *title)
+शून्य
+grammar_dump (FILE *बहिर्गमनम्, ध्रुव वर्ण *title)
 {
-  fprintf (out, "%s\n\n", title);
-  fprintf (out,
+  fprintf (बहिर्गमनम्, "%s\n\n", title);
+  fprintf (बहिर्गमनम्,
            "ntokens = %d, nnterms = %d, nsyms = %d, nrules = %d, nritems = %d\n\n",
            ntokens, nnterms, nsyms, nrules, nritems);
 
-  section (out, "Tokens");
+  section (बहिर्गमनम्, "Tokens");
   {
-    fprintf (out, "Value  Sprec  Sassoc  Tag\n");
+    fprintf (बहिर्गमनम्, "Value  Sprec  Sassoc  Tag\n");
 
-    for (symbol_number i = 0; i < ntokens; i++)
-      fprintf (out, "%5d  %5d   %5d  %s\n",
+    प्रति (चिह्नम्_सङ्ख्या i = 0; i < ntokens; i++)
+      fprintf (बहिर्गमनम्, "%5d  %5d   %5d  %s\n",
                i,
                symbols[i]->content->prec, symbols[i]->content->assoc,
-               symbols[i]->tag);
-    fprintf (out, "\n\n");
+               symbols[i]->चिह्नकम्);
+    fprintf (बहिर्गमनम्, "\n\n");
   }
 
-  section (out, "Nonterminals");
+  section (बहिर्गमनम्, "Nonterminals");
   {
-    fprintf (out, "Value  Tag\n");
+    fprintf (बहिर्गमनम्, "Value  Tag\n");
 
-    for (symbol_number i = ntokens; i < nsyms; i++)
-      fprintf (out, "%5d  %s\n",
-               i, symbols[i]->tag);
-    fprintf (out, "\n\n");
+    प्रति (चिह्नम्_सङ्ख्या i = ntokens; i < nsyms; i++)
+      fprintf (बहिर्गमनम्, "%5d  %s\n",
+               i, symbols[i]->चिह्नकम्);
+    fprintf (बहिर्गमनम्, "\n\n");
   }
 
-  section (out, "Rules");
+  section (बहिर्गमनम्, "Rules");
   {
-    fprintf (out,
+    fprintf (बहिर्गमनम्,
              "Num (Prec, Assoc, Useful, UselessChain) Lhs"
              " -> (Ritem Range) Rhs\n");
-    for (rule_number i = 0; i < nrules + nuseless_productions; ++i)
+    प्रति (नियमः_सङ्ख्या i = 0; i < nrules + nuseless_productions; ++i)
       {
-        rule const *rule_i = &rules[i];
-        int const rhs_itemno = rule_i->rhs - ritem;
-        int length = rule_rhs_length (rule_i);
-        aver (item_number_as_rule_number (rule_i->rhs[length]) == i);
-        fprintf (out, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
+        नियमः ध्रुव *नियमः_i = &नियमाः[i];
+        पूर्णाङ्क ध्रुव rhs_itemno = नियमः_i->rhs - ritem;
+        पूर्णाङ्क दीर्घता = नियमः_rhs_दीर्घता (नियमः_i);
+        aver (item_सङ्ख्या_as_नियमः_सङ्ख्या (नियमः_i->rhs[दीर्घता]) == i);
+        fprintf (बहिर्गमनम्, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
                  i,
-                 rule_i->prec ? rule_i->prec->prec : 0,
-                 rule_i->prec ? rule_i->prec->assoc : 0,
-                 rule_i->useful ? "t" : "f",
-                 rule_useless_chain_p (rule_i) ? "t" : "f",
-                 rule_i->lhs->number,
-                 rhs_itemno, rhs_itemno + length - 1);
+                 नियमः_i->prec ? नियमः_i->prec->prec : 0,
+                 नियमः_i->prec ? नियमः_i->prec->assoc : 0,
+                 नियमः_i->useful ? "t" : "f",
+                 नियमः_useless_chain_p (नियमः_i) ? "t" : "f",
+                 नियमः_i->lhs->सङ्ख्या,
+                 rhs_itemno, rhs_itemno + दीर्घता - 1);
         /* Dumped the RHS. */
-        for (item_number *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
-          fprintf (out, " %3d", *rhsp);
-        putc ('\n', out);
+        प्रति (item_सङ्ख्या *rhsp = नियमः_i->rhs; 0 <= *rhsp; ++rhsp)
+          fprintf (बहिर्गमनम्, " %3d", *rhsp);
+        putc ('\n', बहिर्गमनम्);
       }
   }
-  fprintf (out, "\n\n");
+  fprintf (बहिर्गमनम्, "\n\n");
 
-  section (out, "Rules interpreted");
-  for (rule_number r = 0; r < nrules + nuseless_productions; ++r)
+  section (बहिर्गमनम्, "Rules interpreted");
+  प्रति (नियमः_सङ्ख्या r = 0; r < nrules + nuseless_productions; ++r)
     {
-      fprintf (out, "%-5d  %s:", r, rules[r].lhs->symbol->tag);
-      rule_rhs_print (&rules[r], out);
-      putc ('\n', out);
+      fprintf (बहिर्गमनम्, "%-5d  %s:", r, नियमाः[r].lhs->चिह्नम्->चिह्नकम्);
+      नियमः_rhs_print (&नियमाः[r], बहिर्गमनम्);
+      putc ('\n', बहिर्गमनम्);
     }
-  fprintf (out, "\n\n");
+  fprintf (बहिर्गमनम्, "\n\n");
 }
 
-void
-grammar_rules_useless_report (const char *message)
+शून्य
+grammar_नियमाः_useless_report (ध्रुव वर्ण *सन्देशः)
 {
-  for (rule_number r = 0; r < nrules; ++r)
+  प्रति (नियमः_सङ्ख्या r = 0; r < nrules; ++r)
     /* Don't complain about rules whose LHS is useless, we already
        complained about it.  */
-    if (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
-        && !rules[r].useful)
-      complain (&rules[r].location, Wother, "%s", message);
+    यदि (!reduce_nonterminal_useless_अन्तर्_grammar (नियमाः[r].lhs)
+        && !नियमाः[r].useful)
+      complain (&नियमाः[r].location, Wother, "%s", सन्देशः);
 }
 
-void
-grammar_free (void)
+शून्य
+grammar_free (शून्य)
 {
-  if (ritem)
-    free (ritem - 1);
-  free (rules);
-  free (token_translations);
+  यदि (ritem)
+    मुक्त (ritem - 1);
+  मुक्त (नियमाः);
+  मुक्त (token_translations);
   /* Free the symbol table data structure.  */
   symbols_free ();
   free_merger_functions ();

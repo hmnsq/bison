@@ -15,21 +15,21 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef FIXITS_H_
+#यदि_अपरिभाषितम् FIXITS_H_
 # define FIXITS_H_ 1
 
 # include "location.h"
 
 /* Declare a fix to apply.  */
-void fixits_register (location const *loc, char const* update);
+शून्य fixits_पञ्जिकाकोशः (location ध्रुव *loc, वर्ण ध्रुव* update);
 
 /* Apply the fixits: update the source file.  */
-void fixits_run (void);
+शून्य fixits_सततम् (शून्य);
 
 /* Whether there are no fixits. */
-bool fixits_empty (void);
+bool fixits_रिक्तानि (शून्य);
 
 /* Free the registered fixits.  */
-void fixits_free (void);
+शून्य fixits_free (शून्य);
 
-#endif /* !FIXITS_H_ */
+#यदि_अन्तः /* !FIXITS_H_ */

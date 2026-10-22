@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef READER_H_
+#यदि_अपरिभाषितम् READER_H_
 # define READER_H_
 
 # include "location.h"
@@ -27,22 +27,22 @@
 
 # include "parse-gram.h"
 
-typedef struct merger_list
+प्रकारनिर्देश संरचना merger_list
 {
-  struct merger_list* next;
+  संरचना merger_list* अग्र;
   uniqstr name;
   /* One symbol whose type is the one used by all the symbols on which
      this merging function is used.  */
-  symbol *sym;
+  चिह्नम् *sym;
   /* Where SYM was bound to this merging function.  */
   location type_declaration_loc;
 } merger_list;
 
-void free_merger_functions (void);
-extern merger_list *merge_functions;
+शून्य free_merger_functions (शून्य);
+बाह्य merger_list *merge_functions;
 
 /* List of the start symbols.  */
-extern symbol_list *start_symbols;
+बाह्य चिह्नम्_list *start_symbols;
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
 
@@ -50,36 +50,36 @@ extern symbol_list *start_symbols;
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *switching_token (const symbol *start);
+चिह्नम् *switching_token (ध्रुव चिह्नम् *start);
 
-void grammar_start_symbols_add (symbol_list *syms);
+शून्य grammar_start_symbols_सङ्कलय (चिह्नम्_list *syms);
 
-void grammar_current_rule_begin (symbol *lhs, location loc,
+शून्य grammar_current_नियमः_begin (चिह्नम् *lhs, location loc,
                                  named_ref *lhs_named_ref);
-void grammar_current_rule_end (location loc);
-void grammar_midrule_action (void);
+शून्य grammar_current_नियमः_अन्तः (location loc);
+शून्य grammar_midrule_action (शून्य);
 /* Apply %empty to the current rule.  */
-void grammar_current_rule_empty_set (location loc);
-void grammar_current_rule_prec_set (symbol *precsym, location loc);
-void grammar_current_rule_dprec_set (int dprec, location loc);
-void grammar_current_rule_merge_set (uniqstr name, location loc);
-void grammar_current_rule_expect_sr (int count, location loc);
-void grammar_current_rule_expect_rr (int count, location loc);
-void grammar_current_rule_symbol_append (symbol *sym, location loc,
+शून्य grammar_current_नियमः_रिक्तानि_समुच्चयः (location loc);
+शून्य grammar_current_नियमः_prec_समुच्चयः (चिह्नम् *precsym, location loc);
+शून्य grammar_current_नियमः_dprec_समुच्चयः (पूर्णाङ्क dprec, location loc);
+शून्य grammar_current_नियमः_merge_समुच्चयः (uniqstr name, location loc);
+शून्य grammar_current_नियमः_expect_sr (पूर्णाङ्क गणनम्, location loc);
+शून्य grammar_current_नियमः_expect_rr (पूर्णाङ्क गणनम्, location loc);
+शून्य grammar_current_नियमः_चिह्नम्_append (चिह्नम् *sym, location loc,
                                          named_ref *nref);
 /* Attach an ACTION to the current rule.  */
-void grammar_current_rule_action_append (const char *action, location loc,
-                                         named_ref *nref, uniqstr tag);
+शून्य grammar_current_नियमः_action_append (ध्रुव वर्ण *action, location loc,
+                                         named_ref *nref, uniqstr चिह्नकम्);
 /* Attach a PREDICATE to the current rule.  */
-void grammar_current_rule_predicate_append (const char *predicate, location loc);
+शून्य grammar_current_नियमः_predicate_append (ध्रुव वर्ण *predicate, location loc);
 
 /* Read in the grammar specification.  */
-void reader (const char *gram);
+शून्य reader (ध्रुव वर्ण *gram);
 
 /* Was %union seen?  */
-extern bool union_seen;
+बाह्य bool union_आलोकितम्;
 
 /* Should rules have a default precedence?  */
-extern bool default_prec;
+बाह्य bool default_prec;
 
-#endif /* !READER_H_ */
+#यदि_अन्तः /* !READER_H_ */

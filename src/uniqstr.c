@@ -18,83 +18,83 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <attribute.h>
-#include <error.h>
-#include <hash.h>
-#include <quotearg.h>
-#include <stdarg.h>
+#अन्तर्भाव <attribute.h>
+#अन्तर्भाव <error.h>
+#अन्तर्भाव <hash.h>
+#अन्तर्भाव <quotearg.h>
+#अन्तर्भाव <stdarg.h>
 
-#include "uniqstr.h"
+#अन्तर्भाव "uniqstr.h"
 
 /*-----------------------.
 | A uniqstr hash table.  |
 `-----------------------*/
 
 /* Initial capacity of uniqstr hash table.  */
-#define HT_INITIAL_CAPACITY 257
+#परिभाषय HT_INITIAL_क्षमता 257
 
-static struct hash_table *uniqstrs_table = NULL;
+स्थिर संरचना hash_सारणी *uniqstrs_सारणी = रिक्त;
 
 /*-------------------------------------.
 | Create the uniqstr for S if needed.  |
 `-------------------------------------*/
 
 uniqstr
-uniqstr_new (char const *str)
+uniqstr_new (वर्ण ध्रुव *str)
 {
-  uniqstr res = hash_lookup (uniqstrs_table, str);
-  if (!res)
+  uniqstr res = hash_lookup (uniqstrs_सारणी, str);
+  यदि (!res)
     {
       /* First insertion in the hash. */
       res = xstrdup (str);
-      hash_xinsert (uniqstrs_table, res);
+      hash_xinsert (uniqstrs_सारणी, res);
     }
-  return res;
+  प्रत्यागम res;
 }
 
 uniqstr
-uniqstr_concat (int nargs, ...)
+uniqstr_concat (पूर्णाङ्क nargs, ...)
 {
-  va_list args;
+  va_list तर्काः;
 
-  va_start (args, nargs);
+  va_start (तर्काः, nargs);
   size_t reslen = 0;
-  for (int i = 0; i < nargs; i++)
-    reslen += strlen (va_arg (args, char const *));
-  va_end (args);
+  प्रति (पूर्णाङ्क i = 0; i < nargs; i++)
+    reslen += वाक्यदैर्घ्यम् (va_arg (तर्काः, वर्ण ध्रुव *));
+  va_अन्तः (तर्काः);
 
-  char *str = xmalloc (reslen + 1);
-  char *p = str;
+  वर्ण *str = xmalloc (reslen + 1);
+  वर्ण *p = str;
 
-  va_start (args, nargs);
-  for (int i = 0; i < nargs; i++)
+  va_start (तर्काः, nargs);
+  प्रति (पूर्णाङ्क i = 0; i < nargs; i++)
     {
-      char const *arg = va_arg (args, char const *);
-      size_t arglen = strlen (arg);
-      memcpy (p, arg, arglen);
+      वर्ण ध्रुव *arg = va_arg (तर्काः, वर्ण ध्रुव *);
+      size_t arglen = वाक्यदैर्घ्यम् (arg);
+      स्मृतिं_प्रतिलिख (p, arg, arglen);
       p += arglen;
     }
-  va_end (args);
+  va_अन्तः (तर्काः);
 
   *p = '\0';
-  uniqstr res = hash_xinsert (uniqstrs_table, str);
-  if (res != str)
-    free (str);
-  return res;
+  uniqstr res = hash_xinsert (uniqstrs_सारणी, str);
+  यदि (res != str)
+    मुक्त (str);
+  प्रत्यागम res;
 }
 
 /*------------------------------.
 | Abort if S is not a uniqstr.  |
 `------------------------------*/
 
-void
-uniqstr_assert (char const *str)
+शून्य
+uniqstr_assert (वर्ण ध्रुव *str)
 {
-  uniqstr s = hash_lookup (uniqstrs_table, str);
-  if (!s || s != str)
+  uniqstr s = hash_lookup (uniqstrs_सारणी, str);
+  यदि (!s || s != str)
     {
       error (0, 0,
              "not a uniqstr: %s", quotearg (str));
@@ -107,26 +107,26 @@ uniqstr_assert (char const *str)
 | Print the uniqstr.  |
 `--------------------*/
 
-static inline bool
+स्थिर अन्तःस्थ bool
 uniqstr_print (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
-  return true;
+  प्रत्यागम true;
 }
 
-static bool
-uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
+स्थिर bool
+uniqstr_print_processor (शून्य *ustr, शून्य *null MAYBE_अप्रयुक्तम्)
 {
-  return uniqstr_print (ustr);
+  प्रत्यागम uniqstr_print (ustr);
 }
 
-int
+पूर्णाङ्क
 uniqstr_cmp (uniqstr l, uniqstr r)
 {
-  return (l == r ? 0
+  प्रत्यागम (l == r ? 0
           : !l ? -1
           : !r ? +1
-          : strcmp (l, r));
+          : वाक्यं_तुलय (l, r));
 }
 
 
@@ -134,16 +134,16 @@ uniqstr_cmp (uniqstr l, uniqstr r)
 | A uniqstr hash table.  |
 `-----------------------*/
 
-static bool
-hash_compare_uniqstr (void const *m1, void const *m2)
+स्थिर bool
+hash_compare_uniqstr (शून्य ध्रुव *m1, शून्य ध्रुव *m2)
 {
-  return STREQ (m1, m2);
+  प्रत्यागम STREQ (m1, m2);
 }
 
-static size_t
-hash_uniqstr (void const *m, size_t tablesize)
+स्थिर size_t
+hash_uniqstr (शून्य ध्रुव *m, size_t tablesize)
 {
-  return hash_string (m, tablesize);
+  प्रत्यागम hash_string (m, tablesize);
 }
 
 
@@ -151,14 +151,14 @@ hash_uniqstr (void const *m, size_t tablesize)
 | Create the uniqstrs table.  |
 `----------------------------*/
 
-void
-uniqstrs_new (void)
+शून्य
+uniqstrs_new (शून्य)
 {
-  uniqstrs_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                     NULL,
+  uniqstrs_सारणी = hash_xinitialize (HT_INITIAL_क्षमता,
+                                     रिक्त,
                                      hash_uniqstr,
                                      hash_compare_uniqstr,
-                                     free);
+                                     मुक्त);
 }
 
 
@@ -166,10 +166,10 @@ uniqstrs_new (void)
 | Perform a task on all the uniqstrs.  |
 `-------------------------------------*/
 
-static void
-uniqstrs_do (Hash_processor processor, void *processor_data)
+स्थिर शून्य
+uniqstrs_do (Hash_processor processor, शून्य *processor_दत्त)
 {
-  hash_do_for_each (uniqstrs_table, processor, processor_data);
+  hash_do_for_each (uniqstrs_सारणी, processor, processor_दत्त);
 }
 
 
@@ -177,10 +177,10 @@ uniqstrs_do (Hash_processor processor, void *processor_data)
 | Print them all.  |
 `-----------------*/
 
-void
-uniqstrs_print (void)
+शून्य
+uniqstrs_print (शून्य)
 {
-  uniqstrs_do (uniqstr_print_processor, NULL);
+  uniqstrs_do (uniqstr_print_processor, रिक्त);
 }
 
 
@@ -188,8 +188,8 @@ uniqstrs_print (void)
 | Free the uniqstrs.  |
 `--------------------*/
 
-void
-uniqstrs_free (void)
+शून्य
+uniqstrs_free (शून्य)
 {
-  hash_free (uniqstrs_table);
+  hash_free (uniqstrs_सारणी);
 }

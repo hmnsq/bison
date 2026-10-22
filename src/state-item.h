@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef STATE_ITEM_H
+#यदि_अपरिभाषितम् STATE_ITEM_H
 # define STATE_ITEM_H
 
 # include <bitsetv.h>
@@ -53,62 +53,62 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_वस्तूनि[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_वस्तूनि || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_वस्तूनि && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+प्रकारनिर्देश पूर्णाङ्क state_item_सङ्ख्या;
 
-typedef struct
+प्रकारनिर्देश संरचना
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  ध्रुव state *state;
+  item_सङ्ख्या *item;
+  state_item_सङ्ख्या trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+प्रकारनिर्देश gl_list_t state_item_list;
 
-extern bitsetv firsts;
+बाह्य bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+बाह्य size_t nstate_वस्तूनि;
+बाह्य state_item_सङ्ख्या *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+बाह्य state_item *state_वस्तूनि;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_सङ्ख्या s, state_item_सङ्ख्या off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+स्थिर अन्तःस्थ state_item_सङ्ख्या
+state_item_सूचकांक_lookup (state_सङ्ख्या s, state_item_सङ्ख्या off)
 {
-  return state_item_map[s] + off;
+  प्रत्यागम state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+शून्य state_वस्तूनि_init (शून्य);
+शून्य state_वस्तूनि_free (शून्य);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+शून्य state_item_print (ध्रुव state_item *si, FILE *बहिर्गमनम्, ध्रुव वर्ण *उपसर्गः);
+ध्रुव नियमः *state_item_नियमः (ध्रुव state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (ध्रुव state_item *si, ध्रुव state_item *अग्र);
 
 // Iterating on a state_item_list.
-static inline bool
-state_item_list_next (gl_list_iterator_t *it, state_item **si)
+स्थिर अन्तःस्थ bool
+state_item_list_अग्र (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ध्रुव शून्य *p = रिक्त;
+  bool res = gl_list_iterator_अग्र (it, &p, रिक्त);
+  यदि (res)
     *si = (state_item *) p;
-  else
+  अन्यथा
     gl_list_iterator_free (it);
-  return res;
+  प्रत्यागम res;
 }
 
 
-#endif /* STATE_ITEM_H */
+#यदि_अन्तः /* STATE_ITEM_H */
