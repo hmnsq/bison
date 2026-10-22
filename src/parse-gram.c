@@ -83,26 +83,26 @@
 #  ifdef __cplusplus
 #   define YY_CAST(Type, Val) static_cast<Type> (Val)
 #   define YY_REINTERPRET_CAST(Type, Val) reinterpret_cast<Type> (Val)
-#  else
+#  ᯀᯮᯝᯂᯪ
 #   define YY_CAST(Type, Val) ((Type) (Val))
 #   define YY_REINTERPRET_CAST(Type, Val) ((Type) (Val))
 #  endif
 # endif
 # ifndef YY_NULLPTR
-#  if defined __cplusplus
-#   if 201103L <= __cplusplus
+#  ᯀᯮᯝ defined __cplusplus
+#   ᯀᯮᯝ 201103L <= __cplusplus
 #    define YY_NULLPTR nullptr
-#   else
+#   ᯀᯮᯝᯂᯪ
 #    define YY_NULLPTR 0
 #   endif
-#  else
+#  ᯀᯮᯝᯂᯪ
 #   define YY_NULLPTR ((void*)0)
 #  endif
 # endif
 
 #include "src/parse-gram.h"
 /* Symbol kind.  */
-enum yysymbol_kind_t
+ga_nanaa yysymbol_kind_t
 {
   YYSYMBOL_YYEMPTY = -2,
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
@@ -211,7 +211,7 @@ enum yysymbol_kind_t
   YYSYMBOL_string_as_id = 103,             /* string_as_id  */
   YYSYMBOL_104_epilogue_opt = 104          /* epilogue.opt  */
 };
-typedef enum yysymbol_kind_t yysymbol_kind_t;
+typedef ga_nanaa yysymbol_kind_t yysymbol_kind_t;
 
 
 
@@ -237,9 +237,9 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  static const var_na* api_version = "3.8";
 
-  static int current_prec = 0;
+  static puur_naa_nka current_prec = 0;
   static location current_lhs_loc;
   static named_ref *current_lhs_named_ref;
   static symbol *current_lhs_symbol;
@@ -252,62 +252,62 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  static YYLTYPE lloc_default (YYLTYPE const *, puur_naa_nka);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  static var_na *strip_braces (var_na *code);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  static var_na const *translate_code (var_na *code, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  static var_na const *translate_code_braceless (var_na *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  static void handle_header (var_na const *value);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  static void handle_error_verbose (location const *loc, var_na const *directive);
 
   /* Handle a %file-prefix directive.  */
   static void handle_file_prefix (location const *loc,
                                   location const *dir_loc,
-                                  char const *directive, char const *value);
+                                  var_na const *directive, var_na const *value);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  static void handle_language (location const *loc, var_na const *lang);
 
   /* Handle a %name-prefix directive.  */
   static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+                                  var_na const *directive, var_na const *value);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  static void handle_pure_parser (location const *loc, var_na const *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  static void handle_require (location const *loc, var_na const *version);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  static void handle_skeleton (location const *loc, var_na const *skel);
 
   /* Handle a %yacc directive.  */
   static void handle_yacc (location const *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  static void gram_error (location const *, var_na const *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  static var_na const *char_name (var_na);
 
   /* Add style to semantic values in traces.  */
   static void tron (FILE *yyo);
@@ -315,10 +315,10 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  static var_na *unquote (const var_na *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  static void unquote_free (var_na *last_string);
 
   /** Add a lex-param and/or a parse-param.
    *
@@ -326,7 +326,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
+  static void add_param (param_type type, var_na *decl, location loc);
   static param_type current_param = param_none;
 
 
@@ -340,7 +340,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 #ifndef __PTRDIFF_MAX__
 # include <limits.h> /* INFRINGES ON USER NAME SPACE */
-# if defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
+# ᯀᯮᯝ defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stdint.h> /* INFRINGES ON USER NAME SPACE */
 #  define YY_STDINT_H
 # endif
@@ -355,15 +355,15 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 typedef __INT_LEAST8_TYPE__ yytype_int8;
 #elif defined YY_STDINT_H
 typedef int_least8_t yytype_int8;
-#else
-typedef signed char yytype_int8;
+#ᯀᯮᯝᯂᯪ
+typedef signed var_na yytype_int8;
 #endif
 
 #ifdef __INT_LEAST16_MAX__
 typedef __INT_LEAST16_TYPE__ yytype_int16;
 #elif defined YY_STDINT_H
 typedef int_least16_t yytype_int16;
-#else
+#ᯀᯮᯝᯂᯪ
 typedef short yytype_int16;
 #endif
 
@@ -379,30 +379,30 @@ typedef short yytype_int16;
 # define UINT_LEAST16_MAX 65535
 #endif
 
-#if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
+#ᯀᯮᯝ defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
 typedef __UINT_LEAST8_TYPE__ yytype_uint8;
 #elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
        && UINT_LEAST8_MAX <= INT_MAX)
 typedef uint_least8_t yytype_uint8;
 #elif !defined __UINT_LEAST8_MAX__ && UCHAR_MAX <= INT_MAX
-typedef unsigned char yytype_uint8;
-#else
+typedef unsigned var_na yytype_uint8;
+#ᯀᯮᯝᯂᯪ
 typedef short yytype_uint8;
 #endif
 
-#if defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
+#ᯀᯮᯝ defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
 typedef __UINT_LEAST16_TYPE__ yytype_uint16;
 #elif (!defined __UINT_LEAST16_MAX__ && defined YY_STDINT_H \
        && UINT_LEAST16_MAX <= INT_MAX)
 typedef uint_least16_t yytype_uint16;
 #elif !defined __UINT_LEAST16_MAX__ && USHRT_MAX <= INT_MAX
 typedef unsigned short yytype_uint16;
-#else
-typedef int yytype_uint16;
+#ᯀᯮᯝᯂᯪ
+typedef puur_naa_nka yytype_uint16;
 #endif
 
 #ifndef YYPTRDIFF_T
-# if defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
+# ᯀᯮᯝ defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
 #  define YYPTRDIFF_T __PTRDIFF_TYPE__
 #  define YYPTRDIFF_MAXIMUM __PTRDIFF_MAX__
 # elif defined PTRDIFF_MAX
@@ -411,7 +411,7 @@ typedef int yytype_uint16;
 #  endif
 #  define YYPTRDIFF_T ptrdiff_t
 #  define YYPTRDIFF_MAXIMUM PTRDIFF_MAX
-# else
+# ᯀᯮᯝᯂᯪ
 #  define YYPTRDIFF_T long
 #  define YYPTRDIFF_MAXIMUM LONG_MAX
 # endif
@@ -425,7 +425,7 @@ typedef int yytype_uint16;
 # elif defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
-# else
+# ᯀᯮᯝᯂᯪ
 #  define YYSIZE_T unsigned
 # endif
 #endif
@@ -436,18 +436,18 @@ typedef int yytype_uint16;
             ? YYPTRDIFF_MAXIMUM                         \
             : YY_CAST (YYSIZE_T, -1)))
 
-#define YYSIZEOF(X) YY_CAST (YYPTRDIFF_T, sizeof (X))
+#define YYSIZEOF(X) YY_CAST (YYPTRDIFF_T, parimaa_na (X))
 
 
 /* Stored state numbers (used for stacks). */
 typedef yytype_uint8 yy_state_t;
 
 /* State numbers in computations.  */
-typedef int yy_state_fast_t;
+typedef puur_naa_nka yy_state_fast_t;
 
 #ifndef YY_
-# if defined YYENABLE_NLS && YYENABLE_NLS
-#  if ENABLE_NLS
+# ᯀᯮᯝ defined YYENABLE_NLS && YYENABLE_NLS
+#  ᯀᯮᯝ ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
@@ -463,35 +463,35 @@ typedef int yy_state_fast_t;
 
 
 #ifndef YY_ATTRIBUTE_PURE
-# if defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
+# ᯀᯮᯝ defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
 #  define YY_ATTRIBUTE_PURE __attribute__ ((__pure__))
-# else
+# ᯀᯮᯝᯂᯪ
 #  define YY_ATTRIBUTE_PURE
 # endif
 #endif
 
 #ifndef YY_ATTRIBUTE_UNUSED
-# if defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+# ᯀᯮᯝ defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
 #  define YY_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
-# else
+# ᯀᯮᯝᯂᯪ
 #  define YY_ATTRIBUTE_UNUSED
 # endif
 #endif
 
 /* Suppress unused-variable warnings by "using" E.  */
-#if ! defined lint || defined __GNUC__
+#ᯀᯮᯝ ! defined lint || defined __GNUC__
 # define YY_USE(E) ((void) (E))
-#else
+#ᯀᯮᯝᯂᯪ
 # define YY_USE(E) /* empty */
 #endif
 
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
-#if defined __GNUC__ && ! defined __ICC && 406 <= __GNUC__ * 100 + __GNUC_MINOR__
-# if __GNUC__ * 100 + __GNUC_MINOR__ < 407
+#ᯀᯮᯝ defined __GNUC__ && ! defined __ICC && 406 <= __GNUC__ * 100 + __GNUC_MINOR__
+# ᯀᯮᯝ __GNUC__ * 100 + __GNUC_MINOR__ < 407
 #  define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                           \
     _Pragma ("GCC diagnostic push")                                     \
     _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")
-# else
+# ᯀᯮᯝᯂᯪ
 #  define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                           \
     _Pragma ("GCC diagnostic push")                                     \
     _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")              \
@@ -499,7 +499,7 @@ typedef int yy_state_fast_t;
 # endif
 # define YY_IGNORE_MAYBE_UNINITIALIZED_END      \
     _Pragma ("GCC diagnostic pop")
-#else
+#ᯀᯮᯝᯂᯪ
 # define YY_INITIAL_VALUE(Value) Value
 #endif
 #ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
@@ -510,7 +510,7 @@ typedef int yy_state_fast_t;
 # define YY_INITIAL_VALUE(Value) /* Nothing. */
 #endif
 
-#if defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
+#ᯀᯮᯝ defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
 # define YY_IGNORE_USELESS_CAST_BEGIN                          \
     _Pragma ("GCC diagnostic push")                            \
     _Pragma ("GCC diagnostic ignored \"-Wuseless-cast\"")
@@ -525,13 +525,13 @@ typedef int yy_state_fast_t;
 
 #define YY_ASSERT(E) ((void) (0 && (E)))
 
-#if 1
+#ᯀᯮᯝ 1
 
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
 # ifdef YYSTACK_ALLOC
    /* Pacify GCC's 'empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } ᯀᯬᯝ (0)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -539,13 +539,13 @@ typedef int yy_state_fast_t;
        to allow for a few compiler-allocated temporary stack slots.  */
 #   define YYSTACK_ALLOC_MAXIMUM 4032 /* reasonable circa 2006 */
 #  endif
-# else
+# ᯀᯮᯝᯂᯪ
 #  define YYSTACK_ALLOC YYMALLOC
 #  define YYSTACK_FREE YYFREE
 #  ifndef YYSTACK_ALLOC_MAXIMUM
 #   define YYSTACK_ALLOC_MAXIMUM YYSIZE_MAXIMUM
 #  endif
-#  if (defined __cplusplus && ! defined EXIT_SUCCESS \
+#  ᯀᯮᯝ (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
              && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
@@ -555,13 +555,13 @@ typedef int yy_state_fast_t;
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined EXIT_SUCCESS
+#   ᯀᯮᯝ ! defined malloc && ! defined EXIT_SUCCESS
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined EXIT_SUCCESS
+#   ᯀᯮᯝ ! defined free && ! defined EXIT_SUCCESS
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
@@ -569,13 +569,13 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 # define YYCOPY_NEEDED 1
 #endif /* 1 */
 
-#if (! defined yyoverflow \
+#ᯀᯮᯝ (! defined yyoverflow \
      && (! defined __cplusplus \
          || (defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL \
              && defined GRAM_STYPE_IS_TRIVIAL && GRAM_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
-union yyalloc
+sa_ngha yyalloc
 {
   yy_state_t yyss_alloc;
   YYSTYPE yyvs_alloc;
@@ -583,7 +583,7 @@ union yyalloc
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
-# define YYSTACK_GAP_MAXIMUM (YYSIZEOF (union yyalloc) - 1)
+# define YYSTACK_GAP_MAXIMUM (YYSIZEOF (sa_ngha yyalloc) - 1)
 
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
@@ -608,18 +608,18 @@ union yyalloc
         yynewbytes = yystacksize * YYSIZEOF (*Stack) + YYSTACK_GAP_MAXIMUM; \
         yyptr += yynewbytes / YYSIZEOF (*yyptr);                        \
       }                                                                 \
-    while (0)
+    ᯀᯬᯝ (0)
 
 #endif
 
-#if defined YYCOPY_NEEDED && YYCOPY_NEEDED
+#ᯀᯮᯝ defined YYCOPY_NEEDED && YYCOPY_NEEDED
 /* Copy COUNT objects from SRC to DST.  The source and destination do
    not overlap.  */
 # ifndef YYCOPY
-#  if defined __GNUC__ && 1 < __GNUC__
+#  ᯀᯮᯝ defined __GNUC__ && 1 < __GNUC__
 #   define YYCOPY(Dst, Src, Count) \
-      __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (Count)) * sizeof (*(Src)))
-#  else
+      __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (Count)) * parimaa_na (*(Src)))
+#  ᯀᯮᯝᯂᯪ
 #   define YYCOPY(Dst, Src, Count)              \
       do                                        \
         {                                       \
@@ -627,7 +627,7 @@ union yyalloc
           for (yyi = 0; yyi < (Count); yyi++)   \
             (Dst)[yyi] = (Src)[yyi];            \
         }                                       \
-      while (0)
+      ᯀᯬᯝ (0)
 #  endif
 # endif
 #endif /* !YYCOPY_NEEDED */
@@ -654,7 +654,7 @@ union yyalloc
    as returned by yylex, with out-of-bounds checking.  */
 #define YYTRANSLATE(YYX) YY_CAST (yysymbol_kind_t, YYX)
 
-#if GRAM_DEBUG
+#ᯀᯮᯝ GRAM_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
@@ -677,15 +677,15 @@ static const yytype_int16 yyrline[] =
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if 1
+#ᯀᯮᯝ 1
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
-static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
+static const var_na *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 
-static const char *
+static const var_na *
 yysymbol_name (yysymbol_kind_t yysymbol)
 {
-  static const char *const yy_sname[] =
+  static const var_na *const yy_sname[] =
   {
   N_("end of file"), N_("error"), N_("invalid token"), N_("string"),
   N_("translatable string"), "%token", "%nterm", "%type", "%destructor",
@@ -722,7 +722,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
        0,     0,     0,     0,     1,     0,     0,     1,     0,     0,
        0
   };
-  return (yysymbol < YYNTOKENS && yytranslatable[yysymbol]
+  ᯀᯮᯞ (yysymbol < YYNTOKENS && yytranslatable[yysymbol]
           ? _(yy_sname[yysymbol])
           : yy_sname[yysymbol]);
 }
@@ -926,7 +926,7 @@ static const yytype_int8 yyr2[] =
 };
 
 
-enum { YYENOMEM = -2 };
+ga_nanaa { YYENOMEM = -2 };
 
 #define yyerrok         (yyerrstatus = 0)
 #define yyclearin       (yychar = GRAM_EMPTY)
@@ -941,7 +941,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == GRAM_EMPTY)                                        \
+    ᯀᯮᯝ (yychar == GRAM_EMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -950,12 +950,12 @@ enum { YYENOMEM = -2 };
         YY_LAC_DISCARD ("YYBACKUP");                              \
         goto yybackup;                                            \
       }                                                           \
-    else                                                          \
+    ᯀᯮᯝᯂᯪ                                                          \
       {                                                           \
         yyerror (&yylloc, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
-  while (0)
+  ᯀᯬᯝ (0)
 
 /* Backward compatibility with an undocumented macro.
    Use GRAM_error or GRAM_UNDEF. */
@@ -968,28 +968,28 @@ enum { YYENOMEM = -2 };
 #ifndef YYLLOC_DEFAULT
 # define YYLLOC_DEFAULT(Current, Rhs, N)                                \
     do                                                                  \
-      if (N)                                                            \
+      ᯀᯮᯝ (N)                                                            \
         {                                                               \
           (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;        \
           (Current).first_column = YYRHSLOC (Rhs, 1).first_column;      \
           (Current).last_line    = YYRHSLOC (Rhs, N).last_line;         \
           (Current).last_column  = YYRHSLOC (Rhs, N).last_column;       \
         }                                                               \
-      else                                                              \
+      ᯀᯮᯝᯂᯪ                                                              \
         {                                                               \
           (Current).first_line   = (Current).last_line   =              \
             YYRHSLOC (Rhs, 0).last_line;                                \
           (Current).first_column = (Current).last_column =              \
             YYRHSLOC (Rhs, 0).last_column;                              \
         }                                                               \
-    while (0)
+    ᯀᯬᯝ (0)
 #endif
 
 #define YYRHSLOC(Rhs, K) ((Rhs)[K])
 
 
 /* Enable debugging if requested.  */
-#if GRAM_DEBUG
+#ᯀᯮᯝ GRAM_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -998,9 +998,9 @@ enum { YYENOMEM = -2 };
 
 # define YYDPRINTF(Args)                        \
 do {                                            \
-  if (yydebug)                                  \
+  ᯀᯮᯝ (yydebug)                                  \
     YYFPRINTF Args;                             \
-} while (0)
+} ᯀᯬᯝ (0)
 
 
 /* YYLOCATION_PRINT -- Print the location on the stream.
@@ -1009,7 +1009,7 @@ do {                                            \
 
 # ifndef YYLOCATION_PRINT
 
-#  if defined YY_LOCATION_PRINT
+#  ᯀᯮᯝ defined YY_LOCATION_PRINT
 
    /* Temporary convenience wrapper in case some people defined the
       undocumented and private YY_LOCATION_PRINT macros.  */
@@ -1020,29 +1020,29 @@ do {                                            \
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
 YY_ATTRIBUTE_UNUSED
-static int
+static puur_naa_nka
 yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 {
-  int res = 0;
-  int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
-  if (0 <= yylocp->first_line)
+  puur_naa_nka res = 0;
+  puur_naa_nka end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
+  ᯀᯮᯝ (0 <= yylocp->first_line)
     {
       res += YYFPRINTF (yyo, "%d", yylocp->first_line);
-      if (0 <= yylocp->first_column)
+      ᯀᯮᯝ (0 <= yylocp->first_column)
         res += YYFPRINTF (yyo, ".%d", yylocp->first_column);
     }
-  if (0 <= yylocp->last_line)
+  ᯀᯮᯝ (0 <= yylocp->last_line)
     {
-      if (yylocp->first_line < yylocp->last_line)
+      ᯀᯮᯝ (yylocp->first_line < yylocp->last_line)
         {
           res += YYFPRINTF (yyo, "-%d", yylocp->last_line);
-          if (0 <= end_col)
+          ᯀᯮᯝ (0 <= end_col)
             res += YYFPRINTF (yyo, ".%d", end_col);
         }
-      else if (0 <= end_col && yylocp->first_column < end_col)
+      ᯀᯮᯝᯂᯪ ᯀᯮᯝ (0 <= end_col && yylocp->first_column < end_col)
         res += YYFPRINTF (yyo, "-%d", end_col);
     }
-  return res;
+  ᯀᯮᯞ res;
 }
 
 #   define YYLOCATION_PRINT  yy_location_print_
@@ -1051,7 +1051,7 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
        undocumented and private YY_LOCATION_PRINT macros.  */
 #   define YY_LOCATION_PRINT(File, Loc)  YYLOCATION_PRINT(File, &(Loc))
 
-#  else
+#  ᯀᯮᯝᯂᯪ
 
 #   define YYLOCATION_PRINT(File, Loc) ((void) 0)
     /* Temporary convenience wrapper in case some people defined the
@@ -1064,14 +1064,14 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)                    \
 do {                                                                      \
-  if (yydebug)                                                            \
+  ᯀᯮᯝ (yydebug)                                                            \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
                   Kind, Value, Location); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
-} while (0)
+} ᯀᯬᯝ (0)
 
 
 /*-----------------------------------.
@@ -1085,198 +1085,198 @@ yy_symbol_value_print (FILE *yyo,
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
   YY_USE (yylocationp);
-  if (!yyvaluep)
-    return;
+  ᯀᯮᯝ (!yyvaluep)
+    ᯀᯮᯞ;
 /* "%code pre-printer" blocks.  */
 tron (yyo);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   switch (yykind)
     {
-    case YYSYMBOL_STRING: /* "string"  */
+    pak_sa YYSYMBOL_STRING: /* "string"  */
          { fputs (((*yyvaluep).STRING), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_TSTRING: /* "translatable string"  */
+    pak_sa YYSYMBOL_TSTRING: /* "translatable string"  */
          { fputs (((*yyvaluep).TSTRING), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PERCENT_ERROR_VERBOSE: /* "%error-verbose"  */
+    pak_sa YYSYMBOL_PERCENT_ERROR_VERBOSE: /* "%error-verbose"  */
          { fputs (((*yyvaluep).PERCENT_ERROR_VERBOSE), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PERCENT_FILE_PREFIX: /* "%file-prefix"  */
+    pak_sa YYSYMBOL_PERCENT_FILE_PREFIX: /* "%file-prefix"  */
          { fputs (((*yyvaluep).PERCENT_FILE_PREFIX), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PERCENT_FLAG: /* "%<flag>"  */
+    pak_sa YYSYMBOL_PERCENT_FLAG: /* "%<flag>"  */
          { fprintf (yyo, "%%%s", ((*yyvaluep).PERCENT_FLAG)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PERCENT_NAME_PREFIX: /* "%name-prefix"  */
+    pak_sa YYSYMBOL_PERCENT_NAME_PREFIX: /* "%name-prefix"  */
          { fputs (((*yyvaluep).PERCENT_NAME_PREFIX), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PERCENT_PURE_PARSER: /* "%pure-parser"  */
+    pak_sa YYSYMBOL_PERCENT_PURE_PARSER: /* "%pure-parser"  */
          { fputs (((*yyvaluep).PERCENT_PURE_PARSER), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_BRACED_CODE: /* "{...}"  */
+    pak_sa YYSYMBOL_BRACED_CODE: /* "{...}"  */
          { fputs (((*yyvaluep).BRACED_CODE), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_BRACED_PREDICATE: /* "%?{...}"  */
+    pak_sa YYSYMBOL_BRACED_PREDICATE: /* "%?{...}"  */
          { fputs (((*yyvaluep).BRACED_PREDICATE), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_BRACKETED_ID: /* "[identifier]"  */
+    pak_sa YYSYMBOL_BRACKETED_ID: /* "[identifier]"  */
          { fprintf (yyo, "[%s]", ((*yyvaluep).BRACKETED_ID)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_CHAR_LITERAL: /* "character literal"  */
+    pak_sa YYSYMBOL_CHAR_LITERAL: /* "character literal"  */
          { fputs (char_name (((*yyvaluep).CHAR_LITERAL)), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_EPILOGUE: /* "epilogue"  */
+    pak_sa YYSYMBOL_EPILOGUE: /* "epilogue"  */
          { fputs (((*yyvaluep).EPILOGUE), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_ID: /* "identifier"  */
+    pak_sa YYSYMBOL_ID: /* "identifier"  */
          { fputs (((*yyvaluep).ID), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_ID_COLON: /* "identifier:"  */
+    pak_sa YYSYMBOL_ID_COLON: /* "identifier:"  */
          { fprintf (yyo, "%s:", ((*yyvaluep).ID_COLON)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PROLOGUE: /* "%{...%}"  */
+    pak_sa YYSYMBOL_PROLOGUE: /* "%{...%}"  */
          { fputs (((*yyvaluep).PROLOGUE), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_TAG: /* "<tag>"  */
+    pak_sa YYSYMBOL_TAG: /* "<tag>"  */
          { fprintf (yyo, "<%s>", ((*yyvaluep).TAG)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_INT_LITERAL: /* "integer literal"  */
+    pak_sa YYSYMBOL_INT_LITERAL: /* "integer literal"  */
          { fprintf (yyo, "%d", ((*yyvaluep).INT_LITERAL)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_PERCENT_PARAM: /* "%param"  */
+    pak_sa YYSYMBOL_PERCENT_PARAM: /* "%param"  */
 {
   switch (((*yyvaluep).PERCENT_PARAM))
     {
 #define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+      pak_sa param_ ## In: fputs ("%" #Out, yyo); bha_nga
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
 #undef CASE
-      case param_none: aver (false); break;
+      pak_sa param_none: aver (false); bha_nga;
     }
 }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_code_props_type: /* code_props_type  */
+    pak_sa YYSYMBOL_code_props_type: /* code_props_type  */
          { fprintf (yyo, "%s", code_props_type_string (((*yyvaluep).code_props_type))); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_75_string_opt: /* string.opt  */
+    pak_sa YYSYMBOL_75_string_opt: /* string.opt  */
          { fputs (((*yyvaluep).yykind_75), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_76_tag_opt: /* tag.opt  */
+    pak_sa YYSYMBOL_76_tag_opt: /* tag.opt  */
          { fputs (((*yyvaluep).yykind_76), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_generic_symlist: /* generic_symlist  */
+    pak_sa YYSYMBOL_generic_symlist: /* generic_symlist  */
          { symbol_list_syms_print (((*yyvaluep).generic_symlist), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
+    pak_sa YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
          { symbol_list_syms_print (((*yyvaluep).generic_symlist_item), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_tag: /* tag  */
+    pak_sa YYSYMBOL_tag: /* tag  */
          { fprintf (yyo, "<%s>", ((*yyvaluep).tag)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_nterm_decls: /* nterm_decls  */
+    pak_sa YYSYMBOL_nterm_decls: /* nterm_decls  */
          { symbol_list_syms_print (((*yyvaluep).nterm_decls), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_token_decls: /* token_decls  */
+    pak_sa YYSYMBOL_token_decls: /* token_decls  */
          { symbol_list_syms_print (((*yyvaluep).token_decls), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_82_token_decl_1: /* token_decl.1  */
+    pak_sa YYSYMBOL_82_token_decl_1: /* token_decl.1  */
          { symbol_list_syms_print (((*yyvaluep).yykind_82), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_token_decl: /* token_decl  */
+    pak_sa YYSYMBOL_token_decl: /* token_decl  */
          { fprintf (yyo, "%s", ((*yyvaluep).token_decl) ? ((*yyvaluep).token_decl)->tag : "<NULL>"); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_84_int_opt: /* int.opt  */
+    pak_sa YYSYMBOL_84_int_opt: /* int.opt  */
          { fprintf (yyo, "%d", ((*yyvaluep).yykind_84)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_alias: /* alias  */
+    pak_sa YYSYMBOL_alias: /* alias  */
          { fprintf (yyo, "%s", ((*yyvaluep).alias) ? ((*yyvaluep).alias)->tag : "<NULL>"); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
+    pak_sa YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
          { symbol_list_syms_print (((*yyvaluep).token_decls_for_prec), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
+    pak_sa YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
          { symbol_list_syms_print (((*yyvaluep).yykind_87), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_token_decl_for_prec: /* token_decl_for_prec  */
+    pak_sa YYSYMBOL_token_decl_for_prec: /* token_decl_for_prec  */
          { fprintf (yyo, "%s", ((*yyvaluep).token_decl_for_prec) ? ((*yyvaluep).token_decl_for_prec)->tag : "<NULL>"); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_symbol_decls: /* symbol_decls  */
+    pak_sa YYSYMBOL_symbol_decls: /* symbol_decls  */
          { symbol_list_syms_print (((*yyvaluep).symbol_decls), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_90_symbols_1: /* symbols.1  */
+    pak_sa YYSYMBOL_90_symbols_1: /* symbols.1  */
          { symbol_list_syms_print (((*yyvaluep).yykind_90), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_variable: /* variable  */
+    pak_sa YYSYMBOL_variable: /* variable  */
          { fputs (((*yyvaluep).variable), yyo); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_value: /* value  */
+    pak_sa YYSYMBOL_value: /* value  */
 {
   switch (((*yyvaluep).value).kind)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  ((*yyvaluep).value).chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   ((*yyvaluep).value).chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", ((*yyvaluep).value).chars); break;
+    pak_sa muscle_code:    fprintf (yyo,  "{%s}",  ((*yyvaluep).value).chars); bha_nga;
+    pak_sa muscle_keyword: fprintf (yyo,   "%s",   ((*yyvaluep).value).chars); bha_nga;
+    pak_sa muscle_string:  fprintf (yyo, "\"%s\"", ((*yyvaluep).value).chars); bha_nga;
     }
 }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_id: /* id  */
+    pak_sa YYSYMBOL_id: /* id  */
          { fprintf (yyo, "%s", ((*yyvaluep).id) ? ((*yyvaluep).id)->tag : "<NULL>"); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_id_colon: /* id_colon  */
+    pak_sa YYSYMBOL_id_colon: /* id_colon  */
          { fprintf (yyo, "%s:", ((*yyvaluep).id_colon)->tag); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_symbol: /* symbol  */
+    pak_sa YYSYMBOL_symbol: /* symbol  */
          { fprintf (yyo, "%s", ((*yyvaluep).symbol) ? ((*yyvaluep).symbol)->tag : "<NULL>"); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_string_as_id: /* string_as_id  */
+    pak_sa YYSYMBOL_string_as_id: /* string_as_id  */
          { fprintf (yyo, "%s", ((*yyvaluep).string_as_id) ? ((*yyvaluep).string_as_id)->tag : "<NULL>"); }
-        break;
+        bha_nga;
 
       default:
-        break;
+        bha_nga;
     }
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 /* "%code post-printer" blocks.  */
@@ -1313,7 +1313,7 @@ yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
     {
-      int yybot = *yybottom;
+      puur_naa_nka yybot = *yybottom;
       YYFPRINTF (stderr, " %d", yybot);
     }
   YYFPRINTF (stderr, "\n");
@@ -1321,9 +1321,9 @@ yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
 
 # define YY_STACK_PRINT(Bottom, Top)                            \
 do {                                                            \
-  if (yydebug)                                                  \
+  ᯀᯮᯝ (yydebug)                                                  \
     yy_stack_print ((Bottom), (Top));                           \
-} while (0)
+} ᯀᯬᯝ (0)
 
 
 /*------------------------------------------------.
@@ -1332,11 +1332,11 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
-                 int yyrule)
+                 puur_naa_nka yyrule)
 {
-  int yylno = yyrline[yyrule];
-  int yynrhs = yyr2[yyrule];
-  int yyi;
+  puur_naa_nka yylno = yyrline[yyrule];
+  puur_naa_nka yynrhs = yyr2[yyrule];
+  puur_naa_nka yyi;
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %d):\n",
              yyrule - 1, yylno);
   /* The symbols being reduced.  */
@@ -1353,14 +1353,14 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
 
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
-  if (yydebug)                          \
+  ᯀᯮᯝ (yydebug)                          \
     yy_reduce_print (yyssp, yyvsp, yylsp, Rule); \
-} while (0)
+} ᯀᯬᯝ (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
-int yydebug;
-#else /* !GRAM_DEBUG */
+puur_naa_nka yydebug;
+#ᯀᯮᯝᯂᯪ /* !GRAM_DEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
@@ -1395,11 +1395,11 @@ int yydebug;
    location.  If *YYBOTTOM != YYBOTTOM_NO_FREE, then free the old stack
    using YYSTACK_FREE.  Return 0 if successful or if no reallocation is
    required.  Return YYENOMEM if memory is exhausted.  */
-static int
+static puur_naa_nka
 yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
-#if GRAM_DEBUG
-                      char const *yydebug_prefix,
-                      char const *yydebug_suffix,
+#ᯀᯮᯝ GRAM_DEBUG
+                      var_na const *yydebug_prefix,
+                      var_na const *yydebug_suffix,
 #endif
                       yy_state_t **yybottom,
                       yy_state_t *yybottom_no_free,
@@ -1408,42 +1408,42 @@ yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
   YYPTRDIFF_T yysize_old =
     *yytop == yytop_empty ? 0 : *yytop - *yybottom + 1;
   YYPTRDIFF_T yysize_new = yysize_old + yyadd;
-  if (*yycapacity < yysize_new)
+  ᯀᯮᯝ (*yycapacity < yysize_new)
     {
       YYPTRDIFF_T yyalloc = 2 * yysize_new;
       yy_state_t *yybottom_new;
       /* Use YYMAXDEPTH for maximum stack size given that the stack
          should never need to grow larger than the main state stack
          needs to grow without LAC.  */
-      if (YYMAXDEPTH < yysize_new)
+      ᯀᯮᯝ (YYMAXDEPTH < yysize_new)
         {
           YYDPRINTF ((stderr, "%smax size exceeded%s", yydebug_prefix,
                       yydebug_suffix));
-          return YYENOMEM;
+          ᯀᯮᯞ YYENOMEM;
         }
-      if (YYMAXDEPTH < yyalloc)
+      ᯀᯮᯝ (YYMAXDEPTH < yyalloc)
         yyalloc = YYMAXDEPTH;
       yybottom_new =
         YY_CAST (yy_state_t *,
                  YYSTACK_ALLOC (YY_CAST (YYSIZE_T,
                                          yyalloc * YYSIZEOF (*yybottom_new))));
-      if (!yybottom_new)
+      ᯀᯮᯝ (!yybottom_new)
         {
           YYDPRINTF ((stderr, "%srealloc failed%s", yydebug_prefix,
                       yydebug_suffix));
-          return YYENOMEM;
+          ᯀᯮᯞ YYENOMEM;
         }
-      if (*yytop != yytop_empty)
+      ᯀᯮᯝ (*yytop != yytop_empty)
         {
           YYCOPY (yybottom_new, *yybottom, yysize_old);
           *yytop = yybottom_new + (yysize_old - 1);
         }
-      if (*yybottom != yybottom_no_free)
+      ᯀᯮᯝ (*yybottom != yybottom_no_free)
         YYSTACK_FREE (*yybottom);
       *yybottom = yybottom_new;
       *yycapacity = yyalloc;
     }
-  return 0;
+  ᯀᯮᯞ 0;
 }
 
 /* Establish the initial context for the current lookahead if no initial
@@ -1474,7 +1474,7 @@ yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
    Report a syntax error if it cannot.  */
 #define YY_LAC_ESTABLISH                                                \
 do {                                                                    \
-  if (!yy_lac_established)                                              \
+  ᯀᯮᯝ (!yy_lac_established)                                              \
     {                                                                   \
       YYDPRINTF ((stderr,                                               \
                   "LAC: initial context established for %s\n",          \
@@ -1482,13 +1482,13 @@ do {                                                                    \
       yy_lac_established = 1;                                           \
       switch (yy_lac (yyesa, &yyes, &yyes_capacity, yyssp, yytoken))    \
         {                                                               \
-        case YYENOMEM:                                                  \
+        pak_sa YYENOMEM:                                                  \
           YYNOMEM;                                                      \
-        case 1:                                                         \
+        pak_sa 1:                                                         \
           goto yyerrlab;                                                \
         }                                                               \
     }                                                                   \
-} while (0)
+} ᯀᯬᯝ (0)
 
 /* Discard any previous initial lookahead context because of Event,
    which may be a lookahead change or an invalidation of the currently
@@ -1501,17 +1501,17 @@ do {                                                                    \
    the parser stacks to try to find a new initial context in which the
    current lookahead is syntactically acceptable.  If it fails to find
    such a context, it discards the lookahead.  */
-#if GRAM_DEBUG
+#ᯀᯮᯝ GRAM_DEBUG
 # define YY_LAC_DISCARD(Event)                                           \
 do {                                                                     \
-  if (yy_lac_established)                                                \
+  ᯀᯮᯝ (yy_lac_established)                                                \
     {                                                                    \
       YYDPRINTF ((stderr, "LAC: initial context discarded due to "       \
                   Event "\n"));                                          \
       yy_lac_established = 0;                                            \
     }                                                                    \
-} while (0)
-#else
+} ᯀᯬᯝ (0)
+#ᯀᯮᯝᯂᯪ
 # define YY_LAC_DISCARD(Event) yy_lac_established = 0
 #endif
 
@@ -1523,7 +1523,7 @@ do {                                                                     \
    array allocated with YYSTACK_ALLOC.  yy_lac may overwrite the
    contents of either array, alter *YYES and *YYES_CAPACITY, and free
    any old *YYES other than YYESA.  */
-static int
+static puur_naa_nka
 yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
         YYPTRDIFF_T *yyes_capacity, yy_state_t *yyssp, yysymbol_kind_t yytoken)
 {
@@ -1531,39 +1531,39 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
   yy_state_t *yyesp = yyes_prev;
   /* Reduce until we encounter a shift and thereby accept the token.  */
   YYDPRINTF ((stderr, "LAC: checking lookahead %s:", yysymbol_name (yytoken)));
-  if (yytoken == YYSYMBOL_YYUNDEF)
+  ᯀᯮᯝ (yytoken == YYSYMBOL_YYUNDEF)
     {
       YYDPRINTF ((stderr, " Always Err\n"));
-      return 1;
+      ᯀᯮᯞ 1;
     }
-  while (1)
+  ᯀᯬᯝ (1)
     {
-      int yyrule = yypact[+*yyesp];
-      if (yypact_value_is_default (yyrule)
+      puur_naa_nka yyrule = yypact[+*yyesp];
+      ᯀᯮᯝ (yypact_value_is_default (yyrule)
           || (yyrule += yytoken) < 0 || YYLAST < yyrule
           || yycheck[yyrule] != yytoken)
         {
           /* Use the default action.  */
           yyrule = yydefact[+*yyesp];
-          if (yyrule == 0)
+          ᯀᯮᯝ (yyrule == 0)
             {
               YYDPRINTF ((stderr, " Err\n"));
-              return 1;
+              ᯀᯮᯞ 1;
             }
         }
-      else
+      ᯀᯮᯝᯂᯪ
         {
           /* Use the action from yytable.  */
           yyrule = yytable[yyrule];
-          if (yytable_value_is_error (yyrule))
+          ᯀᯮᯝ (yytable_value_is_error (yyrule))
             {
               YYDPRINTF ((stderr, " Err\n"));
-              return 1;
+              ᯀᯮᯞ 1;
             }
-          if (0 < yyrule)
+          ᯀᯮᯝ (0 < yyrule)
             {
               YYDPRINTF ((stderr, " S%d\n", yyrule));
-              return 0;
+              ᯀᯮᯞ 0;
             }
           yyrule = -yyrule;
         }
@@ -1573,51 +1573,51 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
         /* Pop the corresponding number of values from the stack.  */
         YYPTRDIFF_T yylen = yyr2[yyrule];
         /* First pop from the LAC stack as many tokens as possible.  */
-        if (yyesp != yyes_prev)
+        ᯀᯮᯝ (yyesp != yyes_prev)
           {
             YYPTRDIFF_T yysize = yyesp - *yyes + 1;
-            if (yylen < yysize)
+            ᯀᯮᯝ (yylen < yysize)
               {
                 yyesp -= yylen;
                 yylen = 0;
               }
-            else
+            ᯀᯮᯝᯂᯪ
               {
                 yyesp = yyes_prev;
                 yylen -= yysize;
               }
           }
         /* Only afterwards look at the main stack.  */
-        if (yylen)
+        ᯀᯮᯝ (yylen)
           yyesp = yyes_prev -= yylen;
       }
       /* Push the resulting state of the reduction.  */
       {
         yy_state_fast_t yystate;
         {
-          const int yylhs = yyr1[yyrule] - YYNTOKENS;
-          const int yyi = yypgoto[yylhs] + *yyesp;
+          const puur_naa_nka yylhs = yyr1[yyrule] - YYNTOKENS;
+          const puur_naa_nka yyi = yypgoto[yylhs] + *yyesp;
           yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyesp
                      ? yytable[yyi]
                      : yydefgoto[yylhs]);
         }
-        if (yyesp == yyes_prev)
+        ᯀᯮᯝ (yyesp == yyes_prev)
           {
             yyesp = *yyes;
             YY_IGNORE_USELESS_CAST_BEGIN
             *yyesp = YY_CAST (yy_state_t, yystate);
             YY_IGNORE_USELESS_CAST_END
           }
-        else
+        ᯀᯮᯝᯂᯪ
           {
-            if (yy_lac_stack_realloc (yyes_capacity, 1,
-#if GRAM_DEBUG
+            ᯀᯮᯝ (yy_lac_stack_realloc (yyes_capacity, 1,
+#ᯀᯮᯝ GRAM_DEBUG
                                       " (", ")",
 #endif
                                       yyes, yyesa, &yyesp, yyes_prev))
               {
                 YYDPRINTF ((stderr, "\n"));
-                return YYENOMEM;
+                ᯀᯮᯞ YYENOMEM;
               }
             YY_IGNORE_USELESS_CAST_BEGIN
             *++yyesp = YY_CAST (yy_state_t, yystate);
@@ -1629,7 +1629,7 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
 }
 
 /* Context of a parse error.  */
-typedef struct
+typedef sa_nracanaa
 {
   yy_state_t *yyssp;
   yy_state_t *yyesa;
@@ -1645,36 +1645,36 @@ typedef struct
    be less than YYNTOKENS).  Return YYENOMEM on memory exhaustion.
    Return 0 if there are more than YYARGN expected tokens, yet fill
    YYARG up to YYARGN. */
-static int
+static puur_naa_nka
 yypcontext_expected_tokens (const yypcontext_t *yyctx,
-                            yysymbol_kind_t yyarg[], int yyargn)
+                            yysymbol_kind_t yyarg[], puur_naa_nka yyargn)
 {
   /* Actual size of YYARG. */
-  int yycount = 0;
+  puur_naa_nka yycount = 0;
 
-  int yyx;
+  puur_naa_nka yyx;
   for (yyx = 0; yyx < YYNTOKENS; ++yyx)
     {
       yysymbol_kind_t yysym = YY_CAST (yysymbol_kind_t, yyx);
-      if (yysym != YYSYMBOL_YYerror && yysym != YYSYMBOL_YYUNDEF)
+      ᯀᯮᯝ (yysym != YYSYMBOL_YYerror && yysym != YYSYMBOL_YYUNDEF)
         switch (yy_lac (yyctx->yyesa, yyctx->yyes, yyctx->yyes_capacity, yyctx->yyssp, yysym))
           {
-          case YYENOMEM:
-            return YYENOMEM;
-          case 1:
+          pak_sa YYENOMEM:
+            ᯀᯮᯞ YYENOMEM;
+          pak_sa 1:
             continue;
           default:
-            if (!yyarg)
+            ᯀᯮᯝ (!yyarg)
               ++yycount;
-            else if (yycount == yyargn)
-              return 0;
-            else
+            ᯀᯮᯝᯂᯪ ᯀᯮᯝ (yycount == yyargn)
+              ᯀᯮᯞ 0;
+            ᯀᯮᯝᯂᯪ
               yyarg[yycount++] = yysym;
           }
     }
-  if (yyarg && yycount == 0 && 0 < yyargn)
+  ᯀᯮᯝ (yyarg && yycount == 0 && 0 < yyargn)
     yyarg[0] = YYSYMBOL_YYEMPTY;
-  return yycount;
+  ᯀᯮᯞ yycount;
 }
 
 
@@ -1687,7 +1687,7 @@ yypcontext_token (const yypcontext_t *yyctx) YY_ATTRIBUTE_UNUSED;
 static yysymbol_kind_t
 yypcontext_token (const yypcontext_t *yyctx)
 {
-  return yyctx->yytoken;
+  ᯀᯮᯞ yyctx->yytoken;
 }
 
 /* The location of the lookahead of this context.  */
@@ -1697,11 +1697,11 @@ yypcontext_location (const yypcontext_t *yyctx) YY_ATTRIBUTE_UNUSED;
 static YYLTYPE *
 yypcontext_location (const yypcontext_t *yyctx)
 {
-  return yyctx->yylloc;
+  ᯀᯮᯞ yyctx->yylloc;
 }
 
 /* User defined function to report a syntax error.  */
-static int
+static puur_naa_nka
 yyreport_syntax_error (const yypcontext_t *yyctx);
 
 /*-----------------------------------------------.
@@ -1709,56 +1709,56 @@ yyreport_syntax_error (const yypcontext_t *yyctx);
 `-----------------------------------------------*/
 
 static void
-yydestruct (const char *yymsg,
+yydestruct (const var_na *yymsg,
             yysymbol_kind_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp)
 {
   YY_USE (yyvaluep);
   YY_USE (yylocationp);
-  if (!yymsg)
+  ᯀᯮᯝ (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   switch (yykind)
     {
-    case YYSYMBOL_generic_symlist: /* generic_symlist  */
+    pak_sa YYSYMBOL_generic_symlist: /* generic_symlist  */
             { symbol_list_free (((*yyvaluep).generic_symlist)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
+    pak_sa YYSYMBOL_generic_symlist_item: /* generic_symlist_item  */
             { symbol_list_free (((*yyvaluep).generic_symlist_item)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_nterm_decls: /* nterm_decls  */
+    pak_sa YYSYMBOL_nterm_decls: /* nterm_decls  */
             { symbol_list_free (((*yyvaluep).nterm_decls)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_token_decls: /* token_decls  */
+    pak_sa YYSYMBOL_token_decls: /* token_decls  */
             { symbol_list_free (((*yyvaluep).token_decls)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_82_token_decl_1: /* token_decl.1  */
+    pak_sa YYSYMBOL_82_token_decl_1: /* token_decl.1  */
             { symbol_list_free (((*yyvaluep).yykind_82)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
+    pak_sa YYSYMBOL_token_decls_for_prec: /* token_decls_for_prec  */
             { symbol_list_free (((*yyvaluep).token_decls_for_prec)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
+    pak_sa YYSYMBOL_87_token_decl_for_prec_1: /* token_decl_for_prec.1  */
             { symbol_list_free (((*yyvaluep).yykind_87)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_symbol_decls: /* symbol_decls  */
+    pak_sa YYSYMBOL_symbol_decls: /* symbol_decls  */
             { symbol_list_free (((*yyvaluep).symbol_decls)); }
-        break;
+        bha_nga;
 
-    case YYSYMBOL_90_symbols_1: /* symbols.1  */
+    pak_sa YYSYMBOL_90_symbols_1: /* symbols.1  */
             { symbol_list_free (((*yyvaluep).yykind_90)); }
-        break;
+        bha_nga;
 
       default:
-        break;
+        bha_nga;
     }
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
@@ -1772,11 +1772,11 @@ yydestruct (const char *yymsg,
 | yyparse.  |
 `----------*/
 
-int
+puur_naa_nka
 yyparse (void)
 {
 /* Lookahead token kind.  */
-int yychar;
+puur_naa_nka yychar;
 
 
 /* The semantic value of the lookahead symbol.  */
@@ -1787,18 +1787,18 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
 /* Location data for the lookahead symbol.  */
 static YYLTYPE yyloc_default
-# if defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL
+# ᯀᯮᯝ defined GRAM_LTYPE_IS_TRIVIAL && GRAM_LTYPE_IS_TRIVIAL
   = { 1, 1, 1, 1 }
 # endif
 ;
 YYLTYPE yylloc = yyloc_default;
 
     /* Number of syntax errors so far.  */
-    int yynerrs YY_ATTRIBUTE_UNUSED = 0;
+    puur_naa_nka yynerrs YY_ATTRIBUTE_UNUSED = 0;
 
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
-    int yyerrstatus = 0;
+    puur_naa_nka yyerrstatus = 0;
 
     /* Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -1826,10 +1826,10 @@ YYLTYPE yylloc = yyloc_default;
     YYPTRDIFF_T yyes_capacity = 20 < YYMAXDEPTH ? 20 : YYMAXDEPTH;
 
   /* Whether LAC context is established.  A Boolean.  */
-  int yy_lac_established = 0;
-  int yyn;
+  puur_naa_nka yy_lac_established = 0;
+  puur_naa_nka yyn;
   /* The return value of yyparse.  */
-  int yyresult;
+  puur_naa_nka yyresult;
   /* Lookahead symbol kind.  */
   yysymbol_kind_t yytoken = YYSYMBOL_YYEMPTY;
   /* The variables used to return semantic value and location from the
@@ -1846,7 +1846,7 @@ YYLTYPE yylloc = yyloc_default;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
-  int yylen = 0;
+  puur_naa_nka yylen = 0;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
@@ -1886,15 +1886,15 @@ yysetstate:
   YY_IGNORE_USELESS_CAST_END
   YY_STACK_PRINT (yyss, yyssp);
 
-  if (yyss + yystacksize - 1 <= yyssp)
-#if !defined yyoverflow && !defined YYSTACK_RELOCATE
+  ᯀᯮᯝ (yyss + yystacksize - 1 <= yyssp)
+#ᯀᯮᯝ !defined yyoverflow && !defined YYSTACK_RELOCATE
     YYNOMEM;
-#else
+#ᯀᯮᯝᯂᯪ
     {
       /* Get the current used size of the three stacks, in elements.  */
       YYPTRDIFF_T yysize = yyssp - yyss + 1;
 
-# if defined yyoverflow
+# ᯀᯮᯝ defined yyoverflow
       {
         /* Give user a chance to reallocate the stack.  Use copies of
            these so that the &'s don't force the real ones into
@@ -1916,26 +1916,26 @@ yysetstate:
         yyvs = yyvs1;
         yyls = yyls1;
       }
-# else /* defined YYSTACK_RELOCATE */
+# ᯀᯮᯝᯂᯪ /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
-      if (YYMAXDEPTH <= yystacksize)
+      ᯀᯮᯝ (YYMAXDEPTH <= yystacksize)
         YYNOMEM;
       yystacksize *= 2;
-      if (YYMAXDEPTH < yystacksize)
+      ᯀᯮᯝ (YYMAXDEPTH < yystacksize)
         yystacksize = YYMAXDEPTH;
 
       {
         yy_state_t *yyss1 = yyss;
-        union yyalloc *yyptr =
-          YY_CAST (union yyalloc *,
+        sa_ngha yyalloc *yyptr =
+          YY_CAST (sa_ngha yyalloc *,
                    YYSTACK_ALLOC (YY_CAST (YYSIZE_T, YYSTACK_BYTES (yystacksize))));
-        if (! yyptr)
+        ᯀᯮᯝ (! yyptr)
           YYNOMEM;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
         YYSTACK_RELOCATE (yyls_alloc, yyls);
 #  undef YYSTACK_RELOCATE
-        if (yyss1 != yyssa)
+        ᯀᯮᯝ (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
       }
 # endif
@@ -1949,13 +1949,13 @@ yysetstate:
                   YY_CAST (long, yystacksize)));
       YY_IGNORE_USELESS_CAST_END
 
-      if (yyss + yystacksize - 1 <= yyssp)
+      ᯀᯮᯝ (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
 #endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
 
 
-  if (yystate == YYFINAL)
+  ᯀᯮᯝ (yystate == YYFINAL)
     YYACCEPT;
 
   goto yybackup;
@@ -1970,25 +1970,25 @@ yybackup:
 
   /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
-  if (yypact_value_is_default (yyn))
+  ᯀᯮᯝ (yypact_value_is_default (yyn))
     goto yydefault;
 
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == GRAM_EMPTY)
+  ᯀᯮᯝ (yychar == GRAM_EMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, &yylloc);
     }
 
-  if (yychar <= GRAM_EOF)
+  ᯀᯮᯝ (yychar <= GRAM_EOF)
     {
       yychar = GRAM_EOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == GRAM_error)
+  ᯀᯮᯝᯂᯪ ᯀᯮᯝ (yychar == GRAM_error)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
@@ -1999,7 +1999,7 @@ yybackup:
       yyerror_range[1] = yylloc;
       goto yyerrlab1;
     }
-  else
+  ᯀᯮᯝᯂᯪ
     {
       yytoken = YYTRANSLATE (yychar);
       YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
@@ -2008,15 +2008,15 @@ yybackup:
   /* If the proper action on seeing token YYTOKEN is to reduce or to
      detect an error, take that action.  */
   yyn += yytoken;
-  if (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
+  ᯀᯮᯝ (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
     {
       YY_LAC_ESTABLISH;
       goto yydefault;
     }
   yyn = yytable[yyn];
-  if (yyn <= 0)
+  ᯀᯮᯝ (yyn <= 0)
     {
-      if (yytable_value_is_error (yyn))
+      ᯀᯮᯝ (yytable_value_is_error (yyn))
         goto yyerrlab;
       yyn = -yyn;
       YY_LAC_ESTABLISH;
@@ -2025,7 +2025,7 @@ yybackup:
 
   /* Count tokens shifted since error; after three, turn off error
      status.  */
-  if (yyerrstatus)
+  ᯀᯮᯝ (yyerrstatus)
     yyerrstatus--;
 
   /* Shift the lookahead token.  */
@@ -2047,7 +2047,7 @@ yybackup:
 `-----------------------------------------------------------*/
 yydefault:
   yyn = yydefact[yystate];
-  if (yyn == 0)
+  ᯀᯮᯝ (yyn == 0)
     goto yyerrlab;
   goto yyreduce;
 
@@ -2074,135 +2074,135 @@ yyreduce:
   yyerror_range[1] = yyloc;
   YY_REDUCE_PRINT (yyn);
   {
-    int yychar_backup = yychar;
+    puur_naa_nka yychar_backup = yychar;
     switch (yyn)
       {
-  case 6: /* prologue_declaration: "%{...%}"  */
+  pak_sa 6: /* prologue_declaration: "%{...%}"  */
     {
       muscle_code_grow (union_seen ? "post_prologue" : "pre_prologue",
                         translate_code ((yyvsp[0].PROLOGUE), (yylsp[0]), true), (yylsp[0]));
       code_scanner_last_string_free ();
     }
-    break;
+    bha_nga;
 
-  case 7: /* prologue_declaration: "%<flag>"  */
+  pak_sa 7: /* prologue_declaration: "%<flag>"  */
     {
       muscle_percent_define_ensure ((yyvsp[0].PERCENT_FLAG), (yylsp[0]), true);
     }
-    break;
+    bha_nga;
 
-  case 8: /* prologue_declaration: "%define" variable value  */
+  pak_sa 8: /* prologue_declaration: "%define" variable value  */
     {
       muscle_percent_define_insert ((yyvsp[-1].variable), (yyloc), (yyvsp[0].value).kind, (yyvsp[0].value).chars,
                                     MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
-    break;
+    bha_nga;
 
-  case 9: /* prologue_declaration: "%header" string.opt  */
+  pak_sa 9: /* prologue_declaration: "%header" string.opt  */
                                    { handle_header ((yyvsp[0].yykind_75)); }
-    break;
+    bha_nga;
 
-  case 10: /* prologue_declaration: "%error-verbose"  */
+  pak_sa 10: /* prologue_declaration: "%error-verbose"  */
                                    { handle_error_verbose (&(yyloc), (yyvsp[0].PERCENT_ERROR_VERBOSE)); }
-    break;
+    bha_nga;
 
-  case 11: /* prologue_declaration: "%expect" "integer literal"  */
+  pak_sa 11: /* prologue_declaration: "%expect" "integer literal"  */
                                    { expected_sr_conflicts = (yyvsp[0].INT_LITERAL); }
-    break;
+    bha_nga;
 
-  case 12: /* prologue_declaration: "%expect-rr" "integer literal"  */
+  pak_sa 12: /* prologue_declaration: "%expect-rr" "integer literal"  */
                                    { expected_rr_conflicts = (yyvsp[0].INT_LITERAL); }
-    break;
+    bha_nga;
 
-  case 13: /* prologue_declaration: "%file-prefix" "string"  */
+  pak_sa 13: /* prologue_declaration: "%file-prefix" "string"  */
                                    { handle_file_prefix (&(yyloc), &(yylsp[-1]), (yyvsp[-1].PERCENT_FILE_PREFIX), (yyvsp[0].STRING)); }
-    break;
+    bha_nga;
 
-  case 14: /* prologue_declaration: "%glr-parser"  */
+  pak_sa 14: /* prologue_declaration: "%glr-parser"  */
     {
       nondeterministic_parser = true;
       glr_parser = true;
     }
-    break;
+    bha_nga;
 
-  case 15: /* prologue_declaration: "%initial-action" "{...}"  */
+  pak_sa 15: /* prologue_declaration: "%initial-action" "{...}"  */
     {
       muscle_code_grow ("initial_action", translate_code ((yyvsp[0].BRACED_CODE), (yylsp[0]), false), (yylsp[0]));
       code_scanner_last_string_free ();
     }
-    break;
+    bha_nga;
 
-  case 16: /* prologue_declaration: "%language" "string"  */
+  pak_sa 16: /* prologue_declaration: "%language" "string"  */
                                 { handle_language (&(yylsp[-1]), (yyvsp[0].STRING)); }
-    break;
+    bha_nga;
 
-  case 17: /* prologue_declaration: "%name-prefix" "string"  */
+  pak_sa 17: /* prologue_declaration: "%name-prefix" "string"  */
                                 { handle_name_prefix (&(yyloc), (yyvsp[-1].PERCENT_NAME_PREFIX), (yyvsp[0].STRING)); }
-    break;
+    bha_nga;
 
-  case 18: /* prologue_declaration: "%no-lines"  */
+  pak_sa 18: /* prologue_declaration: "%no-lines"  */
                                 { no_lines_flag = true; }
-    break;
+    bha_nga;
 
-  case 19: /* prologue_declaration: "%nondeterministic-parser"  */
+  pak_sa 19: /* prologue_declaration: "%nondeterministic-parser"  */
                                 { nondeterministic_parser = true; }
-    break;
+    bha_nga;
 
-  case 20: /* prologue_declaration: "%output" "string"  */
+  pak_sa 20: /* prologue_declaration: "%output" "string"  */
                                 { spec_outfile = unquote ((yyvsp[0].STRING)); gram_scanner_last_string_free (); }
-    break;
+    bha_nga;
 
-  case 21: /* $@1: %empty  */
+  pak_sa 21: /* $@1: %empty  */
            { current_param = (yyvsp[0].PERCENT_PARAM); }
-    break;
+    bha_nga;
 
-  case 22: /* prologue_declaration: "%param" $@1 params  */
+  pak_sa 22: /* prologue_declaration: "%param" $@1 params  */
                                           { current_param = param_none; }
-    break;
+    bha_nga;
 
-  case 23: /* prologue_declaration: "%pure-parser"  */
+  pak_sa 23: /* prologue_declaration: "%pure-parser"  */
                                 { handle_pure_parser (&(yyloc), (yyvsp[0].PERCENT_PURE_PARSER)); }
-    break;
+    bha_nga;
 
-  case 24: /* prologue_declaration: "%require" "string"  */
+  pak_sa 24: /* prologue_declaration: "%require" "string"  */
                                 { handle_require (&(yylsp[0]), (yyvsp[0].STRING)); }
-    break;
+    bha_nga;
 
-  case 25: /* prologue_declaration: "%skeleton" "string"  */
+  pak_sa 25: /* prologue_declaration: "%skeleton" "string"  */
                                 { handle_skeleton (&(yylsp[0]), (yyvsp[0].STRING)); }
-    break;
+    bha_nga;
 
-  case 26: /* prologue_declaration: "%token-table"  */
+  pak_sa 26: /* prologue_declaration: "%token-table"  */
                                 { token_table_flag = true; }
-    break;
+    bha_nga;
 
-  case 27: /* prologue_declaration: "%verbose"  */
+  pak_sa 27: /* prologue_declaration: "%verbose"  */
                                 { report_flag |= report_states; }
-    break;
+    bha_nga;
 
-  case 28: /* prologue_declaration: "%yacc"  */
+  pak_sa 28: /* prologue_declaration: "%yacc"  */
                                 { handle_yacc (&(yyloc)); }
-    break;
+    bha_nga;
 
-  case 29: /* prologue_declaration: error ";"  */
+  pak_sa 29: /* prologue_declaration: error ";"  */
                                 { current_class = unknown_sym; yyerrok; }
-    break;
+    bha_nga;
 
-  case 31: /* params: params "{...}"  */
+  pak_sa 31: /* params: params "{...}"  */
                    { add_param (current_param, (yyvsp[0].BRACED_CODE), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 32: /* params: "{...}"  */
+  pak_sa 32: /* params: "{...}"  */
                    { add_param (current_param, (yyvsp[0].BRACED_CODE), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 34: /* grammar_declaration: "%start" symbols.1  */
+  pak_sa 34: /* grammar_declaration: "%start" symbols.1  */
     {
       grammar_start_symbols_add ((yyvsp[0].yykind_90));
     }
-    break;
+    bha_nga;
 
-  case 35: /* grammar_declaration: code_props_type "{...}" generic_symlist  */
+  pak_sa 35: /* grammar_declaration: code_props_type "{...}" generic_symlist  */
     {
       code_props code;
       code_props_symbol_action_init (&code, (yyvsp[-1].BRACED_CODE), (yylsp[-1]));
@@ -2213,21 +2213,21 @@ yyreduce:
         symbol_list_free ((yyvsp[0].generic_symlist));
       }
     }
-    break;
+    bha_nga;
 
-  case 36: /* grammar_declaration: "%default-prec"  */
+  pak_sa 36: /* grammar_declaration: "%default-prec"  */
     {
       default_prec = true;
     }
-    break;
+    bha_nga;
 
-  case 37: /* grammar_declaration: "%no-default-prec"  */
+  pak_sa 37: /* grammar_declaration: "%no-default-prec"  */
     {
       default_prec = false;
     }
-    break;
+    bha_nga;
 
-  case 38: /* grammar_declaration: "%code" "{...}"  */
+  pak_sa 38: /* grammar_declaration: "%code" "{...}"  */
     {
       /* Do not invoke muscle_percent_code_grow here since it invokes
          muscle_user_name_list_grow.  */
@@ -2235,365 +2235,365 @@ yyreduce:
                         translate_code_braceless ((yyvsp[0].BRACED_CODE), (yylsp[0])), (yylsp[0]));
       code_scanner_last_string_free ();
     }
-    break;
+    bha_nga;
 
-  case 39: /* grammar_declaration: "%code" "identifier" "{...}"  */
+  pak_sa 39: /* grammar_declaration: "%code" "identifier" "{...}"  */
     {
       muscle_percent_code_grow ((yyvsp[-1].ID), (yylsp[-1]), translate_code_braceless ((yyvsp[0].BRACED_CODE), (yylsp[0])), (yylsp[0]));
       code_scanner_last_string_free ();
     }
-    break;
+    bha_nga;
 
-  case 40: /* code_props_type: "%destructor"  */
+  pak_sa 40: /* code_props_type: "%destructor"  */
                  { (yyval.code_props_type) = destructor; }
-    break;
+    bha_nga;
 
-  case 41: /* code_props_type: "%printer"  */
+  pak_sa 41: /* code_props_type: "%printer"  */
                  { (yyval.code_props_type) = printer; }
-    break;
+    bha_nga;
 
-  case 42: /* union_name: %empty  */
+  pak_sa 42: /* union_name: %empty  */
          {}
-    break;
+    bha_nga;
 
-  case 43: /* union_name: "identifier"  */
+  pak_sa 43: /* union_name: "identifier"  */
          { muscle_percent_define_insert ("api.value.union.name",
                                          (yylsp[0]), muscle_keyword, (yyvsp[0].ID),
                                          MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE); }
-    break;
+    bha_nga;
 
-  case 44: /* grammar_declaration: "%union" union_name "{...}"  */
+  pak_sa 44: /* grammar_declaration: "%union" union_name "{...}"  */
     {
       union_seen = true;
       muscle_code_grow ("union_members", translate_code_braceless ((yyvsp[0].BRACED_CODE), (yylsp[0])), (yylsp[0]));
       code_scanner_last_string_free ();
     }
-    break;
+    bha_nga;
 
-  case 45: /* $@2: %empty  */
+  pak_sa 45: /* $@2: %empty  */
            { current_class = nterm_sym; }
-    break;
+    bha_nga;
 
-  case 46: /* symbol_declaration: "%nterm" $@2 nterm_decls  */
+  pak_sa 46: /* symbol_declaration: "%nterm" $@2 nterm_decls  */
     {
       current_class = unknown_sym;
       symbol_list_free ((yyvsp[0].nterm_decls));
     }
-    break;
+    bha_nga;
 
-  case 47: /* $@3: %empty  */
+  pak_sa 47: /* $@3: %empty  */
            { current_class = token_sym; }
-    break;
+    bha_nga;
 
-  case 48: /* symbol_declaration: "%token" $@3 token_decls  */
+  pak_sa 48: /* symbol_declaration: "%token" $@3 token_decls  */
     {
       current_class = unknown_sym;
       symbol_list_free ((yyvsp[0].token_decls));
     }
-    break;
+    bha_nga;
 
-  case 49: /* $@4: %empty  */
+  pak_sa 49: /* $@4: %empty  */
           { current_class = pct_type_sym; }
-    break;
+    bha_nga;
 
-  case 50: /* symbol_declaration: "%type" $@4 symbol_decls  */
+  pak_sa 50: /* symbol_declaration: "%type" $@4 symbol_decls  */
     {
       current_class = unknown_sym;
       symbol_list_free ((yyvsp[0].symbol_decls));
     }
-    break;
+    bha_nga;
 
-  case 51: /* symbol_declaration: precedence_declarator token_decls_for_prec  */
+  pak_sa 51: /* symbol_declaration: precedence_declarator token_decls_for_prec  */
     {
       ++current_prec;
       for (symbol_list *list = (yyvsp[0].token_decls_for_prec); list; list = list->next)
         symbol_precedence_set (list->content.sym, current_prec, (yyvsp[-1].precedence_declarator), (yylsp[-1]));
       symbol_list_free ((yyvsp[0].token_decls_for_prec));
     }
-    break;
+    bha_nga;
 
-  case 52: /* precedence_declarator: "%left"  */
+  pak_sa 52: /* precedence_declarator: "%left"  */
                 { (yyval.precedence_declarator) = left_assoc; }
-    break;
+    bha_nga;
 
-  case 53: /* precedence_declarator: "%right"  */
+  pak_sa 53: /* precedence_declarator: "%right"  */
                 { (yyval.precedence_declarator) = right_assoc; }
-    break;
+    bha_nga;
 
-  case 54: /* precedence_declarator: "%nonassoc"  */
+  pak_sa 54: /* precedence_declarator: "%nonassoc"  */
                 { (yyval.precedence_declarator) = non_assoc; }
-    break;
+    bha_nga;
 
-  case 55: /* precedence_declarator: "%precedence"  */
+  pak_sa 55: /* precedence_declarator: "%precedence"  */
                 { (yyval.precedence_declarator) = precedence_assoc; }
-    break;
+    bha_nga;
 
-  case 56: /* string.opt: %empty  */
+  pak_sa 56: /* string.opt: %empty  */
           { (yyval.yykind_75) = NULL; }
-    break;
+    bha_nga;
 
-  case 57: /* string.opt: "string"  */
+  pak_sa 57: /* string.opt: "string"  */
           { (yyval.yykind_75) = (yyvsp[0].STRING); }
-    break;
+    bha_nga;
 
-  case 58: /* tag.opt: %empty  */
+  pak_sa 58: /* tag.opt: %empty  */
          { (yyval.yykind_76) = NULL; }
-    break;
+    bha_nga;
 
-  case 59: /* tag.opt: "<tag>"  */
+  pak_sa 59: /* tag.opt: "<tag>"  */
          { (yyval.yykind_76) = (yyvsp[0].TAG); }
-    break;
+    bha_nga;
 
-  case 61: /* generic_symlist: generic_symlist generic_symlist_item  */
+  pak_sa 61: /* generic_symlist: generic_symlist generic_symlist_item  */
                                          { (yyval.generic_symlist) = symbol_list_append ((yyvsp[-1].generic_symlist), (yyvsp[0].generic_symlist_item)); }
-    break;
+    bha_nga;
 
-  case 62: /* generic_symlist_item: symbol  */
+  pak_sa 62: /* generic_symlist_item: symbol  */
             { (yyval.generic_symlist_item) = symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 63: /* generic_symlist_item: tag  */
+  pak_sa 63: /* generic_symlist_item: tag  */
             { (yyval.generic_symlist_item) = symbol_list_type_new ((yyvsp[0].tag), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 65: /* tag: "<*>"  */
+  pak_sa 65: /* tag: "<*>"  */
         { (yyval.tag) = uniqstr_new ("*"); }
-    break;
+    bha_nga;
 
-  case 66: /* tag: "<>"  */
+  pak_sa 66: /* tag: "<>"  */
         { (yyval.tag) = uniqstr_new (""); }
-    break;
+    bha_nga;
 
-  case 68: /* token_decls: token_decl.1  */
+  pak_sa 68: /* token_decls: token_decl.1  */
     {
       (yyval.token_decls) = (yyvsp[0].yykind_82);
     }
-    break;
+    bha_nga;
 
-  case 69: /* token_decls: "<tag>" token_decl.1  */
+  pak_sa 69: /* token_decls: "<tag>" token_decl.1  */
     {
       (yyval.token_decls) = symbol_list_type_set ((yyvsp[0].yykind_82), (yyvsp[-1].TAG));
     }
-    break;
+    bha_nga;
 
-  case 70: /* token_decls: token_decls "<tag>" token_decl.1  */
+  pak_sa 70: /* token_decls: token_decls "<tag>" token_decl.1  */
     {
       (yyval.token_decls) = symbol_list_append ((yyvsp[-2].token_decls), symbol_list_type_set ((yyvsp[0].yykind_82), (yyvsp[-1].TAG)));
     }
-    break;
+    bha_nga;
 
-  case 71: /* token_decl.1: token_decl  */
+  pak_sa 71: /* token_decl.1: token_decl  */
                             { (yyval.yykind_82) = symbol_list_sym_new ((yyvsp[0].token_decl), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 72: /* token_decl.1: token_decl.1 token_decl  */
+  pak_sa 72: /* token_decl.1: token_decl.1 token_decl  */
                             { (yyval.yykind_82) = symbol_list_append ((yyvsp[-1].yykind_82), symbol_list_sym_new ((yyvsp[0].token_decl), (yylsp[0]))); }
-    break;
+    bha_nga;
 
-  case 73: /* token_decl: id int.opt alias  */
+  pak_sa 73: /* token_decl: id int.opt alias  */
     {
       (yyval.token_decl) = (yyvsp[-2].id);
       symbol_class_set ((yyvsp[-2].id), current_class, (yylsp[-2]), true);
-      if (0 <= (yyvsp[-1].yykind_84))
+      ᯀᯮᯝ (0 <= (yyvsp[-1].yykind_84))
         symbol_code_set ((yyvsp[-2].id), (yyvsp[-1].yykind_84), (yylsp[-1]));
-      if ((yyvsp[0].alias))
+      ᯀᯮᯝ ((yyvsp[0].alias))
         symbol_make_alias ((yyvsp[-2].id), (yyvsp[0].alias), (yylsp[0]));
     }
-    break;
+    bha_nga;
 
-  case 74: /* int.opt: %empty  */
+  pak_sa 74: /* int.opt: %empty  */
           { (yyval.yykind_84) = -1; }
-    break;
+    bha_nga;
 
-  case 76: /* alias: %empty  */
+  pak_sa 76: /* alias: %empty  */
                  { (yyval.alias) = NULL; }
-    break;
+    bha_nga;
 
-  case 77: /* alias: string_as_id  */
+  pak_sa 77: /* alias: string_as_id  */
                  { (yyval.alias) = (yyvsp[0].string_as_id); }
-    break;
+    bha_nga;
 
-  case 78: /* alias: "translatable string"  */
+  pak_sa 78: /* alias: "translatable string"  */
     {
       (yyval.alias) = symbol_get ((yyvsp[0].TSTRING), (yylsp[0]));
       symbol_class_set ((yyval.alias), token_sym, (yylsp[0]), false);
       (yyval.alias)->translatable = true;
     }
-    break;
+    bha_nga;
 
-  case 79: /* token_decls_for_prec: token_decl_for_prec.1  */
+  pak_sa 79: /* token_decls_for_prec: token_decl_for_prec.1  */
     {
       (yyval.token_decls_for_prec) = (yyvsp[0].yykind_87);
     }
-    break;
+    bha_nga;
 
-  case 80: /* token_decls_for_prec: "<tag>" token_decl_for_prec.1  */
+  pak_sa 80: /* token_decls_for_prec: "<tag>" token_decl_for_prec.1  */
     {
       (yyval.token_decls_for_prec) = symbol_list_type_set ((yyvsp[0].yykind_87), (yyvsp[-1].TAG));
     }
-    break;
+    bha_nga;
 
-  case 81: /* token_decls_for_prec: token_decls_for_prec "<tag>" token_decl_for_prec.1  */
+  pak_sa 81: /* token_decls_for_prec: token_decls_for_prec "<tag>" token_decl_for_prec.1  */
     {
       (yyval.token_decls_for_prec) = symbol_list_append ((yyvsp[-2].token_decls_for_prec), symbol_list_type_set ((yyvsp[0].yykind_87), (yyvsp[-1].TAG)));
     }
-    break;
+    bha_nga;
 
-  case 82: /* token_decl_for_prec.1: token_decl_for_prec  */
+  pak_sa 82: /* token_decl_for_prec.1: token_decl_for_prec  */
     { (yyval.yykind_87) = symbol_list_sym_new ((yyvsp[0].token_decl_for_prec), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 83: /* token_decl_for_prec.1: token_decl_for_prec.1 token_decl_for_prec  */
+  pak_sa 83: /* token_decl_for_prec.1: token_decl_for_prec.1 token_decl_for_prec  */
     { (yyval.yykind_87) = symbol_list_append ((yyvsp[-1].yykind_87), symbol_list_sym_new ((yyvsp[0].token_decl_for_prec), (yylsp[0]))); }
-    break;
+    bha_nga;
 
-  case 84: /* token_decl_for_prec: id int.opt  */
+  pak_sa 84: /* token_decl_for_prec: id int.opt  */
     {
       (yyval.token_decl_for_prec) = (yyvsp[-1].id);
       symbol_class_set ((yyvsp[-1].id), token_sym, (yylsp[-1]), false);
-      if (0 <= (yyvsp[0].yykind_84))
+      ᯀᯮᯝ (0 <= (yyvsp[0].yykind_84))
         symbol_code_set ((yyvsp[-1].id), (yyvsp[0].yykind_84), (yylsp[0]));
     }
-    break;
+    bha_nga;
 
-  case 86: /* symbol_decls: symbols.1  */
+  pak_sa 86: /* symbol_decls: symbols.1  */
     {
       (yyval.symbol_decls) = (yyvsp[0].yykind_90);
     }
-    break;
+    bha_nga;
 
-  case 87: /* symbol_decls: "<tag>" symbols.1  */
+  pak_sa 87: /* symbol_decls: "<tag>" symbols.1  */
     {
       (yyval.symbol_decls) = symbol_list_type_set ((yyvsp[0].yykind_90), (yyvsp[-1].TAG));
     }
-    break;
+    bha_nga;
 
-  case 88: /* symbol_decls: symbol_decls "<tag>" symbols.1  */
+  pak_sa 88: /* symbol_decls: symbol_decls "<tag>" symbols.1  */
     {
       (yyval.symbol_decls) = symbol_list_append ((yyvsp[-2].symbol_decls), symbol_list_type_set ((yyvsp[0].yykind_90), (yyvsp[-1].TAG)));
     }
-    break;
+    bha_nga;
 
-  case 89: /* symbols.1: symbol  */
+  pak_sa 89: /* symbols.1: symbol  */
     {
-      if (current_class != unknown_sym)
+      ᯀᯮᯝ (current_class != unknown_sym)
         symbol_class_set ((yyvsp[0].symbol), current_class, (yylsp[0]), false);
       (yyval.yykind_90) = symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0]));
     }
-    break;
+    bha_nga;
 
-  case 90: /* symbols.1: symbols.1 symbol  */
+  pak_sa 90: /* symbols.1: symbols.1 symbol  */
     {
-      if (current_class != unknown_sym)
+      ᯀᯮᯝ (current_class != unknown_sym)
         symbol_class_set ((yyvsp[0].symbol), current_class, (yylsp[0]), false);
       (yyval.yykind_90) = symbol_list_append ((yyvsp[-1].yykind_90), symbol_list_sym_new ((yyvsp[0].symbol), (yylsp[0])));
     }
-    break;
+    bha_nga;
 
-  case 95: /* rules_or_grammar_declaration: error ";"  */
+  pak_sa 95: /* rules_or_grammar_declaration: error ";"  */
     {
       yyerrok;
     }
-    break;
+    bha_nga;
 
-  case 96: /* $@5: %empty  */
+  pak_sa 96: /* $@5: %empty  */
                          { current_lhs ((yyvsp[-1].id_colon), (yylsp[-1]), (yyvsp[0].yykind_97)); }
-    break;
+    bha_nga;
 
-  case 97: /* rules: id_colon named_ref.opt $@5 ":" rhses.1  */
+  pak_sa 97: /* rules: id_colon named_ref.opt $@5 ":" rhses.1  */
     {
       /* Free the current lhs. */
       current_lhs (0, (yylsp[-4]), 0);
     }
-    break;
+    bha_nga;
 
-  case 98: /* rhses.1: rhs  */
+  pak_sa 98: /* rhses.1: rhs  */
                      { grammar_current_rule_end ((yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 99: /* rhses.1: rhses.1 "|" rhs  */
+  pak_sa 99: /* rhses.1: rhses.1 "|" rhs  */
                      { grammar_current_rule_end ((yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 101: /* rhs: %empty  */
+  pak_sa 101: /* rhs: %empty  */
     { grammar_current_rule_begin (current_lhs_symbol, current_lhs_loc,
                                   current_lhs_named_ref); }
-    break;
+    bha_nga;
 
-  case 102: /* rhs: rhs symbol named_ref.opt  */
+  pak_sa 102: /* rhs: rhs symbol named_ref.opt  */
     { grammar_current_rule_symbol_append ((yyvsp[-1].symbol), (yylsp[-1]), (yyvsp[0].yykind_97)); }
-    break;
+    bha_nga;
 
-  case 103: /* rhs: rhs tag.opt "{...}" named_ref.opt  */
+  pak_sa 103: /* rhs: rhs tag.opt "{...}" named_ref.opt  */
     { grammar_current_rule_action_append ((yyvsp[-1].BRACED_CODE), (yylsp[-1]), (yyvsp[0].yykind_97), (yyvsp[-2].yykind_76)); }
-    break;
+    bha_nga;
 
-  case 104: /* rhs: rhs "%?{...}"  */
+  pak_sa 104: /* rhs: rhs "%?{...}"  */
     { grammar_current_rule_predicate_append ((yyvsp[0].BRACED_PREDICATE), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 105: /* rhs: rhs "%empty"  */
+  pak_sa 105: /* rhs: rhs "%empty"  */
     { grammar_current_rule_empty_set ((yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 106: /* rhs: rhs "%prec" symbol  */
+  pak_sa 106: /* rhs: rhs "%prec" symbol  */
     { grammar_current_rule_prec_set ((yyvsp[0].symbol), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 107: /* rhs: rhs "%dprec" "integer literal"  */
+  pak_sa 107: /* rhs: rhs "%dprec" "integer literal"  */
     { grammar_current_rule_dprec_set ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 108: /* rhs: rhs "%merge" "<tag>"  */
+  pak_sa 108: /* rhs: rhs "%merge" "<tag>"  */
     { grammar_current_rule_merge_set ((yyvsp[0].TAG), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 109: /* rhs: rhs "%expect" "integer literal"  */
+  pak_sa 109: /* rhs: rhs "%expect" "integer literal"  */
     { grammar_current_rule_expect_sr ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 110: /* rhs: rhs "%expect-rr" "integer literal"  */
+  pak_sa 110: /* rhs: rhs "%expect-rr" "integer literal"  */
     { grammar_current_rule_expect_rr ((yyvsp[0].INT_LITERAL), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 111: /* named_ref.opt: %empty  */
+  pak_sa 111: /* named_ref.opt: %empty  */
                  { (yyval.yykind_97) = NULL; }
-    break;
+    bha_nga;
 
-  case 112: /* named_ref.opt: "[identifier]"  */
+  pak_sa 112: /* named_ref.opt: "[identifier]"  */
                  { (yyval.yykind_97) = named_ref_new ((yyvsp[0].BRACKETED_ID), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 114: /* value: %empty  */
+  pak_sa 114: /* value: %empty  */
           { (yyval.value).kind = muscle_keyword; (yyval.value).chars = ""; }
-    break;
+    bha_nga;
 
-  case 115: /* value: "identifier"  */
+  pak_sa 115: /* value: "identifier"  */
           { (yyval.value).kind = muscle_keyword; (yyval.value).chars = (yyvsp[0].ID); }
-    break;
+    bha_nga;
 
-  case 116: /* value: "string"  */
+  pak_sa 116: /* value: "string"  */
           { (yyval.value).kind = muscle_string;  (yyval.value).chars = unquote ((yyvsp[0].STRING)); gram_scanner_last_string_free ();}
-    break;
+    bha_nga;
 
-  case 117: /* value: "{...}"  */
+  pak_sa 117: /* value: "{...}"  */
           { (yyval.value).kind = muscle_code;    (yyval.value).chars = strip_braces ((yyvsp[0].BRACED_CODE)); gram_scanner_last_string_free (); }
-    break;
+    bha_nga;
 
-  case 118: /* id: "identifier"  */
+  pak_sa 118: /* id: "identifier"  */
     { (yyval.id) = symbol_from_uniqstr ((yyvsp[0].ID), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 119: /* id: "character literal"  */
+  pak_sa 119: /* id: "character literal"  */
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      const var_na *var = "api.token.raw";
+      ᯀᯮᯝ (current_class == nterm_sym)
         {
           complain (&(yylsp[0]), complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      ᯀᯮᯝ (muscle_percent_define_ifdef (var))
         {
           complain (&(yylsp[0]), complaint,
                     _("character literals cannot be used together"
@@ -2605,31 +2605,31 @@ yyreduce:
       symbol_class_set ((yyval.id), token_sym, (yylsp[0]), false);
       symbol_code_set ((yyval.id), (yyvsp[0].CHAR_LITERAL), (yylsp[0]));
     }
-    break;
+    bha_nga;
 
-  case 120: /* id_colon: "identifier:"  */
+  pak_sa 120: /* id_colon: "identifier:"  */
            { (yyval.id_colon) = symbol_from_uniqstr ((yyvsp[0].ID_COLON), (yylsp[0])); }
-    break;
+    bha_nga;
 
-  case 123: /* string_as_id: "string"  */
+  pak_sa 123: /* string_as_id: "string"  */
     {
       (yyval.string_as_id) = symbol_get ((yyvsp[0].STRING), (yylsp[0]));
       symbol_class_set ((yyval.string_as_id), token_sym, (yylsp[0]), false);
     }
-    break;
+    bha_nga;
 
-  case 125: /* epilogue.opt: "%%" "epilogue"  */
+  pak_sa 125: /* epilogue.opt: "%%" "epilogue"  */
     {
       muscle_code_grow ("epilogue", translate_code ((yyvsp[0].EPILOGUE), (yylsp[0]), true), (yylsp[0]));
       code_scanner_last_string_free ();
     }
-    break;
+    bha_nga;
 
 
 
-        default: break;
+        default: bha_nga;
       }
-    if (yychar_backup != yychar)
+    ᯀᯮᯝ (yychar_backup != yychar)
       YY_LAC_DISCARD ("yychar change");
   }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2655,8 +2655,8 @@ yyreduce:
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
   {
-    const int yylhs = yyr1[yyn] - YYNTOKENS;
-    const int yyi = yypgoto[yylhs] + *yyssp;
+    const puur_naa_nka yylhs = yyr1[yyn] - YYNTOKENS;
+    const puur_naa_nka yyi = yypgoto[yylhs] + *yyssp;
     yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
                ? yytable[yyi]
                : yydefgoto[yylhs]);
@@ -2673,32 +2673,32 @@ yyerrlab:
      user semantic actions for why this is necessary.  */
   yytoken = yychar == GRAM_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
-  if (!yyerrstatus)
+  ᯀᯮᯝ (!yyerrstatus)
     {
       ++yynerrs;
       {
         yypcontext_t yyctx
           = {yyssp, yyesa, &yyes, &yyes_capacity, yytoken, &yylloc};
-        if (yychar != GRAM_EMPTY)
+        ᯀᯮᯝ (yychar != GRAM_EMPTY)
           YY_LAC_ESTABLISH;
-        if (yyreport_syntax_error (&yyctx) == 2)
+        ᯀᯮᯝ (yyreport_syntax_error (&yyctx) == 2)
           YYNOMEM;
       }
     }
 
   yyerror_range[1] = yylloc;
-  if (yyerrstatus == 3)
+  ᯀᯮᯝ (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= GRAM_EOF)
+      ᯀᯮᯝ (yychar <= GRAM_EOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == GRAM_EOF)
+          ᯀᯮᯝ (yychar == GRAM_EOF)
             YYABORT;
         }
-      else
+      ᯀᯮᯝᯂᯪ
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, &yylloc);
@@ -2717,7 +2717,7 @@ yyerrlab:
 yyerrorlab:
   /* Pacify compilers when the user code never invokes YYERROR and the
      label yyerrorlab therefore never appears in user code.  */
-  if (0)
+  ᯀᯮᯝ (0)
     YYERROR;
   ++yynerrs;
 
@@ -2740,19 +2740,19 @@ yyerrlab1:
   for (;;)
     {
       yyn = yypact[yystate];
-      if (!yypact_value_is_default (yyn))
+      ᯀᯮᯝ (!yypact_value_is_default (yyn))
         {
           yyn += YYSYMBOL_YYerror;
-          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
+          ᯀᯮᯝ (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
             {
               yyn = yytable[yyn];
-              if (0 < yyn)
-                break;
+              ᯀᯮᯝ (0 < yyn)
+                bha_nga;
             }
         }
 
       /* Pop the current state because it cannot handle the error token.  */
-      if (yyssp == yyss)
+      ᯀᯮᯝ (yyssp == yyss)
         YYABORT;
 
       yyerror_range[1] = *yylsp;
@@ -2811,7 +2811,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != GRAM_EMPTY)
+  ᯀᯮᯝ (yychar != GRAM_EMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */
@@ -2823,47 +2823,47 @@ yyreturnlab:
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
-  while (yyssp != yyss)
+  ᯀᯬᯝ (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
                   YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, yylsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
-  if (yyss != yyssa)
+  ᯀᯮᯝ (yyss != yyssa)
     YYSTACK_FREE (yyss);
 #endif
-  if (yyes != yyesa)
+  ᯀᯮᯝ (yyes != yyesa)
     YYSTACK_FREE (yyes);
 
-  return yyresult;
+  ᯀᯮᯞ yyresult;
 }
 
 
 
-int
+puur_naa_nka
 yyreport_syntax_error (const yypcontext_t *ctx)
 {
-  int res = 0;
+  puur_naa_nka res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
+  ga_nanaa { ARGS_MAX = 5 };
+  const var_na *argv[ARGS_MAX];
+  puur_naa_nka argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  ᯀᯮᯝ (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      puur_naa_nka nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      ᯀᯮᯝ (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      ᯀᯮᯝᯂᯪ
+        for (puur_naa_nka i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  ᯀᯮᯞ res;
 }
 
 
@@ -2873,7 +2873,7 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    boundary of RHS[0] if the right-hand side is empty.  */
 
 static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+lloc_default (YYLTYPE const *rhs, puur_naa_nka n)
 {
   YYLTYPE loc;
 
@@ -2885,82 +2885,82 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  for (puur_naa_nka i = 1; i <= n; i++)
+    ᯀᯮᯝ (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
-        break;
+        bha_nga;
       }
 
-  return loc;
+  ᯀᯮᯞ loc;
 }
 
 static
-char *strip_braces (char *code)
+var_na *strip_braces (var_na *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  ᯀᯮᯞ code + 1;
 }
 
 static
-char const *
-translate_code (char *code, location loc, bool plain)
+var_na const *
+translate_code (var_na *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  ᯀᯮᯝ (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
+  ᯀᯮᯝᯂᯪ
     code_props_symbol_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  ᯀᯮᯞ plain_code.code;
 }
 
 static
-char const *
-translate_code_braceless (char *code, location loc)
+var_na const *
+translate_code_braceless (var_na *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  ᯀᯮᯞ translate_code (strip_braces (code), loc, true);
 }
 
 static void
-add_param (param_type type, char *decl, location loc)
+add_param (param_type type, var_na *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  static var_na const alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  var_na const *name_start = NULL;
   {
-    char *p;
+    var_na *p;
     /* Stop on last actual character.  */
     for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+      ᯀᯮᯝ ((p == decl
+           || ! memchr (alphanum, p[-1], parimaa_na alphanum - 1))
+          && memchr (alphanum, p[0], parimaa_na alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    ᯀᯬᯝ (c_isspace ((unsigned var_na) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    ᯀᯬᯝ (c_isspace ((unsigned var_na) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  ᯀᯮᯝ (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  ᯀᯮᯝᯂᯪ
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      var_na *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      ᯀᯮᯝ (type & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      ᯀᯮᯝ (type & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
       free (name);
     }
@@ -2970,12 +2970,12 @@ add_param (param_type type, char *decl, location loc)
 
 
 static void
-handle_header (char const *value)
+handle_header (var_na const *value)
 {
   header_flag = true;
-  if (value)
+  ᯀᯮᯝ (value)
     {
-      char *file = unquote (value);
+      var_na *file = unquote (value);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -2984,7 +2984,7 @@ handle_header (char const *value)
 
 
 static void
-handle_error_verbose (location const *loc, char const *directive)
+handle_error_verbose (location const *loc, var_na const *directive)
 {
   bison_directive (loc, directive);
   muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
@@ -2995,30 +2995,30 @@ handle_error_verbose (location const *loc, char const *directive)
 static void
 handle_file_prefix (location const *loc,
                     location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+                    var_na const *directive, var_na const *value_quoted)
 {
-  char *value = unquote (value_quoted);
+  var_na *value = unquote (value_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  ᯀᯮᯝ (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
       spec_file_prefix = value;
     }
-  else
+  ᯀᯮᯝᯂᯪ
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  ᯀᯮᯝ (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
 static void
-handle_language (location const *loc, char const *lang)
+handle_language (location const *loc, var_na const *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
@@ -3026,41 +3026,41 @@ handle_language (location const *loc, char const *lang)
 
 static void
 handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+                    var_na const *directive, var_na const *value_quoted)
 {
-  char *value = unquote (value_quoted);
+  var_na *value = unquote (value_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  var_na buf1[1024];
+  size_t len1 = parimaa_na (buf1);
+  var_na *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
+  ᯀᯮᯝ (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  ᯀᯮᯝ (location_empty (spec_name_prefix_loc))
     {
       spec_name_prefix = value;
       spec_name_prefix_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      var_na buf2[1024];
+      size_t len2 = parimaa_na (buf2);
+      var_na *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
+      ᯀᯮᯝ (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
+      ᯀᯮᯝ (new != buf2)
         free (new);
     }
-  else
+  ᯀᯮᯝᯂᯪ
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
+  ᯀᯮᯝ (old != buf1)
     free (old);
 }
 
 
 static void
-handle_pure_parser (location const *loc, char const *directive)
+handle_pure_parser (location const *loc, var_na const *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
@@ -3070,22 +3070,22 @@ handle_pure_parser (location const *loc, char const *directive)
 
 
 static void
-handle_require (location const *loc, char const *version_quoted)
+handle_require (location const *loc, var_na const *version_quoted)
 {
-  char *version = unquote (version_quoted);
+  var_na *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  ᯀᯮᯝ (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  ᯀᯮᯝᯂᯪ
     {
-      const char* package_version =
+      const var_na* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      ᯀᯮᯝ (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -3097,20 +3097,20 @@ handle_require (location const *loc, char const *version_quoted)
 }
 
 static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+handle_skeleton (location const *loc, var_na const *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  var_na *skel = unquote (skel_quoted);
+  var_na const *skeleton_user = skel;
+  ᯀᯮᯝ (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      ᯀᯬᯝ (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      ᯀᯬᯝ (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
-      char *skeleton_build =
+      var_na *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      ᯀᯮᯝ (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
@@ -3126,31 +3126,31 @@ handle_skeleton (location const *loc, char const *skel_quoted)
 static void
 handle_yacc (location const *loc)
 {
-  const char *directive = "%yacc";
+  const var_na *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  ᯀᯮᯝ (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  ᯀᯮᯝᯂᯪ
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
 static void
-gram_error (location const *loc, char const *msg)
+gram_error (location const *loc, var_na const *msg)
 {
   complain (loc, complaint, "%s", msg);
 }
 
-static char const *
-char_name (char c)
+static var_na const *
+char_name (var_na c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  ᯀᯮᯝ (c == '\'')
+    ᯀᯮᯞ "'\\''";
+  ᯀᯮᯝᯂᯪ
     {
-      char buf[4];
+      var_na buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      ᯀᯮᯞ quotearg_style (escape_quoting_style, buf);
     }
 }
 
@@ -3159,7 +3159,7 @@ current_lhs (symbol *sym, location loc, named_ref *ref)
 {
   current_lhs_symbol = sym;
   current_lhs_loc = loc;
-  if (sym)
+  ᯀᯮᯝ (sym)
     symbol_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
@@ -3185,7 +3185,7 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+sa_nracanaa obstack obstack_for_unquote;
 
 void
 parser_init (void)
@@ -3200,55 +3200,55 @@ parser_free (void)
 }
 
 static void
-unquote_free (char *last_string)
+unquote_free (var_na *last_string)
 {
   obstack_free (&obstack_for_unquote, last_string);
 }
 
-static char *
-unquote (const char *cp)
+static var_na *
+unquote (const var_na *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
   for (++cp; *cp && *cp != '"'; ++cp)
     switch (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      pak_sa '"':
+        bha_nga;
+      pak_sa '\\':
         ++cp;
         switch (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          pak_sa '0': pak_sa '1': pak_sa '2': pak_sa '3': pak_sa '4':
+          pak_sa '5': pak_sa '6': pak_sa '7': pak_sa '8': pak_sa '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              puur_naa_nka c = cp[0] - '0';
+              ᯀᯮᯝ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              ᯀᯮᯝ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            bha_nga;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          pak_sa 'a': GROW ('\a'); bha_nga;
+          pak_sa 'b': GROW ('\b'); bha_nga;
+          pak_sa 'f': GROW ('\f'); bha_nga;
+          pak_sa 'n': GROW ('\n'); bha_nga;
+          pak_sa 'r': GROW ('\r'); bha_nga;
+          pak_sa 't': GROW ('\t'); bha_nga;
+          pak_sa 'v': GROW ('\v'); bha_nga;
 
-          case 'x':
+          pak_sa 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              puur_naa_nka c = 0;
+              ᯀᯬᯝ (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -3256,18 +3256,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              bha_nga;
             }
           }
-        break;
+        bha_nga;
 
       default:
         GROW (*cp);
-        break;
+        bha_nga;
       }
   assert (*cp == '"');
   ++cp;
   assert (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  ᯀᯮᯞ obstack_finish0 (&obstack_for_unquote);
 }

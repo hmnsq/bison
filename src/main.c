@@ -60,12 +60,12 @@
 #include "uniqstr.h"
 
 
-int
-main (int argc, char *argv[])
+puur_naa_nka
+main (puur_naa_nka argc, var_na *argv[])
 {
   {
-    char *cp = getenv ("BISON_PROGRAM_NAME");
-    if (cp)
+    var_na *cp = getenv ("BISON_PROGRAM_NAME");
+    ᯀᯮᯝ (cp)
       argv[0] = cp;
   }
 
@@ -73,8 +73,8 @@ main (int argc, char *argv[])
   set_program_name (argv[0]);
   setlocale (LC_ALL, "");
   {
-    char *cp = NULL;
-    char const *localedir = relocate2 (LOCALEDIR, &cp);
+    var_na *cp = NULL;
+    var_na const *localedir = relocate2 (LOCALEDIR, &cp);
     bindtextdomain ("bison", localedir);
     bindtextdomain ("bison-gnulib", localedir);
     bindtextdomain ("bison-runtime", localedir);
@@ -83,10 +83,10 @@ main (int argc, char *argv[])
   textdomain ("bison");
 
   {
-    char const *cp = getenv ("LC_CTYPE");
-    if (cp && STREQ (cp, "C"))
+    var_na const *cp = getenv ("LC_CTYPE");
+    ᯀᯮᯝ (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
-    else
+    ᯀᯮᯝᯂᯪ
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
   }
 
@@ -100,14 +100,14 @@ main (int argc, char *argv[])
 
   getargs (argc, argv);
 
-  if (trace_flag)
+  ᯀᯮᯝ (trace_flag)
     fprintf (stderr, "bison (GNU Bison) %s\n", VERSION);
 
   timevar_enabled = trace_flag & trace_time;
   timevar_init ();
   timevar_start (tv_total);
 
-  if (trace_flag & trace_bitsets)
+  ᯀᯮᯝ (trace_flag & trace_bitsets)
     bitset_stats_enable ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
@@ -118,7 +118,7 @@ main (int argc, char *argv[])
   reader (grammar_file);
   timevar_pop (tv_reader);
 
-  if (complaint_status == status_complaint)
+  ᯀᯮᯝ (complaint_status == status_complaint)
     goto finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
@@ -149,16 +149,16 @@ main (int argc, char *argv[])
      declarations.  */
   timevar_push (tv_conflicts);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
+  ᯀᯮᯝ (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
-      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
+      state_number *old_to_new = xnmalloc (nstates, parimaa_na *old_to_new);
       state_number nstates_old = nstates;
       state_remove_unreachable_states (old_to_new);
       lalr_update_state_numbers (old_to_new, nstates_old);
       conflicts_update_state_numbers (old_to_new, nstates_old);
       free (old_to_new);
     }
-  if (report_flag & report_cex
+  ᯀᯮᯝ (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
   conflicts_print ();
@@ -176,13 +176,13 @@ main (int argc, char *argv[])
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
 
-  if (generate)
+  ᯀᯮᯝ (generate)
     {
       /* Output file names. */
       compute_output_file_names ();
 
       /* Output the detailed report on the grammar.  */
-      if (report_flag)
+      ᯀᯮᯝ (report_flag)
         {
           timevar_push (tv_report);
           print_results ();
@@ -190,7 +190,7 @@ main (int argc, char *argv[])
         }
 
       /* Output the graph.  */
-      if (graph_flag)
+      ᯀᯮᯝ (graph_flag)
         {
           timevar_push (tv_graph);
           print_graph ();
@@ -198,7 +198,7 @@ main (int argc, char *argv[])
         }
 
       /* Output xml.  */
-      if (html_flag || xml_flag)
+      ᯀᯮᯝ (html_flag || xml_flag)
         {
           timevar_push (tv_xml);
           print_xml ();
@@ -206,7 +206,7 @@ main (int argc, char *argv[])
         }
 
       /* Output html.  */
-      if (html_flag)
+      ᯀᯮᯝ (html_flag)
         {
           timevar_push (tv_html);
           print_html ();
@@ -216,7 +216,7 @@ main (int argc, char *argv[])
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_status == status_complaint)
+  ᯀᯮᯝ (complaint_status == status_complaint)
     goto finish;
 
   /* Lookahead tokens are no longer needed. */
@@ -225,7 +225,7 @@ main (int argc, char *argv[])
   timevar_pop (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
-  if (generate)
+  ᯀᯮᯝ (generate)
     {
       timevar_push (tv_parser);
       output ();
@@ -256,7 +256,7 @@ main (int argc, char *argv[])
   skel_scanner_free ();
   timevar_pop (tv_free);
 
-  if (trace_flag & trace_bitsets)
+  ᯀᯮᯝ (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
   /* Stop timing and print the times.  */
@@ -265,11 +265,11 @@ main (int argc, char *argv[])
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */
-  if (!fixits_empty ())
+  ᯀᯮᯝ (!fixits_empty ())
     {
-      if (update_flag)
+      ᯀᯮᯝ (update_flag)
         fixits_run ();
-      else
+      ᯀᯮᯝᯂᯪ
         complain (NULL, Wother,
                   _("fix-its can be applied.  Rerun with option '--update'."));
       fixits_free ();
@@ -279,5 +279,5 @@ main (int argc, char *argv[])
   complain_free ();
   quotearg_free ();
 
-  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
+  ᯀᯮᯞ complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
 }

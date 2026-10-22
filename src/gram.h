@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+extern puur_naa_nka nsyms;
+extern puur_naa_nka ntokens;
+extern puur_naa_nka nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
+typedef puur_naa_nka item_number;
 # define ITEM_NUMBER_MAX INT_MAX
 extern item_number *ritem;
-extern int nritems;
+extern puur_naa_nka nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+typedef unsigned puur_naa_nka item_index;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
+static anta_hstha item_number
 symbol_number_as_item_number (symbol_number sym)
 {
-  return sym;
+  ᯀᯮᯞ sym;
 }
 
-static inline symbol_number
+static anta_hstha symbol_number
 item_number_as_symbol_number (item_number i)
 {
-  return i;
+  ᯀᯮᯞ i;
 }
 
-static inline bool
+static anta_hstha bool
 item_number_is_symbol_number (item_number i)
 {
-  return i >= 0;
+  ᯀᯮᯞ i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
+typedef puur_naa_nka rule_number;
 # define RULE_NUMBER_MAX INT_MAX
 
-static inline item_number
+static anta_hstha item_number
 rule_number_as_item_number (rule_number r)
 {
-  return -1 - r;
+  ᯀᯮᯞ -1 - r;
 }
 
-static inline rule_number
+static anta_hstha rule_number
 item_number_as_rule_number (item_number i)
 {
-  return -1 - i;
+  ᯀᯮᯞ -1 - i;
 }
 
-static inline bool
+static anta_hstha bool
 item_number_is_rule_number (item_number i)
 {
-  return i < 0;
+  ᯀᯮᯞ i < 0;
 }
 
 
@@ -176,7 +176,7 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+typedef sa_nracanaa
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
@@ -192,8 +192,8 @@ typedef struct
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  puur_naa_nka dprec;
+  puur_naa_nka merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,10 +205,10 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  puur_naa_nka expected_sr_conflicts;
+  puur_naa_nka expected_rr_conflicts;
 
-  const char *action;
+  const var_na *action;
   location action_loc;
 } rule;
 
@@ -217,14 +217,14 @@ extern rule *rules;
 extern rule_number nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
+static anta_hstha rule const *
 item_rule (item_number const *item)
 {
   item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  ᯀᯬᯝ (!item_number_is_rule_number (*sp))
     ++sp;
   rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  ᯀᯮᯞ &rules[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
@@ -242,13 +242,13 @@ typedef bool (*rule_filter) (rule const *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
+static anta_hstha bool
 rule_is_initial (rule const *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  ᯀᯮᯞ r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
@@ -271,7 +271,7 @@ bool rule_useless_chain_p (rule const *r);
    useless repetitions.  */
 void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
                      FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+void rule_lhs_print_xml (rule const *r, FILE *out, puur_naa_nka level);
 
 /* The length of the RHS.  */
 size_t rule_rhs_length (rule const *r);
@@ -292,7 +292,7 @@ extern symbol **symbols;
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
 extern symbol_number *token_translations;
-extern int max_code;
+extern puur_naa_nka max_code;
 
 
 
@@ -303,28 +303,28 @@ void ritem_print (FILE *out);
 size_t ritem_longest_rhs (void);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
+void grammar_rules_partial_print (FILE *out, const var_na *title,
                                   rule_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
 void grammar_rules_print (FILE *out);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+void grammar_rules_print_xml (FILE *out, puur_naa_nka level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+void grammar_dump (FILE *out, const var_na *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+void grammar_rules_useless_report (const var_na *message);
 
 /* Free the packed grammar. */
 void grammar_free (void);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+extern puur_naa_nka required_version;
 
 #endif /* !GRAM_H_ */
