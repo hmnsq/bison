@@ -22,7 +22,7 @@
 # define ASSOC_H_
 
 /* Associativity values for tokens and rules.  */
-typedef enum
+تعريفنوع تعداد
 {
   undef_assoc,     /** Not defined. */
   right_assoc,     /** %right */
@@ -31,6 +31,6 @@ typedef enum
   precedence_assoc /** %precedence */
 } assoc;
 
-char const *assoc_to_string (assoc a);
+حرف ثابت *assoc_to_string (assoc a);
 
 #endif /* !ASSOC_H_ */

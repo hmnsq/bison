@@ -18,31 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "assoc.h"
+#ضمن "assoc.h"
 
 
-const char *
+ثابت حرف *
 assoc_to_string (assoc a)
 {
-  switch (a)
+  بدل (a)
     {
-    case undef_assoc:
-      return "undefined associativity";
+    حالة undef_assoc:
+      أرجع "undefined associativity";
 
-    case right_assoc:
-      return "%right";
+    حالة right_assoc:
+      أرجع "%right";
 
-    case left_assoc:
-      return "%left";
+    حالة left_assoc:
+      أرجع "%left";
 
-    case non_assoc:
-      return "%nonassoc";
+    حالة non_assoc:
+      أرجع "%nonassoc";
 
-    case precedence_assoc:
-      return "%precedence";
+    حالة precedence_assoc:
+      أرجع "%precedence";
     }
   abort ();
 }

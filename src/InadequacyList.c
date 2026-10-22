@@ -17,65 +17,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "InadequacyList.h"
+#ضمن "InadequacyList.h"
 
-#include <intprops.h>
+#ضمن <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+ContributionIndex ثابت ContributionIndex__none = -1;
+ContributionIndex ثابت ContributionIndex__error_action = -2;
 
 InadequacyList *
 InadequacyList__new_conflict (state *manifesting_state, symbol *token,
                               bitset actions,
                               InadequacyListNodeCount *node_count)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
+  InadequacyList *result = xmalloc (حجم *result);
   result->id = *node_count;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  𐤀𐤌 (INT_ADD_WRAPV (*node_count, 1, node_count))
     aver (false);
   IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
+  result->next = عدم;
   result->manifestingState = manifesting_state;
   result->contributionCount = bitset_count (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
-  return result;
+  أرجع result;
 }
 
-void
+فراغ
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  طالما (self)
     {
       InadequacyList *node = self;
       self = self->next;
       bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      حرر (node);
     }
 }
 
 ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+InadequacyList__getShiftContributionIndex (InadequacyList ثابت *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
+  𐤀𐤌 (!bitset_test (self->inadequacy.conflict.actions,
                     self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+    أرجع ContributionIndex__none;
+  أرجع self->contributionCount - 1;
 }
 
 symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
+InadequacyList__getContributionToken (InadequacyList ثابت *self,
                                       ContributionIndex i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contributionCount); (فراغ) i;
+  أرجع self->inadequacy.conflict.token;
 }
 
-void
+فراغ
 InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
 {
   InadequacyList *head_old = *list;

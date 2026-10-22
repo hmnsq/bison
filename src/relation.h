@@ -29,14 +29,14 @@
 
 # define END_NODE ((relation_node) -1)
 
-typedef size_t relation_node;
-typedef relation_node *relation_nodes;
-typedef relation_nodes *relation;
+تعريفنوع size_t relation_node;
+تعريفنوع relation_node *relation_nodes;
+تعريفنوع relation_nodes *relation;
 
-typedef void (relation_node_print) (relation_node node, FILE* out);
+تعريفنوع فراغ (relation_node_print) (relation_node node, FILE* out);
 
 /* Report a relation R that has SIZE vertices.  */
-void relation_print (const char *title,
+فراغ relation_print (ثابت حرف *title,
                      relation r, size_t size,
                      relation_node_print print, FILE *out);
 
@@ -47,9 +47,9 @@ void relation_print (const char *title,
    (unioned) with FUNCTION[NODE2].
 
    FUNCTION is in-out, R is read only.  */
-void relation_digraph (const relation r, relation_node size, bitsetv function);
+فراغ relation_digraph (ثابت relation r, relation_node size, bitsetv function);
 
 /* Destructively transpose *R_ARG, of size SIZE.  */
-void relation_transpose (relation *R_arg, relation_node size);
+فراغ relation_transpose (relation *R_arg, relation_node size);
 
 #endif /* ! RELATION_H_ */

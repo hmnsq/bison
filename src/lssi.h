@@ -52,6 +52,6 @@ bool intersect (bitset ts, bitset syms);
  * to this state-item such that the resulting possible lookahead symbols are
  * as given.
  */
-state_item_list lssi_reverse_production (const state_item *si, bitset lookahead);
+state_item_list lssi_reverse_production (ثابت state_item *si, bitset lookahead);
 
 #endif /* LSSI_H */
