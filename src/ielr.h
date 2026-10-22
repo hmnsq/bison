@@ -37,10 +37,10 @@
  *     - \c "ielr".
  *     - \c "canonical-lr".
  */
-void ielr (void);
+فراغ ielr (فراغ);
 
-bool ielr_item_has_lookahead (state *s, symbol_number lhs, size_t item,
-                              symbol_number lookahead, state ***predecessors,
+bool ielr_item_has_lookahead (state *s, سيمبول_نومبور lhs, size_t item,
+                              سيمبول_نومبور lookahead, state ***predecessors,
                               bitset **item_lookahead_sets);
 
 #endif /* !IELR_H_ */

@@ -18,22 +18,22 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <bitset.h>
-#include <bitsetv.h>
+#ضمن <bitset.h>
+#ضمن <bitsetv.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "symtab.h"
-#include "tables.h"
+#ضمن "complain.h"
+#ضمن "conflicts.h"
+#ضمن "files.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "lalr.h"
+#ضمن "muscle-tab.h"
+#ضمن "reader.h"
+#ضمن "symtab.h"
+#ضمن "tables.h"
 
 /* Several tables are indexed both by state and nonterminal numbers.
    We call such an index a 'vector'; i.e., a vector is either a state
@@ -41,23 +41,23 @@
 
    Of course vector_number_t ought to be wide enough to contain
    state_number and symbol_number.  */
-typedef int vector_number;
+تعريفنوع صحيح vector_نومبور;
 
-#if 0 /* Not currently used.  */
-static inline vector_number
-state_number_to_vector_number (state_number s)
+#إذا 0 /* Not currently used.  */
+ساكن مضمن vector_نومبور
+state_نومبور_to_vector_نومبور (state_نومبور s)
 {
-  return s;
+  أرجع s;
 }
 #endif
 
-static inline vector_number
-symbol_number_to_vector_number (symbol_number sym)
+ساكن مضمن vector_نومبور
+سيمبول_نومبور_to_vector_نومبور (سيمبول_نومبور sym)
 {
-  return state_number_as_int (nstates) + sym - ntokens;
+  أرجع state_نومبور_as_int (nstates) + sym - ntokens;
 }
 
-int nvectors;
+صحيح nvectors;
 
 
 /* FROMS and TOS are indexed by vector_number.
@@ -82,11 +82,11 @@ int nvectors;
 #define BASE_MAXIMUM INT_MAX
 #define BASE_MINIMUM INT_MIN
 
-static base_number **froms;
-static base_number **tos;
-static int **conflict_tos;
-static size_t *tally;
-static base_number *width;
+ساكن base_نومبور **froms;
+ساكن base_نومبور **tos;
+ساكن صحيح **conflict_tos;
+ساكن size_t *tally;
+ساكن base_نومبور *width;
 
 
 /* For a given state, N = ACTROW[SYMBOL]:
@@ -95,65 +95,65 @@ static base_number *width;
    If N = MIN, stands for 'raise a syntax error'.
    If N > 0, stands for 'shift SYMBOL and go to n'.
    If N < 0, stands for 'reduce -N'.  */
-typedef int action_number;
-#define ACTION_NUMBER_MINIMUM INT_MIN
+تعريفنوع صحيح action_نومبور;
+#define ACTION_نومبور_MINIMUM INT_MIN
 
-static action_number *actrow;
+ساكن action_نومبور *actrow;
 
 /* FROMS and TOS are reordered to be compressed.  ORDER[VECTOR] is the
    new vector number of VECTOR.  We skip 'empty' vectors (i.e.,
    TALLY[VECTOR] = 0), and call these 'entries'.  */
-static vector_number *order;
-static int nentries;
+ساكن vector_نومبور *order;
+ساكن صحيح nentries;
 
-base_number *base = NULL;
+base_نومبور *base = عدم;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-base_number base_ninf = 0;
+base_نومبور base_ninf = 0;
 
 /* Bitset representing an integer set in the range
    POS_SET_OFFSET..(POS_SET_OFFSET + SIZE).  POS_SET_OFFSET is
    nonpositive. */
-static bitset pos_set = NULL;
+ساكن bitset pos_set = عدم;
 /* The integer denoted by bitno 0 in pos_set.  */
-static int pos_set_base = 0;
+ساكن صحيح pos_set_base = 0;
 
-static int *conflrow;
-int *conflict_table;
-int *conflict_list;
-int conflict_list_cnt;
-static int conflict_list_free;
+ساكن صحيح *conflrow;
+صحيح *conflict_table;
+صحيح *conflict_list;
+صحيح conflict_list_cnt;
+ساكن صحيح conflict_list_free;
 
 /* TABLE_SIZE is the allocated size of both TABLE and CHECK.  We start
    with more or less the original hard-coded value (which was
    SHRT_MAX).  */
-static int table_size = 32768;
-base_number *table;
-base_number *check;
+ساكن صحيح table_size = 32768;
+base_نومبور *table;
+base_نومبور *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  First defaults to ACTION_NUMBER_MINIMUM,
    but in order to keep small tables, renumbered as TABLE_ERROR, which
    is the smallest (non error) value minus 1.  */
-base_number table_ninf = 0;
-static int lowzero;
-int high;
+base_نومبور table_ninf = 0;
+ساكن صحيح lowzero;
+صحيح تيڠݢي;
 
-state_number *yydefgoto;
-rule_number *yydefact;
+state_نومبور *yydefgoto;
+rule_نومبور *yydefact;
 
 
 /*----------.
 | pos_set.  |
 `----------*/
 
-#if 0
-static void
-pos_set_dump (void)
+#إذا 0
+ساكن فراغ
+pos_set_dump (فراغ)
 {
   fprintf (stderr, "pos_set (%ld, %d) =", bitset_size (pos_set), pos_set_base);
   bitset_iterator biter;
-  int i;
+  صحيح i;
   BITSET_FOR_EACH (biter, pos_set, i, 0)
     fprintf (stderr, " %d", i + pos_set_base);
   putc ('\n', stderr);
@@ -174,41 +174,41 @@ pos_set_dump (void)
    something like doubling the size.
   */
 
-static void
-pos_set_set (int pos)
+ساكن فراغ
+pos_set_set (صحيح pos)
 {
-  int bitno = pos - pos_set_base;
-  if (bitno < 0)
+  صحيح bitno = pos - pos_set_base;
+  إذا (bitno < 0)
     {
       // Need more room on the left.
       // DELTA is positive.  Run 'pos_set >> delta'.
-      const int delta = pos_set_base - pos;
-      const int old_size = bitset_size (pos_set);
-      const int new_size = old_size + delta;
+      ثابت صحيح delta = pos_set_base - pos;
+      ثابت صحيح old_size = bitset_size (pos_set);
+      ثابت صحيح new_size = old_size + delta;
       bitset_resize (pos_set, new_size);
       // Right-shift all the bits by DELTA.  Be sure to reset the new
       // bits on the left.
       //
       // FIXME: add bitset_assign, and bitset_shift?
-      for (int i = new_size - 1; 0 <= i ; --i)
-        if (delta <= i && bitset_test (pos_set, i - delta))
+      لكل (صحيح i = new_size - 1; 0 <= i ; --i)
+        إذا (delta <= i && bitset_test (pos_set, i - delta))
           bitset_set (pos_set, i);
-        else
+        وإلا
           bitset_reset (pos_set, i);
       pos_set_base = pos;
       bitno = 0;
     }
-  else if (bitset_size (pos_set) <= bitno)
+  وإلا إذا (bitset_size (pos_set) <= bitno)
     // Need more room on the right.
     bitset_resize (pos_set, bitno + 1);
   bitset_set (pos_set, bitno);
 }
 
-static bool
-pos_set_test (int pos)
+ساكن bool
+pos_set_test (صحيح pos)
 {
-  const int bitno = pos - pos_set_base;
-  return bitset_test (pos_set, bitno);
+  ثابت صحيح bitno = pos - pos_set_base;
+  أرجع bitset_test (pos_set, bitno);
 }
 
 
@@ -218,29 +218,29 @@ pos_set_test (int pos)
 | size is at least DESIRED + 1.                                      |
 `-------------------------------------------------------------------*/
 
-static void
-table_grow (int desired)
+ساكن فراغ
+table_grow (صحيح desired)
 {
-  int old_size = table_size;
+  صحيح old_size = table_size;
 
-  while (table_size <= desired)
+  طالما (table_size <= desired)
     table_size *= 2;
 
-  if (trace_flag & trace_resource)
+  إذا (trace_flag & trace_resource)
     fprintf (stderr, "growing tables from %d to %d\n",
              old_size, table_size);
 
-  table = xnrealloc (table, table_size, sizeof *table);
+  table = xnrealloc (table, table_size, حجم *table);
   memset (table + old_size, 0,
-          sizeof *table * (table_size - old_size));
+          حجم *table * (table_size - old_size));
 
   conflict_table = xnrealloc (conflict_table, table_size,
-                              sizeof *conflict_table);
+                              حجم *conflict_table);
   memset (conflict_table + old_size, 0,
-          sizeof *conflict_table * (table_size - old_size));
+          حجم *conflict_table * (table_size - old_size));
 
-  check = xnrealloc (check, table_size, sizeof *check);
-  for (int i = old_size; i < table_size; ++i)
+  check = xnrealloc (check, table_size, حجم *check);
+  لكل (صحيح i = old_size; i < table_size; ++i)
     check[i] = -1;
 }
 
@@ -257,27 +257,27 @@ table_grow (int desired)
 | back into CONFLROW.                                                |
 `-------------------------------------------------------------------*/
 
-static void
+ساكن فراغ
 conflict_row (state *s)
 {
-  if (!nondeterministic_parser)
-    return;
+  إذا (!nondeterministic_parser)
+    أرجع;
 
-  const reductions *reds = s->reductions;
-  for (state_number j = 0; j < ntokens; j += 1)
-    if (conflrow[j])
+  ثابت reductions *reds = s->reductions;
+  لكل (state_نومبور j = 0; j < ntokens; j += 1)
+    إذا (conflrow[j])
       {
         conflrow[j] = conflict_list_cnt;
 
         /* Find all reductions for token J, and record all that do not
            match ACTROW[J].  */
-        for (int i = 0; i < reds->num; i += 1)
-          if (bitset_test (reds->lookaheads[i], j)
+        لكل (صحيح i = 0; i < reds->اڠک; i += 1)
+          إذا (bitset_test (reds->lookaheads[i], j)
               && (actrow[j]
-                  != rule_number_as_item_number (reds->rules[i]->number)))
+                  != rule_نومبور_as_item_نومبور (reds->rules[i]->نومبور)))
             {
               aver (0 < conflict_list_free);
-              conflict_list[conflict_list_cnt] = reds->rules[i]->number + 1;
+              conflict_list[conflict_list_cnt] = reds->rules[i]->نومبور + 1;
               conflict_list_cnt += 1;
               conflict_list_free -= 1;
             }
@@ -311,34 +311,34 @@ conflict_row (state *s)
 | that has any such conflicts.                                      |
 `------------------------------------------------------------------*/
 
-static rule *
+ساكن rule *
 action_row (state *s)
 {
-  for (state_number i = 0; i < ntokens; i++)
+  لكل (state_نومبور i = 0; i < ntokens; i++)
     actrow[i] = conflrow[i] = 0;
 
   reductions *reds = s->reductions;
   bool conflicted = false;
-  if (reds->lookaheads)
+  إذا (reds->lookaheads)
     /* loop over all the rules available here which require
        lookahead (in reverse order to give precedence to the first
        rule) */
-    for (int i = reds->num - 1; 0 <= i; --i)
+    لكل (صحيح i = reds->اڠک - 1; 0 <= i; --i)
       /* and find each token which the rule finds acceptable
          to come next */
       {
         bitset_iterator biter;
-        int j;
+        صحيح j;
         BITSET_FOR_EACH (biter, reds->lookaheads[i], j, 0)
           {
             /* and record this rule as the rule to use if that
                token follows.  */
-            if (actrow[j] != 0)
+            إذا (actrow[j] != 0)
               {
                 conflicted = true;
                 conflrow[j] = 1;
               }
-            actrow[j] = rule_number_as_item_number (reds->rules[i]->number);
+            actrow[j] = rule_نومبور_as_item_نومبور (reds->rules[i]->نومبور);
           }
       }
 
@@ -349,22 +349,22 @@ action_row (state *s)
   /* Set to nonzero to inhibit having any default reduction.  */
   bool nodefault = false;
   {
-    int i;
+    صحيح i;
     FOR_EACH_SHIFT (trans, i)
       {
-        symbol_number sym = TRANSITION_SYMBOL (trans, i);
+        سيمبول_نومبور sym = TRANSITION_سيمبول (trans, i);
         state *shift_state = trans->states[i];
 
-        if (actrow[sym] != 0)
+        إذا (actrow[sym] != 0)
           {
             conflicted = true;
             conflrow[sym] = 1;
           }
-        actrow[sym] = state_number_as_int (shift_state->number);
+        actrow[sym] = state_نومبور_as_int (shift_state->نومبور);
 
         /* Do not use any default reduction if there is a shift for
            error */
-        if (sym == errtoken->content->number)
+        إذا (sym == errtoken->content->نومبور)
           nodefault = true;
       }
   }
@@ -373,44 +373,44 @@ action_row (state *s)
      %nonassoc).  For them, record ACTION_NUMBER_MINIMUM as the
      action.  */
   errs *errp = s->errs;
-  for (int i = 0; i < errp->num; i++)
+  لكل (صحيح i = 0; i < errp->اڠک; i++)
     {
-      symbol *sym = errp->symbols[i];
-      actrow[sym->content->number] = ACTION_NUMBER_MINIMUM;
+      سيمبول *sym = errp->symbols[i];
+      actrow[sym->content->نومبور] = ACTION_نومبور_MINIMUM;
     }
 
   /* Turn off default reductions where requested by the user.  See
      state_lookaheads_count in lalr.c to understand when states are
      labeled as consistent.  */
   {
-    char *default_reductions =
+    حرف *default_reductions =
       muscle_percent_define_get ("lr.default-reduction");
-    if (STRNEQ (default_reductions, "most") && !s->consistent)
+    إذا (STRNEQ (default_reductions, "most") && !s->consistent)
       nodefault = true;
-    free (default_reductions);
+    حرر (default_reductions);
   }
 
   /* Now find the most common reduction and make it the default action
      for this state.  */
-  rule *default_reduction = NULL;
-  if (reds->num >= 1 && !nodefault)
+  rule *default_reduction = عدم;
+  إذا (reds->اڠک >= 1 && !nodefault)
     {
-      if (s->consistent)
+      إذا (s->consistent)
         default_reduction = reds->rules[0];
-      else
+      وإلا
         {
-          int max = 0;
-          for (int i = 0; i < reds->num; i++)
+          صحيح max = 0;
+          لكل (صحيح i = 0; i < reds->اڠک; i++)
             {
-              int count = 0;
+              صحيح کيراءن = 0;
               rule *r = reds->rules[i];
-              for (symbol_number j = 0; j < ntokens; j++)
-                if (actrow[j] == rule_number_as_item_number (r->number))
-                  count++;
+              لكل (سيمبول_نومبور j = 0; j < ntokens; j++)
+                إذا (actrow[j] == rule_نومبور_as_item_نومبور (r->نومبور))
+                  کيراءن++;
 
-              if (count > max)
+              إذا (کيراءن > max)
                 {
-                  max = count;
+                  max = کيراءن;
                   default_reduction = r;
                 }
             }
@@ -421,10 +421,10 @@ action_row (state *s)
              actions that match the default are replaced with zero,
              which means "use the default". */
 
-          if (0 < max)
-            for (symbol_number j = 0; j < ntokens; j++)
-              if (actrow[j]
-                  == rule_number_as_item_number (default_reduction->number)
+          إذا (0 < max)
+            لكل (سيمبول_نومبور j = 0; j < ntokens; j++)
+              إذا (actrow[j]
+                  == rule_نومبور_as_item_نومبور (default_reduction->نومبور)
                   && ! (nondeterministic_parser && conflrow[j]))
                 actrow[j] = 0;
         }
@@ -433,15 +433,15 @@ action_row (state *s)
   /* If have no default reduction, the default is an error.
      So replace any action which says "error" with "use default".  */
 
-  if (!default_reduction)
-    for (symbol_number i = 0; i < ntokens; i++)
-      if (actrow[i] == ACTION_NUMBER_MINIMUM)
+  إذا (!default_reduction)
+    لكل (سيمبول_نومبور i = 0; i < ntokens; i++)
+      إذا (actrow[i] == ACTION_نومبور_MINIMUM)
         actrow[i] = 0;
 
-  if (conflicted)
+  إذا (conflicted)
     conflict_row (s);
 
-  return default_reduction;
+  أرجع default_reduction;
 }
 
 
@@ -449,34 +449,34 @@ action_row (state *s)
 | Set FROMS, TOS, TALLY and WIDTH for S.  |
 `----------------------------------------*/
 
-static void
-save_row (state_number s)
+ساكن فراغ
+save_row (state_نومبور s)
 {
   /* Number of non default actions in S.  */
-  size_t count = 0;
-  for (symbol_number i = 0; i < ntokens; i++)
-    if (actrow[i] != 0)
-      count++;
+  size_t کيراءن = 0;
+  لكل (سيمبول_نومبور i = 0; i < ntokens; i++)
+    إذا (actrow[i] != 0)
+      کيراءن++;
 
-  if (count)
+  إذا (کيراءن)
     {
       /* Allocate non defaulted actions.  */
-      base_number *sp1 = froms[s] = xnmalloc (count, sizeof *sp1);
-      base_number *sp2 = tos[s] = xnmalloc (count, sizeof *sp2);
-      int *sp3 = conflict_tos[s] =
-        nondeterministic_parser ? xnmalloc (count, sizeof *sp3) : NULL;
+      base_نومبور *sp1 = froms[s] = xnmalloc (کيراءن, حجم *sp1);
+      base_نومبور *sp2 = tos[s] = xnmalloc (کيراءن, حجم *sp2);
+      صحيح *sp3 = conflict_tos[s] =
+        nondeterministic_parser ? xnmalloc (کيراءن, حجم *sp3) : عدم;
 
       /* Store non defaulted actions.  */
-      for (symbol_number i = 0; i < ntokens; i++)
-        if (actrow[i] != 0)
+      لكل (سيمبول_نومبور i = 0; i < ntokens; i++)
+        إذا (actrow[i] != 0)
           {
             *sp1++ = i;
             *sp2++ = actrow[i];
-            if (nondeterministic_parser)
+            إذا (nondeterministic_parser)
               *sp3++ = conflrow[i];
           }
 
-      tally[s] = count;
+      tally[s] = کيراءن;
       width[s] = sp1[-1] - froms[s][0] + 1;
     }
 }
@@ -490,45 +490,45 @@ save_row (state_number s)
 | putting into YYTABLE later.                                       |
 `------------------------------------------------------------------*/
 
-static void
-token_actions (void)
+ساكن فراغ
+token_actions (فراغ)
 {
-  int nconflict = nondeterministic_parser ? conflicts_total_count () : 0;
+  صحيح nconflict = nondeterministic_parser ? conflicts_total_کيراءن () : 0;
 
-  yydefact = xnmalloc (nstates, sizeof *yydefact);
+  yydefact = xnmalloc (nstates, حجم *yydefact);
 
-  actrow = xnmalloc (ntokens, sizeof *actrow);
-  conflrow = xnmalloc (ntokens, sizeof *conflrow);
+  actrow = xnmalloc (ntokens, حجم *actrow);
+  conflrow = xnmalloc (ntokens, حجم *conflrow);
 
-  conflict_list = xnmalloc (1 + 2 * nconflict, sizeof *conflict_list);
+  conflict_list = xnmalloc (1 + 2 * nconflict, حجم *conflict_list);
   conflict_list_free = 2 * nconflict;
   conflict_list_cnt = 1;
 
   /* Find the rules which are reduced.  */
-  if (!nondeterministic_parser)
-    for (rule_number r = 0; r < nrules; ++r)
+  إذا (!nondeterministic_parser)
+    لكل (rule_نومبور r = 0; r < nrules; ++r)
       rules[r].useful = false;
 
-  for (state_number i = 0; i < nstates; ++i)
+  لكل (state_نومبور i = 0; i < nstates; ++i)
     {
       rule *default_reduction = action_row (states[i]);
-      yydefact[i] = default_reduction ? default_reduction->number + 1 : 0;
+      yydefact[i] = default_reduction ? default_reduction->نومبور + 1 : 0;
       save_row (i);
 
       /* Now that the parser was computed, we can find which rules are
          really reduced, and which are not because of SR or RR
          conflicts.  */
-      if (!nondeterministic_parser)
+      إذا (!nondeterministic_parser)
         {
-          for (symbol_number j = 0; j < ntokens; ++j)
-            if (actrow[j] < 0 && actrow[j] != ACTION_NUMBER_MINIMUM)
-              rules[item_number_as_rule_number (actrow[j])].useful = true;
-          if (yydefact[i])
+          لكل (سيمبول_نومبور j = 0; j < ntokens; ++j)
+            إذا (actrow[j] < 0 && actrow[j] != ACTION_نومبور_MINIMUM)
+              rules[item_نومبور_as_rule_نومبور (actrow[j])].useful = true;
+          إذا (yydefact[i])
             rules[yydefact[i] - 1].useful = true;
         }
     }
-  free (actrow);
-  free (conflrow);
+  حرر (actrow);
+  حرر (conflrow);
 }
 
 
@@ -541,34 +541,34 @@ token_actions (void)
 | default GOTO destination on SYM.                                  |
 `------------------------------------------------------------------*/
 
-static void
-save_column (symbol_number sym, state_number default_state)
+ساكن فراغ
+save_column (سيمبول_نومبور sym, state_نومبور default_state)
 {
-  const goto_number begin = goto_map[sym - ntokens];
-  const goto_number end = goto_map[sym - ntokens + 1];
+  ثابت goto_نومبور begin = goto_map[sym - ntokens];
+  ثابت goto_نومبور end = goto_map[sym - ntokens + 1];
 
   /* Number of non default GOTO.  */
-  size_t count = 0;
-  for (goto_number i = begin; i < end; i++)
-    if (to_state[i] != default_state)
-      count++;
+  size_t کيراءن = 0;
+  لكل (goto_نومبور i = begin; i < end; i++)
+    إذا (to_state[i] != default_state)
+      کيراءن++;
 
-  if (count)
+  إذا (کيراءن)
     {
       /* Allocate room for non defaulted gotos.  */
-      vector_number symno = symbol_number_to_vector_number (sym);
-      base_number *sp1 = froms[symno] = xnmalloc (count, sizeof *sp1);
-      base_number *sp2 = tos[symno] = xnmalloc (count, sizeof *sp2);
+      vector_نومبور symno = سيمبول_نومبور_to_vector_نومبور (sym);
+      base_نومبور *sp1 = froms[symno] = xnmalloc (کيراءن, حجم *sp1);
+      base_نومبور *sp2 = tos[symno] = xnmalloc (کيراءن, حجم *sp2);
 
       /* Store the state numbers of the non defaulted gotos.  */
-      for (goto_number i = begin; i < end; i++)
-        if (to_state[i] != default_state)
+      لكل (goto_نومبور i = begin; i < end; i++)
+        إذا (to_state[i] != default_state)
           {
             *sp1++ = from_state[i];
             *sp2++ = to_state[i];
           }
 
-      tally[symno] = count;
+      tally[symno] = کيراءن;
       width[symno] = sp1[-1] - froms[symno][0] + 1;
     }
 }
@@ -579,11 +579,11 @@ save_column (symbol_number sym, state_number default_state)
 | GOTO destination on SYM (an nterm).                             |
 `----------------------------------------------------------------*/
 
-static state_number
-default_goto (symbol_number sym, size_t state_count[])
+ساكن state_نومبور
+default_goto (سيمبول_نومبور sym, size_t state_کيراءن[])
 {
-  const goto_number begin = goto_map[sym - ntokens];
-  const goto_number end = goto_map[sym - ntokens + 1];
+  ثابت goto_نومبور begin = goto_map[sym - ntokens];
+  ثابت goto_نومبور end = goto_map[sym - ntokens + 1];
 
   /* In the case this symbol is never reduced to ($accept), use state
      0.  We used to use -1, but as a result the yydefgoto table must
@@ -591,25 +591,25 @@ default_goto (symbol_number sym, size_t state_count[])
      a value from yydefgoto into a state number (nonnegative), and (2)
      wastes bits which might result in using a int16 where a uint8
      suffices. */
-  state_number res = 0;
+  state_نومبور res = 0;
 
-  if (begin != end)
+  إذا (begin != end)
     {
-      for (state_number s = 0; s < nstates; s++)
-        state_count[s] = 0;
+      لكل (state_نومبور s = 0; s < nstates; s++)
+        state_کيراءن[s] = 0;
 
-      for (goto_number i = begin; i < end; i++)
-        state_count[to_state[i]]++;
+      لكل (goto_نومبور i = begin; i < end; i++)
+        state_کيراءن[to_state[i]]++;
 
       size_t max = 0;
-      for (state_number s = 0; s < nstates; s++)
-        if (max < state_count[s])
+      لكل (state_نومبور s = 0; s < nstates; s++)
+        إذا (max < state_کيراءن[s])
           {
-            max = state_count[s];
+            max = state_کيراءن[s];
             res = s;
           }
     }
-  return res;
+  أرجع res;
 }
 
 
@@ -622,21 +622,21 @@ default_goto (symbol_number sym, size_t state_count[])
 | putting into YYTABLE later.                                        |
 `-------------------------------------------------------------------*/
 
-static void
-goto_actions (void)
+ساكن فراغ
+goto_actions (فراغ)
 {
-  size_t *state_count = xnmalloc (nstates, sizeof *state_count);
-  yydefgoto = xnmalloc (nnterms, sizeof *yydefgoto);
+  size_t *state_کيراءن = xnmalloc (nstates, حجم *state_کيراءن);
+  yydefgoto = xnmalloc (nnterms, حجم *yydefgoto);
 
   /* For a given nterm I, STATE_COUNT[S] is the number of times there
      is a GOTO to S on I.  */
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  لكل (سيمبول_نومبور i = ntokens; i < nsyms; ++i)
     {
-      state_number default_state = default_goto (i, state_count);
+      state_نومبور default_state = default_goto (i, state_کيراءن);
       save_column (i, default_state);
       yydefgoto[i - ntokens] = default_state;
     }
-  free (state_count);
+  حرر (state_کيراءن);
 }
 
 
@@ -645,25 +645,25 @@ goto_actions (void)
 | pack the actions and gotos information into yytable.              |
 `------------------------------------------------------------------*/
 
-static void
-sort_actions (void)
+ساكن فراغ
+sort_actions (فراغ)
 {
   nentries = 0;
 
-  for (int i = 0; i < nvectors; i++)
-    if (0 < tally[i])
+  لكل (صحيح i = 0; i < nvectors; i++)
+    إذا (0 < tally[i])
       {
-        const size_t t = tally[i];
-        const int w = width[i];
-        int j = nentries - 1;
+        ثابت size_t t = tally[i];
+        ثابت صحيح w = width[i];
+        صحيح j = nentries - 1;
 
-        while (0 <= j && width[order[j]] < w)
+        طالما (0 <= j && width[order[j]] < w)
           j--;
 
-        while (0 <= j && width[order[j]] == w && tally[order[j]] < t)
+        طالما (0 <= j && width[order[j]] == w && tally[order[j]] < t)
           j--;
 
-        for (int k = nentries - 1; k > j; k--)
+        لكل (صحيح k = nentries - 1; k > j; k--)
           order[k + 1] = order[k];
 
         order[j + 1] = i;
@@ -678,96 +678,96 @@ sort_actions (void)
 
    In any other case, return -1.  */
 
-static state_number
-matching_state (vector_number vector)
+ساكن state_نومبور
+matching_state (vector_نومبور vector)
 {
-  vector_number i = order[vector];
+  vector_نومبور i = order[vector];
   /* If VECTOR is a nterm, return -1.  */
-  if (i < nstates)
+  إذا (i < nstates)
     {
       size_t t = tally[i];
-      int w = width[i];
+      صحيح w = width[i];
 
       /* If VECTOR has GLR conflicts, return -1 */
-      if (conflict_tos[i] != NULL)
-        for (int j = 0; j < t; j += 1)
-          if (conflict_tos[i][j] != 0)
-            return -1;
+      إذا (conflict_tos[i] != عدم)
+        لكل (صحيح j = 0; j < t; j += 1)
+          إذا (conflict_tos[i][j] != 0)
+            أرجع -1;
 
-      for (int prev = vector - 1; 0 <= prev; prev--)
+      لكل (صحيح prev = vector - 1; 0 <= prev; prev--)
         {
-          vector_number j = order[prev];
+          vector_نومبور j = order[prev];
           /* Given how ORDER was computed, if the WIDTH or TALLY is
              different, there cannot be a matching state.  */
-          if (width[j] != w || tally[j] != t)
-            return -1;
-          else
+          إذا (width[j] != w || tally[j] != t)
+            أرجع -1;
+          وإلا
             {
               bool match = true;
-              for (int k = 0; match && k < t; k++)
-                if (tos[j][k] != tos[i][k]
+              لكل (صحيح k = 0; match && k < t; k++)
+                إذا (tos[j][k] != tos[i][k]
                     || froms[j][k] != froms[i][k]
-                    || (conflict_tos[j] != NULL && conflict_tos[j][k] != 0))
+                    || (conflict_tos[j] != عدم && conflict_tos[j][k] != 0))
                   match = false;
-              if (match)
-                return j;
+              إذا (match)
+                أرجع j;
             }
         }
     }
-  return -1;
+  أرجع -1;
 }
 
 
-static base_number
-pack_vector (vector_number vector)
+ساكن base_نومبور
+pack_vector (vector_نومبور vector)
 {
-  vector_number i = order[vector];
+  vector_نومبور i = order[vector];
   size_t t = tally[i];
-  base_number *from = froms[i];
-  base_number *to = tos[i];
-  int *conflict_to = conflict_tos[i];
+  base_نومبور *from = froms[i];
+  base_نومبور *to = tos[i];
+  صحيح *conflict_to = conflict_tos[i];
 
   aver (t != 0);
 
-  for (base_number res = lowzero - from[0]; ; res++)
+  لكل (base_نومبور res = lowzero - from[0]; ; res++)
     {
       bool ok = true;
       aver (res < table_size);
       {
-        for (int k = 0; ok && k < t; k++)
+        لكل (صحيح k = 0; ok && k < t; k++)
           {
-            int loc = res + state_number_as_int (from[k]);
-            if (table_size <= loc)
+            صحيح loc = res + state_نومبور_as_int (from[k]);
+            إذا (table_size <= loc)
               table_grow (loc);
 
-            if (table[loc] != 0)
+            إذا (table[loc] != 0)
               ok = false;
           }
 
-        if (ok && pos_set_test (res))
+        إذا (ok && pos_set_test (res))
           ok = false;
       }
 
-      if (ok)
+      إذا (ok)
         {
-          int loc PACIFY_CC (= -1);
-          for (int k = 0; k < t; k++)
+          صحيح loc PACIFY_CC (= -1);
+          لكل (صحيح k = 0; k < t; k++)
             {
-              loc = res + state_number_as_int (from[k]);
+              loc = res + state_نومبور_as_int (from[k]);
               table[loc] = to[k];
-              if (nondeterministic_parser && conflict_to != NULL)
+              إذا (nondeterministic_parser && conflict_to != عدم)
                 conflict_table[loc] = conflict_to[k];
               check[loc] = from[k];
             }
 
-          while (table[lowzero] != 0)
+          طالما (table[lowzero] != 0)
             lowzero++;
 
-          if (high < loc)
-            high = loc;
+          إذا (تيڠݢي < loc)
+            تيڠݢي = loc;
 
           aver (BASE_MINIMUM <= res && res <= BASE_MAXIMUM);
-          return res;
+          أرجع res;
         }
     }
 }
@@ -781,52 +781,52 @@ pack_vector (vector_number vector)
 | parsers.                                                     |
 `-------------------------------------------------------------*/
 
-static base_number
-table_ninf_remap (base_number tab[], int size, base_number ninf)
+ساكن base_نومبور
+table_ninf_remap (base_نومبور tab[], صحيح size, base_نومبور ninf)
 {
-  base_number res = 0;
+  base_نومبور res = 0;
 
-  for (int i = 0; i < size; i++)
-    if (tab[i] < res && tab[i] != ninf)
+  لكل (صحيح i = 0; i < size; i++)
+    إذا (tab[i] < res && tab[i] != ninf)
       res = tab[i];
 
   --res;
 
-  for (int i = 0; i < size; i++)
-    if (tab[i] == ninf)
+  لكل (صحيح i = 0; i < size; i++)
+    إذا (tab[i] == ninf)
       tab[i] = res;
 
-  return res;
+  أرجع res;
 }
 
-static void
-pack_table (void)
+ساكن فراغ
+pack_table (فراغ)
 {
-  base = xnmalloc (nvectors, sizeof *base);
+  base = xnmalloc (nvectors, حجم *base);
   pos_set = bitset_create (table_size + nstates, BITSET_FRUGAL);
   pos_set_base = -nstates;
-  table = xcalloc (table_size, sizeof *table);
-  conflict_table = xcalloc (table_size, sizeof *conflict_table);
-  check = xnmalloc (table_size, sizeof *check);
+  table = xcalloc (table_size, حجم *table);
+  conflict_table = xcalloc (table_size, حجم *conflict_table);
+  check = xnmalloc (table_size, حجم *check);
 
   lowzero = 0;
-  high = 0;
+  تيڠݢي = 0;
 
-  for (int i = 0; i < nvectors; i++)
+  لكل (صحيح i = 0; i < nvectors; i++)
     base[i] = BASE_MINIMUM;
 
-  for (int i = 0; i < table_size; i++)
+  لكل (صحيح i = 0; i < table_size; i++)
     check[i] = -1;
 
-  for (int i = 0; i < nentries; i++)
+  لكل (صحيح i = 0; i < nentries; i++)
     {
-      state_number s = matching_state (i);
-      base_number place;
+      state_نومبور s = matching_state (i);
+      base_نومبور place;
 
-      if (s < 0)
+      إذا (s < 0)
         /* A new set of state actions, or a nonterminal.  */
         place = pack_vector (i);
-      else
+      وإلا
         /* Action of I were already coded for S.  */
         place = base[s];
 
@@ -836,7 +836,7 @@ pack_table (void)
 
   /* Use the greatest possible negative infinites.  */
   base_ninf = table_ninf_remap (base, nvectors, BASE_MINIMUM);
-  table_ninf = table_ninf_remap (table, high + 1, ACTION_NUMBER_MINIMUM);
+  table_ninf = table_ninf_remap (table, تيڠݢي + 1, ACTION_نومبور_MINIMUM);
 
   bitset_free (pos_set);
 }
@@ -848,48 +848,48 @@ pack_table (void)
 | and yycheck.                                                     |
 `-----------------------------------------------------------------*/
 
-void
-tables_generate (void)
+فراغ
+tables_generate (فراغ)
 {
   /* This is a poor way to make sure the sizes are properly
      correlated.  In particular the signedness is not taken into
      account.  But it's not useless.  */
-  verify (sizeof nstates <= sizeof nvectors);
-  verify (sizeof nnterms <= sizeof nvectors);
+  verify (حجم nstates <= حجم nvectors);
+  verify (حجم nnterms <= حجم nvectors);
 
-  nvectors = state_number_as_int (nstates) + nnterms;
+  nvectors = state_نومبور_as_int (nstates) + nnterms;
 
-  froms = xcalloc (nvectors, sizeof *froms);
-  tos = xcalloc (nvectors, sizeof *tos);
-  conflict_tos = xcalloc (nvectors, sizeof *conflict_tos);
-  tally = xcalloc (nvectors, sizeof *tally);
-  width = xnmalloc (nvectors, sizeof *width);
+  froms = xcalloc (nvectors, حجم *froms);
+  tos = xcalloc (nvectors, حجم *tos);
+  conflict_tos = xcalloc (nvectors, حجم *conflict_tos);
+  tally = xcalloc (nvectors, حجم *tally);
+  width = xnmalloc (nvectors, حجم *width);
 
   token_actions ();
 
   goto_actions ();
-  free (goto_map);
-  free (from_state);
-  free (to_state);
+  حرر (goto_map);
+  حرر (from_state);
+  حرر (to_state);
 
-  order = xcalloc (nvectors, sizeof *order);
+  order = xcalloc (nvectors, حجم *order);
   sort_actions ();
   pack_table ();
-  free (order);
+  حرر (order);
 
-  free (tally);
-  free (width);
+  حرر (tally);
+  حرر (width);
 
-  for (int i = 0; i < nvectors; i++)
+  لكل (صحيح i = 0; i < nvectors; i++)
     {
-      free (froms[i]);
-      free (tos[i]);
-      free (conflict_tos[i]);
+      حرر (froms[i]);
+      حرر (tos[i]);
+      حرر (conflict_tos[i]);
     }
 
-  free (froms);
-  free (tos);
-  free (conflict_tos);
+  حرر (froms);
+  حرر (tos);
+  حرر (conflict_tos);
 }
 
 
@@ -897,14 +897,14 @@ tables_generate (void)
 | Free the parser tables.  |
 `-------------------------*/
 
-void
-tables_free (void)
+فراغ
+tables_free (فراغ)
 {
-  free (base);
-  free (conflict_table);
-  free (conflict_list);
-  free (table);
-  free (check);
-  free (yydefgoto);
-  free (yydefact);
+  حرر (base);
+  حرر (conflict_table);
+  حرر (conflict_list);
+  حرر (table);
+  حرر (check);
+  حرر (yydefgoto);
+  حرر (yydefact);
 }

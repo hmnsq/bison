@@ -22,7 +22,7 @@
 # define CONFLICTS_H_
 # include "state.h"
 
-void conflicts_solve (void);
+فراغ conflicts_solve (فراغ);
 
 /**
  * Update state numbers recorded in internal arrays such that:
@@ -33,18 +33,18 @@ void conflicts_solve (void);
  *   - The highest new state number is the number of remaining states - 1.
  *   - The numerical order of the remaining states has not changed.
  */
-void conflicts_update_state_numbers (state_number old_to_new[],
-                                     state_number nstates_old);
+فراغ conflicts_update_state_numbers (state_نومبور old_to_new[],
+                                     state_نومبور nstates_old);
 
-void conflicts_print (void);
-int conflicts_total_count (void);
-void conflicts_output (FILE *out);
-void conflicts_free (void);
+فراغ conflicts_print (فراغ);
+صحيح conflicts_total_کيراءن (فراغ);
+فراغ conflicts_output (FILE *out);
+فراغ conflicts_free (فراغ);
 
-bool has_conflicts (const state *s);
+bool has_conflicts (ثابت state *s);
 
 /* Were there conflicts? */
-extern int expected_sr_conflicts;
-extern int expected_rr_conflicts;
+خارجي صحيح expected_sr_conflicts;
+خارجي صحيح expected_rr_conflicts;
 
 #endif /* !CONFLICTS_H_ */

@@ -18,54 +18,54 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <bitset.h>
-#include <bitset/stats.h>
-#include <closeout.h>
-#include <configmake.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <relocatable.h> /* relocate2 */
-#include <timevar.h>
+#ضمن <bitset.h>
+#ضمن <bitset/stats.h>
+#ضمن <closeout.h>
+#ضمن <configmake.h>
+#ضمن <progname.h>
+#ضمن <quote.h>
+#ضمن <quotearg.h>
+#ضمن <relocatable.h> /* relocate2 */
+#ضمن <timevar.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "derives.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "ielr.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "output.h"
-#include "parse-gram.h"
-#include "print-graph.h"
-#include "print-xml.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"
-#include "scan-gram.h"
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "uniqstr.h"
+#ضمن "complain.h"
+#ضمن "conflicts.h"
+#ضمن "counterexample.h"
+#ضمن "derives.h"
+#ضمن "files.h"
+#ضمن "fixits.h"
+#ضمن "getargs.h"
+#ضمن "glyphs.h"
+#ضمن "gram.h"
+#ضمن "ielr.h"
+#ضمن "lalr.h"
+#ضمن "lr0.h"
+#ضمن "muscle-tab.h"
+#ضمن "nullable.h"
+#ضمن "output.h"
+#ضمن "parse-gram.h"
+#ضمن "print-graph.h"
+#ضمن "print-xml.h"
+#ضمن "print.h"
+#ضمن "reader.h"
+#ضمن "reduce.h"
+#ضمن "scan-code.h"
+#ضمن "scan-gram.h"
+#ضمن "scan-skel.h"
+#ضمن "symtab.h"
+#ضمن "tables.h"
+#ضمن "uniqstr.h"
 
 
-int
-main (int argc, char *argv[])
+صحيح
+main (صحيح argc, حرف *argv[])
 {
   {
-    char *cp = getenv ("BISON_PROGRAM_NAME");
-    if (cp)
+    حرف *cp = getenv ("BISON_PROGRAM_NAME");
+    إذا (cp)
       argv[0] = cp;
   }
 
@@ -73,20 +73,20 @@ main (int argc, char *argv[])
   set_program_name (argv[0]);
   setlocale (LC_ALL, "");
   {
-    char *cp = NULL;
-    char const *localedir = relocate2 (LOCALEDIR, &cp);
+    حرف *cp = عدم;
+    حرف ثابت *localedir = relocate2 (LOCALEDIR, &cp);
     bindtextdomain ("bison", localedir);
     bindtextdomain ("bison-gnulib", localedir);
     bindtextdomain ("bison-runtime", localedir);
-    free (cp);
+    حرر (cp);
   }
   textdomain ("bison");
 
   {
-    char const *cp = getenv ("LC_CTYPE");
-    if (cp && STREQ (cp, "C"))
+    حرف ثابت *cp = getenv ("LC_CTYPE");
+    إذا (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
-    else
+    وإلا
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
   }
 
@@ -100,43 +100,43 @@ main (int argc, char *argv[])
 
   getargs (argc, argv);
 
-  if (trace_flag)
+  إذا (trace_flag)
     fprintf (stderr, "bison (GNU Bison) %s\n", VERSION);
 
   timevar_enabled = trace_flag & trace_time;
   timevar_init ();
   timevar_start (tv_total);
 
-  if (trace_flag & trace_bitsets)
+  إذا (trace_flag & trace_bitsets)
     bitset_stats_enable ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
      and FATTRS.  In file reader.c.  The other parts are recorded in
      the grammar; see gram.h.  */
 
-  timevar_push (tv_reader);
+  timevar_تولق (tv_reader);
   reader (grammar_file);
-  timevar_pop (tv_reader);
+  timevar_کلوار (tv_reader);
 
-  if (complaint_status == status_complaint)
-    goto finish;
+  إذا (complaint_status == status_complaint)
+    اذهب finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
-  timevar_push (tv_reduce);
+  timevar_تولق (tv_reduce);
   reduce_grammar ();
-  timevar_pop (tv_reduce);
+  timevar_کلوار (tv_reduce);
 
   /* Record other info about the grammar.  In files derives and
      nullable.  */
-  timevar_push (tv_sets);
+  timevar_تولق (tv_sets);
   derives_compute ();
   nullable_compute ();
-  timevar_pop (tv_sets);
+  timevar_کلوار (tv_sets);
 
   /* Compute LR(0) parser states.  See state.h for more info.  */
-  timevar_push (tv_lr0);
+  timevar_تولق (tv_lr0);
   generate_states ();
-  timevar_pop (tv_lr0);
+  timevar_کلوار (tv_lr0);
 
   /* Add lookahead sets to parser states.  Except when LALR(1) is
      requested, split states to eliminate LR(1)-relative
@@ -147,27 +147,27 @@ main (int argc, char *argv[])
      lookahead is not enough to disambiguate the parsing.  In file
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
-  timevar_push (tv_conflicts);
+  timevar_تولق (tv_conflicts);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
+  إذا (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
-      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
-      state_number nstates_old = nstates;
+      state_نومبور *old_to_new = xnmalloc (nstates, حجم *old_to_new);
+      state_نومبور nstates_old = nstates;
       state_remove_unreachable_states (old_to_new);
       lalr_update_state_numbers (old_to_new, nstates_old);
       conflicts_update_state_numbers (old_to_new, nstates_old);
-      free (old_to_new);
+      حرر (old_to_new);
     }
-  if (report_flag & report_cex
+  إذا (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
   conflicts_print ();
-  timevar_pop (tv_conflicts);
+  timevar_کلوار (tv_conflicts);
 
   /* Compute the parser tables.  */
-  timevar_push (tv_actions);
+  timevar_تولق (tv_actions);
   tables_generate ();
-  timevar_pop (tv_actions);
+  timevar_کلوار (tv_actions);
 
   grammar_rules_useless_report (_("rule useless in parser due to conflicts"));
 
@@ -176,65 +176,65 @@ main (int argc, char *argv[])
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
 
-  if (generate)
+  إذا (generate)
     {
       /* Output file names. */
       compute_output_file_names ();
 
       /* Output the detailed report on the grammar.  */
-      if (report_flag)
+      إذا (report_flag)
         {
-          timevar_push (tv_report);
+          timevar_تولق (tv_report);
           print_results ();
-          timevar_pop (tv_report);
+          timevar_کلوار (tv_report);
         }
 
       /* Output the graph.  */
-      if (graph_flag)
+      إذا (graph_flag)
         {
-          timevar_push (tv_graph);
+          timevar_تولق (tv_graph);
           print_graph ();
-          timevar_pop (tv_graph);
+          timevar_کلوار (tv_graph);
         }
 
       /* Output xml.  */
-      if (html_flag || xml_flag)
+      إذا (html_flag || xml_flag)
         {
-          timevar_push (tv_xml);
+          timevar_تولق (tv_xml);
           print_xml ();
-          timevar_pop (tv_xml);
+          timevar_کلوار (tv_xml);
         }
 
       /* Output html.  */
-      if (html_flag)
+      إذا (html_flag)
         {
-          timevar_push (tv_html);
+          timevar_تولق (tv_html);
           print_html ();
-          timevar_pop (tv_html);
+          timevar_کلوار (tv_html);
         }
     }
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_status == status_complaint)
-    goto finish;
+  إذا (complaint_status == status_complaint)
+    اذهب finish;
 
   /* Lookahead tokens are no longer needed. */
-  timevar_push (tv_free);
+  timevar_تولق (tv_free);
   lalr_free ();
-  timevar_pop (tv_free);
+  timevar_کلوار (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
-  if (generate)
+  إذا (generate)
     {
-      timevar_push (tv_parser);
+      timevar_تولق (tv_parser);
       output ();
-      timevar_pop (tv_parser);
+      timevar_کلوار (tv_parser);
     }
 
  finish:
 
-  timevar_push (tv_free);
+  timevar_تولق (tv_free);
   nullable_free ();
   derives_free ();
   tables_free ();
@@ -254,9 +254,9 @@ main (int argc, char *argv[])
   muscle_free ();
   code_scanner_free ();
   skel_scanner_free ();
-  timevar_pop (tv_free);
+  timevar_کلوار (tv_free);
 
-  if (trace_flag & trace_bitsets)
+  إذا (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
   /* Stop timing and print the times.  */
@@ -265,12 +265,12 @@ main (int argc, char *argv[])
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */
-  if (!fixits_empty ())
+  إذا (!fixits_empty ())
     {
-      if (update_flag)
+      إذا (update_flag)
         fixits_run ();
-      else
-        complain (NULL, Wother,
+      وإلا
+        complain (عدم, Wother,
                   _("fix-its can be applied.  Rerun with option '--update'."));
       fixits_free ();
     }
@@ -279,5 +279,5 @@ main (int argc, char *argv[])
   complain_free ();
   quotearg_free ();
 
-  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
+  أرجع complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
 }
