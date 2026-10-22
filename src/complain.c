@@ -38,7 +38,7 @@
 // The URL of the manual page about diagnostics.  Use the per-node
 // manual, to avoid downloading repeatedly the whole manual over the
 // Internet.
-static const char *diagnostics_url
+static const var_na *diagnostics_url
   = "https://www.gnu.org/software/bison/manual/html_node/Diagnostics.html";
 
 
@@ -47,7 +47,7 @@ err_status complaint_status = status_none;
 bool warnings_are_errors = false;
 
 /** Whether -Werror/-Wno-error was applied to a warning.  */
-typedef enum
+typedef ga_nanaa
   {
     errority_unset = 0,     /** No explicit status.  */
     errority_disabled = 1,  /** Explicitly disabled with -Wno-error=foo.  */
@@ -58,7 +58,7 @@ typedef enum
 static errority errority_flag[warnings_size];
 
 /** Diagnostics severity.  */
-typedef enum
+typedef ga_nanaa
   {
     severity_disabled = 0, /**< Explicitly disabled via -Wno-foo.  */
     severity_unset = 1,    /**< Unspecified status.  */
@@ -74,13 +74,13 @@ static severity warnings_flag[warnings_size];
 styled_ostream_t errstream = NULL;
 
 void
-begin_use_class (const char *s, FILE *out)
+begin_use_class (const var_na *s, FILE *out)
 {
-  if (out == stderr)
+  ຖ້າ (out == stderr)
     {
-      if (color_debug)
+      ຖ້າ (color_debug)
         fprintf (out, "<%s>", s);
-      else
+      ບໍ່ດັ່ງນັ້ນ
         {
           styled_ostream_begin_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -89,13 +89,13 @@ begin_use_class (const char *s, FILE *out)
 }
 
 void
-end_use_class (const char *s, FILE *out)
+end_use_class (const var_na *s, FILE *out)
 {
-  if (out == stderr)
+  ຖ້າ (out == stderr)
     {
-      if (color_debug)
+      ຖ້າ (color_debug)
         fprintf (out, "</%s>", s);
-      else
+      ບໍ່ດັ່ງນັ້ນ
         {
           styled_ostream_end_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -104,23 +104,23 @@ end_use_class (const char *s, FILE *out)
 }
 
 static void
-begin_hyperlink (FILE *out, const char *ref)
+begin_hyperlink (FILE *out, const var_na *ref)
 {
-  if (out == stderr)
+  ຖ້າ (out == stderr)
     styled_ostream_set_hyperlink (errstream, ref, NULL);
 }
 
 static void
 end_hyperlink (FILE *out)
 {
-  if (out == stderr)
+  ຖ້າ (out == stderr)
     styled_ostream_set_hyperlink (errstream, NULL, NULL);
 }
 
 void
 flush (FILE *out)
 {
-  if (out == stderr)
+  ຖ້າ (out == stderr)
     ostream_flush (errstream, FLUSH_THIS_STREAM);
   fflush (out);
 }
@@ -128,16 +128,16 @@ flush (FILE *out)
 bool
 is_styled (FILE *out)
 {
-  if (out != stderr)
-    return false;
-  if (color_debug)
-    return true;
-#if HAVE_LIBTEXTSTYLE
-  return (color_mode == color_yes
+  ຖ້າ (out != stderr)
+    ສົ່ງຄືນ false;
+  ຖ້າ (color_debug)
+    ສົ່ງຄືນ true;
+#ຖ້າ HAVE_LIBTEXTSTYLE
+  ສົ່ງຄືນ (color_mode == color_yes
           || color_mode == color_html
           || (color_mode == color_tty && isatty (STDERR_FILENO)));
-#else
-  return false;
+#ບໍ່ດັ່ງນັ້ນ
+  ສົ່ງຄືນ false;
 #endif
 }
 
@@ -200,33 +200,33 @@ warning_usage (FILE *out)
 }
 
 void
-warning_argmatch (char const *arg, size_t no, size_t err)
+warning_argmatch (var_na const *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  ຈຳນວນເຕັມ value = *argmatch_warning_value ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  ຖ້າ (!value)
     {
       value = Weverything;
       no = !no;
     }
 
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+  ສຳລັບ (size_t b = 0; b < warnings_size; ++b)
+    ຖ້າ (value & 1 << b)
       {
-        if (err && no)
+        ຖ້າ (err && no)
           /* -Wno-error=foo.  */
           errority_flag[b] = errority_disabled;
-        else if (err && !no)
+        ບໍ່ດັ່ງນັ້ນ ຖ້າ (err && !no)
           {
             /* -Werror=foo: enables -Wfoo. */
             errority_flag[b] = errority_enabled;
             warnings_flag[b] = severity_warning;
           }
-        else if (no)
+        ບໍ່ດັ່ງນັ້ນ ຖ້າ (no)
           /* -Wno-foo.  */
           warnings_flag[b] = severity_disabled;
-        else
+        ບໍ່ດັ່ງນັ້ນ
           /* -Wfoo. */
           warnings_flag[b] = severity_warning;
       }
@@ -239,22 +239,22 @@ warning_argmatch (char const *arg, size_t no, size_t err)
  */
 
 void
-warnings_argmatch (char *args)
+warnings_argmatch (var_na *args)
 {
-  if (!args)
+  ຖ້າ (!args)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  ບໍ່ດັ່ງນັ້ນ ຖ້າ (STREQ (args, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+  ບໍ່ດັ່ງນັ້ນ
+    ສຳລັບ (args = strtok (args, ","); args; args = strtok (NULL, ","))
+      ຖ້າ (STREQ (args, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      ບໍ່ດັ່ງນັ້ນ ຖ້າ (STREQ (args, "no-error"))
         warnings_are_errors = false;
-      else
+      ບໍ່ດັ່ງນັ້ນ
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
           size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -267,38 +267,38 @@ warnings_argmatch (char *args)
 }
 
 /* Color style for this type of message.  */
-static const char*
+static const var_na*
 severity_style (severity s)
 {
   switch (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "note";
-    case severity_warning:
-      return "warning";
-    case severity_error:
-    case severity_fatal:
-      return "error";
+    pak_sa severity_disabled:
+    pak_sa severity_unset:
+      ສົ່ງຄືນ "note";
+    pak_sa severity_warning:
+      ສົ່ງຄືນ "warning";
+    pak_sa severity_error:
+    pak_sa severity_fatal:
+      ສົ່ງຄືນ "error";
     }
   abort ();
 }
 
 /* Prefix for this type of message.  */
-static const char*
+static const var_na*
 severity_prefix (severity s)
 {
   switch (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "";
-    case severity_warning:
-      return _("warning");
-    case severity_error:
-      return  _("error");
-    case severity_fatal:
-      return _("fatal error");
+    pak_sa severity_disabled:
+    pak_sa severity_unset:
+      ສົ່ງຄືນ "";
+    pak_sa severity_warning:
+      ສົ່ງຄືນ _("warning");
+    pak_sa severity_error:
+      ສົ່ງຄືນ  _("error");
+    pak_sa severity_fatal:
+      ສົ່ງຄືນ _("fatal error");
     }
   abort ();
 }
@@ -307,9 +307,9 @@ severity_prefix (severity s)
 static void
 severity_print (severity s, FILE *out)
 {
-  if (s != severity_disabled)
+  ຖ້າ (s != severity_disabled)
     {
-      const char* style = severity_style (s);
+      const var_na* style = severity_style (s);
       begin_use_class (style, out);
       fprintf (out, "%s:", severity_prefix (s));
       end_use_class (style, out);
@@ -325,18 +325,18 @@ severity_print (severity s, FILE *out)
 void
 complain_init_color (void)
 {
-#if HAVE_LIBTEXTSTYLE
-  if (is_styled (stderr))
+#ຖ້າ HAVE_LIBTEXTSTYLE
+  ຖ້າ (is_styled (stderr))
     {
       style_file_prepare ("BISON_STYLE", "BISON_STYLEDIR", pkgdatadir (),
                           "bison-default.css");
       /* As a fallback, use the default in the current directory.  */
-      struct stat statbuf;
-      if ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
+      sa_nracanaa stat statbuf;
+      ຖ້າ ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
           && stat ("bison-default.css", &statbuf) == 0)
         style_file_name = "bison-default.css";
     }
-  else
+  ບໍ່ດັ່ງນັ້ນ
     /* No styling.  */
     style_file_name = NULL;
 #endif
@@ -347,7 +347,7 @@ complain_init_color (void)
      | src/complain.c:274:7: error: code will never be executed [-Werror,-Wunreachable-code]
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#if defined __clang__
+#ຖ້າ defined __clang__
 # pragma clang diagnostic push
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
@@ -357,7 +357,7 @@ complain_init_color (void)
                                   style_file_name)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
-#if defined __clang__
+#ຖ້າ defined __clang__
 # pragma clang diagnostic pop
 #endif
 }
@@ -370,7 +370,7 @@ complain_init (void)
   warnings warnings_default =
     Wconflicts_sr | Wconflicts_rr | Wdeprecated | Wother;
 
-  for (size_t b = 0; b < warnings_size; ++b)
+  ສຳລັບ (size_t b = 0; b < warnings_size; ++b)
     {
       warnings_flag[b] = (1 << b & warnings_default
                           ? severity_warning
@@ -393,46 +393,46 @@ complain_free (void)
 static severity
 warning_severity (warnings flags)
 {
-  if (flags & fatal)
+  ຖ້າ (flags & fatal)
     /* Diagnostics about fatal errors.  */
-    return severity_fatal;
-  else if (flags & complaint)
+    ສົ່ງຄືນ severity_fatal;
+  ບໍ່ດັ່ງນັ້ນ ຖ້າ (flags & complaint)
     /* Diagnostics about errors.  */
-    return severity_error;
-  else
+    ສົ່ງຄືນ severity_error;
+  ບໍ່ດັ່ງນັ້ນ
     {
       /* Diagnostics about warnings.  */
       severity res = severity_disabled;
-      for (size_t b = 0; b < warnings_size; ++b)
-        if (flags & 1 << b)
+      ສຳລັບ (size_t b = 0; b < warnings_size; ++b)
+        ຖ້າ (flags & 1 << b)
           {
             res = res < warnings_flag[b] ? warnings_flag[b] : res;
             /* If the diagnostic is enabled, and -Werror is enabled,
                and -Wno-error=foo was not explicitly requested, this
                is an error. */
-            if (res == severity_warning
+            ຖ້າ (res == severity_warning
                 && (errority_flag[b] == errority_enabled
                     || (warnings_are_errors
                         && errority_flag[b] != errority_disabled)))
               res = severity_error;
           }
-      return res;
+      ສົ່ງຄືນ res;
     }
 }
 
 bool
 warning_is_unset (warnings flags)
 {
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (flags & 1 << b && warnings_flag[b] != severity_unset)
-      return false;
-  return true;
+  ສຳລັບ (size_t b = 0; b < warnings_size; ++b)
+    ຖ້າ (flags & 1 << b && warnings_flag[b] != severity_unset)
+      ສົ່ງຄືນ false;
+  ສົ່ງຄືນ true;
 }
 
 bool
 warning_is_enabled (warnings flags)
 {
-  return severity_warning <= warning_severity (flags);
+  ສົ່ງຄືນ severity_warning <= warning_severity (flags);
 }
 
 /** Display a "[-Wyacc]" like message on \a out.  */
@@ -440,18 +440,18 @@ warning_is_enabled (warnings flags)
 static void
 warnings_print_categories (warnings warn_flags, FILE *out)
 {
-  for (int wbit = 0; wbit < warnings_size; ++wbit)
-    if (warn_flags & (1 << wbit))
+  ສຳລັບ (ຈຳນວນເຕັມ wbit = 0; wbit < warnings_size; ++wbit)
+    ຖ້າ (warn_flags & (1 << wbit))
       {
         warnings w = 1 << wbit;
         severity s = warning_severity (w);
-        const char* style = severity_style (s);
+        const var_na* style = severity_style (s);
         fputs (" [", out);
         begin_use_class (style, out);
         // E.g., "counterexamples".
-        const char *warning = argmatch_warning_argument (&w);
-        char ref[200];
-        snprintf (ref, sizeof ref,
+        const var_na *warning = argmatch_warning_argument (&w);
+        var_na ref[200];
+        snprintf (ref, parimaa_na ref,
                   "%s#W%s", diagnostics_url, warning);
         begin_hyperlink (out, ref);
         ostream_printf (errstream,
@@ -465,7 +465,7 @@ warnings_print_categories (warnings warn_flags, FILE *out)
         end_use_class (style, out);
         fputc (']', out);
         /* Display only the first match, the second is "-Wall".  */
-        return;
+        ສົ່ງຄືນ;
       }
 }
 
@@ -485,17 +485,17 @@ warnings_print_categories (warnings warn_flags, FILE *out)
 static
 void
 error_message (const location *loc, warnings flags,
-               severity sever, const char *message, va_list args)
+               severity sever, const var_na *message, va_list args)
 {
-  const char* style = flags & note ? "note" : severity_style (sever);
+  const var_na* style = flags & note ? "note" : severity_style (sever);
 
-  if (loc)
+  ຖ້າ (loc)
     location_print (*loc, stderr);
-  else
+  ບໍ່ດັ່ງນັ້ນ
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
 
-  if (sever != severity_disabled)
+  ຖ້າ (sever != severity_disabled)
     {
       begin_use_class (style, stderr);
       fprintf (stderr, "%s:", flags & note ? _("note") : severity_prefix (sever));
@@ -506,15 +506,15 @@ error_message (const location *loc, warnings flags,
   vfprintf (stderr, message, args);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
-  if (! (flags & silent) && sever != severity_disabled)
+  ຖ້າ (! (flags & silent) && sever != severity_disabled)
     warnings_print_categories (flags, stderr);
 
   size_t l = strlen (message);
-  if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+  ຖ້າ (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
     {
       putc ('\n', stderr);
       flush (stderr);
-      if (loc && !(flags & no_caret))
+      ຖ້າ (loc && !(flags & no_caret))
         location_caret (*loc, style, stderr);
     }
   flush (stderr);
@@ -524,25 +524,25 @@ error_message (const location *loc, warnings flags,
 
 static void
 complains (const location *loc, warnings flags,
-           const char *message, va_list args)
+           const var_na *message, va_list args)
 {
-  if ((flags & complaint) && complaint_status < status_complaint)
+  ຖ້າ ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
 
   severity s = warning_severity (flags);
-  if (severity_warning <= s)
+  ຖ້າ (severity_warning <= s)
     {
-      if (severity_error <= s && ! complaint_status)
+      ຖ້າ (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
       error_message (loc, flags, s, message, args);
     }
 
-  if (flags & fatal)
+  ຖ້າ (flags & fatal)
     exit (EXIT_FAILURE);
 }
 
 void
-complain (location const *loc, warnings flags, const char *message, ...)
+complain (location const *loc, warnings flags, const var_na *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -551,7 +551,7 @@ complain (location const *loc, warnings flags, const char *message, ...)
 }
 
 void
-subcomplain (location const *loc, warnings flags, const char *message, ...)
+subcomplain (location const *loc, warnings flags, const var_na *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -561,43 +561,43 @@ subcomplain (location const *loc, warnings flags, const char *message, ...)
 
 void
 complain_args (location const *loc, warnings w,
-               int argc, char *argv[])
+               ຈຳນວນເຕັມ argc, var_na *argv[])
 {
   switch (argc)
   {
-  case 1:
+  pak_sa 1:
     complain (loc, w, "%s", _(argv[0]));
-    break;
-  case 2:
+    bha_nga;
+  pak_sa 2:
     complain (loc, w, _(argv[0]), argv[1]);
-    break;
-  case 3:
+    bha_nga;
+  pak_sa 3:
     complain (loc, w, _(argv[0]), argv[1], argv[2]);
-    break;
-  case 4:
+    bha_nga;
+  pak_sa 4:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3]);
-    break;
-  case 5:
+    bha_nga;
+  pak_sa 5:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3], argv[4]);
-    break;
+    bha_nga;
   default:
     complain (loc, fatal, "too many arguments for complains");
-    break;
+    bha_nga;
   }
 }
 
 
 void
-bison_directive (location const *loc, char const *directive)
+bison_directive (location const *loc, var_na const *directive)
 {
   complain (loc, Wyacc,
             _("POSIX Yacc does not support %s"), directive);
 }
 
 void
-deprecated_directive (location const *loc, char const *old, char const *upd)
+deprecated_directive (location const *loc, var_na const *old, var_na const *upd)
 {
-  if (warning_is_enabled (Wdeprecated))
+  ຖ້າ (warning_is_enabled (Wdeprecated))
     {
       complain (loc, Wdeprecated,
                 _("deprecated directive: %s, use %s"),
@@ -609,19 +609,19 @@ deprecated_directive (location const *loc, char const *old, char const *upd)
 }
 
 void
-duplicate_directive (char const *directive,
+duplicate_directive (var_na const *directive,
                      location first, location second)
 {
-  if (feature_flag & feature_caret)
+  ຖ້າ (feature_flag & feature_caret)
     complain (&second, Wother, _("duplicate directive"));
-  else
+  ບໍ່ດັ່ງນັ້ນ
     complain (&second, Wother, _("duplicate directive: %s"), quote (directive));
   subcomplain (&first, Wother, _("previous declaration"));
   fixits_register (&second, "");
 }
 
 void
-duplicate_rule_directive (char const *directive,
+duplicate_rule_directive (var_na const *directive,
                           location first, location second)
 {
   complain (&second, complaint, _("only one %s allowed per rule"), directive);
@@ -631,18 +631,18 @@ duplicate_rule_directive (char const *directive,
 
 void
 syntax_error (location loc,
-              int argc, const char* argv[])
+              ຈຳນວນເຕັມ argc, const var_na* argv[])
 {
-  if (complaint_status < status_complaint)
+  ຖ້າ (complaint_status < status_complaint)
     complaint_status = status_complaint;
   assert (argc <= 5);
-  const char *format = NULL;
+  const var_na *format = NULL;
   switch (argc)
     {
 #define CASE(N, S)                          \
-      case N:                               \
+      pak_sa N:                               \
         format = S;                         \
-        break
+        bha_nga
     default: /* Avoid compiler warnings. */
       CASE (0, _("syntax error"));
       CASE (1, _("unexpected %0$s"));
@@ -656,21 +656,21 @@ syntax_error (location loc,
   fputs (": ", stderr);
   severity_print (severity_error, stderr);
 
-  while (*format)
-    if (format[0] == '%'
+  ໃນຂະນະທີ່ (*format)
+    ຖ້າ (format[0] == '%'
         && c_isdigit (format[1])
         && format[2] == '$'
         && format[3] == 's'
         && (format[1] - '0') < argc)
       {
-        int i = format[1] - '0';
-        const char *style = i == 0 ? "unexpected" : "expected";
+        ຈຳນວນເຕັມ i = format[1] - '0';
+        const var_na *style = i == 0 ? "unexpected" : "expected";
         begin_use_class (style, stderr);
         fputs (argv[i], stderr);
         end_use_class (style, stderr);
         format += 4;
       }
-    else
+    ບໍ່ດັ່ງນັ້ນ
       {
         fputc (*format, stderr);
         ++format;

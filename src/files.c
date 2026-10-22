@@ -50,30 +50,30 @@
    NULL), then the %directive is ignored.  As a result, %name-prefix,
    for instance, will not be honored.  */
 
-char const *spec_outfile = NULL;       /* for -o. */
-char const *spec_file_prefix = NULL;   /* for -b. */
+var_na const *spec_outfile = NULL;       /* for -o. */
+var_na const *spec_file_prefix = NULL;   /* for -b. */
 location spec_file_prefix_loc = EMPTY_LOCATION_INIT;
-char const *spec_name_prefix = NULL;   /* for -p. */
+var_na const *spec_name_prefix = NULL;   /* for -p. */
 location spec_name_prefix_loc = EMPTY_LOCATION_INIT;
-char *spec_verbose_file = NULL;  /* for --verbose. */
-char *spec_graph_file = NULL;    /* for -g. */
-char *spec_html_file = NULL;     /* for --html. */
-char *spec_xml_file = NULL;      /* for -x. */
-char *spec_header_file = NULL;   /* for --header. */
-char *parser_file_name;
+var_na *spec_verbose_file = NULL;  /* for --verbose. */
+var_na *spec_graph_file = NULL;    /* for -g. */
+var_na *spec_html_file = NULL;     /* for --html. */
+var_na *spec_xml_file = NULL;      /* for -x. */
+var_na *spec_header_file = NULL;   /* for --header. */
+var_na *parser_file_name;
 
 /* All computed output file names.  */
-typedef struct generated_file
+typedef sa_nracanaa generated_file
 {
   /** File name.  */
-  char *name;
+  var_na *name;
   /** Whether is a generated source file (e.g., *.c, *.java...), as
       opposed to the report file (e.g., *.output).  When late errors
       are detected, generated source files are removed.  */
   bool is_source;
 } generated_file;
 static generated_file *generated_files = NULL;
-static int generated_files_size = 0;
+static ຈຳນວນເຕັມ generated_files_size = 0;
 
 uniqstr grammar_file = NULL;
 
@@ -93,19 +93,19 @@ uniqstr grammar_file = NULL;
    empty string (meaning the current directory); otherwise it is
    'dir/'.  */
 
-char *all_but_ext;
-static char *all_but_tab_ext;
-char *dir_prefix;
+var_na *all_but_ext;
+static var_na *all_but_tab_ext;
+var_na *dir_prefix;
 
 /* C source file extension (the parser source).  */
-static char *src_extension = NULL;
+static var_na *src_extension = NULL;
 /* Header file extension (if option '`-d'' is specified).  */
-static char *header_extension = NULL;
+static var_na *header_extension = NULL;
 
-struct prefix_map
+sa_nracanaa prefix_map
 {
-  char *oldprefix;
-  char *newprefix;
+  var_na *oldprefix;
+  var_na *newprefix;
 };
 
 static gl_list_t prefix_maps = NULL;
@@ -119,15 +119,15 @@ static gl_map_t mapped_files = NULL;
 | STR1, and STR2.                                                  |
 `-----------------------------------------------------------------*/
 
-static char *
-concat2 (char const *str1, char const *str2)
+static var_na *
+concat2 (var_na const *str1, var_na const *str2)
 {
   size_t len = strlen (str1) + strlen (str2);
-  char *res = xmalloc (len + 1);
-  char *cp;
+  var_na *res = xmalloc (len + 1);
+  var_na *cp;
   cp = stpcpy (res, str1);
   cp = stpcpy (cp, str2);
-  return res;
+  ສົ່ງຄືນ res;
 }
 
 /*-----------------------------------------------------------------.
@@ -136,14 +136,14 @@ concat2 (char const *str1, char const *str2)
 `-----------------------------------------------------------------*/
 
 FILE *
-xfopen (const char *name, const char *mode)
+xfopen (const var_na *name, const var_na *mode)
 {
   FILE *res = fopen_safer (name, mode);
-  if (!res)
+  ຖ້າ (!res)
     error (EXIT_FAILURE, get_errno (),
            _("%s: cannot open"), quotearg_colon (name));
 
-  return res;
+  ສົ່ງຄືນ res;
 }
 
 /*-------------------------------------------------------------.
@@ -153,68 +153,68 @@ xfopen (const char *name, const char *mode)
 void
 xfclose (FILE *ptr)
 {
-  if (ptr == NULL)
-    return;
+  ຖ້າ (ptr == NULL)
+    ສົ່ງຄືນ;
 
-  if (ferror (ptr))
+  ຖ້າ (ferror (ptr))
     error (EXIT_FAILURE, 0, _("input/output error"));
 
-  if (fclose (ptr) != 0)
+  ຖ້າ (fclose (ptr) != 0)
     error (EXIT_FAILURE, get_errno (), _("cannot close file"));
 }
 
 
 FILE *
-xfdopen (int fd, char const *mode)
+xfdopen (ຈຳນວນເຕັມ fd, var_na const *mode)
 {
   FILE *res = fdopen (fd, mode);
-  if (! res)
+  ຖ້າ (! res)
     error (EXIT_FAILURE, get_errno (),
            /* On a separate line to please the "unmarked_diagnostics"
               syntax-check. */
            "fdopen");
-  return res;
+  ສົ່ງຄືນ res;
 }
 
 /* The mapped name of FILENAME, allocated, if there are prefix maps.
    Otherwise NULL.  */
-static char *
-map_file_name_alloc (char const *filename)
+static var_na *
+map_file_name_alloc (var_na const *filename)
 {
-  struct prefix_map const *p = NULL;
+  sa_nracanaa prefix_map const *p = NULL;
   assert (prefix_maps);
   {
     void const *ptr;
     gl_list_iterator_t iter = gl_list_iterator (prefix_maps);
-    while (gl_list_iterator_next (&iter, &ptr, NULL))
+    ໃນຂະນະທີ່ (gl_list_iterator_next (&iter, &ptr, NULL))
       {
         p = ptr;
-        if (strncmp (p->oldprefix, filename, strlen (p->oldprefix)) == 0)
-          break;
+        ຖ້າ (strncmp (p->oldprefix, filename, strlen (p->oldprefix)) == 0)
+          bha_nga;
         p = NULL;
       }
     gl_list_iterator_free (&iter);
   }
 
-  if (!p)
-    return xstrdup (filename);
+  ຖ້າ (!p)
+    ສົ່ງຄືນ xstrdup (filename);
 
   size_t oldprefix_len = strlen (p->oldprefix);
   size_t newprefix_len = strlen (p->newprefix);
-  char *res = xmalloc (newprefix_len + strlen (filename) - oldprefix_len + 1);
+  var_na *res = xmalloc (newprefix_len + strlen (filename) - oldprefix_len + 1);
 
-  char *end = stpcpy (res, p->newprefix);
+  var_na *end = stpcpy (res, p->newprefix);
   stpcpy (end, filename + oldprefix_len);
 
-  return res;
+  ສົ່ງຄືນ res;
 }
 
 static bool
 string_equals (const void *x1, const void *x2)
 {
-  const char *s1 = x1;
-  const char *s2 = x2;
-  return STREQ (s1, s2);
+  const var_na *s1 = x1;
+  const var_na *s2 = x2;
+  ສົ່ງຄືນ STREQ (s1, s2);
 }
 
 /* A hash function for NUL-terminated char* strings using
@@ -223,15 +223,15 @@ string_equals (const void *x1, const void *x2)
 static size_t
 string_hash (const void *x)
 {
-#define SIZE_BITS (sizeof (size_t) * CHAR_BIT)
+#define SIZE_BITS (parimaa_na (size_t) * CHAR_BIT)
 
-  const char *s = x;
+  const var_na *s = x;
   size_t h = 0;
 
-  for (; *s; s++)
+  ສຳລັບ (; *s; s++)
     h = *s + ((h << 9) | (h >> (SIZE_BITS - 9)));
 
-  return h;
+  ສົ່ງຄືນ h;
 }
 
 static void
@@ -241,27 +241,27 @@ string_free (const void *cp)
   free (p);
 }
 
-const char *
-map_file_name (char const *filename)
+const var_na *
+map_file_name (var_na const *filename)
 {
-  if (!filename || !prefix_maps)
-    return filename;
-  if (!mapped_files)
+  ຖ້າ (!filename || !prefix_maps)
+    ສົ່ງຄືນ filename;
+  ຖ້າ (!mapped_files)
     mapped_files
       = gl_map_nx_create_empty (GL_HASH_MAP,
                                 string_equals, string_hash,
                                 string_free, string_free);
   const void *res = gl_map_get (mapped_files, filename);
-  if (!res)
+  ຖ້າ (!res)
     {
       res = map_file_name_alloc (filename);
       gl_map_put (mapped_files, xstrdup (filename), res);
     }
-  return res;
+  ສົ່ງຄືນ res;
 }
 
 static void
-prefix_map_free (struct prefix_map *p)
+prefix_map_free (sa_nracanaa prefix_map *p)
 {
   free (p->oldprefix);
   free (p->newprefix);
@@ -269,9 +269,9 @@ prefix_map_free (struct prefix_map *p)
 }
 
 void
-add_prefix_map (char const *oldprefix, char const *newprefix)
+add_prefix_map (var_na const *oldprefix, var_na const *newprefix)
 {
-  if (!prefix_maps)
+  ຖ້າ (!prefix_maps)
     prefix_maps
       = gl_list_create_empty (GL_ARRAY_LIST,
                               /* equals */ NULL,
@@ -279,7 +279,7 @@ add_prefix_map (char const *oldprefix, char const *newprefix)
                               (gl_listelement_dispose_fn) prefix_map_free,
                               true);
 
-  struct prefix_map *p = xmalloc (sizeof (*p));
+  sa_nracanaa prefix_map *p = xmalloc (parimaa_na (*p));
   p->oldprefix = xstrdup (oldprefix);
   p->newprefix = xstrdup (newprefix);
 
@@ -292,14 +292,14 @@ add_prefix_map (char const *oldprefix, char const *newprefix)
 
 /* Compute extensions from the grammar file extension.  */
 static void
-compute_exts_from_gf (const char *ext)
+compute_exts_from_gf (const var_na *ext)
 {
-  if (STREQ (ext, ".y"))
+  ຖ້າ (STREQ (ext, ".y"))
     {
       src_extension = xstrdup (language->src_extension);
       header_extension = xstrdup (language->header_extension);
     }
-  else
+  ບໍ່ດັ່ງນັ້ນ
     {
       src_extension = xstrdup (ext);
       header_extension = xstrdup (ext);
@@ -312,7 +312,7 @@ compute_exts_from_gf (const char *ext)
 
 /* Compute extensions from the given c source file extension.  */
 static void
-compute_exts_from_src (const char *ext)
+compute_exts_from_src (const var_na *ext)
 {
   /* We use this function when the user specifies `-o' or `--output',
      so the extensions must be computed unconditionally from the file name
@@ -353,8 +353,8 @@ compute_exts_from_src (const char *ext)
    'foo' -> *BASE = 'foo', *TAB = NULL, *EXT = NULL.  */
 
 static void
-file_name_split (const char *file_name,
-                 const char **base, const char **tab, const char **ext)
+file_name_split (const var_na *file_name,
+                 const var_na **base, const var_na **tab, const var_na **ext)
 {
   *base = last_component (file_name);
 
@@ -364,11 +364,11 @@ file_name_split (const char *file_name,
 
   /* If there is an extension, check if there is a '.tab' part right
      before.  */
-  if (*ext)
+  ຖ້າ (*ext)
     {
       size_t baselen = *ext - *base;
-      size_t dottablen = sizeof (TAB_EXT) - 1;
-      if (dottablen < baselen
+      size_t dottablen = parimaa_na (TAB_EXT) - 1;
+      ຖ້າ (dottablen < baselen
           && STRPREFIX_LIT (TAB_EXT, *ext - dottablen))
         *tab = *ext - dottablen;
     }
@@ -383,9 +383,9 @@ file_name_split (const char *file_name,
 static void
 compute_file_name_parts (void)
 {
-  if (spec_outfile)
+  ຖ້າ (spec_outfile)
     {
-      const char *base, *tab, *ext;
+      const var_na *base, *tab, *ext;
       file_name_split (spec_outfile, &base, &tab, &ext);
       dir_prefix = xstrndup (spec_outfile, base - spec_outfile);
 
@@ -400,15 +400,15 @@ compute_file_name_parts (void)
                   (strlen (spec_outfile)
                    - (tab ? strlen (tab) : (ext ? strlen (ext) : 0))));
 
-      if (ext)
+      ຖ້າ (ext)
         compute_exts_from_src (ext);
     }
-  else
+  ບໍ່ດັ່ງນັ້ນ
     {
-      const char *base, *tab, *ext;
+      const var_na *base, *tab, *ext;
       file_name_split (grammar_file, &base, &tab, &ext);
 
-      if (spec_file_prefix)
+      ຖ້າ (spec_file_prefix)
         {
           /* If --file-prefix=foo was specified, ALL_BUT_TAB_EXT = 'foo'.  */
           dir_prefix =
@@ -416,13 +416,13 @@ compute_file_name_parts (void)
                       last_component (spec_file_prefix) - spec_file_prefix);
           all_but_tab_ext = xstrdup (spec_file_prefix);
         }
-      else if (! location_empty (yacc_loc))
+      ບໍ່ດັ່ງນັ້ນ ຖ້າ (! location_empty (yacc_loc))
         {
           /* If --yacc, then the output is 'y.tab.c'.  */
           dir_prefix = xstrdup ("");
           all_but_tab_ext = xstrdup ("y");
         }
-      else
+      ບໍ່ດັ່ງນັ້ນ
         {
           /* Otherwise, ALL_BUT_TAB_EXT is computed from the input
              grammar: 'foo/bar.yy' => 'bar'.  */
@@ -431,13 +431,13 @@ compute_file_name_parts (void)
             xstrndup (base, (strlen (base) - (ext ? strlen (ext) : 0)));
         }
 
-      if (language->add_tab)
+      ຖ້າ (language->add_tab)
         all_but_ext = concat2 (all_but_tab_ext, TAB_EXT);
-      else
+      ບໍ່ດັ່ງນັ້ນ
         all_but_ext = xstrdup (all_but_tab_ext);
 
       /* Compute the extensions from the grammar file name.  */
-      if (ext && location_empty (yacc_loc))
+      ຖ້າ (ext && location_empty (yacc_loc))
         compute_exts_from_gf (ext);
     }
 }
@@ -452,9 +452,9 @@ compute_output_file_names (void)
   compute_file_name_parts ();
 
   /* If not yet done. */
-  if (!src_extension)
+  ຖ້າ (!src_extension)
     src_extension = xstrdup (".c");
-  if (!header_extension)
+  ຖ້າ (!header_extension)
     header_extension = xstrdup (".h");
 
   parser_file_name =
@@ -462,36 +462,36 @@ compute_output_file_names (void)
      ? xstrdup (spec_outfile)
      : concat2 (all_but_ext, src_extension));
 
-  if (header_flag)
+  ຖ້າ (header_flag)
     {
-      if (! spec_header_file)
+      ຖ້າ (! spec_header_file)
         spec_header_file = concat2 (all_but_ext, header_extension);
     }
 
-  if (graph_flag)
+  ຖ້າ (graph_flag)
     {
-      if (! spec_graph_file)
+      ຖ້າ (! spec_graph_file)
         spec_graph_file = concat2 (all_but_tab_ext, ".gv");
       output_file_name_check (&spec_graph_file, false);
     }
 
-  if (html_flag)
+  ຖ້າ (html_flag)
     {
-      if (! spec_html_file)
+      ຖ້າ (! spec_html_file)
         spec_html_file = concat2 (all_but_tab_ext, ".html");
       output_file_name_check (&spec_html_file, false);
     }
 
-  if (xml_flag)
+  ຖ້າ (xml_flag)
     {
-      if (! spec_xml_file)
+      ຖ້າ (! spec_xml_file)
         spec_xml_file = concat2 (all_but_tab_ext, ".xml");
       output_file_name_check (&spec_xml_file, false);
     }
 
-  if (report_flag)
+  ຖ້າ (report_flag)
     {
-      if (!spec_verbose_file)
+      ຖ້າ (!spec_verbose_file)
         spec_verbose_file = concat2 (all_but_tab_ext, OUTPUT_EXT);
       output_file_name_check (&spec_verbose_file, false);
     }
@@ -502,32 +502,32 @@ compute_output_file_names (void)
 }
 
 void
-output_file_name_check (char **file_name, bool source)
+output_file_name_check (var_na **file_name, bool source)
 {
   bool conflict = false;
-  if (STREQ (*file_name, grammar_file))
+  ຖ້າ (STREQ (*file_name, grammar_file))
     {
       complain (NULL, complaint, _("refusing to overwrite the input file %s"),
                 quote (*file_name));
       conflict = true;
     }
-  else
-    for (int i = 0; i < generated_files_size; i++)
-      if (STREQ (generated_files[i].name, *file_name))
+  ບໍ່ດັ່ງນັ້ນ
+    ສຳລັບ (ຈຳນວນເຕັມ i = 0; i < generated_files_size; i++)
+      ຖ້າ (STREQ (generated_files[i].name, *file_name))
         {
           complain (NULL, Wother, _("conflicting outputs to file %s"),
                     quote (generated_files[i].name));
           conflict = true;
         }
-  if (conflict)
+  ຖ້າ (conflict)
     {
       free (*file_name);
       *file_name = strdup ("/dev/null");
     }
-  else
+  ບໍ່ດັ່ງນັ້ນ
     {
       generated_files = xnrealloc (generated_files, ++generated_files_size,
-                                   sizeof *generated_files);
+                                   parimaa_na *generated_files);
       generated_files[generated_files_size-1].name = xstrdup (*file_name);
       generated_files[generated_files_size-1].is_source = source;
     }
@@ -536,42 +536,42 @@ output_file_name_check (char **file_name, bool source)
 void
 unlink_generated_sources (void)
 {
-  for (int i = 0; i < generated_files_size; i++)
-    if (generated_files[i].is_source)
+  ສຳລັບ (ຈຳນວນເຕັມ i = 0; i < generated_files_size; i++)
+    ຖ້າ (generated_files[i].is_source)
       /* Ignore errors.  The file might not even exist.  */
       unlink (generated_files[i].name);
 }
 
 /* Memory allocated by relocate2, to free.  */
-static char *relocate_buffer = NULL;
+static var_na *relocate_buffer = NULL;
 
-char const *
+var_na const *
 pkgdatadir (void)
 {
-  if (relocate_buffer)
-    return relocate_buffer;
-  else
+  ຖ້າ (relocate_buffer)
+    ສົ່ງຄືນ relocate_buffer;
+  ບໍ່ດັ່ງນັ້ນ
     {
-      char const *cp = getenv ("BISON_PKGDATADIR");
-      return cp ? cp : relocate2 (PKGDATADIR, &relocate_buffer);
+      var_na const *cp = getenv ("BISON_PKGDATADIR");
+      ສົ່ງຄືນ cp ? cp : relocate2 (PKGDATADIR, &relocate_buffer);
     }
 }
 
-char const *
+var_na const *
 m4path (void)
 {
-  char const *m4 = getenv ("M4");
-  if (m4)
-    return m4;
+  var_na const *m4 = getenv ("M4");
+  ຖ້າ (m4)
+    ສົ່ງຄືນ m4;
 
   /* We don't use relocate2() to store the temporary buffer and re-use
      it, because m4path() is only called once.  */
-  char const *m4_relocated = relocate (M4);
-  struct stat buf;
-  if (stat (m4_relocated, &buf) == 0)
-    return m4_relocated;
+  var_na const *m4_relocated = relocate (M4);
+  sa_nracanaa stat buf;
+  ຖ້າ (stat (m4_relocated, &buf) == 0)
+    ສົ່ງຄືນ m4_relocated;
 
-  return M4;
+  ສົ່ງຄືນ M4;
 }
 
 void
@@ -585,13 +585,13 @@ output_file_names_free (void)
   free (spec_header_file);
   free (parser_file_name);
   free (dir_prefix);
-  for (int i = 0; i < generated_files_size; i++)
+  ສຳລັບ (ຈຳນວນເຕັມ i = 0; i < generated_files_size; i++)
     free (generated_files[i].name);
   free (generated_files);
   free (relocate_buffer);
 
-  if (prefix_maps)
+  ຖ້າ (prefix_maps)
     gl_list_free (prefix_maps);
-  if (mapped_files)
+  ຖ້າ (mapped_files)
     gl_map_free (mapped_files);
 }

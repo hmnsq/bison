@@ -24,25 +24,25 @@
 #include "assoc.h"
 
 
-const char *
+const var_na *
 assoc_to_string (assoc a)
 {
   switch (a)
     {
-    case undef_assoc:
-      return "undefined associativity";
+    pak_sa undef_assoc:
+      ສົ່ງຄືນ "undefined associativity";
 
-    case right_assoc:
-      return "%right";
+    pak_sa right_assoc:
+      ສົ່ງຄືນ "%right";
 
-    case left_assoc:
-      return "%left";
+    pak_sa left_assoc:
+      ສົ່ງຄືນ "%left";
 
-    case non_assoc:
-      return "%nonassoc";
+    pak_sa non_assoc:
+      ສົ່ງຄືນ "%nonassoc";
 
-    case precedence_assoc:
-      return "%precedence";
+    pak_sa precedence_assoc:
+      ສົ່ງຄືນ "%precedence";
     }
   abort ();
 }

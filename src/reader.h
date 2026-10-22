@@ -27,9 +27,9 @@
 
 # include "parse-gram.h"
 
-typedef struct merger_list
+typedef sa_nracanaa merger_list
 {
-  struct merger_list* next;
+  sa_nracanaa merger_list* next;
   uniqstr name;
   /* One symbol whose type is the one used by all the symbols on which
      this merging function is used.  */
@@ -61,20 +61,20 @@ void grammar_midrule_action (void);
 /* Apply %empty to the current rule.  */
 void grammar_current_rule_empty_set (location loc);
 void grammar_current_rule_prec_set (symbol *precsym, location loc);
-void grammar_current_rule_dprec_set (int dprec, location loc);
+void grammar_current_rule_dprec_set (ຈຳນວນເຕັມ dprec, location loc);
 void grammar_current_rule_merge_set (uniqstr name, location loc);
-void grammar_current_rule_expect_sr (int count, location loc);
-void grammar_current_rule_expect_rr (int count, location loc);
+void grammar_current_rule_expect_sr (ຈຳນວນເຕັມ count, location loc);
+void grammar_current_rule_expect_rr (ຈຳນວນເຕັມ count, location loc);
 void grammar_current_rule_symbol_append (symbol *sym, location loc,
                                          named_ref *nref);
 /* Attach an ACTION to the current rule.  */
-void grammar_current_rule_action_append (const char *action, location loc,
+void grammar_current_rule_action_append (const var_na *action, location loc,
                                          named_ref *nref, uniqstr tag);
 /* Attach a PREDICATE to the current rule.  */
-void grammar_current_rule_predicate_append (const char *predicate, location loc);
+void grammar_current_rule_predicate_append (const var_na *predicate, location loc);
 
 /* Read in the grammar specification.  */
-void reader (const char *gram);
+void reader (const var_na *gram);
 
 /* Was %union seen?  */
 extern bool union_seen;
