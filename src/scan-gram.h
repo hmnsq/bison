@@ -30,7 +30,7 @@ void gram_scanner_close (void);
 void gram_scanner_free (void);
 void gram_scanner_last_string_free (void);
 
-# define GRAM_LEX_DECL int gram_lex (GRAM_STYPE *val, location *loc)
+# define GRAM_LEX_DECL цео gram_lex (GRAM_STYPE *val, location *loc)
 GRAM_LEX_DECL;
 
 #endif /* !SCAN_GRAM_H_ */

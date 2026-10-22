@@ -52,7 +52,7 @@ print_core (struct obstack *oout, state *s)
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not just its kernel.  */
-  if (report_flag & report_itemsets)
+  ако (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
@@ -61,24 +61,24 @@ print_core (struct obstack *oout, state *s)
 
   obstack_printf (oout, _("State %d"), s->number);
   obstack_sgrow (oout, "\\n\\l");
-  for (size_t i = 0; i < snritems; ++i)
+  за (size_t i = 0; i < snritems; ++i)
     {
       item_number const *sp1 = ritem + sitems[i];
       rule const *r = item_rule (sp1);
 
       obstack_printf (oout, "%3d ", r->number);
-      if (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
+      ако (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
                                       r->lhs->symbol->tag))
         obstack_printf (oout, "%*s| ",
-                        (int) strlen (previous_lhs->symbol->tag), "");
-      else
+                        (цео) strlen (previous_lhs->symbol->tag), "");
+      инако
         {
           obstack_backslash (oout, r->lhs->symbol->tag);
           obstack_printf (oout, ": ");
         }
       previous_lhs = r->lhs;
 
-      for (item_number const *sp = r->rhs; sp < sp1; sp++)
+      за (item_number const *sp = r->rhs; sp < sp1; sp++)
         {
           obstack_backslash (oout, symbols[*sp]->tag);
           obstack_1grow (oout, ' ');
@@ -86,28 +86,28 @@ print_core (struct obstack *oout, state *s)
 
       obstack_sgrow (oout, "•");
 
-      if (0 <= *r->rhs)
-        for (item_number const *sp = sp1; 0 <= *sp; ++sp)
+      ако (0 <= *r->rhs)
+        за (item_number const *sp = sp1; 0 <= *sp; ++sp)
           {
             obstack_1grow (oout, ' ');
             obstack_backslash (oout, symbols[*sp]->tag);
           }
-      else
+      инако
         obstack_sgrow (oout, " %empty");
 
       /* Experimental feature: display the lookahead tokens. */
-      if (report_flag & report_lookaheads
+      ако (report_flag & report_lookaheads
           && item_number_is_rule_number (*sp1))
         {
           /* Find the reduction we are handling.  */
           reductions *reds = s->reductions;
-          int redno = state_reduction_find (s, r);
+          цео redno = state_reduction_find (s, r);
 
           /* Print them if there are.  */
-          if (reds->lookaheads && redno != -1)
+          ако (reds->lookaheads && redno != -1)
             {
               bitset_iterator biter;
-              int k;
+              цео k;
               char const *sep = "";
               obstack_sgrow (oout, "  [");
               BITSET_FOR_EACH (biter, reds->lookaheads[redno], k, 0)
@@ -134,11 +134,11 @@ print_actions (state const *s, FILE *fgraph)
 {
   transitions const *trans = s->transitions;
 
-  if (!trans->num && !s->reductions)
-    return;
+  ако (!trans->num && !s->reductions)
+    врати;
 
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  за (цео i = 0; i < trans->num; i++)
+    ако (!TRANSITION_IS_DISABLED (trans, i))
       {
         const state *s1 = trans->states[i];
         const symbol_number sym = s1->accessing_symbol;
@@ -149,7 +149,7 @@ print_actions (state const *s, FILE *fgraph)
            : TRANSITION_IS_SHIFT (trans, i) ? "solid"
            : "dashed");
 
-        if (TRANSITION_IS_ERROR (trans, i)
+        ако (TRANSITION_IS_ERROR (trans, i)
             && STRNEQ (symbols[sym]->tag, "error"))
           abort ();
         output_edge (s->number, s1->number,
@@ -189,7 +189,7 @@ print_graph (void)
   start_graph (fgraph);
 
   /* Output nodes and edges. */
-  for (int i = 0; i < nstates; i++)
+  за (цео i = 0; i < nstates; i++)
     print_state (states[i], fgraph);
 
   finish_graph (fgraph);

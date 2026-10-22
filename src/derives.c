@@ -42,10 +42,10 @@ print_derives (void)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  за (symbol_number i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
-      for (rule **rp = derives[i - ntokens]; *rp; ++rp)
+      за (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
           rule_rhs_print (*rp, stderr);
@@ -69,7 +69,7 @@ derives_compute (void)
      indexed by rule numbers.  */
   rule_list *delts = xnmalloc (nrules, sizeof *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  за (rule_number r = nrules - 1; r >= 0; --r)
     {
       symbol_number lhs = rules[r].lhs->number;
       rule_list *p = &delts[r];
@@ -86,11 +86,11 @@ derives_compute (void)
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
   rule **q = xnmalloc (nnterms + nrules, sizeof *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  за (symbol_number i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      док (p)
         {
           *q++ = p->value;
           p = p->next;
@@ -98,7 +98,7 @@ derives_compute (void)
       *q++ = NULL;
     }
 
-  if (trace_flag & trace_sets)
+  ако (trace_flag & trace_sets)
     print_derives ();
 
   free (dset);
@@ -109,7 +109,7 @@ derives_compute (void)
 void
 derives_free (void)
 {
-  if (derives)
+  ако (derives)
     {
       free (derives[0]);
       free (derives);

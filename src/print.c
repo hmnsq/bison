@@ -57,7 +57,7 @@ static void
 max_length (size_t *width, const char *str)
 {
   size_t len = mbswidth (str, 0);
-  if (len > *width)
+  ако (len > *width)
     *width = len;
 }
 
@@ -71,20 +71,20 @@ print_core (FILE *out, const state *s)
   const item_index *sitems = s->items;
   size_t snritems = s->nitems;
   /* Output all the items of a state, not only its kernel.  */
-  if (report_flag & report_itemsets)
+  ако (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  if (!snritems)
-    return;
+  ако (!snritems)
+    врати;
 
   fputc ('\n', out);
 
   rule const *previous_rule = NULL;
-  for (size_t i = 0; i < snritems; i++)
+  за (size_t i = 0; i < snritems; i++)
     {
       item_number *sp1 = ritem + sitems[i];
       rule const *r = item_rule (sp1);
@@ -92,7 +92,7 @@ print_core (FILE *out, const state *s)
       previous_rule = r;
 
       /* Display the lookahead tokens?  */
-      if (report_flag & report_lookaheads
+      ако (report_flag & report_lookaheads
           && item_number_is_rule_number (*sp1))
         state_rule_lookaheads_print (s, r, out);
       fputc ('\n', out);
@@ -112,8 +112,8 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  за (цео i = 0; i < trans->num; i++)
+    ако (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
@@ -121,15 +121,15 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  ако (!width)
+    врати;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and shifts.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  за (цео i = 0; i < trans->num; i++)
+    ако (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
@@ -137,11 +137,11 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
         const state *s1 = trans->states[i];
 
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        за (цео j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
-        if (display_transitions_p)
+        ако (display_transitions_p)
           fprintf (out, _("shift, and go to state %d\n"), s1->number);
-        else
+        инако
           fprintf (out, _("go to state %d\n"), s1->number);
       }
 }
@@ -158,24 +158,24 @@ print_errs (FILE *out, const state *s)
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  за (цео i = 0; i < errp->num; ++i)
+    ако (errp->symbols[i])
       max_length (&width, errp->symbols[i]->tag);
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  ако (!width)
+    врати;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and errors.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  за (цео i = 0; i < errp->num; ++i)
+    ако (errp->symbols[i])
       {
         const char *tag = errp->symbols[i]->tag;
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        за (цео j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
         fputs (_("error (nonassociative)\n"), out);
       }
@@ -194,16 +194,16 @@ print_reduction (FILE *out, size_t width,
                  rule *r, bool enabled)
 {
   fprintf (out, "    %s", lookahead);
-  for (int j = width - mbswidth (lookahead, 0); j > 0; --j)
+  за (цео j = width - mbswidth (lookahead, 0); j > 0; --j)
     fputc (' ', out);
-  if (!enabled)
+  ако (!enabled)
     fputc ('[', out);
-  if (rule_is_initial (r))
+  ако (rule_is_initial (r))
     fprintf (out, _("accept"));
-  else
+  инако
     fprintf (out, _("reduce using rule %d (%s)"), r->number,
              r->lhs->symbol->tag);
-  if (!enabled)
+  ако (!enabled)
     fputc (']', out);
   fputc ('\n', out);
 }
@@ -217,52 +217,52 @@ static void
 print_reductions (FILE *out, const state *s)
 {
   reductions *reds = s->reductions;
-  if (reds->num == 0)
-    return;
+  ако (reds->num == 0)
+    врати;
 
   rule *default_reduction = NULL;
-  if (yydefact[s->number] != 0)
+  ако (yydefact[s->number] != 0)
     default_reduction = &rules[yydefact[s->number] - 1];
 
   transitions *trans = s->transitions;
 
   bitset_zero (no_reduce_set);
   {
-    int i;
+    цео i;
     FOR_EACH_SHIFT (trans, i)
       bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
   }
-  for (int i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
+  за (цео i = 0; i < s->errs->num; ++i)
+    ако (s->errs->symbols[i])
       bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
 
   /* Compute the width of the lookahead token column.  */
   size_t width = 0;
-  if (default_reduction)
+  ако (default_reduction)
     width = mbswidth (_("$default"), 0);
 
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  ако (reds->lookaheads)
+    за (цео i = 0; i < ntokens; i++)
       {
         bool count = bitset_test (no_reduce_set, i);
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        за (цео j = 0; j < reds->num; ++j)
+          ако (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              ако (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  ако (reds->rules[j] != default_reduction)
                     max_length (&width, symbols[i]->tag);
                   count = true;
                 }
-              else
+              инако
                 max_length (&width, symbols[i]->tag);
             }
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  ако (!width)
+    врати;
 
   fputc ('\n', out);
   width += 2;
@@ -270,34 +270,34 @@ print_reductions (FILE *out, const state *s)
   bool default_reduction_only = true;
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  ако (reds->lookaheads)
+    за (цео i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
         bool count = bitset_test (no_reduce_set, i);
-        if (count)
+        ако (count)
           default_reduction_only = false;
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        за (цео j = 0; j < reds->num; ++j)
+          ако (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              ако (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  ако (reds->rules[j] != default_reduction)
                     {
                       default_reduction_only = false;
                       print_reduction (out, width,
                                        symbols[i]->tag,
                                        reds->rules[j], true);
                     }
-                  else
+                  инако
                     defaulted = true;
                   count = true;
                 }
-              else
+              инако
                 {
                   default_reduction_only = false;
-                  if (defaulted)
+                  ако (defaulted)
                     print_reduction (out, width,
                                      symbols[i]->tag,
                                      default_reduction, true);
@@ -309,7 +309,7 @@ print_reductions (FILE *out, const state *s)
             }
       }
 
-  if (default_reduction)
+  ако (default_reduction)
     {
       char *default_reductions =
         muscle_percent_define_get ("lr.default-reduction");
@@ -353,12 +353,12 @@ print_state (FILE *out, const state *s)
   fputc ('\n', out);
   print_core (out, s);
   print_actions (out, s);
-  if ((report_flag & report_solved_conflicts) && s->solved_conflicts)
+  ако ((report_flag & report_solved_conflicts) && s->solved_conflicts)
     {
       fputc ('\n', out);
       fputs (s->solved_conflicts, out);
     }
-  if (has_conflicts (s)
+  ако (has_conflicts (s)
       && (report_flag & report_cex
           || warning_is_enabled (Wcounterexamples)))
     {
@@ -376,19 +376,19 @@ print_terminal_symbols (FILE *out)
 {
   /* TERMINAL (type #) : rule #s terminal is on RHS */
   fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
-  for (int i = 0; i < max_code + 1; ++i)
-    if (token_translations[i] != undeftoken->content->number)
+  за (цео i = 0; i < max_code + 1; ++i)
+    ако (token_translations[i] != undeftoken->content->number)
       {
         const symbol *sym = symbols[token_translations[i]];
         const char *tag = sym->tag;
         fprintf (out, "%4s%s", "", tag);
-        if (sym->content->type_name)
+        ако (sym->content->type_name)
           fprintf (out, " <%s>", sym->content->type_name);
         fprintf (out, " (%d)", i);
 
-        for (rule_number r = 0; r < nrules; r++)
-          for (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
-            if (item_number_as_symbol_number (*rhsp) == token_translations[i])
+        за (rule_number r = 0; r < nrules; r++)
+          за (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
+            ако (item_number_as_symbol_number (*rhsp) == token_translations[i])
               {
                 fprintf (out, " %d", r);
                 break;
@@ -403,42 +403,42 @@ static void
 print_nonterminal_symbols (FILE *out)
 {
   fprintf (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
-  for (symbol_number i = ntokens; i < nsyms; i++)
+  за (symbol_number i = ntokens; i < nsyms; i++)
     {
       const symbol *sym = symbols[i];
       const char *tag = sym->tag;
       bool on_left = false;
       bool on_right = false;
 
-      for (rule_number r = 0; r < nrules; r++)
+      за (rule_number r = 0; r < nrules; r++)
         {
           on_left |= rules[r].lhs->number == i;
-          for (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
+          за (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
             on_right |= item_number_as_symbol_number (*rhsp) == i;
-          if (on_left && on_right)
+          ако (on_left && on_right)
             break;
         }
 
       fprintf (out, "%4s%s", "", tag);
-      if (sym->content->type_name)
+      ако (sym->content->type_name)
         fprintf (out, " <%s>", sym->content->type_name);
       fprintf (out, " (%d)\n", i);
 
-      if (on_left)
+      ако (on_left)
         {
           fprintf (out, "%8s%s", "", _("on left:"));
-          for (rule_number r = 0; r < nrules; r++)
-            if (rules[r].lhs->number == i)
+          за (rule_number r = 0; r < nrules; r++)
+            ако (rules[r].lhs->number == i)
               fprintf (out, " %d", r);
           fputc ('\n', out);
         }
 
-      if (on_right)
+      ако (on_right)
         {
           fprintf (out, "%8s%s", "", _("on right:"));
-          for (rule_number r = 0; r < nrules; r++)
-            for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-              if (item_number_as_symbol_number (*rhsp) == i)
+          за (rule_number r = 0; r < nrules; r++)
+            за (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+              ако (item_number_as_symbol_number (*rhsp) == i)
                 {
                   fprintf (out, " %d", r);
                   break;
@@ -467,7 +467,7 @@ print_results (void)
 
   /* Storage for print_reductions.  */
   no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
-  for (state_number i = 0; i < nstates; i++)
+  за (state_number i = 0; i < nstates; i++)
     print_state (out, states[i]);
   bitset_free (no_reduce_set);
 

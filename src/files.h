@@ -86,7 +86,7 @@ void unlink_generated_sources (void);
 
 FILE *xfopen (const char *name, char const *mode);
 void xfclose (FILE *ptr);
-FILE *xfdopen (int fd, char const *mode);
+FILE *xfdopen (цео fd, char const *mode);
 
 /* Given an input file path, return a string that contains the path
    with the file prefix mapping rules applied, or NULL if the input

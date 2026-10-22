@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  цео line;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,17 +46,17 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  цео column;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  цео byte;
 
 } boundary;
 
 /* Set the position of \a p. */
 static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+boundary_set (boundary *p, const char *f, цео l, цео c, цео b)
 {
   p->file = f;
   p->line = l;
@@ -66,27 +66,27 @@ boundary_set (boundary *p, const char *f, int l, int c, int b)
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+static inline цео
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  цео res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
+  ако (!res)
     res = a.line - b.line;
-  if (!res)
+  ако (!res)
     res = a.column - b.column;
-  return res;
+  врати res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
 static inline bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
+  врати (a.column == b.column
           && a.line == b.line
           && UNIQSTR_EQ (a.file, b.file));
 }
@@ -115,7 +115,7 @@ void location_compute (location *loc,
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+цео location_print (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
 void caret_init (void);
@@ -134,13 +134,13 @@ void location_caret_suggestion (location loc, const char *s, FILE *out);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+static inline цео
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
+  цео res = boundary_cmp (a.start, b.start);
+  ако (!res)
     res = boundary_cmp (a.end, b.end);
-  return res;
+  врати res;
 }
 
 /* Whether this is the empty location.  */

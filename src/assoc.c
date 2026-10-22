@@ -30,19 +30,19 @@ assoc_to_string (assoc a)
   switch (a)
     {
     case undef_assoc:
-      return "undefined associativity";
+      врати "undefined associativity";
 
     case right_assoc:
-      return "%right";
+      врати "%right";
 
     case left_assoc:
-      return "%left";
+      врати "%left";
 
     case non_assoc:
-      return "%nonassoc";
+      врати "%nonassoc";
 
     case precedence_assoc:
-      return "%precedence";
+      врати "%precedence";
     }
   abort ();
 }
