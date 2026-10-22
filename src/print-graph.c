@@ -45,14 +45,14 @@
    repetition, like in *.output files. */
 
 static void
-print_core (struct obstack *oout, state *s)
+print_core (sa_nracanaa obstack *oout, state *s)
 {
   item_index const *sitems = s->items;
   sym_content *previous_lhs = NULL;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not just its kernel.  */
-  if (report_flag & report_itemsets)
+  ถ้า (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
@@ -61,24 +61,24 @@ print_core (struct obstack *oout, state *s)
 
   obstack_printf (oout, _("State %d"), s->number);
   obstack_sgrow (oout, "\\n\\l");
-  for (size_t i = 0; i < snritems; ++i)
+  สำหรับ (size_t i = 0; i < snritems; ++i)
     {
       item_number const *sp1 = ritem + sitems[i];
       rule const *r = item_rule (sp1);
 
       obstack_printf (oout, "%3d ", r->number);
-      if (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
+      ถ้า (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
                                       r->lhs->symbol->tag))
         obstack_printf (oout, "%*s| ",
-                        (int) strlen (previous_lhs->symbol->tag), "");
-      else
+                        (จำนวนเต็ม) strlen (previous_lhs->symbol->tag), "");
+      มิฉะนั้น
         {
           obstack_backslash (oout, r->lhs->symbol->tag);
           obstack_printf (oout, ": ");
         }
       previous_lhs = r->lhs;
 
-      for (item_number const *sp = r->rhs; sp < sp1; sp++)
+      สำหรับ (item_number const *sp = r->rhs; sp < sp1; sp++)
         {
           obstack_backslash (oout, symbols[*sp]->tag);
           obstack_1grow (oout, ' ');
@@ -86,29 +86,29 @@ print_core (struct obstack *oout, state *s)
 
       obstack_sgrow (oout, "•");
 
-      if (0 <= *r->rhs)
-        for (item_number const *sp = sp1; 0 <= *sp; ++sp)
+      ถ้า (0 <= *r->rhs)
+        สำหรับ (item_number const *sp = sp1; 0 <= *sp; ++sp)
           {
             obstack_1grow (oout, ' ');
             obstack_backslash (oout, symbols[*sp]->tag);
           }
-      else
+      มิฉะนั้น
         obstack_sgrow (oout, " %empty");
 
       /* Experimental feature: display the lookahead tokens. */
-      if (report_flag & report_lookaheads
+      ถ้า (report_flag & report_lookaheads
           && item_number_is_rule_number (*sp1))
         {
           /* Find the reduction we are handling.  */
           reductions *reds = s->reductions;
-          int redno = state_reduction_find (s, r);
+          จำนวนเต็ม redno = state_reduction_find (s, r);
 
           /* Print them if there are.  */
-          if (reds->lookaheads && redno != -1)
+          ถ้า (reds->lookaheads && redno != -1)
             {
               bitset_iterator biter;
-              int k;
-              char const *sep = "";
+              จำนวนเต็ม k;
+              var_na const *sep = "";
               obstack_sgrow (oout, "  [");
               BITSET_FOR_EACH (biter, reds->lookaheads[redno], k, 0)
                 {
@@ -134,22 +134,22 @@ print_actions (state const *s, FILE *fgraph)
 {
   transitions const *trans = s->transitions;
 
-  if (!trans->num && !s->reductions)
-    return;
+  ถ้า (!trans->num && !s->reductions)
+    คืน;
 
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  สำหรับ (จำนวนเต็ม i = 0; i < trans->num; i++)
+    ถ้า (!TRANSITION_IS_DISABLED (trans, i))
       {
         const state *s1 = trans->states[i];
         const symbol_number sym = s1->accessing_symbol;
 
         /* Shifts are solid, gotos are dashed, and error is dotted.  */
-        char const *style =
+        var_na const *style =
           (TRANSITION_IS_ERROR (trans, i) ? "dotted"
            : TRANSITION_IS_SHIFT (trans, i) ? "solid"
            : "dashed");
 
-        if (TRANSITION_IS_ERROR (trans, i)
+        ถ้า (TRANSITION_IS_ERROR (trans, i)
             && STRNEQ (symbols[sym]->tag, "error"))
           abort ();
         output_edge (s->number, s1->number,
@@ -169,7 +169,7 @@ print_actions (state const *s, FILE *fgraph)
 static void
 print_state (state *s, FILE *fgraph)
 {
-  struct obstack node_obstack;
+  sa_nracanaa obstack node_obstack;
 
   /* A node's label contains its items.  */
   obstack_init (&node_obstack);
@@ -189,7 +189,7 @@ print_graph (void)
   start_graph (fgraph);
 
   /* Output nodes and edges. */
-  for (int i = 0; i < nstates; i++)
+  สำหรับ (จำนวนเต็ม i = 0; i < nstates; i++)
     print_state (states[i], fgraph);
 
   finish_graph (fgraph);

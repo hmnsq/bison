@@ -27,7 +27,7 @@
    data so that closure can be called.  n is the number of elements to
    allocate for itemset.  */
 
-void closure_new (int n);
+void closure_new (จำนวนเต็ม n);
 
 
 /* Given the kernel (aka core) of a state (a sorted vector of item indices

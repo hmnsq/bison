@@ -36,7 +36,7 @@
 `----------*/
 
 /** Symbol classes.  */
-typedef enum
+typedef ga_nanaa
 {
   /** Undefined.  */
   unknown_sym,
@@ -51,12 +51,12 @@ typedef enum
 
 
 /** Internal token numbers. */
-typedef int symbol_number;
+typedef จำนวนเต็ม symbol_number;
 # define SYMBOL_NUMBER_MAXIMUM INT_MAX
 
 
-typedef struct symbol symbol;
-typedef struct sym_content sym_content;
+typedef sa_nracanaa symbol symbol;
+typedef sa_nracanaa sym_content sym_content;
 
 /* Declaration status of a symbol.
 
@@ -68,7 +68,7 @@ typedef struct sym_content sym_content;
    When status are checked at the end, "declared" symbols are fine,
    "used" symbols trigger warnings, otherwise it's an error.  */
 
-typedef enum
+typedef ga_nanaa
   {
     /** Used in the input file for an unknown reason (error).  */
     undeclared,
@@ -80,16 +80,16 @@ typedef enum
     declared,
   } declaration_status;
 
-enum code_props_type
+ga_nanaa code_props_type
   {
     destructor = 0,
     printer = 1,
   };
-typedef enum code_props_type code_props_type;
+typedef ga_nanaa code_props_type code_props_type;
 
-enum { CODE_PROPS_SIZE = 2 };
+ga_nanaa { CODE_PROPS_SIZE = 2 };
 
-struct symbol
+sa_nracanaa symbol
 {
   /** The key, name of the symbol.  */
   uniqstr tag;
@@ -118,7 +118,7 @@ struct symbol
   sym_content *content;
 };
 
-struct sym_content
+sa_nracanaa sym_content
 {
   /** The main symbol that denotes this content (it contains the
       possible alias). */
@@ -146,11 +146,11 @@ struct sym_content
 
   symbol_number number;
   location prec_loc;
-  int prec;
+  จำนวนเต็ม prec;
   assoc assoc;
 
   /** Token code, possibly specified by the user (%token FOO 42).  */
-  int code;
+  จำนวนเต็ม code;
 
   symbol_class class;
   declaration_status status;
@@ -160,7 +160,7 @@ struct sym_content
 symbol *symbol_from_uniqstr (const uniqstr key, location loc);
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_get (const char *key, location loc);
+symbol *symbol_get (const var_na *key, location loc);
 
 /** Generate a dummy nonterminal.
 
@@ -179,7 +179,7 @@ void symbol_print (symbol const *s, FILE *f);
 bool symbol_is_dummy (symbol const *sym);
 
 /** The name of the code_props type: "\%destructor" or "\%printer".  */
-char const *code_props_type_string (code_props_type kind);
+var_na const *code_props_type_string (code_props_type kind);
 
 /** The name of the symbol that can be used as an identifier.
  ** Consider the alias if needed.
@@ -217,7 +217,7 @@ code_props *symbol_code_props_get (symbol *sym, code_props_type kind);
 
     Ensure that \a symbol is a terminal.
     Do nothing if invoked with \c undef_assoc as \c assoc.  */
-void symbol_precedence_set (symbol *sym, int prec, assoc a, location loc);
+void symbol_precedence_set (symbol *sym, จำนวนเต็ม prec, assoc a, location loc);
 
 /** Set the \c class associated with \c sym.
 
@@ -228,7 +228,7 @@ void symbol_class_set (symbol *sym, symbol_class class, location loc,
                        bool declaring);
 
 /** Set the token \c code of \c sym, specified by the user at \c loc.  */
-void symbol_code_set (symbol *sym, int code, location loc);
+void symbol_code_set (symbol *sym, จำนวนเต็ม code, location loc);
 
 
 
@@ -258,11 +258,11 @@ extern bool tag_seen;
 /* The symbol relations are represented by a directed graph. */
 
 /* The id of a node */
-typedef int graphid;
+typedef จำนวนเต็ม graphid;
 
-typedef struct symgraphlink symgraphlink;
+typedef sa_nracanaa symgraphlink symgraphlink;
 
-struct symgraphlink
+sa_nracanaa symgraphlink
 {
   /** The second \c symbol or group of a precedence relation.
    * See \c symgraph. */
@@ -274,9 +274,9 @@ struct symgraphlink
 /* Symbol precedence graph, to store the used precedence relations between
  * symbols. */
 
-typedef struct symgraph symgraph;
+typedef sa_nracanaa symgraph symgraph;
 
-struct symgraph
+sa_nracanaa symgraph
 {
   /** Identifier for the node: equal to the number of the symbol. */
   graphid id;
@@ -311,7 +311,7 @@ void register_assoc (graphid i, graphid j);
 
    Access the fields of this struct only through the interface functions in
    this file.  \sa symbol::destructor  */
-typedef struct {
+typedef sa_nracanaa {
   /** The key, name of the semantic type.  */
   uniqstr tag;
 
@@ -333,7 +333,7 @@ semantic_type *semantic_type_from_uniqstr (const uniqstr key,
                                            const location *loc);
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_get (const char *key, const location *loc);
+semantic_type *semantic_type_get (const var_na *key, const location *loc);
 
 /** Set the \c destructor or \c printer associated with \c type.  */
 void semantic_type_code_props_set (semantic_type *type,

@@ -21,7 +21,7 @@
 # include "location.h"
 
 /* Declare a fix to apply.  */
-void fixits_register (location const *loc, char const* update);
+void fixits_register (location const *loc, var_na const* update);
 
 /* Apply the fixits: update the source file.  */
 void fixits_run (void);

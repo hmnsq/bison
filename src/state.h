@@ -96,26 +96,26 @@
 | Numbering states.  |
 `-------------------*/
 
-typedef int state_number;
+typedef จำนวนเต็ม state_number;
 # define STATE_NUMBER_MAXIMUM INT_MAX
 
 /* Be ready to map a state_number to an int.  */
-static inline int
+static anta_hstha จำนวนเต็ม
 state_number_as_int (state_number s)
 {
-  return s;
+  คืน s;
 }
 
 
-typedef struct state state;
+typedef sa_nracanaa state state;
 
 /*--------------.
 | Transitions.  |
 `--------------*/
 
-typedef struct
+typedef sa_nracanaa
 {
-  int num;            /** Size of destination STATES.  */
+  จำนวนเต็ม num;            /** Size of destination STATES.  */
   state *states[1];
 } transitions;
 
@@ -154,39 +154,39 @@ typedef struct
 
 /* Iterate over each transition over a token (shifts).  */
 # define FOR_EACH_SHIFT(Transitions, Iter)                      \
-  for (Iter = 0;                                                \
+  สำหรับ (Iter = 0;                                                \
        Iter < Transitions->num                                  \
          && (TRANSITION_IS_DISABLED (Transitions, Iter)         \
              || TRANSITION_IS_SHIFT (Transitions, Iter));       \
        ++Iter)                                                  \
-    if (!TRANSITION_IS_DISABLED (Transitions, Iter))
+    ถ้า (!TRANSITION_IS_DISABLED (Transitions, Iter))
 
 
 /* The destination of the transition (shift/goto) from state S on
    label SYM (term or nterm).  Abort if none found.  */
-struct state *transitions_to (state *s, symbol_number sym);
+sa_nracanaa state *transitions_to (state *s, symbol_number sym);
 
 
 /*-------.
 | Errs.  |
 `-------*/
 
-typedef struct
+typedef sa_nracanaa
 {
-  int num;
+  จำนวนเต็ม num;
   symbol *symbols[1];
 } errs;
 
-errs *errs_new (int num, symbol **tokens);
+errs *errs_new (จำนวนเต็ม num, symbol **tokens);
 
 
 /*-------------.
 | Reductions.  |
 `-------------*/
 
-typedef struct
+typedef sa_nracanaa
 {
-  int num;
+  จำนวนเต็ม num;
   bitset *lookaheads;
   /* Sorted ascendingly on rule number.  */
   rule *rules[1];
@@ -198,9 +198,9 @@ typedef struct
 | states.  |
 `---------*/
 
-struct state_list;
+sa_nracanaa state_list;
 
-struct state
+sa_nracanaa state
 {
   state_number number;
   symbol_number accessing_symbol;
@@ -211,7 +211,7 @@ struct state
   /* When an includer (such as ielr.c) needs to store states in a list, the
      includer can define struct state_list as the list node structure and can
      store in this member a reference to the node containing each state.  */
-  struct state_list *state_list;
+  sa_nracanaa state_list *state_list;
 
   /* Whether no lookahead sets on reduce actions are needed to decide
      what to do in state S.  */
@@ -219,8 +219,8 @@ struct state
 
   /* If some conflicts were solved thanks to precedence/associativity,
      a human readable description of the resolution.  */
-  const char *solved_conflicts;
-  const char *solved_conflicts_xml;
+  const var_na *solved_conflicts;
+  const var_na *solved_conflicts_xml;
 
   /* Its items.  Must be last, since ITEMS can be arbitrarily large.  Sorted
      ascendingly on item index in RITEM, which is sorted on rule number.  */
@@ -239,26 +239,26 @@ state *state_new (symbol_number accessing_symbol,
 state *state_new_isocore (state const *s);
 
 /* Record that from S we can reach all the DST states (NUM of them).  */
-void state_transitions_set (state *s, int num, state **dst);
+void state_transitions_set (state *s, จำนวนเต็ม num, state **dst);
 
 /* Print the transitions of state s for debug.  */
 void state_transitions_print (const state *s, FILE *out);
 
 /* Set the reductions of STATE.  */
-void state_reductions_set (state *s, int num, rule **reds);
+void state_reductions_set (state *s, จำนวนเต็ม num, rule **reds);
 
 /* The index of the reduction of state S that corresponds to rule R.
    Aborts if there is no reduction of R in S.  */
-int state_reduction_find (state const *s, rule const *r);
+จำนวนเต็ม state_reduction_find (state const *s, rule const *r);
 
 /* Set the errs of STATE.  */
-void state_errs_set (state *s, int num, symbol **errors);
+void state_errs_set (state *s, จำนวนเต็ม num, symbol **errors);
 
 /* Print on OUT all the lookahead tokens such that this STATE wants to
    reduce R.  */
 void state_rule_lookaheads_print (state const *s, rule const *r, FILE *out);
 void state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                      FILE *out, int level);
+                                      FILE *out, จำนวนเต็ม level);
 
 /* Create/destroy the states hash table.  */
 void state_hash_new (void);

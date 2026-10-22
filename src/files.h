@@ -25,36 +25,36 @@
 # include "uniqstr.h"
 
 /* File name specified with -o for the output file, or 0 if no -o.  */
-extern char const *spec_outfile;
+extern var_na const *spec_outfile;
 
 /* File name for the parser (i.e., the one above, or its default.) */
-extern char *parser_file_name;
+extern var_na *parser_file_name;
 
 /* Symbol prefix specified with -p, or 0 if no -p.  */
-extern const char *spec_name_prefix;
+extern const var_na *spec_name_prefix;
 extern location spec_name_prefix_loc;
 
 /* File name prefix specified with -b, or 0 if no -b.  */
-extern char const *spec_file_prefix;
+extern var_na const *spec_file_prefix;
 extern location spec_file_prefix_loc;
 
 /* --verbose. */
-extern char *spec_verbose_file;
+extern var_na *spec_verbose_file;
 
 /* File name specified for the output graph.  */
-extern char *spec_graph_file;
+extern var_na *spec_graph_file;
 
 /* File name specified for the HTML output.  */
-extern char *spec_html_file;
+extern var_na *spec_html_file;
 
 /* File name specified for the XML output.  */
-extern char *spec_xml_file;
+extern var_na *spec_xml_file;
 
 /* File name specified with --header.  */
-extern char *spec_header_file;
+extern var_na *spec_header_file;
 
 /* Directory prefix of output file names.  */
-extern char *dir_prefix;
+extern var_na *dir_prefix;
 
 /* The file name as given on the command line.
    Not named "input_file" because Flex uses this name for an argument,
@@ -62,13 +62,13 @@ extern char *dir_prefix;
 extern uniqstr grammar_file;
 
 /* The computed base for output file names.  */
-extern char *all_but_ext;
+extern var_na *all_but_ext;
 
 /* Where our data files are installed.  */
-char const *pkgdatadir (void);
+var_na const *pkgdatadir (void);
 
 /* Where the m4 program is installed.  */
-char const *m4path (void);
+var_na const *m4path (void);
 
 void compute_output_file_names (void);
 void output_file_names_free (void);
@@ -79,22 +79,22 @@ void output_file_names_free (void);
  *  \param source whether this is a source file (*c, *.java...)
  *                as opposed to a report (*.output, *.dot...).
  */
-void output_file_name_check (char **file_name, bool source);
+void output_file_name_check (var_na **file_name, bool source);
 
 /** Remove all the generated source files. */
 void unlink_generated_sources (void);
 
-FILE *xfopen (const char *name, char const *mode);
+FILE *xfopen (const var_na *name, var_na const *mode);
 void xfclose (FILE *ptr);
-FILE *xfdopen (int fd, char const *mode);
+FILE *xfdopen (จำนวนเต็ม fd, var_na const *mode);
 
 /* Given an input file path, return a string that contains the path
    with the file prefix mapping rules applied, or NULL if the input
    was NULL.  Do not free the return value.  */
-const char *map_file_name (char const *filename);
+const var_na *map_file_name (var_na const *filename);
 
 /* Add a new file prefix mapping. If a file path starts with
    oldprefix, it will be replaced with newprefix.  */
-void add_prefix_map (char const *oldprefix, char const *newprefix);
+void add_prefix_map (var_na const *oldprefix, var_na const *newprefix);
 
 #endif /* !FILES_H_ */
