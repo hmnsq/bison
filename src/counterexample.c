@@ -17,156 +17,156 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "counterexample.h"
+#ضمن "counterexample.h"
 
-#include "system.h"
+#ضمن "system.h"
 
-#include <c-strtod.h>
-#include <errno.h>
-#include <gethrxtime.h>
-#include <gl_linked_list.h>
-#include <gl_rbtreehash_list.h>
-#include <hash.h>
-#include <mbswidth.h>
-#include <quote.h>
-#include <stdlib.h>
-#include <textstyle.h>
-#include <time.h>
+#ضمن <c-strtod.h>
+#ضمن <errno.h>
+#ضمن <gethrxtime.h>
+#ضمن <gl_linked_list.h>
+#ضمن <gl_rbtreehash_list.h>
+#ضمن <hash.h>
+#ضمن <mbswidth.h>
+#ضمن <quote.h>
+#ضمن <stdlib.h>
+#ضمن <textstyle.h>
+#ضمن <time.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "derivation.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lssi.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "parse-simulation.h"
+#ضمن "closure.h"
+#ضمن "complain.h"
+#ضمن "derivation.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "lalr.h"
+#ضمن "lssi.h"
+#ضمن "muscle-tab.h"
+#ضمن "nullable.h"
+#ضمن "parse-simulation.h"
 
 
-#define TIME_LIMIT_ENFORCED true
+#وصف_ڪريو وقت_حد_بندي_ENFORCED true
 /** If set to false, only consider the states on the shortest
  *  lookahead-sensitive path when constructing a unifying counterexample. */
-#define EXTENDED_SEARCH false
+#وصف_ڪريو EXTENDED_ڳولا false
 
 /* costs for making various steps in a search */
-#define PRODUCTION_COST 50
-#define REDUCE_COST 1
-#define SHIFT_COST 1
-#define UNSHIFT_COST 1
-#define EXTENDED_COST 10000
+#وصف_ڪريو PRODUCTION_لاڳت 50
+#وصف_ڪريو REDUCE_لاڳت 1
+#وصف_ڪريو سرڪايو_لاڳت 1
+#وصف_ڪريو UNSHIFT_لاڳت 1
+#وصف_ڪريو EXTENDED_لاڳت 10000
 
 /** The time limit before printing an assurance message to the user to
  *  indicate that the search is still running. */
-#define ASSURANCE_LIMIT 2.0
+#وصف_ڪريو ASSURANCE_حد_بندي 2.0
 
 /* The time limit before giving up looking for unifying counterexample. */
-static double time_limit = 5.0;
+ساكن مزدوج وقت_حد_بندي = 5.0;
 
-#define CUMULATIVE_TIME_LIMIT 120.0
+#وصف_ڪريو CUMULATIVE_وقت_حد_بندي 120.0
 
 // This is the fastest way to get the tail node from the gl_list API.
-static gl_list_node_t
-list_get_end (gl_list_t list)
+ساكن gl_list_ڳنڍ_t
+list_get_پڇاڙي (gl_list_t list)
 {
-  gl_list_node_t sentinel = gl_list_add_last (list, NULL);
-  gl_list_node_t res = gl_list_previous_node (list, sentinel);
-  gl_list_remove_node (list, sentinel);
-  return res;
+  gl_list_ڳنڍ_t sentinel = gl_list_جوڙيو_آخري (list, عدم);
+  gl_list_ڳنڍ_t res = gl_list_اڳيون_ڳنڍ (list, sentinel);
+  gl_list_remove_ڳنڍ (list, sentinel);
+  أرجع res;
 }
 
-typedef struct
+تعريفنوع بنية
 {
   derivation *d1;
   derivation *d2;
-  bool shift_reduce;
+  bool سرڪايو_reduce;
   bool unifying;
   bool timeout;
 } counterexample;
 
-static counterexample *
+ساكن counterexample *
 new_counterexample (derivation *d1, derivation *d2,
-                    bool shift_reduce,
+                    bool سرڪايو_reduce,
                     bool u, bool t)
 {
-  counterexample *res = xmalloc (sizeof *res);
-  res->shift_reduce = shift_reduce;
-  if (shift_reduce)
+  counterexample *res = xmalloc (حجم *res);
+  res->سرڪايو_reduce = سرڪايو_reduce;
+  إذا (سرڪايو_reduce)
     {
       // Display the shift first.
       res->d1 = d2;
       res->d2 = d1;
     }
-  else
+  وإلا
     {
       res->d1 = d1;
       res->d2 = d2;
     }
   res->unifying = u;
   res->timeout = t;
-  return res;
+  أرجع res;
 }
 
-static void
+ساكن فراغ
 free_counterexample (counterexample *cex)
 {
   derivation_free (cex->d1);
   derivation_free (cex->d2);
-  free (cex);
+  حرر (cex);
 }
 
-static void
-counterexample_print (const counterexample *cex, FILE *out, const char *prefix)
+ساكن فراغ
+counterexample_print (ثابت counterexample *cex, FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
-  const bool flat = getenv ("YYFLAT");
-  const char *example1_label
+  ثابت bool flat = getenv ("YYFLAT");
+  ثابت حرف *example1_label
     = cex->unifying ? _("Example") : _("First example");
-  const char *example2_label
+  ثابت حرف *example2_label
     = cex->unifying ? _("Example") : _("Second example");
-  const char *deriv1_label
-    = cex->shift_reduce ? _("Shift derivation") : _("First reduce derivation");
-  const char *deriv2_label
-    = cex->shift_reduce ? _("Reduce derivation") : _("Second reduce derivation");
-  const int width =
+  ثابت حرف *deriv1_label
+    = cex->سرڪايو_reduce ? _("Shift derivation") : _("First reduce derivation");
+  ثابت حرف *deriv2_label
+    = cex->سرڪايو_reduce ? _("Reduce derivation") : _("Second reduce derivation");
+  ثابت صحيح ويڪر =
     max_int (max_int (mbswidth (example1_label, 0), mbswidth (example2_label, 0)),
              max_int (mbswidth (deriv1_label, 0),   mbswidth (deriv2_label, 0)));
-  if (flat)
-    fprintf (out, "  %s%s%*s ", prefix,
-             example1_label, width - mbswidth (example1_label, 0), "");
-  else
-    fprintf (out, "  %s%s: ", prefix, example1_label);
-  derivation_print_leaves (cex->d1, out);
-  if (flat)
-    fprintf (out, "  %s%s%*s ", prefix,
-             deriv1_label, width - mbswidth (deriv1_label, 0), "");
-  else
-    fprintf (out, "  %s%s", prefix, deriv1_label);
-  derivation_print (cex->d1, out, prefix);
+  إذا (flat)
+    fprintf (ٻاهريون, "  %s%s%*s ", اڳياڙي,
+             example1_label, ويڪر - mbswidth (example1_label, 0), "");
+  وإلا
+    fprintf (ٻاهريون, "  %s%s: ", اڳياڙي, example1_label);
+  derivation_print_leaves (cex->d1, ٻاهريون);
+  إذا (flat)
+    fprintf (ٻاهريون, "  %s%s%*s ", اڳياڙي,
+             deriv1_label, ويڪر - mbswidth (deriv1_label, 0), "");
+  وإلا
+    fprintf (ٻاهريون, "  %s%s", اڳياڙي, deriv1_label);
+  derivation_print (cex->d1, ٻاهريون, اڳياڙي);
 
   // If we output to the terminal (via stderr) and we have color
   // support, display unifying examples a second time, as color allows
   // to see the differences.
-  if (!cex->unifying || is_styled (stderr))
+  إذا (!cex->unifying || is_styled (stderr))
     {
-      if (flat)
-        fprintf (out, "  %s%s%*s ", prefix,
-                 example2_label, width - mbswidth (example2_label, 0), "");
-      else
-        fprintf (out, "  %s%s: ", prefix, example2_label);
-      derivation_print_leaves (cex->d2, out);
+      إذا (flat)
+        fprintf (ٻاهريون, "  %s%s%*s ", اڳياڙي,
+                 example2_label, ويڪر - mbswidth (example2_label, 0), "");
+      وإلا
+        fprintf (ٻاهريون, "  %s%s: ", اڳياڙي, example2_label);
+      derivation_print_leaves (cex->d2, ٻاهريون);
     }
-  if (flat)
-    fprintf (out, "  %s%s%*s ", prefix,
-             deriv2_label, width - mbswidth (deriv2_label, 0), "");
-  else
-    fprintf (out, "  %s%s", prefix, deriv2_label);
-  derivation_print (cex->d2, out, prefix);
+  إذا (flat)
+    fprintf (ٻاهريون, "  %s%s%*s ", اڳياڙي,
+             deriv2_label, ويڪر - mbswidth (deriv2_label, 0), "");
+  وإلا
+    fprintf (ٻاهريون, "  %s%s", اڳياڙي, deriv2_label);
+  derivation_print (cex->d2, ٻاهريون, اڳياڙي);
 
-  if (out != stderr)
-    putc ('\n', out);
+  إذا (ٻاهريون != stderr)
+    putc ('\n', ٻاهريون);
 }
 
 /*
@@ -176,49 +176,49 @@ counterexample_print (const counterexample *cex, FILE *out, const char *prefix)
  */
 
 // Search node for BFS on state items
-struct si_bfs_node;
-typedef struct si_bfs_node
+بنية si_bfs_ڳنڍ;
+تعريفنوع بنية si_bfs_ڳنڍ
 {
-  state_item_number si;
-  struct si_bfs_node *parent;
-  int reference_count;
-} si_bfs_node;
+  state_شي_عدد si;
+  بنية si_bfs_ڳنڍ *والد;
+  صحيح reference_ڳڻپ;
+} si_bfs_ڳنڍ;
 
-static si_bfs_node *
-si_bfs_new (state_item_number si, si_bfs_node *parent)
+ساكن si_bfs_ڳنڍ *
+si_bfs_new (state_شي_عدد si, si_bfs_ڳنڍ *والد)
 {
-  si_bfs_node *res = xcalloc (1, sizeof *res);
+  si_bfs_ڳنڍ *res = xcalloc (1, حجم *res);
   res->si = si;
-  res->parent = parent;
-  res->reference_count = 1;
-  if (parent)
-    ++parent->reference_count;
-  return res;
+  res->والد = والد;
+  res->reference_ڳڻپ = 1;
+  إذا (والد)
+    ++والد->reference_ڳڻپ;
+  أرجع res;
 }
 
-static bool
-si_bfs_contains (const si_bfs_node *n, state_item_number sin)
+ساكن bool
+si_bfs_شامل_آهي (ثابت si_bfs_ڳنڍ *n, state_شي_عدد جيب)
 {
-  for (const si_bfs_node *search = n; search != NULL; search = search->parent)
-    if (search->si == sin)
-      return true;
-  return false;
+  لكل (ثابت si_bfs_ڳنڍ *ڳولا = n; ڳولا != عدم; ڳولا = ڳولا->والد)
+    إذا (ڳولا->si == جيب)
+      أرجع true;
+  أرجع false;
 }
 
-static void
-si_bfs_free (si_bfs_node *n)
+ساكن فراغ
+si_bfs_free (si_bfs_ڳنڍ *n)
 {
-  if (n == NULL)
-    return;
-  --n->reference_count;
-  if (n->reference_count == 0)
+  إذا (n == عدم)
+    أرجع;
+  --n->reference_ڳڻپ;
+  إذا (n->reference_ڳڻپ == 0)
     {
-      si_bfs_free (n->parent);
-      free (n);
+      si_bfs_free (n->والد);
+      حرر (n);
     }
 }
 
-typedef gl_list_t si_bfs_node_list;
+تعريفنوع gl_list_t si_bfs_ڳنڍ_list;
 
 /**
  * start is a state_item such that conflict_sym is an element of FIRSTS of the
@@ -228,87 +228,87 @@ typedef gl_list_t si_bfs_node_list;
  *
  * this returns the derivation of the productions that lead to conflict_sym
  */
-static inline derivation_list
-expand_to_conflict (state_item_number start, symbol_number conflict_sym)
+ساكن مضمن derivation_list
+expand_منزل_conflict (state_شي_عدد شروعات, نشان_عدد conflict_sym)
 {
-  si_bfs_node *init = si_bfs_new (start, NULL);
+  si_bfs_ڳنڍ *init = si_bfs_new (شروعات, عدم);
 
-  si_bfs_node_list queue
-    = gl_list_create (GL_LINKED_LIST, NULL, NULL,
+  si_bfs_ڳنڍ_list قطار
+    = gl_list_create (GL_LINKED_LIST, عدم, عدم,
                       (gl_listelement_dispose_fn) si_bfs_free,
-                      true, 1, (const void **) &init);
-  si_bfs_node *node = NULL;
+                      true, 1, (ثابت فراغ **) &init);
+  si_bfs_ڳنڍ *ڳنڍ = عدم;
   // breadth-first search for a path of productions to the conflict symbol
-  while (gl_list_size (queue) > 0)
+  طالما (gl_list_سائيز (قطار) > 0)
     {
-      node = (si_bfs_node *) gl_list_get_at (queue, 0);
-      state_item *silast = &state_items[node->si];
-      symbol_number sym = item_number_as_symbol_number (*silast->item);
-      if (sym == conflict_sym)
-        break;
-      if (ISVAR (sym))
+      ڳنڍ = (si_bfs_ڳنڍ *) gl_list_get_at (قطار, 0);
+      state_شي *silast = &state_شيون[ڳنڍ->si];
+      نشان_عدد sym = شي_عدد_as_نشان_عدد (*silast->شي);
+      إذا (sym == conflict_sym)
+        اكسر;
+      إذا (ISVAR (sym))
         {
           // add each production to the search
           bitset_iterator biter;
-          state_item_number sin;
+          state_شي_عدد جيب;
           bitset sib = silast->prods;
-          BITSET_FOR_EACH (biter, sib, sin, 0)
+          BITSET_FOR_EACH (biter, sib, جيب, 0)
             {
               // ignore productions already in the path
-              if (si_bfs_contains (node, sin))
-                continue;
-              si_bfs_node *next = si_bfs_new (sin, node);
-              gl_list_add_last (queue, next);
+              إذا (si_bfs_شامل_آهي (ڳنڍ, جيب))
+                استمر;
+              si_bfs_ڳنڍ *ايندڙ = si_bfs_new (جيب, ڳنڍ);
+              gl_list_جوڙيو_آخري (قطار, ايندڙ);
             }
           // for nullable nonterminals, add its goto to the search
-          if (nullable[sym - ntokens])
+          إذا (nullable[sym - ntokens])
             {
-              si_bfs_node *next = si_bfs_new (silast->trans, node);
-              gl_list_add_last (queue, next);
+              si_bfs_ڳنڍ *ايندڙ = si_bfs_new (silast->trans, ڳنڍ);
+              gl_list_جوڙيو_آخري (قطار, ايندڙ);
             }
         }
-      gl_list_remove_at (queue, 0);
+      gl_list_remove_at (قطار, 0);
     }
-  if (gl_list_size (queue) == 0)
+  إذا (gl_list_سائيز (قطار) == 0)
     {
-      gl_list_free (queue);
+      gl_list_free (قطار);
       fputs ("Error expanding derivation\n", stderr);
       abort ();
     }
 
-  derivation *dinit = derivation_new_leaf (conflict_sym);
-  derivation_list result = derivation_list_new ();
-  derivation_list_append (result, dinit);
+  derivation *dinit = derivation_new_پن (conflict_sym);
+  derivation_list نتيجو = derivation_list_new ();
+  derivation_list_append (نتيجو, dinit);
   // iterate backwards through the generated path to create a derivation
   // of the conflict symbol containing derivations of each production step.
 
-  for (si_bfs_node *n = node; n != NULL; n = n->parent)
+  لكل (si_bfs_ڳنڍ *n = ڳنڍ; n != عدم; n = n->والد)
     {
-      state_item *si = &state_items[n->si];
-      item_number *pos = si->item;
-      if (SI_PRODUCTION (si))
+      state_شي *si = &state_شيون[n->si];
+      شي_عدد *pos = si->شي;
+      إذا (SI_PRODUCTION (si))
         {
-          item_number *i = NULL;
-          for (i = pos + 1; !item_number_is_rule_number (*i); ++i)
-            derivation_list_append (result, derivation_new_leaf (*i));
-          symbol_number lhs =
-            rules[item_number_as_rule_number (*i)].lhs->number;
-          derivation *deriv = derivation_new (lhs, result,
-                                              state_item_rule (si));
-          result = derivation_list_new ();
-          derivation_list_append (result, deriv);
+          شي_عدد *i = عدم;
+          لكل (i = pos + 1; !شي_عدد_is_قاعدو_عدد (*i); ++i)
+            derivation_list_append (نتيجو, derivation_new_پن (*i));
+          نشان_عدد lhs =
+            قاعدا[شي_عدد_as_قاعدو_عدد (*i)].lhs->عدد;
+          derivation *deriv = derivation_new (lhs, نتيجو,
+                                              state_شي_قاعدو (si));
+          نتيجو = derivation_list_new ();
+          derivation_list_append (نتيجو, deriv);
         }
-      else
+      وإلا
         {
-          symbol_number sym = item_number_as_symbol_number (*(pos - 1));
-          derivation *deriv = derivation_new_leaf (sym);
-          derivation_list_prepend (result, deriv);
+          نشان_عدد sym = شي_عدد_as_نشان_عدد (*(pos - 1));
+          derivation *deriv = derivation_new_پن (sym);
+          derivation_list_prepend (نتيجو, deriv);
         }
     }
-  gl_list_free (queue);
-  derivation_free ((derivation*)gl_list_get_at (result, 0));
-  gl_list_remove_at (result, 0);
-  return result;
+  gl_list_free (قطار);
+  derivation_free ((derivation*)gl_list_get_at (نتيجو, 0));
+  gl_list_remove_at (نتيجو, 0);
+  أرجع نتيجو;
 }
 
 /**
@@ -319,60 +319,60 @@ expand_to_conflict (state_item_number start, symbol_number conflict_sym)
  * So to complete the derivation of Stmt, we need an output like:
  * Stmt ::= [lval ::= [VAR] '=' e ::=[ e::=['0'] '+' • e ] ';' ]
  */
-static derivation *
-complete_diverging_example (symbol_number conflict_sym,
-                            state_item_list path, derivation_list derivs)
+ساكن derivation *
+complete_diverging_example (نشان_عدد conflict_sym,
+                            state_شي_list رستو, derivation_list derivs)
 {
   // The idea is to transfer each pending symbol on the productions
   // associated with the given StateItems to the resulting derivation.
-  derivation_list result = derivation_list_new ();
+  derivation_list نتيجو = derivation_list_new ();
   bool lookahead_required = false;
-  if (!derivs)
+  إذا (!derivs)
     {
       derivs = derivation_list_new ();
-      gl_list_add_last (result, derivation_dot ());
+      gl_list_جوڙيو_آخري (نتيجو, derivation_dot ());
       lookahead_required = true;
     }
 
-  gl_list_node_t deriv = list_get_end (derivs);
+  gl_list_ڳنڍ_t deriv = list_get_پڇاڙي (derivs);
 
   // We go backwards through the path to create the derivation tree bottom-up.
   // Effectively this loops through each production once, and generates a
   // derivation of the left hand side by appending all of the rhs symbols.
   // this becomes the derivation of the nonterminal after the dot in the
   // next production, and all of the other symbols of the rule are added as normal.
-  for (gl_list_node_t state_node = list_get_end (path);
-       state_node != NULL;
-       state_node = gl_list_previous_node (path, state_node))
+  لكل (gl_list_ڳنڍ_t state_ڳنڍ = list_get_پڇاڙي (رستو);
+       state_ڳنڍ != عدم;
+       state_ڳنڍ = gl_list_اڳيون_ڳنڍ (رستو, state_ڳنڍ))
     {
-      state_item *si = (state_item *) gl_list_node_value (path, state_node);
-      item_number *item = si->item;
-      item_number pos = *item;
+      state_شي *si = (state_شي *) gl_list_ڳنڍ_قدر (رستو, state_ڳنڍ);
+      شي_عدد *شي = si->شي;
+      شي_عدد pos = *شي;
       // symbols after dot
-      if (gl_list_size (result) == 1 && !item_number_is_rule_number (pos)
-          && gl_list_get_at (result, 0) == derivation_dot ())
+      إذا (gl_list_سائيز (نتيجو) == 1 && !شي_عدد_is_قاعدو_عدد (pos)
+          && gl_list_get_at (نتيجو, 0) == derivation_dot ())
         {
-          derivation_list_append (result,
-            derivation_new_leaf (item_number_as_symbol_number (pos)));
+          derivation_list_append (نتيجو,
+            derivation_new_پن (شي_عدد_as_نشان_عدد (pos)));
           lookahead_required = false;
         }
-      item_number *i = item;
+      شي_عدد *i = شي;
       // go through each symbol after the dot in the current rule, and
       // add each symbol to its derivation.
-      for (state_item_number nsi = si - state_items;
-           !item_number_is_rule_number (*i);
-           ++i, nsi = state_items[nsi].trans)
+      لكل (state_شي_عدد nsi = si - state_شيون;
+           !شي_عدد_is_قاعدو_عدد (*i);
+           ++i, nsi = state_شيون[nsi].trans)
         {
           // if the item is a reduction, we could skip to the wrong rule
           // by starting at i + 1, so this continue is necessary
-          if (i == item)
-            continue;
-          symbol_number sym = item_number_as_symbol_number (*i);
-          if (!lookahead_required || sym == conflict_sym)
+          إذا (i == شي)
+            استمر;
+          نشان_عدد sym = شي_عدد_as_نشان_عدد (*i);
+          إذا (!lookahead_required || sym == conflict_sym)
             {
-              derivation_list_append (result, derivation_new_leaf (sym));
+              derivation_list_append (نتيجو, derivation_new_پن (sym));
               lookahead_required = false;
-              continue;
+              استمر;
             }
           // Since PATH is a path to the conflict state-item,
           // for a reduce conflict item, we will want to have a derivation
@@ -384,152 +384,152 @@ complete_diverging_example (symbol_number conflict_sym,
           // the symbol after the dot should be a nonterminal,
           // and we can look through successive nullable nonterminals
           // for one with the conflict symbol in its first set.
-          if (bitset_test (FIRSTS (sym), conflict_sym))
+          إذا (bitset_test (FIRSTS (sym), conflict_sym))
             {
               lookahead_required = false;
-              derivation_list next_derivs =
-                expand_to_conflict (nsi, conflict_sym);
-              derivation *d = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (next_derivs);
-                   derivation_list_next (&it, &d);)
-                derivation_list_append (result, d);
-              i += gl_list_size (next_derivs) - 1;
-              derivation_list_free (next_derivs);
+              derivation_list ايندڙ_derivs =
+                expand_منزل_conflict (nsi, conflict_sym);
+              derivation *d = عدم;
+              لكل (gl_list_iterator_t it = gl_list_iterator (ايندڙ_derivs);
+                   derivation_list_ايندڙ (&it, &d);)
+                derivation_list_append (نتيجو, d);
+              i += gl_list_سائيز (ايندڙ_derivs) - 1;
+              derivation_list_free (ايندڙ_derivs);
             }
-          else if (nullable[sym - ntokens])
+          وإلا إذا (nullable[sym - ntokens])
             {
-              derivation *d = derivation_new_leaf (sym);
-              derivation_list_append (result, d);
+              derivation *d = derivation_new_پن (sym);
+              derivation_list_append (نتيجو, d);
             }
-          else
+          وإلا
             {
               // We found a path to the conflict item, and despite it
               // having the conflict symbol in its lookahead, no example
               // containing the symbol after the conflict item
               // can be found.
-              derivation_list_append (result, derivation_new_leaf (1));
+              derivation_list_append (نتيجو, derivation_new_پن (1));
               lookahead_required = false;
             }
         }
-      const rule *r = &rules[item_number_as_rule_number (*i)];
+      ثابت قاعدو *r = &قاعدا[شي_عدد_as_قاعدو_عدد (*i)];
       // add derivations for symbols before dot
-      for (i = item - 1; !item_number_is_rule_number (*i) && i >= ritem; i--)
+      لكل (i = شي - 1; !شي_عدد_is_قاعدو_عدد (*i) && i >= ritem; i--)
         {
-          gl_list_node_t p = gl_list_previous_node (path, state_node);
-          if (p)
-            state_node = p;
-          if (deriv)
+          gl_list_ڳنڍ_t p = gl_list_اڳيون_ڳنڍ (رستو, state_ڳنڍ);
+          إذا (p)
+            state_ڳنڍ = p;
+          إذا (deriv)
             {
-              const void *tmp_deriv = gl_list_node_value (derivs, deriv);
-              deriv = gl_list_previous_node (derivs, deriv);
-              derivation_list_prepend (result, (derivation*)tmp_deriv);
+              ثابت فراغ *tmp_deriv = gl_list_ڳنڍ_قدر (derivs, deriv);
+              deriv = gl_list_اڳيون_ڳنڍ (derivs, deriv);
+              derivation_list_prepend (نتيجو, (derivation*)tmp_deriv);
             }
-          else
-            derivation_list_prepend (result, derivation_new_leaf (*i));
+          وإلا
+            derivation_list_prepend (نتيجو, derivation_new_پن (*i));
         }
       // completing the derivation
-      derivation *new_deriv = derivation_new (r->lhs->number, result, r);
-      result = derivation_list_new ();
-      derivation_list_append (result, new_deriv);
+      derivation *new_deriv = derivation_new (r->lhs->عدد, نتيجو, r);
+      نتيجو = derivation_list_new ();
+      derivation_list_append (نتيجو, new_deriv);
     }
-  derivation *res = (derivation *) gl_list_get_at (result, 0);
+  derivation *res = (derivation *) gl_list_get_at (نتيجو, 0);
   derivation_retain (res);
-  derivation_list_free (result);
+  derivation_list_free (نتيجو);
   derivation_list_free (derivs);
-  return res;
+  أرجع res;
 }
 
 /* Iterate backwards through the shifts of the path in the reduce
    conflict, and find a path of shifts from the shift conflict that
    goes through the same states. */
-static state_item_list
-nonunifying_shift_path (state_item_list reduce_path, state_item *shift_conflict)
+ساكن state_شي_list
+nonunifying_سرڪايو_رستو (state_شي_list reduce_رستو, state_شي *سرڪايو_conflict)
 {
-  gl_list_node_t tmp = gl_list_add_last (reduce_path, NULL);
-  gl_list_node_t next_node = gl_list_previous_node (reduce_path, tmp);
-  gl_list_node_t node = gl_list_previous_node (reduce_path, next_node);
-  gl_list_remove_node (reduce_path, tmp);
-  state_item *si = shift_conflict;
-  state_item_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  gl_list_ڳنڍ_t tmp = gl_list_جوڙيو_آخري (reduce_رستو, عدم);
+  gl_list_ڳنڍ_t ايندڙ_ڳنڍ = gl_list_اڳيون_ڳنڍ (reduce_رستو, tmp);
+  gl_list_ڳنڍ_t ڳنڍ = gl_list_اڳيون_ڳنڍ (reduce_رستو, ايندڙ_ڳنڍ);
+  gl_list_remove_ڳنڍ (reduce_رستو, tmp);
+  state_شي *si = سرڪايو_conflict;
+  state_شي_list نتيجو =
+    gl_list_create_خالي_جايون (GL_LINKED_LIST, عدم, عدم, عدم, true);
   // FIXME: bool paths_merged;
-  for (; node != NULL; next_node = node,
-       node = gl_list_previous_node (reduce_path, node))
+  لكل (; ڳنڍ != عدم; ايندڙ_ڳنڍ = ڳنڍ,
+       ڳنڍ = gl_list_اڳيون_ڳنڍ (reduce_رستو, ڳنڍ))
     {
-      state_item *refsi =
-        (state_item *) gl_list_node_value (reduce_path, node);
-      state_item *nextrefsi =
-        (state_item *) gl_list_node_value (reduce_path, next_node);
-      if (nextrefsi == si)
+      state_شي *refsi =
+        (state_شي *) gl_list_ڳنڍ_قدر (reduce_رستو, ڳنڍ);
+      state_شي *nextrefsi =
+        (state_شي *) gl_list_ڳنڍ_قدر (reduce_رستو, ايندڙ_ڳنڍ);
+      إذا (nextrefsi == si)
         {
-          gl_list_add_first (result, refsi);
+          gl_list_جوڙيو_پهريون (نتيجو, refsi);
           si = refsi;
-          continue;
+          استمر;
         }
       // skip reduction items
-      if (nextrefsi->item != refsi->item + 1 && refsi->item != ritem)
-        continue;
+      إذا (nextrefsi->شي != refsi->شي + 1 && refsi->شي != ritem)
+        استمر;
 
       // bfs to find a shift to the right state
-      si_bfs_node *init = si_bfs_new (si - state_items, NULL);
-      si_bfs_node_list queue
-        = gl_list_create (GL_LINKED_LIST, NULL, NULL,
+      si_bfs_ڳنڍ *init = si_bfs_new (si - state_شيون, عدم);
+      si_bfs_ڳنڍ_list قطار
+        = gl_list_create (GL_LINKED_LIST, عدم, عدم,
                           (gl_listelement_dispose_fn) si_bfs_free,
-                          true, 1, (const void **) &init);
-      si_bfs_node *sis = NULL;
-      state_item *prevsi = NULL;
-      while (gl_list_size (queue) > 0)
+                          true, 1, (ثابت فراغ **) &init);
+      si_bfs_ڳنڍ *sis = عدم;
+      state_شي *prevsi = عدم;
+      طالما (gl_list_سائيز (قطار) > 0)
         {
-          sis = (si_bfs_node *) gl_list_get_at (queue, 0);
+          sis = (si_bfs_ڳنڍ *) gl_list_get_at (قطار, 0);
           // if we end up in the start state, the shift couldn't be found.
-          if (sis->si == 0)
-            break;
+          إذا (sis->si == 0)
+            اكسر;
 
-          state_item *search_si = &state_items[sis->si];
+          state_شي *ڳولا_si = &state_شيون[sis->si];
           // if the current state-item is a production item,
           // its reverse production items get added to the queue.
           // Otherwise, look for a reverse transition to the target state.
-          bitset rsi = search_si->revs;
+          bitset rsi = ڳولا_si->revs;
           bitset_iterator biter;
-          state_item_number sin;
-          BITSET_FOR_EACH (biter, rsi, sin, 0)
+          state_شي_عدد جيب;
+          BITSET_FOR_EACH (biter, rsi, جيب, 0)
             {
-              prevsi = &state_items[sin];
-              if (SI_TRANSITION (search_si))
+              prevsi = &state_شيون[جيب];
+              إذا (SI_TRANSITION (ڳولا_si))
                 {
-                  if (prevsi->state == refsi->state)
-                    goto search_end;
+                  إذا (prevsi->state == refsi->state)
+                    اذهب ڳولا_پڇاڙي;
                 }
-              else if (!si_bfs_contains (sis, sin))
+              وإلا إذا (!si_bfs_شامل_آهي (sis, جيب))
                 {
-                  si_bfs_node *prevsis = si_bfs_new (sin, sis);
-                  gl_list_add_last (queue, prevsis);
+                  si_bfs_ڳنڍ *prevsis = si_bfs_new (جيب, sis);
+                  gl_list_جوڙيو_آخري (قطار, prevsis);
                 }
             }
-          gl_list_remove_at (queue, 0);
+          gl_list_remove_at (قطار, 0);
         }
-    search_end:
+    ڳولا_پڇاڙي:
       // prepend path to shift we found
-      if (sis)
+      إذا (sis)
         {
-          gl_list_node_t ln = gl_list_add_first (result, &state_items[sis->si]);
-          for (si_bfs_node *n = sis->parent; n; n = n->parent)
-            ln = gl_list_add_after (result, ln, &state_items[n->si]);
+          gl_list_ڳنڍ_t ln = gl_list_جوڙيو_پهريون (نتيجو, &state_شيون[sis->si]);
+          لكل (si_bfs_ڳنڍ *n = sis->والد; n; n = n->والد)
+            ln = gl_list_جوڙيو_after (نتيجو, ln, &state_شيون[n->si]);
 
         }
       si = prevsi;
-      gl_list_free (queue);
+      gl_list_free (قطار);
     }
-  if (trace_flag & trace_cex)
+  إذا (trace_flag & trace_cex)
     {
       fputs ("SHIFT ITEM PATH:\n", stderr);
-      state_item *sip = NULL;
-      for (gl_list_iterator_t it = gl_list_iterator (result);
-           state_item_list_next (&it, &sip);
+      state_شي *sip = عدم;
+      لكل (gl_list_iterator_t it = gl_list_iterator (نتيجو);
+           state_شي_list_ايندڙ (&it, &sip);
            )
-        state_item_print (sip, stderr, "");
+        state_شي_print (sip, stderr, "");
     }
-  return result;
+  أرجع نتيجو;
 }
 
 
@@ -537,20 +537,20 @@ nonunifying_shift_path (state_item_list reduce_path, state_item *shift_conflict)
  * Construct a nonunifying counterexample from the shortest
  * lookahead-sensitive path.
  */
-static counterexample *
-example_from_path (bool shift_reduce,
-                   state_item_number itm2,
-                   state_item_list shortest_path, symbol_number next_sym)
+ساكن counterexample *
+example_from_رستو (bool سرڪايو_reduce,
+                   state_شي_عدد itm2,
+                   state_شي_list سڀ_کان_ٿورو_رستو, نشان_عدد ايندڙ_sym)
 {
   derivation *deriv1 =
-    complete_diverging_example (next_sym, shortest_path, NULL);
-  state_item_list path_2
-    = shift_reduce
-    ? nonunifying_shift_path (shortest_path, &state_items [itm2])
-    : shortest_path_from_start (itm2, next_sym);
-  derivation *deriv2 = complete_diverging_example (next_sym, path_2, NULL);
-  gl_list_free (path_2);
-  return new_counterexample (deriv1, deriv2, shift_reduce, false, true);
+    complete_diverging_example (ايندڙ_sym, سڀ_کان_ٿورو_رستو, عدم);
+  state_شي_list رستو_2
+    = سرڪايو_reduce
+    ? nonunifying_سرڪايو_رستو (سڀ_کان_ٿورو_رستو, &state_شيون [itm2])
+    : سڀ_کان_ٿورو_رستو_from_شروعات (itm2, ايندڙ_sym);
+  derivation *deriv2 = complete_diverging_example (ايندڙ_sym, رستو_2, عدم);
+  gl_list_free (رستو_2);
+  أرجع new_counterexample (deriv1, deriv2, سرڪايو_reduce, false, true);
 }
 
 /*
@@ -563,96 +563,96 @@ example_from_path (bool shift_reduce,
  * one starting at each conflict. Complexity is a metric
  * which sums different parser actions with varying weights.
  */
-typedef struct
+تعريفنوع بنية
 {
-  parse_state *states[2];
-  int complexity;
-} search_state;
+  parse_state *حالتون[2];
+  صحيح complexity;
+} ڳولا_state;
 
-static search_state *
-initial_search_state (state_item *conflict1, state_item *conflict2)
+ساكن ڳولا_state *
+initial_ڳولا_state (state_شي *conflict1, state_شي *conflict2)
 {
-  search_state *res = xmalloc (sizeof *res);
-  res->states[0] = new_parse_state (conflict1);
-  res->states[1] = new_parse_state (conflict2);
-  parse_state_retain (res->states[0]);
-  parse_state_retain (res->states[1]);
+  ڳولا_state *res = xmalloc (حجم *res);
+  res->حالتون[0] = new_parse_state (conflict1);
+  res->حالتون[1] = new_parse_state (conflict2);
+  parse_state_retain (res->حالتون[0]);
+  parse_state_retain (res->حالتون[1]);
   res->complexity = 0;
-  return res;
+  أرجع res;
 }
 
-static search_state *
-new_search_state (parse_state *ps1, parse_state *ps2, int complexity)
+ساكن ڳولا_state *
+new_ڳولا_state (parse_state *ps1, parse_state *ps2, صحيح complexity)
 {
-  search_state *res = xmalloc (sizeof *res);
-  res->states[0] = ps1;
-  res->states[1] = ps2;
-  parse_state_retain (res->states[0]);
-  parse_state_retain (res->states[1]);
+  ڳولا_state *res = xmalloc (حجم *res);
+  res->حالتون[0] = ps1;
+  res->حالتون[1] = ps2;
+  parse_state_retain (res->حالتون[0]);
+  parse_state_retain (res->حالتون[1]);
   res->complexity = complexity;
-  return res;
+  أرجع res;
 }
 
-static search_state *
-copy_search_state (search_state *parent)
+ساكن ڳولا_state *
+copy_ڳولا_state (ڳولا_state *والد)
 {
-  search_state *res = xmalloc (sizeof *res);
-  *res = *parent;
-  parse_state_retain (res->states[0]);
-  parse_state_retain (res->states[1]);
-  return res;
+  ڳولا_state *res = xmalloc (حجم *res);
+  *res = *والد;
+  parse_state_retain (res->حالتون[0]);
+  parse_state_retain (res->حالتون[1]);
+  أرجع res;
 }
 
-static void
-search_state_free_children (search_state *ss)
+ساكن فراغ
+ڳولا_state_free_children (ڳولا_state *ss)
 {
-  free_parse_state (ss->states[0]);
-  free_parse_state (ss->states[1]);
+  free_parse_state (ss->حالتون[0]);
+  free_parse_state (ss->حالتون[1]);
 }
 
-static void
-search_state_free (search_state *ss)
+ساكن فراغ
+ڳولا_state_free (ڳولا_state *ss)
 {
-  if (ss == NULL)
-    return;
-  search_state_free_children (ss);
-  free (ss);
+  إذا (ss == عدم)
+    أرجع;
+  ڳولا_state_free_children (ss);
+  حرر (ss);
 }
 
 /* For debugging traces.  */
-static void
-search_state_print (search_state *ss)
+ساكن فراغ
+ڳولا_state_print (ڳولا_state *ss)
 {
   fputs ("CONFLICT 1 ", stderr);
-  print_parse_state (ss->states[0]);
+  print_parse_state (ss->حالتون[0]);
   fputs ("CONFLICT 2 ", stderr);
-  print_parse_state (ss->states[1]);
+  print_parse_state (ss->حالتون[1]);
   putc ('\n', stderr);
 }
 
-typedef gl_list_t search_state_list;
+تعريفنوع gl_list_t ڳولا_state_list;
 
-static inline bool
-search_state_list_next (gl_list_iterator_t *it, search_state **ss)
+ساكن مضمن bool
+ڳولا_state_list_ايندڙ (gl_list_iterator_t *it, ڳولا_state **ss)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
-    *ss = (search_state*) p;
-  else
+  ثابت فراغ *p = عدم;
+  bool res = gl_list_iterator_ايندڙ (it, &p, عدم);
+  إذا (res)
+    *ss = (ڳولا_state*) p;
+  وإلا
     gl_list_iterator_free (it);
-  return res;
+  أرجع res;
 }
 
 /*
  * When a search state is copied, this is used to
  * directly set one of the parse states
  */
-static inline void
-ss_set_parse_state (search_state *ss, int idx, parse_state *ps)
+ساكن مضمن فراغ
+ss_سيٽ_parse_state (ڳولا_state *ss, صحيح idx, parse_state *ps)
 {
-  free_parse_state (ss->states[idx]);
-  ss->states[idx] = ps;
+  free_parse_state (ss->حالتون[idx]);
+  ss->حالتون[idx] = ps;
   parse_state_retain (ps);
 }
 
@@ -661,22 +661,22 @@ ss_set_parse_state (search_state *ss, int idx, parse_state *ps)
  * which has its parse states unified at the beginning
  * but not the end of the example.
  */
-static counterexample *
-complete_diverging_examples (search_state *ss,
-                             symbol_number next_sym,
-                             bool shift_reduce)
+ساكن counterexample *
+complete_diverging_examples (ڳولا_state *ss,
+                             نشان_عدد ايندڙ_sym,
+                             bool سرڪايو_reduce)
 {
   derivation *new_derivs[2];
-  for (int i = 0; i < 2; ++i)
+  لكل (صحيح i = 0; i < 2; ++i)
     {
-      state_item_list sitems;
+      state_شي_list sitems;
       derivation_list derivs;
-      parse_state_lists (ss->states[i], &sitems, &derivs);
-      new_derivs[i] = complete_diverging_example (next_sym, sitems, derivs);
+      parse_state_lists (ss->حالتون[i], &sitems, &derivs);
+      new_derivs[i] = complete_diverging_example (ايندڙ_sym, sitems, derivs);
       gl_list_free (sitems);
     }
-  return new_counterexample (new_derivs[0], new_derivs[1],
-                             shift_reduce, false, true);
+  أرجع new_counterexample (new_derivs[0], new_derivs[1],
+                             سرڪايو_reduce, false, true);
 }
 
 /*
@@ -684,174 +684,174 @@ complete_diverging_examples (search_state *ss,
  * share the same complexity. This is so the priority
  * queue takes less overhead.
  */
-typedef struct
+تعريفنوع بنية
 {
-  search_state_list states;
-  int complexity;
-} search_state_bundle;
+  ڳولا_state_list حالتون;
+  صحيح complexity;
+} ڳولا_state_bundle;
 
-static void
-ssb_free (search_state_bundle *ssb)
+ساكن فراغ
+ssb_free (ڳولا_state_bundle *ssb)
 {
-  gl_list_free (ssb->states);
-  free (ssb);
+  gl_list_free (ssb->حالتون);
+  حرر (ssb);
 }
 
-static size_t
-ssb_hasher (search_state_bundle *ssb)
+ساكن size_t
+ssb_hasher (ڳولا_state_bundle *ssb)
 {
-  return ssb->complexity;
+  أرجع ssb->complexity;
 }
 
-static int
-ssb_comp (const search_state_bundle *s1, const search_state_bundle *s2)
+ساكن صحيح
+ssb_comp (ثابت ڳولا_state_bundle *s1, ثابت ڳولا_state_bundle *s2)
 {
-  return s1->complexity - s2->complexity;
+  أرجع s1->complexity - s2->complexity;
 }
 
-static bool
-ssb_equals (const search_state_bundle *s1, const search_state_bundle *s2)
+ساكن bool
+ssb_equals (ثابت ڳولا_state_bundle *s1, ثابت ڳولا_state_bundle *s2)
 {
-  return s1->complexity == s2->complexity;
+  أرجع s1->complexity == s2->complexity;
 }
 
-typedef gl_list_t ssb_list;
+تعريفنوع gl_list_t ssb_list;
 
-static size_t
-visited_hasher (const search_state *ss, size_t max)
+ساكن size_t
+گهميل_hasher (ثابت ڳولا_state *ss, size_t max)
 {
-  return (parse_state_hasher (ss->states[0], max)
-          + parse_state_hasher (ss->states[1], max)) % max;
+  أرجع (parse_state_hasher (ss->حالتون[0], max)
+          + parse_state_hasher (ss->حالتون[1], max)) % max;
 }
 
-static bool
-visited_comparator (const search_state *ss1, const search_state *ss2)
+ساكن bool
+گهميل_comparator (ثابت ڳولا_state *ss1, ثابت ڳولا_state *ss2)
 {
-  return parse_state_comparator (ss1->states[0], ss2->states[0])
-    && parse_state_comparator (ss1->states[1], ss2->states[1]);
+  أرجع parse_state_comparator (ss1->حالتون[0], ss2->حالتون[0])
+    && parse_state_comparator (ss1->حالتون[1], ss2->حالتون[1]);
 }
 
 /* Priority queue for search states with minimal complexity. */
-static ssb_list ssb_queue;
-static Hash_table *visited;
+ساكن ssb_list ssb_قطار;
+ساكن Hash_جدول *گهميل;
 /* The set of parser states on the shortest lookahead-sensitive path. */
-static bitset scp_set = NULL;
+ساكن bitset scp_سيٽ = عدم;
 /* The set of parser states used for the conflict reduction rule. */
-static bitset rpp_set = NULL;
+ساكن bitset rpp_سيٽ = عدم;
 
-static void
-ssb_append (search_state *ss)
+ساكن فراغ
+ssb_append (ڳولا_state *ss)
 {
-  if (hash_lookup (visited, ss))
+  إذا (hash_lookup (گهميل, ss))
     {
-      search_state_free (ss);
-      return;
+      ڳولا_state_free (ss);
+      أرجع;
     }
-  hash_xinsert (visited, ss);
+  hash_xinsert (گهميل, ss);
   // if states are only referenced by the visited set,
   // their contents should be freed as we only need
   // the metadata necessary to compute a hash.
-  parse_state_free_contents_early (ss->states[0]);
-  parse_state_free_contents_early (ss->states[1]);
-  parse_state_retain (ss->states[0]);
-  parse_state_retain (ss->states[1]);
-  search_state_bundle *ssb = xmalloc (sizeof *ssb);
+  parse_state_free_contents_early (ss->حالتون[0]);
+  parse_state_free_contents_early (ss->حالتون[1]);
+  parse_state_retain (ss->حالتون[0]);
+  parse_state_retain (ss->حالتون[1]);
+  ڳولا_state_bundle *ssb = xmalloc (حجم *ssb);
   ssb->complexity = ss->complexity;
-  gl_list_node_t n = gl_list_search (ssb_queue, ssb);
-  if (!n)
+  gl_list_ڳنڍ_t n = gl_list_ڳولا (ssb_قطار, ssb);
+  إذا (!n)
     {
-      ssb->states =
-        gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
-                              (gl_listelement_dispose_fn)search_state_free_children,
+      ssb->حالتون =
+        gl_list_create_خالي_جايون (GL_LINKED_LIST, عدم, عدم,
+                              (gl_listelement_dispose_fn)ڳولا_state_free_children,
                               true);
-      gl_sortedlist_add (ssb_queue, (gl_listelement_compar_fn) ssb_comp, ssb);
+      gl_sortedlist_جوڙيو (ssb_قطار, (gl_listelement_compar_fn) ssb_comp, ssb);
     }
-  else
+  وإلا
     {
-      free (ssb);
-      ssb = (search_state_bundle *) gl_list_node_value (ssb_queue, n);
+      حرر (ssb);
+      ssb = (ڳولا_state_bundle *) gl_list_ڳنڍ_قدر (ssb_قطار, n);
     }
-  gl_list_add_last (ssb->states, ss);
+  gl_list_جوڙيو_آخري (ssb->حالتون, ss);
 }
 
 /*
  * The following functions perform various actions on parse states
  * and assign complexities to the newly generated search states.
  */
-static void
-production_step (search_state *ss, int parser_state)
+ساكن فراغ
+production_قدم (ڳولا_state *ss, صحيح parser_state)
 {
-  const state_item *other_si = parse_state_tail (ss->states[1 - parser_state]);
-  symbol_number other_sym = item_number_as_symbol_number (*other_si->item);
+  ثابت state_شي *other_si = parse_state_پڇ (ss->حالتون[1 - parser_state]);
+  نشان_عدد other_sym = شي_عدد_as_نشان_عدد (*other_si->شي);
   parse_state_list prods =
-    simulate_production (ss->states[parser_state], other_sym);
-  int complexity = ss->complexity + PRODUCTION_COST;
+    simulate_production (ss->حالتون[parser_state], other_sym);
+  صحيح complexity = ss->complexity + PRODUCTION_لاڳت;
 
-  parse_state *ps = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (prods);
-       parse_state_list_next (&it, &ps);
+  parse_state *ps = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (prods);
+       parse_state_list_ايندڙ (&it, &ps);
        )
     {
-      search_state *copy = copy_search_state (ss);
-      ss_set_parse_state (copy, parser_state, ps);
+      ڳولا_state *copy = copy_ڳولا_state (ss);
+      ss_سيٽ_parse_state (copy, parser_state, ps);
       copy->complexity = complexity;
       ssb_append (copy);
     }
   gl_list_free (prods);
 }
 
-static inline int
-reduction_cost (const parse_state *ps)
+ساكن مضمن صحيح
+reduction_لاڳت (ثابت parse_state *ps)
 {
-  int shifts;
-  int productions;
-  parse_state_completed_steps (ps, &shifts, &productions);
-  return SHIFT_COST * shifts + PRODUCTION_COST * productions;
+  صحيح shifts;
+  صحيح productions;
+  parse_state_completed_قدمن (ps, &shifts, &productions);
+  أرجع سرڪايو_لاڳت * shifts + PRODUCTION_لاڳت * productions;
 }
 
-static search_state_list
-reduction_step (search_state *ss, const item_number *conflict_item,
-                int parser_state, int rule_len)
+ساكن ڳولا_state_list
+reduction_قدم (ڳولا_state *ss, ثابت شي_عدد *conflict_شي,
+                صحيح parser_state, صحيح قاعدو_len)
 {
-  (void) conflict_item; // FIXME: Unused
-  search_state_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, 1);
+  (فراغ) conflict_شي; // FIXME: Unused
+  ڳولا_state_list نتيجو =
+    gl_list_create_خالي_جايون (GL_LINKED_LIST, عدم, عدم, عدم, 1);
 
-  parse_state *ps = ss->states[parser_state];
-  const state_item *si = parse_state_tail (ps);
-  bitset symbol_set = si->lookahead;
-  parse_state *other = ss->states[1 - parser_state];
-  const state_item *other_si = parse_state_tail (other);
+  parse_state *ps = ss->حالتون[parser_state];
+  ثابت state_شي *si = parse_state_پڇ (ps);
+  bitset نشان_سيٽ = si->lookahead;
+  parse_state *other = ss->حالتون[1 - parser_state];
+  ثابت state_شي *other_si = parse_state_پڇ (other);
   // if the other state can transition on a symbol,
   // the reduction needs to have that symbol in its lookahead
-  if (item_number_is_symbol_number (*other_si->item))
+  إذا (شي_عدد_is_نشان_عدد (*other_si->شي))
     {
-      symbol_number other_sym =
-        item_number_as_symbol_number (*other_si->item);
-      if (!intersect_symbol (other_sym, symbol_set))
-        return result;
-      symbol_set = bitset_create (nsyms, BITSET_FIXED);
-      bitset_set (symbol_set, other_sym);
+      نشان_عدد other_sym =
+        شي_عدد_as_نشان_عدد (*other_si->شي);
+      إذا (!intersect_نشان (other_sym, نشان_سيٽ))
+        أرجع نتيجو;
+      نشان_سيٽ = bitset_create (nsyms, BITSET_FIXED);
+      bitset_سيٽ (نشان_سيٽ, other_sym);
     }
 
   // FIXME: search_state *new_root = copy_search_state (ss);
   parse_state_list reduced =
-    simulate_reduction (ps, rule_len, symbol_set);
-  parse_state *reduced_ps = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (reduced);
-       parse_state_list_next (&it, &reduced_ps);
+    simulate_reduction (ps, قاعدو_len, نشان_سيٽ);
+  parse_state *reduced_ps = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (reduced);
+       parse_state_list_ايندڙ (&it, &reduced_ps);
        )
     {
-      search_state *copy = copy_search_state (ss);
-      ss_set_parse_state (copy, parser_state, reduced_ps);
-      int r_cost = reduction_cost (reduced_ps);
-      copy->complexity += r_cost + PRODUCTION_COST + 2 * SHIFT_COST;
-      gl_list_add_last (result, copy);
+      ڳولا_state *copy = copy_ڳولا_state (ss);
+      ss_سيٽ_parse_state (copy, parser_state, reduced_ps);
+      صحيح r_لاڳت = reduction_لاڳت (reduced_ps);
+      copy->complexity += r_لاڳت + PRODUCTION_لاڳت + 2 * سرڪايو_لاڳت;
+      gl_list_جوڙيو_آخري (نتيجو, copy);
     }
   gl_list_free (reduced);
-  if (symbol_set != si->lookahead)
-    bitset_free (symbol_set);
-  return result;
+  إذا (نشان_سيٽ != si->lookahead)
+    bitset_free (نشان_سيٽ);
+  أرجع نتيجو;
 }
 
 /**
@@ -859,82 +859,82 @@ reduction_step (search_state *ss, const item_number *conflict_item,
  * the given subsequent next symbol on each path. If a reverse transition
  * cannot be made on both states, possible reverse productions are prepended
  */
-static void
-search_state_prepend (search_state *ss, symbol_number sym, bitset guide)
+ساكن فراغ
+ڳولا_state_prepend (ڳولا_state *ss, نشان_عدد sym, bitset guide)
 {
-  (void) sym; // FIXME: Unused.
-  const state_item *si1src = parse_state_head (ss->states[0]);
-  const state_item *si2src = parse_state_head (ss->states[1]);
+  (فراغ) sym; // FIXME: Unused.
+  ثابت state_شي *si1src = parse_state_سر (ss->حالتون[0]);
+  ثابت state_شي *si2src = parse_state_سر (ss->حالتون[1]);
 
   bool prod1 = SI_PRODUCTION (si1src);
   // If one can make a reverse transition and the other can't, only apply
   // the reverse productions that the other state can make in an attempt to
   // make progress.
-  if (prod1 != SI_PRODUCTION (si2src))
+  إذا (prod1 != SI_PRODUCTION (si2src))
     {
-      int prod_state = prod1 ? 0 : 1;
-      parse_state_list prev = parser_prepend (ss->states[prod_state]);
-      parse_state *ps = NULL;
-      for (gl_list_iterator_t iter = gl_list_iterator (prev);
-           parse_state_list_next (&iter, &ps);
+      صحيح prod_state = prod1 ? 0 : 1;
+      parse_state_list prev = parser_prepend (ss->حالتون[prod_state]);
+      parse_state *ps = عدم;
+      لكل (gl_list_iterator_t iter = gl_list_iterator (prev);
+           parse_state_list_ايندڙ (&iter, &ps);
            )
         {
-          const state_item *psi = parse_state_head (ps);
-          bool guided = bitset_test (guide, psi->state->number);
-          if (!guided && !EXTENDED_SEARCH)
-            continue;
+          ثابت state_شي *psi = parse_state_سر (ps);
+          bool guided = bitset_test (guide, psi->state->عدد);
+          إذا (!guided && !EXTENDED_ڳولا)
+            استمر;
 
-          search_state *copy = copy_search_state (ss);
-          ss_set_parse_state (copy, prod_state, ps);
-          copy->complexity += PRODUCTION_COST;
-          if (!guided)
-            copy->complexity += EXTENDED_COST;
+          ڳولا_state *copy = copy_ڳولا_state (ss);
+          ss_سيٽ_parse_state (copy, prod_state, ps);
+          copy->complexity += PRODUCTION_لاڳت;
+          إذا (!guided)
+            copy->complexity += EXTENDED_لاڳت;
           ssb_append (copy);
         }
       gl_list_free (prev);
-      return;
+      أرجع;
     }
 
   // The parse state heads are either both production items or both
   // transition items. So all prepend options will either be
   // reverse transitions or reverse productions
-  const int complexity_cost = 2 * (prod1 ? PRODUCTION_COST : UNSHIFT_COST);
+  ثابت صحيح complexity_لاڳت = 2 * (prod1 ? PRODUCTION_لاڳت : UNSHIFT_لاڳت);
 
-  parse_state_list prev1 = parser_prepend (ss->states[0]);
-  parse_state_list prev2 = parser_prepend (ss->states[1]);
+  parse_state_list prev1 = parser_prepend (ss->حالتون[0]);
+  parse_state_list prev2 = parser_prepend (ss->حالتون[1]);
 
   // loop through each pair of possible prepend states and append search
   // states for each pair where the parser states correspond to the same
   // parsed input.
-  parse_state *ps1 = NULL;
-  for (gl_list_iterator_t iter1 = gl_list_iterator (prev1);
-       parse_state_list_next (&iter1, &ps1);
+  parse_state *ps1 = عدم;
+  لكل (gl_list_iterator_t iter1 = gl_list_iterator (prev1);
+       parse_state_list_ايندڙ (&iter1, &ps1);
        )
     {
-      const state_item *psi1 = parse_state_head (ps1);
-      bool guided1 = bitset_test (guide, psi1->state->number);
-      if (!guided1 && !EXTENDED_SEARCH)
-        continue;
+      ثابت state_شي *psi1 = parse_state_سر (ps1);
+      bool guided1 = bitset_test (guide, psi1->state->عدد);
+      إذا (!guided1 && !EXTENDED_ڳولا)
+        استمر;
 
-      parse_state *ps2 = NULL;
-      for (gl_list_iterator_t iter2 = gl_list_iterator (prev2);
-           parse_state_list_next (&iter2, &ps2);
+      parse_state *ps2 = عدم;
+      لكل (gl_list_iterator_t iter2 = gl_list_iterator (prev2);
+           parse_state_list_ايندڙ (&iter2, &ps2);
            )
         {
-          const state_item *psi2 = parse_state_head (ps2);
+          ثابت state_شي *psi2 = parse_state_سر (ps2);
 
-          bool guided2 = bitset_test (guide, psi2->state->number);
-          if (!guided2 && !EXTENDED_SEARCH)
-            continue;
+          bool guided2 = bitset_test (guide, psi2->state->عدد);
+          إذا (!guided2 && !EXTENDED_ڳولا)
+            استمر;
           // Only consider prepend state items that share the same state.
-          if (psi1->state != psi2->state)
-            continue;
+          إذا (psi1->state != psi2->state)
+            استمر;
 
-          int complexity = ss->complexity + complexity_cost;
+          صحيح complexity = ss->complexity + complexity_لاڳت;
           // penalty for not being along the guide path
-          if (!guided1 || !guided2)
-            complexity += EXTENDED_COST;
-          ssb_append (new_search_state (ps1, ps2, complexity));
+          إذا (!guided1 || !guided2)
+            complexity += EXTENDED_لاڳت;
+          ssb_append (new_ڳولا_state (ps1, ps2, complexity));
         }
     }
   gl_list_free (prev1);
@@ -945,37 +945,37 @@ search_state_prepend (search_state *ss, symbol_number sym, bitset guide)
  * Determine if the productions associated with the given parser items have
  * the same prefix up to the dot.
  */
-static bool
-have_common_prefix (const item_number *itm1, const item_number *itm2)
+ساكن bool
+have_common_اڳياڙي (ثابت شي_عدد *itm1, ثابت شي_عدد *itm2)
 {
-  int i = 0;
-  for (; !item_number_is_rule_number (itm1[i]); ++i)
-    if (itm1[i] != itm2[i])
-      return false;
-  return item_number_is_rule_number (itm2[i]);
+  صحيح i = 0;
+  لكل (; !شي_عدد_is_قاعدو_عدد (itm1[i]); ++i)
+    إذا (itm1[i] != itm2[i])
+      أرجع false;
+  أرجع شي_عدد_is_قاعدو_عدد (itm2[i]);
 }
 
 /*
  * The start and end locations of an item in ritem.
  */
-static const item_number *
-item_rule_start (const item_number *item)
+ساكن ثابت شي_عدد *
+شي_قاعدو_شروعات (ثابت شي_عدد *شي)
 {
-  const item_number *res = NULL;
-  for (res = item;
-       ritem < res && item_number_is_symbol_number (*(res - 1));
+  ثابت شي_عدد *res = عدم;
+  لكل (res = شي;
+       ritem < res && شي_عدد_is_نشان_عدد (*(res - 1));
        --res)
-    continue;
-  return res;
+    استمر;
+  أرجع res;
 }
 
-static const item_number *
-item_rule_end (const item_number *item)
+ساكن ثابت شي_عدد *
+شي_قاعدو_پڇاڙي (ثابت شي_عدد *شي)
 {
-  const item_number *res = NULL;
-  for (res = item; item_number_is_symbol_number (*res); ++res)
-    continue;
-  return res;
+  ثابت شي_عدد *res = عدم;
+  لكل (res = شي; شي_عدد_is_نشان_عدد (*res); ++res)
+    استمر;
+  أرجع res;
 }
 
 /*
@@ -983,97 +983,97 @@ item_rule_end (const item_number *item)
  * on a search state and add the results to the
  * search state priority queue.
  */
-static inline void
-generate_next_states (search_state *ss, state_item *conflict1,
-                      state_item *conflict2)
+ساكن مضمن فراغ
+generate_ايندڙ_حالتون (ڳولا_state *ss, state_شي *conflict1,
+                      state_شي *conflict2)
 {
   // Compute the successor configurations.
-  parse_state *ps1 = ss->states[0];
-  parse_state *ps2 = ss->states[1];
-  const state_item *si1 = parse_state_tail (ps1);
-  const state_item *si2 = parse_state_tail (ps2);
-  bool si1reduce = item_number_is_rule_number (*si1->item);
-  bool si2reduce = item_number_is_rule_number (*si2->item);
-  if (!si1reduce && !si2reduce)
+  parse_state *ps1 = ss->حالتون[0];
+  parse_state *ps2 = ss->حالتون[1];
+  ثابت state_شي *si1 = parse_state_پڇ (ps1);
+  ثابت state_شي *si2 = parse_state_پڇ (ps2);
+  bool si1reduce = شي_عدد_is_قاعدو_عدد (*si1->شي);
+  bool si2reduce = شي_عدد_is_قاعدو_عدد (*si2->شي);
+  إذا (!si1reduce && !si2reduce)
     {
       // Transition if both paths end at the same symbol
-      if (*si1->item == *si2->item)
+      إذا (*si1->شي == *si2->شي)
         {
-          int complexity = ss->complexity + 2 * SHIFT_COST;
+          صحيح complexity = ss->complexity + 2 * سرڪايو_لاڳت;
           parse_state_list trans1 = simulate_transition (ps1);
           parse_state_list trans2 = simulate_transition (ps2);
-          parse_state *tps1 = NULL;
-          parse_state *tps2 = NULL;
-          for (gl_list_iterator_t it1 = gl_list_iterator (trans1);
-               parse_state_list_next (&it1, &tps1);
+          parse_state *tps1 = عدم;
+          parse_state *tps2 = عدم;
+          لكل (gl_list_iterator_t it1 = gl_list_iterator (trans1);
+               parse_state_list_ايندڙ (&it1, &tps1);
                )
-            for (gl_list_iterator_t it2 = gl_list_iterator (trans2);
-                 parse_state_list_next (&it2, &tps2);
+            لكل (gl_list_iterator_t it2 = gl_list_iterator (trans2);
+                 parse_state_list_ايندڙ (&it2, &tps2);
                  )
-              ssb_append (new_search_state (tps1, tps2, complexity));
+              ssb_append (new_ڳولا_state (tps1, tps2, complexity));
           gl_list_free (trans1);
           gl_list_free (trans2);
         }
 
       // Take production steps if possible.
-      production_step (ss, 0);
-      production_step (ss, 1);
+      production_قدم (ss, 0);
+      production_قدم (ss, 1);
     }
   // One of the states requires a reduction
-  else
+  وإلا
     {
-      const item_number *rhs1 = item_rule_start (si1->item);
-      const item_number *rhe1 = item_rule_end (si1->item);
-      int len1 = rhe1 - rhs1;
-      int size1 = parse_state_length (ps1);
+      ثابت شي_عدد *rhs1 = شي_قاعدو_شروعات (si1->شي);
+      ثابت شي_عدد *rhe1 = شي_قاعدو_پڇاڙي (si1->شي);
+      صحيح len1 = rhe1 - rhs1;
+      صحيح size1 = parse_state_ڊيگهائي (ps1);
       bool ready1 = si1reduce && len1 < size1;
 
-      const item_number *rhs2 = item_rule_start (si2->item);
-      const item_number *rhe2 = item_rule_end (si2->item);
-      int len2 = rhe2 - rhs2;
-      int size2 = parse_state_length (ps2);
+      ثابت شي_عدد *rhs2 = شي_قاعدو_شروعات (si2->شي);
+      ثابت شي_عدد *rhe2 = شي_قاعدو_پڇاڙي (si2->شي);
+      صحيح len2 = rhe2 - rhs2;
+      صحيح size2 = parse_state_ڊيگهائي (ps2);
       bool ready2 = si2reduce && len2 < size2;
       // If there is a path ready for reduction without being
       // prepended further, reduce.
-      if (ready1 && ready2)
+      إذا (ready1 && ready2)
         {
-          search_state_list reduced1 = reduction_step (ss, conflict1->item, 0, len1);
-          gl_list_add_last (reduced1, ss);
-          search_state *red1 = NULL;
-          for (gl_list_iterator_t iter = gl_list_iterator (reduced1);
-               search_state_list_next (&iter, &red1);
+          ڳولا_state_list reduced1 = reduction_قدم (ss, conflict1->شي, 0, len1);
+          gl_list_جوڙيو_آخري (reduced1, ss);
+          ڳولا_state *red1 = عدم;
+          لكل (gl_list_iterator_t iter = gl_list_iterator (reduced1);
+               ڳولا_state_list_ايندڙ (&iter, &red1);
                )
             {
-              search_state_list reduced2 =
-                reduction_step (red1, conflict2->item, 1, len2);
-              search_state *red2 = NULL;
-              for (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
-                   search_state_list_next (&iter2, &red2);
+              ڳولا_state_list reduced2 =
+                reduction_قدم (red1, conflict2->شي, 1, len2);
+              ڳولا_state *red2 = عدم;
+              لكل (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
+                   ڳولا_state_list_ايندڙ (&iter2, &red2);
                    )
                 ssb_append (red2);
               // Avoid duplicates.
-              if (red1 != ss)
+              إذا (red1 != ss)
                 ssb_append (red1);
               gl_list_free (reduced2);
             }
           gl_list_free (reduced1);
         }
-      else if (ready1)
+      وإلا إذا (ready1)
         {
-          search_state_list reduced1 = reduction_step (ss, conflict1->item, 0, len1);
-          search_state *red1 = NULL;
-          for (gl_list_iterator_t iter = gl_list_iterator (reduced1);
-               search_state_list_next (&iter, &red1);
+          ڳولا_state_list reduced1 = reduction_قدم (ss, conflict1->شي, 0, len1);
+          ڳولا_state *red1 = عدم;
+          لكل (gl_list_iterator_t iter = gl_list_iterator (reduced1);
+               ڳولا_state_list_ايندڙ (&iter, &red1);
                )
             ssb_append (red1);
           gl_list_free (reduced1);
         }
-      else if (ready2)
+      وإلا إذا (ready2)
         {
-          search_state_list reduced2 = reduction_step (ss, conflict2->item, 1, len2);
-          search_state *red2 = NULL;
-          for (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
-               search_state_list_next (&iter2, &red2);
+          ڳولا_state_list reduced2 = reduction_قدم (ss, conflict2->شي, 1, len2);
+          ڳولا_state *red2 = عدم;
+          لكل (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
+               ڳولا_state_list_ايندڙ (&iter2, &red2);
                )
             ssb_append (red2);
           gl_list_free (reduced2);
@@ -1081,15 +1081,15 @@ generate_next_states (search_state *ss, state_item *conflict1,
       /* Both states end with a reduction, yet they don't have enough symbols
        * to reduce. This means symbols are missing from the beginning of the
        * rule, so we must prepend */
-      else
+      وإلا
         {
-          const symbol_number sym
+          ثابت نشان_عدد sym
             = si1reduce && !ready1
             ? *(rhe1 - size1)
             : *(rhe2 - size2);
-          search_state_prepend (ss, sym,
-                                parse_state_depth (ss->states[0]) >= 0
-                                ? rpp_set : scp_set);
+          ڳولا_state_prepend (ss, sym,
+                                parse_state_اونهائي (ss->حالتون[0]) >= 0
+                                ? rpp_سيٽ : scp_سيٽ);
         }
     }
 }
@@ -1100,72 +1100,72 @@ generate_next_states (search_state *ss, state_item *conflict1,
  * we are at and gives the appropriate counterexample
  * type based off of time constraints.
  */
-static counterexample *
-unifying_example (state_item_number itm1,
-                  state_item_number itm2,
-                  bool shift_reduce,
-                  state_item_list reduce_path, symbol_number next_sym)
+ساكن counterexample *
+unifying_example (state_شي_عدد itm1,
+                  state_شي_عدد itm2,
+                  bool سرڪايو_reduce,
+                  state_شي_list reduce_رستو, نشان_عدد ايندڙ_sym)
 {
-  state_item *conflict1 = &state_items[itm1];
-  state_item *conflict2 = &state_items[itm2];
-  search_state *initial = initial_search_state (conflict1, conflict2);
-  ssb_queue = gl_list_create_empty (GL_RBTREEHASH_LIST,
+  state_شي *conflict1 = &state_شيون[itm1];
+  state_شي *conflict2 = &state_شيون[itm2];
+  ڳولا_state *initial = initial_ڳولا_state (conflict1, conflict2);
+  ssb_قطار = gl_list_create_خالي_جايون (GL_RBTREEHASH_LIST,
                                     (gl_listelement_equals_fn) ssb_equals,
                                     (gl_listelement_hashcode_fn) ssb_hasher,
                                     (gl_listelement_dispose_fn) ssb_free,
                                     false);
-  visited =
-    hash_initialize (32, NULL, (Hash_hasher) visited_hasher,
-                     (Hash_comparator) visited_comparator,
-                     (Hash_data_freer) search_state_free);
+  گهميل =
+    hash_initialize (32, عدم, (Hash_hasher) گهميل_hasher,
+                     (Hash_comparator) گهميل_comparator,
+                     (Hash_معلومات_freer) ڳولا_state_free);
   ssb_append (initial);
-  xtime_t start = gethrxtime ();
+  xtime_t شروعات = gethrxtime ();
   bool assurance_printed = false;
-  search_state *stage3result = NULL;
-  counterexample *cex = NULL;
-  while (gl_list_size (ssb_queue) > 0)
+  ڳولا_state *stage3result = عدم;
+  counterexample *cex = عدم;
+  طالما (gl_list_سائيز (ssb_قطار) > 0)
     {
-      const search_state_bundle *ssb = gl_list_get_at (ssb_queue, 0);
+      ثابت ڳولا_state_bundle *ssb = gl_list_get_at (ssb_قطار, 0);
 
-      search_state *ss = NULL;
-      for (gl_list_iterator_t it = gl_list_iterator (ssb->states);
-           search_state_list_next (&it, &ss);
+      ڳولا_state *ss = عدم;
+      لكل (gl_list_iterator_t it = gl_list_iterator (ssb->حالتون);
+           ڳولا_state_list_ايندڙ (&it, &ss);
            )
         {
-          if (trace_flag & trace_cex)
-            search_state_print (ss);
+          إذا (trace_flag & trace_cex)
+            ڳولا_state_print (ss);
           // Stage 1/2 completing the rules containing the conflicts
-          parse_state *ps1 = ss->states[0];
-          parse_state *ps2 = ss->states[1];
-          if (parse_state_depth (ps1) < 0 && parse_state_depth (ps2) < 0)
+          parse_state *ps1 = ss->حالتون[0];
+          parse_state *ps2 = ss->حالتون[1];
+          إذا (parse_state_اونهائي (ps1) < 0 && parse_state_اونهائي (ps2) < 0)
             {
               // Stage 3: reduce and shift conflict items completed.
-              const state_item *si1src = parse_state_head (ps1);
-              const state_item *si2src = parse_state_head (ps2);
-              if (item_rule (si1src->item)->lhs == item_rule (si2src->item)->lhs
-                  && have_common_prefix (si1src->item, si2src->item))
+              ثابت state_شي *si1src = parse_state_سر (ps1);
+              ثابت state_شي *si2src = parse_state_سر (ps2);
+              إذا (شي_قاعدو (si1src->شي)->lhs == شي_قاعدو (si2src->شي)->lhs
+                  && have_common_اڳياڙي (si1src->شي, si2src->شي))
                 {
                   // Stage 4: both paths share a prefix
                   derivation *d1 = parse_state_derivation (ps1);
                   derivation *d2 = parse_state_derivation (ps2);
-                  if (parse_state_derivation_completed (ps1)
+                  إذا (parse_state_derivation_completed (ps1)
                       && parse_state_derivation_completed (ps2))
                     {
                       // Once we have two derivations for the same symbol,
                       // we've found a unifying counterexample.
-                      cex = new_counterexample (d1, d2, shift_reduce, true, false);
+                      cex = new_counterexample (d1, d2, سرڪايو_reduce, true, false);
                       derivation_retain (d1);
                       derivation_retain (d2);
-                      goto cex_search_end;
+                      اذهب cex_ڳولا_پڇاڙي;
                     }
-                  if (!stage3result)
-                    stage3result = copy_search_state (ss);
+                  إذا (!stage3result)
+                    stage3result = copy_ڳولا_state (ss);
                 }
             }
-          if (TIME_LIMIT_ENFORCED)
+          إذا (وقت_حد_بندي_ENFORCED)
             {
-              double time_passed = (gethrxtime () - start) / 1e9;
-              if (!assurance_printed && time_passed > ASSURANCE_LIMIT
+              مزدوج وقت_passed = (gethrxtime () - شروعات) / 1e9;
+              إذا (!assurance_printed && وقت_passed > ASSURANCE_حد_بندي
                   && stage3result)
                 {
                   fputs ("Productions leading up to the conflict state found.  "
@@ -1173,54 +1173,54 @@ unifying_example (state_item_number itm1,
                          stderr);
                   assurance_printed = true;
                 }
-              if (time_passed > time_limit)
+              إذا (وقت_passed > وقت_حد_بندي)
                 {
-                  fprintf (stderr, "time limit exceeded: %f\n", time_passed);
-                  goto cex_search_end;
+                  fprintf (stderr, "time limit exceeded: %f\n", وقت_passed);
+                  اذهب cex_ڳولا_پڇاڙي;
                 }
             }
-          generate_next_states (ss, conflict1, conflict2);
+          generate_ايندڙ_حالتون (ss, conflict1, conflict2);
         }
-      gl_sortedlist_remove (ssb_queue,
+      gl_sortedlist_remove (ssb_قطار,
                             (gl_listelement_compar_fn) ssb_comp, ssb);
     }
-cex_search_end:;
-  if (!cex)
+cex_ڳولا_پڇاڙي:;
+  إذا (!cex)
     {
       // No unifying counterexamples
       // If a search state from Stage 3 is available, use it
       // to construct a more compact nonunifying counterexample.
-      if (stage3result)
-        cex = complete_diverging_examples (stage3result, next_sym, shift_reduce);
+      إذا (stage3result)
+        cex = complete_diverging_examples (stage3result, ايندڙ_sym, سرڪايو_reduce);
       // Otherwise, construct a nonunifying counterexample that
       // begins from the start state using the shortest
       // lookahead-sensitive path to the reduce item.
-      else
-        cex = example_from_path (shift_reduce, itm2, reduce_path, next_sym);
+      وإلا
+        cex = example_from_رستو (سرڪايو_reduce, itm2, reduce_رستو, ايندڙ_sym);
     }
-  gl_list_free (ssb_queue);
-  hash_free (visited);
-  if (stage3result)
-    search_state_free (stage3result);
-  return cex;
+  gl_list_free (ssb_قطار);
+  hash_free (گهميل);
+  إذا (stage3result)
+    ڳولا_state_free (stage3result);
+  أرجع cex;
 }
 
-static xtime_t cumulative_time;
+ساكن xtime_t cumulative_وقت;
 
-void
-counterexample_init (void)
+فراغ
+counterexample_init (فراغ)
 {
   // Check cex.timeout.
   {
-    const char *variable = "cex.timeout";
-    char *cp = muscle_percent_define_get (variable);
-    if (*cp != '\0')
+    ثابت حرف *variable = "cex.timeout";
+    حرف *cp = muscle_percent_define_get (variable);
+    إذا (*cp != '\0')
       {
-        char *end = NULL;
-        double v = c_strtod (cp, &end);
-        if (*end == '\0' && errno == 0 && v >= 0)
-          time_limit = v;
-        else
+        حرف *پڇاڙي = عدم;
+        مزدوج v = c_strtod (cp, &پڇاڙي);
+        إذا (*پڇاڙي == '\0' && errno == 0 && v >= 0)
+          وقت_حد_بندي = v;
+        وإلا
           {
             location loc = muscle_percent_define_get_loc (variable);
             complain (&loc, complaint,
@@ -1228,23 +1228,23 @@ counterexample_init (void)
                       quote (variable), quote_n (1, cp));
           }
       }
-    free (cp);
+    حرر (cp);
   }
-  cumulative_time = gethrxtime ();
-  scp_set = bitset_create (nstates, BITSET_FIXED);
-  rpp_set = bitset_create (nstates, BITSET_FIXED);
-  state_items_init ();
+  cumulative_وقت = gethrxtime ();
+  scp_سيٽ = bitset_create (nstates, BITSET_FIXED);
+  rpp_سيٽ = bitset_create (nstates, BITSET_FIXED);
+  state_شيون_init ();
 }
 
 
-void
-counterexample_free (void)
+فراغ
+counterexample_free (فراغ)
 {
-  if (scp_set)
+  إذا (scp_سيٽ)
     {
-      bitset_free (scp_set);
-      bitset_free (rpp_set);
-      state_items_free ();
+      bitset_free (scp_سيٽ);
+      bitset_free (rpp_سيٽ);
+      state_شيون_free ();
     }
 }
 
@@ -1252,153 +1252,153 @@ counterexample_free (void)
  * Report a counterexample for conflict on symbol next_sym
  * between the given state-items
  */
-static void
-counterexample_report (state_item_number itm1, state_item_number itm2,
-                       symbol_number next_sym, bool shift_reduce,
-                       FILE *out, const char *prefix)
+ساكن فراغ
+counterexample_report (state_شي_عدد itm1, state_شي_عدد itm2,
+                       نشان_عدد ايندڙ_sym, bool سرڪايو_reduce,
+                       FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
   // Compute the shortest lookahead-sensitive path and associated sets of
   // parser states.
-  state_item_list shortest_path = shortest_path_from_start (itm1, next_sym);
+  state_شي_list سڀ_کان_ٿورو_رستو = سڀ_کان_ٿورو_رستو_from_شروعات (itm1, ايندڙ_sym);
   bool reduce_prod_reached = false;
-  const rule *reduce_rule = item_rule (state_items[itm1].item);
+  ثابت قاعدو *reduce_قاعدو = شي_قاعدو (state_شيون[itm1].شي);
 
-  bitset_zero (scp_set);
-  bitset_zero (rpp_set);
+  bitset_zero (scp_سيٽ);
+  bitset_zero (rpp_سيٽ);
 
-  state_item *si = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (shortest_path);
-       state_item_list_next (&it, &si);
+  state_شي *si = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (سڀ_کان_ٿورو_رستو);
+       state_شي_list_ايندڙ (&it, &si);
        )
     {
-      bitset_set (scp_set, si->state->number);
+      bitset_سيٽ (scp_سيٽ, si->state->عدد);
       reduce_prod_reached = reduce_prod_reached
-                          || item_rule (si->item) == reduce_rule;
-      if (reduce_prod_reached)
-        bitset_set (rpp_set, si->state->number);
+                          || شي_قاعدو (si->شي) == reduce_قاعدو;
+      إذا (reduce_prod_reached)
+        bitset_سيٽ (rpp_سيٽ, si->state->عدد);
     }
   counterexample *cex
-    = (gethrxtime () - cumulative_time) / 1e9 < CUMULATIVE_TIME_LIMIT
-    ? unifying_example (itm1, itm2, shift_reduce, shortest_path, next_sym)
-    : example_from_path (shift_reduce, itm2, shortest_path, next_sym);
+    = (gethrxtime () - cumulative_وقت) / 1e9 < CUMULATIVE_وقت_حد_بندي
+    ? unifying_example (itm1, itm2, سرڪايو_reduce, سڀ_کان_ٿورو_رستو, ايندڙ_sym)
+    : example_from_رستو (سرڪايو_reduce, itm2, سڀ_کان_ٿورو_رستو, ايندڙ_sym);
 
-  gl_list_free (shortest_path);
-  counterexample_print (cex, out, prefix);
+  gl_list_free (سڀ_کان_ٿورو_رستو);
+  counterexample_print (cex, ٻاهريون, اڳياڙي);
   free_counterexample (cex);
 }
 
 
 // ITM1 denotes a shift, ITM2 a reduce.
-static void
-counterexample_report_shift_reduce (state_item_number itm1, state_item_number itm2,
-                                    symbol_number next_sym,
-                                    FILE *out, const char *prefix)
+ساكن فراغ
+counterexample_report_سرڪايو_reduce (state_شي_عدد itm1, state_شي_عدد itm2,
+                                    نشان_عدد ايندڙ_sym,
+                                    FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
-  if (out == stderr)
-    complain (NULL, Wcounterexamples,
-              _("shift/reduce conflict on token %s"), symbols[next_sym]->tag);
-  else
+  إذا (ٻاهريون == stderr)
+    complain (عدم, Wcounterexamples,
+              _("shift/reduce conflict on token %s"), symbols[ايندڙ_sym]->ٽيگ);
+  وإلا
     {
-      fputs (prefix, out);
-      fprintf (out, _("shift/reduce conflict on token %s"), symbols[next_sym]->tag);
-      fprintf (out, "%s\n", _(":"));
+      fputs (اڳياڙي, ٻاهريون);
+      fprintf (ٻاهريون, _("shift/reduce conflict on token %s"), symbols[ايندڙ_sym]->ٽيگ);
+      fprintf (ٻاهريون, "%s\n", _(":"));
     }
   // In the report, print the items.
-  if (out != stderr || trace_flag & trace_cex)
+  إذا (ٻاهريون != stderr || trace_flag & trace_cex)
     {
-      state_item_print (&state_items[itm1], out, prefix);
-      state_item_print (&state_items[itm2], out, prefix);
+      state_شي_print (&state_شيون[itm1], ٻاهريون, اڳياڙي);
+      state_شي_print (&state_شيون[itm2], ٻاهريون, اڳياڙي);
     }
-  counterexample_report (itm1, itm2, next_sym, true, out, prefix);
+  counterexample_report (itm1, itm2, ايندڙ_sym, true, ٻاهريون, اڳياڙي);
 }
 
-static void
-counterexample_report_reduce_reduce (state_item_number itm1, state_item_number itm2,
+ساكن فراغ
+counterexample_report_reduce_reduce (state_شي_عدد itm1, state_شي_عدد itm2,
                                      bitset conflict_syms,
-                                     FILE *out, const char *prefix)
+                                     FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
   {
-    struct obstack obstack;
+    بنية obstack obstack;
     obstack_init (&obstack);
     bitset_iterator biter;
-    state_item_number sym;
-    const char *sep = "";
+    state_شي_عدد sym;
+    ثابت حرف *sep = "";
     BITSET_FOR_EACH (biter, conflict_syms, sym, 0)
       {
-        obstack_printf (&obstack, "%s%s", sep, symbols[sym]->tag);
+        obstack_printf (&obstack, "%s%s", sep, symbols[sym]->ٽيگ);
         sep = ", ";
       }
-    char *tokens = obstack_finish0 (&obstack);
-    if (out == stderr)
-      complain (NULL, Wcounterexamples,
+    حرف *ٽوڪن = obstack_finish0 (&obstack);
+    إذا (ٻاهريون == stderr)
+      complain (عدم, Wcounterexamples,
                 ngettext ("reduce/reduce conflict on token %s",
                           "reduce/reduce conflict on tokens %s",
-                          bitset_count (conflict_syms)),
-                tokens);
-    else
+                          bitset_ڳڻپ (conflict_syms)),
+                ٽوڪن);
+    وإلا
       {
-        fputs (prefix, out);
-        fprintf (out,
+        fputs (اڳياڙي, ٻاهريون);
+        fprintf (ٻاهريون,
                  ngettext ("reduce/reduce conflict on token %s",
                            "reduce/reduce conflict on tokens %s",
-                           bitset_count (conflict_syms)),
-                 tokens);
-        fprintf (out, "%s\n", _(":"));
+                           bitset_ڳڻپ (conflict_syms)),
+                 ٽوڪن);
+        fprintf (ٻاهريون, "%s\n", _(":"));
       }
-    obstack_free (&obstack, NULL);
+    obstack_free (&obstack, عدم);
   }
   // In the report, print the items.
-  if (out != stderr || trace_flag & trace_cex)
+  إذا (ٻاهريون != stderr || trace_flag & trace_cex)
     {
-      state_item_print (&state_items[itm1], out, prefix);
-      state_item_print (&state_items[itm2], out, prefix);
+      state_شي_print (&state_شيون[itm1], ٻاهريون, اڳياڙي);
+      state_شي_print (&state_شيون[itm2], ٻاهريون, اڳياڙي);
     }
-  counterexample_report (itm1, itm2, bitset_first (conflict_syms),
-                         false, out, prefix);
+  counterexample_report (itm1, itm2, bitset_پهريون (conflict_syms),
+                         false, ٻاهريون, اڳياڙي);
 }
 
-static state_item_number
-find_state_item_number (const rule *r, state_number sn)
+ساكن state_شي_عدد
+ڳوليو_state_شي_عدد (ثابت قاعدو *r, state_عدد sn)
 {
-  for (state_item_number i = state_item_map[sn]; i < state_item_map[sn + 1]; ++i)
-    if (!SI_DISABLED (i)
-        && item_number_as_rule_number (*state_items[i].item) == r->number)
-      return i;
+  لكل (state_شي_عدد i = state_شي_map[sn]; i < state_شي_map[sn + 1]; ++i)
+    إذا (!SI_DISABLED (i)
+        && شي_عدد_as_قاعدو_عدد (*state_شيون[i].شي) == r->عدد)
+      أرجع i;
   abort ();
 }
 
-void
-counterexample_report_state (const state *s, FILE *out, const char *prefix)
+فراغ
+counterexample_report_state (ثابت state *s, FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
-  const state_number sn = s->number;
-  const reductions *reds = s->reductions;
+  ثابت state_عدد sn = s->عدد;
+  ثابت reductions *reds = s->reductions;
   bitset lookaheads = bitset_create (ntokens, BITSET_FIXED);
-  for (int i = 0; i < reds->num; ++i)
+  لكل (صحيح i = 0; i < reds->انگ; ++i)
     {
-      const rule *r1 = reds->rules[i];
-      const state_item_number c1 = find_state_item_number (r1, sn);
-      for (state_item_number c2 = state_item_map[sn]; c2 < state_item_map[sn + 1]; ++c2)
-        if (!SI_DISABLED (c2))
+      ثابت قاعدو *r1 = reds->قاعدا[i];
+      ثابت state_شي_عدد c1 = ڳوليو_state_شي_عدد (r1, sn);
+      لكل (state_شي_عدد c2 = state_شي_map[sn]; c2 < state_شي_map[sn + 1]; ++c2)
+        إذا (!SI_DISABLED (c2))
           {
-            item_number conf = *state_items[c2].item;
-            if (item_number_is_symbol_number (conf)
+            شي_عدد conf = *state_شيون[c2].شي;
+            إذا (شي_عدد_is_نشان_عدد (conf)
                 && bitset_test (reds->lookaheads[i], conf))
-              counterexample_report_shift_reduce (c1, c2, conf, out, prefix);
+              counterexample_report_سرڪايو_reduce (c1, c2, conf, ٻاهريون, اڳياڙي);
           }
-      for (int j = i+1; j < reds->num; ++j)
+      لكل (صحيح j = i+1; j < reds->انگ; ++j)
         {
-          const rule *r2 = reds->rules[j];
+          ثابت قاعدو *r2 = reds->قاعدا[j];
           // Conflicts: common lookaheads.
           bitset_intersection (lookaheads,
                                reds->lookaheads[i],
                                reds->lookaheads[j]);
-          if (!bitset_empty_p (lookaheads))
-            for (state_item_number c2 = state_item_map[sn]; c2 < state_item_map[sn + 1]; ++c2)
-              if (!SI_DISABLED (c2)
-                  && item_rule (state_items[c2].item) == r2)
+          إذا (!bitset_خالي_جايون_p (lookaheads))
+            لكل (state_شي_عدد c2 = state_شي_map[sn]; c2 < state_شي_map[sn + 1]; ++c2)
+              إذا (!SI_DISABLED (c2)
+                  && شي_قاعدو (state_شيون[c2].شي) == r2)
                 {
-                  counterexample_report_reduce_reduce (c1, c2, lookaheads, out, prefix);
-                  break;
+                  counterexample_report_reduce_reduce (c1, c2, lookaheads, ٻاهريون, اڳياڙي);
+                  اكسر;
                 }
         }
     }

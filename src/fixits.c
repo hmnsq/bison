@@ -17,213 +17,213 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "fixits.h"
+#ضمن "fixits.h"
 
-#include <error.h>
-#include <get-errno.h>
-#include <gl_array_list.h>
-#include <gl_xlist.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <vasnprintf.h>
+#ضمن <error.h>
+#ضمن <get-errno.h>
+#ضمن <gl_array_list.h>
+#ضمن <gl_xlist.h>
+#ضمن <progname.h>
+#ضمن <quote.h>
+#ضمن <quotearg.h>
+#ضمن <vasnprintf.h>
 
-#include "system.h"
+#ضمن "system.h"
 
-#include "files.h"
-#include "getargs.h"
+#ضمن "files.h"
+#ضمن "getargs.h"
 
-typedef struct
+تعريفنوع بنية
 {
   location location;
-  char *fix;
+  حرف *fix;
 } fixit;
 
-gl_list_t fixits = NULL;
+gl_list_t fixits = عدم;
 
-static fixit *
-fixit_new (location const *loc, char const* fix)
+ساكن fixit *
+fixit_new (location ثابت *loc, حرف ثابت* fix)
 {
-  fixit *res = xmalloc (sizeof *res);
+  fixit *res = xmalloc (حجم *res);
   res->location = *loc;
   res->fix = xstrdup (fix);
-  return res;
+  أرجع res;
 }
 
-static int
-fixit_cmp (const  fixit *a, const fixit *b)
+ساكن صحيح
+fixit_cmp (ثابت  fixit *a, ثابت fixit *b)
 {
-  return location_cmp (a->location, b->location);
+  أرجع location_cmp (a->location, b->location);
 }
 
-static void
+ساكن فراغ
 fixit_free (fixit *f)
 {
-  free (f->fix);
-  free (f);
+  حرر (f->fix);
+  حرر (f);
 }
 
 
 /* GCC and Clang follow the same pattern.
    https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
    https://clang.llvm.org/docs/UsersManual.html#cmdoption-fdiagnostics-parseable-fixits */
-static void
-fixit_print (fixit const *f, FILE *out)
+ساكن فراغ
+fixit_print (fixit ثابت *f, FILE *ٻاهريون)
 {
-  fprintf (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
-           quotearg_n_style (1, c_quoting_style, f->location.start.file),
-           f->location.start.line, f->location.start.byte,
-           f->location.end.line, f->location.end.byte,
+  fprintf (ٻاهريون, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
+           quotearg_n_style (1, c_quoting_style, f->location.شروعات.file),
+           f->location.شروعات.سٽ, f->location.شروعات.byte,
+           f->location.پڇاڙي.سٽ, f->location.پڇاڙي.byte,
            quotearg_n_style (2, c_quoting_style, f->fix));
 }
 
 
-void
-fixits_register (location const *loc, char const* fix)
+فراغ
+fixits_رجسٽر (location ثابت *loc, حرف ثابت* fix)
 {
-  if (!fixits)
-    fixits = gl_list_create_empty (GL_ARRAY_LIST,
-                                   /* equals */ NULL,
-                                   /* hashcode */ NULL,
+  إذا (!fixits)
+    fixits = gl_list_create_خالي_جايون (GL_ARRAY_LIST,
+                                   /* equals */ عدم,
+                                   /* hashcode */ عدم,
                                    (gl_listelement_dispose_fn) fixit_free,
                                    true);
   fixit *f = fixit_new (loc, fix);
-  gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
-  if (feature_flag & feature_fixit)
+  gl_sortedlist_جوڙيو (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
+  إذا (feature_flag & feature_fixit)
     fixit_print (f, stderr);
 }
 
 
 bool
-fixits_empty (void)
+fixits_خالي_جايون (فراغ)
 {
-  return !fixits;
+  أرجع !fixits;
 }
 
 
-void
-fixits_run (void)
+فراغ
+fixits_لاڳيتو (فراغ)
 {
-  if (!fixits)
-    return;
+  إذا (!fixits)
+    أرجع;
 
   /* This is not unlike what is done in location_caret.  */
-  uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
+  uniqstr داخلا = ((fixit *) gl_list_get_at (fixits, 0))->location.شروعات.file;
   /* Backup the file. */
-  char buf[256];
-  size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
-  if (!backup)
+  حرف buf[256];
+  size_t len = حجم (buf);
+  حرف *backup = asnprintf (buf, &len, "%s~", داخلا);
+  إذا (!backup)
     xalloc_die ();
-  if (rename (input, backup))
+  إذا (rename (داخلا, backup))
     error (EXIT_FAILURE, get_errno (),
-           _("%s: cannot backup"), quotearg_colon (input));
-  FILE *in = xfopen (backup, "r");
-  FILE *out = xfopen (input, "w");
-  size_t line = 1;
-  size_t offset = 1;
-  void const *p = NULL;
+           _("%s: cannot backup"), quotearg_colon (داخلا));
+  FILE *اندريون = xfopen (backup, "r");
+  FILE *ٻاهريون = xfopen (داخلا, "w");
+  size_t سٽ = 1;
+  size_t وٿي = 1;
+  فراغ ثابت *p = عدم;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
-  while (gl_list_iterator_next (&iter, &p, NULL))
+  طالما (gl_list_iterator_ايندڙ (&iter, &p, عدم))
     {
-      fixit const *f = p;
+      fixit ثابت *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      طالما (سٽ < f->location.شروعات.سٽ)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          صحيح c = getc (اندريون);
+          إذا (c == EOF)
+            اكسر;
+          إذا (c == '\n')
             {
-              ++line;
-              offset = 1;
+              ++سٽ;
+              وٿي = 1;
             }
-          putc (c, out);
+          putc (c, ٻاهريون);
         }
 
       /* Look for the right offset. */
       bool need_eol = false;
-      while (offset < f->location.start.byte)
+      طالما (وٿي < f->location.شروعات.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          ++offset;
-          if (c == '\n')
+          صحيح c = getc (اندريون);
+          إذا (c == EOF)
+            اكسر;
+          ++وٿي;
+          إذا (c == '\n')
             /* The position we are asked for is beyond the actual
                line: pad with spaces, and remember we need a \n.  */
             need_eol = true;
-          putc (need_eol ? ' ' : c, out);
+          putc (need_eol ? ' ' : c, ٻاهريون);
         }
 
       /* Paste the fix instead. */
-      fputs (f->fix, out);
+      fputs (f->fix, ٻاهريون);
 
       /* Maybe install the eol afterwards.  */
-      if (need_eol)
-        putc ('\n', out);
+      إذا (need_eol)
+        putc ('\n', ٻاهريون);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      طالما (سٽ < f->location.پڇاڙي.سٽ)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          صحيح c = getc (اندريون);
+          إذا (c == EOF)
+            اكسر;
+          إذا (c == '\n')
             {
-              ++line;
-              offset = 1;
+              ++سٽ;
+              وٿي = 1;
             }
         }
-      while (offset < f->location.end.byte)
+      طالما (وٿي < f->location.پڇاڙي.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          ++offset;
+          صحيح c = getc (اندريون);
+          إذا (c == EOF)
+            اكسر;
+          ++وٿي;
         }
 
       /* If erasing the content of a full line, also remove the
          end-of-line. */
-      if (f->fix[0] == 0 && f->location.start.byte == 1)
+      إذا (f->fix[0] == 0 && f->location.شروعات.byte == 1)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          else if (c == '\n')
+          صحيح c = getc (اندريون);
+          إذا (c == EOF)
+            اكسر;
+          وإلا إذا (c == '\n')
             {
-              ++line;
-              offset = 1;
+              ++سٽ;
+              وٿي = 1;
             }
-          else
-            ungetc (c, in);
+          وإلا
+            ungetc (c, اندريون);
         }
     }
   /* Paste the rest of the file.  */
   {
-    int c;
-    while ((c = getc (in)) != EOF)
-      putc (c, out);
+    صحيح c;
+    طالما ((c = getc (اندريون)) != EOF)
+      putc (c, ٻاهريون);
   }
 
   gl_list_iterator_free (&iter);
-  xfclose (out);
-  xfclose (in);
+  xfclose (ٻاهريون);
+  xfclose (اندريون);
   fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
-           program_name, quote_n (0, input), quote_n (1, backup));
-  if (backup != buf)
-    free (backup);
+           پروگرام_name, quote_n (0, داخلا), quote_n (1, backup));
+  إذا (backup != buf)
+    حرر (backup);
 }
 
 
 /* Free the registered fixits.  */
-void fixits_free (void)
+فراغ fixits_free (فراغ)
 {
-  if (fixits)
+  إذا (fixits)
     {
       gl_list_free (fixits);
-      fixits = NULL;
+      fixits = عدم;
     }
 }

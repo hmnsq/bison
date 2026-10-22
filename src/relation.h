@@ -19,26 +19,26 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 
-#ifndef RELATION_H_
-# define RELATION_H_
+#جيڪڏهن_وصف_نه_ٿيل لاڳاپو_H
+# define لاڳاپو_H
 
 /* Performing operations on graphs coded as list of adjacency.
 
    If GRAPH is a relation, then GRAPH[Node] is a list of adjacent
    nodes, ended with END_NODE.  */
 
-# define END_NODE ((relation_node) -1)
+# define پڇاڙي_ڳنڍ ((لاڳاپو_ڳنڍ) -1)
 
-typedef size_t relation_node;
-typedef relation_node *relation_nodes;
-typedef relation_nodes *relation;
+تعريفنوع size_t لاڳاپو_ڳنڍ;
+تعريفنوع لاڳاپو_ڳنڍ *لاڳاپو_nodes;
+تعريفنوع لاڳاپو_nodes *لاڳاپو;
 
-typedef void (relation_node_print) (relation_node node, FILE* out);
+تعريفنوع فراغ (لاڳاپو_ڳنڍ_print) (لاڳاپو_ڳنڍ ڳنڍ, FILE* ٻاهريون);
 
 /* Report a relation R that has SIZE vertices.  */
-void relation_print (const char *title,
-                     relation r, size_t size,
-                     relation_node_print print, FILE *out);
+فراغ لاڳاپو_print (ثابت حرف *title,
+                     لاڳاپو r, size_t سائيز,
+                     لاڳاپو_ڳنڍ_print print, FILE *ٻاهريون);
 
 /* Compute the transitive closure of the FUNCTION on the relation R
    with SIZE vertices.
@@ -47,9 +47,9 @@ void relation_print (const char *title,
    (unioned) with FUNCTION[NODE2].
 
    FUNCTION is in-out, R is read only.  */
-void relation_digraph (const relation r, relation_node size, bitsetv function);
+فراغ لاڳاپو_digraph (ثابت لاڳاپو r, لاڳاپو_ڳنڍ سائيز, bitsetv function);
 
 /* Destructively transpose *R_ARG, of size SIZE.  */
-void relation_transpose (relation *R_arg, relation_node size);
+فراغ لاڳاپو_transpose (لاڳاپو *R_arg, لاڳاپو_ڳنڍ سائيز);
 
-#endif /* ! RELATION_H_ */
+#جيڪڏهن_پورو /* ! RELATION_H_ */

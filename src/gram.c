@@ -18,338 +18,338 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "complain.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "print-xml.h"
-#include "reader.h"
-#include "reduce.h"
-#include "symtab.h"
+#ضمن "complain.h"
+#ضمن "getargs.h"
+#ضمن "glyphs.h"
+#ضمن "gram.h"
+#ضمن "print-xml.h"
+#ضمن "reader.h"
+#ضمن "reduce.h"
+#ضمن "symtab.h"
 
 /* Comments for these variables are in gram.h.  */
 
-item_number *ritem = NULL;
-int nritems = 0;
+شي_عدد *ritem = عدم;
+صحيح nritems = 0;
 
-rule *rules = NULL;
-rule_number nrules = 0;
+قاعدو *قاعدا = عدم;
+قاعدو_عدد nrules = 0;
 
-symbol **symbols = NULL;
-int nsyms = 0;
-int ntokens = 1;
-int nnterms = 0;
+نشان **symbols = عدم;
+صحيح nsyms = 0;
+صحيح ntokens = 1;
+صحيح nnterms = 0;
 
-symbol_number *token_translations = NULL;
+نشان_عدد *token_translations = عدم;
 
-int max_code = 256;
+صحيح max_ڪوڊ = 256;
 
-int required_version = 0;
+صحيح required_نسخو = 0;
 
-void
-item_print (item_number *item, rule const *previous_rule, FILE *out)
+فراغ
+شي_print (شي_عدد *شي, قاعدو ثابت *اڳيون_قاعدو, FILE *ٻاهريون)
 {
-  rule const *r = item_rule (item);
-  rule_lhs_print (r, previous_rule ? previous_rule->lhs : NULL, out);
+  قاعدو ثابت *r = شي_قاعدو (شي);
+  قاعدو_lhs_print (r, اڳيون_قاعدو ? اڳيون_قاعدو->lhs : عدم, ٻاهريون);
 
-  if (0 <= *r->rhs)
+  إذا (0 <= *r->rhs)
     {
       // Non-empty rhs.
-      for (item_number *sp = r->rhs; sp < item; sp++)
-        fprintf (out, " %s", symbols[*sp]->tag);
-      fprintf (out, " %s", dot);
-      for (item_number *sp = item; 0 <= *sp; ++sp)
-        fprintf (out, " %s", symbols[*sp]->tag);
+      لكل (شي_عدد *sp = r->rhs; sp < شي; sp++)
+        fprintf (ٻاهريون, " %s", symbols[*sp]->ٽيگ);
+      fprintf (ٻاهريون, " %s", dot);
+      لكل (شي_عدد *sp = شي; 0 <= *sp; ++sp)
+        fprintf (ٻاهريون, " %s", symbols[*sp]->ٽيگ);
     }
-  else
-    fprintf (out, " %s %s", empty, dot);
+  وإلا
+    fprintf (ٻاهريون, " %s %s", خالي_جايون, dot);
 }
 
 
 bool
-rule_useful_in_grammar_p (rule const *r)
+قاعدو_useful_اندريون_grammar_p (قاعدو ثابت *r)
 {
-  return r->number < nrules;
+  أرجع r->عدد < nrules;
 }
 
 bool
-rule_useless_in_grammar_p (rule const *r)
+قاعدو_useless_اندريون_grammar_p (قاعدو ثابت *r)
 {
-  return !rule_useful_in_grammar_p (r);
+  أرجع !قاعدو_useful_اندريون_grammar_p (r);
 }
 
 bool
-rule_useless_in_parser_p (rule const *r)
+قاعدو_useless_اندريون_parser_p (قاعدو ثابت *r)
 {
-  return !r->useful && rule_useful_in_grammar_p (r);
+  أرجع !r->useful && قاعدو_useful_اندريون_grammar_p (r);
 }
 
 bool
-rule_useless_chain_p (rule const *r)
+قاعدو_useless_chain_p (قاعدو ثابت *r)
 {
-  return rule_rhs_length (r) == 1 && !r->action;
+  أرجع قاعدو_rhs_ڊيگهائي (r) == 1 && !r->action;
 }
 
-void
-rule_lhs_print (rule const *r, sym_content const *previous_lhs, FILE *out)
+فراغ
+قاعدو_lhs_print (قاعدو ثابت *r, sym_content ثابت *اڳيون_lhs, FILE *ٻاهريون)
 {
-  fprintf (out, "  %3d ", r->number);
-  if (previous_lhs != r->lhs)
-    fprintf (out, "%s:", r->lhs->symbol->tag);
-  else
-    fprintf (out, "%*s|", (int) strlen (previous_lhs->symbol->tag), "");
+  fprintf (ٻاهريون, "  %3d ", r->عدد);
+  إذا (اڳيون_lhs != r->lhs)
+    fprintf (ٻاهريون, "%s:", r->lhs->نشان->ٽيگ);
+  وإلا
+    fprintf (ٻاهريون, "%*s|", (صحيح) لڙي_ڊيگهه (اڳيون_lhs->نشان->ٽيگ), "");
 }
 
-void
-rule_lhs_print_xml (rule const *r, FILE *out, int level)
+فراغ
+قاعدو_lhs_print_xml (قاعدو ثابت *r, FILE *ٻاهريون, صحيح level)
 {
-  xml_printf (out, level, "<lhs>%s</lhs>", r->lhs->symbol->tag);
+  xml_printf (ٻاهريون, level, "<lhs>%s</lhs>", r->lhs->نشان->ٽيگ);
 }
 
 size_t
-rule_rhs_length (rule const *r)
+قاعدو_rhs_ڊيگهائي (قاعدو ثابت *r)
 {
   size_t res = 0;
-  for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  لكل (شي_عدد *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
     ++res;
-  return res;
+  أرجع res;
 }
 
-void
-rule_rhs_print (rule const *r, FILE *out)
+فراغ
+قاعدو_rhs_print (قاعدو ثابت *r, FILE *ٻاهريون)
 {
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
-      fprintf (out, " %s", symbols[*rhsp]->tag);
-  else
-    fprintf (out, " %s", empty);
+  إذا (0 <= *r->rhs)
+    لكل (شي_عدد *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+      fprintf (ٻاهريون, " %s", symbols[*rhsp]->ٽيگ);
+  وإلا
+    fprintf (ٻاهريون, " %s", خالي_جايون);
 }
 
-static void
-rule_rhs_print_xml (rule const *r, FILE *out, int level)
+ساكن فراغ
+قاعدو_rhs_print_xml (قاعدو ثابت *r, FILE *ٻاهريون, صحيح level)
 {
-  if (*r->rhs >= 0)
+  إذا (*r->rhs >= 0)
     {
-      xml_puts (out, level, "<rhs>");
-      for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
-        xml_printf (out, level + 1, "<symbol>%s</symbol>",
-                    xml_escape (symbols[*rhsp]->tag));
-      xml_puts (out, level, "</rhs>");
+      xml_puts (ٻاهريون, level, "<rhs>");
+      لكل (شي_عدد *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+        xml_printf (ٻاهريون, level + 1, "<symbol>%s</symbol>",
+                    xml_escape (symbols[*rhsp]->ٽيگ));
+      xml_puts (ٻاهريون, level, "</rhs>");
     }
-  else
+  وإلا
     {
-      xml_puts (out, level, "<rhs>");
-      xml_puts (out, level + 1, "<empty/>");
-      xml_puts (out, level, "</rhs>");
+      xml_puts (ٻاهريون, level, "<rhs>");
+      xml_puts (ٻاهريون, level + 1, "<empty/>");
+      xml_puts (ٻاهريون, level, "</rhs>");
     }
 }
 
-void
-rule_print (rule const *r, rule const *prev_rule, FILE *out)
+فراغ
+قاعدو_print (قاعدو ثابت *r, قاعدو ثابت *prev_قاعدو, FILE *ٻاهريون)
 {
-  rule_lhs_print (r, prev_rule ? prev_rule->lhs : NULL, out);
-  rule_rhs_print (r, out);
+  قاعدو_lhs_print (r, prev_قاعدو ? prev_قاعدو->lhs : عدم, ٻاهريون);
+  قاعدو_rhs_print (r, ٻاهريون);
 }
 
-void
-ritem_print (FILE *out)
+فراغ
+ritem_print (FILE *ٻاهريون)
 {
-  fputs ("RITEM\n", out);
-  bool first = true;
-  for (int i = 0; i < nritems; ++i)
+  fputs ("RITEM\n", ٻاهريون);
+  bool پهريون = true;
+  لكل (صحيح i = 0; i < nritems; ++i)
     {
-      if (first)
+      إذا (پهريون)
         {
-          fprintf (out, "  %d: ", i);
-          first = false;
+          fprintf (ٻاهريون, "  %d: ", i);
+          پهريون = false;
         }
-      if (ritem[i] >= 0)
-        fprintf (out, "  %s", symbols[ritem[i]]->tag);
-      else
+      إذا (ritem[i] >= 0)
+        fprintf (ٻاهريون, "  %s", symbols[ritem[i]]->ٽيگ);
+      وإلا
         {
-          fprintf (out, "  (rule %d)\n", item_number_as_rule_number (ritem[i]));
-          first = true;
+          fprintf (ٻاهريون, "  (rule %d)\n", شي_عدد_as_قاعدو_عدد (ritem[i]));
+          پهريون = true;
         }
     }
-  fputs ("\n\n", out);
+  fputs ("\n\n", ٻاهريون);
 }
 
 size_t
-ritem_longest_rhs (void)
+ritem_longest_rhs (فراغ)
 {
-  int max = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  صحيح max = 0;
+  لكل (قاعدو_عدد r = 0; r < nrules; ++r)
     {
-      size_t length = rule_rhs_length (&rules[r]);
-      if (length > max)
-        max = length;
+      size_t ڊيگهائي = قاعدو_rhs_ڊيگهائي (&قاعدا[r]);
+      إذا (ڊيگهائي > max)
+        max = ڊيگهائي;
     }
 
-  return max;
+  أرجع max;
 }
 
-void
-grammar_rules_partial_print (FILE *out, const char *title,
-                             rule_filter filter)
+فراغ
+grammar_قاعدا_partial_print (FILE *ٻاهريون, ثابت حرف *title,
+                             قاعدو_filter filter)
 {
-  bool first = true;
-  rule *previous_rule = NULL;
+  bool پهريون = true;
+  قاعدو *اڳيون_قاعدو = عدم;
 
   /* rule # : LHS -> RHS */
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  لكل (قاعدو_عدد r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (filter && !filter (&rules[r]))
-        continue;
-      if (first)
-        fprintf (out, "%s\n\n", title);
-      else if (previous_rule && previous_rule->lhs != rules[r].lhs)
-        putc ('\n', out);
-      first = false;
-      rule_print (&rules[r], previous_rule, out);
-      putc ('\n', out);
-      previous_rule = &rules[r];
+      إذا (filter && !filter (&قاعدا[r]))
+        استمر;
+      إذا (پهريون)
+        fprintf (ٻاهريون, "%s\n\n", title);
+      وإلا إذا (اڳيون_قاعدو && اڳيون_قاعدو->lhs != قاعدا[r].lhs)
+        putc ('\n', ٻاهريون);
+      پهريون = false;
+      قاعدو_print (&قاعدا[r], اڳيون_قاعدو, ٻاهريون);
+      putc ('\n', ٻاهريون);
+      اڳيون_قاعدو = &قاعدا[r];
     }
-  if (!first)
-    fputs ("\n\n", out);
+  إذا (!پهريون)
+    fputs ("\n\n", ٻاهريون);
 }
 
-void
-grammar_rules_print (FILE *out)
+فراغ
+grammar_قاعدا_print (FILE *ٻاهريون)
 {
-  grammar_rules_partial_print (out, _("Grammar"), rule_useful_in_grammar_p);
+  grammar_قاعدا_partial_print (ٻاهريون, _("Grammar"), قاعدو_useful_اندريون_grammar_p);
 }
 
-void
-grammar_rules_print_xml (FILE *out, int level)
+فراغ
+grammar_قاعدا_print_xml (FILE *ٻاهريون, صحيح level)
 {
-  bool first = true;
+  bool پهريون = true;
 
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  لكل (قاعدو_عدد r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (first)
-        xml_puts (out, level + 1, "<rules>");
-      first = false;
+      إذا (پهريون)
+        xml_puts (ٻاهريون, level + 1, "<rules>");
+      پهريون = false;
       {
-        char const *usefulness
-          = rule_useless_in_grammar_p (&rules[r]) ? "useless-in-grammar"
-          : rule_useless_in_parser_p (&rules[r])  ? "useless-in-parser"
+        حرف ثابت *usefulness
+          = قاعدو_useless_اندريون_grammar_p (&قاعدا[r]) ? "useless-in-grammar"
+          : قاعدو_useless_اندريون_parser_p (&قاعدا[r])  ? "useless-in-parser"
           :                                         "useful";
-        xml_indent (out, level + 2);
-        fprintf (out, "<rule number=\"%d\" usefulness=\"%s\"",
-                 rules[r].number, usefulness);
-        if (rules[r].precsym)
-          fprintf (out, " percent_prec=\"%s\"",
-                   xml_escape (rules[r].precsym->symbol->tag));
-        fputs (">\n", out);
+        xml_indent (ٻاهريون, level + 2);
+        fprintf (ٻاهريون, "<rule number=\"%d\" usefulness=\"%s\"",
+                 قاعدا[r].عدد, usefulness);
+        إذا (قاعدا[r].precsym)
+          fprintf (ٻاهريون, " percent_prec=\"%s\"",
+                   xml_escape (قاعدا[r].precsym->نشان->ٽيگ));
+        fputs (">\n", ٻاهريون);
       }
-      rule_lhs_print_xml (&rules[r], out, level + 3);
-      rule_rhs_print_xml (&rules[r], out, level + 3);
-      xml_puts (out, level + 2, "</rule>");
+      قاعدو_lhs_print_xml (&قاعدا[r], ٻاهريون, level + 3);
+      قاعدو_rhs_print_xml (&قاعدا[r], ٻاهريون, level + 3);
+      xml_puts (ٻاهريون, level + 2, "</rule>");
     }
-  if (!first)
-    xml_puts (out, level + 1, "</rules>");
-  else
-   xml_puts (out, level + 1, "<rules/>");
+  إذا (!پهريون)
+    xml_puts (ٻاهريون, level + 1, "</rules>");
+  وإلا
+   xml_puts (ٻاهريون, level + 1, "<rules/>");
 }
 
-static void
-section (FILE *out, const char *s)
+ساكن فراغ
+section (FILE *ٻاهريون, ثابت حرف *s)
 {
-  fprintf (out, "%s\n", s);
-  for (int i = strlen (s); 0 < i; --i)
-    putc ('-', out);
-  putc ('\n', out);
-  putc ('\n', out);
+  fprintf (ٻاهريون, "%s\n", s);
+  لكل (صحيح i = لڙي_ڊيگهه (s); 0 < i; --i)
+    putc ('-', ٻاهريون);
+  putc ('\n', ٻاهريون);
+  putc ('\n', ٻاهريون);
 }
 
-void
-grammar_dump (FILE *out, const char *title)
+فراغ
+grammar_dump (FILE *ٻاهريون, ثابت حرف *title)
 {
-  fprintf (out, "%s\n\n", title);
-  fprintf (out,
+  fprintf (ٻاهريون, "%s\n\n", title);
+  fprintf (ٻاهريون,
            "ntokens = %d, nnterms = %d, nsyms = %d, nrules = %d, nritems = %d\n\n",
            ntokens, nnterms, nsyms, nrules, nritems);
 
-  section (out, "Tokens");
+  section (ٻاهريون, "Tokens");
   {
-    fprintf (out, "Value  Sprec  Sassoc  Tag\n");
+    fprintf (ٻاهريون, "Value  Sprec  Sassoc  Tag\n");
 
-    for (symbol_number i = 0; i < ntokens; i++)
-      fprintf (out, "%5d  %5d   %5d  %s\n",
+    لكل (نشان_عدد i = 0; i < ntokens; i++)
+      fprintf (ٻاهريون, "%5d  %5d   %5d  %s\n",
                i,
                symbols[i]->content->prec, symbols[i]->content->assoc,
-               symbols[i]->tag);
-    fprintf (out, "\n\n");
+               symbols[i]->ٽيگ);
+    fprintf (ٻاهريون, "\n\n");
   }
 
-  section (out, "Nonterminals");
+  section (ٻاهريون, "Nonterminals");
   {
-    fprintf (out, "Value  Tag\n");
+    fprintf (ٻاهريون, "Value  Tag\n");
 
-    for (symbol_number i = ntokens; i < nsyms; i++)
-      fprintf (out, "%5d  %s\n",
-               i, symbols[i]->tag);
-    fprintf (out, "\n\n");
+    لكل (نشان_عدد i = ntokens; i < nsyms; i++)
+      fprintf (ٻاهريون, "%5d  %s\n",
+               i, symbols[i]->ٽيگ);
+    fprintf (ٻاهريون, "\n\n");
   }
 
-  section (out, "Rules");
+  section (ٻاهريون, "Rules");
   {
-    fprintf (out,
+    fprintf (ٻاهريون,
              "Num (Prec, Assoc, Useful, UselessChain) Lhs"
              " -> (Ritem Range) Rhs\n");
-    for (rule_number i = 0; i < nrules + nuseless_productions; ++i)
+    لكل (قاعدو_عدد i = 0; i < nrules + nuseless_productions; ++i)
       {
-        rule const *rule_i = &rules[i];
-        int const rhs_itemno = rule_i->rhs - ritem;
-        int length = rule_rhs_length (rule_i);
-        aver (item_number_as_rule_number (rule_i->rhs[length]) == i);
-        fprintf (out, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
+        قاعدو ثابت *قاعدو_i = &قاعدا[i];
+        صحيح ثابت rhs_itemno = قاعدو_i->rhs - ritem;
+        صحيح ڊيگهائي = قاعدو_rhs_ڊيگهائي (قاعدو_i);
+        aver (شي_عدد_as_قاعدو_عدد (قاعدو_i->rhs[ڊيگهائي]) == i);
+        fprintf (ٻاهريون, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
                  i,
-                 rule_i->prec ? rule_i->prec->prec : 0,
-                 rule_i->prec ? rule_i->prec->assoc : 0,
-                 rule_i->useful ? "t" : "f",
-                 rule_useless_chain_p (rule_i) ? "t" : "f",
-                 rule_i->lhs->number,
-                 rhs_itemno, rhs_itemno + length - 1);
+                 قاعدو_i->prec ? قاعدو_i->prec->prec : 0,
+                 قاعدو_i->prec ? قاعدو_i->prec->assoc : 0,
+                 قاعدو_i->useful ? "t" : "f",
+                 قاعدو_useless_chain_p (قاعدو_i) ? "t" : "f",
+                 قاعدو_i->lhs->عدد,
+                 rhs_itemno, rhs_itemno + ڊيگهائي - 1);
         /* Dumped the RHS. */
-        for (item_number *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
-          fprintf (out, " %3d", *rhsp);
-        putc ('\n', out);
+        لكل (شي_عدد *rhsp = قاعدو_i->rhs; 0 <= *rhsp; ++rhsp)
+          fprintf (ٻاهريون, " %3d", *rhsp);
+        putc ('\n', ٻاهريون);
       }
   }
-  fprintf (out, "\n\n");
+  fprintf (ٻاهريون, "\n\n");
 
-  section (out, "Rules interpreted");
-  for (rule_number r = 0; r < nrules + nuseless_productions; ++r)
+  section (ٻاهريون, "Rules interpreted");
+  لكل (قاعدو_عدد r = 0; r < nrules + nuseless_productions; ++r)
     {
-      fprintf (out, "%-5d  %s:", r, rules[r].lhs->symbol->tag);
-      rule_rhs_print (&rules[r], out);
-      putc ('\n', out);
+      fprintf (ٻاهريون, "%-5d  %s:", r, قاعدا[r].lhs->نشان->ٽيگ);
+      قاعدو_rhs_print (&قاعدا[r], ٻاهريون);
+      putc ('\n', ٻاهريون);
     }
-  fprintf (out, "\n\n");
+  fprintf (ٻاهريون, "\n\n");
 }
 
-void
-grammar_rules_useless_report (const char *message)
+فراغ
+grammar_قاعدا_useless_report (ثابت حرف *پيغام)
 {
-  for (rule_number r = 0; r < nrules; ++r)
+  لكل (قاعدو_عدد r = 0; r < nrules; ++r)
     /* Don't complain about rules whose LHS is useless, we already
        complained about it.  */
-    if (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
-        && !rules[r].useful)
-      complain (&rules[r].location, Wother, "%s", message);
+    إذا (!reduce_nonterminal_useless_اندريون_grammar (قاعدا[r].lhs)
+        && !قاعدا[r].useful)
+      complain (&قاعدا[r].location, Wother, "%s", پيغام);
 }
 
-void
-grammar_free (void)
+فراغ
+grammar_free (فراغ)
 {
-  if (ritem)
-    free (ritem - 1);
-  free (rules);
-  free (token_translations);
+  إذا (ritem)
+    حرر (ritem - 1);
+  حرر (قاعدا);
+  حرر (token_translations);
   /* Free the symbol table data structure.  */
   symbols_free ();
   free_merger_functions ();

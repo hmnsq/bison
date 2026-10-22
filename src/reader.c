@@ -18,71 +18,71 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <quote.h>
-#include <vasnprintf.h>
+#ضمن <quote.h>
+#ضمن <vasnprintf.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "gram.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "symlist.h"
-#include "symtab.h"
-#include "scan-gram.h"
-#include "scan-code.h"
+#ضمن "complain.h"
+#ضمن "conflicts.h"
+#ضمن "files.h"
+#ضمن "fixits.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "muscle-tab.h"
+#ضمن "reader.h"
+#ضمن "symlist.h"
+#ضمن "symtab.h"
+#ضمن "scan-gram.h"
+#ضمن "scan-code.h"
 
-static void prepare_percent_define_front_end_variables (void);
-static void check_and_convert_grammar (void);
+ساكن فراغ prepare_percent_define_front_پڇاڙي_variables (فراغ);
+ساكن فراغ check_and_convert_grammar (فراغ);
 
-static symbol_list *grammar = NULL;
-symbol_list *start_symbols = NULL;
-merger_list *merge_functions = NULL;
+ساكن نشان_list *grammar = عدم;
+نشان_list *شروعات_symbols = عدم;
+merger_list *ملايو_functions = عدم;
 
 /* Was %union seen?  */
-bool union_seen = false;
+bool union_ڏٺل = false;
 
 /* Should rules have a default precedence?  */
 bool default_prec = true;
 
 
-void
-grammar_start_symbols_add (symbol_list *syms)
+فراغ
+grammar_شروعات_symbols_جوڙيو (نشان_list *syms)
 {
   /* Report and ignore duplicates.  Append the others to START_SYMBOLS.  */
-  symbol_list *last = symbol_list_last (start_symbols);
-  for (symbol_list *l = syms; l && l->content.sym; /* nothing */)
+  نشان_list *آخري = نشان_list_آخري (شروعات_symbols);
+  لكل (نشان_list *l = syms; l && l->content.sym; /* nothing */)
     {
       /* Is there a previous definition?  */
-      symbol_list *first = symbol_list_find_symbol (start_symbols, l->content.sym);
-      if (first)
+      نشان_list *پهريون = نشان_list_ڳوليو_نشان (شروعات_symbols, l->content.sym);
+      إذا (پهريون)
         {
-          duplicate_directive ("%start", first->sym_loc, l->sym_loc);
-          symbol_list *dupl = l;
-          l = l->next;
-          dupl->next = NULL;
-          symbol_list_free (dupl);
+          duplicate_directive ("%start", پهريون->sym_loc, l->sym_loc);
+          نشان_list *dupl = l;
+          l = l->ايندڙ;
+          dupl->ايندڙ = عدم;
+          نشان_list_free (dupl);
         }
-      else
+      وإلا
         {
-          if (last)
+          إذا (آخري)
             {
-              last->next = l;
-              last = l;
+              آخري->ايندڙ = l;
+              آخري = l;
             }
-          else
+          وإلا
             {
-              last = l;
-              start_symbols = last;
+              آخري = l;
+              شروعات_symbols = آخري;
             }
-          symbol_list *next = l->next;
-          l->next = NULL;
-          l = next;
+          نشان_list *ايندڙ = l->ايندڙ;
+          l->ايندڙ = عدم;
+          l = ايندڙ;
         }
     }
 }
@@ -94,31 +94,31 @@ grammar_start_symbols_add (symbol_list *syms)
 | function, if new, in MERGER_LIST.                                       |
 `------------------------------------------------------------------------*/
 
-static int
-get_merge_function (uniqstr name)
+ساكن صحيح
+get_ملايو_function (uniqstr name)
 {
-  if (! glr_parser)
-    return 0;
+  إذا (! glr_parser)
+    أرجع 0;
 
   merger_list *syms;
-  merger_list head;
-  int n;
+  merger_list سر;
+  صحيح n;
 
-  head.next = merge_functions;
-  for (syms = &head, n = 1; syms->next; syms = syms->next, n += 1)
-    if (UNIQSTR_EQ (name, syms->next->name))
-      break;
-  if (syms->next == NULL)
+  سر.ايندڙ = ملايو_functions;
+  لكل (syms = &سر, n = 1; syms->ايندڙ; syms = syms->ايندڙ, n += 1)
+    إذا (UNIQSTR_EQ (name, syms->ايندڙ->name))
+      اكسر;
+  إذا (syms->ايندڙ == عدم)
     {
-      syms->next = xmalloc (sizeof syms->next[0]);
-      syms->next->name = uniqstr_new (name);
+      syms->ايندڙ = xmalloc (حجم syms->ايندڙ[0]);
+      syms->ايندڙ->name = uniqstr_new (name);
       /* After all symbol type declarations have been parsed, packgram invokes
          record_merge_function_type to set the type.  */
-      syms->next->sym = NULL;
-      syms->next->next = NULL;
-      merge_functions = head.next;
+      syms->ايندڙ->sym = عدم;
+      syms->ايندڙ->ايندڙ = عدم;
+      ملايو_functions = سر.ايندڙ;
     }
-  return n;
+  أرجع n;
 }
 
 /*-------------------------------------------------------------------.
@@ -127,39 +127,39 @@ get_merge_function (uniqstr name)
 | of the rule whose %merge declaration is at DECLARATION_LOC.        |
 `-------------------------------------------------------------------*/
 
-static void
-record_merge_function_type (int merger, symbol *sym, location declaration_loc)
+ساكن فراغ
+رڪارڊ_ملايو_function_type (صحيح merger, نشان *sym, location declaration_loc)
 {
-  if (merger <= 0)
-    return;
+  إذا (merger <= 0)
+    أرجع;
 
   uniqstr type
     = sym->content->type_name ? sym->content->type_name : uniqstr_new ("");
 
-  merger_list *merge_function;
-  int merger_find = 1;
-  for (merge_function = merge_functions;
-       merge_function != NULL && merger_find != merger;
-       merge_function = merge_function->next)
-    merger_find += 1;
-  aver (merge_function != NULL && merger_find == merger);
-  if (merge_function->sym && merge_function->sym->content->type_name)
+  merger_list *ملايو_function;
+  صحيح merger_ڳوليو = 1;
+  لكل (ملايو_function = ملايو_functions;
+       ملايو_function != عدم && merger_ڳوليو != merger;
+       ملايو_function = ملايو_function->ايندڙ)
+    merger_ڳوليو += 1;
+  aver (ملايو_function != عدم && merger_ڳوليو == merger);
+  إذا (ملايو_function->sym && ملايو_function->sym->content->type_name)
     {
-      if (!UNIQSTR_EQ (merge_function->sym->content->type_name, type))
+      إذا (!UNIQSTR_EQ (ملايو_function->sym->content->type_name, type))
         {
           complain (&declaration_loc, complaint,
                     _("result type clash on merge function %s: "
                       "<%s> != <%s>"),
-                    quote (merge_function->name), type,
-                    merge_function->sym->content->type_name);
-          subcomplain (&merge_function->type_declaration_loc, complaint,
+                    quote (ملايو_function->name), type,
+                    ملايو_function->sym->content->type_name);
+          subcomplain (&ملايو_function->type_declaration_loc, complaint,
                        _("previous declaration"));
         }
     }
-  else
+  وإلا
     {
-      merge_function->sym = sym;
-      merge_function->type_declaration_loc = declaration_loc;
+      ملايو_function->sym = sym;
+      ملايو_function->type_declaration_loc = declaration_loc;
     }
 }
 
@@ -167,14 +167,14 @@ record_merge_function_type (int merger, symbol *sym, location declaration_loc)
 | Free all merge-function definitions.  |
 `--------------------------------------*/
 
-void
-free_merger_functions (void)
+فراغ
+free_merger_functions (فراغ)
 {
-  merger_list *L0 = merge_functions;
-  while (L0)
+  merger_list *L0 = ملايو_functions;
+  طالما (L0)
     {
-      merger_list *L1 = L0->next;
-      free (L0);
+      merger_list *L1 = L0->ايندڙ;
+      حرر (L0);
       L0 = L1;
     }
 }
@@ -192,42 +192,42 @@ free_merger_functions (void)
 `-------------------------------------------------------------------*/
 
 /* The (currently) last symbol of GRAMMAR. */
-static symbol_list *grammar_end = NULL;
+ساكن نشان_list *grammar_پڇاڙي = عدم;
 
 /* Append SYM to the grammar.  */
-static symbol_list *
-grammar_symbol_append (symbol *sym, location loc)
+ساكن نشان_list *
+grammar_نشان_append (نشان *sym, location loc)
 {
-  symbol_list *p = symbol_list_sym_new (sym, loc);
+  نشان_list *p = نشان_list_sym_new (sym, loc);
 
-  if (grammar_end)
-    grammar_end->next = p;
-  else
+  إذا (grammar_پڇاڙي)
+    grammar_پڇاڙي->ايندڙ = p;
+  وإلا
     grammar = p;
 
-  grammar_end = p;
+  grammar_پڇاڙي = p;
 
   /* A null SYM stands for an end of rule; it is not an actual
      part of it.  */
-  if (sym)
+  إذا (sym)
     ++nritems;
 
-  return p;
+  أرجع p;
 }
 
-static void
-assign_named_ref (symbol_list *p, named_ref *name)
+ساكن فراغ
+سونپيو_named_ref (نشان_list *p, named_ref *name)
 {
-  symbol *sym = p->content.sym;
+  نشان *sym = p->content.sym;
 
-  if (name->id == sym->tag)
+  إذا (name->id == sym->ٽيگ)
     {
       complain (&name->loc, Wother,
                 _("duplicated symbol name for %s ignored"),
-                quote (sym->tag));
+                quote (sym->ٽيگ));
       named_ref_free (name);
     }
-  else
+  وإلا
     p->named_ref = name;
 }
 
@@ -235,32 +235,32 @@ assign_named_ref (symbol_list *p, named_ref *name)
 /* The rule currently being defined, and the previous rule.
    CURRENT_RULE points to the first LHS of the current rule, while
    PREVIOUS_RULE_END points to the *end* of the previous rule (NULL).  */
-static symbol_list *current_rule = NULL;
-static symbol_list *previous_rule_end = NULL;
+ساكن نشان_list *current_قاعدو = عدم;
+ساكن نشان_list *اڳيون_قاعدو_پڇاڙي = عدم;
 
 
 /*----------------------------------------------.
 | Create a new rule for LHS in to the GRAMMAR.  |
 `----------------------------------------------*/
 
-void
-grammar_current_rule_begin (symbol *lhs, location loc,
+فراغ
+grammar_current_قاعدو_begin (نشان *lhs, location loc,
                             named_ref *lhs_name)
 {
   /* Start a new rule and record its lhs.  */
   ++nrules;
-  previous_rule_end = grammar_end;
+  اڳيون_قاعدو_پڇاڙي = grammar_پڇاڙي;
 
-  current_rule = grammar_symbol_append (lhs, loc);
-  if (lhs_name)
-    assign_named_ref (current_rule, named_ref_copy (lhs_name));
+  current_قاعدو = grammar_نشان_append (lhs, loc);
+  إذا (lhs_name)
+    سونپيو_named_ref (current_قاعدو, named_ref_copy (lhs_name));
 
   /* Mark the rule's lhs as a nonterminal if not already so.  */
-  if (lhs->content->class == unknown_sym || lhs->content->class == pct_type_sym)
-    symbol_class_set (lhs, nterm_sym, empty_loc, false);
-  else if (lhs->content->class == token_sym)
+  إذا (lhs->content->class == unknown_sym || lhs->content->class == pct_type_sym)
+    نشان_class_سيٽ (lhs, nterm_sym, خالي_جايون_loc, false);
+  وإلا إذا (lhs->content->class == token_sym)
     complain (&loc, complaint, _("rule given for %s, which is a token"),
-              lhs->tag);
+              lhs->ٽيگ);
 }
 
 
@@ -272,21 +272,21 @@ grammar_current_rule_begin (symbol *lhs, location loc,
 |      "exp: { $$ = 1; } { $$ = $1; }".                                 |
 `----------------------------------------------------------------------*/
 
-static bool
-symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
+ساكن bool
+نشان_should_be_استعمال_ٿيل (نشان_list ثابت *s, bool *midrule_warning)
 {
-  if (symbol_code_props_get (s->content.sym, destructor)->code)
-    return true;
-  if ((s->midrule && s->midrule->action_props.is_value_used)
-      || (s->midrule_parent_rule
-          && (symbol_list_n_get (s->midrule_parent_rule,
-                                 s->midrule_parent_rhs_index)
-              ->action_props.is_value_used)))
+  إذا (نشان_ڪوڊ_props_get (s->content.sym, destructor)->ڪوڊ)
+    أرجع true;
+  إذا ((s->midrule && s->midrule->action_props.is_قدر_استعمال_ٿيل)
+      || (s->midrule_والد_قاعدو
+          && (نشان_list_n_get (s->midrule_والد_قاعدو,
+                                 s->midrule_والد_rhs_اشاريو)
+              ->action_props.is_قدر_استعمال_ٿيل)))
     {
       *midrule_warning = true;
-      return true;
+      أرجع true;
     }
-  return false;
+  أرجع false;
 }
 
 /*-----------------------------------------------------------------.
@@ -295,11 +295,11 @@ symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
 | the default action.                                              |
 `-----------------------------------------------------------------*/
 
-static void
-grammar_rule_check_and_complete (symbol_list *r)
+ساكن فراغ
+grammar_قاعدو_check_and_complete (نشان_list *r)
 {
-  const symbol *lhs = r->content.sym;
-  const symbol *first_rhs = r->next->content.sym;
+  ثابت نشان *lhs = r->content.sym;
+  ثابت نشان *پهريون_rhs = r->ايندڙ->content.sym;
 
   /* Type check.
 
@@ -308,39 +308,39 @@ grammar_rule_check_and_complete (symbol_list *r)
 
      Don't worry about the default action if $$ is untyped, since $$'s
      value can't be used.  */
-  if (!r->action_props.code && lhs->content->type_name)
+  إذا (!r->action_props.ڪوڊ && lhs->content->type_name)
     {
       /* If $$ is being set in default way, report if any type mismatch.  */
-      if (first_rhs)
+      إذا (پهريون_rhs)
         {
-          char const *lhs_type = lhs->content->type_name;
-          char const *rhs_type =
-            first_rhs->content->type_name ? first_rhs->content->type_name : "";
-          if (!UNIQSTR_EQ (lhs_type, rhs_type))
+          حرف ثابت *lhs_type = lhs->content->type_name;
+          حرف ثابت *rhs_type =
+            پهريون_rhs->content->type_name ? پهريون_rhs->content->type_name : "";
+          إذا (!UNIQSTR_EQ (lhs_type, rhs_type))
             complain (&r->rhs_loc, Wother,
                       _("type clash on default action: <%s> != <%s>"),
                       lhs_type, rhs_type);
-          else
+          وإلا
             {
               /* Install the default action only for C++.  */
-              const bool is_cxx =
+              ثابت bool is_cxx =
                 STREQ (language->language, "c++")
                 || (skeleton && (STREQ (skeleton, "glr.cc")
                                  || STREQ (skeleton, "glr2.cc")
                                  || STREQ (skeleton, "lalr1.cc")));
-              if (is_cxx)
+              إذا (is_cxx)
                 {
-                  code_props_rule_action_init (&r->action_props, "{ $$ = $1; }",
+                  ڪوڊ_props_قاعدو_action_init (&r->action_props, "{ $$ = $1; }",
                                                r->rhs_loc, r,
-                                               /* name */ NULL,
-                                               /* type */ NULL,
+                                               /* name */ عدم,
+                                               /* type */ عدم,
                                                /* is_predicate */ false);
-                  code_props_translate_code (&r->action_props);
+                  ڪوڊ_props_translate_ڪوڊ (&r->action_props);
                 }
             }
         }
       /* Warn if there is no default for $$ but we need one.  */
-      else
+      وإلا
         complain (&r->rhs_loc, Wother,
                   _("empty rule for typed nonterminal, and no action"));
     }
@@ -348,23 +348,23 @@ grammar_rule_check_and_complete (symbol_list *r)
   /* For each start symbol, build the action of its start rule.  Use
      the same obstack as the one used by scan-code, which is in charge
      of actions. */
-  const bool multistart = start_symbols && start_symbols->next;
-  if (multistart && lhs == acceptsymbol)
+  ثابت bool multistart = شروعات_symbols && شروعات_symbols->ايندڙ;
+  إذا (multistart && lhs == acceptsymbol)
     {
-      const symbol *start = r->next->next->content.sym;
-      if (start->content->type_name)
+      ثابت نشان *شروعات = r->ايندڙ->ايندڙ->content.sym;
+      إذا (شروعات->content->type_name)
         obstack_printf (obstack_for_actions,
                         "{ ]b4_accept""([%s%d])[; }",
-                        start->content->class == nterm_sym ? "orig " : "",
-                        start->content->number);
-      else
+                        شروعات->content->class == nterm_sym ? "orig " : "",
+                        شروعات->content->عدد);
+      وإلا
         obstack_printf (obstack_for_actions,
                         "{ ]b4_accept[; }");
-      code_props_rule_action_init (&r->action_props,
+      ڪوڊ_props_قاعدو_action_init (&r->action_props,
                                    obstack_finish0 (obstack_for_actions),
                                    r->rhs_loc, r,
-                                   /* name */ NULL,
-                                   /* type */ NULL,
+                                   /* name */ عدم,
+                                   /* type */ عدم,
                                    /* is_predicate */ false);
     }
 
@@ -373,61 +373,61 @@ grammar_rule_check_and_complete (symbol_list *r)
      Don't check the generated start rules.  It has no action, so some
      rhs symbols may appear unused, but the parsing algorithm ensures
      that %destructor's are invoked appropriately.  */
-  if (lhs != acceptsymbol)
+  إذا (lhs != acceptsymbol)
     {
-      int n = 0;
-      for (symbol_list const *l = r; l && l->content.sym; l = l->next, ++n)
+      صحيح n = 0;
+      لكل (نشان_list ثابت *l = r; l && l->content.sym; l = l->ايندڙ, ++n)
         {
           bool midrule_warning = false;
-          if (!l->action_props.is_value_used
-              && symbol_should_be_used (l, &midrule_warning)
+          إذا (!l->action_props.is_قدر_استعمال_ٿيل
+              && نشان_should_be_استعمال_ٿيل (l, &midrule_warning)
               /* The default action, $$ = $1, 'uses' both.  */
-              && (r->action_props.code || (n != 0 && n != 1)))
+              && (r->action_props.ڪوڊ || (n != 0 && n != 1)))
             {
-              warnings warn_flag = midrule_warning ? Wmidrule_values : Wother;
-              if (n)
+              warnings warn_flag = midrule_warning ? Wmidrule_قدرون : Wother;
+              إذا (n)
                 complain (&l->sym_loc, warn_flag, _("unused value: $%d"), n);
-              else
+              وإلا
                 complain (&l->rhs_loc, warn_flag, _("unset value: $$"));
             }
         }
     }
 
   /* Check that %empty => empty rule.  */
-  if (r->percent_empty_loc.start.file
-      && r->next && r->next->content.sym)
+  إذا (r->percent_خالي_جايون_loc.شروعات.file
+      && r->ايندڙ && r->ايندڙ->content.sym)
     {
-      complain (&r->percent_empty_loc, complaint,
+      complain (&r->percent_خالي_جايون_loc, complaint,
                 _("%%empty on non-empty rule"));
-      fixits_register (&r->percent_empty_loc, "");
+      fixits_رجسٽر (&r->percent_خالي_جايون_loc, "");
     }
 
   /* Check that empty rule => %empty.  */
-  if (!(r->next && r->next->content.sym)
-      && !r->midrule_parent_rule
-      && !r->percent_empty_loc.start.file
-      && warning_is_enabled (Wempty_rule))
+  إذا (!(r->ايندڙ && r->ايندڙ->content.sym)
+      && !r->midrule_والد_قاعدو
+      && !r->percent_خالي_جايون_loc.شروعات.file
+      && warning_is_enabled (Wempty_قاعدو))
     {
-      complain (&r->rhs_loc, Wempty_rule, _("empty rule without %%empty"));
-      if (feature_flag & feature_caret)
+      complain (&r->rhs_loc, Wempty_قاعدو, _("empty rule without %%empty"));
+      إذا (feature_flag & feature_caret)
         location_caret_suggestion (r->rhs_loc, "%empty", stderr);
       location loc = r->rhs_loc;
-      loc.end = loc.start;
-      fixits_register (&loc, " %empty ");
+      loc.پڇاڙي = loc.شروعات;
+      fixits_رجسٽر (&loc, " %empty ");
     }
 
   /* See comments in grammar_current_rule_prec_set for how POSIX
      mandates this complaint.  It's only for identifiers, so skip
      it for char literals and strings, which are always tokens.  */
-  if (r->ruleprec
-      && r->ruleprec->tag[0] != '\'' && r->ruleprec->tag[0] != '"'
-      && r->ruleprec->content->status != declared
+  إذا (r->ruleprec
+      && r->ruleprec->ٽيگ[0] != '\'' && r->ruleprec->ٽيگ[0] != '"'
+      && r->ruleprec->content->حالت != declared
       && !r->ruleprec->content->prec)
     complain (&r->rhs_loc, Wother,
-              _("token for %%prec is not defined: %s"), r->ruleprec->tag);
+              _("token for %%prec is not defined: %s"), r->ruleprec->ٽيگ);
 
   /* Check that the (main) action was not typed.  */
-  if (r->action_props.type)
+  إذا (r->action_props.type)
     complain (&r->rhs_loc, Wother,
               _("only midrule actions can be typed: %s"), r->action_props.type);
 }
@@ -437,12 +437,12 @@ grammar_rule_check_and_complete (symbol_list *r)
 | End the currently being grown rule.  |
 `-------------------------------------*/
 
-void
-grammar_current_rule_end (location loc)
+فراغ
+grammar_current_قاعدو_پڇاڙي (location loc)
 {
   /* Put an empty link in the list to mark the end of this rule  */
-  grammar_symbol_append (NULL, grammar_end->rhs_loc);
-  current_rule->rhs_loc = loc;
+  grammar_نشان_append (عدم, grammar_پڇاڙي->rhs_loc);
+  current_قاعدو->rhs_loc = loc;
 }
 
 
@@ -453,8 +453,8 @@ grammar_current_rule_end (location loc)
 | rule.                                                              |
 `-------------------------------------------------------------------*/
 
-void
-grammar_midrule_action (void)
+فراغ
+grammar_midrule_action (فراغ)
 {
   /* Since the action was written out with this rule's number, we must
      give the new rule this number by inserting the new rule before
@@ -462,14 +462,14 @@ grammar_midrule_action (void)
 
   /* Make a DUMMY nonterminal, whose location is that of the midrule
      action.  Create the MIDRULE.  */
-  location dummy_loc = current_rule->action_props.location;
-  symbol *dummy = dummy_symbol_get (dummy_loc);
-  symbol_type_set (dummy,
-                   current_rule->action_props.type, current_rule->action_props.location);
-  symbol_list *midrule = symbol_list_sym_new (dummy, dummy_loc);
+  location dummy_loc = current_قاعدو->action_props.location;
+  نشان *dummy = dummy_نشان_get (dummy_loc);
+  نشان_type_سيٽ (dummy,
+                   current_قاعدو->action_props.type, current_قاعدو->action_props.location);
+  نشان_list *midrule = نشان_list_sym_new (dummy, dummy_loc);
 
   /* Remember named_ref of previous action. */
-  named_ref *action_name = current_rule->action_props.named_ref;
+  named_ref *action_name = current_قاعدو->action_props.named_ref;
 
   /* Make a new rule, whose body is empty, before the current one, so
      that the action just read can belong to it.  */
@@ -477,44 +477,44 @@ grammar_midrule_action (void)
   ++nritems;
   /* Attach its location and actions to that of the DUMMY.  */
   midrule->rhs_loc = dummy_loc;
-  code_props_rule_action_init (&midrule->action_props,
-                               current_rule->action_props.code,
-                               current_rule->action_props.location,
+  ڪوڊ_props_قاعدو_action_init (&midrule->action_props,
+                               current_قاعدو->action_props.ڪوڊ,
+                               current_قاعدو->action_props.location,
                                midrule,
-                               /* name_ref */ NULL,
-                               /* type */ NULL,
-                               current_rule->action_props.is_predicate);
-  code_props_none_init (&current_rule->action_props);
+                               /* name_ref */ عدم,
+                               /* type */ عدم,
+                               current_قاعدو->action_props.is_predicate);
+  ڪوڊ_props_none_init (&current_قاعدو->action_props);
 
-  midrule->expected_sr_conflicts = current_rule->expected_sr_conflicts;
-  midrule->expected_rr_conflicts = current_rule->expected_rr_conflicts;
-  current_rule->expected_sr_conflicts = -1;
-  current_rule->expected_rr_conflicts = -1;
+  midrule->expected_sr_conflicts = current_قاعدو->expected_sr_conflicts;
+  midrule->expected_rr_conflicts = current_قاعدو->expected_rr_conflicts;
+  current_قاعدو->expected_sr_conflicts = -1;
+  current_قاعدو->expected_rr_conflicts = -1;
 
-  if (previous_rule_end)
-    previous_rule_end->next = midrule;
-  else
+  إذا (اڳيون_قاعدو_پڇاڙي)
+    اڳيون_قاعدو_پڇاڙي->ايندڙ = midrule;
+  وإلا
     grammar = midrule;
 
   /* End the dummy's rule.  */
-  midrule->next = symbol_list_sym_new (NULL, dummy_loc);
-  midrule->next->next = current_rule;
+  midrule->ايندڙ = نشان_list_sym_new (عدم, dummy_loc);
+  midrule->ايندڙ->ايندڙ = current_قاعدو;
 
-  previous_rule_end = midrule->next;
+  اڳيون_قاعدو_پڇاڙي = midrule->ايندڙ;
 
   /* Insert the dummy nonterminal replacing the midrule action into
      the current rule.  Bind it to its dedicated rule.  */
-  grammar_current_rule_symbol_append (dummy, dummy_loc,
+  grammar_current_قاعدو_نشان_append (dummy, dummy_loc,
                                       action_name);
-  grammar_end->midrule = midrule;
-  midrule->midrule_parent_rule = current_rule;
-  midrule->midrule_parent_rhs_index = symbol_list_length (current_rule->next);
+  grammar_پڇاڙي->midrule = midrule;
+  midrule->midrule_والد_قاعدو = current_قاعدو;
+  midrule->midrule_والد_rhs_اشاريو = نشان_list_ڊيگهائي (current_قاعدو->ايندڙ);
 }
 
 /* Set the precedence symbol of the current rule to PRECSYM. */
 
-void
-grammar_current_rule_prec_set (symbol *precsym, location loc)
+فراغ
+grammar_current_قاعدو_prec_سيٽ (نشان *precsym, location loc)
 {
   /* POSIX says that any identifier is a nonterminal if it does not
      appear on the LHS of a grammar rule and is not defined by %token
@@ -526,111 +526,111 @@ grammar_current_rule_prec_set (symbol *precsym, location loc)
      believe is the real intent of POSIX here: that an error be
      reported for any identifier that appears after %prec but that is
      not defined separately as a token.  */
-  symbol_class_set (precsym, token_sym, loc, false);
-  if (current_rule->ruleprec)
-    duplicate_rule_directive ("%prec",
-                              current_rule->ruleprec->location, loc);
-  else
-    current_rule->ruleprec = precsym;
+  نشان_class_سيٽ (precsym, token_sym, loc, false);
+  إذا (current_قاعدو->ruleprec)
+    duplicate_قاعدو_directive ("%prec",
+                              current_قاعدو->ruleprec->location, loc);
+  وإلا
+    current_قاعدو->ruleprec = precsym;
 }
 
 /* Set %empty for the current rule. */
 
-void
-grammar_current_rule_empty_set (location loc)
+فراغ
+grammar_current_قاعدو_خالي_جايون_سيٽ (location loc)
 {
   /* If %empty is used and -Wno-empty-rule is not, then enable
      -Wempty-rule.  */
-  if (warning_is_unset (Wempty_rule))
+  إذا (warning_is_unset (Wempty_قاعدو))
     warning_argmatch ("empty-rule", 0, 0);
-  if (current_rule->percent_empty_loc.start.file)
-    duplicate_rule_directive ("%empty",
-                              current_rule->percent_empty_loc, loc);
-  else
-    current_rule->percent_empty_loc = loc;
+  إذا (current_قاعدو->percent_خالي_جايون_loc.شروعات.file)
+    duplicate_قاعدو_directive ("%empty",
+                              current_قاعدو->percent_خالي_جايون_loc, loc);
+  وإلا
+    current_قاعدو->percent_خالي_جايون_loc = loc;
 }
 
 /* Attach dynamic precedence DPREC to the current rule. */
 
-void
-grammar_current_rule_dprec_set (int dprec, location loc)
+فراغ
+grammar_current_قاعدو_dprec_سيٽ (صحيح dprec, location loc)
 {
-  if (! glr_parser)
+  إذا (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%dprec");
-  if (dprec <= 0)
+  إذا (dprec <= 0)
     complain (&loc, complaint, _("%s must be followed by positive number"),
               "%dprec");
-  else if (current_rule->dprec != 0)
-    duplicate_rule_directive ("%dprec",
-                              current_rule->dprec_loc, loc);
-  else
+  وإلا إذا (current_قاعدو->dprec != 0)
+    duplicate_قاعدو_directive ("%dprec",
+                              current_قاعدو->dprec_loc, loc);
+  وإلا
     {
-      current_rule->dprec = dprec;
-      current_rule->dprec_loc = loc;
+      current_قاعدو->dprec = dprec;
+      current_قاعدو->dprec_loc = loc;
     }
 }
 
 /* Attach a merge function NAME with argument type TYPE to current
    rule. */
 
-void
-grammar_current_rule_merge_set (uniqstr name, location loc)
+فراغ
+grammar_current_قاعدو_ملايو_سيٽ (uniqstr name, location loc)
 {
-  if (! glr_parser)
+  إذا (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%merge");
-  if (current_rule->merger != 0)
-    duplicate_rule_directive ("%merge",
-                              current_rule->merger_declaration_loc, loc);
-  else
+  إذا (current_قاعدو->merger != 0)
+    duplicate_قاعدو_directive ("%merge",
+                              current_قاعدو->merger_declaration_loc, loc);
+  وإلا
     {
-      current_rule->merger = get_merge_function (name);
-      current_rule->merger_declaration_loc = loc;
+      current_قاعدو->merger = get_ملايو_function (name);
+      current_قاعدو->merger_declaration_loc = loc;
     }
 }
 
 /* Attach SYM to the current rule.  If needed, move the previous
    action as a midrule action.  */
 
-void
-grammar_current_rule_symbol_append (symbol *sym, location loc,
+فراغ
+grammar_current_قاعدو_نشان_append (نشان *sym, location loc,
                                     named_ref *name)
 {
-  if (current_rule->action_props.code)
+  إذا (current_قاعدو->action_props.ڪوڊ)
     grammar_midrule_action ();
-  symbol_list *p = grammar_symbol_append (sym, loc);
-  if (name)
-    assign_named_ref (p, name);
-  if (sym->content->status == undeclared || sym->content->status == used)
-    sym->content->status = needed;
+  نشان_list *p = grammar_نشان_append (sym, loc);
+  إذا (name)
+    سونپيو_named_ref (p, name);
+  إذا (sym->content->حالت == undeclared || sym->content->حالت == استعمال_ٿيل)
+    sym->content->حالت = needed;
 }
 
-void
-grammar_current_rule_action_append (const char *action, location loc,
+فراغ
+grammar_current_قاعدو_action_append (ثابت حرف *action, location loc,
                                     named_ref *name, uniqstr type)
 {
-  if (current_rule->action_props.code)
+  إذا (current_قاعدو->action_props.ڪوڊ)
     grammar_midrule_action ();
-  if (type)
+  إذا (type)
     complain (&loc, Wyacc,
               _("POSIX Yacc does not support typed midrule actions"));
   /* After all symbol declarations have been parsed, packgram invokes
      code_props_translate_code.  */
-  code_props_rule_action_init (&current_rule->action_props, action, loc,
-                               current_rule,
+  ڪوڊ_props_قاعدو_action_init (&current_قاعدو->action_props, action, loc,
+                               current_قاعدو,
                                name, type,
                                /* is_predicate */ false);
 }
 
-void
-grammar_current_rule_predicate_append (const char *pred, location loc)
+فراغ
+grammar_current_قاعدو_predicate_append (ثابت حرف *pred, location loc)
 {
-  if (current_rule->action_props.code)
+  إذا (current_قاعدو->action_props.ڪوڊ)
     grammar_midrule_action ();
-  code_props_rule_action_init (&current_rule->action_props, pred, loc,
-                               current_rule,
-                               NULL, NULL,
+  ڪوڊ_props_قاعدو_action_init (&current_قاعدو->action_props, pred, loc,
+                               current_قاعدو,
+                               عدم, عدم,
                                /* is_predicate */ true);
 }
 
@@ -638,21 +638,21 @@ grammar_current_rule_predicate_append (const char *pred, location loc)
  * for the current rule.  If a midrule is encountered later, the count
  * is transferred to it and reset in the current rule to -1. */
 
-void
-grammar_current_rule_expect_sr (int count, location loc)
+فراغ
+grammar_current_قاعدو_expect_sr (صحيح ڳڻپ, location loc)
 {
-  (void) loc;
-  current_rule->expected_sr_conflicts = count;
+  (فراغ) loc;
+  current_قاعدو->expected_sr_conflicts = ڳڻپ;
 }
 
-void
-grammar_current_rule_expect_rr (int count, location loc)
+فراغ
+grammar_current_قاعدو_expect_rr (صحيح ڳڻپ, location loc)
 {
-  if (! glr_parser)
+  إذا (! glr_parser)
     complain (&loc, Wother, _("%s affects only GLR parsers"),
               "%expect-rr");
-  else
-    current_rule->expected_rr_conflicts = count;
+  وإلا
+    current_قاعدو->expected_rr_conflicts = ڳڻپ;
 }
 
 
@@ -660,91 +660,91 @@ grammar_current_rule_expect_rr (int count, location loc)
 | Build RULES and RITEM from what was parsed.  |
 `---------------------------------------------*/
 
-static void
-packgram (void)
+ساكن فراغ
+packgram (فراغ)
 {
-  int itemno = 0;
-  ritem = xnmalloc (nritems + 1, sizeof *ritem);
+  صحيح itemno = 0;
+  ritem = xnmalloc (nritems + 1, حجم *ritem);
   /* This sentinel is used by build_relations() in lalr.c.  */
   *ritem++ = 0;
 
-  rule_number ruleno = 0;
-  rules = xnmalloc (nrules, sizeof *rules);
+  قاعدو_عدد ruleno = 0;
+  قاعدا = xnmalloc (nrules, حجم *قاعدا);
 
-  for (symbol_list *p = grammar; p; p = p->next)
+  لكل (نشان_list *p = grammar; p; p = p->ايندڙ)
     {
-      symbol_list *lhs = p;
-      record_merge_function_type (lhs->merger, lhs->content.sym,
+      نشان_list *lhs = p;
+      رڪارڊ_ملايو_function_type (lhs->merger, lhs->content.sym,
                                   lhs->merger_declaration_loc);
       /* If the midrule's $$ is set or its $n is used, remove the '$' from the
          symbol name so that it's a user-defined symbol so that the default
          %destructor and %printer apply.  */
-      if (lhs->midrule_parent_rule /* i.e., symbol_is_dummy (lhs->content.sym).  */
-          && (lhs->action_props.is_value_used
-              || (symbol_list_n_get (lhs->midrule_parent_rule,
-                                     lhs->midrule_parent_rhs_index)
-                  ->action_props.is_value_used)))
-        lhs->content.sym->tag += 1;
+      إذا (lhs->midrule_والد_قاعدو /* i.e., symbol_is_dummy (lhs->content.sym).  */
+          && (lhs->action_props.is_قدر_استعمال_ٿيل
+              || (نشان_list_n_get (lhs->midrule_والد_قاعدو,
+                                     lhs->midrule_والد_rhs_اشاريو)
+                  ->action_props.is_قدر_استعمال_ٿيل)))
+        lhs->content.sym->ٽيگ += 1;
 
-      grammar_rule_check_and_complete (lhs);
+      grammar_قاعدو_check_and_complete (lhs);
 
-      rules[ruleno].code = ruleno;
-      rules[ruleno].number = ruleno;
-      rules[ruleno].lhs = lhs->content.sym->content;
-      rules[ruleno].rhs = ritem + itemno;
-      rules[ruleno].prec = NULL;
-      rules[ruleno].dprec = lhs->dprec;
-      rules[ruleno].merger = lhs->merger;
-      rules[ruleno].precsym = NULL;
-      rules[ruleno].location = lhs->rhs_loc;
-      rules[ruleno].useful = true;
-      rules[ruleno].action = lhs->action_props.code;
-      rules[ruleno].action_loc = lhs->action_props.location;
-      rules[ruleno].is_predicate = lhs->action_props.is_predicate;
-      rules[ruleno].expected_sr_conflicts = lhs->expected_sr_conflicts;
-      rules[ruleno].expected_rr_conflicts = lhs->expected_rr_conflicts;
+      قاعدا[ruleno].ڪوڊ = ruleno;
+      قاعدا[ruleno].عدد = ruleno;
+      قاعدا[ruleno].lhs = lhs->content.sym->content;
+      قاعدا[ruleno].rhs = ritem + itemno;
+      قاعدا[ruleno].prec = عدم;
+      قاعدا[ruleno].dprec = lhs->dprec;
+      قاعدا[ruleno].merger = lhs->merger;
+      قاعدا[ruleno].precsym = عدم;
+      قاعدا[ruleno].location = lhs->rhs_loc;
+      قاعدا[ruleno].useful = true;
+      قاعدا[ruleno].action = lhs->action_props.ڪوڊ;
+      قاعدا[ruleno].action_loc = lhs->action_props.location;
+      قاعدا[ruleno].is_predicate = lhs->action_props.is_predicate;
+      قاعدا[ruleno].expected_sr_conflicts = lhs->expected_sr_conflicts;
+      قاعدا[ruleno].expected_rr_conflicts = lhs->expected_rr_conflicts;
 
       /* Traverse the rhs.  */
       {
-        size_t rule_length = 0;
-        for (p = lhs->next; p->content.sym; p = p->next)
+        size_t قاعدو_ڊيگهائي = 0;
+        لكل (p = lhs->ايندڙ; p->content.sym; p = p->ايندڙ)
           {
-            ++rule_length;
+            ++قاعدو_ڊيگهائي;
 
             /* Don't allow rule_length == INT_MAX, since that might
                cause confusion with strtol if INT_MAX == LONG_MAX.  */
-            if (rule_length == INT_MAX)
-              complain (&rules[ruleno].location, fatal, _("rule is too long"));
+            إذا (قاعدو_ڊيگهائي == وڌ_کان_وڌ_عدد)
+              complain (&قاعدا[ruleno].location, fatal, _("rule is too long"));
 
             /* item_number = symbol_number.
                But the former needs to contain more: negative rule numbers. */
             ritem[itemno++] =
-              symbol_number_as_item_number (p->content.sym->content->number);
+              نشان_عدد_as_شي_عدد (p->content.sym->content->عدد);
             /* A rule gets by default the precedence and associativity
                of its last token.  */
-            if (p->content.sym->content->class == token_sym && default_prec)
-              rules[ruleno].prec = p->content.sym->content;
+            إذا (p->content.sym->content->class == token_sym && default_prec)
+              قاعدا[ruleno].prec = p->content.sym->content;
           }
       }
 
       /* If this rule has a %prec,
          the specified symbol's precedence replaces the default.  */
-      if (lhs->ruleprec)
+      إذا (lhs->ruleprec)
         {
-          rules[ruleno].precsym = lhs->ruleprec->content;
-          rules[ruleno].prec = lhs->ruleprec->content;
+          قاعدا[ruleno].precsym = lhs->ruleprec->content;
+          قاعدا[ruleno].prec = lhs->ruleprec->content;
         }
 
       /* An item ends by the rule number (negated).  */
-      ritem[itemno++] = rule_number_as_item_number (ruleno);
-      aver (itemno < ITEM_NUMBER_MAX);
+      ritem[itemno++] = قاعدو_عدد_as_شي_عدد (ruleno);
+      aver (itemno < شي_عدد_MAX);
       ++ruleno;
-      aver (ruleno < RULE_NUMBER_MAX);
+      aver (ruleno < قاعدو_عدد_MAX);
     }
 
   aver (itemno == nritems);
 
-  if (trace_flag & trace_sets)
+  إذا (trace_flag & trace_sets)
     ritem_print (stderr);
 }
 
@@ -754,8 +754,8 @@ packgram (void)
 | described in gram.h.                                          |
 `--------------------------------------------------------------*/
 
-void
-reader (const char *gram)
+فراغ
+reader (ثابت حرف *gram)
 {
   /* Set up symbol_table, semantic_type_table, and the built-in
      symbols.  */
@@ -766,14 +766,14 @@ reader (const char *gram)
   gram_parse ();
   gram_scanner_close ();
 
-  prepare_percent_define_front_end_variables ();
+  prepare_percent_define_front_پڇاڙي_variables ();
 
-  if (complaint_status  < status_complaint)
+  إذا (complaint_حالت  < حالت_complaint)
     check_and_convert_grammar ();
 }
 
-static void
-prepare_percent_define_front_end_variables (void)
+ساكن فراغ
+prepare_percent_define_front_پڇاڙي_variables (فراغ)
 {
   /* Set %define front-end variable defaults.  */
   muscle_percent_define_default ("lr.keep-unreachable-state", "false");
@@ -781,39 +781,39 @@ prepare_percent_define_front_end_variables (void)
     /* IELR would be a better default, but LALR is historically the
        default.  */
     muscle_percent_define_default ("lr.type", "lalr");
-    char *lr_type = muscle_percent_define_get ("lr.type");
-    if (STRNEQ (lr_type, "canonical-lr"))
+    حرف *lr_type = muscle_percent_define_get ("lr.type");
+    إذا (STRNEQ (lr_type, "canonical-lr"))
       muscle_percent_define_default ("lr.default-reduction", "most");
-    else
+    وإلا
       muscle_percent_define_default ("lr.default-reduction", "accepting");
-    free (lr_type);
+    حرر (lr_type);
   }
   muscle_percent_define_default ("tool.xsltproc", "xsltproc");
 
   /* Check %define front-end variables.  */
   {
-    static char const * const values[] =
+    ساكن حرف ثابت * ثابت قدرون[] =
       {
-       "lr.type", "lr""(0)", "lalr", "ielr", "canonical-lr", NULL,
-       "lr.default-reduction", "most", "consistent", "accepting", NULL,
-       NULL
+       "lr.type", "lr""(0)", "lalr", "ielr", "canonical-lr", عدم,
+       "lr.default-reduction", "most", "consistent", "accepting", عدم,
+       عدم
       };
-    muscle_percent_define_check_values (values);
+    muscle_percent_define_check_قدرون (قدرون);
   }
 }
 
 /* Find the first LHS which is not a dummy.  */
 
-static symbol *
-find_start_symbol (void)
+ساكن نشان *
+ڳوليو_شروعات_نشان (فراغ)
 {
-  symbol_list *res = grammar;
+  نشان_list *res = grammar;
   /* Skip all the possible dummy rules of the first rule.  */
-  for (; symbol_is_dummy (res->content.sym); res = res->next)
+  لكل (; نشان_is_dummy (res->content.sym); res = res->ايندڙ)
     /* Skip the LHS, and then all the RHS of the dummy rule.  */
-    for (res = res->next; res->content.sym; res = res->next)
-      continue;
-  return res->content.sym;
+    لكل (res = res->ايندڙ; res->content.sym; res = res->ايندڙ)
+      استمر;
+  أرجع res->content.sym;
 }
 
 
@@ -821,32 +821,32 @@ find_start_symbol (void)
    (not that of the start symbol):
 
    $accept: SWITCHING_TOKEN START $end.  */
-static void
-create_start_rule (symbol *swtok, symbol *start)
+ساكن فراغ
+create_شروعات_قاعدو (نشان *swtok, نشان *شروعات)
 {
-  symbol_list *initial_rule = symbol_list_sym_new (acceptsymbol, empty_loc);
-  initial_rule->rhs_loc = grammar->rhs_loc;
-  symbol_list *p = initial_rule;
-  if (swtok)
+  نشان_list *initial_قاعدو = نشان_list_sym_new (acceptsymbol, خالي_جايون_loc);
+  initial_قاعدو->rhs_loc = grammar->rhs_loc;
+  نشان_list *p = initial_قاعدو;
+  إذا (swtok)
     {
       // Cannot create the action now, as the symbols have not yet
       // been assigned their number (by symbol_pack), which we need to
       // know the type name.  So the action is created in
       // grammar_rule_check_and_complete, which is run after
       // symbol_pack.
-      p->next = symbol_list_sym_new (swtok, empty_loc);
-      p = p->next;
+      p->ايندڙ = نشان_list_sym_new (swtok, خالي_جايون_loc);
+      p = p->ايندڙ;
     }
-  p->next = symbol_list_sym_new (start, empty_loc);
-  p = p->next;
-  p->next = symbol_list_sym_new (eoftoken, empty_loc);
-  p = p->next;
-  p->next = symbol_list_sym_new (NULL, empty_loc);
-  p = p->next;
-  p->next = grammar;
+  p->ايندڙ = نشان_list_sym_new (شروعات, خالي_جايون_loc);
+  p = p->ايندڙ;
+  p->ايندڙ = نشان_list_sym_new (eoftoken, خالي_جايون_loc);
+  p = p->ايندڙ;
+  p->ايندڙ = نشان_list_sym_new (عدم, خالي_جايون_loc);
+  p = p->ايندڙ;
+  p->ايندڙ = grammar;
   nrules += 1;
   nritems += 3 + !!swtok;
-  grammar = initial_rule;
+  grammar = initial_قاعدو;
 }
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
@@ -855,86 +855,86 @@ create_start_rule (symbol *swtok, symbol *start)
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *
-switching_token (const symbol *start)
+نشان *
+switching_token (ثابت نشان *شروعات)
 {
-  char buf[100];
-  size_t len = sizeof buf;
-  char *name = asnprintf (buf, &len, "YY_PARSE_%s", symbol_id_get (start));
-  if (!name)
+  حرف buf[100];
+  size_t len = حجم buf;
+  حرف *name = asnprintf (buf, &len, "YY_PARSE_%s", نشان_id_get (شروعات));
+  إذا (!name)
     xalloc_die ();
   // Setting the location ensures deterministic symbol numbers.
-  symbol *res = symbol_get (name, start->location);
-  if (name != buf)
-    free (name);
-  symbol_class_set (res, token_sym, start->location, false);
-  return res;
+  نشان *res = نشان_get (name, شروعات->location);
+  إذا (name != buf)
+    حرر (name);
+  نشان_class_سيٽ (res, token_sym, شروعات->location, false);
+  أرجع res;
 }
 
 /* Create the start rules in reverse order, since they are inserted at
    the top of the grammar.  That way the rules follow the order of
    declaration to %start.  */
 
-static void
-create_multiple_start_rules (symbol_list *start_syms)
+ساكن فراغ
+create_گڻو_شروعات_قاعدا (نشان_list *شروعات_syms)
 {
-  if (start_syms)
+  إذا (شروعات_syms)
     {
-      create_multiple_start_rules (start_syms->next);
-      assert (start_syms->content_type == SYMLIST_SYMBOL);
-      symbol *start = start_syms->content.sym;
-      symbol *swtok = switching_token (start);
-      create_start_rule (swtok, start);
+      create_گڻو_شروعات_قاعدا (شروعات_syms->ايندڙ);
+      أكد (شروعات_syms->content_type == SYMLIST_نشان);
+      نشان *شروعات = شروعات_syms->content.sym;
+      نشان *swtok = switching_token (شروعات);
+      create_شروعات_قاعدو (swtok, شروعات);
     }
 }
 
 /* For each start symbol "foo", create the rule "$accept: YY_FOO
    foo $end". */
-static void
-create_start_rules (void)
+ساكن فراغ
+create_شروعات_قاعدا (فراغ)
 {
-  if (!start_symbols)
+  إذا (!شروعات_symbols)
     {
-      symbol *start = find_start_symbol ();
-      start_symbols = symbol_list_sym_new (start, start->location);
+      نشان *شروعات = ڳوليو_شروعات_نشان ();
+      شروعات_symbols = نشان_list_sym_new (شروعات, شروعات->location);
     }
 
-  const bool several = start_symbols->next;
-  if (several)
-    create_multiple_start_rules (start_symbols);
-  else
+  ثابت bool several = شروعات_symbols->ايندڙ;
+  إذا (several)
+    create_گڻو_شروعات_قاعدا (شروعات_symbols);
+  وإلا
     {
-      symbol *start = start_symbols->content.sym;
-      create_start_rule (NULL, start);
+      نشان *شروعات = شروعات_symbols->content.sym;
+      create_شروعات_قاعدو (عدم, شروعات);
     }
 }
 
-static void
-check_start_symbols (void)
+ساكن فراغ
+check_شروعات_symbols (فراغ)
 {
-  const bool multistart = start_symbols && start_symbols->next;
+  ثابت bool multistart = شروعات_symbols && شروعات_symbols->ايندڙ;
   // Sanity checks on the start symbols.
-  for (symbol_list *list = start_symbols; list; list = list->next)
+  لكل (نشان_list *list = شروعات_symbols; list; list = list->ايندڙ)
     {
-      const symbol *start = list->content.sym;
-      if (start->content->class == unknown_sym)
+      ثابت نشان *شروعات = list->content.sym;
+      إذا (شروعات->content->class == unknown_sym)
         {
-          complain (&start->location, complaint,
+          complain (&شروعات->location, complaint,
                     _("the start symbol %s is undefined"),
-                    start->tag);
+                    شروعات->ٽيگ);
           // I claim this situation is unreachable.  This is caught
           // before, and we get "symbol 'foo' is used, but is not
           // defined as a token and has no rules".
           abort ();
         }
       // If your only start symbol is a token, you're weird.
-      if (!multistart && start->content->class == token_sym)
-        complain (&start->location, complaint,
+      إذا (!multistart && شروعات->content->class == token_sym)
+        complain (&شروعات->location, complaint,
                   _("the start symbol %s is a token"),
-                  start->tag);
+                  شروعات->ٽيگ);
     }
-  if (complaint_status == status_complaint)
-    exit (EXIT_FAILURE);
+  إذا (complaint_حالت == حالت_complaint)
+    ٻاهر_نڪرو (EXIT_FAILURE);
 }
 
 
@@ -943,48 +943,48 @@ check_start_symbols (void)
 | internal form.                                               |
 `-------------------------------------------------------------*/
 
-static void
-check_and_convert_grammar (void)
+ساكن فراغ
+check_and_convert_grammar (فراغ)
 {
   /* Grammar has been read.  Do some checking.  */
-  if (nrules == 0)
-    complain (NULL, fatal, _("no rules in the input grammar"));
+  إذا (nrules == 0)
+    complain (عدم, fatal, _("no rules in the input grammar"));
 
   /* If the user did not define her EOFTOKEN, do it now. */
-  if (!eoftoken)
+  إذا (!eoftoken)
     {
-      eoftoken = symbol_get ("YYEOF", empty_loc);
-      if (eoftoken->content->class == nterm_sym)
+      eoftoken = نشان_get ("YYEOF", خالي_جايون_loc);
+      إذا (eoftoken->content->class == nterm_sym)
         complain (&eoftoken->location, complaint,
                   _("rule given for %s, which is a token"),
-                  eoftoken->tag);
+                  eoftoken->ٽيگ);
       eoftoken->content->class = token_sym;
-      eoftoken->content->number = 0;
+      eoftoken->content->عدد = 0;
       /* Value specified by POSIX.  */
-      eoftoken->content->code = 0;
+      eoftoken->content->ڪوڊ = 0;
       {
-        symbol *alias = symbol_get ("$end", empty_loc);
-        symbol_class_set (alias, token_sym, empty_loc, false);
-        symbol_make_alias (eoftoken, alias, empty_loc);
+        نشان *alias = نشان_get ("$end", خالي_جايون_loc);
+        نشان_class_سيٽ (alias, token_sym, خالي_جايون_loc, false);
+        نشان_make_alias (eoftoken, alias, خالي_جايون_loc);
       }
     }
 
   /* Insert the initial rule(s).  */
-  create_start_rules ();
+  create_شروعات_قاعدا ();
 
   /* Report any undefined symbols and consider them nonterminals.  */
   symbols_check_defined ();
 
-  if (SYMBOL_NUMBER_MAXIMUM - nnterms < ntokens)
-    complain (NULL, fatal, "too many symbols in input grammar (limit is %d)",
-              SYMBOL_NUMBER_MAXIMUM);
+  إذا (نشان_عدد_وڌ_کان_وڌ - nnterms < ntokens)
+    complain (عدم, fatal, "too many symbols in input grammar (limit is %d)",
+              نشان_عدد_وڌ_کان_وڌ);
 
   nsyms = ntokens + nnterms;
 
   /* Assign the symbols their symbol numbers.  */
   symbols_pack ();
 
-  check_start_symbols ();
+  check_شروعات_symbols ();
 
   /* Scan rule actions after invoking symbol_check_alias_consistency
      (in symbols_pack above) so that token types are set correctly
@@ -998,12 +998,12 @@ check_and_convert_grammar (void)
      the same reason, all the 'used' flags must be set before checking
      whether to remove '$' from any midrule symbol name (also in
      packgram).  */
-  for (symbol_list *sym = grammar; sym; sym = sym->next)
-    code_props_translate_code (&sym->action_props);
+  لكل (نشان_list *sym = grammar; sym; sym = sym->ايندڙ)
+    ڪوڊ_props_translate_ڪوڊ (&sym->action_props);
 
   /* Convert the grammar into the format described in gram.h.  */
   packgram ();
 
   /* The grammar as a symbol_list is no longer needed. */
-  symbol_list_free (grammar);
+  نشان_list_free (grammar);
 }

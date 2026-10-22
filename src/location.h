@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef LOCATION_H_
+#جيڪڏهن_وصف_نه_ٿيل LOCATION_H_
 # define LOCATION_H_
 
 # include <stdbool.h>
@@ -28,7 +28,7 @@
 # include "uniqstr.h"
 
 /* A boundary between two characters.  */
-typedef struct
+تعريفنوع بنية
 {
   /* The name of the file that contains the boundary.  */
   uniqstr file;
@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  صحيح سٽ;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,109 +46,109 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  صحيح ڪالم;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  صحيح byte;
 
 } boundary;
 
 /* Set the position of \a p. */
-static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+ساكن مضمن فراغ
+boundary_سيٽ (boundary *p, ثابت حرف *f, صحيح l, صحيح c, صحيح b)
 {
   p->file = f;
-  p->line = l;
-  p->column = c;
+  p->سٽ = l;
+  p->ڪالم = c;
   p->byte = b;
 }
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+ساكن مضمن صحيح
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  صحيح res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
-    res = a.line - b.line;
-  if (!res)
-    res = a.column - b.column;
-  return res;
+  إذا (!res)
+    res = a.سٽ - b.سٽ;
+  إذا (!res)
+    res = a.ڪالم - b.ڪالم;
+  أرجع res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
-static inline bool
+ساكن مضمن bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
-          && a.line == b.line
+  أرجع (a.ڪالم == b.ڪالم
+          && a.سٽ == b.سٽ
           && UNIQSTR_EQ (a.file, b.file));
 }
 
 /* A location, that is, a region of source code.  */
-typedef struct
+تعريفنوع بنية
 {
   /* Boundary just before the location starts.  */
-  boundary start;
+  boundary شروعات;
 
   /* Boundary just after the location ends.  */
-  boundary end;
+  boundary پڇاڙي;
 
 } location;
 
 # define GRAM_LTYPE location
 
-# define EMPTY_LOCATION_INIT {{NULL, 0, 0, 0}, {NULL, 0, 0, 0}}
-extern location const empty_loc;
+# define خالي_جايون_LOCATION_INIT {{عدم, 0, 0, 0}, {عدم, 0, 0, 0}}
+خارجي location ثابت خالي_جايون_loc;
 
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
-void location_compute (location *loc,
-                       boundary *cur, char const *token, size_t size);
+فراغ location_compute (location *loc,
+                       boundary *cur, حرف ثابت *token, size_t سائيز);
 
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+صحيح location_print (location loc, FILE *ٻاهريون);
 
 /* Prepare the use of location_caret.  */
-void caret_init (void);
+فراغ caret_init (فراغ);
 
 /* Free any allocated resources and close any open file handles that are
    left-over by the usage of location_caret.  */
-void caret_free (void);
+فراغ caret_free (فراغ);
 
 /* If -fcaret is enabled, quote the line containing LOC onto OUT.
    Highlight the part of LOC with the color STYLE.  */
-void location_caret (location loc, const char* style, FILE *out);
+فراغ location_caret (location loc, ثابت حرف* style, FILE *ٻاهريون);
 
 /* If -fcaret is enabled, display a suggestion of replacement for LOC
    with S.  To call after location_caret.  */
-void location_caret_suggestion (location loc, const char *s, FILE *out);
+فراغ location_caret_suggestion (location loc, ثابت حرف *s, FILE *ٻاهريون);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+ساكن مضمن صحيح
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
-    res = boundary_cmp (a.end, b.end);
-  return res;
+  صحيح res = boundary_cmp (a.شروعات, b.شروعات);
+  إذا (!res)
+    res = boundary_cmp (a.پڇاڙي, b.پڇاڙي);
+  أرجع res;
 }
 
 /* Whether this is the empty location.  */
-bool location_empty (location loc);
+bool location_خالي_جايون (location loc);
 
 /* STR must be formatted as 'file:line.column@byte' or 'file:line.column'.
    It may be '<command line>:3.-1@-1', with -1 to denote no-column/no-byte.
    STR will be modified.  */
-void boundary_set_from_string (boundary *bound, char *str);
+فراغ boundary_سيٽ_from_string (boundary *bound, حرف *str);
 
-#endif /* ! defined LOCATION_H_ */
+#جيڪڏهن_پورو /* ! defined LOCATION_H_ */

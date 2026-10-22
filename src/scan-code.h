@@ -18,26 +18,26 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SCAN_CODE_H_
-# define SCAN_CODE_H_
+#جيڪڏهن_وصف_نه_ٿيل جاچ_ڪوڊ_H
+# define جاچ_ڪوڊ_H
 
 # include "location.h"
 # include "named-ref.h"
 # include "uniqstr.h"
 
-struct symbol_list;
+بنية نشان_list;
 
 /**
  * Keeps track of the maximum number of semantic values to the left of a handle
  * (those referenced by $0, $-1, etc.) that are required by the semantic
  * actions of this grammar.
  */
-extern int max_left_semantic_context;
+خارجي صحيح max_کاٻو_semantic_context;
 
 /**
  * The obstack used to store the translated actions.
  */
-extern struct obstack *obstack_for_actions;
+خارجي بنية obstack *obstack_for_actions;
 
 /**
  * A code passage captured from the grammar file and possibly translated,
@@ -45,18 +45,18 @@ extern struct obstack *obstack_for_actions;
  * encapsulation by modifying the fields directly.  Use the provided interface
  * functions.
  */
-typedef struct code_props {
+تعريفنوع بنية ڪوڊ_props {
   /** Set by the init functions.  */
-  enum {
-    CODE_PROPS_NONE, CODE_PROPS_PLAIN,
-    CODE_PROPS_SYMBOL_ACTION, CODE_PROPS_RULE_ACTION
-  } kind;
+  تعداد {
+    ڪوڊ_PROPS_NONE, ڪوڊ_PROPS_PLAIN,
+    ڪوڊ_PROPS_نشان_ACTION, ڪوڊ_PROPS_قاعدو_ACTION
+  } قسم;
 
   /**
    * \c NULL iff \c code_props::kind is \c CODE_PROPS_NONE.
    * Memory is allocated in an obstack freed elsewhere.
    */
-  char const *code;
+  حرف ثابت *ڪوڊ;
   /** Undefined iff \c code_props::code is \c NULL.  */
   location location;
 
@@ -71,7 +71,7 @@ typedef struct code_props {
    *     but the symbol value associated with this \c code_props was not
    *     referenced in the code passage.
    */
-  bool is_value_used;
+  bool is_قدر_استعمال_ٿيل;
 
   /**
    * \c true iff this code is an action that is not to be deferred in
@@ -82,17 +82,17 @@ typedef struct code_props {
   /**
    * Whether this is actually used (i.e., not completely masked by
    * other code props).  */
-  bool is_used;
+  bool is_استعمال_ٿيل;
 
   /** \c NULL iff \c code_props::kind is not \c CODE_PROPS_RULE_ACTION.  */
-  struct symbol_list *rule;
+  بنية نشان_list *قاعدو;
 
   /** Named reference. */
   named_ref *named_ref;
 
   /** Type, for midrule actions.  */
   uniqstr type;
-} code_props;
+} ڪوڊ_props;
 
 /**
  * \pre
@@ -100,24 +100,24 @@ typedef struct code_props {
  * \post
  *   - \c self has been overwritten to contain no code.
  */
-void code_props_none_init (code_props *self);
+فراغ ڪوڊ_props_none_init (ڪوڊ_props *self);
 
 /** Equivalent to \c code_props_none_init.  */
-# define CODE_PROPS_NONE_INIT                   \
+# define ڪوڊ_PROPS_NONE_INIT                   \
   {                                             \
-    /* .kind = */ CODE_PROPS_NONE,              \
-    /* .code = */ NULL,                         \
-    /* .location = */ EMPTY_LOCATION_INIT,      \
+    /* .kind = */ ڪوڊ_PROPS_NONE,              \
+    /* .code = */ عدم,                         \
+    /* .location = */ خالي_جايون_LOCATION_INIT,      \
     /* .is_value_used = */ false,               \
     /* .is_predicate = */ false,                \
     /* .is_used = */ false,                     \
-    /* .rule = */ NULL,                         \
-    /* .named_ref = */ NULL,                    \
-    /* .type = */ NULL,                         \
+    /* .rule = */ عدم,                         \
+    /* .named_ref = */ عدم,                    \
+    /* .type = */ عدم,                         \
   }
 
 /** Initialized by \c CODE_PROPS_NONE_INIT with no further modification.  */
-extern code_props code_props_none;
+خارجي ڪوڊ_props ڪوڊ_props_none;
 
 /**
  * \pre
@@ -131,8 +131,8 @@ extern code_props code_props_none;
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_plain_init (code_props *self, char const *code,
-                            location code_loc);
+فراغ ڪوڊ_props_plain_init (ڪوڊ_props *self, حرف ثابت *ڪوڊ,
+                            location ڪوڊ_loc);
 
 /**
  * \pre
@@ -146,8 +146,8 @@ void code_props_plain_init (code_props *self, char const *code,
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_symbol_action_init (code_props *self, char const *code,
-                                    location code_loc);
+فراغ ڪوڊ_props_نشان_action_init (ڪوڊ_props *self, حرف ثابت *ڪوڊ,
+                                    location ڪوڊ_loc);
 
 /**
  * \param  type   type for midrule actions
@@ -167,8 +167,8 @@ void code_props_symbol_action_init (code_props *self, char const *code,
  *       on \c self.
  *     - The caller frees \c rule.
  */
-void code_props_rule_action_init (code_props *self, char const *code,
-                                  location code_loc, struct symbol_list *rule,
+فراغ ڪوڊ_props_قاعدو_action_init (ڪوڊ_props *self, حرف ثابت *ڪوڊ,
+                                  location ڪوڊ_loc, بنية نشان_list *قاعدو,
                                   named_ref *name, uniqstr type,
                                   bool is_predicate);
 
@@ -183,7 +183,7 @@ void code_props_rule_action_init (code_props *self, char const *code,
  *   - <tt>self->code != self->code\@pre</tt> unless
  *     <tt>self->code\@pre = NULL</tt>.
  */
-void code_props_translate_code (code_props *self);
+فراغ ڪوڊ_props_translate_ڪوڊ (ڪوڊ_props *self);
 
 /**
  * \pre
@@ -194,9 +194,9 @@ void code_props_translate_code (code_props *self);
  *     instance for which \c code_props_translate_code was invoked is now
  *     invalid.
  */
-void code_scanner_last_string_free (void);
+فراغ ڪوڊ_scanner_آخري_string_free (فراغ);
 
-void code_scanner_init (void);
+فراغ ڪوڊ_scanner_init (فراغ);
 
 /**
  * \pre
@@ -206,6 +206,6 @@ void code_scanner_init (void);
  *     \c code_props_translate_code (if any) has been freed.  All \c code_props
  *     instances may now be invalid.
  */
-void code_scanner_free (void);
+فراغ ڪوڊ_scanner_free (فراغ);
 
-#endif /* !SCAN_CODE_H_ */
+#جيڪڏهن_پورو /* !SCAN_CODE_H_ */

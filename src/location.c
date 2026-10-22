@@ -18,108 +18,108 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <mbfile.h>
-#include <mbswidth.h>
-#include <quotearg.h>
-#include <stdio.h>    /* fileno */
-#include <sys/ioctl.h>
-#include <sys/stat.h> /* fstat */
-#include <termios.h>
+#ضمن <mbfile.h>
+#ضمن <mbswidth.h>
+#ضمن <quotearg.h>
+#ضمن <stdio.h>    /* fileno */
+#ضمن <sys/ioctl.h>
+#ضمن <sys/stat.h> /* fstat */
+#ضمن <termios.h>
 
-#ifdef WINSIZE_IN_PTEM
+#جيڪڏهن_وصف_ٿيل WINSIZE_اندريون_PTEM
 # include <sys/stream.h>
 # include <sys/ptem.h>
-#endif
+#جيڪڏهن_پورو
 
-#include "complain.h"
-#include "getargs.h"
-#include "location.h"
+#ضمن "complain.h"
+#ضمن "getargs.h"
+#ضمن "location.h"
 
-location const empty_loc = EMPTY_LOCATION_INIT;
+location ثابت خالي_جايون_loc = خالي_جايون_LOCATION_INIT;
 
 /* The terminal width.  Not less than 40.  */
-static int
-columns (void)
+ساكن صحيح
+columns (فراغ)
 {
-  const char *cp = getenv ("COLUMNS");
-  int res = 80;
-  if (cp && *cp)
+  ثابت حرف *cp = getenv ("COLUMNS");
+  صحيح res = 80;
+  إذا (cp && *cp)
     {
-      long l = strtol (cp, NULL, 10);
-      res = 0 <= l && l <= INT_MAX ? l : INT_MAX;
+      ڊگهو l = strtol (cp, عدم, 10);
+      res = 0 <= l && l <= وڌ_کان_وڌ_عدد ? l : وڌ_کان_وڌ_عدد;
     }
-  else
+  وإلا
     {
-#ifdef TIOCGWINSZ
-      struct winsize ws;
-      if (ioctl (STDERR_FILENO, TIOCGWINSZ, &ws) != -1
-          && 0 < ws.ws_col && ws.ws_col == (size_t) ws.ws_col)
-        res = ws.ws_col;
-#endif
+#جيڪڏهن_وصف_ٿيل TIOCGWINSZ
+      بنية winsize ws;
+      إذا (ioctl (STDERR_FILENO, TIOCGWINSZ, &ws) != -1
+          && 0 < ws.ws_کانو && ws.ws_کانو == (size_t) ws.ws_کانو)
+        res = ws.ws_کانو;
+#جيڪڏهن_پورو
     }
-  return max_int (res, 40);
+  أرجع max_int (res, 40);
 }
 
 /* Available screen width.  */
-static int screen_width = 80;
+ساكن صحيح screen_ويڪر = 80;
 
 /* The ellipsis symbol to use for this locale, and the number of
    screen-columns it uses.  */
-static const char *ellipsis = "...";
-static int ellipsize = 3;
+ساكن ثابت حرف *ellipsis = "...";
+ساكن صحيح ellipsize = 3;
 
 /* If BUF is null, add BUFSIZE (which in this case must be less than
    INT_MAX) to COLUMN; otherwise, add mbsnwidth (BUF, BUFSIZE, 0) to
    COLUMN.  If an overflow occurs, return INT_MAX.  */
 
-static inline int
-add_column_width (int column, char const *buf, size_t bufsize)
+ساكن مضمن صحيح
+جوڙيو_ڪالم_ويڪر (صحيح ڪالم, حرف ثابت *buf, size_t bufsize)
 {
-  int width
+  صحيح ويڪر
     = buf ? mbsnwidth (buf, bufsize, 0)
-    : INT_MAX <= bufsize ? INT_MAX
+    : وڌ_کان_وڌ_عدد <= bufsize ? وڌ_کان_وڌ_عدد
     : bufsize;
-  return column <= INT_MAX - width ? column + width : INT_MAX;
+  أرجع ڪالم <= وڌ_کان_وڌ_عدد - ويڪر ? ڪالم + ويڪر : وڌ_کان_وڌ_عدد;
 }
 
-static void
-boundary_compute (boundary *cur, char const *token, size_t size)
+ساكن فراغ
+boundary_compute (boundary *cur, حرف ثابت *token, size_t سائيز)
 {
-  int line = cur->line;
-  int column = cur->column;
-  int byte = cur->byte;
-  char const *p0 = token;
-  char const *p = token;
-  char const *lim = token + size;
+  صحيح سٽ = cur->سٽ;
+  صحيح ڪالم = cur->ڪالم;
+  صحيح byte = cur->byte;
+  حرف ثابت *p0 = token;
+  حرف ثابت *p = token;
+  حرف ثابت *lim = token + سائيز;
 
-  for (p = token; p < lim; ++p)
-    switch (*p)
+  لكل (p = token; p < lim; ++p)
+    بدل (*p)
       {
-      case '\n':
-        line += line < INT_MAX;
-        column = 1;
+      حالة '\n':
+        سٽ += سٽ < وڌ_کان_وڌ_عدد;
+        ڪالم = 1;
         byte = 1;
         p0 = p + 1;
-        break;
+        اكسر;
 
-      case '\t':
-        column = add_column_width (column, p0, p - p0);
-        column = add_column_width (column, NULL, 8 - ((column - 1) & 7));
+      حالة '\t':
+        ڪالم = جوڙيو_ڪالم_ويڪر (ڪالم, p0, p - p0);
+        ڪالم = جوڙيو_ڪالم_ويڪر (ڪالم, عدم, 8 - ((ڪالم - 1) & 7));
         p0 = p + 1;
-        byte += byte < INT_MAX;
-        break;
+        byte += byte < وڌ_کان_وڌ_عدد;
+        اكسر;
 
-      default:
-        byte += byte < INT_MAX;
-        break;
+      افتراضي:
+        byte += byte < وڌ_کان_وڌ_عدد;
+        اكسر;
       }
-  column = add_column_width (column, p0, p - p0);
+  ڪالم = جوڙيو_ڪالم_ويڪر (ڪالم, p0, p - p0);
 
-  cur->line = line;
-  cur->column = column;
+  cur->سٽ = سٽ;
+  cur->ڪالم = ڪالم;
   cur->byte = byte;
 }
 
@@ -127,87 +127,87 @@ boundary_compute (boundary *cur, char const *token, size_t size)
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
 
-void
-location_compute (location *loc, boundary *cur, char const *token, size_t size)
+فراغ
+location_compute (location *loc, boundary *cur, حرف ثابت *token, size_t سائيز)
 {
-  loc->start = *cur;
-  boundary_compute (cur, token, size);
-  loc->end = *cur;
+  loc->شروعات = *cur;
+  boundary_compute (cur, token, سائيز);
+  loc->پڇاڙي = *cur;
 
-  if (loc->end.line == INT_MAX && loc->start.line != INT_MAX)
+  إذا (loc->پڇاڙي.سٽ == وڌ_کان_وڌ_عدد && loc->شروعات.سٽ != وڌ_کان_وڌ_عدد)
     complain (loc, Wother, _("line number overflow"));
-  if (loc->end.column == INT_MAX && loc->start.column != INT_MAX)
+  إذا (loc->پڇاڙي.ڪالم == وڌ_کان_وڌ_عدد && loc->شروعات.ڪالم != وڌ_کان_وڌ_عدد)
     complain (loc, Wother, _("column number overflow"));
   /* TRANSLATORS: we are counting bytes, and there are too many.  */
-  if (loc->end.byte == INT_MAX && loc->start.byte != INT_MAX)
+  إذا (loc->پڇاڙي.byte == وڌ_کان_وڌ_عدد && loc->شروعات.byte != وڌ_کان_وڌ_عدد)
     complain (loc, Wother, _("byte number overflow"));
 }
 
-static int
-boundary_print (boundary const *b, FILE *out)
+ساكن صحيح
+boundary_print (boundary ثابت *b, FILE *ٻاهريون)
 {
-  return fprintf (out, "%s:%d.%d@%d",
+  أرجع fprintf (ٻاهريون, "%s:%d.%d@%d",
                   quotearg_n_style (3, escape_quoting_style, b->file),
-                  b->line, b->column, b->byte);
+                  b->سٽ, b->ڪالم, b->byte);
 }
 
-int
-location_print (location loc, FILE *out)
+صحيح
+location_print (location loc, FILE *ٻاهريون)
 {
-  int res = 0;
-  if (location_empty (loc))
-    res += fprintf (out, "(empty location)");
-  else if (trace_flag & trace_locations)
+  صحيح res = 0;
+  إذا (location_خالي_جايون (loc))
+    res += fprintf (ٻاهريون, "(empty location)");
+  وإلا إذا (trace_flag & trace_locations)
     {
-      res += boundary_print (&loc.start, out);
-      res += fprintf (out, "-");
-      res += boundary_print (&loc.end, out);
+      res += boundary_print (&loc.شروعات, ٻاهريون);
+      res += fprintf (ٻاهريون, "-");
+      res += boundary_print (&loc.پڇاڙي, ٻاهريون);
     }
-  else
+  وإلا
     {
-      aver (loc.start.file);
-      aver (loc.end.file);
-      int end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
-      res += fprintf (out, "%s",
-                      quotearg_n_style (3, escape_quoting_style, loc.start.file));
-      if (0 < loc.start.line)
+      aver (loc.شروعات.file);
+      aver (loc.پڇاڙي.file);
+      صحيح پڇاڙي_کانو = 0 != loc.پڇاڙي.ڪالم ? loc.پڇاڙي.ڪالم - 1 : 0;
+      res += fprintf (ٻاهريون, "%s",
+                      quotearg_n_style (3, escape_quoting_style, loc.شروعات.file));
+      إذا (0 < loc.شروعات.سٽ)
         {
-          res += fprintf (out, ":%d", loc.start.line);
-          if (0 < loc.start.column)
-            res += fprintf (out, ".%d", loc.start.column);
+          res += fprintf (ٻاهريون, ":%d", loc.شروعات.سٽ);
+          إذا (0 < loc.شروعات.ڪالم)
+            res += fprintf (ٻاهريون, ".%d", loc.شروعات.ڪالم);
         }
-      if (loc.start.file != loc.end.file)
+      إذا (loc.شروعات.file != loc.پڇاڙي.file)
         {
-          res += fprintf (out, "-%s",
+          res += fprintf (ٻاهريون, "-%s",
                           quotearg_n_style (3, escape_quoting_style,
-                                            loc.end.file));
-          if (0 < loc.end.line)
+                                            loc.پڇاڙي.file));
+          إذا (0 < loc.پڇاڙي.سٽ)
             {
-              res += fprintf (out, ":%d", loc.end.line);
-              if (0 <= end_col)
-                res += fprintf (out, ".%d", end_col);
+              res += fprintf (ٻاهريون, ":%d", loc.پڇاڙي.سٽ);
+              إذا (0 <= پڇاڙي_کانو)
+                res += fprintf (ٻاهريون, ".%d", پڇاڙي_کانو);
             }
         }
-      else if (0 < loc.end.line)
+      وإلا إذا (0 < loc.پڇاڙي.سٽ)
         {
-          if (loc.start.line < loc.end.line)
+          إذا (loc.شروعات.سٽ < loc.پڇاڙي.سٽ)
             {
-              res += fprintf (out, "-%d", loc.end.line);
-              if (0 <= end_col)
-                res += fprintf (out, ".%d", end_col);
+              res += fprintf (ٻاهريون, "-%d", loc.پڇاڙي.سٽ);
+              إذا (0 <= پڇاڙي_کانو)
+                res += fprintf (ٻاهريون, ".%d", پڇاڙي_کانو);
             }
-          else if (0 <= end_col && loc.start.column < end_col)
-            res += fprintf (out, "-%d", end_col);
+          وإلا إذا (0 <= پڇاڙي_کانو && loc.شروعات.ڪالم < پڇاڙي_کانو)
+            res += fprintf (ٻاهريون, "-%d", پڇاڙي_کانو);
         }
     }
 
-  return res;
+  أرجع res;
 }
 
 
 /* Persistent data used by location_caret to avoid reopening and rereading the
    same file all over for each error.  */
-static struct
+ساكن بنية
 {
   /* Raw input file.  */
   FILE *file;
@@ -219,21 +219,21 @@ static struct
   boundary pos;
   /* Offset in FILE of the current line (i.e., where line POS.LINE
      starts).  */
-  size_t offset;
+  size_t وٿي;
   /* Length of the current line.  */
-  int line_len;
+  صحيح سٽ_len;
   /* Given the initial column to display, the offset (number of
      characters to skip at the beginning of the line). */
-  int skip;
+  صحيح skip;
 
   /* Available width to quote the source file.  Eight chars are
      consumed by the left-margin (with line number).  */
-  int width;
+  صحيح ويڪر;
 } caret_info;
 
-void caret_init (void)
+فراغ caret_init (فراغ)
 {
-  screen_width = columns ();
+  screen_ويڪر = columns ();
   /* TRANSLATORS: This is used when a line is too long, and is
      displayed truncated.  Use an ellipsis appropriate for your
      language, remembering that "…" (U+2026 HORIZONTAL ELLIPSIS)
@@ -243,175 +243,175 @@ void caret_init (void)
   ellipsize = mbswidth (ellipsis, 0);
 }
 
-void
-caret_free (void)
+فراغ
+caret_free (فراغ)
 {
-  if (caret_info.file)
+  إذا (caret_info.file)
     {
       fclose (caret_info.file);
-      caret_info.file = NULL;
+      caret_info.file = عدم;
     }
 }
 
 /* Open FILE for quoting, if needed, and if possible.  Return whether
    the file can quoted. */
-static bool
-caret_set_file (const char *file)
+ساكن bool
+caret_سيٽ_file (ثابت حرف *file)
 {
   /* If a different file than before, close and let the rest open
      the new one. */
-  if (caret_info.pos.file && caret_info.pos.file != file)
+  إذا (caret_info.pos.file && caret_info.pos.file != file)
     {
       caret_free ();
-      caret_info.pos.file = NULL;
+      caret_info.pos.file = عدم;
     }
-  if (!caret_info.pos.file)
+  إذا (!caret_info.pos.file)
     {
       caret_info.pos.file = file;
-      if ((caret_info.file = fopen (caret_info.pos.file, "rb")))
+      إذا ((caret_info.file = fopen (caret_info.pos.file, "rb")))
         {
           /* If the file is not regular (imagine #line 1 "/dev/stdin"
              in the input file for instance), don't try to quote the
              file.  Keep caret_info.pos.file set so that we don't try
              to open it again, but leave caret_info.file NULL so that
              we don't try to quote it. */
-          struct stat buf;
-          if (fstat (fileno (caret_info.file), &buf) == 0
-              && buf.st_mode & S_IFREG)
+          بنية stat buf;
+          إذا (fstat (fileno (caret_info.file), &buf) == 0
+              && buf.st_گهڻائي & S_IFREG)
             {
-              caret_info.pos.line = 1;
+              caret_info.pos.سٽ = 1;
               mbf_init (caret_info.mbfile, caret_info.file);
             }
-          else
+          وإلا
             caret_free ();
         }
     }
-  return !!caret_info.file;
+  أرجع !!caret_info.file;
 }
 
 /* Getc, but smash \r\n as \n.  */
-static void
-caret_getc_internal (mbchar_t *res)
+ساكن فراغ
+caret_getc_اندروني (mbchar_t *res)
 {
   mbf_getc (*res, caret_info.mbfile);
-  if (mb_iseq (*res, '\r'))
+  إذا (mb_iseq (*res, '\r'))
     {
       mbchar_t c;
       mbf_getc (c, caret_info.mbfile);
-      if (mb_iseq (c, '\n'))
+      إذا (mb_iseq (c, '\n'))
         mb_copy (res, &c);
-      else
+      وإلا
         mbf_ungetc (c, caret_info.mbfile);
     }
 }
 
-#define caret_getc(Var) caret_getc_internal(&Var)
+#وصف_ڪريو caret_getc(Var) caret_getc_اندروني(&Var)
 
 /* Move CARET_INFO (which has a valid FILE) to the line number LINE.
    Compute and cache that line's length in CARET_INFO.LINE_LEN.
    Return whether successful.  */
-static bool
-caret_set_line (int line)
+ساكن bool
+caret_سيٽ_سٽ (صحيح سٽ)
 {
   /* If the line we want to quote is seekable (the same line as the previous
      location), just seek it. If it was a previous line, we lost track of it,
      so return to the start of file.  */
-  if (line < caret_info.pos.line)
+  إذا (سٽ < caret_info.pos.سٽ)
     {
-      caret_info.pos.line = 1;
-      caret_info.offset = 0;
+      caret_info.pos.سٽ = 1;
+      caret_info.وٿي = 0;
     }
-  if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
-    return false;
+  إذا (fseek (caret_info.file, caret_info.وٿي, SEEK_SET))
+    أرجع false;
 
   /* If this is the same line as the previous one, we are done. */
-  if (line < caret_info.pos.line)
-    return true;
+  إذا (سٽ < caret_info.pos.سٽ)
+    أرجع true;
 
   /* Advance to the line's position, keeping track of the offset.  */
-  while (caret_info.pos.line < line)
+  طالما (caret_info.pos.سٽ < سٽ)
     {
       mbchar_t c;
       caret_getc (c);
-      if (mb_iseof (c))
+      إذا (mb_iseof (c))
         /* Something is wrong, that line number does not exist.  */
-        return false;
-      caret_info.pos.line += mb_iseq (c, '\n');
+        أرجع false;
+      caret_info.pos.سٽ += mb_iseq (c, '\n');
     }
-  caret_info.offset = ftell (caret_info.file);
-  caret_info.pos.column = 1;
+  caret_info.وٿي = ftell (caret_info.file);
+  caret_info.pos.ڪالم = 1;
   /* Reset mbf's internal state.
      FIXME: should be done in mbfile.  */
-  caret_info.mbfile.eof_seen = 0;
+  caret_info.mbfile.eof_ڏٺل = 0;
 
   /* Find the number of columns of this line.  */
-  while (true)
+  طالما (true)
     {
       mbchar_t c;
       caret_getc (c);
-      if (mb_iseof (c) || mb_iseq (c, '\n'))
-        break;
+      إذا (mb_iseof (c) || mb_iseq (c, '\n'))
+        اكسر;
       boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
     }
-  caret_info.line_len = caret_info.pos.column;
+  caret_info.سٽ_len = caret_info.pos.ڪالم;
   /* Go back to the beginning of line.  */
-  if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
-    return false;
+  إذا (fseek (caret_info.file, caret_info.وٿي, SEEK_SET))
+    أرجع false;
   /* Reset mbf's internal state.
      FIXME: should be done in mbfile.  */
-  caret_info.mbfile.eof_seen = 0;
-  caret_info.pos.column = 1;
-  return true;
+  caret_info.mbfile.eof_ڏٺل = 0;
+  caret_info.pos.ڪالم = 1;
+  أرجع true;
 }
 
 /* Compute CARET_INFO.WIDTH and CARET_INFO.SKIP based on the fact that
    the first column to display in the current line is COL.  */
-static bool
-caret_set_column (int col)
+ساكن bool
+caret_سيٽ_ڪالم (صحيح کانو)
 {
   /* Available width.  Eight chars are consumed by the left-margin
      (with line number).  */
-  caret_info.width = screen_width - 8;
+  caret_info.ويڪر = screen_ويڪر - 8;
   caret_info.skip = 0;
-  if (caret_info.width < caret_info.line_len)
+  إذا (caret_info.ويڪر < caret_info.سٽ_len)
     {
       /* We cannot quote the whole line.  Make sure we can see the
          beginning of the location.  */
-      caret_info.skip = caret_info.width < col ? col - 10 : 0;
+      caret_info.skip = caret_info.ويڪر < کانو ? کانو - 10 : 0;
     }
   /* If we skip the initial part, we insert "..." before.  */
-  if (caret_info.skip)
-    caret_info.width -= ellipsize;
+  إذا (caret_info.skip)
+    caret_info.ويڪر -= ellipsize;
   /* If the end of line does not fit, we also need to truncate the
      end, and leave "..." there.  */
-  if (caret_info.width < caret_info.line_len - caret_info.skip)
-    caret_info.width -= ellipsize;
-  return true;
+  إذا (caret_info.ويڪر < caret_info.سٽ_len - caret_info.skip)
+    caret_info.ويڪر -= ellipsize;
+  أرجع true;
 }
 
-void
-location_caret (location loc, const char *style, FILE *out)
+فراغ
+location_caret (location loc, ثابت حرف *style, FILE *ٻاهريون)
 {
-  if (!(feature_flag & feature_caret))
-    return;
-  if (!loc.start.line)
-    return;
-  if (!caret_set_file (loc.start.file))
-    return;
-  if (!caret_set_line (loc.start.line))
-    return;
-  if (!caret_set_column (loc.start.column))
-    return;
+  إذا (!(feature_flag & feature_caret))
+    أرجع;
+  إذا (!loc.شروعات.سٽ)
+    أرجع;
+  إذا (!caret_سيٽ_file (loc.شروعات.file))
+    أرجع;
+  إذا (!caret_سيٽ_سٽ (loc.شروعات.سٽ))
+    أرجع;
+  إذا (!caret_سيٽ_ڪالم (loc.شروعات.ڪالم))
+    أرجع;
 
-  const int width = caret_info.width;
-  const int skip = caret_info.skip;
+  ثابت صحيح ويڪر = caret_info.ويڪر;
+  ثابت صحيح skip = caret_info.skip;
 
   /* Read the actual line.  Don't update the offset, so that we keep a pointer
      to the start of the line.  */
   {
     mbchar_t c;
     caret_getc (c);
-    if (!mb_iseof (c))
+    إذا (!mb_iseof (c))
       {
         /* The last column to highlight.  Only the first line of
            multiline locations are quoted, in which case the ending
@@ -420,128 +420,128 @@ location_caret (location loc, const char *style, FILE *out)
            We used to work with byte offsets, and that was much
            easier.  However, we went back to using (visual) columns to
            support truncating of long lines.  */
-        const int col_end
-          = loc.start.line == loc.end.line
-          ? loc.end.column
-          : caret_info.line_len;
+        ثابت صحيح کانو_پڇاڙي
+          = loc.شروعات.سٽ == loc.پڇاڙي.سٽ
+          ? loc.پڇاڙي.ڪالم
+          : caret_info.سٽ_len;
         /* Quote the file (at most the first line in the case of
            multiline locations).  */
         {
-          fprintf (out, "%5d | %s", loc.start.line, skip ? ellipsis : "");
+          fprintf (ٻاهريون, "%5d | %s", loc.شروعات.سٽ, skip ? ellipsis : "");
           /* Whether we opened the style.  If the line is not as
              expected (maybe the file was changed since the scanner
              ran), we might reach the end before we actually saw the
              opening column.  */
-          enum { before, inside, after } state = before;
-          while (!mb_iseof (c) && !mb_iseq (c, '\n'))
+          تعداد { before, inside, after } state = before;
+          طالما (!mb_iseof (c) && !mb_iseq (c, '\n'))
             {
               // We might have already opened (and even closed!) the
               // style and yet have the equality of the columns if we
               // just saw zero-width characters.
-              if (state == before
-                  && caret_info.pos.column == loc.start.column)
+              إذا (state == before
+                  && caret_info.pos.ڪالم == loc.شروعات.ڪالم)
                 {
-                  begin_use_class (style, out);
+                  begin_use_class (style, ٻاهريون);
                   state = inside;
                 }
-              if (skip < caret_info.pos.column)
-                mb_putc (c, out);
+              إذا (skip < caret_info.pos.ڪالم)
+                mb_putc (c, ٻاهريون);
               boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
               caret_getc (c);
-              if (state == inside
-                  && (caret_info.pos.column == col_end
-                      || width < caret_info.pos.column - skip))
+              إذا (state == inside
+                  && (caret_info.pos.ڪالم == کانو_پڇاڙي
+                      || ويڪر < caret_info.pos.ڪالم - skip))
                 {
-                  end_use_class (style, out);
+                  پڇاڙي_use_class (style, ٻاهريون);
                   state = after;
                 }
-              if (width < caret_info.pos.column - skip)
+              إذا (ويڪر < caret_info.pos.ڪالم - skip)
                 {
-                  fputs (ellipsis, out);
-                  break;
+                  fputs (ellipsis, ٻاهريون);
+                  اكسر;
                 }
             }
-          if (state == inside)
+          إذا (state == inside)
             {
               // The line is shorter than expected.
-              end_use_class (style, out);
+              پڇاڙي_use_class (style, ٻاهريون);
               state = after;
             }
-          putc ('\n', out);
+          putc ('\n', ٻاهريون);
         }
 
         /* Print the carets with the same indentation as above.  */
         {
-          fprintf (out, "      | %*s",
-                   loc.start.column - 1 - skip + (skip ? ellipsize : 0), "");
-          begin_use_class (style, out);
-          putc ('^', out);
+          fprintf (ٻاهريون, "      | %*s",
+                   loc.شروعات.ڪالم - 1 - skip + (skip ? ellipsize : 0), "");
+          begin_use_class (style, ٻاهريون);
+          putc ('^', ٻاهريون);
           /* Underlining a multiline location ends with the first
              line.  */
-          for (int i = loc.start.column - 1 - skip + 1,
-                 i_end = min_int (col_end - 1 - skip, width);
-               i < i_end; ++i)
-            putc ('~', out);
-          end_use_class (style, out);
-          putc ('\n', out);
+          لكل (صحيح i = loc.شروعات.ڪالم - 1 - skip + 1,
+                 i_پڇاڙي = min_int (کانو_پڇاڙي - 1 - skip, ويڪر);
+               i < i_پڇاڙي; ++i)
+            putc ('~', ٻاهريون);
+          پڇاڙي_use_class (style, ٻاهريون);
+          putc ('\n', ٻاهريون);
         }
       }
   }
 }
 
-void
-location_caret_suggestion (location loc, const char *s, FILE *out)
+فراغ
+location_caret_suggestion (location loc, ثابت حرف *s, FILE *ٻاهريون)
 {
-  if (!(feature_flag & feature_caret))
-    return;
-  const char *style = "fixit-insert";
-  fprintf (out, "      | %*s",
-           loc.start.column - 1 - caret_info.skip
+  إذا (!(feature_flag & feature_caret))
+    أرجع;
+  ثابت حرف *style = "fixit-insert";
+  fprintf (ٻاهريون, "      | %*s",
+           loc.شروعات.ڪالم - 1 - caret_info.skip
            + (caret_info.skip ? ellipsize : 0),
            "");
-  begin_use_class (style, out);
-  fputs (s, out);
-  end_use_class (style, out);
-  putc ('\n', out);
+  begin_use_class (style, ٻاهريون);
+  fputs (s, ٻاهريون);
+  پڇاڙي_use_class (style, ٻاهريون);
+  putc ('\n', ٻاهريون);
 }
 
 bool
-location_empty (location loc)
+location_خالي_جايون (location loc)
 {
-  return !loc.start.file && !loc.start.line && !loc.start.column
-    && !loc.end.file && !loc.end.line && !loc.end.column;
+  أرجع !loc.شروعات.file && !loc.شروعات.سٽ && !loc.شروعات.ڪالم
+    && !loc.پڇاڙي.file && !loc.پڇاڙي.سٽ && !loc.پڇاڙي.ڪالم;
 }
 
-static inline int
-str_to_int (const char *s)
+ساكن مضمن صحيح
+str_منزل_int (ثابت حرف *s)
 {
-  long l = strtol (s, NULL, 10);
-  return l < 0 ? -1 : l <= INT_MAX ? l : INT_MAX;
+  ڊگهو l = strtol (s, عدم, 10);
+  أرجع l < 0 ? -1 : l <= وڌ_کان_وڌ_عدد ? l : وڌ_کان_وڌ_عدد;
 }
 
-void
-boundary_set_from_string (boundary *bound, char *str)
+فراغ
+boundary_سيٽ_from_string (boundary *bound, حرف *str)
 {
   /* Search backwards: the file name may contain '.'  or ':'.  */
-  char *at = strrchr (str, '@');
-  if (at)
+  حرف *at = strrchr (str, '@');
+  إذا (at)
     {
       *at = '\0';
-      bound->byte = str_to_int (at + 1);
+      bound->byte = str_منزل_int (at + 1);
     }
   {
-    char *dot = strrchr (str, '.');
+    حرف *dot = strrchr (str, '.');
     aver (dot);
     *dot = '\0';
-    bound->column = str_to_int (dot + 1);
-    if (!at)
-      bound->byte = bound->column;
+    bound->ڪالم = str_منزل_int (dot + 1);
+    إذا (!at)
+      bound->byte = bound->ڪالم;
   }
   {
-    char *colon = strrchr (str, ':');
+    حرف *colon = strrchr (str, ':');
     aver (colon);
     *colon = '\0';
-    bound->line = str_to_int (colon + 1);
+    bound->سٽ = str_منزل_int (colon + 1);
   }
   bound->file = uniqstr_new (str);
 }

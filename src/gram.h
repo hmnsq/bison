@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef GRAM_H_
+#جيڪڏهن_وصف_نه_ٿيل GRAM_H_
 # define GRAM_H_
 
 /* Representation of the grammar rules:
@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+خارجي صحيح nsyms;
+خارجي صحيح ntokens;
+خارجي صحيح nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
-# define ITEM_NUMBER_MAX INT_MAX
-extern item_number *ritem;
-extern int nritems;
+تعريفنوع صحيح شي_عدد;
+# define شي_عدد_MAX وڌ_کان_وڌ_عدد
+خارجي شي_عدد *ritem;
+خارجي صحيح nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+تعريفنوع بنانشان صحيح شي_اشاريو;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
-symbol_number_as_item_number (symbol_number sym)
+ساكن مضمن شي_عدد
+نشان_عدد_as_شي_عدد (نشان_عدد sym)
 {
-  return sym;
+  أرجع sym;
 }
 
-static inline symbol_number
-item_number_as_symbol_number (item_number i)
+ساكن مضمن نشان_عدد
+شي_عدد_as_نشان_عدد (شي_عدد i)
 {
-  return i;
+  أرجع i;
 }
 
-static inline bool
-item_number_is_symbol_number (item_number i)
+ساكن مضمن bool
+شي_عدد_is_نشان_عدد (شي_عدد i)
 {
-  return i >= 0;
+  أرجع i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
-# define RULE_NUMBER_MAX INT_MAX
+تعريفنوع صحيح قاعدو_عدد;
+# define قاعدو_عدد_MAX وڌ_کان_وڌ_عدد
 
-static inline item_number
-rule_number_as_item_number (rule_number r)
+ساكن مضمن شي_عدد
+قاعدو_عدد_as_شي_عدد (قاعدو_عدد r)
 {
-  return -1 - r;
+  أرجع -1 - r;
 }
 
-static inline rule_number
-item_number_as_rule_number (item_number i)
+ساكن مضمن قاعدو_عدد
+شي_عدد_as_قاعدو_عدد (شي_عدد i)
 {
-  return -1 - i;
+  أرجع -1 - i;
 }
 
-static inline bool
-item_number_is_rule_number (item_number i)
+ساكن مضمن bool
+شي_عدد_is_قاعدو_عدد (شي_عدد i)
 {
-  return i < 0;
+  أرجع i < 0;
 }
 
 
@@ -176,24 +176,24 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+تعريفنوع بنية
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number code;
+  قاعدو_عدد ڪوڊ;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number number;
+  قاعدو_عدد عدد;
 
   sym_content *lhs;
-  item_number *rhs;
+  شي_عدد *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  صحيح dprec;
+  صحيح merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,126 +205,126 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  صحيح expected_sr_conflicts;
+  صحيح expected_rr_conflicts;
 
-  const char *action;
+  ثابت حرف *action;
   location action_loc;
-} rule;
+} قاعدو;
 
 /* The used rules (size NRULES).  */
-extern rule *rules;
-extern rule_number nrules;
+خارجي قاعدو *قاعدا;
+خارجي قاعدو_عدد nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
-item_rule (item_number const *item)
+ساكن مضمن قاعدو ثابت *
+شي_قاعدو (شي_عدد ثابت *شي)
 {
-  item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  شي_عدد ثابت *sp = شي;
+  طالما (!شي_عدد_is_قاعدو_عدد (*sp))
     ++sp;
-  rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  قاعدو_عدد r = شي_عدد_as_قاعدو_عدد (*sp);
+  أرجع &قاعدا[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
    RITEM.  PREVIOUS_RULE is used to see if the lhs is common, in which
    case LHS is factored.  Passing NULL is fine.  */
-void item_print (item_number *item, rule const *previous_rule,
-                 FILE *out);
+فراغ شي_print (شي_عدد *شي, قاعدو ثابت *اڳيون_قاعدو,
+                 FILE *ٻاهريون);
 
 /*--------.
 | Rules.  |
 `--------*/
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter) (rule const *);
+تعريفنوع bool (*قاعدو_filter) (قاعدو ثابت *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
-rule_is_initial (rule const *r)
+ساكن مضمن bool
+قاعدو_is_initial (قاعدو ثابت *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  أرجع r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
    is useful in the grammar.  */
-bool rule_useful_in_grammar_p (rule const *r);
+bool قاعدو_useful_اندريون_grammar_p (قاعدو ثابت *r);
 
 /* Whether the rule has a 'number' higher than NRULES.  That is, it is
    useless in the grammar.  */
-bool rule_useless_in_grammar_p (rule const *r);
+bool قاعدو_useless_اندريون_grammar_p (قاعدو ثابت *r);
 
 /* Whether the rule is not flagged as useful but is useful in the
    grammar.  In other words, it was discarded because of conflicts.  */
-bool rule_useless_in_parser_p (rule const *r);
+bool قاعدو_useless_اندريون_parser_p (قاعدو ثابت *r);
 
 /* Whether the rule has a single RHS, and no user action. */
-bool rule_useless_chain_p (rule const *r);
+bool قاعدو_useless_chain_p (قاعدو ثابت *r);
 
 /* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
-                     FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+فراغ قاعدو_lhs_print (قاعدو ثابت *r, sym_content ثابت *اڳيون_lhs,
+                     FILE *ٻاهريون);
+فراغ قاعدو_lhs_print_xml (قاعدو ثابت *r, FILE *ٻاهريون, صحيح level);
 
 /* The length of the RHS.  */
-size_t rule_rhs_length (rule const *r);
+size_t قاعدو_rhs_ڊيگهائي (قاعدو ثابت *r);
 
 /* Print this rule's RHS on OUT.  */
-void rule_rhs_print (rule const *r, FILE *out);
+فراغ قاعدو_rhs_print (قاعدو ثابت *r, FILE *ٻاهريون);
 
 /* Print this rule on OUT.  If a PREVIOUS_RULE was already displayed,
    avoid useless repetitions of their LHS. */
-void rule_print (rule const *r, rule const *prev_rule, FILE *out);
+فراغ قاعدو_print (قاعدو ثابت *r, قاعدو ثابت *prev_قاعدو, FILE *ٻاهريون);
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol **symbols;
+خارجي نشان **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number *token_translations;
-extern int max_code;
+خارجي نشان_عدد *token_translations;
+خارجي صحيح max_ڪوڊ;
 
 
 
 /* Dump RITEM for traces. */
-void ritem_print (FILE *out);
+فراغ ritem_print (FILE *ٻاهريون);
 
 /* The size of the longest rule RHS.  */
-size_t ritem_longest_rhs (void);
+size_t ritem_longest_rhs (فراغ);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
-                                  rule_filter filter);
+فراغ grammar_قاعدا_partial_print (FILE *ٻاهريون, ثابت حرف *title,
+                                  قاعدو_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
-void grammar_rules_print (FILE *out);
+فراغ grammar_قاعدا_print (FILE *ٻاهريون);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+فراغ grammar_قاعدا_print_xml (FILE *ٻاهريون, صحيح level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+فراغ grammar_dump (FILE *ٻاهريون, ثابت حرف *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+فراغ grammar_قاعدا_useless_report (ثابت حرف *پيغام);
 
 /* Free the packed grammar. */
-void grammar_free (void);
+فراغ grammar_free (فراغ);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+خارجي صحيح required_نسخو;
 
-#endif /* !GRAM_H_ */
+#جيڪڏهن_پورو /* !GRAM_H_ */

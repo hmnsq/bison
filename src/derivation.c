@@ -17,155 +17,155 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "derivation.h"
-#include "glyphs.h"
+#ضمن "derivation.h"
+#ضمن "glyphs.h"
 
-#include <c-ctype.h>
-#include <gl_linked_list.h>
-#include <mbswidth.h>
-#include <vasnprintf.h>
+#ضمن <c-ctype.h>
+#ضمن <gl_linked_list.h>
+#ضمن <mbswidth.h>
+#ضمن <vasnprintf.h>
 
-#include "system.h"
-#include "complain.h"
+#ضمن "system.h"
+#ضمن "complain.h"
 
-struct derivation
+بنية derivation
 {
-  symbol_number sym;
+  نشان_عدد sym;
   derivation_list children;
-  int reference_count;
+  صحيح reference_ڳڻپ;
   // The rule SYM -> CHILDREN.
-  const rule *rule;
+  ثابت قاعدو *قاعدو;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  صحيح color;
 };
 
-static derivation d_dot = { -1, NULL, -1, NULL, -1 };
+ساكن derivation d_dot = { -1, عدم, -1, عدم, -1 };
 
 derivation *
-derivation_dot (void)
+derivation_dot (فراغ)
 {
-  return &d_dot;
+  أرجع &d_dot;
 }
 
-void
+فراغ
 derivation_list_append (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
-  gl_list_add_last (dl, d);
+  gl_list_جوڙيو_آخري (dl, d);
 }
 
-void
+فراغ
 derivation_list_prepend (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
-  gl_list_add_first (dl, d);
+  gl_list_جوڙيو_پهريون (dl, d);
 }
 
-void derivation_list_free (derivation_list dl)
+فراغ derivation_list_free (derivation_list dl)
 {
-  derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
-       derivation_list_next (&it, &d);
+  derivation *d = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (dl);
+       derivation_list_ايندڙ (&it, &d);
        )
-    if (d != &d_dot)
+    إذا (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r)
+derivation_new (نشان_عدد sym, derivation_list children,
+                ثابت قاعدو *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (حجم *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
-  res->rule = r;
+  res->reference_ڳڻپ = 0;
+  res->قاعدو = r;
   res->color = -1;
-  return res;
+  أرجع res;
 }
 
-void
+فراغ
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_ڳڻپ;
 }
 
-void
+فراغ
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
-  derivation_list free_queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
-                    1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+  إذا (!d)
+    أرجع;
+  derivation_list free_قطار =
+    gl_list_create (GL_LINKED_LIST, عدم, عدم, عدم, true,
+                    1, (ثابت فراغ **)&d);
+  طالما (gl_list_سائيز (free_قطار) > 0)
     {
-      derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      derivation *deriv = (derivation *) gl_list_get_at (free_قطار, 0);
+      إذا (--deriv->reference_ڳڻپ == 0)
         {
-          if (deriv->children)
+          إذا (deriv->children)
             {
-              derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              derivation *ٻار = عدم;
+              لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_ايندڙ (&it, &ٻار);
                    )
-                if (child != &d_dot)
-                  gl_list_add_last (free_queue, child);
+                إذا (ٻار != &d_dot)
+                  gl_list_جوڙيو_آخري (free_قطار, ٻار);
               gl_list_free (deriv->children);
             }
-          free (deriv);
+          حرر (deriv);
         }
-      gl_list_remove_at (free_queue, 0);
+      gl_list_remove_at (free_قطار, 0);
     }
-  gl_list_free (free_queue);
+  gl_list_free (free_قطار);
 }
 
 size_t
-derivation_size (const derivation *deriv)
+derivation_سائيز (ثابت derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
-  derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-       derivation_list_next (&it, &child);
+  إذا (!deriv->children)
+    أرجع 1;
+  صحيح سائيز = 1;
+  derivation *ٻار = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+       derivation_list_ايندڙ (&it, &ٻار);
        )
-    size += derivation_size (child);
-  return size;
+    سائيز += derivation_سائيز (ٻار);
+  أرجع سائيز;
 }
 
 
 // Longest distance from root to leaf.
-static int
-derivation_depth (const derivation *deriv)
+ساكن صحيح
+derivation_اونهائي (ثابت derivation *deriv)
 {
-  if (deriv->children)
+  إذا (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
-      derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      صحيح res = 1;
+      derivation *ٻار;
+      لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_ايندڙ (&it, &ٻار);
            )
-        res = max_int (res, derivation_depth (child));
-      return res + 1;
+        res = max_int (res, derivation_اونهائي (ٻار));
+      أرجع res + 1;
     }
-  else
-    return 1;
+  وإلا
+    أرجع 1;
 }
 
-static bool
-all_spaces (const char *s)
+ساكن bool
+all_spaces (ثابت حرف *s)
 {
-  while (c_isspace (*s))
+  طالما (c_isspace (*s))
     s++;
-  return *s == '\0';
+  أرجع *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,83 +194,83 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+ساكن صحيح
+fputs_if (bool cond, FILE *ٻاهريون, صحيح *padding, ثابت حرف *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  صحيح res = mbswidth (s, 0);
+  إذا (cond && !all_spaces (s))
     {
-      fprintf (out, "%*s%s", *padding, "", s);
+      fprintf (ٻاهريون, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  وإلا
     {
       *padding += res;
     }
-  return res;
+  أرجع res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+ساكن صحيح
+fprintf_if (bool cond, FILE *ٻاهريون, صحيح *padding, ثابت حرف *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
-  va_list args;
-  va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
-  va_end (args);
-  if (!cp)
+  حرف buf[256];
+  size_t len = حجم (buf);
+  va_list دليلون;
+  va_شروعات (دليلون, fmt);
+  حرف *cp = vasnprintf (buf, &len, fmt, دليلون);
+  va_پڇاڙي (دليلون);
+  إذا (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
-    free (cp);
-  return res;
+  صحيح res = fputs_if (cond, ٻاهريون, padding, cp);
+  إذا (cp != buf)
+    حرر (cp);
+  أرجع res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
-derivation_width (const derivation *deriv)
+ساكن صحيح
+derivation_ويڪر (ثابت derivation *deriv)
 {
-  if (deriv->children)
+  إذا (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      ثابت نشان *sym = symbols[deriv->sym];
+      صحيح self_ويڪر = mbswidth (sym->ٽيگ, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      صحيح children_ويڪر = هيٺ_ڏانهن_arrow_ويڪر;
+      children_ويڪر += snprintf (عدم, 0, "%d: ", deriv->قاعدو->عدد);
+      إذا (gl_list_سائيز (deriv->children) == 0)
         // Empty rhs.
-        children_width += empty_width;
-      else
+        children_ويڪر += خالي_جايون_ويڪر;
+      وإلا
         {
-          if (gl_list_size (deriv->children) == 1
-              && gl_list_get_first (deriv->children) == &d_dot)
+          إذا (gl_list_سائيز (deriv->children) == 1
+              && gl_list_get_پهريون (deriv->children) == &d_dot)
             {
-              children_width += empty_width;
-              children_width += derivation_separator_width;
+              children_ويڪر += خالي_جايون_ويڪر;
+              children_ويڪر += derivation_separator_ويڪر;
             }
 
-          derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-               derivation_list_next (&it, &child);
+          derivation *ٻار;
+          لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+               derivation_list_ايندڙ (&it, &ٻار);
                )
-            children_width
-              += derivation_separator_width + derivation_width (child);
+            children_ويڪر
+              += derivation_separator_ويڪر + derivation_ويڪر (ٻار);
           // No separator at the beginning.
-          children_width -= derivation_separator_width;
+          children_ويڪر -= derivation_separator_ويڪر;
         }
-      return max_int (self_width, children_width);
+      أرجع max_int (self_ويڪر, children_ويڪر);
     }
-  else if (deriv == &d_dot)
+  وإلا إذا (deriv == &d_dot)
     {
-      return dot_width;
+      أرجع dot_ويڪر;
     }
-  else // leaf.
+  وإلا // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      ثابت نشان *sym = symbols[deriv->sym];
+      أرجع mbswidth (sym->ٽيگ, 0);
     }
 }
 
@@ -286,191 +286,191 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+ساكن صحيح
+derivation_print_وڻ_impl (ثابت derivation *deriv, FILE *ٻاهريون,
+                            صحيح اونهائي, صحيح *padding)
 {
-  const int width = derivation_width (deriv);
+  ثابت صحيح ويڪر = derivation_ويڪر (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  صحيح res = 0;
+  إذا (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      ثابت نشان *sym = symbols[deriv->sym];
+      حرف style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      إذا (اونهائي == 0 || اونهائي == 1)
         {
-          begin_use_class (style, out);
-          begin_use_class ("cex-step", out);
+          begin_use_class (style, ٻاهريون);
+          begin_use_class ("cex-step", ٻاهريون);
         }
-      if (depth == 0)
+      إذا (اونهائي == 0)
         {
-          res += fputs_if (true, out, padding, sym->tag);
+          res += fputs_if (true, ٻاهريون, padding, sym->ٽيگ);
         }
-      else
+      وإلا
         {
-          res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          res += fputs_if (اونهائي == 1, ٻاهريون, padding, هيٺ_ڏانهن_arrow);
+          res += fprintf_if (اونهائي == 1, ٻاهريون, padding, "%d: ", deriv->قاعدو->عدد);
+          إذا (gl_list_سائيز (deriv->children) == 0)
             // Empty rhs.
-            res += fputs_if (depth == 1, out, padding, empty);
-          else
+            res += fputs_if (اونهائي == 1, ٻاهريون, padding, خالي_جايون);
+          وإلا
             {
-              if (gl_list_size (deriv->children) == 1
-                  && gl_list_get_first (deriv->children) == &d_dot)
+              إذا (gl_list_سائيز (deriv->children) == 1
+                  && gl_list_get_پهريون (deriv->children) == &d_dot)
                 {
-                  res += fputs_if (depth == 1, out, padding, empty);
-                  res += fputs_if (depth == 1, out, padding, derivation_separator);
+                  res += fputs_if (اونهائي == 1, ٻاهريون, padding, خالي_جايون);
+                  res += fputs_if (اونهائي == 1, ٻاهريون, padding, derivation_separator);
                 }
 
-              bool first = true;
-              derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              bool پهريون = true;
+              derivation *ٻار;
+              لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_ايندڙ (&it, &ٻار);
                    )
                 {
-                  if (!first)
-                    res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
-                  first = false;
+                  إذا (!پهريون)
+                    res += fputs_if (اونهائي == 1, ٻاهريون, padding, derivation_separator);
+                  res += derivation_print_وڻ_impl (ٻار, ٻاهريون, اونهائي - 1, padding);
+                  پهريون = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      إذا (اونهائي == 0 || اونهائي == 1)
         {
-          end_use_class ("cex-step", out);
-          end_use_class (style, out);
+          پڇاڙي_use_class ("cex-step", ٻاهريون);
+          پڇاڙي_use_class (style, ٻاهريون);
         }
-      *padding += width - res;
-      res = width;
+      *padding += ويڪر - res;
+      res = ويڪر;
     }
-  else if (deriv == &d_dot)
+  وإلا إذا (deriv == &d_dot)
     {
-      if (depth == 0)
-        begin_use_class ("cex-dot", out);
-      res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
-        end_use_class ("cex-dot", out);
+      إذا (اونهائي == 0)
+        begin_use_class ("cex-dot", ٻاهريون);
+      res += fputs_if (اونهائي == 0, ٻاهريون, padding, dot);
+      إذا (اونهائي == 0)
+        پڇاڙي_use_class ("cex-dot", ٻاهريون);
     }
-  else // leaf.
+  وإلا // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
-        begin_use_class ("cex-leaf", out);
-      res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
-        end_use_class ("cex-leaf", out);
+      ثابت نشان *sym = symbols[deriv->sym];
+      إذا (اونهائي == 0)
+        begin_use_class ("cex-leaf", ٻاهريون);
+      res += fputs_if (اونهائي == 0, ٻاهريون, padding, sym->ٽيگ);
+      إذا (اونهائي == 0)
+        پڇاڙي_use_class ("cex-leaf", ٻاهريون);
     }
-  return res;
+  أرجع res;
 }
 
-static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+ساكن فراغ
+derivation_print_وڻ (ثابت derivation *deriv, FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
-  fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
-       depth < max_depth; ++depth)
+  fputc ('\n', ٻاهريون);
+  لكل (صحيح اونهائي = 0, max_اونهائي = derivation_اونهائي (deriv);
+       اونهائي < max_اونهائي; ++اونهائي)
     {
-      int padding = 0;
-      fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
-      fputc ('\n', out);
+      صحيح padding = 0;
+      fprintf (ٻاهريون, "    %s", اڳياڙي);
+      derivation_print_وڻ_impl (deriv, ٻاهريون, اونهائي, &padding);
+      fputc ('\n', ٻاهريون);
     }
 }
 
 
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
-static bool
-derivation_print_flat_impl (derivation *deriv, FILE *out,
+ساكن bool
+derivation_print_flat_impl (derivation *deriv, FILE *ٻاهريون,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            صحيح *counter, ثابت حرف *اڳياڙي)
 {
-  if (deriv->children)
+  إذا (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      ثابت نشان *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      حرف style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
-      begin_use_class (style, out);
+      begin_use_class (style, ٻاهريون);
 
-      if (!leaves_only)
+      إذا (!leaves_only)
         {
-          fputs (prefix, out);
-          begin_use_class ("cex-step", out);
-          fprintf (out, "%s %s [ ", sym->tag, arrow);
-          end_use_class ("cex-step", out);
-          prefix = "";
+          fputs (اڳياڙي, ٻاهريون);
+          begin_use_class ("cex-step", ٻاهريون);
+          fprintf (ٻاهريون, "%s %s [ ", sym->ٽيگ, arrow);
+          پڇاڙي_use_class ("cex-step", ٻاهريون);
+          اڳياڙي = "";
         }
       bool res = false;
-      derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      derivation *ٻار;
+      لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_ايندڙ (&it, &ٻار);
            )
         {
-          if (derivation_print_flat_impl (child, out,
-                                          leaves_only, counter, prefix))
+          إذا (derivation_print_flat_impl (ٻار, ٻاهريون,
+                                          leaves_only, counter, اڳياڙي))
             {
-              prefix = " ";
+              اڳياڙي = " ";
               res = true;
             }
-          else if (!leaves_only)
-            prefix = " ";
+          وإلا إذا (!leaves_only)
+            اڳياڙي = " ";
         }
-      if (!leaves_only)
+      إذا (!leaves_only)
         {
-          begin_use_class ("cex-step", out);
-          if (res)
-            fputs (" ]", out);
-          else
-            fputs ("]", out);
-          end_use_class ("cex-step", out);
+          begin_use_class ("cex-step", ٻاهريون);
+          إذا (res)
+            fputs (" ]", ٻاهريون);
+          وإلا
+            fputs ("]", ٻاهريون);
+          پڇاڙي_use_class ("cex-step", ٻاهريون);
         }
-      end_use_class (style, out);
-      return res;
+      پڇاڙي_use_class (style, ٻاهريون);
+      أرجع res;
     }
-  else if (deriv == &d_dot)
+  وإلا إذا (deriv == &d_dot)
     {
-      fputs (prefix, out);
-      begin_use_class ("cex-dot", out);
-      fputs (dot, out);
-      end_use_class ("cex-dot", out);
+      fputs (اڳياڙي, ٻاهريون);
+      begin_use_class ("cex-dot", ٻاهريون);
+      fputs (dot, ٻاهريون);
+      پڇاڙي_use_class ("cex-dot", ٻاهريون);
     }
-  else // leaf.
+  وإلا // leaf.
     {
-      fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
-      begin_use_class ("cex-leaf", out);
-      fprintf (out, "%s", sym->tag);
-      end_use_class ("cex-leaf", out);
+      fputs (اڳياڙي, ٻاهريون);
+      ثابت نشان *sym = symbols[deriv->sym];
+      begin_use_class ("cex-leaf", ٻاهريون);
+      fprintf (ٻاهريون, "%s", sym->ٽيگ);
+      پڇاڙي_use_class ("cex-leaf", ٻاهريون);
     }
-  return true;
+  أرجع true;
 }
 
-static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+ساكن فراغ
+derivation_print_flat (ثابت derivation *deriv, FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
-  int counter = 0;
-  fputs (prefix, out);
-  derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
-  fputc ('\n', out);
+  صحيح counter = 0;
+  fputs (اڳياڙي, ٻاهريون);
+  derivation_print_flat_impl ((derivation *)deriv, ٻاهريون, false, &counter, "");
+  fputc ('\n', ٻاهريون);
 }
 
-void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+فراغ
+derivation_print_leaves (ثابت derivation *deriv, FILE *ٻاهريون)
 {
-  int counter = 0;
-  derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
-  fputc ('\n', out);
+  صحيح counter = 0;
+  derivation_print_flat_impl ((derivation *)deriv, ٻاهريون, true, &counter, "");
+  fputc ('\n', ٻاهريون);
 }
 
-void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+فراغ
+derivation_print (ثابت derivation *deriv, FILE *ٻاهريون, ثابت حرف *اڳياڙي)
 {
-  if (getenv ("YYFLAT"))
-    derivation_print_flat (deriv, out, prefix);
-  else
-    derivation_print_tree (deriv, out, prefix);
+  إذا (getenv ("YYFLAT"))
+    derivation_print_flat (deriv, ٻاهريون, اڳياڙي);
+  وإلا
+    derivation_print_وڻ (deriv, ٻاهريون, اڳياڙي);
 }

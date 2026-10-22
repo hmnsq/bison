@@ -17,64 +17,64 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "Sbitset.h"
+#ضمن "Sbitset.h"
 
 Sbitset
-Sbitset__new (Sbitset__Index nbits)
+Sbitset__new (Sbitset_اشاريو nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  أرجع xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
-Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
+Sbitset__new_on_obstack (Sbitset_اشاريو nbits, بنية obstack *obstackp)
 {
-  Sbitset result;
+  Sbitset نتيجو;
   Sbitset ptr;
-  Sbitset end;
+  Sbitset پڇاڙي;
   aver (nbits);
-  result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
-  for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
+  نتيجو = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
+  لكل (ptr = نتيجو, پڇاڙي = نتيجو + Sbitset__nbytes (nbits); ptr < پڇاڙي; ++ptr)
     *ptr = 0;
-  return result;
+  أرجع نتيجو;
 }
 
-void
+فراغ
 Sbitset__delete (Sbitset self)
 {
-  free (self);
+  حرر (self);
 }
 
 bool
-Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
+Sbitset_is_خالي_جايون (Sbitset self, Sbitset_اشاريو nbits)
 {
-  Sbitset last = self + Sbitset__nbytes (nbits) - 1;
-  for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+  Sbitset آخري = self + Sbitset__nbytes (nbits) - 1;
+  لكل (; self < آخري; ++self)
+    إذا (*self != 0)
+      أرجع false;
+  أرجع ((*آخري) & Sbitset_آخري_byte_نقاب (nbits)) == 0;
 }
 
-void
-Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
+فراغ
+Sbitset__fprint (Sbitset self, Sbitset_اشاريو nbits, FILE *file)
 {
-  Sbitset__Index i;
+  Sbitset_اشاريو i;
   Sbitset itr;
-  bool first = true;
+  bool پهريون = true;
   fprintf (file,
-           "nbits = %" SBITSET__INDEX__CONVERSION_SPEC ", set = {",
+           "nbits = %" SBITSET_اشاريو_CONVERSION_SPEC ", set = {",
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
-        first = false;
-      else
+      إذا (پهريون)
+        پهريون = false;
+      وإلا
         fprintf (file, ",");
-      fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
+      fprintf (file, " %" SBITSET_اشاريو_CONVERSION_SPEC, i);
     }
   fprintf (file, " }");
 }

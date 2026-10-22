@@ -35,29 +35,29 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
+#جيڪڏهن_وصف_نه_ٿيل YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
 # define YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
 /* Debug traces.  */
-#ifndef GRAM_DEBUG
-# if defined YYDEBUG
-#if YYDEBUG
+#جيڪڏهن_وصف_نه_ٿيل GRAM_DEBUG
+# إذا defined YYDEBUG
+#إذا YYDEBUG
 #   define GRAM_DEBUG 1
-#  else
+#  وإلا
 #   define GRAM_DEBUG 0
 #  endif
-# else /* ! defined YYDEBUG */
+# وإلا /* ! defined YYDEBUG */
 #  define GRAM_DEBUG 1
 # endif /* ! defined YYDEBUG */
-#endif  /* ! defined GRAM_DEBUG */
-#if GRAM_DEBUG
-extern int gram_debug;
-#endif
+#جيڪڏهن_پورو  /* ! defined GRAM_DEBUG */
+#إذا GRAM_DEBUG
+خارجي صحيح gram_debug;
+#جيڪڏهن_پورو
 /* "%code requires" blocks.  */
 
-  #include "symlist.h"
-  #include "symtab.h"
+  #ضمن "symlist.h"
+  #ضمن "symtab.h"
 
-  typedef enum
+  تعريفنوع تعداد
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -65,20 +65,20 @@ extern int gram_debug;
     param_both   = param_lex | param_parse
   } param_type;
 
-  #include "muscle-tab.h"
-  typedef struct
+  #ضمن "muscle-tab.h"
+  تعريفنوع بنية
   {
-    char const *chars;
-    muscle_kind kind;
-  } value_type;
+    حرف ثابت *chars;
+    muscle_قسم قسم;
+  } قدر_type;
 
 
 /* Token kinds.  */
-#ifndef GRAM_TOKENTYPE
+#جيڪڏهن_وصف_نه_ٿيل GRAM_TOKENTYPE
 # define GRAM_TOKENTYPE
-  enum gram_tokentype
+  تعداد gram_tokentype
   {
-    GRAM_EMPTY = -2,
+    GRAM_خالي_جايون = -2,
     GRAM_EOF = 0,                  /* "end of file"  */
     GRAM_error = 1,                /* error  */
     GRAM_UNDEF = 2,                /* "invalid token"  */
@@ -89,38 +89,38 @@ extern int gram_debug;
     PERCENT_TYPE = 7,              /* "%type"  */
     PERCENT_DESTRUCTOR = 8,        /* "%destructor"  */
     PERCENT_PRINTER = 9,           /* "%printer"  */
-    PERCENT_LEFT = 10,             /* "%left"  */
-    PERCENT_RIGHT = 11,            /* "%right"  */
+    PERCENT_کاٻو = 10,             /* "%left"  */
+    PERCENT_ساڄو = 11,            /* "%right"  */
     PERCENT_NONASSOC = 12,         /* "%nonassoc"  */
     PERCENT_PRECEDENCE = 13,       /* "%precedence"  */
     PERCENT_PREC = 14,             /* "%prec"  */
     PERCENT_DPREC = 15,            /* "%dprec"  */
-    PERCENT_MERGE = 16,            /* "%merge"  */
-    PERCENT_CODE = 17,             /* "%code"  */
+    PERCENT_ملايو = 16,            /* "%merge"  */
+    PERCENT_ڪوڊ = 17,             /* "%code"  */
     PERCENT_DEFAULT_PREC = 18,     /* "%default-prec"  */
     PERCENT_DEFINE = 19,           /* "%define"  */
     PERCENT_ERROR_VERBOSE = 20,    /* "%error-verbose"  */
     PERCENT_EXPECT = 21,           /* "%expect"  */
     PERCENT_EXPECT_RR = 22,        /* "%expect-rr"  */
-    PERCENT_FILE_PREFIX = 23,      /* "%file-prefix"  */
+    PERCENT_FILE_اڳياڙي = 23,      /* "%file-prefix"  */
     PERCENT_FLAG = 24,             /* "%<flag>"  */
     PERCENT_GLR_PARSER = 25,       /* "%glr-parser"  */
-    PERCENT_HEADER = 26,           /* "%header"  */
+    PERCENT_سرو = 26,           /* "%header"  */
     PERCENT_INITIAL_ACTION = 27,   /* "%initial-action"  */
     PERCENT_LANGUAGE = 28,         /* "%language"  */
-    PERCENT_NAME_PREFIX = 29,      /* "%name-prefix"  */
+    PERCENT_NAME_اڳياڙي = 29,      /* "%name-prefix"  */
     PERCENT_NO_DEFAULT_PREC = 30,  /* "%no-default-prec"  */
-    PERCENT_NO_LINES = 31,         /* "%no-lines"  */
+    PERCENT_NO_سٽون = 31,         /* "%no-lines"  */
     PERCENT_NONDETERMINISTIC_PARSER = 32, /* "%nondeterministic-parser"  */
     PERCENT_OUTPUT = 33,           /* "%output"  */
-    PERCENT_PURE_PARSER = 34,      /* "%pure-parser"  */
+    PERCENT_خالص_PARSER = 34,      /* "%pure-parser"  */
     PERCENT_REQUIRE = 35,          /* "%require"  */
     PERCENT_SKELETON = 36,         /* "%skeleton"  */
-    PERCENT_START = 37,            /* "%start"  */
-    PERCENT_TOKEN_TABLE = 38,      /* "%token-table"  */
+    PERCENT_شروعات = 37,            /* "%start"  */
+    PERCENT_TOKEN_جدول = 38,      /* "%token-table"  */
     PERCENT_VERBOSE = 39,          /* "%verbose"  */
     PERCENT_YACC = 40,             /* "%yacc"  */
-    BRACED_CODE = 41,              /* "{...}"  */
+    BRACED_ڪوڊ = 41,              /* "{...}"  */
     BRACED_PREDICATE = 42,         /* "%?{...}"  */
     BRACKETED_ID = 43,             /* "[identifier]"  */
     CHAR_LITERAL = 44,             /* "character literal"  */
@@ -133,97 +133,97 @@ extern int gram_debug;
     PIPE = 51,                     /* "|"  */
     PROLOGUE = 52,                 /* "%{...%}"  */
     SEMICOLON = 53,                /* ";"  */
-    TAG = 54,                      /* "<tag>"  */
-    TAG_ANY = 55,                  /* "<*>"  */
-    TAG_NONE = 56,                 /* "<>"  */
+    ٽيگ_2 = 54,                      /* "<tag>"  */
+    ٽيگ_ANY = 55,                  /* "<*>"  */
+    ٽيگ_NONE = 56,                 /* "<>"  */
     INT_LITERAL = 57,              /* "integer literal"  */
     PERCENT_PARAM = 58,            /* "%param"  */
     PERCENT_UNION = 59,            /* "%union"  */
-    PERCENT_EMPTY = 60             /* "%empty"  */
+    PERCENT_خالي_جايون = 60             /* "%empty"  */
   };
-  typedef enum gram_tokentype gram_token_kind_t;
-#endif
+  تعريفنوع تعداد gram_tokentype gram_token_قسم_t;
+#جيڪڏهن_پورو
 
 /* Value type.  */
-#if ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
-union GRAM_STYPE
+#إذا ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
+اتحاد GRAM_STYPE
 {
   assoc precedence_declarator;             /* precedence_declarator  */
-  char* STRING;                            /* "string"  */
-  char* TSTRING;                           /* "translatable string"  */
-  char* BRACED_CODE;                       /* "{...}"  */
-  char* BRACED_PREDICATE;                  /* "%?{...}"  */
-  char* EPILOGUE;                          /* "epilogue"  */
-  char* PROLOGUE;                          /* "%{...%}"  */
-  char* yykind_75;                         /* string.opt  */
-  code_props_type code_props_type;         /* code_props_type  */
-  int INT_LITERAL;                         /* "integer literal"  */
-  int yykind_84;                           /* int.opt  */
+  حرف* STRING;                            /* "string"  */
+  حرف* TSTRING;                           /* "translatable string"  */
+  حرف* BRACED_ڪوڊ;                       /* "{...}"  */
+  حرف* BRACED_PREDICATE;                  /* "%?{...}"  */
+  حرف* EPILOGUE;                          /* "epilogue"  */
+  حرف* PROLOGUE;                          /* "%{...%}"  */
+  حرف* yykind_75;                         /* string.opt  */
+  ڪوڊ_props_type ڪوڊ_props_type;         /* code_props_type  */
+  صحيح INT_LITERAL;                         /* "integer literal"  */
+  صحيح yykind_84;                           /* int.opt  */
   named_ref* yykind_97;                    /* named_ref.opt  */
   param_type PERCENT_PARAM;                /* "%param"  */
-  symbol* token_decl;                      /* token_decl  */
-  symbol* alias;                           /* alias  */
-  symbol* token_decl_for_prec;             /* token_decl_for_prec  */
-  symbol* id;                              /* id  */
-  symbol* id_colon;                        /* id_colon  */
-  symbol* symbol;                          /* symbol  */
-  symbol* string_as_id;                    /* string_as_id  */
-  symbol_list* generic_symlist;            /* generic_symlist  */
-  symbol_list* generic_symlist_item;       /* generic_symlist_item  */
-  symbol_list* nterm_decls;                /* nterm_decls  */
-  symbol_list* token_decls;                /* token_decls  */
-  symbol_list* yykind_82;                  /* token_decl.1  */
-  symbol_list* token_decls_for_prec;       /* token_decls_for_prec  */
-  symbol_list* yykind_87;                  /* token_decl_for_prec.1  */
-  symbol_list* symbol_decls;               /* symbol_decls  */
-  symbol_list* yykind_90;                  /* symbols.1  */
+  نشان* token_decl;                      /* token_decl  */
+  نشان* alias;                           /* alias  */
+  نشان* token_decl_for_prec;             /* token_decl_for_prec  */
+  نشان* id;                              /* id  */
+  نشان* id_colon;                        /* id_colon  */
+  نشان* نشان;                          /*نشان*/
+  نشان* string_as_id;                    /* string_as_id  */
+  نشان_list* generic_symlist;            /* generic_symlist  */
+  نشان_list* generic_symlist_شي;       /* generic_symlist_item  */
+  نشان_list* nterm_decls;                /* nterm_decls  */
+  نشان_list* token_decls;                /* token_decls  */
+  نشان_list* yykind_82;                  /* token_decl.1  */
+  نشان_list* token_decls_for_prec;       /* token_decls_for_prec  */
+  نشان_list* yykind_87;                  /* token_decl_for_prec.1  */
+  نشان_list* نشان_decls;               /* symbol_decls  */
+  نشان_list* yykind_90;                  /* symbols.1  */
   uniqstr PERCENT_ERROR_VERBOSE;           /* "%error-verbose"  */
-  uniqstr PERCENT_FILE_PREFIX;             /* "%file-prefix"  */
+  uniqstr PERCENT_FILE_اڳياڙي;             /* "%file-prefix"  */
   uniqstr PERCENT_FLAG;                    /* "%<flag>"  */
-  uniqstr PERCENT_NAME_PREFIX;             /* "%name-prefix"  */
-  uniqstr PERCENT_PURE_PARSER;             /* "%pure-parser"  */
+  uniqstr PERCENT_NAME_اڳياڙي;             /* "%name-prefix"  */
+  uniqstr PERCENT_خالص_PARSER;             /* "%pure-parser"  */
   uniqstr BRACKETED_ID;                    /* "[identifier]"  */
   uniqstr ID;                              /* "identifier"  */
   uniqstr ID_COLON;                        /* "identifier:"  */
-  uniqstr TAG;                             /* "<tag>"  */
+  uniqstr ٽيگ_2;                             /* "<tag>"  */
   uniqstr yykind_76;                       /* tag.opt  */
-  uniqstr tag;                             /* tag  */
+  uniqstr ٽيگ;                             /*ٽيگ*/
   uniqstr variable;                        /* variable  */
-  unsigned char CHAR_LITERAL;              /* "character literal"  */
-  value_type value;                        /* value  */
+  بنانشان حرف CHAR_LITERAL;              /* "character literal"  */
+  قدر_type قدر;                        /*قدر*/
 
 
 };
-typedef union GRAM_STYPE GRAM_STYPE;
+تعريفنوع اتحاد GRAM_STYPE GRAM_STYPE;
 # define GRAM_STYPE_IS_TRIVIAL 1
 # define GRAM_STYPE_IS_DECLARED 1
-#endif
+#جيڪڏهن_پورو
 
 /* Location type.  */
-#if ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
-typedef struct GRAM_LTYPE GRAM_LTYPE;
-struct GRAM_LTYPE
+#إذا ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
+تعريفنوع بنية GRAM_LTYPE GRAM_LTYPE;
+بنية GRAM_LTYPE
 {
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
+  صحيح پهريون_سٽ;
+  صحيح پهريون_ڪالم;
+  صحيح آخري_سٽ;
+  صحيح آخري_ڪالم;
 };
 # define GRAM_LTYPE_IS_DECLARED 1
 # define GRAM_LTYPE_IS_TRIVIAL 1
-#endif
+#جيڪڏهن_پورو
 
 
 
 
-int gram_parse (void);
+صحيح gram_parse (فراغ);
 
 /* "%code provides" blocks.  */
 
   /* Initialize unquote.  */
-  void parser_init (void);
+  فراغ parser_init (فراغ);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  فراغ parser_free (فراغ);
 
 
-#endif /* !YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED  */
+#جيڪڏهن_پورو /* !YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED  */

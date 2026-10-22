@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef LR0_H_
+#جيڪڏهن_وصف_نه_ٿيل LR0_H_
 # define LR0_H_
 
-void generate_states (void);
+فراغ generate_حالتون (فراغ);
 
-#endif /* !LR0_H_ */
+#جيڪڏهن_پورو /* !LR0_H_ */

@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef LALR_H_
+#جيڪڏهن_وصف_نه_ٿيل LALR_H_
 # define LALR_H_
 
 # include <bitset.h>
@@ -42,13 +42,13 @@
      - #to_state
      - #goto_follows
 */
-void lalr (void);
+فراغ lalr (فراغ);
 
 /**
  * Set #nLA and allocate all reduction lookahead sets.  Normally invoked by
  * #lalr.
  */
-void initialize_LA (void);
+فراغ initialize_LA (فراغ);
 
 /**
  * Build only:
@@ -57,7 +57,7 @@ void initialize_LA (void);
  *   - #to_state
  * Normally invoked by #lalr.
  */
-void set_goto_map (void);
+فراغ سيٽ_goto_map (فراغ);
 
 /**
  * Update state numbers recorded in #goto_map, #from_state, and #to_state such
@@ -68,38 +68,38 @@ void set_goto_map (void);
  *       Thus, remove all goto entries involving this state.
  *     - The new state number.
  */
-void lalr_update_state_numbers (state_number old_to_new[],
-                                state_number nstates_old);
+فراغ lalr_update_state_numbers (state_عدد old_منزل_new[],
+                                state_عدد nstates_old);
 
 
 /** Release the information related to lookahead tokens.
 
    Can be performed once the action tables are computed.  */
-void lalr_free (void);
+فراغ lalr_free (فراغ);
 
-typedef size_t goto_number;
-# define GOTO_NUMBER_MAXIMUM ((goto_number) -1)
+تعريفنوع size_t goto_عدد;
+# define GOTO_عدد_وڌ_کان_وڌ ((goto_عدد) -1)
 
 /** Index into #from_state and #to_state.
 
    All the transitions that accept a particular variable are grouped
    together in FROM_STATE and TO_STATE, with indexes from GOTO_MAP[I -
    NTOKENS] to GOTO_MAP[I - NTOKENS + 1] - 1 (including both).  */
-extern goto_number *goto_map;
+خارجي goto_عدد *goto_map;
 
 /** The size of #from_state and #to_state.  */
-extern goto_number ngotos;
+خارجي goto_عدد ngotos;
 
 /** State number which a transition leads from.  */
-extern state_number *from_state;
+خارجي state_عدد *from_state;
 
 /** State number it leads to.  */
-extern state_number *to_state;
+خارجي state_عدد *منزل_state;
 
 /** The number of the goto from state SRC labeled with nterm SYM.  */
-goto_number map_goto (state_number src, symbol_number sym);
+goto_عدد map_goto (state_عدد src, نشان_عدد sym);
 
 /* goto_follows[i] is the set of tokens following goto i.  */
-extern bitsetv goto_follows;
+خارجي bitsetv goto_follows;
 
-#endif /* !LALR_H_ */
+#جيڪڏهن_پورو /* !LALR_H_ */

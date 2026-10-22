@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef TABLES_H_
+#جيڪڏهن_وصف_نه_ٿيل TABLES_H_
 # define TABLES_H_
 
 # include "state.h"
@@ -113,30 +113,30 @@
    summary, forget about zero values in YYTABLE.
 */
 
-extern int nvectors;
+خارجي صحيح nvectors;
 
-typedef int base_number;
-extern base_number *base;
+تعريفنوع صحيح بنياد_عدد;
+خارجي بنياد_عدد *بنياد;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-extern base_number base_ninf;
+خارجي بنياد_عدد بنياد_ninf;
 
-extern int *conflict_table;
-extern int *conflict_list;
-extern int conflict_list_cnt;
+خارجي صحيح *conflict_جدول;
+خارجي صحيح *conflict_list;
+خارجي صحيح conflict_list_cnt;
 
-extern base_number *table;
-extern base_number *check;
+خارجي بنياد_عدد *جدول;
+خارجي بنياد_عدد *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  */
-extern base_number table_ninf;
+خارجي بنياد_عدد جدول_ninf;
 
-extern state_number *yydefgoto;
-extern rule_number *yydefact;
-extern int high;
+خارجي state_عدد *yydefgoto;
+خارجي قاعدو_عدد *yydefact;
+خارجي صحيح مٿاهون;
 
-void tables_generate (void);
-void tables_free (void);
+فراغ tables_generate (فراغ);
+فراغ tables_free (فراغ);
 
-#endif /* !TABLES_H_ */
+#جيڪڏهن_پورو /* !TABLES_H_ */
