@@ -1,0 +1,627 @@
+# What is still missing
+
+76 languages. Each line says in how many languages it is missing.
+
+## Files in languages BURP cannot read yet
+
+
+## Keywords with no word in a language's table
+
+- shabda:yytext: 75
+- guru:fprintf: 71
+- guru:size_t: 71
+- guru:stderr: 71
+- guru:FILE: 71
+- guru:fputs: 71
+- guru:fputc: 71
+- guru:putc: 71
+- guru:stdout: 71
+- shabda:EOF: 71
+- guru:abort: 71
+- guru:EXIT_SUCCESS: 71
+- guru:EXIT_FAILURE: 71
+- wyaaka:fprintf: 71
+- guru:CHAR_BIT: 71
+- guru:getenv: 71
+- guru:strchr: 71
+- guru:offsetof: 71
+- guru:va_list: 71
+- guru:strtol: 71
+- guru:ptrdiff_t: 71
+- guru:va_start: 71
+- guru:va_end: 71
+- guru:getc: 71
+- guru:EOF: 71
+- shabda:strtol: 71
+- guru:errno: 71
+- guru:strtok: 71
+- guru:strrchr: 71
+- guru:memchr: 71
+- wyaaka:FILE: 71
+- wyaaka:fputs: 71
+- shabda:UCHAR_MAX: 71
+- shabda:errno: 71
+- guru:UCHAR_MAX: 71
+- wyaaka:size_t: 71
+- shabda:strchr: 71
+- shabda:fputc: 71
+- guru:vfprintf: 71
+- guru:fclose: 71
+- guru:setlocale: 71
+- guru:fseek: 71
+- guru:SEEK_SET: 71
+- wyaaka:memchr: 71
+- shabda:INT_MIN: 71
+- shabda:size_t: 71
+- shabda:ULONG_MAX: 71
+- shabda:fputs: 71
+- guru:INT_MIN: 71
+- guru:va_arg: 71
+- guru:fflush: 71
+- guru:ferror: 71
+- guru:rename: 71
+- guru:ungetc: 71
+- guru:NDEBUG: 71
+- guru:CHAR_MAX: 71
+- guru:strncat: 71
+- guru:fopen: 71
+- guru:fstat: 71
+- guru:ftell: 71
+- guru:atexit: 71
+- guru:sprintf: 71
+- guru:feof: 71
+- guru:USHRT_MAX: 71
+- guru:LONG_MAX: 71
+- guru:strspn: 71
+- wyaaka:strspn: 71
+- wyaaka:strchr: 71
+- shabda:fprintf: 71
+- shabda:FILE: 71
+- shabda:abort: 71
+- guru:memset: 70
+- guru:strcmp: 70
+- guru:strcpy: 70
+- guru:qsort: 70
+- wyaaka:strcpy: 70
+- shabda:strcpy: 70
+- guru:sin: 67
+- guru:#endif: 66
+- guru:#define: 66
+- guru:#ifndef: 66
+- shabda:#define: 66
+- guru:#undef: 66
+- guru:#ifdef: 66
+- wyaaka:#define: 66
+- shabda:#undef: 66
+- wyaaka:#undef: 66
+- guru:#line: 66
+- shabda:#endif: 66
+- guru:strlen: 62
+- guru:INT_MAX: 62
+- guru:long: 62
+- guru:exit: 62
+- guru:unsigned: 62
+- guru:memcpy: 62
+- shabda:long: 62
+- shabda:INT_MAX: 62
+- guru:printf: 62
+- guru:short: 62
+- shabda:strlen: 62
+- guru:malloc: 62
+- wyaaka:unsigned: 62
+- guru:strncmp: 62
+- shabda:unsigned: 62
+- wyaaka:strlen: 62
+- guru:signed: 62
+- wyaaka:exit: 62
+- wyaaka:memcpy: 62
+- shabda:signed: 62
+- guru:main: 54
+- wyaaka:type: 26
+- guru:const: 25
+- guru:void: 25
+- guru:static: 25
+- guru:NULL: 25
+- guru:free: 25
+- guru:extern: 25
+- guru:typedef: 25
+- shabda:static: 25
+- wyaaka:const: 25
+- shabda:void: 25
+- shabda:const: 25
+- wyaaka:static: 25
+- wyaaka:void: 25
+- guru:switch: 25
+- guru:continue: 25
+- guru:goto: 25
+- shabda:NULL: 25
+- guru:do: 25
+- guru:default: 25
+- guru:assert: 25
+- shabda:continue: 25
+- guru:#elif: 25
+- wyaaka:NULL: 25
+- wyaaka:free: 25
+- wyaaka:switch: 25
+- shabda:switch: 25
+- shabda:do: 25
+- shabda:free: 25
+- shabda:default: 25
+- wyaaka:typedef: 25
+- wyaaka:assert: 25
+- shabda:typedef: 25
+- guru:write: 25
+- guru:float: 25
+- wyaaka:default: 25
+- guru:for: 9
+- wyaaka:for: 9
+- shabda:for: 9
+- guru:char: 9
+- guru:break: 9
+- guru:case: 9
+- guru:sizeof: 9
+- guru:struct: 9
+- shabda:char: 9
+- wyaaka:char: 9
+- guru:inline: 9
+- guru:enum: 9
+- wyaaka:case: 9
+- wyaaka:break: 9
+- shabda:case: 9
+- shabda:break: 9
+- guru:union: 9
+- guru:double: 9
+- wyaaka:sizeof: 9
+- shabda:sizeof: 9
+- shabda:struct: 9
+- shabda:inline: 9
+- wyaaka:enum: 9
+- wyaaka:struct: 9
+- wyaaka:union: 9
+- guru:if: 1
+- guru:int: 1
+- guru:return: 1
+- guru:else: 1
+- shabda:return: 1
+- guru:while: 1
+- shabda:if: 1
+- shabda:int: 1
+- wyaaka:if: 1
+- guru:#if: 1
+- shabda:else: 1
+- wyaaka:int: 1
+- guru:#else: 1
+- wyaaka:else: 1
+- wyaaka:return: 1
+- shabda:while: 1
+- wyaaka:while: 1
+- shabda:#if: 1
+
+## Names with no dictionary entry (the most common first)
+
+- `i`: 76
+- `s`: 76
+- `res`: 76
+- `loc`: 76
+- `sym`: 76
+- `r`: 76
+- `location`: 76
+- `j`: 76
+- `content`: 76
+- `_`: 76
+- `define`: 76
+- `cp`: 76
+- `p`: 76
+- `n`: 76
+- `ntokens`: 76
+- `lookaheads`: 76
+- `symbols`: 76
+- `complain`: 76
+- `yyvsp`: 76
+- `si`: 76
+- `reds`: 76
+- `trans`: 76
+- `l`: 76
+- `c`: 76
+- `ps`: 76
+- `lhs`: 76
+- `bitset`: 76
+- `argv`: 76
+- `level`: 76
+- `parse_state`: 76
+- `yyo`: 76
+- `self`: 76
+- `nitems`: 76
+- `complaint`: 76
+- `id`: 76
+- `nstates`: 76
+- `aver`: 76
+- `uniqstr`: 76
+- `yylsp`: 76
+- `list`: 76
+- `reductions`: 76
+- `rhs`: 76
+- `file`: 76
+- `name`: 76
+- `xnmalloc`: 76
+- `variable`: 76
+- `derivation`: 76
+- `ci`: 76
+- `nsyms`: 76
+- `transitions`: 76
+- `b`: 76
+- `deriv`: 76
+- `ss`: 76
+- `nrules`: 76
+- `defined`: 76
+- `yyvaluep`: 76
+- `type_name`: 76
+- `a`: 76
+- `k`: 76
+- `str`: 76
+- `trace_flag`: 76
+- `caret_info`: 76
+- `rhsp`: 76
+- `bitset_test`: 76
+- `yyval`: 76
+- `ritem`: 76
+- `obstack_sgrow`: 76
+- `lookahead`: 76
+- `biter`: 76
+- `it`: 76
+- `BEGIN`: 76
+- `token`: 76
+- `N_`: 76
+- `directive`: 76
+- `buf`: 76
+- `named_ref`: 76
+- `prec`: 76
+- `bitsetv`: 76
+- `var`: 76
+- `syms`: 76
+- `sp`: 76
+- `ngotos`: 76
+- `state_list`: 76
+- `alias`: 76
+- `ruleno`: 76
+- `argc`: 76
+- `t`: 76
+- `BITSET_FIXED`: 76
+- `STREQ`: 76
+- `obstack_printf`: 76
+- `pos`: 76
+- `sn`: 76
+- `muscle_obstack`: 76
+- `Wother`: 76
+- `yytext`: 76
+- `xml_puts`: 76
+- `style`: 76
+- `bitset_free`: 76
+- `xmalloc`: 76
+- `endif`: 76
+- `arg`: 76
+- `derivs`: 76
+- `bitset_create`: 76
+- `f`: 76
+- `quote`: 76
+- `obstack_for_string`: 76
+- `type`: 76
+- `action_props`: 76
+- `obstack_free`: 76
+- `nnterms`: 76
+- `bitset_iterator`: 76
+- `BITSET_FOR_EACH`: 76
+- `s1`: 76
+- `xstrdup`: 76
+- `muscle_keyword`: 76
+- `obstack`: 76
+- `flags`: 76
+- `d`: 76
+- `gl_list_iterator_t`: 76
+- `gl_list_free`: 76
+- `STRING_GROW`: 76
+- `fout`: 76
+- `yyn`: 76
+- `token_sym`: 76
+- `predecessor`: 76
+- `contents`: 76
+- `AnnotationList`: 76
+- `yy_state_t`: 76
+- `yyssp`: 76
+- `errs`: 76
+- `gl_list_iterator`: 76
+- `copy`: 76
+- `nedges`: 76
+- `this_isocorep`: 76
+- `YYLTYPE`: 76
+- `N`: 76
+- `obstack_finish0`: 76
+- `max`: 76
+- `default_reduction`: 76
+- `current_class`: 76
+- `BISON_DIRECTIVE`: 76
+- `always_follows`: 76
+- `Sbitset`: 76
+- `warnings`: 76
+- `complexity`: 76
+- `ext`: 76
+- `contributions`: 76
+- `annotation_lists`: 76
+- `xcalloc`: 76
+- `iter`: 76
+- `src`: 76
+- `uniqstr_new`: 76
+- `format_obstack`: 76
+- `derivation_list`: 76
+- `boundary`: 76
+- `eoftoken`: 76
+- `annotations_obstackp`: 76
+- `InadequacyList`: 76
+- `assoc`: 76
+- `rp`: 76
+- `grammar_file`: 76
+- `children`: 76
+- `goto_map`: 76
+- `yyi`: 76
+- `STRING`: 76
+- `GROW`: 76
+- `predecessors`: 76
+- `itemset`: 76
+- `core`: 76
+- `cex`: 76
+- `s2`: 76
+- `parse_state_list`: 76
+- `byte`: 76
+- `trace_automaton`: 76
+- `sym_content`: 76
+- `unknown_sym`: 76
+- `yychar`: 76
+- `sem_type`: 76
+- `begin_use_class`: 76
+- `opt`: 76
+- `yytoken`: 76
+- `sp1`: 76
+- `props`: 76
+- `actrow`: 76
+- `ptr`: 76
+- `SELF`: 76
+- `old`: 76
+- `prods`: 76
+- `nullable`: 76
+- `yystate`: 76
+- `yyrule`: 76
+- `subcomplain`: 76
+- `padding`: 76
+- `muscle_name`: 76
+- `probe`: 76
+- `YY_CAST`: 76
+- `unquote`: 76
+- `YYPTRDIFF_T`: 76
+- `rhs_loc`: 76
+- `semantic_type`: 76
+- `no`: 76
+- `expected_rr_conflicts`: 76
+- `mbswidth`: 76
+- `len`: 76
+- `tab`: 76
+- `yydefact`: 76
+- `edgesp`: 76
+- `dst`: 76
+- `translatable`: 76
+- `YYFPRINTF`: 76
+- `YYDPRINTF`: 76
+- `ret`: 76
+- `midrule`: 76
+- `INITIAL`: 76
+- `actions`: 76
+- `FIRSTS`: 76
+- `ISVAR`: 76
+- `CASE`: 76
+- `gl_list_t`: 76
+- `sis`: 76
+- `itm2`: 76
+- `ps1`: 76
+- `ps2`: 76
+- `sitems`: 76
+- `V`: 76
+- `nritems`: 76
+- `token_translations`: 76
+- `merger`: 76
+- `lssi`: 76
+- `decl`: 76
+- `yylen`: 76
+- `yylloc`: 76
+- `ID`: 76
+- `chars`: 76
+- `yyss`: 76
+- `oout`: 76
+- `nbits`: 76
+- `fatal`: 76
+- `w`: 76
+- `expected_sr_conflicts`: 76
+- `solved_conflicts_obstack`: 76
+- `xml_escape`: 76
+- `GL_LINKED_LIST`: 76
+- `revs`: 76
+- `ssb`: 76
+- `itm1`: 76
+- `spec_outfile`: 76
+- `skeleton`: 76
+- `dprec`: 76
+- `from_state`: 76
+- `skip`: 76
+- `val`: 76
+- `nvectors`: 76
+- `INT_LITERAL`: 76
+- `alphanum`: 76
+- `symbols_sorted`: 76
+- `splice`: 76
+- `Transitions`: 76
+- `conflict`: 76
+- `nitemset`: 76
+- `err`: 76
+- `gl_list_get_at`: 76
+- `xml_printf`: 76
+- `nuseless_productions`: 76
+- `acceptsymbol`: 76
+- `nuseless_nonterminals`: 76
+- `tablesize`: 76
+- `Rhs`: 76
+- `token_decl`: 76
+- `token_decl_for_prec`: 76
+- `errp`: 76
+- `explicit_bracketing`: 76
+- `prec_nodes`: 76
+- `annotation_counts`: 76
+- `derives`: 76
+- `ref`: 76
+- `report_flag`: 76
+- `obstack_init`: 76
+- `nondeterministic_parser`: 76
+- `report`: 76
+- `useful`: 76
+- `Type`: 76
+- `undeftoken`: 76
+- `ifndef`: 76
+- `yyesp`: 76
+- `red`: 76
+- `errtoken`: 76
+- `sidx`: 76
+- `lookahead_filter`: 76
+- `title`: 76
+- `solved_conflicts_xml_obstack`: 76
+- `xml_escape_n`: 76
+- `expected`: 76
+- `parse_state_retain`: 76
+- `sep`: 76
+- `color`: 76
+- `language`: 76
+- `output`: 76
+- `the`: 76
+- `grammar`: 76
+
+## Comments with no translation
+
+- INFRINGES ON USER NAME SPACE: 76
+- Nothing to report.: 76
+- Nothing.: 76
+- *
+ * \pre
+ *   - <tt>self != NULL</tt>.
+ *   - \c nitems is the number of kernel items in the LR(0) : 76
+- *
+ * \pre
+ *   - \c follow_kernel_items and \c always_follows were computed by
+ *     \c ielr_comput: 76
+- First insertion in the hash.: 76
+- "string": 76
+- "translatable string": 76
+- "%error-verbose": 76
+- "%file-prefix": 76
+- "%<flag>": 76
+- "%name-prefix": 76
+- "%pure-parser": 76
+- "[identifier]": 76
+- "character literal": 76
+- "epilogue": 76
+- "identifier": 76
+- "identifier:": 76
+- "<tag>": 76
+- "integer literal": 76
+- "%param": 76
+- generic_symlist: 76
+- generic_symlist_item: 76
+- nterm_decls: 76
+- token_decls: 76
+- token_decl.1: 76
+- token_decls_for_prec: 76
+- token_decl_for_prec.1: 76
+- symbol_decls: 76
+- symbols.1: 76
+- is_predicate: 76
+- leaf.: 76
+- code_props_type: 76
+- string.opt: 76
+- tag.opt: 76
+- token_decl: 76
+- int.opt: 76
+- alias: 76
+- token_decl_for_prec: 76
+- variable: 76
+- id_colon: 76
+- string_as_id: 76
+- Find the reduction we are handling.: 76
+- Print them if there are.: 76
+- Compute the width of the lookahead token column.: 76
+- type: 76
+- Work around a bug in flex 2.5.31.  See Debian bug 333231
+   <https://bugs.debian.org/333231>.: 76
+- Reclaim Flex's buffers.: 76
+- * Decode a comma-separated list of arguments from -W.
+ *
+ *  \param args     comma separated list of: 76
+- -----------.
+| complain.  |
+`-----------: 76
+- The description of the resolution.: 76
+- The reason.: 76
+- Conflicts by state.: 76
+- For debugging traces.: 76
+- In the report, print the items.: 76
+- Empty rhs.: 76
+- relocate2: 76
+- equals: 76
+- hashcode: 76
+- Free the registered fixits.: 76
+- for -u: 76
+- Handled in getargs_colors.: 76
+- --------.
+| Rules.  |
+`--------: 76
+- Written by Paul Eggert and Satya Kiran Popuri.: 76
+- *
+ * \pre:
+ *   - \c ritem_sees_lookahead_set was computed by
+ *     \c ielr_compute_ritem_sees_look: 76
+- Set *LOC and adjust scanner cursor to account for token TOKEN of
+   size SIZE.: 76
+- Reset mbf's internal state.
+     FIXME: should be done in mbfile.: 76
+- Return -1, 0, 1, depending whether a is before, equal, or
+   after b.: 76
+- *
+ * Determine if the given terminal is in the given symbol set or can begin
+ * a nonterminal in the: 76
+- ----------------------------------------------------------------.
+| Print to OUT a representation of: 76
+- nothing: 76
+- directory: 76
+- slave_process: 76
+- exit_on_error: 76
+- A Bison parser, made by GNU Bison 3.8.2.30-82269.: 76
+- DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start : 76
+- On column 0 to please syntax-check.: 76
+- "end of file": 76
+- error: 76
+- "invalid token": 76
+- "%token": 76
+- "%nterm": 76
+- "%type": 76
+- "%destructor": 76
+- "%printer": 76
+- "%left": 76
+- "%right": 76
+- "%nonassoc": 76
+- "%precedence": 76
+- "%prec": 76
+- "%dprec": 76
+- "%merge": 76
+- "%code": 76
+- "%default-prec": 76
+- "%define": 76
+- "%expect": 76
+- "%expect-rr": 76
+- "%glr-parser": 76
+- "%header": 76
+- "%initial-action": 76
