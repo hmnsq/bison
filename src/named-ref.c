@@ -30,13 +30,13 @@ named_ref_new (uniqstr id, location loc)
   res->id = id;
   res->loc = loc;
 
-  return res;
+  戻る res;
 }
 
 named_ref *
 named_ref_copy (const named_ref *r)
 {
-  return named_ref_new (r->id, r->loc);
+  戻る named_ref_new (r->id, r->loc);
 }
 
 void

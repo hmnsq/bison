@@ -32,7 +32,7 @@ struct symbol_list;
  * (those referenced by $0, $-1, etc.) that are required by the semantic
  * actions of this grammar.
  */
-extern int max_left_semantic_context;
+extern 整数 max_left_semantic_context;
 
 /**
  * The obstack used to store the translated actions.

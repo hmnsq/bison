@@ -51,9 +51,9 @@ bool color_debug = false;
 bool nondeterministic_parser = false;
 bool glr_parser = false;
 
-int feature_flag = feature_caret;
-int report_flag = report_none;
-int trace_flag = trace_none;
+整数 feature_flag = feature_caret;
+整数 report_flag = report_none;
+整数 trace_flag = trace_none;
 
 static struct bison_language const valid_languages[] = {
   /* lang,  skeleton,       ext,     hdr,     add_tab */
@@ -64,18 +64,18 @@ static struct bison_language const valid_languages[] = {
   { "", "", "", "", false }
 };
 
-int skeleton_prio = default_prio;
+整数 skeleton_prio = default_prio;
 const char *skeleton = NULL;
-int language_prio = default_prio;
+整数 language_prio = default_prio;
 struct bison_language const *language = &valid_languages[0];
 
-typedef int* (xargmatch_fn) (const char *context, const char *arg);
+typedef 整数* (xargmatch_fn) (const char *context, const char *arg);
 
 void
 set_yacc (location loc)
 {
   yacc_loc = loc;
-  if (getenv ("POSIXLY_CORRECT"))
+  もし (getenv ("POSIXLY_CORRECT"))
     muscle_percent_define_insert ("posix",
                                   loc,
                                   muscle_keyword, "",
@@ -100,20 +100,20 @@ set_yacc (location loc)
  */
 static void
 flag_argmatch (const char *opt, xargmatch_fn xargmatch,
-               int all, int *flags, char *arg, size_t no)
+               整数 all, 整数 *flags, char *arg, size_t no)
 {
-  int value = *xargmatch (opt, arg + no);
+  整数 value = *xargmatch (opt, arg + no);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
-  if (!value)
+  もし (!value)
     {
       value = all;
       no = !no;
     }
 
-  if (no)
+  もし (no)
     *flags &= ~value;
-  else
+  否则
     *flags |= value;
 }
 
@@ -133,17 +133,17 @@ static void
 flags_argmatch (const char *opt,
                 xargmatch_fn xargmatch,
                 usage_fn usage,
-                int all, int *flags, char *args)
+                整数 all, 整数 *flags, char *args)
 {
-  if (!args)
+  もし (!args)
     *flags |= all;
-  else if (STREQ (args, "help"))
+  否则 もし (STREQ (args, "help"))
     {
       usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
+  否则
+    ために (args = strtok (args, ","); args; args = strtok (NULL, ","))
       {
         size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
         flag_argmatch (opt, xargmatch,
@@ -358,15 +358,15 @@ const argmatch_feature_group_type argmatch_feature_group =
 `-------------------------------------------*/
 
  _Noreturn
-static void usage (int);
+static void usage (整数);
 
 static void
-usage (int status)
+usage (整数 status)
 {
-  if (status != 0)
+  もし (status != 0)
     fprintf (stderr, _("Try '%s --help' for more information.\n"),
              program_name);
-  else
+  否则
     {
       /* For ../build-aux/cross-options.pl to work, use the format:
                 ^  -S, --long[=ARGS] (whitespace)
@@ -381,10 +381,10 @@ LALR(1), IELR(1), or canonical LR(1) parser tables.\n\
 "), stdout);
 
       fputs (_("\
-Mandatory arguments to long options are mandatory for short options too.\n\
+Mandatory arguments to long options are mandatory ために short options too.\n\
 "), stdout);
       fputs (_("\
-The same is true for optional arguments.\n\
+The same is true ために optional arguments.\n\
 "), stdout);
       putc ('\n', stdout);
 
@@ -408,7 +408,7 @@ Operation Modes:\n\
 Diagnostics:\n\
   -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n\
       --color[=WHEN]         whether to colorize the diagnostics\n\
-      --style=FILE           specify the CSS FILE for colorizer diagnostics\n\
+      --style=FILE           specify the CSS FILE ために colorizer diagnostics\n\
 \n\
 "), stdout);
 
@@ -422,7 +422,7 @@ Diagnostics:\n\
 Tuning the Parser:\n\
   -L, --language=LANGUAGE          specify the output programming language\n\
   -S, --skeleton=FILE              specify the skeleton to use\n\
-  -t, --debug                      instrument the parser for tracing\n\
+  -t, --debug                      instrument the parser ために tracing\n\
                                    same as '-Dparse.trace'\n\
       --locations                  enable location support\n\
   -D, --define=NAME[=VALUE]        similar to '%define NAME VALUE'\n\
@@ -438,11 +438,11 @@ Tuning the Parser:\n\
       fputs (_("\
 Output Files:\n\
   -H, --header=[FILE]           also produce a header file\n\
-  -d                            likewise but cannot specify FILE (for POSIX Yacc)\n\
+  -d                            likewise but cannot specify FILE (ために POSIX Yacc)\n\
   -r, --report=THINGS           also produce details on the automaton\n\
       --report-file=FILE        write report to FILE\n\
   -v, --verbose                 same as '--report=state'\n\
-  -b, --file-prefix=PREFIX      specify a PREFIX for output files\n\
+  -b, --file-prefix=PREFIX      specify a PREFIX ために output files\n\
   -o, --output=FILE             leave output to FILE\n\
   -g, --graph[=FILE]            also output a graph of the automaton\n\
       --html[=FILE]             also output an HTML report of the automaton\n\
@@ -461,12 +461,12 @@ Output Files:\n\
                "<https://www.gnu.org/gethelp/>.\n"),
              stdout);
 
-#if (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
+#もし (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
       /* Don't output this redundant message for English locales.
          Note we still output for 'C' so that it gets included in the
          man page.  */
       const char *lc_messages = setlocale (LC_MESSAGES, NULL);
-      if (lc_messages && !STREQ (lc_messages, "en_"))
+      もし (lc_messages && !STREQ (lc_messages, "en_"))
         /* TRANSLATORS: Replace LANG_CODE in this URL with your language code to
            form one of the URLs at https://translationproject.org/team/.
            Otherwise, replace the entire URL with your translation team's
@@ -500,8 +500,8 @@ version (void)
            PACKAGE_COPYRIGHT_YEAR);
 
   fputs (_("\
-This is free software; see the source for copying conditions.  There is NO\n\
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
+This is free software; see the source ために copying conditions.  There is NO\n\
+warranty; not even ために MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 "),
          stdout);
 }
@@ -512,38 +512,38 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 `--------------------------------------*/
 
 void
-skeleton_arg (char const *arg, int prio, location loc)
+skeleton_arg (char const *arg, 整数 prio, location loc)
 {
-  if (prio < skeleton_prio)
+  もし (prio < skeleton_prio)
     {
       skeleton_prio = prio;
       skeleton = arg;
     }
-  else if (prio == skeleton_prio)
+  否则 もし (prio == skeleton_prio)
     complain (&loc, complaint,
               _("multiple skeleton declarations are invalid"));
 }
 
 void
-language_argmatch (char const *arg, int prio, location loc)
+language_argmatch (char const *arg, 整数 prio, location loc)
 {
   char const *msg = NULL;
 
-  if (prio < language_prio)
+  もし (prio < language_prio)
     {
-      for (int i = 0; valid_languages[i].language[0]; ++i)
-        if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+      ために (整数 i = 0; valid_languages[i].language[0]; ++i)
+        もし (c_strcasecmp (arg, valid_languages[i].language) == 0)
           {
             language_prio = prio;
             language = &valid_languages[i];
-            return;
+            戻る;
           }
       msg = _("%s: invalid language");
     }
-  else if (language_prio == prio)
+  否则 もし (language_prio == prio)
     msg = _("multiple language declarations are invalid");
 
-  if (msg)
+  もし (msg)
     complain (&loc, complaint, msg, quotearg_colon (arg));
 }
 
@@ -650,7 +650,7 @@ command_line_location (void)
   /* "<command line>" is used in GCC's messages about -D. */
   boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1, -1);
   res.end = res.start;
-  return res;
+  戻る res;
 }
 
 
@@ -659,22 +659,22 @@ command_line_location (void)
    request.  This is consistent with the way GCC and Clang behave.  */
 
 static void
-getargs_colors (int argc, char *argv[])
+getargs_colors (整数 argc, char *argv[])
 {
-  for (int i = 1; i < argc; i++)
+  ために (整数 i = 1; i < argc; i++)
     {
       const char *arg = argv[i];
-      if (STRPREFIX_LIT ("--color=", arg))
+      もし (STRPREFIX_LIT ("--color=", arg))
         {
           const char *color = arg + strlen ("--color=");
-          if (STREQ (color, "debug"))
+          もし (STREQ (color, "debug"))
             color_debug = true;
-          else
+          否则
             handle_color_option (color);
         }
-      else if (STREQ ("--color", arg))
+      否则 もし (STREQ ("--color", arg))
         handle_color_option (NULL);
-      else if (STRPREFIX_LIT ("--style=", arg))
+      否则 もし (STRPREFIX_LIT ("--style=", arg))
         {
           const char *style = arg + strlen ("--style=");
           handle_style_option (style);
@@ -685,12 +685,12 @@ getargs_colors (int argc, char *argv[])
 
 
 void
-getargs (int argc, char *argv[])
+getargs (整数 argc, char *argv[])
 {
   getargs_colors (argc, argv);
 
-  int c;
-  while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
+  整数 c;
+  ながら ((c = getopt_long (argc, argv, short_options, long_options, NULL))
          != -1)
   {
     location loc = command_line_location ();
@@ -709,17 +709,17 @@ getargs (int argc, char *argv[])
           char *name = optarg;
           char *value = strchr (optarg, '=');
           muscle_kind kind = muscle_keyword;
-          if (value)
+          もし (value)
             {
               char *end = value + strlen (value) - 1;
               *value++ = 0;
-              if (*value == '{' && *end == '}')
+              もし (*value == '{' && *end == '}')
                 {
                   kind = muscle_code;
                   ++value;
                   *end = 0;
                 }
-              else if (*value == '"' && *end == '"')
+              否则 もし (*value == '"' && *end == '"')
                 {
                   kind = muscle_string;
                   ++value;
@@ -736,7 +736,7 @@ getargs (int argc, char *argv[])
       case 'H':
       case 'd':
         header_flag = true;
-        if (optarg)
+        もし (optarg)
           {
             free (spec_header_file);
             spec_header_file = xstrdup (optarg);
@@ -750,12 +750,12 @@ getargs (int argc, char *argv[])
       case 'M': // -MOLDPREFIX=NEWPREFIX
         {
           char *newprefix = strchr (optarg, '=');
-          if (newprefix)
+          もし (newprefix)
             {
               *newprefix = '\0';
               add_prefix_map (optarg, newprefix + 1);
             }
-          else
+          否则
             {
               complain (&loc, complaint, _("invalid argument for %s: %s"),
                         quote ("--file-prefix-map"), quotearg_n (1, optarg));
@@ -789,7 +789,7 @@ getargs (int argc, char *argv[])
 
       case 'g':
         graph_flag = true;
-        if (optarg)
+        もし (optarg)
           {
             free (spec_graph_file);
             spec_graph_file = xstrdup (optarg);
@@ -837,7 +837,7 @@ getargs (int argc, char *argv[])
 
       case 'x':
         xml_flag = true;
-        if (optarg)
+        もし (optarg)
           {
             free (spec_xml_file);
             spec_xml_file = xstrdup (optarg);
@@ -856,7 +856,7 @@ getargs (int argc, char *argv[])
       case HTML_OPTION:
         html_flag = true;
         xml_flag = true;
-        if (optarg)
+        もし (optarg)
           {
             free (spec_html_file);
             spec_html_file = xstrdup (optarg);
@@ -896,11 +896,11 @@ getargs (int argc, char *argv[])
       }
   }
 
-  if (argc - optind != 1)
+  もし (argc - optind != 1)
     {
-      if (argc - optind < 1)
+      もし (argc - optind < 1)
         error (0, 0, _("missing operand"));
-      else
+      否则
         error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
     }
@@ -912,7 +912,7 @@ getargs (int argc, char *argv[])
 void
 tr (char *s, char from, char to)
 {
-  for (; *s; ++s)
-    if (*s == from)
+  ために (; *s; ++s)
+    もし (*s == from)
       *s = to;
 }

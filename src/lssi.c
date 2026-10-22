@@ -46,15 +46,15 @@ new_lssi (state_item_number si, lssi *p, bitset l, bool free_l)
   res->parent = p;
   res->lookahead = l;
   res->free_lookahead = free_l;
-  return res;
+  戻る res;
 }
 
 static void
 lssi_free (lssi *sn)
 {
-  if (sn == NULL)
-    return;
-  if (sn->free_lookahead)
+  もし (sn == NULL)
+    戻る;
+  もし (sn->free_lookahead)
     bitset_free (sn->lookahead);
   free (sn);
 }
@@ -67,19 +67,19 @@ lssi_hasher (lssi *sn, size_t max)
   symbol_number syn;
   BITSET_FOR_EACH (biter, sn->lookahead, syn, 0)
     hash += syn;
-  return hash % max;
+  戻る hash % max;
 }
 
 static bool
 lssi_comparator (lssi *s1, lssi *s2)
 {
-  if (s1->si == s2->si)
+  もし (s1->si == s2->si)
     {
-      if (s1->lookahead == s2->lookahead)
-        return true;
-      return bitset_equal_p (s1->lookahead, s2->lookahead);
+      もし (s1->lookahead == s2->lookahead)
+        戻る true;
+      戻る bitset_equal_p (s1->lookahead, s2->lookahead);
     }
-  return false;
+  戻る false;
 }
 
 typedef gl_list_t lssi_list;
@@ -87,24 +87,24 @@ typedef gl_list_t lssi_list;
 static inline bool
 append_lssi (lssi *sn, Hash_table *visited, lssi_list queue)
 {
-  if (hash_lookup (visited, sn))
+  もし (hash_lookup (visited, sn))
     {
       sn->free_lookahead = false;
       lssi_free (sn);
-      return false;
+      戻る false;
     }
   hash_xinsert (visited, sn);
   gl_list_add_last (queue, sn);
-  return true;
+  戻る true;
 }
 
-#if 0
+#もし 0
 static void
 lssi_print (lssi *l)
 {
   FILE *out = stderr;
   print_state_item (&state_items[l->si], out);
-  if (l->lookahead)
+  もし (l->lookahead)
     {
       fprintf (out, "FOLLOWL = { ");
       bitset_iterator biter;
@@ -127,11 +127,11 @@ eligible_state_items (state_item *target)
   state_item_list queue =
     gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true, 1,
                     (const void **) &target);
-  while (gl_list_size (queue) > 0)
+  ながら (gl_list_size (queue) > 0)
     {
       state_item *si = (state_item *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      if (bitset_test (result, si - state_items))
+      もし (bitset_test (result, si - state_items))
         continue;
       bitset_set (result, si - state_items);
       // search all reverse edges.
@@ -142,7 +142,7 @@ eligible_state_items (state_item *target)
         gl_list_add_last (queue, &state_items[sin]);
     }
   gl_list_free (queue);
-  return result;
+  戻る result;
 }
 
 /**
@@ -168,21 +168,21 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
   // breadth-first search
   bool finished = false;
   lssi *n;
-  while (gl_list_size (queue) > 0)
+  ながら (gl_list_size (queue) > 0)
     {
       n = (lssi *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
       state_item_number last = n->si;
-      if (target == last && bitset_test (n->lookahead, next_sym))
+      もし (target == last && bitset_test (n->lookahead, next_sym))
         {
           finished = true;
           break;
         }
       state_item *si = &state_items[last];
       // Transitions don't change follow_L
-      if (si->trans >= 0)
+      もし (si->trans >= 0)
         {
-          if (bitset_test (eligible, si->trans))
+          もし (bitset_test (eligible, si->trans))
             {
               lssi *next = new_lssi (si->trans, n, n->lookahead, false);
               append_lssi (next, visited, queue);
@@ -195,27 +195,27 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
       // if the symbol is not nullable, follow_L is its FIRSTS set
       // if the symbol is nullable, follow_L is its FIRSTS set unioned with
       // this logic applied to the next symbol in the rule
-      if (si->prods)
+      もし (si->prods)
         {
           // Compute follow_L as above
           bitset lookahead = bitset_create (nsyms, BITSET_FIXED);
           item_number *pos = si->item + 1;
-          for (; !item_number_is_rule_number (*pos); ++pos)
+          ために (; !item_number_is_rule_number (*pos); ++pos)
             {
               item_number it = *pos;
-              if (ISTOKEN (it))
+              もし (ISTOKEN (it))
                 {
                   bitset_set (lookahead, it);
                   break;
                 }
-              else
+              否则
                 {
                   bitset_union (lookahead, lookahead, FIRSTS (it));
-                  if (!nullable[it - ntokens])
+                  もし (!nullable[it - ntokens])
                     break;
                 }
             }
-          if (item_number_is_rule_number (*pos))
+          もし (item_number_is_rule_number (*pos))
             bitset_union (lookahead, n->lookahead, lookahead);
 
           bool lookahead_used = false;
@@ -224,20 +224,20 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
           state_item_number nextSI;
           BITSET_FOR_EACH (biter, si->prods, nextSI, 0)
             {
-              if (!bitset_test (eligible, nextSI))
+              もし (!bitset_test (eligible, nextSI))
                 continue;
               lssi *next = new_lssi (nextSI, n, lookahead,
                                      !lookahead_used);
               lookahead_used = append_lssi (next, visited, queue)
                                || lookahead_used;
             }
-          if (!lookahead_used)
+          もし (!lookahead_used)
             bitset_free (lookahead);
         }
     }
 
   bitset_free (eligible);
-  if (!finished)
+  もし (!finished)
     {
       gl_list_free (queue);
       fputs ("Cannot find shortest path to conflict state.", stderr);
@@ -245,21 +245,21 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
     }
   state_item_list res =
     gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  for (lssi *sn = n; sn != NULL; sn = sn->parent)
+  ために (lssi *sn = n; sn != NULL; sn = sn->parent)
     gl_list_add_first (res, &state_items[sn->si]);
 
   hash_free (visited);
   gl_list_free (queue);
 
-  if (trace_flag & trace_cex)
+  もし (trace_flag & trace_cex)
     {
       fputs ("REDUCE ITEM PATH:\n", stderr);
       gl_list_iterator_t it = gl_list_iterator (res);
       const void *sip;
-      while (gl_list_iterator_next (&it, &sip, NULL))
+      ながら (gl_list_iterator_next (&it, &sip, NULL))
         state_item_print ((state_item *) sip, stderr, "");
     }
-  return res;
+  戻る res;
 }
 
 /**
@@ -269,18 +269,18 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
 bool
 intersect_symbol (symbol_number sym, bitset syms)
 {
-  if (!syms)
-    return true;
+  もし (!syms)
+    戻る true;
   bitset_iterator biter;
   symbol_number sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (sym == sn)
-        return true;
-      if (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
-        return true;
+      もし (sym == sn)
+        戻る true;
+      もし (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
+        戻る true;
     }
-  return false;
+  戻る false;
 }
 
 /**
@@ -290,18 +290,18 @@ intersect_symbol (symbol_number sym, bitset syms)
 bool
 intersect (bitset ts, bitset syms)
 {
-  if (!syms || !ts)
-    return true;
+  もし (!syms || !ts)
+    戻る true;
   bitset_iterator biter;
   symbol_number sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (bitset_test (ts, sn))
-        return true;
-      if (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
-        return true;
+      もし (bitset_test (ts, sn))
+        戻る true;
+      もし (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
+        戻る true;
     }
-  return false;
+  戻る false;
 }
 
 
@@ -314,8 +314,8 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
 {
   state_item_list result =
     gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  if (SI_TRANSITION (si))
-    return result;
+  もし (SI_TRANSITION (si))
+    戻る result;
   // A production step was made to the current lalr_item.
   // Check that the next symbol in the parent lalr_item is
   // compatible with the lookahead.
@@ -324,20 +324,20 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
   BITSET_FOR_EACH (biter, si->revs, sin, 0)
   {
     state_item *prevsi = &state_items[sin];
-    if (!production_allowed (prevsi, si))
+    もし (!production_allowed (prevsi, si))
       continue;
     bitset prev_lookahead = prevsi->lookahead;
-    if (item_number_is_rule_number (*(prevsi->item)))
+    もし (item_number_is_rule_number (*(prevsi->item)))
       {
         // reduce item
         // Check that some lookaheads can be preserved.
-        if (!intersect (prev_lookahead, lookahead))
+        もし (!intersect (prev_lookahead, lookahead))
           continue;
       }
-    else
+    否则
       {
         // shift item
-        if (lookahead)
+        もし (lookahead)
           {
             // Check that lookahead is compatible with the first
             // possible symbols in the rest of the production.
@@ -346,28 +346,28 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
             // the lookahead of the corresponding item.
             bool applicable = false;
             bool nlable = true;
-            for (item_number *pos = prevsi->item + 1;
+            ために (item_number *pos = prevsi->item + 1;
                  !applicable && nlable && item_number_is_symbol_number (*pos);
                  ++pos)
               {
                 symbol_number next_sym = item_number_as_symbol_number (*pos);
-                if (ISTOKEN (next_sym))
+                もし (ISTOKEN (next_sym))
                   {
                     applicable = intersect_symbol (next_sym, lookahead);
                     nlable = false;
                   }
-                else
+                否则
                   {
                     applicable = intersect (FIRSTS (next_sym), lookahead);
-                    if (!applicable)
+                    もし (!applicable)
                       nlable = nullable[next_sym - ntokens];
                   }
               }
-            if (!applicable && !nlable)
+            もし (!applicable && !nlable)
               continue;
           }
       }
     gl_list_add_last (result, prevsi);
   }
-  return result;
+  戻る result;
 }

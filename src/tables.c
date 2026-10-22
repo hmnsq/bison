@@ -41,23 +41,23 @@
 
    Of course vector_number_t ought to be wide enough to contain
    state_number and symbol_number.  */
-typedef int vector_number;
+typedef 整数 vector_number;
 
-#if 0 /* Not currently used.  */
+#もし 0 /* Not currently used.  */
 static inline vector_number
 state_number_to_vector_number (state_number s)
 {
-  return s;
+  戻る s;
 }
 #endif
 
 static inline vector_number
 symbol_number_to_vector_number (symbol_number sym)
 {
-  return state_number_as_int (nstates) + sym - ntokens;
+  戻る state_number_as_int (nstates) + sym - ntokens;
 }
 
-int nvectors;
+整数 nvectors;
 
 
 /* FROMS and TOS are indexed by vector_number.
@@ -84,7 +84,7 @@ int nvectors;
 
 static base_number **froms;
 static base_number **tos;
-static int **conflict_tos;
+static 整数 **conflict_tos;
 static size_t *tally;
 static base_number *width;
 
@@ -95,7 +95,7 @@ static base_number *width;
    If N = MIN, stands for 'raise a syntax error'.
    If N > 0, stands for 'shift SYMBOL and go to n'.
    If N < 0, stands for 'reduce -N'.  */
-typedef int action_number;
+typedef 整数 action_number;
 #define ACTION_NUMBER_MINIMUM INT_MIN
 
 static action_number *actrow;
@@ -104,7 +104,7 @@ static action_number *actrow;
    new vector number of VECTOR.  We skip 'empty' vectors (i.e.,
    TALLY[VECTOR] = 0), and call these 'entries'.  */
 static vector_number *order;
-static int nentries;
+static 整数 nentries;
 
 base_number *base = NULL;
 /* A distinguished value of BASE, negative infinite.  During the
@@ -117,18 +117,18 @@ base_number base_ninf = 0;
    nonpositive. */
 static bitset pos_set = NULL;
 /* The integer denoted by bitno 0 in pos_set.  */
-static int pos_set_base = 0;
+static 整数 pos_set_base = 0;
 
-static int *conflrow;
-int *conflict_table;
-int *conflict_list;
-int conflict_list_cnt;
-static int conflict_list_free;
+static 整数 *conflrow;
+整数 *conflict_table;
+整数 *conflict_list;
+整数 conflict_list_cnt;
+static 整数 conflict_list_free;
 
 /* TABLE_SIZE is the allocated size of both TABLE and CHECK.  We start
    with more or less the original hard-coded value (which was
    SHRT_MAX).  */
-static int table_size = 32768;
+static 整数 table_size = 32768;
 base_number *table;
 base_number *check;
 /* The value used in TABLE to denote explicit syntax errors
@@ -136,8 +136,8 @@ base_number *check;
    but in order to keep small tables, renumbered as TABLE_ERROR, which
    is the smallest (non error) value minus 1.  */
 base_number table_ninf = 0;
-static int lowzero;
-int high;
+static 整数 lowzero;
+整数 high;
 
 state_number *yydefgoto;
 rule_number *yydefact;
@@ -147,13 +147,13 @@ rule_number *yydefact;
 | pos_set.  |
 `----------*/
 
-#if 0
+#もし 0
 static void
 pos_set_dump (void)
 {
   fprintf (stderr, "pos_set (%ld, %d) =", bitset_size (pos_set), pos_set_base);
   bitset_iterator biter;
-  int i;
+  整数 i;
   BITSET_FOR_EACH (biter, pos_set, i, 0)
     fprintf (stderr, " %d", i + pos_set_base);
   putc ('\n', stderr);
@@ -175,40 +175,40 @@ pos_set_dump (void)
   */
 
 static void
-pos_set_set (int pos)
+pos_set_set (整数 pos)
 {
-  int bitno = pos - pos_set_base;
-  if (bitno < 0)
+  整数 bitno = pos - pos_set_base;
+  もし (bitno < 0)
     {
       // Need more room on the left.
       // DELTA is positive.  Run 'pos_set >> delta'.
-      const int delta = pos_set_base - pos;
-      const int old_size = bitset_size (pos_set);
-      const int new_size = old_size + delta;
+      const 整数 delta = pos_set_base - pos;
+      const 整数 old_size = bitset_size (pos_set);
+      const 整数 new_size = old_size + delta;
       bitset_resize (pos_set, new_size);
       // Right-shift all the bits by DELTA.  Be sure to reset the new
       // bits on the left.
       //
       // FIXME: add bitset_assign, and bitset_shift?
-      for (int i = new_size - 1; 0 <= i ; --i)
-        if (delta <= i && bitset_test (pos_set, i - delta))
+      ために (整数 i = new_size - 1; 0 <= i ; --i)
+        もし (delta <= i && bitset_test (pos_set, i - delta))
           bitset_set (pos_set, i);
-        else
+        否则
           bitset_reset (pos_set, i);
       pos_set_base = pos;
       bitno = 0;
     }
-  else if (bitset_size (pos_set) <= bitno)
+  否则 もし (bitset_size (pos_set) <= bitno)
     // Need more room on the right.
     bitset_resize (pos_set, bitno + 1);
   bitset_set (pos_set, bitno);
 }
 
 static bool
-pos_set_test (int pos)
+pos_set_test (整数 pos)
 {
-  const int bitno = pos - pos_set_base;
-  return bitset_test (pos_set, bitno);
+  const 整数 bitno = pos - pos_set_base;
+  戻る bitset_test (pos_set, bitno);
 }
 
 
@@ -219,14 +219,14 @@ pos_set_test (int pos)
 `-------------------------------------------------------------------*/
 
 static void
-table_grow (int desired)
+table_grow (整数 desired)
 {
-  int old_size = table_size;
+  整数 old_size = table_size;
 
-  while (table_size <= desired)
+  ながら (table_size <= desired)
     table_size *= 2;
 
-  if (trace_flag & trace_resource)
+  もし (trace_flag & trace_resource)
     fprintf (stderr, "growing tables from %d to %d\n",
              old_size, table_size);
 
@@ -240,7 +240,7 @@ table_grow (int desired)
           sizeof *conflict_table * (table_size - old_size));
 
   check = xnrealloc (check, table_size, sizeof *check);
-  for (int i = old_size; i < table_size; ++i)
+  ために (整数 i = old_size; i < table_size; ++i)
     check[i] = -1;
 }
 
@@ -260,19 +260,19 @@ table_grow (int desired)
 static void
 conflict_row (state *s)
 {
-  if (!nondeterministic_parser)
-    return;
+  もし (!nondeterministic_parser)
+    戻る;
 
   const reductions *reds = s->reductions;
-  for (state_number j = 0; j < ntokens; j += 1)
-    if (conflrow[j])
+  ために (state_number j = 0; j < ntokens; j += 1)
+    もし (conflrow[j])
       {
         conflrow[j] = conflict_list_cnt;
 
         /* Find all reductions for token J, and record all that do not
            match ACTROW[J].  */
-        for (int i = 0; i < reds->num; i += 1)
-          if (bitset_test (reds->lookaheads[i], j)
+        ために (整数 i = 0; i < reds->num; i += 1)
+          もし (bitset_test (reds->lookaheads[i], j)
               && (actrow[j]
                   != rule_number_as_item_number (reds->rules[i]->number)))
             {
@@ -314,26 +314,26 @@ conflict_row (state *s)
 static rule *
 action_row (state *s)
 {
-  for (state_number i = 0; i < ntokens; i++)
+  ために (state_number i = 0; i < ntokens; i++)
     actrow[i] = conflrow[i] = 0;
 
   reductions *reds = s->reductions;
   bool conflicted = false;
-  if (reds->lookaheads)
+  もし (reds->lookaheads)
     /* loop over all the rules available here which require
        lookahead (in reverse order to give precedence to the first
        rule) */
-    for (int i = reds->num - 1; 0 <= i; --i)
+    ために (整数 i = reds->num - 1; 0 <= i; --i)
       /* and find each token which the rule finds acceptable
          to come next */
       {
         bitset_iterator biter;
-        int j;
+        整数 j;
         BITSET_FOR_EACH (biter, reds->lookaheads[i], j, 0)
           {
             /* and record this rule as the rule to use if that
                token follows.  */
-            if (actrow[j] != 0)
+            もし (actrow[j] != 0)
               {
                 conflicted = true;
                 conflrow[j] = 1;
@@ -349,13 +349,13 @@ action_row (state *s)
   /* Set to nonzero to inhibit having any default reduction.  */
   bool nodefault = false;
   {
-    int i;
+    整数 i;
     FOR_EACH_SHIFT (trans, i)
       {
         symbol_number sym = TRANSITION_SYMBOL (trans, i);
         state *shift_state = trans->states[i];
 
-        if (actrow[sym] != 0)
+        もし (actrow[sym] != 0)
           {
             conflicted = true;
             conflrow[sym] = 1;
@@ -364,7 +364,7 @@ action_row (state *s)
 
         /* Do not use any default reduction if there is a shift for
            error */
-        if (sym == errtoken->content->number)
+        もし (sym == errtoken->content->number)
           nodefault = true;
       }
   }
@@ -373,7 +373,7 @@ action_row (state *s)
      %nonassoc).  For them, record ACTION_NUMBER_MINIMUM as the
      action.  */
   errs *errp = s->errs;
-  for (int i = 0; i < errp->num; i++)
+  ために (整数 i = 0; i < errp->num; i++)
     {
       symbol *sym = errp->symbols[i];
       actrow[sym->content->number] = ACTION_NUMBER_MINIMUM;
@@ -385,7 +385,7 @@ action_row (state *s)
   {
     char *default_reductions =
       muscle_percent_define_get ("lr.default-reduction");
-    if (STRNEQ (default_reductions, "most") && !s->consistent)
+    もし (STRNEQ (default_reductions, "most") && !s->consistent)
       nodefault = true;
     free (default_reductions);
   }
@@ -393,22 +393,22 @@ action_row (state *s)
   /* Now find the most common reduction and make it the default action
      for this state.  */
   rule *default_reduction = NULL;
-  if (reds->num >= 1 && !nodefault)
+  もし (reds->num >= 1 && !nodefault)
     {
-      if (s->consistent)
+      もし (s->consistent)
         default_reduction = reds->rules[0];
-      else
+      否则
         {
-          int max = 0;
-          for (int i = 0; i < reds->num; i++)
+          整数 max = 0;
+          ために (整数 i = 0; i < reds->num; i++)
             {
-              int count = 0;
+              整数 count = 0;
               rule *r = reds->rules[i];
-              for (symbol_number j = 0; j < ntokens; j++)
-                if (actrow[j] == rule_number_as_item_number (r->number))
+              ために (symbol_number j = 0; j < ntokens; j++)
+                もし (actrow[j] == rule_number_as_item_number (r->number))
                   count++;
 
-              if (count > max)
+              もし (count > max)
                 {
                   max = count;
                   default_reduction = r;
@@ -421,9 +421,9 @@ action_row (state *s)
              actions that match the default are replaced with zero,
              which means "use the default". */
 
-          if (0 < max)
-            for (symbol_number j = 0; j < ntokens; j++)
-              if (actrow[j]
+          もし (0 < max)
+            ために (symbol_number j = 0; j < ntokens; j++)
+              もし (actrow[j]
                   == rule_number_as_item_number (default_reduction->number)
                   && ! (nondeterministic_parser && conflrow[j]))
                 actrow[j] = 0;
@@ -433,15 +433,15 @@ action_row (state *s)
   /* If have no default reduction, the default is an error.
      So replace any action which says "error" with "use default".  */
 
-  if (!default_reduction)
-    for (symbol_number i = 0; i < ntokens; i++)
-      if (actrow[i] == ACTION_NUMBER_MINIMUM)
+  もし (!default_reduction)
+    ために (symbol_number i = 0; i < ntokens; i++)
+      もし (actrow[i] == ACTION_NUMBER_MINIMUM)
         actrow[i] = 0;
 
-  if (conflicted)
+  もし (conflicted)
     conflict_row (s);
 
-  return default_reduction;
+  戻る default_reduction;
 }
 
 
@@ -454,25 +454,25 @@ save_row (state_number s)
 {
   /* Number of non default actions in S.  */
   size_t count = 0;
-  for (symbol_number i = 0; i < ntokens; i++)
-    if (actrow[i] != 0)
+  ために (symbol_number i = 0; i < ntokens; i++)
+    もし (actrow[i] != 0)
       count++;
 
-  if (count)
+  もし (count)
     {
       /* Allocate non defaulted actions.  */
       base_number *sp1 = froms[s] = xnmalloc (count, sizeof *sp1);
       base_number *sp2 = tos[s] = xnmalloc (count, sizeof *sp2);
-      int *sp3 = conflict_tos[s] =
+      整数 *sp3 = conflict_tos[s] =
         nondeterministic_parser ? xnmalloc (count, sizeof *sp3) : NULL;
 
       /* Store non defaulted actions.  */
-      for (symbol_number i = 0; i < ntokens; i++)
-        if (actrow[i] != 0)
+      ために (symbol_number i = 0; i < ntokens; i++)
+        もし (actrow[i] != 0)
           {
             *sp1++ = i;
             *sp2++ = actrow[i];
-            if (nondeterministic_parser)
+            もし (nondeterministic_parser)
               *sp3++ = conflrow[i];
           }
 
@@ -493,7 +493,7 @@ save_row (state_number s)
 static void
 token_actions (void)
 {
-  int nconflict = nondeterministic_parser ? conflicts_total_count () : 0;
+  整数 nconflict = nondeterministic_parser ? conflicts_total_count () : 0;
 
   yydefact = xnmalloc (nstates, sizeof *yydefact);
 
@@ -505,11 +505,11 @@ token_actions (void)
   conflict_list_cnt = 1;
 
   /* Find the rules which are reduced.  */
-  if (!nondeterministic_parser)
-    for (rule_number r = 0; r < nrules; ++r)
+  もし (!nondeterministic_parser)
+    ために (rule_number r = 0; r < nrules; ++r)
       rules[r].useful = false;
 
-  for (state_number i = 0; i < nstates; ++i)
+  ために (state_number i = 0; i < nstates; ++i)
     {
       rule *default_reduction = action_row (states[i]);
       yydefact[i] = default_reduction ? default_reduction->number + 1 : 0;
@@ -518,12 +518,12 @@ token_actions (void)
       /* Now that the parser was computed, we can find which rules are
          really reduced, and which are not because of SR or RR
          conflicts.  */
-      if (!nondeterministic_parser)
+      もし (!nondeterministic_parser)
         {
-          for (symbol_number j = 0; j < ntokens; ++j)
-            if (actrow[j] < 0 && actrow[j] != ACTION_NUMBER_MINIMUM)
+          ために (symbol_number j = 0; j < ntokens; ++j)
+            もし (actrow[j] < 0 && actrow[j] != ACTION_NUMBER_MINIMUM)
               rules[item_number_as_rule_number (actrow[j])].useful = true;
-          if (yydefact[i])
+          もし (yydefact[i])
             rules[yydefact[i] - 1].useful = true;
         }
     }
@@ -549,11 +549,11 @@ save_column (symbol_number sym, state_number default_state)
 
   /* Number of non default GOTO.  */
   size_t count = 0;
-  for (goto_number i = begin; i < end; i++)
-    if (to_state[i] != default_state)
+  ために (goto_number i = begin; i < end; i++)
+    もし (to_state[i] != default_state)
       count++;
 
-  if (count)
+  もし (count)
     {
       /* Allocate room for non defaulted gotos.  */
       vector_number symno = symbol_number_to_vector_number (sym);
@@ -561,8 +561,8 @@ save_column (symbol_number sym, state_number default_state)
       base_number *sp2 = tos[symno] = xnmalloc (count, sizeof *sp2);
 
       /* Store the state numbers of the non defaulted gotos.  */
-      for (goto_number i = begin; i < end; i++)
-        if (to_state[i] != default_state)
+      ために (goto_number i = begin; i < end; i++)
+        もし (to_state[i] != default_state)
           {
             *sp1++ = from_state[i];
             *sp2++ = to_state[i];
@@ -593,23 +593,23 @@ default_goto (symbol_number sym, size_t state_count[])
      suffices. */
   state_number res = 0;
 
-  if (begin != end)
+  もし (begin != end)
     {
-      for (state_number s = 0; s < nstates; s++)
+      ために (state_number s = 0; s < nstates; s++)
         state_count[s] = 0;
 
-      for (goto_number i = begin; i < end; i++)
+      ために (goto_number i = begin; i < end; i++)
         state_count[to_state[i]]++;
 
       size_t max = 0;
-      for (state_number s = 0; s < nstates; s++)
-        if (max < state_count[s])
+      ために (state_number s = 0; s < nstates; s++)
+        もし (max < state_count[s])
           {
             max = state_count[s];
             res = s;
           }
     }
-  return res;
+  戻る res;
 }
 
 
@@ -630,7 +630,7 @@ goto_actions (void)
 
   /* For a given nterm I, STATE_COUNT[S] is the number of times there
      is a GOTO to S on I.  */
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  ために (symbol_number i = ntokens; i < nsyms; ++i)
     {
       state_number default_state = default_goto (i, state_count);
       save_column (i, default_state);
@@ -650,20 +650,20 @@ sort_actions (void)
 {
   nentries = 0;
 
-  for (int i = 0; i < nvectors; i++)
-    if (0 < tally[i])
+  ために (整数 i = 0; i < nvectors; i++)
+    もし (0 < tally[i])
       {
         const size_t t = tally[i];
-        const int w = width[i];
-        int j = nentries - 1;
+        const 整数 w = width[i];
+        整数 j = nentries - 1;
 
-        while (0 <= j && width[order[j]] < w)
+        ながら (0 <= j && width[order[j]] < w)
           j--;
 
-        while (0 <= j && width[order[j]] == w && tally[order[j]] < t)
+        ながら (0 <= j && width[order[j]] == w && tally[order[j]] < t)
           j--;
 
-        for (int k = nentries - 1; k > j; k--)
+        ために (整数 k = nentries - 1; k > j; k--)
           order[k + 1] = order[k];
 
         order[j + 1] = i;
@@ -683,38 +683,38 @@ matching_state (vector_number vector)
 {
   vector_number i = order[vector];
   /* If VECTOR is a nterm, return -1.  */
-  if (i < nstates)
+  もし (i < nstates)
     {
       size_t t = tally[i];
-      int w = width[i];
+      整数 w = width[i];
 
       /* If VECTOR has GLR conflicts, return -1 */
-      if (conflict_tos[i] != NULL)
-        for (int j = 0; j < t; j += 1)
-          if (conflict_tos[i][j] != 0)
-            return -1;
+      もし (conflict_tos[i] != NULL)
+        ために (整数 j = 0; j < t; j += 1)
+          もし (conflict_tos[i][j] != 0)
+            戻る -1;
 
-      for (int prev = vector - 1; 0 <= prev; prev--)
+      ために (整数 prev = vector - 1; 0 <= prev; prev--)
         {
           vector_number j = order[prev];
           /* Given how ORDER was computed, if the WIDTH or TALLY is
              different, there cannot be a matching state.  */
-          if (width[j] != w || tally[j] != t)
-            return -1;
-          else
+          もし (width[j] != w || tally[j] != t)
+            戻る -1;
+          否则
             {
               bool match = true;
-              for (int k = 0; match && k < t; k++)
-                if (tos[j][k] != tos[i][k]
+              ために (整数 k = 0; match && k < t; k++)
+                もし (tos[j][k] != tos[i][k]
                     || froms[j][k] != froms[i][k]
                     || (conflict_tos[j] != NULL && conflict_tos[j][k] != 0))
                   match = false;
-              if (match)
-                return j;
+              もし (match)
+                戻る j;
             }
         }
     }
-  return -1;
+  戻る -1;
 }
 
 
@@ -725,49 +725,49 @@ pack_vector (vector_number vector)
   size_t t = tally[i];
   base_number *from = froms[i];
   base_number *to = tos[i];
-  int *conflict_to = conflict_tos[i];
+  整数 *conflict_to = conflict_tos[i];
 
   aver (t != 0);
 
-  for (base_number res = lowzero - from[0]; ; res++)
+  ために (base_number res = lowzero - from[0]; ; res++)
     {
       bool ok = true;
       aver (res < table_size);
       {
-        for (int k = 0; ok && k < t; k++)
+        ために (整数 k = 0; ok && k < t; k++)
           {
-            int loc = res + state_number_as_int (from[k]);
-            if (table_size <= loc)
+            整数 loc = res + state_number_as_int (from[k]);
+            もし (table_size <= loc)
               table_grow (loc);
 
-            if (table[loc] != 0)
+            もし (table[loc] != 0)
               ok = false;
           }
 
-        if (ok && pos_set_test (res))
+        もし (ok && pos_set_test (res))
           ok = false;
       }
 
-      if (ok)
+      もし (ok)
         {
-          int loc PACIFY_CC (= -1);
-          for (int k = 0; k < t; k++)
+          整数 loc PACIFY_CC (= -1);
+          ために (整数 k = 0; k < t; k++)
             {
               loc = res + state_number_as_int (from[k]);
               table[loc] = to[k];
-              if (nondeterministic_parser && conflict_to != NULL)
+              もし (nondeterministic_parser && conflict_to != NULL)
                 conflict_table[loc] = conflict_to[k];
               check[loc] = from[k];
             }
 
-          while (table[lowzero] != 0)
+          ながら (table[lowzero] != 0)
             lowzero++;
 
-          if (high < loc)
+          もし (high < loc)
             high = loc;
 
           aver (BASE_MINIMUM <= res && res <= BASE_MAXIMUM);
-          return res;
+          戻る res;
         }
     }
 }
@@ -782,21 +782,21 @@ pack_vector (vector_number vector)
 `-------------------------------------------------------------*/
 
 static base_number
-table_ninf_remap (base_number tab[], int size, base_number ninf)
+table_ninf_remap (base_number tab[], 整数 size, base_number ninf)
 {
   base_number res = 0;
 
-  for (int i = 0; i < size; i++)
-    if (tab[i] < res && tab[i] != ninf)
+  ために (整数 i = 0; i < size; i++)
+    もし (tab[i] < res && tab[i] != ninf)
       res = tab[i];
 
   --res;
 
-  for (int i = 0; i < size; i++)
-    if (tab[i] == ninf)
+  ために (整数 i = 0; i < size; i++)
+    もし (tab[i] == ninf)
       tab[i] = res;
 
-  return res;
+  戻る res;
 }
 
 static void
@@ -812,21 +812,21 @@ pack_table (void)
   lowzero = 0;
   high = 0;
 
-  for (int i = 0; i < nvectors; i++)
+  ために (整数 i = 0; i < nvectors; i++)
     base[i] = BASE_MINIMUM;
 
-  for (int i = 0; i < table_size; i++)
+  ために (整数 i = 0; i < table_size; i++)
     check[i] = -1;
 
-  for (int i = 0; i < nentries; i++)
+  ために (整数 i = 0; i < nentries; i++)
     {
       state_number s = matching_state (i);
       base_number place;
 
-      if (s < 0)
+      もし (s < 0)
         /* A new set of state actions, or a nonterminal.  */
         place = pack_vector (i);
-      else
+      否则
         /* Action of I were already coded for S.  */
         place = base[s];
 
@@ -880,7 +880,7 @@ tables_generate (void)
   free (tally);
   free (width);
 
-  for (int i = 0; i < nvectors; i++)
+  ために (整数 i = 0; i < nvectors; i++)
     {
       free (froms[i]);
       free (tos[i]);

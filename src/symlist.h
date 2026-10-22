@@ -66,7 +66,7 @@ typedef struct symbol_list
      appears, and MIDRULE_PARENT_RHS_INDEX = its rhs index (1-origin) in the
      parent rule.  */
   struct symbol_list *midrule_parent_rule;
-  int midrule_parent_rhs_index;
+  整数 midrule_parent_rhs_index;
 
   /*--------------------------------------------------------------.
   | Used for rules only (attached to the "LHS", one per rule even |
@@ -87,15 +87,15 @@ typedef struct symbol_list
      empty_loc.  */
   location percent_empty_loc;
 
-  int dprec;
+  整数 dprec;
   location dprec_loc;
-  int merger;
+  整数 merger;
   location merger_declaration_loc;
 
   /* Counts of the number of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  整数 expected_sr_conflicts;
+  整数 expected_rr_conflicts;
 
   /* The list.  */
   struct symbol_list *next;
@@ -134,17 +134,17 @@ symbol_list *symbol_list_append (symbol_list *list, symbol_list *node);
 void symbol_list_free (symbol_list *list);
 
 /** Return the length of \c l. */
-int symbol_list_length (symbol_list const *l);
+整数 symbol_list_length (symbol_list const *l);
 
 /** Get item \c n in symbol list \c l.
  ** \pre  0 <= n
  ** \post res != NULL
  **/
-symbol_list *symbol_list_n_get (symbol_list *l, int n);
+symbol_list *symbol_list_n_get (symbol_list *l, 整数 n);
 
 /** Get the data type (alternative in the union) of the value for
     symbol N in rule RULE.  */
-uniqstr symbol_list_n_type_name_get (symbol_list *l, int n);
+uniqstr symbol_list_n_type_name_get (symbol_list *l, 整数 n);
 
 /** Check whether the node is a border element of a rule. */
 bool symbol_list_null (symbol_list *node);

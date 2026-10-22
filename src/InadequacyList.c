@@ -35,7 +35,7 @@ InadequacyList__new_conflict (state *manifesting_state, symbol *token,
   InadequacyList *result = xmalloc (sizeof *result);
   result->id = *node_count;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  もし (INT_ADD_WRAPV (*node_count, 1, node_count))
     aver (false);
   IGNORE_TYPE_LIMITS_END
   result->next = NULL;
@@ -43,13 +43,13 @@ InadequacyList__new_conflict (state *manifesting_state, symbol *token,
   result->contributionCount = bitset_count (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
-  return result;
+  戻る result;
 }
 
 void
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  ながら (self)
     {
       InadequacyList *node = self;
       self = self->next;
@@ -61,10 +61,10 @@ InadequacyList__delete (InadequacyList *self)
 ContributionIndex
 InadequacyList__getShiftContributionIndex (InadequacyList const *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
+  もし (!bitset_test (self->inadequacy.conflict.actions,
                     self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+    戻る ContributionIndex__none;
+  戻る self->contributionCount - 1;
 }
 
 symbol *
@@ -72,7 +72,7 @@ InadequacyList__getContributionToken (InadequacyList const *self,
                                       ContributionIndex i)
 {
   aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  戻る self->inadequacy.conflict.token;
 }
 
 void

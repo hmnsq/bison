@@ -30,19 +30,19 @@ assoc_to_string (assoc a)
   switch (a)
     {
     case undef_assoc:
-      return "undefined associativity";
+      戻る "undefined associativity";
 
     case right_assoc:
-      return "%right";
+      戻る "%right";
 
     case left_assoc:
-      return "%left";
+      戻る "%left";
 
     case non_assoc:
-      return "%nonassoc";
+      戻る "%nonassoc";
 
     case precedence_assoc:
-      return "%precedence";
+      戻る "%precedence";
     }
   abort ();
 }

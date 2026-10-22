@@ -33,21 +33,21 @@
 /* Comments for these variables are in gram.h.  */
 
 item_number *ritem = NULL;
-int nritems = 0;
+整数 nritems = 0;
 
 rule *rules = NULL;
 rule_number nrules = 0;
 
 symbol **symbols = NULL;
-int nsyms = 0;
-int ntokens = 1;
-int nnterms = 0;
+整数 nsyms = 0;
+整数 ntokens = 1;
+整数 nnterms = 0;
 
 symbol_number *token_translations = NULL;
 
-int max_code = 256;
+整数 max_code = 256;
 
-int required_version = 0;
+整数 required_version = 0;
 
 void
 item_print (item_number *item, rule const *previous_rule, FILE *out)
@@ -55,16 +55,16 @@ item_print (item_number *item, rule const *previous_rule, FILE *out)
   rule const *r = item_rule (item);
   rule_lhs_print (r, previous_rule ? previous_rule->lhs : NULL, out);
 
-  if (0 <= *r->rhs)
+  もし (0 <= *r->rhs)
     {
       // Non-empty rhs.
-      for (item_number *sp = r->rhs; sp < item; sp++)
+      ために (item_number *sp = r->rhs; sp < item; sp++)
         fprintf (out, " %s", symbols[*sp]->tag);
       fprintf (out, " %s", dot);
-      for (item_number *sp = item; 0 <= *sp; ++sp)
+      ために (item_number *sp = item; 0 <= *sp; ++sp)
         fprintf (out, " %s", symbols[*sp]->tag);
     }
-  else
+  否则
     fprintf (out, " %s %s", empty, dot);
 }
 
@@ -72,39 +72,39 @@ item_print (item_number *item, rule const *previous_rule, FILE *out)
 bool
 rule_useful_in_grammar_p (rule const *r)
 {
-  return r->number < nrules;
+  戻る r->number < nrules;
 }
 
 bool
 rule_useless_in_grammar_p (rule const *r)
 {
-  return !rule_useful_in_grammar_p (r);
+  戻る !rule_useful_in_grammar_p (r);
 }
 
 bool
 rule_useless_in_parser_p (rule const *r)
 {
-  return !r->useful && rule_useful_in_grammar_p (r);
+  戻る !r->useful && rule_useful_in_grammar_p (r);
 }
 
 bool
 rule_useless_chain_p (rule const *r)
 {
-  return rule_rhs_length (r) == 1 && !r->action;
+  戻る rule_rhs_length (r) == 1 && !r->action;
 }
 
 void
 rule_lhs_print (rule const *r, sym_content const *previous_lhs, FILE *out)
 {
   fprintf (out, "  %3d ", r->number);
-  if (previous_lhs != r->lhs)
+  もし (previous_lhs != r->lhs)
     fprintf (out, "%s:", r->lhs->symbol->tag);
-  else
-    fprintf (out, "%*s|", (int) strlen (previous_lhs->symbol->tag), "");
+  否则
+    fprintf (out, "%*s|", (整数) strlen (previous_lhs->symbol->tag), "");
 }
 
 void
-rule_lhs_print_xml (rule const *r, FILE *out, int level)
+rule_lhs_print_xml (rule const *r, FILE *out, 整数 level)
 {
   xml_printf (out, level, "<lhs>%s</lhs>", r->lhs->symbol->tag);
 }
@@ -113,33 +113,33 @@ size_t
 rule_rhs_length (rule const *r)
 {
   size_t res = 0;
-  for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  ために (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
     ++res;
-  return res;
+  戻る res;
 }
 
 void
 rule_rhs_print (rule const *r, FILE *out)
 {
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  もし (0 <= *r->rhs)
+    ために (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       fprintf (out, " %s", symbols[*rhsp]->tag);
-  else
+  否则
     fprintf (out, " %s", empty);
 }
 
 static void
-rule_rhs_print_xml (rule const *r, FILE *out, int level)
+rule_rhs_print_xml (rule const *r, FILE *out, 整数 level)
 {
-  if (*r->rhs >= 0)
+  もし (*r->rhs >= 0)
     {
       xml_puts (out, level, "<rhs>");
-      for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+      ために (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
         xml_printf (out, level + 1, "<symbol>%s</symbol>",
                     xml_escape (symbols[*rhsp]->tag));
       xml_puts (out, level, "</rhs>");
     }
-  else
+  否则
     {
       xml_puts (out, level, "<rhs>");
       xml_puts (out, level + 1, "<empty/>");
@@ -159,16 +159,16 @@ ritem_print (FILE *out)
 {
   fputs ("RITEM\n", out);
   bool first = true;
-  for (int i = 0; i < nritems; ++i)
+  ために (整数 i = 0; i < nritems; ++i)
     {
-      if (first)
+      もし (first)
         {
           fprintf (out, "  %d: ", i);
           first = false;
         }
-      if (ritem[i] >= 0)
+      もし (ritem[i] >= 0)
         fprintf (out, "  %s", symbols[ritem[i]]->tag);
-      else
+      否则
         {
           fprintf (out, "  (rule %d)\n", item_number_as_rule_number (ritem[i]));
           first = true;
@@ -180,15 +180,15 @@ ritem_print (FILE *out)
 size_t
 ritem_longest_rhs (void)
 {
-  int max = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  整数 max = 0;
+  ために (rule_number r = 0; r < nrules; ++r)
     {
       size_t length = rule_rhs_length (&rules[r]);
-      if (length > max)
+      もし (length > max)
         max = length;
     }
 
-  return max;
+  戻る max;
 }
 
 void
@@ -199,20 +199,20 @@ grammar_rules_partial_print (FILE *out, const char *title,
   rule *previous_rule = NULL;
 
   /* rule # : LHS -> RHS */
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  ために (rule_number r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (filter && !filter (&rules[r]))
+      もし (filter && !filter (&rules[r]))
         continue;
-      if (first)
+      もし (first)
         fprintf (out, "%s\n\n", title);
-      else if (previous_rule && previous_rule->lhs != rules[r].lhs)
+      否则 もし (previous_rule && previous_rule->lhs != rules[r].lhs)
         putc ('\n', out);
       first = false;
       rule_print (&rules[r], previous_rule, out);
       putc ('\n', out);
       previous_rule = &rules[r];
     }
-  if (!first)
+  もし (!first)
     fputs ("\n\n", out);
 }
 
@@ -223,13 +223,13 @@ grammar_rules_print (FILE *out)
 }
 
 void
-grammar_rules_print_xml (FILE *out, int level)
+grammar_rules_print_xml (FILE *out, 整数 level)
 {
   bool first = true;
 
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  ために (rule_number r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (first)
+      もし (first)
         xml_puts (out, level + 1, "<rules>");
       first = false;
       {
@@ -240,7 +240,7 @@ grammar_rules_print_xml (FILE *out, int level)
         xml_indent (out, level + 2);
         fprintf (out, "<rule number=\"%d\" usefulness=\"%s\"",
                  rules[r].number, usefulness);
-        if (rules[r].precsym)
+        もし (rules[r].precsym)
           fprintf (out, " percent_prec=\"%s\"",
                    xml_escape (rules[r].precsym->symbol->tag));
         fputs (">\n", out);
@@ -249,9 +249,9 @@ grammar_rules_print_xml (FILE *out, int level)
       rule_rhs_print_xml (&rules[r], out, level + 3);
       xml_puts (out, level + 2, "</rule>");
     }
-  if (!first)
+  もし (!first)
     xml_puts (out, level + 1, "</rules>");
-  else
+  否则
    xml_puts (out, level + 1, "<rules/>");
 }
 
@@ -259,7 +259,7 @@ static void
 section (FILE *out, const char *s)
 {
   fprintf (out, "%s\n", s);
-  for (int i = strlen (s); 0 < i; --i)
+  ために (整数 i = strlen (s); 0 < i; --i)
     putc ('-', out);
   putc ('\n', out);
   putc ('\n', out);
@@ -277,7 +277,7 @@ grammar_dump (FILE *out, const char *title)
   {
     fprintf (out, "Value  Sprec  Sassoc  Tag\n");
 
-    for (symbol_number i = 0; i < ntokens; i++)
+    ために (symbol_number i = 0; i < ntokens; i++)
       fprintf (out, "%5d  %5d   %5d  %s\n",
                i,
                symbols[i]->content->prec, symbols[i]->content->assoc,
@@ -289,7 +289,7 @@ grammar_dump (FILE *out, const char *title)
   {
     fprintf (out, "Value  Tag\n");
 
-    for (symbol_number i = ntokens; i < nsyms; i++)
+    ために (symbol_number i = ntokens; i < nsyms; i++)
       fprintf (out, "%5d  %s\n",
                i, symbols[i]->tag);
     fprintf (out, "\n\n");
@@ -300,11 +300,11 @@ grammar_dump (FILE *out, const char *title)
     fprintf (out,
              "Num (Prec, Assoc, Useful, UselessChain) Lhs"
              " -> (Ritem Range) Rhs\n");
-    for (rule_number i = 0; i < nrules + nuseless_productions; ++i)
+    ために (rule_number i = 0; i < nrules + nuseless_productions; ++i)
       {
         rule const *rule_i = &rules[i];
-        int const rhs_itemno = rule_i->rhs - ritem;
-        int length = rule_rhs_length (rule_i);
+        整数 const rhs_itemno = rule_i->rhs - ritem;
+        整数 length = rule_rhs_length (rule_i);
         aver (item_number_as_rule_number (rule_i->rhs[length]) == i);
         fprintf (out, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
                  i,
@@ -315,7 +315,7 @@ grammar_dump (FILE *out, const char *title)
                  rule_i->lhs->number,
                  rhs_itemno, rhs_itemno + length - 1);
         /* Dumped the RHS. */
-        for (item_number *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
+        ために (item_number *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
           fprintf (out, " %3d", *rhsp);
         putc ('\n', out);
       }
@@ -323,7 +323,7 @@ grammar_dump (FILE *out, const char *title)
   fprintf (out, "\n\n");
 
   section (out, "Rules interpreted");
-  for (rule_number r = 0; r < nrules + nuseless_productions; ++r)
+  ために (rule_number r = 0; r < nrules + nuseless_productions; ++r)
     {
       fprintf (out, "%-5d  %s:", r, rules[r].lhs->symbol->tag);
       rule_rhs_print (&rules[r], out);
@@ -335,10 +335,10 @@ grammar_dump (FILE *out, const char *title)
 void
 grammar_rules_useless_report (const char *message)
 {
-  for (rule_number r = 0; r < nrules; ++r)
+  ために (rule_number r = 0; r < nrules; ++r)
     /* Don't complain about rules whose LHS is useless, we already
        complained about it.  */
-    if (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
+    もし (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
         && !rules[r].useful)
       complain (&rules[r].location, Wother, "%s", message);
 }
@@ -346,7 +346,7 @@ grammar_rules_useless_report (const char *message)
 void
 grammar_free (void)
 {
-  if (ritem)
+  もし (ritem)
     free (ritem - 1);
   free (rules);
   free (token_translations);
