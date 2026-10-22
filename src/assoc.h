@@ -22,15 +22,15 @@
 # define ASSOC_H_
 
 /* Associativity values for tokens and rules.  */
-typedef enum
+തരനിർവചനം എണ്ണൽ
 {
   undef_assoc,     /** Not defined. */
-  right_assoc,     /** %right */
-  left_assoc,      /** %left */
+  വലത്_assoc,     /** %right */
+  ഇടത്_assoc,      /** %left */
   non_assoc,       /** %nonassoc */
   precedence_assoc /** %precedence */
 } assoc;
 
-char const *assoc_to_string (assoc a);
+അക്ഷരം സ്ഥിരം *assoc_to_string (assoc a);
 
 #endif /* !ASSOC_H_ */

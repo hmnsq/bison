@@ -25,11 +25,11 @@
 
 /* DERIVES[SYMBOL - NTOKENS] points to a vector of the rules that
    SYMBOL derives, terminated with NULL.  */
-extern rule ***derives;
+ബാഹ്യ rule ***derives;
 
 /* Compute DERIVES.  */
 
-void derives_compute (void);
-void derives_free (void);
+ശൂന്യം derives_compute (ശൂന്യം);
+ശൂന്യം derives_free (ശൂന്യം);
 
 #endif /* !DERIVES_H_ */

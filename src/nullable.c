@@ -23,113 +23,113 @@
    the null string.  NULLABLE[I - NTOKENS] is nonzero if symbol I can
    do so.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include "getargs.h"
-#include "gram.h"
-#include "nullable.h"
-#include "reduce.h"
-#include "symtab.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "gram.h"
+#അന്തര്ഭാവ "nullable.h"
+#അന്തര്ഭാവ "reduce.h"
+#അന്തര്ഭാവ "symtab.h"
 
 /* Linked list of rules.  */
-typedef struct rule_list
+തരനിർവചനം ഘടന rule_list
 {
-  struct rule_list *next;
-  const rule *value;
+  ഘടന rule_list *next;
+  സ്ഥിരം rule *മൂല്യം;
 } rule_list;
 
-bool *nullable = NULL;
+bool *nullable = ശൂന്യ;
 
-static void
+സ്ഥിതം ശൂന്യം
 nullable_print (FILE *out)
 {
   fputs ("NULLABLE\n", out);
-  for (int i = ntokens; i < nsyms; i++)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = ntokens; i < nsyms; i++)
     fprintf (out, "  %s: %s\n", symbols[i]->tag,
              nullable[i - ntokens] ? "yes" : "no");
   fputs ("\n\n", out);
 }
 
-void
-nullable_compute (void)
+ശൂന്യം
+nullable_compute (ശൂന്യം)
 {
-  nullable = xcalloc (nnterms, sizeof *nullable);
+  nullable = xcalloc (nnterms, വലുപ്പം *nullable);
 
-  size_t *rcount = xcalloc (nrules, sizeof *rcount);
+  size_t *rcount = xcalloc (nrules, വലുപ്പം *rcount);
   /* RITEM contains all the rules, including useless productions.
      Hence we must allocate room for useless nonterminals too.  */
-  rule_list **rsets = xcalloc (nnterms, sizeof *rsets);
+  rule_list **rsets = xcalloc (nnterms, വലുപ്പം *rsets);
   /* This is said to be more elements than we actually use.
      Supposedly NRITEMS - NRULES is enough.  But why take the risk?  */
-  rule_list *relts = xnmalloc (nritems + nnterms + 1, sizeof *relts);
+  rule_list *relts = xnmalloc (nritems + nnterms + 1, വലുപ്പം *relts);
 
-  symbol_number *squeue = xnmalloc (nnterms, sizeof *squeue);
-  symbol_number *s2 = squeue;
+  ചിഹ്നം_സംഖ്യ *squeue = xnmalloc (nnterms, വലുപ്പം *squeue);
+  ചിഹ്നം_സംഖ്യ *s2 = squeue;
   {
     rule_list *p = relts;
-    for (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
-      if (rules[ruleno].useful)
+    വേണ്ടി (rule_സംഖ്യ ruleno = 0; ruleno < nrules; ++ruleno)
+      എങ്കിൽ (rules[ruleno].useful)
         {
-          const rule *r = &rules[ruleno];
-          if (r->rhs[0] >= 0)
+          സ്ഥിരം rule *r = &rules[ruleno];
+          എങ്കിൽ (r->rhs[0] >= 0)
             {
               /* This rule has a non empty RHS. */
               bool any_tokens = false;
-              for (item_number *rp = r->rhs; *rp >= 0; ++rp)
-                if (ISTOKEN (*rp))
+              വേണ്ടി (item_സംഖ്യ *rp = r->rhs; *rp >= 0; ++rp)
+                എങ്കിൽ (ISTOKEN (*rp))
                   any_tokens = true;
 
               /* This rule has only nonterminals: schedule it for the second
                  pass.  */
-              if (!any_tokens)
-                for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+              എങ്കിൽ (!any_tokens)
+                വേണ്ടി (item_സംഖ്യ *rp = r->rhs; *rp >= 0; ++rp)
                   {
                     rcount[ruleno]++;
                     p->next = rsets[*rp - ntokens];
-                    p->value = r;
+                    p->മൂല്യം = r;
                     rsets[*rp - ntokens] = p;
                     p++;
                   }
             }
-          else
+          അല്ലെങ്കിൽ
             {
               /* This rule has an empty RHS. */
-              if (r->useful
-                  && ! nullable[r->lhs->number - ntokens])
+              എങ്കിൽ (r->useful
+                  && ! nullable[r->lhs->സംഖ്യ - ntokens])
                 {
-                  nullable[r->lhs->number - ntokens] = true;
-                  *s2++ = r->lhs->number;
+                  nullable[r->lhs->സംഖ്യ - ntokens] = true;
+                  *s2++ = r->lhs->സംഖ്യ;
                 }
             }
         }
   }
 
-  symbol_number *s1 = squeue;
-  while (s1 < s2)
-    for (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
+  ചിഹ്നം_സംഖ്യ *s1 = squeue;
+  ആകുമ്പോൾ (s1 < s2)
+    വേണ്ടി (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
       {
-        const rule *r = p->value;
-        if (--rcount[r->number] == 0)
-          if (r->useful && ! nullable[r->lhs->number - ntokens])
+        സ്ഥിരം rule *r = p->മൂല്യം;
+        എങ്കിൽ (--rcount[r->സംഖ്യ] == 0)
+          എങ്കിൽ (r->useful && ! nullable[r->lhs->സംഖ്യ - ntokens])
             {
-              nullable[r->lhs->number - ntokens] = true;
-              *s2++ = r->lhs->number;
+              nullable[r->lhs->സംഖ്യ - ntokens] = true;
+              *s2++ = r->lhs->സംഖ്യ;
             }
       }
 
-  free (squeue);
-  free (rcount);
-  free (rsets);
-  free (relts);
+  സ്വതന്ത്രം (squeue);
+  സ്വതന്ത്രം (rcount);
+  സ്വതന്ത്രം (rsets);
+  സ്വതന്ത്രം (relts);
 
-  if (trace_flag & trace_sets)
+  എങ്കിൽ (trace_flag & trace_sets)
     nullable_print (stderr);
 }
 
 
-void
-nullable_free (void)
+ശൂന്യം
+nullable_free (ശൂന്യം)
 {
-  free (nullable);
+  സ്വതന്ത്രം (nullable);
 }

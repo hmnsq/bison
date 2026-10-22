@@ -20,8 +20,8 @@
 #ifndef SBITSET_H_
 # define SBITSET_H_
 
-typedef unsigned char *Sbitset;
-typedef size_t Sbitset__Index;
+തരനിർവചനം unsigned അക്ഷരം *Sbitset;
+തരനിർവചനം size_t Sbitset__Index;
 # define SBITSET__INDEX__CONVERSION_SPEC "zu"
 
 # define Sbitset__nbytes(NBITS) \
@@ -36,59 +36,59 @@ typedef size_t Sbitset__Index;
 /* nbits must not be 0.  */
 Sbitset Sbitset__new (Sbitset__Index nbits);
 Sbitset Sbitset__new_on_obstack (Sbitset__Index nbits,
-                                 struct obstack *obstackp);
-void Sbitset__delete (Sbitset self);
+                                 ഘടന obstack *obstackp);
+ശൂന്യം Sbitset__delete (Sbitset self);
 
 # define Sbitset__test(SELF, INDEX)                                     \
   ((*Sbitset__byteAddress ((SELF), (INDEX)) & Sbitset__bit_mask (INDEX)) != 0)
 
 bool Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits);
 
-void Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
+ശൂന്യം Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
 
 # define Sbitset__set(SELF, INDEX)                                      \
-  do {                                                                  \
+  ചെയ്യുക {                                                                  \
     *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
       *Sbitset__byteAddress ((SELF), (INDEX)) | Sbitset__bit_mask (INDEX); \
-  } while (0)
+  } ആകുമ്പോൾ (0)
 
 # define Sbitset__reset(SELF, INDEX)                                    \
-  do {                                                                  \
+  ചെയ്യുക {                                                                  \
     *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
       *Sbitset__byteAddress ((SELF), (INDEX)) & ~Sbitset__bit_mask (INDEX); \
-  } while (0)
+  } ആകുമ്പോൾ (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be reset.  */
 # define Sbitset__zero(SELF, NBITS)             \
-  do {                                          \
+  ചെയ്യുക {                                          \
     memset (SELF, 0, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } ആകുമ്പോൾ (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be set.  */
 # define Sbitset__ones(SELF, NBITS)                     \
-  do {                                                  \
+  ചെയ്യുക {                                                  \
     memset (SELF, UCHAR_MAX, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } ആകുമ്പോൾ (0)
 
 /* NBITS is the size of every bitset.  More than NBITS bits might be set.  */
 # define Sbitset__or(SELF, OTHER1, OTHER2, NBITS)                       \
-  do {                                                                  \
+  ചെയ്യുക {                                                                  \
     Sbitset ptr_self = (SELF);                                          \
     Sbitset ptr_other1 = (OTHER1);                                      \
     Sbitset ptr_other2 = (OTHER2);                                      \
     Sbitset end_self = ptr_self + Sbitset__nbytes (NBITS);              \
-    for (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
+    വേണ്ടി (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
       *ptr_self = *ptr_other1 | *ptr_other2;                            \
-  } while (0)
+  } ആകുമ്പോൾ (0)
 
 /* ATTENTION: there are *two* loops here, "break" and "continue" will
    not apply to the whole loop, just the inner one.  */
 # define SBITSET__FOR_EACH(SELF, NBITS, ITER, INDEX)                    \
-  for ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
-    if (*(ITER) != 0)                                                   \
-      for ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
+  വേണ്ടി ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
+    എങ്കിൽ (*(ITER) != 0)                                                   \
+      വേണ്ടി ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
            (INDEX) < (NBITS) && (SELF)+(INDEX)/CHAR_BIT < (ITER)+1;     \
            ++(INDEX))                                                   \
-        if (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
+        എങ്കിൽ (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
 
 #endif /* !SBITSET_H_ */

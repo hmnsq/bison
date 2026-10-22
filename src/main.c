@@ -18,54 +18,54 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include <bitset.h>
-#include <bitset/stats.h>
-#include <closeout.h>
-#include <configmake.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <relocatable.h> /* relocate2 */
-#include <timevar.h>
+#അന്തര്ഭാവ <bitset.h>
+#അന്തര്ഭാവ <bitset/stats.h>
+#അന്തര്ഭാവ <closeout.h>
+#അന്തര്ഭാവ <configmake.h>
+#അന്തര്ഭാവ <progname.h>
+#അന്തര്ഭാവ <quote.h>
+#അന്തര്ഭാവ <quotearg.h>
+#അന്തര്ഭാവ <relocatable.h> /* relocate2 */
+#അന്തര്ഭാവ <timevar.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "derives.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "ielr.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "output.h"
-#include "parse-gram.h"
-#include "print-graph.h"
-#include "print-xml.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"
-#include "scan-gram.h"
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "uniqstr.h"
+#അന്തര്ഭാവ "complain.h"
+#അന്തര്ഭാവ "conflicts.h"
+#അന്തര്ഭാവ "counterexample.h"
+#അന്തര്ഭാവ "derives.h"
+#അന്തര്ഭാവ "files.h"
+#അന്തര്ഭാവ "fixits.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "glyphs.h"
+#അന്തര്ഭാവ "gram.h"
+#അന്തര്ഭാവ "ielr.h"
+#അന്തര്ഭാവ "lalr.h"
+#അന്തര്ഭാവ "lr0.h"
+#അന്തര്ഭാവ "muscle-tab.h"
+#അന്തര്ഭാവ "nullable.h"
+#അന്തര്ഭാവ "output.h"
+#അന്തര്ഭാവ "parse-gram.h"
+#അന്തര്ഭാവ "print-graph.h"
+#അന്തര്ഭാവ "print-xml.h"
+#അന്തര്ഭാവ "print.h"
+#അന്തര്ഭാവ "reader.h"
+#അന്തര്ഭാവ "reduce.h"
+#അന്തര്ഭാവ "scan-code.h"
+#അന്തര്ഭാവ "scan-gram.h"
+#അന്തര്ഭാവ "scan-skel.h"
+#അന്തര്ഭാവ "symtab.h"
+#അന്തര്ഭാവ "tables.h"
+#അന്തര്ഭാവ "uniqstr.h"
 
 
-int
-main (int argc, char *argv[])
+പൂർണ്ണസംഖ്യ
+പ്രധാന (പൂർണ്ണസംഖ്യ argc, അക്ഷരം *argv[])
 {
   {
-    char *cp = getenv ("BISON_PROGRAM_NAME");
-    if (cp)
+    അക്ഷരം *cp = getenv ("BISON_PROGRAM_NAME");
+    എങ്കിൽ (cp)
       argv[0] = cp;
   }
 
@@ -73,20 +73,20 @@ main (int argc, char *argv[])
   set_program_name (argv[0]);
   setlocale (LC_ALL, "");
   {
-    char *cp = NULL;
-    char const *localedir = relocate2 (LOCALEDIR, &cp);
+    അക്ഷരം *cp = ശൂന്യ;
+    അക്ഷരം സ്ഥിരം *localedir = relocate2 (LOCALEDIR, &cp);
     bindtextdomain ("bison", localedir);
     bindtextdomain ("bison-gnulib", localedir);
     bindtextdomain ("bison-runtime", localedir);
-    free (cp);
+    സ്വതന്ത്രം (cp);
   }
   textdomain ("bison");
 
   {
-    char const *cp = getenv ("LC_CTYPE");
-    if (cp && STREQ (cp, "C"))
+    അക്ഷരം സ്ഥിരം *cp = getenv ("LC_CTYPE");
+    എങ്കിൽ (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
-    else
+    അല്ലെങ്കിൽ
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
   }
 
@@ -100,43 +100,43 @@ main (int argc, char *argv[])
 
   getargs (argc, argv);
 
-  if (trace_flag)
+  എങ്കിൽ (trace_flag)
     fprintf (stderr, "bison (GNU Bison) %s\n", VERSION);
 
   timevar_enabled = trace_flag & trace_time;
   timevar_init ();
   timevar_start (tv_total);
 
-  if (trace_flag & trace_bitsets)
+  എങ്കിൽ (trace_flag & trace_bitsets)
     bitset_stats_enable ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
      and FATTRS.  In file reader.c.  The other parts are recorded in
      the grammar; see gram.h.  */
 
-  timevar_push (tv_reader);
+  timevar_തള്ളുക (tv_reader);
   reader (grammar_file);
-  timevar_pop (tv_reader);
+  timevar_എടുക്കുക (tv_reader);
 
-  if (complaint_status == status_complaint)
-    goto finish;
+  എങ്കിൽ (complaint_status == status_complaint)
+    പോകുക finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
-  timevar_push (tv_reduce);
+  timevar_തള്ളുക (tv_reduce);
   reduce_grammar ();
-  timevar_pop (tv_reduce);
+  timevar_എടുക്കുക (tv_reduce);
 
   /* Record other info about the grammar.  In files derives and
      nullable.  */
-  timevar_push (tv_sets);
+  timevar_തള്ളുക (tv_sets);
   derives_compute ();
   nullable_compute ();
-  timevar_pop (tv_sets);
+  timevar_എടുക്കുക (tv_sets);
 
   /* Compute LR(0) parser states.  See state.h for more info.  */
-  timevar_push (tv_lr0);
+  timevar_തള്ളുക (tv_lr0);
   generate_states ();
-  timevar_pop (tv_lr0);
+  timevar_എടുക്കുക (tv_lr0);
 
   /* Add lookahead sets to parser states.  Except when LALR(1) is
      requested, split states to eliminate LR(1)-relative
@@ -147,27 +147,27 @@ main (int argc, char *argv[])
      lookahead is not enough to disambiguate the parsing.  In file
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
-  timevar_push (tv_conflicts);
+  timevar_തള്ളുക (tv_conflicts);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
+  എങ്കിൽ (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
-      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
-      state_number nstates_old = nstates;
+      state_സംഖ്യ *old_to_new = xnmalloc (nstates, വലുപ്പം *old_to_new);
+      state_സംഖ്യ nstates_old = nstates;
       state_remove_unreachable_states (old_to_new);
       lalr_update_state_numbers (old_to_new, nstates_old);
       conflicts_update_state_numbers (old_to_new, nstates_old);
-      free (old_to_new);
+      സ്വതന്ത്രം (old_to_new);
     }
-  if (report_flag & report_cex
+  എങ്കിൽ (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
   conflicts_print ();
-  timevar_pop (tv_conflicts);
+  timevar_എടുക്കുക (tv_conflicts);
 
   /* Compute the parser tables.  */
-  timevar_push (tv_actions);
+  timevar_തള്ളുക (tv_actions);
   tables_generate ();
-  timevar_pop (tv_actions);
+  timevar_എടുക്കുക (tv_actions);
 
   grammar_rules_useless_report (_("rule useless in parser due to conflicts"));
 
@@ -176,65 +176,65 @@ main (int argc, char *argv[])
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
 
-  if (generate)
+  എങ്കിൽ (generate)
     {
       /* Output file names. */
       compute_output_file_names ();
 
       /* Output the detailed report on the grammar.  */
-      if (report_flag)
+      എങ്കിൽ (report_flag)
         {
-          timevar_push (tv_report);
+          timevar_തള്ളുക (tv_report);
           print_results ();
-          timevar_pop (tv_report);
+          timevar_എടുക്കുക (tv_report);
         }
 
       /* Output the graph.  */
-      if (graph_flag)
+      എങ്കിൽ (graph_flag)
         {
-          timevar_push (tv_graph);
+          timevar_തള്ളുക (tv_graph);
           print_graph ();
-          timevar_pop (tv_graph);
+          timevar_എടുക്കുക (tv_graph);
         }
 
       /* Output xml.  */
-      if (html_flag || xml_flag)
+      എങ്കിൽ (html_flag || xml_flag)
         {
-          timevar_push (tv_xml);
+          timevar_തള്ളുക (tv_xml);
           print_xml ();
-          timevar_pop (tv_xml);
+          timevar_എടുക്കുക (tv_xml);
         }
 
       /* Output html.  */
-      if (html_flag)
+      എങ്കിൽ (html_flag)
         {
-          timevar_push (tv_html);
+          timevar_തള്ളുക (tv_html);
           print_html ();
-          timevar_pop (tv_html);
+          timevar_എടുക്കുക (tv_html);
         }
     }
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_status == status_complaint)
-    goto finish;
+  എങ്കിൽ (complaint_status == status_complaint)
+    പോകുക finish;
 
   /* Lookahead tokens are no longer needed. */
-  timevar_push (tv_free);
+  timevar_തള്ളുക (tv_free);
   lalr_free ();
-  timevar_pop (tv_free);
+  timevar_എടുക്കുക (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
-  if (generate)
+  എങ്കിൽ (generate)
     {
-      timevar_push (tv_parser);
+      timevar_തള്ളുക (tv_parser);
       output ();
-      timevar_pop (tv_parser);
+      timevar_എടുക്കുക (tv_parser);
     }
 
  finish:
 
-  timevar_push (tv_free);
+  timevar_തള്ളുക (tv_free);
   nullable_free ();
   derives_free ();
   tables_free ();
@@ -254,9 +254,9 @@ main (int argc, char *argv[])
   muscle_free ();
   code_scanner_free ();
   skel_scanner_free ();
-  timevar_pop (tv_free);
+  timevar_എടുക്കുക (tv_free);
 
-  if (trace_flag & trace_bitsets)
+  എങ്കിൽ (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
   /* Stop timing and print the times.  */
@@ -265,12 +265,12 @@ main (int argc, char *argv[])
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */
-  if (!fixits_empty ())
+  എങ്കിൽ (!fixits_empty ())
     {
-      if (update_flag)
+      എങ്കിൽ (update_flag)
         fixits_run ();
-      else
-        complain (NULL, Wother,
+      അല്ലെങ്കിൽ
+        complain (ശൂന്യ, Wother,
                   _("fix-its can be applied.  Rerun with option '--update'."));
       fixits_free ();
     }
@@ -279,5 +279,5 @@ main (int argc, char *argv[])
   complain_free ();
   quotearg_free ();
 
-  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
+  തിരികെ complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
 }

@@ -30,48 +30,48 @@
    relevant to the counterexample.  The leaves of a derivation form a
    counterexample when printed.  */
 
-typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+തരനിർവചനം gl_list_t derivation_list;
+തരനിർവചനം ഘടന derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+സ്ഥിതം വരിയിൽ derivation_list derivation_list_new (ശൂന്യം)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  തിരികെ gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, true);
 }
 
-static inline bool
+സ്ഥിതം വരിയിൽ bool
 derivation_list_next (gl_list_iterator_t *it, derivation **d)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  സ്ഥിരം ശൂന്യം *p = ശൂന്യ;
+  bool res = gl_list_iterator_next (it, &p, ശൂന്യ);
+  എങ്കിൽ (res)
     *d = (derivation *) p;
-  else
+  അല്ലെങ്കിൽ
     gl_list_iterator_free (it);
-  return res;
+  തിരികെ res;
 }
 
-void derivation_list_append (derivation_list dl, derivation *d);
-void derivation_list_prepend (derivation_list dl, derivation *d);
-void derivation_list_free (derivation_list dl);
+ശൂന്യം derivation_list_append (derivation_list dl, derivation *d);
+ശൂന്യം derivation_list_prepend (derivation_list dl, derivation *d);
+ശൂന്യം derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r);
+derivation_new (ചിഹ്നം_സംഖ്യ sym, derivation_list children,
+                സ്ഥിരം rule *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+സ്ഥിതം വരിയിൽ derivation *derivation_new_leaf (ചിഹ്നം_സംഖ്യ sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  തിരികെ derivation_new (sym, ശൂന്യ, ശൂന്യ);
 }
 
 // Number of symbols.
-size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
-void derivation_free (derivation *deriv);
-void derivation_retain (derivation *deriv);
+size_t derivation_size (സ്ഥിരം derivation *deriv);
+ശൂന്യം derivation_print (സ്ഥിരം derivation *deriv, FILE *out, സ്ഥിരം അക്ഷരം *prefix);
+ശൂന്യം derivation_print_leaves (സ്ഥിരം derivation *deriv, FILE *out);
+ശൂന്യം derivation_free (derivation *deriv);
+ശൂന്യം derivation_retain (derivation *deriv);
 
 // A derivation denoting the position of the dot.
-derivation *derivation_dot (void);
+derivation *derivation_dot (ശൂന്യം);
 
 #endif /* DERIVATION_H */

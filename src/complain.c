@@ -19,26 +19,26 @@
 /* Based on error.c and error.h,
    written by David MacKenzie <djm@gnu.ai.mit.edu>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include <argmatch.h>
-#include <c-ctype.h>
-#include <progname.h>
-#include <stdarg.h>
-#include <sys/stat.h>
-#include <textstyle.h>
+#അന്തര്ഭാവ <argmatch.h>
+#അന്തര്ഭാവ <c-ctype.h>
+#അന്തര്ഭാവ <progname.h>
+#അന്തര്ഭാവ <stdarg.h>
+#അന്തര്ഭാവ <sys/stat.h>
+#അന്തര്ഭാവ <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "quote.h"
+#അന്തര്ഭാവ "complain.h"
+#അന്തര്ഭാവ "files.h"
+#അന്തര്ഭാവ "fixits.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "quote.h"
 
 // The URL of the manual page about diagnostics.  Use the per-node
 // manual, to avoid downloading repeatedly the whole manual over the
 // Internet.
-static const char *diagnostics_url
+സ്ഥിതം സ്ഥിരം അക്ഷരം *diagnostics_url
   = "https://www.gnu.org/software/bison/manual/html_node/Diagnostics.html";
 
 
@@ -47,7 +47,7 @@ err_status complaint_status = status_none;
 bool warnings_are_errors = false;
 
 /** Whether -Werror/-Wno-error was applied to a warning.  */
-typedef enum
+തരനിർവചനം എണ്ണൽ
   {
     errority_unset = 0,     /** No explicit status.  */
     errority_disabled = 1,  /** Explicitly disabled with -Wno-error=foo.  */
@@ -55,10 +55,10 @@ typedef enum
   } errority;
 
 /** For each warning type, its errority.  */
-static errority errority_flag[warnings_size];
+സ്ഥിതം errority errority_flag[warnings_size];
 
 /** Diagnostics severity.  */
-typedef enum
+തരനിർവചനം എണ്ണൽ
   {
     severity_disabled = 0, /**< Explicitly disabled via -Wno-foo.  */
     severity_unset = 1,    /**< Unspecified status.  */
@@ -69,18 +69,18 @@ typedef enum
 
 
 /** For each warning type, its severity.  */
-static severity warnings_flag[warnings_size];
+സ്ഥിതം severity warnings_flag[warnings_size];
 
-styled_ostream_t errstream = NULL;
+styled_ostream_t errstream = ശൂന്യ;
 
-void
-begin_use_class (const char *s, FILE *out)
+ശൂന്യം
+begin_use_class (സ്ഥിരം അക്ഷരം *s, FILE *out)
 {
-  if (out == stderr)
+  എങ്കിൽ (out == stderr)
     {
-      if (color_debug)
+      എങ്കിൽ (color_debug)
         fprintf (out, "<%s>", s);
-      else
+      അല്ലെങ്കിൽ
         {
           styled_ostream_begin_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -88,14 +88,14 @@ begin_use_class (const char *s, FILE *out)
     }
 }
 
-void
-end_use_class (const char *s, FILE *out)
+ശൂന്യം
+end_use_class (സ്ഥിരം അക്ഷരം *s, FILE *out)
 {
-  if (out == stderr)
+  എങ്കിൽ (out == stderr)
     {
-      if (color_debug)
+      എങ്കിൽ (color_debug)
         fprintf (out, "</%s>", s);
-      else
+      അല്ലെങ്കിൽ
         {
           styled_ostream_end_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -103,24 +103,24 @@ end_use_class (const char *s, FILE *out)
     }
 }
 
-static void
-begin_hyperlink (FILE *out, const char *ref)
+സ്ഥിതം ശൂന്യം
+begin_hyperlink (FILE *out, സ്ഥിരം അക്ഷരം *ref)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, ref, NULL);
+  എങ്കിൽ (out == stderr)
+    styled_ostream_set_hyperlink (errstream, ref, ശൂന്യ);
 }
 
-static void
+സ്ഥിതം ശൂന്യം
 end_hyperlink (FILE *out)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, NULL, NULL);
+  എങ്കിൽ (out == stderr)
+    styled_ostream_set_hyperlink (errstream, ശൂന്യ, ശൂന്യ);
 }
 
-void
+ശൂന്യം
 flush (FILE *out)
 {
-  if (out == stderr)
+  എങ്കിൽ (out == stderr)
     ostream_flush (errstream, FLUSH_THIS_STREAM);
   fflush (out);
 }
@@ -128,16 +128,16 @@ flush (FILE *out)
 bool
 is_styled (FILE *out)
 {
-  if (out != stderr)
-    return false;
-  if (color_debug)
-    return true;
-#if HAVE_LIBTEXTSTYLE
-  return (color_mode == color_yes
+  എങ്കിൽ (out != stderr)
+    തിരികെ false;
+  എങ്കിൽ (color_debug)
+    തിരികെ true;
+#എങ്കിൽ HAVE_LIBTEXTSTYLE
+  തിരികെ (color_mode == color_yes
           || color_mode == color_html
           || (color_mode == color_tty && isatty (STDERR_FILENO)));
-#else
-  return false;
+#അല്ലെങ്കിൽ
+  തിരികെ false;
 #endif
 }
 
@@ -148,7 +148,7 @@ is_styled (FILE *out)
 
 ARGMATCH_DEFINE_GROUP (warning, warnings)
 
-static const argmatch_warning_doc argmatch_warning_docs[] =
+സ്ഥിതം സ്ഥിരം argmatch_warning_doc argmatch_warning_docs[] =
 {
   { "conflicts-sr",     N_("S/R conflicts (enabled by default)") },
   { "conflicts-rr",     N_("R/R conflicts (enabled by default)") },
@@ -164,10 +164,10 @@ static const argmatch_warning_doc argmatch_warning_docs[] =
   { "no-CATEGORY",      N_("turn off warnings in CATEGORY") },
   { "none",             N_("turn off all the warnings") },
   { "error[=CATEGORY]", N_("treat warnings as errors") },
-  { NULL, NULL }
+  { ശൂന്യ, ശൂന്യ }
 };
 
-static const argmatch_warning_arg argmatch_warning_args[] =
+സ്ഥിതം സ്ഥിരം argmatch_warning_arg argmatch_warning_args[] =
 {
   { "all",             Wall },
   { "conflicts-rr",    Wconflicts_rr },
@@ -177,56 +177,56 @@ static const argmatch_warning_arg argmatch_warning_args[] =
   { "deprecated",      Wdeprecated },
   { "empty-rule",      Wempty_rule },
   { "everything",      Weverything },
-  { "midrule-values",  Wmidrule_values },
+  { "midrule-values",  Wmidrule_മൂല്യങ്ങൾ },
   { "none",            Wnone },
   { "other",           Wother },
   { "precedence",      Wprecedence },
   { "yacc",            Wyacc },
-  { NULL, Wnone }
+  { ശൂന്യ, Wnone }
 };
 
-const argmatch_warning_group_type argmatch_warning_group =
+സ്ഥിരം argmatch_warning_group_type argmatch_warning_group =
 {
   argmatch_warning_args,
   argmatch_warning_docs,
   N_("Warning categories include:"),
-  NULL
+  ശൂന്യ
 };
 
-void
+ശൂന്യം
 warning_usage (FILE *out)
 {
   argmatch_warning_usage (out);
 }
 
-void
-warning_argmatch (char const *arg, size_t no, size_t err)
+ശൂന്യം
+warning_argmatch (അക്ഷരം സ്ഥിരം *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  പൂർണ്ണസംഖ്യ മൂല്യം = *argmatch_warning_മൂല്യം ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  എങ്കിൽ (!മൂല്യം)
     {
-      value = Weverything;
+      മൂല്യം = Weverything;
       no = !no;
     }
 
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+  വേണ്ടി (size_t b = 0; b < warnings_size; ++b)
+    എങ്കിൽ (മൂല്യം & 1 << b)
       {
-        if (err && no)
+        എങ്കിൽ (err && no)
           /* -Wno-error=foo.  */
           errority_flag[b] = errority_disabled;
-        else if (err && !no)
+        അല്ലെങ്കിൽ എങ്കിൽ (err && !no)
           {
             /* -Werror=foo: enables -Wfoo. */
             errority_flag[b] = errority_enabled;
             warnings_flag[b] = severity_warning;
           }
-        else if (no)
+        അല്ലെങ്കിൽ എങ്കിൽ (no)
           /* -Wno-foo.  */
           warnings_flag[b] = severity_disabled;
-        else
+        അല്ലെങ്കിൽ
           /* -Wfoo. */
           warnings_flag[b] = severity_warning;
       }
@@ -238,23 +238,23 @@ warning_argmatch (char const *arg, size_t no, size_t err)
  *                  If 0, then activate all the flags.
  */
 
-void
-warnings_argmatch (char *args)
+ശൂന്യം
+warnings_argmatch (അക്ഷരം *args)
 {
-  if (!args)
+  എങ്കിൽ (!args)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  അല്ലെങ്കിൽ എങ്കിൽ (STREQ (args, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+  അല്ലെങ്കിൽ
+    വേണ്ടി (args = strtok (args, ","); args; args = strtok (ശൂന്യ, ","))
+      എങ്കിൽ (STREQ (args, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      അല്ലെങ്കിൽ എങ്കിൽ (STREQ (args, "no-error"))
         warnings_are_errors = false;
-      else
+      അല്ലെങ്കിൽ
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
           size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -267,49 +267,49 @@ warnings_argmatch (char *args)
 }
 
 /* Color style for this type of message.  */
-static const char*
+സ്ഥിതം സ്ഥിരം അക്ഷരം*
 severity_style (severity s)
 {
-  switch (s)
+  തിരഞ്ഞെടുപ്പ് (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "note";
-    case severity_warning:
-      return "warning";
-    case severity_error:
-    case severity_fatal:
-      return "error";
+    അവസ്ഥ severity_disabled:
+    അവസ്ഥ severity_unset:
+      തിരികെ "note";
+    അവസ്ഥ severity_warning:
+      തിരികെ "warning";
+    അവസ്ഥ severity_error:
+    അവസ്ഥ severity_fatal:
+      തിരികെ "error";
     }
   abort ();
 }
 
 /* Prefix for this type of message.  */
-static const char*
+സ്ഥിതം സ്ഥിരം അക്ഷരം*
 severity_prefix (severity s)
 {
-  switch (s)
+  തിരഞ്ഞെടുപ്പ് (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "";
-    case severity_warning:
-      return _("warning");
-    case severity_error:
-      return  _("error");
-    case severity_fatal:
-      return _("fatal error");
+    അവസ്ഥ severity_disabled:
+    അവസ്ഥ severity_unset:
+      തിരികെ "";
+    അവസ്ഥ severity_warning:
+      തിരികെ _("warning");
+    അവസ്ഥ severity_error:
+      തിരികെ  _("error");
+    അവസ്ഥ severity_fatal:
+      തിരികെ _("fatal error");
     }
   abort ();
 }
 
 
-static void
+സ്ഥിതം ശൂന്യം
 severity_print (severity s, FILE *out)
 {
-  if (s != severity_disabled)
+  എങ്കിൽ (s != severity_disabled)
     {
-      const char* style = severity_style (s);
+      സ്ഥിരം അക്ഷരം* style = severity_style (s);
       begin_use_class (style, out);
       fprintf (out, "%s:", severity_prefix (s));
       end_use_class (style, out);
@@ -322,23 +322,23 @@ severity_print (severity s, FILE *out)
 | complain.  |
 `-----------*/
 
-void
-complain_init_color (void)
+ശൂന്യം
+complain_init_color (ശൂന്യം)
 {
-#if HAVE_LIBTEXTSTYLE
-  if (is_styled (stderr))
+#എങ്കിൽ HAVE_LIBTEXTSTYLE
+  എങ്കിൽ (is_styled (stderr))
     {
       style_file_prepare ("BISON_STYLE", "BISON_STYLEDIR", pkgdatadir (),
                           "bison-default.css");
       /* As a fallback, use the default in the current directory.  */
-      struct stat statbuf;
-      if ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
+      ഘടന stat statbuf;
+      എങ്കിൽ ((style_file_name == ശൂന്യ || stat (style_file_name, &statbuf) < 0)
           && stat ("bison-default.css", &statbuf) == 0)
         style_file_name = "bison-default.css";
     }
-  else
+  അല്ലെങ്കിൽ
     /* No styling.  */
-    style_file_name = NULL;
+    style_file_name = ശൂന്യ;
 #endif
 
   /* Workaround clang's warning (starting at Clang 3.5) about the stub
@@ -347,8 +347,8 @@ complain_init_color (void)
      | src/complain.c:274:7: error: code will never be executed [-Werror,-Wunreachable-code]
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#if defined __clang__
-# pragma clang diagnostic push
+#എങ്കിൽ defined __clang__
+# pragma clang diagnostic തള്ളുക
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
   errstream =
@@ -357,20 +357,20 @@ complain_init_color (void)
                                   style_file_name)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
-#if defined __clang__
-# pragma clang diagnostic pop
+#എങ്കിൽ defined __clang__
+# pragma clang diagnostic എടുക്കുക
 #endif
 }
 
-void
-complain_init (void)
+ശൂന്യം
+complain_init (ശൂന്യം)
 {
   caret_init ();
 
   warnings warnings_default =
     Wconflicts_sr | Wconflicts_rr | Wdeprecated | Wother;
 
-  for (size_t b = 0; b < warnings_size; ++b)
+  വേണ്ടി (size_t b = 0; b < warnings_size; ++b)
     {
       warnings_flag[b] = (1 << b & warnings_default
                           ? severity_warning
@@ -379,8 +379,8 @@ complain_init (void)
     }
 }
 
-void
-complain_free (void)
+ശൂന്യം
+complain_free (ശൂന്യം)
 {
   caret_free ();
   styled_ostream_free (errstream);
@@ -390,68 +390,68 @@ complain_free (void)
    (severity_fatal, severity_error, severity_disabled, or
    severity_warning.) */
 
-static severity
+സ്ഥിതം severity
 warning_severity (warnings flags)
 {
-  if (flags & fatal)
+  എങ്കിൽ (flags & fatal)
     /* Diagnostics about fatal errors.  */
-    return severity_fatal;
-  else if (flags & complaint)
+    തിരികെ severity_fatal;
+  അല്ലെങ്കിൽ എങ്കിൽ (flags & complaint)
     /* Diagnostics about errors.  */
-    return severity_error;
-  else
+    തിരികെ severity_error;
+  അല്ലെങ്കിൽ
     {
       /* Diagnostics about warnings.  */
       severity res = severity_disabled;
-      for (size_t b = 0; b < warnings_size; ++b)
-        if (flags & 1 << b)
+      വേണ്ടി (size_t b = 0; b < warnings_size; ++b)
+        എങ്കിൽ (flags & 1 << b)
           {
             res = res < warnings_flag[b] ? warnings_flag[b] : res;
             /* If the diagnostic is enabled, and -Werror is enabled,
                and -Wno-error=foo was not explicitly requested, this
                is an error. */
-            if (res == severity_warning
+            എങ്കിൽ (res == severity_warning
                 && (errority_flag[b] == errority_enabled
                     || (warnings_are_errors
                         && errority_flag[b] != errority_disabled)))
               res = severity_error;
           }
-      return res;
+      തിരികെ res;
     }
 }
 
 bool
 warning_is_unset (warnings flags)
 {
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (flags & 1 << b && warnings_flag[b] != severity_unset)
-      return false;
-  return true;
+  വേണ്ടി (size_t b = 0; b < warnings_size; ++b)
+    എങ്കിൽ (flags & 1 << b && warnings_flag[b] != severity_unset)
+      തിരികെ false;
+  തിരികെ true;
 }
 
 bool
 warning_is_enabled (warnings flags)
 {
-  return severity_warning <= warning_severity (flags);
+  തിരികെ severity_warning <= warning_severity (flags);
 }
 
 /** Display a "[-Wyacc]" like message on \a out.  */
 
-static void
+സ്ഥിതം ശൂന്യം
 warnings_print_categories (warnings warn_flags, FILE *out)
 {
-  for (int wbit = 0; wbit < warnings_size; ++wbit)
-    if (warn_flags & (1 << wbit))
+  വേണ്ടി (പൂർണ്ണസംഖ്യ wbit = 0; wbit < warnings_size; ++wbit)
+    എങ്കിൽ (warn_flags & (1 << wbit))
       {
         warnings w = 1 << wbit;
         severity s = warning_severity (w);
-        const char* style = severity_style (s);
+        സ്ഥിരം അക്ഷരം* style = severity_style (s);
         fputs (" [", out);
         begin_use_class (style, out);
         // E.g., "counterexamples".
-        const char *warning = argmatch_warning_argument (&w);
-        char ref[200];
-        snprintf (ref, sizeof ref,
+        സ്ഥിരം അക്ഷരം *warning = argmatch_warning_argument (&w);
+        അക്ഷരം ref[200];
+        snprintf (ref, വലുപ്പം ref,
                   "%s#W%s", diagnostics_url, warning);
         begin_hyperlink (out, ref);
         ostream_printf (errstream,
@@ -465,7 +465,7 @@ warnings_print_categories (warnings warn_flags, FILE *out)
         end_use_class (style, out);
         fputc (']', out);
         /* Display only the first match, the second is "-Wall".  */
-        return;
+        തിരികെ;
       }
 }
 
@@ -482,20 +482,20 @@ warnings_print_categories (warnings warn_flags, FILE *out)
  *                newline-terminated message to stderr.
  * \param args    the arguments of the format string.
  */
-static
-void
-error_message (const location *loc, warnings flags,
-               severity sever, const char *message, va_list args)
+സ്ഥിതം
+ശൂന്യം
+error_message (സ്ഥിരം location *loc, warnings flags,
+               severity sever, സ്ഥിരം അക്ഷരം *message, va_list args)
 {
-  const char* style = flags & note ? "note" : severity_style (sever);
+  സ്ഥിരം അക്ഷരം* style = flags & note ? "note" : severity_style (sever);
 
-  if (loc)
+  എങ്കിൽ (loc)
     location_print (*loc, stderr);
-  else
+  അല്ലെങ്കിൽ
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
 
-  if (sever != severity_disabled)
+  എങ്കിൽ (sever != severity_disabled)
     {
       begin_use_class (style, stderr);
       fprintf (stderr, "%s:", flags & note ? _("note") : severity_prefix (sever));
@@ -506,15 +506,15 @@ error_message (const location *loc, warnings flags,
   vfprintf (stderr, message, args);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
-  if (! (flags & silent) && sever != severity_disabled)
+  എങ്കിൽ (! (flags & silent) && sever != severity_disabled)
     warnings_print_categories (flags, stderr);
 
   size_t l = strlen (message);
-  if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+  എങ്കിൽ (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
     {
       putc ('\n', stderr);
       flush (stderr);
-      if (loc && !(flags & no_caret))
+      എങ്കിൽ (loc && !(flags & no_caret))
         location_caret (*loc, style, stderr);
     }
   flush (stderr);
@@ -522,27 +522,27 @@ error_message (const location *loc, warnings flags,
 
 /** Raise a complaint (fatal error, error or just warning).  */
 
-static void
-complains (const location *loc, warnings flags,
-           const char *message, va_list args)
+സ്ഥിതം ശൂന്യം
+complains (സ്ഥിരം location *loc, warnings flags,
+           സ്ഥിരം അക്ഷരം *message, va_list args)
 {
-  if ((flags & complaint) && complaint_status < status_complaint)
+  എങ്കിൽ ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
 
   severity s = warning_severity (flags);
-  if (severity_warning <= s)
+  എങ്കിൽ (severity_warning <= s)
     {
-      if (severity_error <= s && ! complaint_status)
+      എങ്കിൽ (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
       error_message (loc, flags, s, message, args);
     }
 
-  if (flags & fatal)
+  എങ്കിൽ (flags & fatal)
     exit (EXIT_FAILURE);
 }
 
-void
-complain (location const *loc, warnings flags, const char *message, ...)
+ശൂന്യം
+complain (location സ്ഥിരം *loc, warnings flags, സ്ഥിരം അക്ഷരം *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -550,8 +550,8 @@ complain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-subcomplain (location const *loc, warnings flags, const char *message, ...)
+ശൂന്യം
+subcomplain (location സ്ഥിരം *loc, warnings flags, സ്ഥിരം അക്ഷരം *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -559,45 +559,45 @@ subcomplain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-complain_args (location const *loc, warnings w,
-               int argc, char *argv[])
+ശൂന്യം
+complain_args (location സ്ഥിരം *loc, warnings w,
+               പൂർണ്ണസംഖ്യ argc, അക്ഷരം *argv[])
 {
-  switch (argc)
+  തിരഞ്ഞെടുപ്പ് (argc)
   {
-  case 1:
+  അവസ്ഥ 1:
     complain (loc, w, "%s", _(argv[0]));
-    break;
-  case 2:
+    നിർത്തുക;
+  അവസ്ഥ 2:
     complain (loc, w, _(argv[0]), argv[1]);
-    break;
-  case 3:
+    നിർത്തുക;
+  അവസ്ഥ 3:
     complain (loc, w, _(argv[0]), argv[1], argv[2]);
-    break;
-  case 4:
+    നിർത്തുക;
+  അവസ്ഥ 4:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3]);
-    break;
-  case 5:
+    നിർത്തുക;
+  അവസ്ഥ 5:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3], argv[4]);
-    break;
-  default:
+    നിർത്തുക;
+  സ്ഥിരസ്ഥിതി:
     complain (loc, fatal, "too many arguments for complains");
-    break;
+    നിർത്തുക;
   }
 }
 
 
-void
-bison_directive (location const *loc, char const *directive)
+ശൂന്യം
+bison_directive (location സ്ഥിരം *loc, അക്ഷരം സ്ഥിരം *directive)
 {
   complain (loc, Wyacc,
             _("POSIX Yacc does not support %s"), directive);
 }
 
-void
-deprecated_directive (location const *loc, char const *old, char const *upd)
+ശൂന്യം
+deprecated_directive (location സ്ഥിരം *loc, അക്ഷരം സ്ഥിരം *old, അക്ഷരം സ്ഥിരം *upd)
 {
-  if (warning_is_enabled (Wdeprecated))
+  എങ്കിൽ (warning_is_enabled (Wdeprecated))
     {
       complain (loc, Wdeprecated,
                 _("deprecated directive: %s, use %s"),
@@ -608,20 +608,20 @@ deprecated_directive (location const *loc, char const *old, char const *upd)
     }
 }
 
-void
-duplicate_directive (char const *directive,
+ശൂന്യം
+duplicate_directive (അക്ഷരം സ്ഥിരം *directive,
                      location first, location second)
 {
-  if (feature_flag & feature_caret)
+  എങ്കിൽ (feature_flag & feature_caret)
     complain (&second, Wother, _("duplicate directive"));
-  else
+  അല്ലെങ്കിൽ
     complain (&second, Wother, _("duplicate directive: %s"), quote (directive));
   subcomplain (&first, Wother, _("previous declaration"));
   fixits_register (&second, "");
 }
 
-void
-duplicate_rule_directive (char const *directive,
+ശൂന്യം
+duplicate_rule_directive (അക്ഷരം സ്ഥിരം *directive,
                           location first, location second)
 {
   complain (&second, complaint, _("only one %s allowed per rule"), directive);
@@ -629,21 +629,21 @@ duplicate_rule_directive (char const *directive,
   fixits_register (&second, "");
 }
 
-void
+ശൂന്യം
 syntax_error (location loc,
-              int argc, const char* argv[])
+              പൂർണ്ണസംഖ്യ argc, സ്ഥിരം അക്ഷരം* argv[])
 {
-  if (complaint_status < status_complaint)
+  എങ്കിൽ (complaint_status < status_complaint)
     complaint_status = status_complaint;
-  assert (argc <= 5);
-  const char *format = NULL;
-  switch (argc)
+  പ്രതിജ്ഞാ (argc <= 5);
+  സ്ഥിരം അക്ഷരം *format = ശൂന്യ;
+  തിരഞ്ഞെടുപ്പ് (argc)
     {
 #define CASE(N, S)                          \
-      case N:                               \
+      അവസ്ഥ N:                               \
         format = S;                         \
-        break
-    default: /* Avoid compiler warnings. */
+        നിർത്തുക
+    സ്ഥിരസ്ഥിതി: /* Avoid compiler warnings. */
       CASE (0, _("syntax error"));
       CASE (1, _("unexpected %0$s"));
       CASE (2, _("expected %1$s before %0$s"));
@@ -656,21 +656,21 @@ syntax_error (location loc,
   fputs (": ", stderr);
   severity_print (severity_error, stderr);
 
-  while (*format)
-    if (format[0] == '%'
+  ആകുമ്പോൾ (*format)
+    എങ്കിൽ (format[0] == '%'
         && c_isdigit (format[1])
         && format[2] == '$'
         && format[3] == 's'
         && (format[1] - '0') < argc)
       {
-        int i = format[1] - '0';
-        const char *style = i == 0 ? "unexpected" : "expected";
+        പൂർണ്ണസംഖ്യ i = format[1] - '0';
+        സ്ഥിരം അക്ഷരം *style = i == 0 ? "unexpected" : "expected";
         begin_use_class (style, stderr);
         fputs (argv[i], stderr);
         end_use_class (style, stderr);
         format += 4;
       }
-    else
+    അല്ലെങ്കിൽ
       {
         fputc (*format, stderr);
         ++format;

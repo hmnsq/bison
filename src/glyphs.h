@@ -21,30 +21,30 @@
 # define GLYPHS_H
 
 /* Initialize the following variables.  */
-void glyphs_init (void);
+ശൂന്യം glyphs_init (ശൂന്യം);
 
 /* In gnulib/lib/unicodeio.h unicode_to_mb uses a buffer of 25 bytes.
    In down_arrow, we append one space.  */
-typedef char glyph_buffer_t[26];
+തരനിർവചനം അക്ഷരം glyph_buffer_t[26];
 
 /* "→", separates the lhs of a rule from its rhs.  */
-extern glyph_buffer_t arrow;
-extern int arrow_width;
+ബാഹ്യ glyph_buffer_t arrow;
+ബാഹ്യ പൂർണ്ണസംഖ്യ arrow_width;
 
 /* "•", a point in an item (aka, a dotted rule).  */
-extern glyph_buffer_t dot;
-extern int dot_width;
+ബാഹ്യ glyph_buffer_t dot;
+ബാഹ്യ പൂർണ്ണസംഖ്യ dot_width;
 
 /* "↳ ", below an lhs to announce the rhs.  */
-extern glyph_buffer_t down_arrow;
-extern int down_arrow_width;
+ബാഹ്യ glyph_buffer_t down_arrow;
+ബാഹ്യ പൂർണ്ണസംഖ്യ down_arrow_width;
 
 /* "ε", an empty rhs.  */
-extern glyph_buffer_t empty;
-extern int empty_width;
+ബാഹ്യ glyph_buffer_t empty;
+ബാഹ്യ പൂർണ്ണസംഖ്യ empty_width;
 
 /* " ", separate symbols in the rhs of a derivation.  */
-extern const char *derivation_separator;
-extern int derivation_separator_width;
+ബാഹ്യ സ്ഥിരം അക്ഷരം *derivation_separator;
+ബാഹ്യ പൂർണ്ണസംഖ്യ derivation_separator_width;
 
 #endif /* GLYPHS_H */

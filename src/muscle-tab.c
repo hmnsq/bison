@@ -17,38 +17,38 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include <hash.h>
-#include <quote.h>
+#അന്തര്ഭാവ <hash.h>
+#അന്തര്ഭാവ <quote.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "muscle-tab.h"
+#അന്തര്ഭാവ "complain.h"
+#അന്തര്ഭാവ "files.h"
+#അന്തര്ഭാവ "fixits.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "muscle-tab.h"
 
 muscle_kind
-muscle_kind_new (char const *k)
+muscle_kind_new (അക്ഷരം സ്ഥിരം *k)
 {
-  if (STREQ (k, "code"))
-    return muscle_code;
-  else if (STREQ (k, "keyword"))
-    return muscle_keyword;
-  else if (STREQ (k, "string"))
-    return muscle_string;
+  എങ്കിൽ (STREQ (k, "code"))
+    തിരികെ muscle_code;
+  അല്ലെങ്കിൽ എങ്കിൽ (STREQ (k, "keyword"))
+    തിരികെ muscle_keyword;
+  അല്ലെങ്കിൽ എങ്കിൽ (STREQ (k, "string"))
+    തിരികെ muscle_string;
   abort ();
 }
 
-char const *
+അക്ഷരം സ്ഥിരം *
 muscle_kind_string (muscle_kind k)
 {
-  switch (k)
+  തിരഞ്ഞെടുപ്പ് (k)
     {
-    case muscle_code:    return "code";
-    case muscle_keyword: return "keyword";
-    case muscle_string:  return "string";
+    അവസ്ഥ muscle_code:    തിരികെ "code";
+    അവസ്ഥ muscle_keyword: തിരികെ "keyword";
+    അവസ്ഥ muscle_string:  തിരികെ "string";
     }
   abort ();
 }
@@ -56,111 +56,111 @@ muscle_kind_string (muscle_kind k)
 
 /* A key-value pair, along with storage that can be reclaimed when
    this pair is no longer needed.  */
-typedef struct
+തരനിർവചനം ഘടന
 {
-  char const *key;
-  char const *value;
-  char *storage;
+  അക്ഷരം സ്ഥിരം *താക്കോൽ;
+  അക്ഷരം സ്ഥിരം *മൂല്യം;
+  അക്ഷരം *storage;
   muscle_kind kind;
 } muscle_entry;
 
 
 /* The name of muscle for the %define variable VAR (corresponding to
    FIELD, if defined).  */
-static uniqstr
-muscle_name (char const *var, char const *field)
+സ്ഥിതം uniqstr
+muscle_name (അക്ഷരം സ്ഥിരം *var, അക്ഷരം സ്ഥിരം *field)
 {
-  if (field)
-    return UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
-  else
-    return UNIQSTR_CONCAT ("percent_define(", var, ")");
+  എങ്കിൽ (field)
+    തിരികെ UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
+  അല്ലെങ്കിൽ
+    തിരികെ UNIQSTR_CONCAT ("percent_define(", var, ")");
 }
 
 /* An obstack used to create some entries.  */
-struct obstack muscle_obstack;
+ഘടന obstack muscle_obstack;
 
 /* Initial capacity of muscles hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *muscle_table = NULL;
+സ്ഥിതം ഘടന hash_table *muscle_table = ശൂന്യ;
 
-static bool
-hash_compare_muscles (void const *x, void const *y)
+സ്ഥിതം bool
+hash_compare_muscles (ശൂന്യം സ്ഥിരം *x, ശൂന്യം സ്ഥിരം *y)
 {
-  muscle_entry const *m1 = x;
-  muscle_entry const *m2 = y;
-  return STREQ (m1->key, m2->key);
+  muscle_entry സ്ഥിരം *m1 = x;
+  muscle_entry സ്ഥിരം *m2 = y;
+  തിരികെ STREQ (m1->താക്കോൽ, m2->താക്കോൽ);
 }
 
-static size_t
-hash_muscle (const void *x, size_t tablesize)
+സ്ഥിതം size_t
+hash_muscle (സ്ഥിരം ശൂന്യം *x, size_t tablesize)
 {
-  muscle_entry const *m = x;
-  return hash_string (m->key, tablesize);
+  muscle_entry സ്ഥിരം *m = x;
+  തിരികെ hash_string (m->താക്കോൽ, tablesize);
 }
 
 /* Create a fresh muscle name KEY, and insert in the hash table.  */
-static void *
-muscle_entry_new (char const *key)
+സ്ഥിതം ശൂന്യം *
+muscle_entry_new (അക്ഷരം സ്ഥിരം *താക്കോൽ)
 {
-  muscle_entry *res = xmalloc (sizeof *res);
-  res->key = key;
-  res->value = NULL;
-  res->storage = NULL;
+  muscle_entry *res = xmalloc (വലുപ്പം *res);
+  res->താക്കോൽ = താക്കോൽ;
+  res->മൂല്യം = ശൂന്യ;
+  res->storage = ശൂന്യ;
   hash_xinsert (muscle_table, res);
-  return res;
+  തിരികെ res;
 }
 
-static void
-muscle_entry_free (void *entry)
+സ്ഥിതം ശൂന്യം
+muscle_entry_free (ശൂന്യം *entry)
 {
   muscle_entry *mentry = entry;
-  free (mentry->storage);
-  free (mentry);
+  സ്വതന്ത്രം (mentry->storage);
+  സ്വതന്ത്രം (mentry);
 }
 
-void
-muscle_init (void)
+ശൂന്യം
+muscle_init (ശൂന്യം)
 {
   /* Initialize the muscle obstack.  */
   obstack_init (&muscle_obstack);
 
-  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, NULL, hash_muscle,
+  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, ശൂന്യ, hash_muscle,
                                    hash_compare_muscles, muscle_entry_free);
   /* Avoid warnings if the user defined this variable, but did not
      actually call -Wcex.  */
-  free (muscle_percent_define_get ("cex.timeout"));
+  സ്വതന്ത്രം (muscle_percent_define_get ("cex.timeout"));
 }
 
 
-void
-muscle_free (void)
+ശൂന്യം
+muscle_free (ശൂന്യം)
 {
   hash_free (muscle_table);
-  obstack_free (&muscle_obstack, NULL);
+  obstack_free (&muscle_obstack, ശൂന്യ);
 }
 
 /* Look for the muscle named KEY.  Return NULL if does not exist.  */
-static muscle_entry *
-muscle_lookup (char const *key)
+സ്ഥിതം muscle_entry *
+muscle_lookup (അക്ഷരം സ്ഥിരം *താക്കോൽ)
 {
   muscle_entry probe;
-  probe.key = key;
-  return hash_lookup (muscle_table, &probe);
+  probe.താക്കോൽ = താക്കോൽ;
+  തിരികെ hash_lookup (muscle_table, &probe);
 }
 
 
-void
-muscle_insert (char const *key, char const *value)
+ശൂന്യം
+muscle_തിരുകുക (അക്ഷരം സ്ഥിരം *താക്കോൽ, അക്ഷരം സ്ഥിരം *മൂല്യം)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
-    free (entry->storage);
-  else
+  muscle_entry *entry = muscle_lookup (താക്കോൽ);
+  എങ്കിൽ (entry)
+    സ്വതന്ത്രം (entry->storage);
+  അല്ലെങ്കിൽ
     /* First insertion in the hash. */
-    entry = muscle_entry_new (key);
-  entry->value = value;
-  entry->storage = NULL;
+    entry = muscle_entry_new (താക്കോൽ);
+  entry->മൂല്യം = മൂല്യം;
+  entry->storage = ശൂന്യ;
 }
 
 
@@ -169,31 +169,31 @@ muscle_insert (char const *key, char const *value)
    associated value.  Copy VALUE and SEPARATOR.  If VALUE does not end
    with TERMINATOR, append one.  */
 
-static void
-muscle_grow (const char *key, const char *val,
-             const char *separator, const char *terminator)
+സ്ഥിതം ശൂന്യം
+muscle_grow (സ്ഥിരം അക്ഷരം *താക്കോൽ, സ്ഥിരം അക്ഷരം *val,
+             സ്ഥിരം അക്ഷരം *separator, സ്ഥിരം അക്ഷരം *terminator)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (താക്കോൽ);
+  എങ്കിൽ (entry)
     {
-      obstack_sgrow (&muscle_obstack, entry->value);
+      obstack_sgrow (&muscle_obstack, entry->മൂല്യം);
       obstack_sgrow (&muscle_obstack, separator);
-      free (entry->storage);
+      സ്വതന്ത്രം (entry->storage);
     }
-  else
-    entry = muscle_entry_new (key);
+  അല്ലെങ്കിൽ
+    entry = muscle_entry_new (താക്കോൽ);
 
   obstack_sgrow (&muscle_obstack, val);
 
   size_t vals = strlen (val);
   size_t terms = strlen (terminator);
-  if (terms <= vals
+  എങ്കിൽ (terms <= vals
       && STRNEQ (val + vals - terms, terminator))
     obstack_sgrow (&muscle_obstack, terminator);
 
   {
-    char const *new_val = obstack_finish0 (&muscle_obstack);
-    entry->value = entry->storage = xstrdup (new_val);
+    അക്ഷരം സ്ഥിരം *new_val = obstack_finish0 (&muscle_obstack);
+    entry->മൂല്യം = entry->storage = xstrdup (new_val);
     obstack_free (&muscle_obstack, new_val);
   }
 }
@@ -203,15 +203,15 @@ muscle_grow (const char *key, const char *val,
 | LOC to the current value of KEY.                                  |
 `------------------------------------------------------------------*/
 
-static void
-muscle_syncline_grow (char const *key, location loc)
+സ്ഥിതം ശൂന്യം
+muscle_syncline_grow (അക്ഷരം സ്ഥിരം *താക്കോൽ, location loc)
 {
-  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.line);
+  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.വരി);
   obstack_quote (&muscle_obstack,
                  quotearg_style (c_quoting_style, map_file_name (loc.start.file)));
   obstack_sgrow (&muscle_obstack, ")dnl\n[");
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  അക്ഷരം സ്ഥിരം *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (താക്കോൽ, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
@@ -221,167 +221,167 @@ muscle_syncline_grow (char const *key, location loc)
 | using muscle_syncline_grow.                                       |
 `------------------------------------------------------------------*/
 
-void
-muscle_code_grow (const char *key, const char *val, location loc)
+ശൂന്യം
+muscle_code_grow (സ്ഥിരം അക്ഷരം *താക്കോൽ, സ്ഥിരം അക്ഷരം *val, location loc)
 {
-  muscle_syncline_grow (key, loc);
-  muscle_grow (key, val, "", "\n");
+  muscle_syncline_grow (താക്കോൽ, loc);
+  muscle_grow (താക്കോൽ, val, "", "\n");
 }
 
 
-void
-muscle_pair_list_grow (const char *muscle,
-                       const char *a1, const char *a2)
+ശൂന്യം
+muscle_pair_list_grow (സ്ഥിരം അക്ഷരം *muscle,
+                       സ്ഥിരം അക്ഷരം *a1, സ്ഥിരം അക്ഷരം *a2)
 {
   obstack_sgrow (&muscle_obstack, "[");
   obstack_quote (&muscle_obstack, a1);
   obstack_sgrow (&muscle_obstack, ", ");
   obstack_quote (&muscle_obstack, a2);
   obstack_sgrow (&muscle_obstack, "]");
-  char const *pair = obstack_finish0 (&muscle_obstack);
+  അക്ഷരം സ്ഥിരം *pair = obstack_finish0 (&muscle_obstack);
   muscle_grow (muscle, pair, ",\n", "");
   obstack_free (&muscle_obstack, pair);
 }
 
 
-char const *
-muscle_find_const (char const *key)
+അക്ഷരം സ്ഥിരം *
+muscle_find_const (അക്ഷരം സ്ഥിരം *താക്കോൽ)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  return entry ? entry->value : NULL;
+  muscle_entry *entry = muscle_lookup (താക്കോൽ);
+  തിരികെ entry ? entry->മൂല്യം : ശൂന്യ;
 }
 
 
-char *
-muscle_find (char const *key)
+അക്ഷരം *
+muscle_find (അക്ഷരം സ്ഥിരം *താക്കോൽ)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (താക്കോൽ);
+  എങ്കിൽ (entry)
     {
-      aver (entry->value == entry->storage);
-      return entry->storage;
+      aver (entry->മൂല്യം == entry->storage);
+      തിരികെ entry->storage;
     }
-  return NULL;
+  തിരികെ ശൂന്യ;
 }
 
 
 /* In the format 'file_name:line.column', append BOUND to MUSCLE.  Use
    digraphs for special characters in the file name.  */
 
-static void
-muscle_boundary_grow (char const *key, boundary bound)
+സ്ഥിതം ശൂന്യം
+muscle_boundary_grow (അക്ഷരം സ്ഥിരം *താക്കോൽ, boundary bound)
 {
   obstack_sgrow  (&muscle_obstack, "[[");
   obstack_escape (&muscle_obstack, bound.file);
-  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.line, bound.column, bound.byte);
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.വരി, bound.column, bound.byte);
+  അക്ഷരം സ്ഥിരം *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (താക്കോൽ, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
 
-void
-muscle_location_grow (char const *key, location loc)
+ശൂന്യം
+muscle_location_grow (അക്ഷരം സ്ഥിരം *താക്കോൽ, location loc)
 {
-  muscle_boundary_grow (key, loc.start);
-  muscle_grow (key, "", ", ", "");
-  muscle_boundary_grow (key, loc.end);
+  muscle_boundary_grow (താക്കോൽ, loc.start);
+  muscle_grow (താക്കോൽ, "", ", ", "");
+  muscle_boundary_grow (താക്കോൽ, loc.end);
 }
 
-#define COMMON_DECODE(Value)                                    \
-  case '$':                                                     \
-    ++(Value); aver (*(Value) == ']');                          \
-    ++(Value); aver (*(Value) == '[');                          \
+#define COMMON_DECODE(മൂല്യം_4)                                    \
+  അവസ്ഥ '$':                                                     \
+    ++(മൂല്യം_4); aver (*(മൂല്യം_4) == ']');                          \
+    ++(മൂല്യം_4); aver (*(മൂല്യം_4) == '[');                          \
     obstack_sgrow (&muscle_obstack, "$");                       \
-    break;                                                      \
-  case '@':                                                     \
-    switch (*++(Value))                                         \
+    നിർത്തുക;                                                      \
+  അവസ്ഥ '@':                                                     \
+    തിരഞ്ഞെടുപ്പ് (*++(മൂല്യം_4))                                         \
       {                                                         \
-      case '\'': /* Ignore "@'" */ break;                       \
-      case '@': obstack_sgrow (&muscle_obstack, "@" ); break;   \
-      case '{': obstack_sgrow (&muscle_obstack, "[" ); break;   \
-      case '}': obstack_sgrow (&muscle_obstack, "]" ); break;   \
-      default: aver (false); break;                             \
+      അവസ്ഥ '\'': /* Ignore "@'" */ നിർത്തുക;                       \
+      അവസ്ഥ '@': obstack_sgrow (&muscle_obstack, "@" ); നിർത്തുക;   \
+      അവസ്ഥ '{': obstack_sgrow (&muscle_obstack, "[" ); നിർത്തുക;   \
+      അവസ്ഥ '}': obstack_sgrow (&muscle_obstack, "]" ); നിർത്തുക;   \
+      സ്ഥിരസ്ഥിതി: aver (false); നിർത്തുക;                             \
       }                                                         \
-    break;                                                      \
-  default:                                                      \
-    obstack_1grow (&muscle_obstack, *(Value));                  \
-    break;
+    നിർത്തുക;                                                      \
+  സ്ഥിരസ്ഥിതി:                                                      \
+    obstack_1grow (&muscle_obstack, *(മൂല്യം_4));                  \
+    നിർത്തുക;
 
 /* Reverse of obstack_escape.  */
-static char *
-string_decode (char const *key)
+സ്ഥിതം അക്ഷരം *
+string_decode (അക്ഷരം സ്ഥിരം *താക്കോൽ)
 {
-  char const *value = muscle_find_const (key);
-  if (!value)
-    return NULL;
-  do {
-    switch (*value)
+  അക്ഷരം സ്ഥിരം *മൂല്യം = muscle_find_const (താക്കോൽ);
+  എങ്കിൽ (!മൂല്യം)
+    തിരികെ ശൂന്യ;
+  ചെയ്യുക {
+    തിരഞ്ഞെടുപ്പ് (*മൂല്യം)
       {
-        COMMON_DECODE (value)
-        case '[':
-        case ']':
+        COMMON_DECODE (മൂല്യം)
+        അവസ്ഥ '[':
+        അവസ്ഥ ']':
           aver (false);
-          break;
+          നിർത്തുക;
       }
-  } while (*value++);
-  char const *value_decoded = obstack_finish (&muscle_obstack);
-  char *res = xstrdup (value_decoded);
-  obstack_free (&muscle_obstack, value_decoded);
-  return res;
+  } ആകുമ്പോൾ (*മൂല്യം++);
+  അക്ഷരം സ്ഥിരം *മൂല്യം_decoded = obstack_finish (&muscle_obstack);
+  അക്ഷരം *res = xstrdup (മൂല്യം_decoded);
+  obstack_free (&muscle_obstack, മൂല്യം_decoded);
+  തിരികെ res;
 }
 
 /* Reverse of muscle_location_grow.  */
-static location
-location_decode (char const *value)
+സ്ഥിതം location
+location_decode (അക്ഷരം സ്ഥിരം *മൂല്യം)
 {
-  aver (value);
-  aver (*value == '[');
-  ++value; aver (*value == '[');
+  aver (മൂല്യം);
+  aver (*മൂല്യം == '[');
+  ++മൂല്യം; aver (*മൂല്യം == '[');
   location loc;
-  while (*++value)
-    switch (*value)
+  ആകുമ്പോൾ (*++മൂല്യം)
+    തിരഞ്ഞെടുപ്പ് (*മൂല്യം)
       {
-        COMMON_DECODE (value)
-        case '[':
+        COMMON_DECODE (മൂല്യം)
+        അവസ്ഥ '[':
           aver (false);
-          break;
-        case ']':
-          ++value; aver (*value == ']');
-          char *boundary_str = obstack_finish0 (&muscle_obstack);
-          switch (*++value)
+          നിർത്തുക;
+        അവസ്ഥ ']':
+          ++മൂല്യം; aver (*മൂല്യം == ']');
+          അക്ഷരം *boundary_str = obstack_finish0 (&muscle_obstack);
+          തിരഞ്ഞെടുപ്പ് (*++മൂല്യം)
             {
-            case ',':
+            അവസ്ഥ ',':
               boundary_set_from_string (&loc.start, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              ++value; aver (*value == ' ');
-              ++value; aver (*value == '[');
-              ++value; aver (*value == '[');
-              break;
-            case '\0':
+              ++മൂല്യം; aver (*മൂല്യം == ' ');
+              ++മൂല്യം; aver (*മൂല്യം == '[');
+              ++മൂല്യം; aver (*മൂല്യം == '[');
+              നിർത്തുക;
+            അവസ്ഥ '\0':
               boundary_set_from_string (&loc.end, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              return loc;
-              break;
-            default:
+              തിരികെ loc;
+              നിർത്തുക;
+            സ്ഥിരസ്ഥിതി:
               aver (false);
-              break;
+              നിർത്തുക;
             }
-          break;
+          നിർത്തുക;
       }
   aver (false);
-  return loc;
+  തിരികെ loc;
 }
 
-void
-muscle_user_name_list_grow (char const *key, char const *user_name,
+ശൂന്യം
+muscle_user_name_list_grow (അക്ഷരം സ്ഥിരം *താക്കോൽ, അക്ഷരം സ്ഥിരം *user_name,
                             location loc)
 {
-  muscle_grow (key, "[[[[", ",", "");
-  muscle_grow (key, user_name, "", "");
-  muscle_grow (key, "]], ", "", "");
-  muscle_location_grow (key, loc);
-  muscle_grow (key, "]]", "", "");
+  muscle_grow (താക്കോൽ, "[[[[", ",", "");
+  muscle_grow (താക്കോൽ, user_name, "", "");
+  muscle_grow (താക്കോൽ, "]], ", "", "");
+  muscle_location_grow (താക്കോൽ, loc);
+  muscle_grow (താക്കോൽ, "]]", "", "");
 }
 
 
@@ -400,25 +400,25 @@ muscle_user_name_list_grow (char const *key, char const *user_name,
     "foo=", "baz"    => "%define foo"
  */
 
-static
-char *
-define_directive (char const *assignment,
+സ്ഥിതം
+അക്ഷരം *
+define_directive (അക്ഷരം സ്ഥിരം *assignment,
                   muscle_kind kind,
-                  char const *value)
+                  അക്ഷരം സ്ഥിരം *മൂല്യം)
 {
-  char *eq = strchr (assignment, '=');
-  char const *fmt
-    = eq || !value || !*value ? "%%define %s"
+  അക്ഷരം *eq = strchr (assignment, '=');
+  അക്ഷരം സ്ഥിരം *fmt
+    = eq || !മൂല്യം || !*മൂല്യം ? "%%define %s"
     : kind == muscle_code     ? "%%define %s {%s}"
     : kind == muscle_string   ? "%%define %s \"%s\""
     :                           "%%define %s %s";
-  char *res = xmalloc (strlen (fmt) + strlen (assignment)
-                       + (value ? strlen (value) : 0));
-  sprintf (res, fmt, assignment, value);
+  അക്ഷരം *res = xmalloc (strlen (fmt) + strlen (assignment)
+                       + (മൂല്യം ? strlen (മൂല്യം) : 0));
+  sprintf (res, fmt, assignment, മൂല്യം);
   eq = strchr (res, '=');
-  if (eq)
+  എങ്കിൽ (eq)
     *eq = eq[1] ? ' ' : '\0';
-  return res;
+  തിരികെ res;
 }
 
 /** If the \a variable name is obsolete, return the name to use,
@@ -426,20 +426,20 @@ define_directive (char const *assignment,
  *
  * Allocates the returned value if needed, otherwise the returned
  * value is exactly \a variable.  */
-static
-char const *
-muscle_percent_variable_update (char const *variable,
+സ്ഥിതം
+അക്ഷരം സ്ഥിരം *
+muscle_percent_variable_update (അക്ഷരം സ്ഥിരം *variable,
                                 muscle_kind kind,
-                                char const **value,
-                                char **old, char **upd)
+                                അക്ഷരം സ്ഥിരം **മൂല്യം,
+                                അക്ഷരം **old, അക്ഷരം **upd)
 {
-  typedef struct
+  തരനിർവചനം ഘടന
   {
-    const char *obsolete;
-    const char *updated;
+    സ്ഥിരം അക്ഷരം *obsolete;
+    സ്ഥിരം അക്ഷരം *updated;
     muscle_kind kind;
   } conversion_type;
-  const conversion_type conversion[] =
+  സ്ഥിരം conversion_type conversion[] =
   {
     { "%error-verbose",             "parse.error=verbose",       muscle_keyword },
     { "%error_verbose",             "parse.error=verbose",       muscle_keyword },
@@ -464,51 +464,51 @@ muscle_percent_variable_update (char const *variable,
     { "stype",                      "api.value.type",            -1 },
     { "variant=",                   "api.value.type=variant",    -1 },
     { "variant=true",               "api.value.type=variant",    -1 },
-    { NULL, NULL, -1, }
+    { ശൂന്യ, ശൂന്യ, -1, }
   };
 
-  for (conversion_type const *c = conversion; c->obsolete; ++c)
+  വേണ്ടി (conversion_type സ്ഥിരം *c = conversion; c->obsolete; ++c)
     {
-      char const *eq = strchr (c->obsolete, '=');
-      if (eq
+      അക്ഷരം സ്ഥിരം *eq = strchr (c->obsolete, '=');
+      എങ്കിൽ (eq
           ? (!strncmp (c->obsolete, variable, eq - c->obsolete)
-             && STREQ (eq + 1, *value))
+             && STREQ (eq + 1, *മൂല്യം))
           : STREQ (c->obsolete, variable))
         {
           /* Generate the deprecation warning. */
           *old = c->obsolete[0] == '%'
             ? xstrdup (c->obsolete)
-            : define_directive (c->obsolete, kind, *value);
-          *upd = define_directive (c->updated, c->kind, *value);
+            : define_directive (c->obsolete, kind, *മൂല്യം);
+          *upd = define_directive (c->updated, c->kind, *മൂല്യം);
           /* Update the variable and its value.  */
           {
-            char *res = xstrdup (c->updated);
-            char *eq2 = strchr (res, '=');
-            if (eq2)
+            അക്ഷരം *res = xstrdup (c->updated);
+            അക്ഷരം *eq2 = strchr (res, '=');
+            എങ്കിൽ (eq2)
               {
                 *eq2 = '\0';
-                *value = eq2 + 1;
+                *മൂല്യം = eq2 + 1;
               }
-            return res;
+            തിരികെ res;
           }
         }
     }
-  return variable;
+  തിരികെ variable;
 }
 
-void
-muscle_percent_define_insert (char const *var, location variable_loc,
+ശൂന്യം
+muscle_percent_define_തിരുകുക (അക്ഷരം സ്ഥിരം *var, location variable_loc,
                               muscle_kind kind,
-                              char const *value,
+                              അക്ഷരം സ്ഥിരം *മൂല്യം,
                               muscle_percent_define_how how)
 {
   /* Backward compatibility.  */
-  char *old = NULL;
-  char *upd = NULL;
-  char const *variable
+  അക്ഷരം *old = ശൂന്യ;
+  അക്ഷരം *upd = ശൂന്യ;
+  അക്ഷരം സ്ഥിരം *variable
     = muscle_percent_variable_update (var, kind,
-                                      &value, &old, &upd);
-  uniqstr name = muscle_name (variable, NULL);
+                                      &മൂല്യം, &old, &upd);
+  uniqstr name = muscle_name (variable, ശൂന്യ);
   uniqstr loc_name = muscle_name (variable, "loc");
   uniqstr syncline_name = muscle_name (variable, "syncline");
   uniqstr how_name = muscle_name (variable, "how");
@@ -516,18 +516,18 @@ muscle_percent_define_insert (char const *var, location variable_loc,
 
   /* Command-line options are processed before the grammar file.  */
   bool warned = false;
-  if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
+  എങ്കിൽ (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
     {
-      char const *current_value = muscle_find_const (name);
-      if (current_value)
+      അക്ഷരം സ്ഥിരം *current_മൂല്യം = muscle_find_const (name);
+      എങ്കിൽ (current_മൂല്യം)
         {
-          long l = strtol (muscle_find_const (how_name), NULL, 10);
+          long l = strtol (muscle_find_const (how_name), ശൂന്യ, 10);
           muscle_percent_define_how how_old
             = 0 <= l && l <= INT_MAX ? l : INT_MAX;
-          if (how_old == MUSCLE_PERCENT_DEFINE_F)
-            goto end;
+          എങ്കിൽ (how_old == MUSCLE_PERCENT_DEFINE_F)
+            പോകുക end;
           /* If assigning the same value, make it a warning.  */
-          warnings warn = STREQ (value, current_value) ? Wother : complaint;
+          warnings warn = STREQ (മൂല്യം, current_മൂല്യം) ? Wother : complaint;
           complain (&variable_loc, warn,
                     _("%%define variable %s redefined"),
                     quote (variable));
@@ -538,229 +538,229 @@ muscle_percent_define_insert (char const *var, location variable_loc,
         }
     }
 
-  if (!warned && old && upd)
+  എങ്കിൽ (!warned && old && upd)
     deprecated_directive (&variable_loc, old, upd);
 
-  MUSCLE_INSERT_STRING (name, value);
-  muscle_insert (loc_name, "");
+  MUSCLE_തിരുകുക_STRING (name, മൂല്യം);
+  muscle_തിരുകുക (loc_name, "");
   muscle_location_grow (loc_name, variable_loc);
-  muscle_insert (syncline_name, "");
+  muscle_തിരുകുക (syncline_name, "");
   muscle_syncline_grow (syncline_name, variable_loc);
   muscle_user_name_list_grow ("percent_define_user_variables", variable,
                               variable_loc);
-  MUSCLE_INSERT_INT (how_name, how);
-  MUSCLE_INSERT_STRING (kind_name, muscle_kind_string (kind));
+  MUSCLE_തിരുകുക_INT (how_name, how);
+  MUSCLE_തിരുകുക_STRING (kind_name, muscle_kind_string (kind));
  end:
-  free (old);
-  free (upd);
-  if (variable != var)
-    free ((char *) variable);
+  സ്വതന്ത്രം (old);
+  സ്വതന്ത്രം (upd);
+  എങ്കിൽ (variable != var)
+    സ്വതന്ത്രം ((അക്ഷരം *) variable);
 }
 
 /* This is used for backward compatibility, e.g., "%define api.pure"
    supersedes "%pure-parser".  */
-void
-muscle_percent_define_ensure (char const *variable, location loc,
-                              bool value)
+ശൂന്യം
+muscle_percent_define_ensure (അക്ഷരം സ്ഥിരം *variable, location loc,
+                              bool മൂല്യം)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char const *val = value ? "" : "false";
+  uniqstr name = muscle_name (variable, ശൂന്യ);
+  അക്ഷരം സ്ഥിരം *val = മൂല്യം ? "" : "false";
 
   /* Don't complain is VARIABLE is already defined, but be sure to set
      its value to VAL.  */
-  if (!muscle_find_const (name)
-      || muscle_percent_define_flag_if (variable) != value)
-    muscle_percent_define_insert (variable, loc, muscle_keyword, val,
+  എങ്കിൽ (!muscle_find_const (name)
+      || muscle_percent_define_flag_if (variable) != മൂല്യം)
+    muscle_percent_define_തിരുകുക (variable, loc, muscle_keyword, val,
                                   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 /* Mark %define VARIABLE as used.  */
-static void
-muscle_percent_define_use (char const *variable)
+സ്ഥിതം ശൂന്യം
+muscle_percent_define_use (അക്ഷരം സ്ഥിരം *variable)
 {
-  muscle_insert (muscle_name (variable, "bison_variables"), "");
+  muscle_തിരുകുക (muscle_name (variable, "bison_variables"), "");
 }
 
 /* The value of %define variable VARIABLE (corresponding to FIELD, if
    defined).  Do not register as used, but diagnose unset variables.  */
 
-static
-char const *
-muscle_percent_define_get_raw (char const *variable, char const *field)
+സ്ഥിതം
+അക്ഷരം സ്ഥിരം *
+muscle_percent_define_get_raw (അക്ഷരം സ്ഥിരം *variable, അക്ഷരം സ്ഥിരം *field)
 {
   uniqstr name = muscle_name (variable, field);
-  char const *res = muscle_find_const (name);
-  if (!res)
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  അക്ഷരം സ്ഥിരം *res = muscle_find_const (name);
+  എങ്കിൽ (!res)
+    complain (ശൂന്യ, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_get_raw", quote (variable));
-  return res;
+  തിരികെ res;
 }
 
-char *
-muscle_percent_define_get (char const *variable)
+അക്ഷരം *
+muscle_percent_define_get (അക്ഷരം സ്ഥിരം *variable)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char *value = string_decode (name);
-  if (!value)
-    value = xstrdup ("");
+  uniqstr name = muscle_name (variable, ശൂന്യ);
+  അക്ഷരം *മൂല്യം = string_decode (name);
+  എങ്കിൽ (!മൂല്യം)
+    മൂല്യം = xstrdup ("");
   muscle_percent_define_use (variable);
-  return value;
+  തിരികെ മൂല്യം;
 }
 
 /* The kind of VARIABLE.  An error if undefined.  */
-static muscle_kind
-muscle_percent_define_get_kind (char const *variable)
+സ്ഥിതം muscle_kind
+muscle_percent_define_get_kind (അക്ഷരം സ്ഥിരം *variable)
 {
-  return muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
+  തിരികെ muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
 }
 
 /* Check the kind of VARIABLE.  An error if undefined.  */
-static void
-muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
+സ്ഥിതം ശൂന്യം
+muscle_percent_define_check_kind (അക്ഷരം സ്ഥിരം *variable, muscle_kind kind)
 {
-  if (muscle_percent_define_get_kind (variable) != kind)
+  എങ്കിൽ (muscle_percent_define_get_kind (variable) != kind)
     {
       location loc = muscle_percent_define_get_loc (variable);
-      switch (kind)
+      തിരഞ്ഞെടുപ്പ് (kind)
         {
-        case muscle_code:
+        അവസ്ഥ muscle_code:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '{...}' values"),
                     variable);
-          break;
-        case muscle_keyword:
+          നിർത്തുക;
+        അവസ്ഥ muscle_keyword:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires keyword values"),
                     variable);
-          break;
-        case muscle_string:
+          നിർത്തുക;
+        അവസ്ഥ muscle_string:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '\"...\"' values"),
                     variable);
-          break;
+          നിർത്തുക;
         }
     }
 }
 
 
 location
-muscle_percent_define_get_loc (char const *variable)
+muscle_percent_define_get_loc (അക്ഷരം സ്ഥിരം *variable)
 {
-  return location_decode (muscle_percent_define_get_raw (variable, "loc"));
+  തിരികെ location_decode (muscle_percent_define_get_raw (variable, "loc"));
 }
 
-char const *
-muscle_percent_define_get_syncline (char const *variable)
+അക്ഷരം സ്ഥിരം *
+muscle_percent_define_get_syncline (അക്ഷരം സ്ഥിരം *variable)
 {
-  return muscle_percent_define_get_raw (variable, "syncline");
+  തിരികെ muscle_percent_define_get_raw (variable, "syncline");
 }
 
 bool
-muscle_percent_define_ifdef (char const *variable)
+muscle_percent_define_ifdef (അക്ഷരം സ്ഥിരം *variable)
 {
-  if (muscle_find_const (muscle_name (variable, NULL)))
+  എങ്കിൽ (muscle_find_const (muscle_name (variable, ശൂന്യ)))
     {
       muscle_percent_define_use (variable);
-      return true;
+      തിരികെ true;
     }
-  else
-    return false;
+  അല്ലെങ്കിൽ
+    തിരികെ false;
 }
 
 bool
-muscle_percent_define_flag_if (char const *variable)
+muscle_percent_define_flag_if (അക്ഷരം സ്ഥിരം *variable)
 {
   uniqstr invalid_boolean_name = muscle_name (variable, "invalid_boolean");
   bool res = false;
 
-  if (muscle_percent_define_ifdef (variable))
+  എങ്കിൽ (muscle_percent_define_ifdef (variable))
     {
-      char *value = muscle_percent_define_get (variable);
+      അക്ഷരം *മൂല്യം = muscle_percent_define_get (variable);
       muscle_percent_define_check_kind (variable, muscle_keyword);
-      if (value[0] == '\0' || STREQ (value, "true"))
+      എങ്കിൽ (മൂല്യം[0] == '\0' || STREQ (മൂല്യം, "true"))
         res = true;
-      else if (STREQ (value, "false"))
+      അല്ലെങ്കിൽ എങ്കിൽ (STREQ (മൂല്യം, "false"))
         res = false;
-      else if (!muscle_find_const (invalid_boolean_name))
+      അല്ലെങ്കിൽ എങ്കിൽ (!muscle_find_const (invalid_boolean_name))
         {
-          muscle_insert (invalid_boolean_name, "");
+          muscle_തിരുകുക (invalid_boolean_name, "");
           location loc = muscle_percent_define_get_loc (variable);
           complain (&loc, complaint,
                     _("invalid value for %%define Boolean variable %s"),
                     quote (variable));
         }
-      free (value);
+      സ്വതന്ത്രം (മൂല്യം);
     }
-  else
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  അല്ലെങ്കിൽ
+    complain (ശൂന്യ, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_flag", quote (variable));
 
-  return res;
+  തിരികെ res;
 }
 
-void
-muscle_percent_define_default (char const *variable, char const *value)
+ശൂന്യം
+muscle_percent_define_default (അക്ഷരം സ്ഥിരം *variable, അക്ഷരം സ്ഥിരം *മൂല്യം)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  if (!muscle_find_const (name))
+  uniqstr name = muscle_name (variable, ശൂന്യ);
+  എങ്കിൽ (!muscle_find_const (name))
     {
-      MUSCLE_INSERT_STRING (name, value);
-      MUSCLE_INSERT_STRING (muscle_name (variable, "kind"), "keyword");
+      MUSCLE_തിരുകുക_STRING (name, മൂല്യം);
+      MUSCLE_തിരുകുക_STRING (muscle_name (variable, "kind"), "keyword");
       {
         uniqstr loc_name = muscle_name (variable, "loc");
         location loc;
         loc.start.file = "<default value>";
-        loc.start.line = -1;
+        loc.start.വരി = -1;
         loc.start.column = -1;
         loc.start.byte = -1;
         loc.end = loc.start;
-        muscle_insert (loc_name, "");
+        muscle_തിരുകുക (loc_name, "");
         muscle_location_grow (loc_name, loc);
       }
-      muscle_insert (muscle_name (variable, "syncline"), "");
+      muscle_തിരുകുക (muscle_name (variable, "syncline"), "");
     }
 }
 
-void
-muscle_percent_define_check_values (char const * const *values)
+ശൂന്യം
+muscle_percent_define_check_മൂല്യങ്ങൾ (അക്ഷരം സ്ഥിരം * സ്ഥിരം *മൂല്യങ്ങൾ)
 {
-  for (; *values; ++values)
+  വേണ്ടി (; *മൂല്യങ്ങൾ; ++മൂല്യങ്ങൾ)
     {
-      char const * const *variablep = values;
-      uniqstr name = muscle_name (*variablep, NULL);
-      char *value = string_decode (name);
+      അക്ഷരം സ്ഥിരം * സ്ഥിരം *variablep = മൂല്യങ്ങൾ;
+      uniqstr name = muscle_name (*variablep, ശൂന്യ);
+      അക്ഷരം *മൂല്യം = string_decode (name);
       muscle_percent_define_check_kind (*variablep, muscle_keyword);
-      if (value)
+      എങ്കിൽ (മൂല്യം)
         {
-          for (++values; *values; ++values)
-            if (STREQ (value, *values))
-              break;
-          if (!*values)
+          വേണ്ടി (++മൂല്യങ്ങൾ; *മൂല്യങ്ങൾ; ++മൂല്യങ്ങൾ)
+            എങ്കിൽ (STREQ (മൂല്യം, *മൂല്യങ്ങൾ))
+              നിർത്തുക;
+          എങ്കിൽ (!*മൂല്യങ്ങൾ)
             {
               location loc = muscle_percent_define_get_loc (*variablep);
               complain (&loc, complaint,
                         _("invalid value for %%define variable %s: %s"),
-                        quote (*variablep), quote_n (1, value));
-              for (values = variablep + 1; *values; ++values)
+                        quote (*variablep), quote_n (1, മൂല്യം));
+              വേണ്ടി (മൂല്യങ്ങൾ = variablep + 1; *മൂല്യങ്ങൾ; ++മൂല്യങ്ങൾ)
                 subcomplain (&loc, complaint | no_caret | silent,
-                             _("accepted value: %s"), quote (*values));
+                             _("accepted value: %s"), quote (*മൂല്യങ്ങൾ));
             }
-          else
-            while (*values)
-              ++values;
-          free (value);
+          അല്ലെങ്കിൽ
+            ആകുമ്പോൾ (*മൂല്യങ്ങൾ)
+              ++മൂല്യങ്ങൾ;
+          സ്വതന്ത്രം (മൂല്യം);
         }
-      else
-        complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+      അല്ലെങ്കിൽ
+        complain (ശൂന്യ, fatal, _("%s: undefined %%define variable %s"),
                   "muscle_percent_define_check_values", quote (*variablep));
     }
 }
 
-void
-muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
-                          char const *code, location code_loc)
+ശൂന്യം
+muscle_percent_code_grow (അക്ഷരം സ്ഥിരം *qualifier, location qualifier_loc,
+                          അക്ഷരം സ്ഥിരം *code, location code_loc)
 {
-  char const *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
+  അക്ഷരം സ്ഥിരം *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
   muscle_code_grow (name, code, code_loc);
   muscle_user_name_list_grow ("percent_code_user_qualifiers", qualifier,
                                qualifier_loc);
@@ -771,23 +771,23 @@ muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
 | Output the definition of ENTRY as a m4_define.  |
 `------------------------------------------------*/
 
-static inline bool
+സ്ഥിതം വരിയിൽ bool
 muscle_m4_output (muscle_entry *entry, FILE *out)
 {
   fprintf (out,
            "m4_define([b4_%s],\n"
-           "[[%s]])\n\n\n", entry->key, entry->value);
-  return true;
+           "[[%s]])\n\n\n", entry->താക്കോൽ, entry->മൂല്യം);
+  തിരികെ true;
 }
 
-static bool
-muscle_m4_output_processor (void *entry, void *out)
+സ്ഥിതം bool
+muscle_m4_output_processor (ശൂന്യം *entry, ശൂന്യം *out)
 {
-  return muscle_m4_output (entry, out);
+  തിരികെ muscle_m4_output (entry, out);
 }
 
 
-void
+ശൂന്യം
 muscles_m4_output (FILE *out)
 {
   hash_do_for_each (muscle_table, muscle_m4_output_processor, out);

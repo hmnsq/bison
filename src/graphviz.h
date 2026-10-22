@@ -29,7 +29,7 @@
  *
  * \param fout   output stream.
  */
-void start_graph (FILE *fout);
+ശൂന്യം start_graph (FILE *fout);
 
 /** Output a Dot node.
  *
@@ -37,7 +37,7 @@ void start_graph (FILE *fout);
  * \param label  human readable label of the node (no Dot escaping needed).
  * \param fout   output stream.
  */
-void output_node (int id, char const *label, FILE *fout);
+ശൂന്യം output_കണ്ണി (പൂർണ്ണസംഖ്യ id, അക്ഷരം സ്ഥിരം *label, FILE *fout);
 
 /** Output a Dot edge.
  * \param source       id of the source node
@@ -47,20 +47,20 @@ void output_node (int id, char const *label, FILE *fout);
  * \param style        Dot style of the edge (e.g., "dotted" or "solid").
  * \param fout         output stream.
  */
-void output_edge (int source, int destination, char const *label,
-                  char const *style, FILE *fout);
+ശൂന്യം output_edge (പൂർണ്ണസംഖ്യ source, പൂർണ്ണസംഖ്യ destination, അക്ഷരം സ്ഥിരം *label,
+                  അക്ഷരം സ്ഥിരം *style, FILE *fout);
 
 /** Output a reduction.
  * \param s            current state
  * \param reds         the set of reductions
  * \param fout         output stream.
  */
-void output_red (state const *s, reductions const *reds, FILE *fout);
+ശൂന്യം output_red (state സ്ഥിരം *s, reductions സ്ഥിരം *reds, FILE *fout);
 
 /** End a Dot graph.
  *
  * \param fout  output stream.
  */
-void finish_graph (FILE *fout);
+ശൂന്യം finish_graph (FILE *fout);
 
 #endif /* ! GRAPHVIZ_H_ */

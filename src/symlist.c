@@ -18,32 +18,32 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include "symlist.h"
+#അന്തര്ഭാവ "symlist.h"
 
 /*--------------------------------------.
 | Create a list containing SYM at LOC.  |
 `--------------------------------------*/
 
-symbol_list *
-symbol_list_sym_new (symbol *sym, location loc)
+ചിഹ്നം_list *
+ചിഹ്നം_list_sym_new (ചിഹ്നം *sym, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  ചിഹ്നം_list *res = xmalloc (വലുപ്പം *res);
 
-  res->content_type = SYMLIST_SYMBOL;
+  res->content_type = SYMLIST_ചിഹ്നം;
   res->content.sym = sym;
   res->sym_loc = loc;
-  res->named_ref = NULL;
+  res->named_ref = ശൂന്യ;
 
-  res->midrule = NULL;
-  res->midrule_parent_rule = NULL;
+  res->midrule = ശൂന്യ;
+  res->midrule_parent_rule = ശൂന്യ;
   res->midrule_parent_rhs_index = 0;
 
   /* Members used for LHS only.  */
   res->rhs_loc = empty_loc;
-  res->ruleprec = NULL;
+  res->ruleprec = ശൂന്യ;
   res->percent_empty_loc = empty_loc;
   code_props_none_init (&res->action_props);
   res->dprec = 0;
@@ -53,9 +53,9 @@ symbol_list_sym_new (symbol *sym, location loc)
   res->expected_sr_conflicts = -1;
   res->expected_rr_conflicts = -1;
 
-  res->next = NULL;
+  res->next = ശൂന്യ;
 
-  return res;
+  തിരികെ res;
 }
 
 
@@ -63,41 +63,41 @@ symbol_list_sym_new (symbol *sym, location loc)
 | Create a list containing TYPE_NAME at LOC.  |
 `--------------------------------------------*/
 
-symbol_list *
-symbol_list_type_new (uniqstr type_name, location loc)
+ചിഹ്നം_list *
+ചിഹ്നം_list_type_new (uniqstr type_name, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  ചിഹ്നം_list *res = xmalloc (വലുപ്പം *res);
 
   res->content_type = SYMLIST_TYPE;
-  res->content.sem_type = xmalloc (sizeof (semantic_type));
+  res->content.sem_type = xmalloc (വലുപ്പം (semantic_type));
   res->content.sem_type->tag = type_name;
   res->content.sem_type->location = loc;
   res->content.sem_type->status = undeclared;
 
   res->sym_loc = loc;
-  res->named_ref = NULL;
-  res->next = NULL;
+  res->named_ref = ശൂന്യ;
+  res->next = ശൂന്യ;
 
-  return res;
+  തിരികെ res;
 }
 
 
-symbol_list *
-symbol_list_type_set (symbol_list *syms, uniqstr type_name)
+ചിഹ്നം_list *
+ചിഹ്നം_list_type_set (ചിഹ്നം_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
-    symbol_type_set (l->content.sym, type_name, l->sym_loc);
-  return syms;
+  വേണ്ടി (ചിഹ്നം_list *l = syms; l; l = l->next)
+    ചിഹ്നം_type_set (l->content.sym, type_name, l->sym_loc);
+  തിരികെ syms;
 }
 
 
-symbol_list *
-symbol_list_find_symbol (symbol_list *l, const symbol *sym)
+ചിഹ്നം_list *
+ചിഹ്നം_list_find_ചിഹ്നം (ചിഹ്നം_list *l, സ്ഥിരം ചിഹ്നം *sym)
 {
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
-    if (l->content.sym == sym)
-      return l;
-  return NULL;
+  വേണ്ടി (/* Nothing. */; l && l->content.sym; l = l->next)
+    എങ്കിൽ (l->content.sym == sym)
+      തിരികെ l;
+  തിരികെ ശൂന്യ;
 }
 
 
@@ -105,21 +105,21 @@ symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 | Print this list, for which every content_type must be SYMLIST_SYMBOL.  |
 `-----------------------------------------------------------------------*/
 
-void
-symbol_list_syms_print (const symbol_list *l, FILE *out)
+ശൂന്യം
+ചിഹ്നം_list_syms_print (സ്ഥിരം ചിഹ്നം_list *l, FILE *out)
 {
   fputc ('[', out);
-  char const *sep = "";
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
+  അക്ഷരം സ്ഥിരം *sep = "";
+  വേണ്ടി (/* Nothing. */; l && l->content.sym; l = l->next)
     {
       fputs (sep, out);
-      fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
+      fputs (l->content_type == SYMLIST_ചിഹ്നം ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
              out);
-      if (l->content_type == SYMLIST_SYMBOL)
-        symbol_print (l->content.sym, out);
-      fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
+      എങ്കിൽ (l->content_type == SYMLIST_ചിഹ്നം)
+        ചിഹ്നം_print (l->content.sym, out);
+      fputs (l->action_props.is_മൂല്യം_used ? " (used)" : " (unused)", out);
       putc ('}', out);
       sep = ", ";
     }
@@ -131,33 +131,33 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 | Prepend NODE to the LIST.  |
 `---------------------------*/
 
-symbol_list *
-symbol_list_prepend (symbol_list *list, symbol_list *node)
+ചിഹ്നം_list *
+ചിഹ്നം_list_prepend (ചിഹ്നം_list *list, ചിഹ്നം_list *കണ്ണി)
 {
-  node->next = list;
-  return node;
+  കണ്ണി->next = list;
+  തിരികെ കണ്ണി;
 }
 
 
-symbol_list *
-symbol_list_last (symbol_list *list)
+ചിഹ്നം_list *
+ചിഹ്നം_list_last (ചിഹ്നം_list *list)
 {
-  if (!list)
-    return NULL;
-  symbol_list *next = list;
-  while (next->next)
+  എങ്കിൽ (!list)
+    തിരികെ ശൂന്യ;
+  ചിഹ്നം_list *next = list;
+  ആകുമ്പോൾ (next->next)
     next = next->next;
-  return next;
+  തിരികെ next;
 }
 
-symbol_list *
-symbol_list_append (symbol_list *list, symbol_list *node)
+ചിഹ്നം_list *
+ചിഹ്നം_list_append (ചിഹ്നം_list *list, ചിഹ്നം_list *കണ്ണി)
 {
-  if (list)
-    symbol_list_last (list)->next = node;
-  else
-    list = node;
-  return list;
+  എങ്കിൽ (list)
+    ചിഹ്നം_list_last (list)->next = കണ്ണി;
+  അല്ലെങ്കിൽ
+    list = കണ്ണി;
+  തിരികെ list;
 }
 
 
@@ -166,16 +166,16 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 | Free the LIST, but not the items it contains.  |
 `-----------------------------------------------*/
 
-void
-symbol_list_free (symbol_list *list)
+ശൂന്യം
+ചിഹ്നം_list_free (ചിഹ്നം_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  വേണ്ടി (ചിഹ്നം_list *next; list; list = next)
     {
       next = list->next;
       named_ref_free (list->named_ref);
-      if (list->content_type == SYMLIST_TYPE)
-        free (list->content.sem_type);
-      free (list);
+      എങ്കിൽ (list->content_type == SYMLIST_TYPE)
+        സ്വതന്ത്രം (list->content.sem_type);
+      സ്വതന്ത്രം (list);
     }
 }
 
@@ -184,15 +184,15 @@ symbol_list_free (symbol_list *list)
 | Return its length.  |
 `--------------------*/
 
-int
-symbol_list_length (symbol_list const *l)
+പൂർണ്ണസംഖ്യ
+ചിഹ്നം_list_length (ചിഹ്നം_list സ്ഥിരം *l)
 {
-  int res = 0;
-  for (/* Nothing. */;
-       l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
+  പൂർണ്ണസംഖ്യ res = 0;
+  വേണ്ടി (/* Nothing. */;
+       l && !(l->content_type == SYMLIST_ചിഹ്നം && l->content.sym == ശൂന്യ);
        l = l->next)
     ++res;
-  return res;
+  തിരികെ res;
 }
 
 
@@ -200,18 +200,18 @@ symbol_list_length (symbol_list const *l)
 | Get item N in symbol list L.  |
 `------------------------------*/
 
-symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+ചിഹ്നം_list *
+ചിഹ്നം_list_n_get (ചിഹ്നം_list *l, പൂർണ്ണസംഖ്യ n)
 {
   aver (0 <= n);
-  for (int i = 0; i < n; ++i)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < n; ++i)
     {
       l = l->next;
       aver (l);
     }
-  aver (l->content_type == SYMLIST_SYMBOL);
+  aver (l->content_type == SYMLIST_ചിഹ്നം);
   aver (l->content.sym);
-  return l;
+  തിരികെ l;
 }
 
 /*--------------------------------------------------------------.
@@ -220,36 +220,36 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+ചിഹ്നം_list_n_type_name_get (ചിഹ്നം_list *l, പൂർണ്ണസംഖ്യ n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  തിരികെ ചിഹ്നം_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
-symbol_list_null (symbol_list *node)
+ചിഹ്നം_list_null (ചിഹ്നം_list *കണ്ണി)
 {
-  return (!node
-          || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
+  തിരികെ (!കണ്ണി
+          || (കണ്ണി->content_type == SYMLIST_ചിഹ്നം && !കണ്ണി->content.sym));
 }
 
-void
-symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                            code_props const *cprops)
+ശൂന്യം
+ചിഹ്നം_list_code_props_set (ചിഹ്നം_list *കണ്ണി, code_props_type kind,
+                            code_props സ്ഥിരം *cprops)
 {
-  switch (node->content_type)
+  തിരഞ്ഞെടുപ്പ് (കണ്ണി->content_type)
     {
-    case SYMLIST_SYMBOL:
-      symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
-        node->content.sym->content->status = used;
-      break;
-    case SYMLIST_TYPE:
+    അവസ്ഥ SYMLIST_ചിഹ്നം:
+      ചിഹ്നം_code_props_set (കണ്ണി->content.sym, kind, cprops);
+      എങ്കിൽ (കണ്ണി->content.sym->content->status == undeclared)
+        കണ്ണി->content.sym->content->status = used;
+      നിർത്തുക;
+    അവസ്ഥ SYMLIST_TYPE:
       semantic_type_code_props_set
-        (semantic_type_get (node->content.sem_type->tag,
-                            &node->content.sem_type->location),
+        (semantic_type_get (കണ്ണി->content.sem_type->tag,
+                            &കണ്ണി->content.sem_type->location),
          kind, cprops);
-      if (node->content.sem_type->status == undeclared)
-        node->content.sem_type->status = used;
-      break;
+      എങ്കിൽ (കണ്ണി->content.sem_type->status == undeclared)
+        കണ്ണി->content.sem_type->status = used;
+      നിർത്തുക;
     }
 }

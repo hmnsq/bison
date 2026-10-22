@@ -18,16 +18,16 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include <attribute.h>
-#include <error.h>
-#include <hash.h>
-#include <quotearg.h>
-#include <stdarg.h>
+#അന്തര്ഭാവ <attribute.h>
+#അന്തര്ഭാവ <error.h>
+#അന്തര്ഭാവ <hash.h>
+#അന്തര്ഭാവ <quotearg.h>
+#അന്തര്ഭാവ <stdarg.h>
 
-#include "uniqstr.h"
+#അന്തര്ഭാവ "uniqstr.h"
 
 /*-----------------------.
 | A uniqstr hash table.  |
@@ -36,43 +36,43 @@
 /* Initial capacity of uniqstr hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *uniqstrs_table = NULL;
+സ്ഥിതം ഘടന hash_table *uniqstrs_table = ശൂന്യ;
 
 /*-------------------------------------.
 | Create the uniqstr for S if needed.  |
 `-------------------------------------*/
 
 uniqstr
-uniqstr_new (char const *str)
+uniqstr_new (അക്ഷരം സ്ഥിരം *str)
 {
   uniqstr res = hash_lookup (uniqstrs_table, str);
-  if (!res)
+  എങ്കിൽ (!res)
     {
       /* First insertion in the hash. */
       res = xstrdup (str);
       hash_xinsert (uniqstrs_table, res);
     }
-  return res;
+  തിരികെ res;
 }
 
 uniqstr
-uniqstr_concat (int nargs, ...)
+uniqstr_concat (പൂർണ്ണസംഖ്യ nargs, ...)
 {
   va_list args;
 
   va_start (args, nargs);
   size_t reslen = 0;
-  for (int i = 0; i < nargs; i++)
-    reslen += strlen (va_arg (args, char const *));
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < nargs; i++)
+    reslen += strlen (va_arg (args, അക്ഷരം സ്ഥിരം *));
   va_end (args);
 
-  char *str = xmalloc (reslen + 1);
-  char *p = str;
+  അക്ഷരം *str = xmalloc (reslen + 1);
+  അക്ഷരം *p = str;
 
   va_start (args, nargs);
-  for (int i = 0; i < nargs; i++)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < nargs; i++)
     {
-      char const *arg = va_arg (args, char const *);
+      അക്ഷരം സ്ഥിരം *arg = va_arg (args, അക്ഷരം സ്ഥിരം *);
       size_t arglen = strlen (arg);
       memcpy (p, arg, arglen);
       p += arglen;
@@ -81,20 +81,20 @@ uniqstr_concat (int nargs, ...)
 
   *p = '\0';
   uniqstr res = hash_xinsert (uniqstrs_table, str);
-  if (res != str)
-    free (str);
-  return res;
+  എങ്കിൽ (res != str)
+    സ്വതന്ത്രം (str);
+  തിരികെ res;
 }
 
 /*------------------------------.
 | Abort if S is not a uniqstr.  |
 `------------------------------*/
 
-void
-uniqstr_assert (char const *str)
+ശൂന്യം
+uniqstr_assert (അക്ഷരം സ്ഥിരം *str)
 {
   uniqstr s = hash_lookup (uniqstrs_table, str);
-  if (!s || s != str)
+  എങ്കിൽ (!s || s != str)
     {
       error (0, 0,
              "not a uniqstr: %s", quotearg (str));
@@ -107,23 +107,23 @@ uniqstr_assert (char const *str)
 | Print the uniqstr.  |
 `--------------------*/
 
-static inline bool
+സ്ഥിതം വരിയിൽ bool
 uniqstr_print (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
-  return true;
+  തിരികെ true;
 }
 
-static bool
-uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
+സ്ഥിതം bool
+uniqstr_print_processor (ശൂന്യം *ustr, ശൂന്യം *null MAYBE_UNUSED)
 {
-  return uniqstr_print (ustr);
+  തിരികെ uniqstr_print (ustr);
 }
 
-int
+പൂർണ്ണസംഖ്യ
 uniqstr_cmp (uniqstr l, uniqstr r)
 {
-  return (l == r ? 0
+  തിരികെ (l == r ? 0
           : !l ? -1
           : !r ? +1
           : strcmp (l, r));
@@ -134,16 +134,16 @@ uniqstr_cmp (uniqstr l, uniqstr r)
 | A uniqstr hash table.  |
 `-----------------------*/
 
-static bool
-hash_compare_uniqstr (void const *m1, void const *m2)
+സ്ഥിതം bool
+hash_compare_uniqstr (ശൂന്യം സ്ഥിരം *m1, ശൂന്യം സ്ഥിരം *m2)
 {
-  return STREQ (m1, m2);
+  തിരികെ STREQ (m1, m2);
 }
 
-static size_t
-hash_uniqstr (void const *m, size_t tablesize)
+സ്ഥിതം size_t
+hash_uniqstr (ശൂന്യം സ്ഥിരം *m, size_t tablesize)
 {
-  return hash_string (m, tablesize);
+  തിരികെ hash_string (m, tablesize);
 }
 
 
@@ -151,14 +151,14 @@ hash_uniqstr (void const *m, size_t tablesize)
 | Create the uniqstrs table.  |
 `----------------------------*/
 
-void
-uniqstrs_new (void)
+ശൂന്യം
+uniqstrs_new (ശൂന്യം)
 {
   uniqstrs_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                     NULL,
+                                     ശൂന്യ,
                                      hash_uniqstr,
                                      hash_compare_uniqstr,
-                                     free);
+                                     സ്വതന്ത്രം);
 }
 
 
@@ -166,8 +166,8 @@ uniqstrs_new (void)
 | Perform a task on all the uniqstrs.  |
 `-------------------------------------*/
 
-static void
-uniqstrs_do (Hash_processor processor, void *processor_data)
+സ്ഥിതം ശൂന്യം
+uniqstrs_do (Hash_processor processor, ശൂന്യം *processor_data)
 {
   hash_do_for_each (uniqstrs_table, processor, processor_data);
 }
@@ -177,10 +177,10 @@ uniqstrs_do (Hash_processor processor, void *processor_data)
 | Print them all.  |
 `-----------------*/
 
-void
-uniqstrs_print (void)
+ശൂന്യം
+uniqstrs_print (ശൂന്യം)
 {
-  uniqstrs_do (uniqstr_print_processor, NULL);
+  uniqstrs_do (uniqstr_print_processor, ശൂന്യ);
 }
 
 
@@ -188,8 +188,8 @@ uniqstrs_print (void)
 | Free the uniqstrs.  |
 `--------------------*/
 
-void
-uniqstrs_free (void)
+ശൂന്യം
+uniqstrs_free (ശൂന്യം)
 {
   hash_free (uniqstrs_table);
 }

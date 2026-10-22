@@ -39,25 +39,25 @@
 # define YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
 /* Debug traces.  */
 #ifndef GRAM_DEBUG
-# if defined YYDEBUG
-#if YYDEBUG
+# എങ്കിൽ defined YYDEBUG
+#എങ്കിൽ YYDEBUG
 #   define GRAM_DEBUG 1
-#  else
+#  അല്ലെങ്കിൽ
 #   define GRAM_DEBUG 0
 #  endif
-# else /* ! defined YYDEBUG */
+# അല്ലെങ്കിൽ /* ! defined YYDEBUG */
 #  define GRAM_DEBUG 1
 # endif /* ! defined YYDEBUG */
 #endif  /* ! defined GRAM_DEBUG */
-#if GRAM_DEBUG
-extern int gram_debug;
+#എങ്കിൽ GRAM_DEBUG
+ബാഹ്യ പൂർണ്ണസംഖ്യ gram_debug;
 #endif
 /* "%code requires" blocks.  */
 
-  #include "symlist.h"
-  #include "symtab.h"
+  #അന്തര്ഭാവ "symlist.h"
+  #അന്തര്ഭാവ "symtab.h"
 
-  typedef enum
+  തരനിർവചനം എണ്ണൽ
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -65,18 +65,18 @@ extern int gram_debug;
     param_both   = param_lex | param_parse
   } param_type;
 
-  #include "muscle-tab.h"
-  typedef struct
+  #അന്തര്ഭാവ "muscle-tab.h"
+  തരനിർവചനം ഘടന
   {
-    char const *chars;
+    അക്ഷരം സ്ഥിരം *chars;
     muscle_kind kind;
-  } value_type;
+  } മൂല്യം_type;
 
 
 /* Token kinds.  */
 #ifndef GRAM_TOKENTYPE
 # define GRAM_TOKENTYPE
-  enum gram_tokentype
+  എണ്ണൽ gram_tokentype
   {
     GRAM_EMPTY = -2,
     GRAM_EOF = 0,                  /* "end of file"  */
@@ -89,8 +89,8 @@ extern int gram_debug;
     PERCENT_TYPE = 7,              /* "%type"  */
     PERCENT_DESTRUCTOR = 8,        /* "%destructor"  */
     PERCENT_PRINTER = 9,           /* "%printer"  */
-    PERCENT_LEFT = 10,             /* "%left"  */
-    PERCENT_RIGHT = 11,            /* "%right"  */
+    PERCENT_ഇടത് = 10,             /* "%left"  */
+    PERCENT_വലത് = 11,            /* "%right"  */
     PERCENT_NONASSOC = 12,         /* "%nonassoc"  */
     PERCENT_PRECEDENCE = 13,       /* "%precedence"  */
     PERCENT_PREC = 14,             /* "%prec"  */
@@ -110,7 +110,7 @@ extern int gram_debug;
     PERCENT_LANGUAGE = 28,         /* "%language"  */
     PERCENT_NAME_PREFIX = 29,      /* "%name-prefix"  */
     PERCENT_NO_DEFAULT_PREC = 30,  /* "%no-default-prec"  */
-    PERCENT_NO_LINES = 31,         /* "%no-lines"  */
+    PERCENT_NO_വരികൾ = 31,         /* "%no-lines"  */
     PERCENT_NONDETERMINISTIC_PARSER = 32, /* "%nondeterministic-parser"  */
     PERCENT_OUTPUT = 33,           /* "%output"  */
     PERCENT_PURE_PARSER = 34,      /* "%pure-parser"  */
@@ -141,42 +141,42 @@ extern int gram_debug;
     PERCENT_UNION = 59,            /* "%union"  */
     PERCENT_EMPTY = 60             /* "%empty"  */
   };
-  typedef enum gram_tokentype gram_token_kind_t;
+  തരനിർവചനം എണ്ണൽ gram_tokentype gram_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
-union GRAM_STYPE
+#എങ്കിൽ ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
+സംഘം GRAM_STYPE
 {
   assoc precedence_declarator;             /* precedence_declarator  */
-  char* STRING;                            /* "string"  */
-  char* TSTRING;                           /* "translatable string"  */
-  char* BRACED_CODE;                       /* "{...}"  */
-  char* BRACED_PREDICATE;                  /* "%?{...}"  */
-  char* EPILOGUE;                          /* "epilogue"  */
-  char* PROLOGUE;                          /* "%{...%}"  */
-  char* yykind_75;                         /* string.opt  */
+  അക്ഷരം* STRING;                            /* "string"  */
+  അക്ഷരം* TSTRING;                           /* "translatable string"  */
+  അക്ഷരം* BRACED_CODE;                       /* "{...}"  */
+  അക്ഷരം* BRACED_PREDICATE;                  /* "%?{...}"  */
+  അക്ഷരം* EPILOGUE;                          /* "epilogue"  */
+  അക്ഷരം* PROLOGUE;                          /* "%{...%}"  */
+  അക്ഷരം* yykind_75;                         /* string.opt  */
   code_props_type code_props_type;         /* code_props_type  */
-  int INT_LITERAL;                         /* "integer literal"  */
-  int yykind_84;                           /* int.opt  */
+  പൂർണ്ണസംഖ്യ INT_LITERAL;                         /* "integer literal"  */
+  പൂർണ്ണസംഖ്യ yykind_84;                           /* int.opt  */
   named_ref* yykind_97;                    /* named_ref.opt  */
   param_type PERCENT_PARAM;                /* "%param"  */
-  symbol* token_decl;                      /* token_decl  */
-  symbol* alias;                           /* alias  */
-  symbol* token_decl_for_prec;             /* token_decl_for_prec  */
-  symbol* id;                              /* id  */
-  symbol* id_colon;                        /* id_colon  */
-  symbol* symbol;                          /* symbol  */
-  symbol* string_as_id;                    /* string_as_id  */
-  symbol_list* generic_symlist;            /* generic_symlist  */
-  symbol_list* generic_symlist_item;       /* generic_symlist_item  */
-  symbol_list* nterm_decls;                /* nterm_decls  */
-  symbol_list* token_decls;                /* token_decls  */
-  symbol_list* yykind_82;                  /* token_decl.1  */
-  symbol_list* token_decls_for_prec;       /* token_decls_for_prec  */
-  symbol_list* yykind_87;                  /* token_decl_for_prec.1  */
-  symbol_list* symbol_decls;               /* symbol_decls  */
-  symbol_list* yykind_90;                  /* symbols.1  */
+  ചിഹ്നം* token_decl;                      /* token_decl  */
+  ചിഹ്നം* alias;                           /* alias  */
+  ചിഹ്നം* token_decl_for_prec;             /* token_decl_for_prec  */
+  ചിഹ്നം* id;                              /* id  */
+  ചിഹ്നം* id_colon;                        /* id_colon  */
+  ചിഹ്നം* ചിഹ്നം;                          /*ചിഹ്നം*/
+  ചിഹ്നം* string_as_id;                    /* string_as_id  */
+  ചിഹ്നം_list* generic_symlist;            /* generic_symlist  */
+  ചിഹ്നം_list* generic_symlist_item;       /* generic_symlist_item  */
+  ചിഹ്നം_list* nterm_decls;                /* nterm_decls  */
+  ചിഹ്നം_list* token_decls;                /* token_decls  */
+  ചിഹ്നം_list* yykind_82;                  /* token_decl.1  */
+  ചിഹ്നം_list* token_decls_for_prec;       /* token_decls_for_prec  */
+  ചിഹ്നം_list* yykind_87;                  /* token_decl_for_prec.1  */
+  ചിഹ്നം_list* ചിഹ്നം_decls;               /* symbol_decls  */
+  ചിഹ്നം_list* yykind_90;                  /* symbols.1  */
   uniqstr PERCENT_ERROR_VERBOSE;           /* "%error-verbose"  */
   uniqstr PERCENT_FILE_PREFIX;             /* "%file-prefix"  */
   uniqstr PERCENT_FLAG;                    /* "%<flag>"  */
@@ -189,25 +189,25 @@ union GRAM_STYPE
   uniqstr yykind_76;                       /* tag.opt  */
   uniqstr tag;                             /* tag  */
   uniqstr variable;                        /* variable  */
-  unsigned char CHAR_LITERAL;              /* "character literal"  */
-  value_type value;                        /* value  */
+  unsigned അക്ഷരം CHAR_LITERAL;              /* "character literal"  */
+  മൂല്യം_type മൂല്യം;                        /*മൂല്യം*/
 
 
 };
-typedef union GRAM_STYPE GRAM_STYPE;
+തരനിർവചനം സംഘം GRAM_STYPE GRAM_STYPE;
 # define GRAM_STYPE_IS_TRIVIAL 1
 # define GRAM_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
-typedef struct GRAM_LTYPE GRAM_LTYPE;
-struct GRAM_LTYPE
+#എങ്കിൽ ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
+തരനിർവചനം ഘടന GRAM_LTYPE GRAM_LTYPE;
+ഘടന GRAM_LTYPE
 {
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
+  പൂർണ്ണസംഖ്യ first_വരി;
+  പൂർണ്ണസംഖ്യ first_column;
+  പൂർണ്ണസംഖ്യ last_വരി;
+  പൂർണ്ണസംഖ്യ last_column;
 };
 # define GRAM_LTYPE_IS_DECLARED 1
 # define GRAM_LTYPE_IS_TRIVIAL 1
@@ -216,14 +216,14 @@ struct GRAM_LTYPE
 
 
 
-int gram_parse (void);
+പൂർണ്ണസംഖ്യ gram_parse (ശൂന്യം);
 
 /* "%code provides" blocks.  */
 
   /* Initialize unquote.  */
-  void parser_init (void);
+  ശൂന്യം parser_init (ശൂന്യം);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  ശൂന്യം parser_free (ശൂന്യം);
 
 
 #endif /* !YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED  */

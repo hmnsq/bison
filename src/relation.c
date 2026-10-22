@@ -18,36 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include <bitsetv.h>
+#അന്തര്ഭാവ <bitsetv.h>
 
-#include "getargs.h"
-#include "relation.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "relation.h"
 
-void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+ശൂന്യം
+relation_print (സ്ഥിരം അക്ഷരം *title,
+                relation r, relation_കണ്ണി size,
+                relation_കണ്ണി_print print, FILE *out)
 {
-  if (title)
+  എങ്കിൽ (title)
     fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  വേണ്ടി (relation_കണ്ണി i = 0; i < size; ++i)
+    എങ്കിൽ (r[i])
       {
         fputs ("    ", out);
-        if (print)
+        എങ്കിൽ (print)
           print (i, out);
-        else
+        അല്ലെങ്കിൽ
           fprintf (out, "%3ld", (long) i);
         fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        വേണ്ടി (relation_കണ്ണി j = 0; r[i][j] != END_കണ്ണി; ++j)
           {
             fputc (' ', out);
-            if (print)
+            എങ്കിൽ (print)
               print (r[i][j], out);
-            else
+            അല്ലെങ്കിൽ
               fprintf (out, "%3ld", (long) r[i][j]);
           }
         fputc ('\n', out);
@@ -63,62 +63,62 @@ relation_print (const char *title,
 | two.                                                           |
 `---------------------------------------------------------------*/
 
-static relation R;
-static relation_nodes indexes;
-static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
-static bitsetv F;
+സ്ഥിതം relation R;
+സ്ഥിതം relation_nodes indexes;
+സ്ഥിതം relation_nodes vertices;
+സ്ഥിതം relation_കണ്ണി മുകൾ_2;
+സ്ഥിതം relation_കണ്ണി infinity;
+സ്ഥിതം bitsetv F;
 
-static void
-traverse (relation_node i)
+സ്ഥിതം ശൂന്യം
+traverse (relation_കണ്ണി i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++മുകൾ_2] = i;
+  relation_കണ്ണി height = indexes[i] = മുകൾ_2;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  എങ്കിൽ (R[i])
+    വേണ്ടി (relation_കണ്ണി j = 0; R[i][j] != END_കണ്ണി; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        എങ്കിൽ (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        എങ്കിൽ (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  എങ്കിൽ (indexes[i] == height)
+    വേണ്ടി (;;)
       {
-        relation_node j = vertices[top--];
+        relation_കണ്ണി j = vertices[മുകൾ_2--];
         indexes[j] = infinity;
 
-        if (i == j)
-          break;
+        എങ്കിൽ (i == j)
+          നിർത്തുക;
 
         bitset_copy (F[j], F[i]);
       }
 }
 
 
-void
-relation_digraph (relation r, relation_node size, bitsetv function)
+ശൂന്യം
+relation_digraph (relation r, relation_കണ്ണി size, bitsetv function)
 {
   infinity = size + 2;
-  indexes = xcalloc (size + 1, sizeof *indexes);
-  vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  indexes = xcalloc (size + 1, വലുപ്പം *indexes);
+  vertices = xnmalloc (size + 1, വലുപ്പം *vertices);
+  മുകൾ_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  വേണ്ടി (relation_കണ്ണി i = 0; i < size; i++)
+    എങ്കിൽ (indexes[i] == 0 && R[i])
       traverse (i);
 
-  free (indexes);
-  free (vertices);
+  സ്വതന്ത്രം (indexes);
+  സ്വതന്ത്രം (vertices);
 
   function = F;
 }
@@ -128,55 +128,55 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 | Destructively transpose R_ARG, of size N.  |
 `-------------------------------------------*/
 
-void
-relation_transpose (relation *R_arg, relation_node size)
+ശൂന്യം
+relation_transpose (relation *R_arg, relation_കണ്ണി size)
 {
   relation r = *R_arg;
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+  എങ്കിൽ (trace_flag & trace_sets)
+    relation_print ("relation_transpose", r, size, ശൂന്യ, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
-  size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  size_t *nedges = xcalloc (size, വലുപ്പം *nedges);
+  വേണ്ടി (relation_കണ്ണി i = 0; i < size; i++)
+    എങ്കിൽ (r[i])
+      വേണ്ടി (relation_കണ്ണി j = 0; r[i][j] != END_കണ്ണി; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
   /* The result. */
-  relation new_R = xnmalloc (size, sizeof *new_R);
+  relation new_R = xnmalloc (size, വലുപ്പം *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
-  relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  relation end_R = xnmalloc (size, വലുപ്പം *end_R);
+  വേണ്ടി (relation_കണ്ണി i = 0; i < size; i++)
     {
-      relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      relation_കണ്ണി *sp = ശൂന്യ;
+      എങ്കിൽ (nedges[i] > 0)
         {
-          sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp = xnmalloc (nedges[i] + 1, വലുപ്പം *sp);
+          sp[nedges[i]] = END_കണ്ണി;
         }
       new_R[i] = sp;
       end_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  വേണ്ടി (relation_കണ്ണി i = 0; i < size; i++)
+    എങ്കിൽ (r[i])
+      വേണ്ടി (relation_കണ്ണി j = 0; r[i][j] != END_കണ്ണി; ++j)
         *end_R[r[i][j]]++ = i;
 
-  free (nedges);
-  free (end_R);
+  സ്വതന്ത്രം (nedges);
+  സ്വതന്ത്രം (end_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
-    free (r[i]);
-  free (r);
+  വേണ്ടി (relation_കണ്ണി i = 0; i < size; i++)
+    സ്വതന്ത്രം (r[i]);
+  സ്വതന്ത്രം (r);
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+  എങ്കിൽ (trace_flag & trace_sets)
+    relation_print ("relation_transpose: output", new_R, size, ശൂന്യ, stderr);
 
   *R_arg = new_R;
 }

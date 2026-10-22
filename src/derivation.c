@@ -17,108 +17,108 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#അന്തര്ഭാവ <config.h>
 
-#include "derivation.h"
-#include "glyphs.h"
+#അന്തര്ഭാവ "derivation.h"
+#അന്തര്ഭാവ "glyphs.h"
 
-#include <c-ctype.h>
-#include <gl_linked_list.h>
-#include <mbswidth.h>
-#include <vasnprintf.h>
+#അന്തര്ഭാവ <c-ctype.h>
+#അന്തര്ഭാവ <gl_linked_list.h>
+#അന്തര്ഭാവ <mbswidth.h>
+#അന്തര്ഭാവ <vasnprintf.h>
 
-#include "system.h"
-#include "complain.h"
+#അന്തര്ഭാവ "system.h"
+#അന്തര്ഭാവ "complain.h"
 
-struct derivation
+ഘടന derivation
 {
-  symbol_number sym;
+  ചിഹ്നം_സംഖ്യ sym;
   derivation_list children;
-  int reference_count;
+  പൂർണ്ണസംഖ്യ reference_എണ്ണം;
   // The rule SYM -> CHILDREN.
-  const rule *rule;
+  സ്ഥിരം rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  പൂർണ്ണസംഖ്യ color;
 };
 
-static derivation d_dot = { -1, NULL, -1, NULL, -1 };
+സ്ഥിതം derivation d_dot = { -1, ശൂന്യ, -1, ശൂന്യ, -1 };
 
 derivation *
-derivation_dot (void)
+derivation_dot (ശൂന്യം)
 {
-  return &d_dot;
+  തിരികെ &d_dot;
 }
 
-void
+ശൂന്യം
 derivation_list_append (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
   gl_list_add_last (dl, d);
 }
 
-void
+ശൂന്യം
 derivation_list_prepend (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
   gl_list_add_first (dl, d);
 }
 
-void derivation_list_free (derivation_list dl)
+ശൂന്യം derivation_list_free (derivation_list dl)
 {
-  derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
+  derivation *d = ശൂന്യ;
+  വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (dl);
        derivation_list_next (&it, &d);
        )
-    if (d != &d_dot)
+    എങ്കിൽ (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r)
+derivation_new (ചിഹ്നം_സംഖ്യ sym, derivation_list children,
+                സ്ഥിരം rule *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (വലുപ്പം *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
+  res->reference_എണ്ണം = 0;
   res->rule = r;
   res->color = -1;
-  return res;
+  തിരികെ res;
 }
 
-void
+ശൂന്യം
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_എണ്ണം;
 }
 
-void
+ശൂന്യം
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
+  എങ്കിൽ (!d)
+    തിരികെ;
   derivation_list free_queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
-                    1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+    gl_list_create (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, true,
+                    1, (സ്ഥിരം ശൂന്യം **)&d);
+  ആകുമ്പോൾ (gl_list_size (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      എങ്കിൽ (--deriv->reference_എണ്ണം == 0)
         {
-          if (deriv->children)
+          എങ്കിൽ (deriv->children)
             {
-              derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              derivation *child = ശൂന്യ;
+              വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
-                if (child != &d_dot)
+                എങ്കിൽ (child != &d_dot)
                   gl_list_add_last (free_queue, child);
               gl_list_free (deriv->children);
             }
-          free (deriv);
+          സ്വതന്ത്രം (deriv);
         }
       gl_list_remove_at (free_queue, 0);
     }
@@ -126,46 +126,46 @@ derivation_free (derivation *d)
 }
 
 size_t
-derivation_size (const derivation *deriv)
+derivation_size (സ്ഥിരം derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
-  derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+  എങ്കിൽ (!deriv->children)
+    തിരികെ 1;
+  പൂർണ്ണസംഖ്യ size = 1;
+  derivation *child = ശൂന്യ;
+  വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (deriv->children);
        derivation_list_next (&it, &child);
        )
     size += derivation_size (child);
-  return size;
+  തിരികെ size;
 }
 
 
 // Longest distance from root to leaf.
-static int
-derivation_depth (const derivation *deriv)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+derivation_depth (സ്ഥിരം derivation *deriv)
 {
-  if (deriv->children)
+  എങ്കിൽ (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
+      പൂർണ്ണസംഖ്യ res = 1;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         res = max_int (res, derivation_depth (child));
-      return res + 1;
+      തിരികെ res + 1;
     }
-  else
-    return 1;
+  അല്ലെങ്കിൽ
+    തിരികെ 1;
 }
 
-static bool
-all_spaces (const char *s)
+സ്ഥിതം bool
+all_spaces (സ്ഥിരം അക്ഷരം *s)
 {
-  while (c_isspace (*s))
+  ആകുമ്പോൾ (c_isspace (*s))
     s++;
-  return *s == '\0';
+  തിരികെ *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,58 +194,58 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+fputs_if (bool cond, FILE *out, പൂർണ്ണസംഖ്യ *padding, സ്ഥിരം അക്ഷരം *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  പൂർണ്ണസംഖ്യ res = mbswidth (s, 0);
+  എങ്കിൽ (cond && !all_spaces (s))
     {
       fprintf (out, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  അല്ലെങ്കിൽ
     {
       *padding += res;
     }
-  return res;
+  തിരികെ res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+fprintf_if (bool cond, FILE *out, പൂർണ്ണസംഖ്യ *padding, സ്ഥിരം അക്ഷരം *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
+  അക്ഷരം buf[256];
+  size_t len = വലുപ്പം (buf);
   va_list args;
   va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
+  അക്ഷരം *cp = vasnprintf (buf, &len, fmt, args);
   va_end (args);
-  if (!cp)
+  എങ്കിൽ (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
-    free (cp);
-  return res;
+  പൂർണ്ണസംഖ്യ res = fputs_if (cond, out, padding, cp);
+  എങ്കിൽ (cp != buf)
+    സ്വതന്ത്രം (cp);
+  തിരികെ res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
-derivation_width (const derivation *deriv)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+derivation_width (സ്ഥിരം derivation *deriv)
 {
-  if (deriv->children)
+  എങ്കിൽ (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      സ്ഥിരം ചിഹ്നം *sym = symbols[deriv->sym];
+      പൂർണ്ണസംഖ്യ self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      പൂർണ്ണസംഖ്യ children_width = down_arrow_width;
+      children_width += snprintf (ശൂന്യ, 0, "%d: ", deriv->rule->സംഖ്യ);
+      എങ്കിൽ (gl_list_size (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
-      else
+      അല്ലെങ്കിൽ
         {
-          if (gl_list_size (deriv->children) == 1
+          എങ്കിൽ (gl_list_size (deriv->children) == 1
               && gl_list_get_first (deriv->children) == &d_dot)
             {
               children_width += empty_width;
@@ -253,7 +253,7 @@ derivation_width (const derivation *deriv)
             }
 
           derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+          വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                derivation_list_next (&it, &child);
                )
             children_width
@@ -261,16 +261,16 @@ derivation_width (const derivation *deriv)
           // No separator at the beginning.
           children_width -= derivation_separator_width;
         }
-      return max_int (self_width, children_width);
+      തിരികെ max_int (self_width, children_width);
     }
-  else if (deriv == &d_dot)
+  അല്ലെങ്കിൽ എങ്കിൽ (deriv == &d_dot)
     {
-      return dot_width;
+      തിരികെ dot_width;
     }
-  else // leaf.
+  അല്ലെങ്കിൽ // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      സ്ഥിരം ചിഹ്നം *sym = symbols[deriv->sym];
+      തിരികെ mbswidth (sym->tag, 0);
     }
 }
 
@@ -286,38 +286,38 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+derivation_print_വൃക്ഷം_impl (സ്ഥിരം derivation *deriv, FILE *out,
+                            പൂർണ്ണസംഖ്യ depth, പൂർണ്ണസംഖ്യ *padding)
 {
-  const int width = derivation_width (deriv);
+  സ്ഥിരം പൂർണ്ണസംഖ്യ width = derivation_width (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  പൂർണ്ണസംഖ്യ res = 0;
+  എങ്കിൽ (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      സ്ഥിരം ചിഹ്നം *sym = symbols[deriv->sym];
+      അക്ഷരം style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      എങ്കിൽ (depth == 0 || depth == 1)
         {
           begin_use_class (style, out);
           begin_use_class ("cex-step", out);
         }
-      if (depth == 0)
+      എങ്കിൽ (depth == 0)
         {
           res += fputs_if (true, out, padding, sym->tag);
         }
-      else
+      അല്ലെങ്കിൽ
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->സംഖ്യ);
+          എങ്കിൽ (gl_list_size (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
-          else
+          അല്ലെങ്കിൽ
             {
-              if (gl_list_size (deriv->children) == 1
+              എങ്കിൽ (gl_list_size (deriv->children) == 1
                   && gl_list_get_first (deriv->children) == &d_dot)
                 {
                   res += fputs_if (depth == 1, out, padding, empty);
@@ -326,18 +326,18 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
 
               bool first = true;
               derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
                 {
-                  if (!first)
+                  എങ്കിൽ (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
+                  res += derivation_print_വൃക്ഷം_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      എങ്കിൽ (depth == 0 || depth == 1)
         {
           end_use_class ("cex-step", out);
           end_use_class (style, out);
@@ -345,36 +345,36 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       *padding += width - res;
       res = width;
     }
-  else if (deriv == &d_dot)
+  അല്ലെങ്കിൽ എങ്കിൽ (deriv == &d_dot)
     {
-      if (depth == 0)
+      എങ്കിൽ (depth == 0)
         begin_use_class ("cex-dot", out);
       res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
+      എങ്കിൽ (depth == 0)
         end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  അല്ലെങ്കിൽ // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
+      സ്ഥിരം ചിഹ്നം *sym = symbols[deriv->sym];
+      എങ്കിൽ (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
+      എങ്കിൽ (depth == 0)
         end_use_class ("cex-leaf", out);
     }
-  return res;
+  തിരികെ res;
 }
 
-static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+സ്ഥിതം ശൂന്യം
+derivation_print_വൃക്ഷം (സ്ഥിരം derivation *deriv, FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
   fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
+  വേണ്ടി (പൂർണ്ണസംഖ്യ depth = 0, max_depth = derivation_depth (deriv);
        depth < max_depth; ++depth)
     {
-      int padding = 0;
+      പൂർണ്ണസംഖ്യ padding = 0;
       fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
+      derivation_print_വൃക്ഷം_impl (deriv, out, depth, &padding);
       fputc ('\n', out);
     }
 }
@@ -382,21 +382,21 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
-static bool
+സ്ഥിതം bool
 derivation_print_flat_impl (derivation *deriv, FILE *out,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            പൂർണ്ണസംഖ്യ *counter, സ്ഥിരം അക്ഷരം *prefix)
 {
-  if (deriv->children)
+  എങ്കിൽ (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      സ്ഥിരം ചിഹ്നം *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      അക്ഷരം style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
       begin_use_class (style, out);
 
-      if (!leaves_only)
+      എങ്കിൽ (!leaves_only)
         {
           fputs (prefix, out);
           begin_use_class ("cex-step", out);
@@ -406,71 +406,71 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
         }
       bool res = false;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
+          എങ്കിൽ (derivation_print_flat_impl (child, out,
                                           leaves_only, counter, prefix))
             {
               prefix = " ";
               res = true;
             }
-          else if (!leaves_only)
+          അല്ലെങ്കിൽ എങ്കിൽ (!leaves_only)
             prefix = " ";
         }
-      if (!leaves_only)
+      എങ്കിൽ (!leaves_only)
         {
           begin_use_class ("cex-step", out);
-          if (res)
+          എങ്കിൽ (res)
             fputs (" ]", out);
-          else
+          അല്ലെങ്കിൽ
             fputs ("]", out);
           end_use_class ("cex-step", out);
         }
       end_use_class (style, out);
-      return res;
+      തിരികെ res;
     }
-  else if (deriv == &d_dot)
+  അല്ലെങ്കിൽ എങ്കിൽ (deriv == &d_dot)
     {
       fputs (prefix, out);
       begin_use_class ("cex-dot", out);
       fputs (dot, out);
       end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  അല്ലെങ്കിൽ // leaf.
     {
       fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
+      സ്ഥിരം ചിഹ്നം *sym = symbols[deriv->sym];
       begin_use_class ("cex-leaf", out);
       fprintf (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
     }
-  return true;
+  തിരികെ true;
 }
 
-static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+സ്ഥിതം ശൂന്യം
+derivation_print_flat (സ്ഥിരം derivation *deriv, FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
-  int counter = 0;
+  പൂർണ്ണസംഖ്യ counter = 0;
   fputs (prefix, out);
   derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
   fputc ('\n', out);
 }
 
-void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+ശൂന്യം
+derivation_print_leaves (സ്ഥിരം derivation *deriv, FILE *out)
 {
-  int counter = 0;
+  പൂർണ്ണസംഖ്യ counter = 0;
   derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
   fputc ('\n', out);
 }
 
-void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+ശൂന്യം
+derivation_print (സ്ഥിരം derivation *deriv, FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
-  if (getenv ("YYFLAT"))
+  എങ്കിൽ (getenv ("YYFLAT"))
     derivation_print_flat (deriv, out, prefix);
-  else
-    derivation_print_tree (deriv, out, prefix);
+  അല്ലെങ്കിൽ
+    derivation_print_വൃക്ഷം (deriv, out, prefix);
 }

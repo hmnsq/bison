@@ -17,65 +17,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include "InadequacyList.h"
+#അന്തര്ഭാവ "InadequacyList.h"
 
-#include <intprops.h>
+#അന്തര്ഭാവ <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+ContributionIndex സ്ഥിരം ContributionIndex__none = -1;
+ContributionIndex സ്ഥിരം ContributionIndex__error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, ചിഹ്നം *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_കണ്ണി_എണ്ണം *കണ്ണി_എണ്ണം)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *result = xmalloc (വലുപ്പം *result);
+  result->id = *കണ്ണി_എണ്ണം;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  എങ്കിൽ (INT_ADD_WRAPV (*കണ്ണി_എണ്ണം, 1, കണ്ണി_എണ്ണം))
     aver (false);
   IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
+  result->next = ശൂന്യ;
   result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
+  result->contribution_എണ്ണം_2 = bitset_എണ്ണം (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
-  return result;
+  തിരികെ result;
 }
 
-void
+ശൂന്യം
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  ആകുമ്പോൾ (self)
     {
-      InadequacyList *node = self;
+      InadequacyList *കണ്ണി = self;
       self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      bitset_free (കണ്ണി->inadequacy.conflict.actions);
+      സ്വതന്ത്രം (കണ്ണി);
     }
 }
 
 ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+InadequacyList__getShiftContributionIndex (InadequacyList സ്ഥിരം *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  എങ്കിൽ (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->അക്കം))
+    തിരികെ ContributionIndex__none;
+  തിരികെ self->contribution_എണ്ണം_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
+ചിഹ്നം *
+InadequacyList__getContributionToken (InadequacyList സ്ഥിരം *self,
                                       ContributionIndex i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_എണ്ണം_2); (ശൂന്യം) i;
+  തിരികെ self->inadequacy.conflict.token;
 }
 
-void
+ശൂന്യം
 InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
 {
   InadequacyList *head_old = *list;

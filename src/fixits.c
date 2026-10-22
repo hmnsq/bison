@@ -17,127 +17,127 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#അന്തര്ഭാവ <config.h>
 
-#include "fixits.h"
+#അന്തര്ഭാവ "fixits.h"
 
-#include <error.h>
-#include <get-errno.h>
-#include <gl_array_list.h>
-#include <gl_xlist.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <vasnprintf.h>
+#അന്തര്ഭാവ <error.h>
+#അന്തര്ഭാവ <get-errno.h>
+#അന്തര്ഭാവ <gl_array_list.h>
+#അന്തര്ഭാവ <gl_xlist.h>
+#അന്തര്ഭാവ <progname.h>
+#അന്തര്ഭാവ <quote.h>
+#അന്തര്ഭാവ <quotearg.h>
+#അന്തര്ഭാവ <vasnprintf.h>
 
-#include "system.h"
+#അന്തര്ഭാവ "system.h"
 
-#include "files.h"
-#include "getargs.h"
+#അന്തര്ഭാവ "files.h"
+#അന്തര്ഭാവ "getargs.h"
 
-typedef struct
+തരനിർവചനം ഘടന
 {
   location location;
-  char *fix;
+  അക്ഷരം *fix;
 } fixit;
 
-gl_list_t fixits = NULL;
+gl_list_t fixits = ശൂന്യ;
 
-static fixit *
-fixit_new (location const *loc, char const* fix)
+സ്ഥിതം fixit *
+fixit_new (location സ്ഥിരം *loc, അക്ഷരം സ്ഥിരം* fix)
 {
-  fixit *res = xmalloc (sizeof *res);
+  fixit *res = xmalloc (വലുപ്പം *res);
   res->location = *loc;
   res->fix = xstrdup (fix);
-  return res;
+  തിരികെ res;
 }
 
-static int
-fixit_cmp (const  fixit *a, const fixit *b)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+fixit_cmp (സ്ഥിരം  fixit *a, സ്ഥിരം fixit *b)
 {
-  return location_cmp (a->location, b->location);
+  തിരികെ location_cmp (a->location, b->location);
 }
 
-static void
+സ്ഥിതം ശൂന്യം
 fixit_free (fixit *f)
 {
-  free (f->fix);
-  free (f);
+  സ്വതന്ത്രം (f->fix);
+  സ്വതന്ത്രം (f);
 }
 
 
 /* GCC and Clang follow the same pattern.
    https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
    https://clang.llvm.org/docs/UsersManual.html#cmdoption-fdiagnostics-parseable-fixits */
-static void
-fixit_print (fixit const *f, FILE *out)
+സ്ഥിതം ശൂന്യം
+fixit_print (fixit സ്ഥിരം *f, FILE *out)
 {
   fprintf (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
            quotearg_n_style (1, c_quoting_style, f->location.start.file),
-           f->location.start.line, f->location.start.byte,
-           f->location.end.line, f->location.end.byte,
+           f->location.start.വരി, f->location.start.byte,
+           f->location.end.വരി, f->location.end.byte,
            quotearg_n_style (2, c_quoting_style, f->fix));
 }
 
 
-void
-fixits_register (location const *loc, char const* fix)
+ശൂന്യം
+fixits_register (location സ്ഥിരം *loc, അക്ഷരം സ്ഥിരം* fix)
 {
-  if (!fixits)
+  എങ്കിൽ (!fixits)
     fixits = gl_list_create_empty (GL_ARRAY_LIST,
-                                   /* equals */ NULL,
-                                   /* hashcode */ NULL,
+                                   /* equals */ ശൂന്യ,
+                                   /* hashcode */ ശൂന്യ,
                                    (gl_listelement_dispose_fn) fixit_free,
                                    true);
   fixit *f = fixit_new (loc, fix);
   gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
-  if (feature_flag & feature_fixit)
+  എങ്കിൽ (feature_flag & feature_fixit)
     fixit_print (f, stderr);
 }
 
 
 bool
-fixits_empty (void)
+fixits_empty (ശൂന്യം)
 {
-  return !fixits;
+  തിരികെ !fixits;
 }
 
 
-void
-fixits_run (void)
+ശൂന്യം
+fixits_run (ശൂന്യം)
 {
-  if (!fixits)
-    return;
+  എങ്കിൽ (!fixits)
+    തിരികെ;
 
   /* This is not unlike what is done in location_caret.  */
-  uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
+  uniqstr നിവേശം = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
   /* Backup the file. */
-  char buf[256];
-  size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
-  if (!backup)
+  അക്ഷരം buf[256];
+  size_t len = വലുപ്പം (buf);
+  അക്ഷരം *backup = asnprintf (buf, &len, "%s~", നിവേശം);
+  എങ്കിൽ (!backup)
     xalloc_die ();
-  if (rename (input, backup))
+  എങ്കിൽ (rename (നിവേശം, backup))
     error (EXIT_FAILURE, get_errno (),
-           _("%s: cannot backup"), quotearg_colon (input));
+           _("%s: cannot backup"), quotearg_colon (നിവേശം));
   FILE *in = xfopen (backup, "r");
-  FILE *out = xfopen (input, "w");
-  size_t line = 1;
+  FILE *out = xfopen (നിവേശം, "w");
+  size_t വരി = 1;
   size_t offset = 1;
-  void const *p = NULL;
+  ശൂന്യം സ്ഥിരം *p = ശൂന്യ;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
-  while (gl_list_iterator_next (&iter, &p, NULL))
+  ആകുമ്പോൾ (gl_list_iterator_next (&iter, &p, ശൂന്യ))
     {
-      fixit const *f = p;
+      fixit സ്ഥിരം *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      ആകുമ്പോൾ (വരി < f->location.start.വരി)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          പൂർണ്ണസംഖ്യ c = getc (in);
+          എങ്കിൽ (c == EOF)
+            നിർത്തുക;
+          എങ്കിൽ (c == '\n')
             {
-              ++line;
+              ++വരി;
               offset = 1;
             }
           putc (c, out);
@@ -145,13 +145,13 @@ fixits_run (void)
 
       /* Look for the right offset. */
       bool need_eol = false;
-      while (offset < f->location.start.byte)
+      ആകുമ്പോൾ (offset < f->location.start.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          പൂർണ്ണസംഖ്യ c = getc (in);
+          എങ്കിൽ (c == EOF)
+            നിർത്തുക;
           ++offset;
-          if (c == '\n')
+          എങ്കിൽ (c == '\n')
             /* The position we are asked for is beyond the actual
                line: pad with spaces, and remember we need a \n.  */
             need_eol = true;
@@ -162,49 +162,49 @@ fixits_run (void)
       fputs (f->fix, out);
 
       /* Maybe install the eol afterwards.  */
-      if (need_eol)
+      എങ്കിൽ (need_eol)
         putc ('\n', out);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      ആകുമ്പോൾ (വരി < f->location.end.വരി)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          പൂർണ്ണസംഖ്യ c = getc (in);
+          എങ്കിൽ (c == EOF)
+            നിർത്തുക;
+          എങ്കിൽ (c == '\n')
             {
-              ++line;
+              ++വരി;
               offset = 1;
             }
         }
-      while (offset < f->location.end.byte)
+      ആകുമ്പോൾ (offset < f->location.end.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          പൂർണ്ണസംഖ്യ c = getc (in);
+          എങ്കിൽ (c == EOF)
+            നിർത്തുക;
           ++offset;
         }
 
       /* If erasing the content of a full line, also remove the
          end-of-line. */
-      if (f->fix[0] == 0 && f->location.start.byte == 1)
+      എങ്കിൽ (f->fix[0] == 0 && f->location.start.byte == 1)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          else if (c == '\n')
+          പൂർണ്ണസംഖ്യ c = getc (in);
+          എങ്കിൽ (c == EOF)
+            നിർത്തുക;
+          അല്ലെങ്കിൽ എങ്കിൽ (c == '\n')
             {
-              ++line;
+              ++വരി;
               offset = 1;
             }
-          else
+          അല്ലെങ്കിൽ
             ungetc (c, in);
         }
     }
   /* Paste the rest of the file.  */
   {
-    int c;
-    while ((c = getc (in)) != EOF)
+    പൂർണ്ണസംഖ്യ c;
+    ആകുമ്പോൾ ((c = getc (in)) != EOF)
       putc (c, out);
   }
 
@@ -212,18 +212,18 @@ fixits_run (void)
   xfclose (out);
   xfclose (in);
   fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
-           program_name, quote_n (0, input), quote_n (1, backup));
-  if (backup != buf)
-    free (backup);
+           program_name, quote_n (0, നിവേശം), quote_n (1, backup));
+  എങ്കിൽ (backup != buf)
+    സ്വതന്ത്രം (backup);
 }
 
 
 /* Free the registered fixits.  */
-void fixits_free (void)
+ശൂന്യം fixits_free (ശൂന്യം)
 {
-  if (fixits)
+  എങ്കിൽ (fixits)
     {
       gl_list_free (fixits);
-      fixits = NULL;
+      fixits = ശൂന്യ;
     }
 }

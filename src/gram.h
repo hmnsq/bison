@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+ബാഹ്യ പൂർണ്ണസംഖ്യ nsyms;
+ബാഹ്യ പൂർണ്ണസംഖ്യ ntokens;
+ബാഹ്യ പൂർണ്ണസംഖ്യ nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
-# define ITEM_NUMBER_MAX INT_MAX
-extern item_number *ritem;
-extern int nritems;
+തരനിർവചനം പൂർണ്ണസംഖ്യ item_സംഖ്യ;
+# define ITEM_സംഖ്യ_MAX INT_MAX
+ബാഹ്യ item_സംഖ്യ *ritem;
+ബാഹ്യ പൂർണ്ണസംഖ്യ nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+തരനിർവചനം unsigned പൂർണ്ണസംഖ്യ item_index;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
-symbol_number_as_item_number (symbol_number sym)
+സ്ഥിതം വരിയിൽ item_സംഖ്യ
+ചിഹ്നം_സംഖ്യ_as_item_സംഖ്യ (ചിഹ്നം_സംഖ്യ sym)
 {
-  return sym;
+  തിരികെ sym;
 }
 
-static inline symbol_number
-item_number_as_symbol_number (item_number i)
+സ്ഥിതം വരിയിൽ ചിഹ്നം_സംഖ്യ
+item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (item_സംഖ്യ i)
 {
-  return i;
+  തിരികെ i;
 }
 
-static inline bool
-item_number_is_symbol_number (item_number i)
+സ്ഥിതം വരിയിൽ bool
+item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (item_സംഖ്യ i)
 {
-  return i >= 0;
+  തിരികെ i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
-# define RULE_NUMBER_MAX INT_MAX
+തരനിർവചനം പൂർണ്ണസംഖ്യ rule_സംഖ്യ;
+# define RULE_സംഖ്യ_MAX INT_MAX
 
-static inline item_number
-rule_number_as_item_number (rule_number r)
+സ്ഥിതം വരിയിൽ item_സംഖ്യ
+rule_സംഖ്യ_as_item_സംഖ്യ (rule_സംഖ്യ r)
 {
-  return -1 - r;
+  തിരികെ -1 - r;
 }
 
-static inline rule_number
-item_number_as_rule_number (item_number i)
+സ്ഥിതം വരിയിൽ rule_സംഖ്യ
+item_സംഖ്യ_as_rule_സംഖ്യ (item_സംഖ്യ i)
 {
-  return -1 - i;
+  തിരികെ -1 - i;
 }
 
-static inline bool
-item_number_is_rule_number (item_number i)
+സ്ഥിതം വരിയിൽ bool
+item_സംഖ്യ_is_rule_സംഖ്യ (item_സംഖ്യ i)
 {
-  return i < 0;
+  തിരികെ i < 0;
 }
 
 
@@ -176,24 +176,24 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+തരനിർവചനം ഘടന
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number code;
+  rule_സംഖ്യ code;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number number;
+  rule_സംഖ്യ സംഖ്യ;
 
   sym_content *lhs;
-  item_number *rhs;
+  item_സംഖ്യ *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  പൂർണ്ണസംഖ്യ dprec;
+  പൂർണ്ണസംഖ്യ merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,32 +205,32 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  പൂർണ്ണസംഖ്യ expected_sr_conflicts;
+  പൂർണ്ണസംഖ്യ expected_rr_conflicts;
 
-  const char *action;
+  സ്ഥിരം അക്ഷരം *action;
   location action_loc;
 } rule;
 
 /* The used rules (size NRULES).  */
-extern rule *rules;
-extern rule_number nrules;
+ബാഹ്യ rule *rules;
+ബാഹ്യ rule_സംഖ്യ nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
-item_rule (item_number const *item)
+സ്ഥിതം വരിയിൽ rule സ്ഥിരം *
+item_rule (item_സംഖ്യ സ്ഥിരം *item)
 {
-  item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  item_സംഖ്യ സ്ഥിരം *sp = item;
+  ആകുമ്പോൾ (!item_സംഖ്യ_is_rule_സംഖ്യ (*sp))
     ++sp;
-  rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  rule_സംഖ്യ r = item_സംഖ്യ_as_rule_സംഖ്യ (*sp);
+  തിരികെ &rules[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
    RITEM.  PREVIOUS_RULE is used to see if the lhs is common, in which
    case LHS is factored.  Passing NULL is fine.  */
-void item_print (item_number *item, rule const *previous_rule,
+ശൂന്യം item_print (item_സംഖ്യ *item, rule സ്ഥിരം *previous_rule,
                  FILE *out);
 
 /*--------.
@@ -238,93 +238,93 @@ void item_print (item_number *item, rule const *previous_rule,
 `--------*/
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter) (rule const *);
+തരനിർവചനം bool (*rule_filter) (rule സ്ഥിരം *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
-rule_is_initial (rule const *r)
+സ്ഥിതം വരിയിൽ bool
+rule_is_initial (rule സ്ഥിരം *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  തിരികെ r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
    is useful in the grammar.  */
-bool rule_useful_in_grammar_p (rule const *r);
+bool rule_useful_in_grammar_p (rule സ്ഥിരം *r);
 
 /* Whether the rule has a 'number' higher than NRULES.  That is, it is
    useless in the grammar.  */
-bool rule_useless_in_grammar_p (rule const *r);
+bool rule_useless_in_grammar_p (rule സ്ഥിരം *r);
 
 /* Whether the rule is not flagged as useful but is useful in the
    grammar.  In other words, it was discarded because of conflicts.  */
-bool rule_useless_in_parser_p (rule const *r);
+bool rule_useless_in_parser_p (rule സ്ഥിരം *r);
 
 /* Whether the rule has a single RHS, and no user action. */
-bool rule_useless_chain_p (rule const *r);
+bool rule_useless_chain_p (rule സ്ഥിരം *r);
 
 /* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
+ശൂന്യം rule_lhs_print (rule സ്ഥിരം *r, sym_content സ്ഥിരം *previous_lhs,
                      FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+ശൂന്യം rule_lhs_print_xml (rule സ്ഥിരം *r, FILE *out, പൂർണ്ണസംഖ്യ level);
 
 /* The length of the RHS.  */
-size_t rule_rhs_length (rule const *r);
+size_t rule_rhs_length (rule സ്ഥിരം *r);
 
 /* Print this rule's RHS on OUT.  */
-void rule_rhs_print (rule const *r, FILE *out);
+ശൂന്യം rule_rhs_print (rule സ്ഥിരം *r, FILE *out);
 
 /* Print this rule on OUT.  If a PREVIOUS_RULE was already displayed,
    avoid useless repetitions of their LHS. */
-void rule_print (rule const *r, rule const *prev_rule, FILE *out);
+ശൂന്യം rule_print (rule സ്ഥിരം *r, rule സ്ഥിരം *prev_rule, FILE *out);
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol **symbols;
+ബാഹ്യ ചിഹ്നം **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number *token_translations;
-extern int max_code;
+ബാഹ്യ ചിഹ്നം_സംഖ്യ *token_translations;
+ബാഹ്യ പൂർണ്ണസംഖ്യ max_code;
 
 
 
 /* Dump RITEM for traces. */
-void ritem_print (FILE *out);
+ശൂന്യം ritem_print (FILE *out);
 
 /* The size of the longest rule RHS.  */
-size_t ritem_longest_rhs (void);
+size_t ritem_longest_rhs (ശൂന്യം);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
+ശൂന്യം grammar_rules_partial_print (FILE *out, സ്ഥിരം അക്ഷരം *title,
                                   rule_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
-void grammar_rules_print (FILE *out);
+ശൂന്യം grammar_rules_print (FILE *out);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+ശൂന്യം grammar_rules_print_xml (FILE *out, പൂർണ്ണസംഖ്യ level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+ശൂന്യം grammar_dump (FILE *out, സ്ഥിരം അക്ഷരം *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+ശൂന്യം grammar_rules_useless_report (സ്ഥിരം അക്ഷരം *message);
 
 /* Free the packed grammar. */
-void grammar_free (void);
+ശൂന്യം grammar_free (ശൂന്യം);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+ബാഹ്യ പൂർണ്ണസംഖ്യ required_version;
 
 #endif /* !GRAM_H_ */

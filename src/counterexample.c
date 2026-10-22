@@ -17,40 +17,40 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#അന്തര്ഭാവ <config.h>
 
-#include "counterexample.h"
+#അന്തര്ഭാവ "counterexample.h"
 
-#include "system.h"
+#അന്തര്ഭാവ "system.h"
 
-#include <c-strtod.h>
-#include <errno.h>
-#include <gethrxtime.h>
-#include <gl_linked_list.h>
-#include <gl_rbtreehash_list.h>
-#include <hash.h>
-#include <mbswidth.h>
-#include <quote.h>
-#include <stdlib.h>
-#include <textstyle.h>
-#include <time.h>
+#അന്തര്ഭാവ <c-strtod.h>
+#അന്തര്ഭാവ <errno.h>
+#അന്തര്ഭാവ <gethrxtime.h>
+#അന്തര്ഭാവ <gl_linked_list.h>
+#അന്തര്ഭാവ <gl_rbtreehash_list.h>
+#അന്തര്ഭാവ <hash.h>
+#അന്തര്ഭാവ <mbswidth.h>
+#അന്തര്ഭാവ <quote.h>
+#അന്തര്ഭാവ <stdlib.h>
+#അന്തര്ഭാവ <textstyle.h>
+#അന്തര്ഭാവ <time.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "derivation.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lssi.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "parse-simulation.h"
+#അന്തര്ഭാവ "closure.h"
+#അന്തര്ഭാവ "complain.h"
+#അന്തര്ഭാവ "derivation.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "gram.h"
+#അന്തര്ഭാവ "lalr.h"
+#അന്തര്ഭാവ "lssi.h"
+#അന്തര്ഭാവ "muscle-tab.h"
+#അന്തര്ഭാവ "nullable.h"
+#അന്തര്ഭാവ "parse-simulation.h"
 
 
 #define TIME_LIMIT_ENFORCED true
 /** If set to false, only consider the states on the shortest
  *  lookahead-sensitive path when constructing a unifying counterexample. */
-#define EXTENDED_SEARCH false
+#define EXTENDED_തിരയൽ false
 
 /* costs for making various steps in a search */
 #define PRODUCTION_COST 50
@@ -64,21 +64,21 @@
 #define ASSURANCE_LIMIT 2.0
 
 /* The time limit before giving up looking for unifying counterexample. */
-static double time_limit = 5.0;
+സ്ഥിതം ഇരട്ട time_limit = 5.0;
 
 #define CUMULATIVE_TIME_LIMIT 120.0
 
 // This is the fastest way to get the tail node from the gl_list API.
-static gl_list_node_t
+സ്ഥിതം gl_list_കണ്ണി_t
 list_get_end (gl_list_t list)
 {
-  gl_list_node_t sentinel = gl_list_add_last (list, NULL);
-  gl_list_node_t res = gl_list_previous_node (list, sentinel);
-  gl_list_remove_node (list, sentinel);
-  return res;
+  gl_list_കണ്ണി_t sentinel = gl_list_add_last (list, ശൂന്യ);
+  gl_list_കണ്ണി_t res = gl_list_previous_കണ്ണി (list, sentinel);
+  gl_list_remove_കണ്ണി (list, sentinel);
+  തിരികെ res;
 }
 
-typedef struct
+തരനിർവചനം ഘടന
 {
   derivation *d1;
   derivation *d2;
@@ -87,85 +87,85 @@ typedef struct
   bool timeout;
 } counterexample;
 
-static counterexample *
+സ്ഥിതം counterexample *
 new_counterexample (derivation *d1, derivation *d2,
                     bool shift_reduce,
                     bool u, bool t)
 {
-  counterexample *res = xmalloc (sizeof *res);
+  counterexample *res = xmalloc (വലുപ്പം *res);
   res->shift_reduce = shift_reduce;
-  if (shift_reduce)
+  എങ്കിൽ (shift_reduce)
     {
       // Display the shift first.
       res->d1 = d2;
       res->d2 = d1;
     }
-  else
+  അല്ലെങ്കിൽ
     {
       res->d1 = d1;
       res->d2 = d2;
     }
   res->unifying = u;
   res->timeout = t;
-  return res;
+  തിരികെ res;
 }
 
-static void
+സ്ഥിതം ശൂന്യം
 free_counterexample (counterexample *cex)
 {
   derivation_free (cex->d1);
   derivation_free (cex->d2);
-  free (cex);
+  സ്വതന്ത്രം (cex);
 }
 
-static void
-counterexample_print (const counterexample *cex, FILE *out, const char *prefix)
+സ്ഥിതം ശൂന്യം
+counterexample_print (സ്ഥിരം counterexample *cex, FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
-  const bool flat = getenv ("YYFLAT");
-  const char *example1_label
+  സ്ഥിരം bool flat = getenv ("YYFLAT");
+  സ്ഥിരം അക്ഷരം *example1_label
     = cex->unifying ? _("Example") : _("First example");
-  const char *example2_label
+  സ്ഥിരം അക്ഷരം *example2_label
     = cex->unifying ? _("Example") : _("Second example");
-  const char *deriv1_label
+  സ്ഥിരം അക്ഷരം *deriv1_label
     = cex->shift_reduce ? _("Shift derivation") : _("First reduce derivation");
-  const char *deriv2_label
+  സ്ഥിരം അക്ഷരം *deriv2_label
     = cex->shift_reduce ? _("Reduce derivation") : _("Second reduce derivation");
-  const int width =
+  സ്ഥിരം പൂർണ്ണസംഖ്യ width =
     max_int (max_int (mbswidth (example1_label, 0), mbswidth (example2_label, 0)),
              max_int (mbswidth (deriv1_label, 0),   mbswidth (deriv2_label, 0)));
-  if (flat)
+  എങ്കിൽ (flat)
     fprintf (out, "  %s%s%*s ", prefix,
              example1_label, width - mbswidth (example1_label, 0), "");
-  else
+  അല്ലെങ്കിൽ
     fprintf (out, "  %s%s: ", prefix, example1_label);
   derivation_print_leaves (cex->d1, out);
-  if (flat)
+  എങ്കിൽ (flat)
     fprintf (out, "  %s%s%*s ", prefix,
              deriv1_label, width - mbswidth (deriv1_label, 0), "");
-  else
+  അല്ലെങ്കിൽ
     fprintf (out, "  %s%s", prefix, deriv1_label);
   derivation_print (cex->d1, out, prefix);
 
   // If we output to the terminal (via stderr) and we have color
   // support, display unifying examples a second time, as color allows
   // to see the differences.
-  if (!cex->unifying || is_styled (stderr))
+  എങ്കിൽ (!cex->unifying || is_styled (stderr))
     {
-      if (flat)
+      എങ്കിൽ (flat)
         fprintf (out, "  %s%s%*s ", prefix,
                  example2_label, width - mbswidth (example2_label, 0), "");
-      else
+      അല്ലെങ്കിൽ
         fprintf (out, "  %s%s: ", prefix, example2_label);
       derivation_print_leaves (cex->d2, out);
     }
-  if (flat)
+  എങ്കിൽ (flat)
     fprintf (out, "  %s%s%*s ", prefix,
              deriv2_label, width - mbswidth (deriv2_label, 0), "");
-  else
+  അല്ലെങ്കിൽ
     fprintf (out, "  %s%s", prefix, deriv2_label);
   derivation_print (cex->d2, out, prefix);
 
-  if (out != stderr)
+  എങ്കിൽ (out != stderr)
     putc ('\n', out);
 }
 
@@ -176,49 +176,49 @@ counterexample_print (const counterexample *cex, FILE *out, const char *prefix)
  */
 
 // Search node for BFS on state items
-struct si_bfs_node;
-typedef struct si_bfs_node
+ഘടന si_bfs_കണ്ണി;
+തരനിർവചനം ഘടന si_bfs_കണ്ണി
 {
-  state_item_number si;
-  struct si_bfs_node *parent;
-  int reference_count;
-} si_bfs_node;
+  state_item_സംഖ്യ si;
+  ഘടന si_bfs_കണ്ണി *parent;
+  പൂർണ്ണസംഖ്യ reference_എണ്ണം;
+} si_bfs_കണ്ണി;
 
-static si_bfs_node *
-si_bfs_new (state_item_number si, si_bfs_node *parent)
+സ്ഥിതം si_bfs_കണ്ണി *
+si_bfs_new (state_item_സംഖ്യ si, si_bfs_കണ്ണി *parent)
 {
-  si_bfs_node *res = xcalloc (1, sizeof *res);
+  si_bfs_കണ്ണി *res = xcalloc (1, വലുപ്പം *res);
   res->si = si;
   res->parent = parent;
-  res->reference_count = 1;
-  if (parent)
-    ++parent->reference_count;
-  return res;
+  res->reference_എണ്ണം = 1;
+  എങ്കിൽ (parent)
+    ++parent->reference_എണ്ണം;
+  തിരികെ res;
 }
 
-static bool
-si_bfs_contains (const si_bfs_node *n, state_item_number sin)
+സ്ഥിതം bool
+si_bfs_contains (സ്ഥിരം si_bfs_കണ്ണി *n, state_item_സംഖ്യ sin)
 {
-  for (const si_bfs_node *search = n; search != NULL; search = search->parent)
-    if (search->si == sin)
-      return true;
-  return false;
+  വേണ്ടി (സ്ഥിരം si_bfs_കണ്ണി *തിരയൽ = n; തിരയൽ != ശൂന്യ; തിരയൽ = തിരയൽ->parent)
+    എങ്കിൽ (തിരയൽ->si == sin)
+      തിരികെ true;
+  തിരികെ false;
 }
 
-static void
-si_bfs_free (si_bfs_node *n)
+സ്ഥിതം ശൂന്യം
+si_bfs_free (si_bfs_കണ്ണി *n)
 {
-  if (n == NULL)
-    return;
-  --n->reference_count;
-  if (n->reference_count == 0)
+  എങ്കിൽ (n == ശൂന്യ)
+    തിരികെ;
+  --n->reference_എണ്ണം;
+  എങ്കിൽ (n->reference_എണ്ണം == 0)
     {
       si_bfs_free (n->parent);
-      free (n);
+      സ്വതന്ത്രം (n);
     }
 }
 
-typedef gl_list_t si_bfs_node_list;
+തരനിർവചനം gl_list_t si_bfs_കണ്ണി_list;
 
 /**
  * start is a state_item such that conflict_sym is an element of FIRSTS of the
@@ -228,48 +228,48 @@ typedef gl_list_t si_bfs_node_list;
  *
  * this returns the derivation of the productions that lead to conflict_sym
  */
-static inline derivation_list
-expand_to_conflict (state_item_number start, symbol_number conflict_sym)
+സ്ഥിതം വരിയിൽ derivation_list
+expand_to_conflict (state_item_സംഖ്യ start, ചിഹ്നം_സംഖ്യ conflict_sym)
 {
-  si_bfs_node *init = si_bfs_new (start, NULL);
+  si_bfs_കണ്ണി *init = si_bfs_new (start, ശൂന്യ);
 
-  si_bfs_node_list queue
-    = gl_list_create (GL_LINKED_LIST, NULL, NULL,
+  si_bfs_കണ്ണി_list queue
+    = gl_list_create (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ,
                       (gl_listelement_dispose_fn) si_bfs_free,
-                      true, 1, (const void **) &init);
-  si_bfs_node *node = NULL;
+                      true, 1, (സ്ഥിരം ശൂന്യം **) &init);
+  si_bfs_കണ്ണി *കണ്ണി = ശൂന്യ;
   // breadth-first search for a path of productions to the conflict symbol
-  while (gl_list_size (queue) > 0)
+  ആകുമ്പോൾ (gl_list_size (queue) > 0)
     {
-      node = (si_bfs_node *) gl_list_get_at (queue, 0);
-      state_item *silast = &state_items[node->si];
-      symbol_number sym = item_number_as_symbol_number (*silast->item);
-      if (sym == conflict_sym)
-        break;
-      if (ISVAR (sym))
+      കണ്ണി = (si_bfs_കണ്ണി *) gl_list_get_at (queue, 0);
+      state_item *silast = &state_ഇനങ്ങൾ[കണ്ണി->si];
+      ചിഹ്നം_സംഖ്യ sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*silast->item);
+      എങ്കിൽ (sym == conflict_sym)
+        നിർത്തുക;
+      എങ്കിൽ (ISVAR (sym))
         {
           // add each production to the search
           bitset_iterator biter;
-          state_item_number sin;
+          state_item_സംഖ്യ sin;
           bitset sib = silast->prods;
           BITSET_FOR_EACH (biter, sib, sin, 0)
             {
               // ignore productions already in the path
-              if (si_bfs_contains (node, sin))
-                continue;
-              si_bfs_node *next = si_bfs_new (sin, node);
+              എങ്കിൽ (si_bfs_contains (കണ്ണി, sin))
+                തുടരുക;
+              si_bfs_കണ്ണി *next = si_bfs_new (sin, കണ്ണി);
               gl_list_add_last (queue, next);
             }
           // for nullable nonterminals, add its goto to the search
-          if (nullable[sym - ntokens])
+          എങ്കിൽ (nullable[sym - ntokens])
             {
-              si_bfs_node *next = si_bfs_new (silast->trans, node);
+              si_bfs_കണ്ണി *next = si_bfs_new (silast->trans, കണ്ണി);
               gl_list_add_last (queue, next);
             }
         }
       gl_list_remove_at (queue, 0);
     }
-  if (gl_list_size (queue) == 0)
+  എങ്കിൽ (gl_list_size (queue) == 0)
     {
       gl_list_free (queue);
       fputs ("Error expanding derivation\n", stderr);
@@ -282,25 +282,25 @@ expand_to_conflict (state_item_number start, symbol_number conflict_sym)
   // iterate backwards through the generated path to create a derivation
   // of the conflict symbol containing derivations of each production step.
 
-  for (si_bfs_node *n = node; n != NULL; n = n->parent)
+  വേണ്ടി (si_bfs_കണ്ണി *n = കണ്ണി; n != ശൂന്യ; n = n->parent)
     {
-      state_item *si = &state_items[n->si];
-      item_number *pos = si->item;
-      if (SI_PRODUCTION (si))
+      state_item *si = &state_ഇനങ്ങൾ[n->si];
+      item_സംഖ്യ *pos = si->item;
+      എങ്കിൽ (SI_PRODUCTION (si))
         {
-          item_number *i = NULL;
-          for (i = pos + 1; !item_number_is_rule_number (*i); ++i)
+          item_സംഖ്യ *i = ശൂന്യ;
+          വേണ്ടി (i = pos + 1; !item_സംഖ്യ_is_rule_സംഖ്യ (*i); ++i)
             derivation_list_append (result, derivation_new_leaf (*i));
-          symbol_number lhs =
-            rules[item_number_as_rule_number (*i)].lhs->number;
+          ചിഹ്നം_സംഖ്യ lhs =
+            rules[item_സംഖ്യ_as_rule_സംഖ്യ (*i)].lhs->സംഖ്യ;
           derivation *deriv = derivation_new (lhs, result,
                                               state_item_rule (si));
           result = derivation_list_new ();
           derivation_list_append (result, deriv);
         }
-      else
+      അല്ലെങ്കിൽ
         {
-          symbol_number sym = item_number_as_symbol_number (*(pos - 1));
+          ചിഹ്നം_സംഖ്യ sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*(pos - 1));
           derivation *deriv = derivation_new_leaf (sym);
           derivation_list_prepend (result, deriv);
         }
@@ -308,7 +308,7 @@ expand_to_conflict (state_item_number start, symbol_number conflict_sym)
   gl_list_free (queue);
   derivation_free ((derivation*)gl_list_get_at (result, 0));
   gl_list_remove_at (result, 0);
-  return result;
+  തിരികെ result;
 }
 
 /**
@@ -319,60 +319,60 @@ expand_to_conflict (state_item_number start, symbol_number conflict_sym)
  * So to complete the derivation of Stmt, we need an output like:
  * Stmt ::= [lval ::= [VAR] '=' e ::=[ e::=['0'] '+' • e ] ';' ]
  */
-static derivation *
-complete_diverging_example (symbol_number conflict_sym,
+സ്ഥിതം derivation *
+complete_diverging_example (ചിഹ്നം_സംഖ്യ conflict_sym,
                             state_item_list path, derivation_list derivs)
 {
   // The idea is to transfer each pending symbol on the productions
   // associated with the given StateItems to the resulting derivation.
   derivation_list result = derivation_list_new ();
   bool lookahead_required = false;
-  if (!derivs)
+  എങ്കിൽ (!derivs)
     {
       derivs = derivation_list_new ();
       gl_list_add_last (result, derivation_dot ());
       lookahead_required = true;
     }
 
-  gl_list_node_t deriv = list_get_end (derivs);
+  gl_list_കണ്ണി_t deriv = list_get_end (derivs);
 
   // We go backwards through the path to create the derivation tree bottom-up.
   // Effectively this loops through each production once, and generates a
   // derivation of the left hand side by appending all of the rhs symbols.
   // this becomes the derivation of the nonterminal after the dot in the
   // next production, and all of the other symbols of the rule are added as normal.
-  for (gl_list_node_t state_node = list_get_end (path);
-       state_node != NULL;
-       state_node = gl_list_previous_node (path, state_node))
+  വേണ്ടി (gl_list_കണ്ണി_t state_കണ്ണി = list_get_end (path);
+       state_കണ്ണി != ശൂന്യ;
+       state_കണ്ണി = gl_list_previous_കണ്ണി (path, state_കണ്ണി))
     {
-      state_item *si = (state_item *) gl_list_node_value (path, state_node);
-      item_number *item = si->item;
-      item_number pos = *item;
+      state_item *si = (state_item *) gl_list_കണ്ണി_മൂല്യം (path, state_കണ്ണി);
+      item_സംഖ്യ *item = si->item;
+      item_സംഖ്യ pos = *item;
       // symbols after dot
-      if (gl_list_size (result) == 1 && !item_number_is_rule_number (pos)
+      എങ്കിൽ (gl_list_size (result) == 1 && !item_സംഖ്യ_is_rule_സംഖ്യ (pos)
           && gl_list_get_at (result, 0) == derivation_dot ())
         {
           derivation_list_append (result,
-            derivation_new_leaf (item_number_as_symbol_number (pos)));
+            derivation_new_leaf (item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (pos)));
           lookahead_required = false;
         }
-      item_number *i = item;
+      item_സംഖ്യ *i = item;
       // go through each symbol after the dot in the current rule, and
       // add each symbol to its derivation.
-      for (state_item_number nsi = si - state_items;
-           !item_number_is_rule_number (*i);
-           ++i, nsi = state_items[nsi].trans)
+      വേണ്ടി (state_item_സംഖ്യ nsi = si - state_ഇനങ്ങൾ;
+           !item_സംഖ്യ_is_rule_സംഖ്യ (*i);
+           ++i, nsi = state_ഇനങ്ങൾ[nsi].trans)
         {
           // if the item is a reduction, we could skip to the wrong rule
           // by starting at i + 1, so this continue is necessary
-          if (i == item)
-            continue;
-          symbol_number sym = item_number_as_symbol_number (*i);
-          if (!lookahead_required || sym == conflict_sym)
+          എങ്കിൽ (i == item)
+            തുടരുക;
+          ചിഹ്നം_സംഖ്യ sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*i);
+          എങ്കിൽ (!lookahead_required || sym == conflict_sym)
             {
               derivation_list_append (result, derivation_new_leaf (sym));
               lookahead_required = false;
-              continue;
+              തുടരുക;
             }
           // Since PATH is a path to the conflict state-item,
           // for a reduce conflict item, we will want to have a derivation
@@ -384,24 +384,24 @@ complete_diverging_example (symbol_number conflict_sym,
           // the symbol after the dot should be a nonterminal,
           // and we can look through successive nullable nonterminals
           // for one with the conflict symbol in its first set.
-          if (bitset_test (FIRSTS (sym), conflict_sym))
+          എങ്കിൽ (bitset_test (FIRSTS (sym), conflict_sym))
             {
               lookahead_required = false;
               derivation_list next_derivs =
                 expand_to_conflict (nsi, conflict_sym);
-              derivation *d = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (next_derivs);
+              derivation *d = ശൂന്യ;
+              വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (next_derivs);
                    derivation_list_next (&it, &d);)
                 derivation_list_append (result, d);
               i += gl_list_size (next_derivs) - 1;
               derivation_list_free (next_derivs);
             }
-          else if (nullable[sym - ntokens])
+          അല്ലെങ്കിൽ എങ്കിൽ (nullable[sym - ntokens])
             {
               derivation *d = derivation_new_leaf (sym);
               derivation_list_append (result, d);
             }
-          else
+          അല്ലെങ്കിൽ
             {
               // We found a path to the conflict item, and despite it
               // having the conflict symbol in its lookahead, no example
@@ -411,24 +411,24 @@ complete_diverging_example (symbol_number conflict_sym,
               lookahead_required = false;
             }
         }
-      const rule *r = &rules[item_number_as_rule_number (*i)];
+      സ്ഥിരം rule *r = &rules[item_സംഖ്യ_as_rule_സംഖ്യ (*i)];
       // add derivations for symbols before dot
-      for (i = item - 1; !item_number_is_rule_number (*i) && i >= ritem; i--)
+      വേണ്ടി (i = item - 1; !item_സംഖ്യ_is_rule_സംഖ്യ (*i) && i >= ritem; i--)
         {
-          gl_list_node_t p = gl_list_previous_node (path, state_node);
-          if (p)
-            state_node = p;
-          if (deriv)
+          gl_list_കണ്ണി_t p = gl_list_previous_കണ്ണി (path, state_കണ്ണി);
+          എങ്കിൽ (p)
+            state_കണ്ണി = p;
+          എങ്കിൽ (deriv)
             {
-              const void *tmp_deriv = gl_list_node_value (derivs, deriv);
-              deriv = gl_list_previous_node (derivs, deriv);
+              സ്ഥിരം ശൂന്യം *tmp_deriv = gl_list_കണ്ണി_മൂല്യം (derivs, deriv);
+              deriv = gl_list_previous_കണ്ണി (derivs, deriv);
               derivation_list_prepend (result, (derivation*)tmp_deriv);
             }
-          else
+          അല്ലെങ്കിൽ
             derivation_list_prepend (result, derivation_new_leaf (*i));
         }
       // completing the derivation
-      derivation *new_deriv = derivation_new (r->lhs->number, result, r);
+      derivation *new_deriv = derivation_new (r->lhs->സംഖ്യ, result, r);
       result = derivation_list_new ();
       derivation_list_append (result, new_deriv);
     }
@@ -436,100 +436,100 @@ complete_diverging_example (symbol_number conflict_sym,
   derivation_retain (res);
   derivation_list_free (result);
   derivation_list_free (derivs);
-  return res;
+  തിരികെ res;
 }
 
 /* Iterate backwards through the shifts of the path in the reduce
    conflict, and find a path of shifts from the shift conflict that
    goes through the same states. */
-static state_item_list
+സ്ഥിതം state_item_list
 nonunifying_shift_path (state_item_list reduce_path, state_item *shift_conflict)
 {
-  gl_list_node_t tmp = gl_list_add_last (reduce_path, NULL);
-  gl_list_node_t next_node = gl_list_previous_node (reduce_path, tmp);
-  gl_list_node_t node = gl_list_previous_node (reduce_path, next_node);
-  gl_list_remove_node (reduce_path, tmp);
+  gl_list_കണ്ണി_t tmp = gl_list_add_last (reduce_path, ശൂന്യ);
+  gl_list_കണ്ണി_t next_കണ്ണി = gl_list_previous_കണ്ണി (reduce_path, tmp);
+  gl_list_കണ്ണി_t കണ്ണി = gl_list_previous_കണ്ണി (reduce_path, next_കണ്ണി);
+  gl_list_remove_കണ്ണി (reduce_path, tmp);
   state_item *si = shift_conflict;
   state_item_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+    gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, true);
   // FIXME: bool paths_merged;
-  for (; node != NULL; next_node = node,
-       node = gl_list_previous_node (reduce_path, node))
+  വേണ്ടി (; കണ്ണി != ശൂന്യ; next_കണ്ണി = കണ്ണി,
+       കണ്ണി = gl_list_previous_കണ്ണി (reduce_path, കണ്ണി))
     {
       state_item *refsi =
-        (state_item *) gl_list_node_value (reduce_path, node);
+        (state_item *) gl_list_കണ്ണി_മൂല്യം (reduce_path, കണ്ണി);
       state_item *nextrefsi =
-        (state_item *) gl_list_node_value (reduce_path, next_node);
-      if (nextrefsi == si)
+        (state_item *) gl_list_കണ്ണി_മൂല്യം (reduce_path, next_കണ്ണി);
+      എങ്കിൽ (nextrefsi == si)
         {
           gl_list_add_first (result, refsi);
           si = refsi;
-          continue;
+          തുടരുക;
         }
       // skip reduction items
-      if (nextrefsi->item != refsi->item + 1 && refsi->item != ritem)
-        continue;
+      എങ്കിൽ (nextrefsi->item != refsi->item + 1 && refsi->item != ritem)
+        തുടരുക;
 
       // bfs to find a shift to the right state
-      si_bfs_node *init = si_bfs_new (si - state_items, NULL);
-      si_bfs_node_list queue
-        = gl_list_create (GL_LINKED_LIST, NULL, NULL,
+      si_bfs_കണ്ണി *init = si_bfs_new (si - state_ഇനങ്ങൾ, ശൂന്യ);
+      si_bfs_കണ്ണി_list queue
+        = gl_list_create (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ,
                           (gl_listelement_dispose_fn) si_bfs_free,
-                          true, 1, (const void **) &init);
-      si_bfs_node *sis = NULL;
-      state_item *prevsi = NULL;
-      while (gl_list_size (queue) > 0)
+                          true, 1, (സ്ഥിരം ശൂന്യം **) &init);
+      si_bfs_കണ്ണി *sis = ശൂന്യ;
+      state_item *prevsi = ശൂന്യ;
+      ആകുമ്പോൾ (gl_list_size (queue) > 0)
         {
-          sis = (si_bfs_node *) gl_list_get_at (queue, 0);
+          sis = (si_bfs_കണ്ണി *) gl_list_get_at (queue, 0);
           // if we end up in the start state, the shift couldn't be found.
-          if (sis->si == 0)
-            break;
+          എങ്കിൽ (sis->si == 0)
+            നിർത്തുക;
 
-          state_item *search_si = &state_items[sis->si];
+          state_item *തിരയൽ_si = &state_ഇനങ്ങൾ[sis->si];
           // if the current state-item is a production item,
           // its reverse production items get added to the queue.
           // Otherwise, look for a reverse transition to the target state.
-          bitset rsi = search_si->revs;
+          bitset rsi = തിരയൽ_si->revs;
           bitset_iterator biter;
-          state_item_number sin;
+          state_item_സംഖ്യ sin;
           BITSET_FOR_EACH (biter, rsi, sin, 0)
             {
-              prevsi = &state_items[sin];
-              if (SI_TRANSITION (search_si))
+              prevsi = &state_ഇനങ്ങൾ[sin];
+              എങ്കിൽ (SI_TRANSITION (തിരയൽ_si))
                 {
-                  if (prevsi->state == refsi->state)
-                    goto search_end;
+                  എങ്കിൽ (prevsi->state == refsi->state)
+                    പോകുക തിരയൽ_end;
                 }
-              else if (!si_bfs_contains (sis, sin))
+              അല്ലെങ്കിൽ എങ്കിൽ (!si_bfs_contains (sis, sin))
                 {
-                  si_bfs_node *prevsis = si_bfs_new (sin, sis);
+                  si_bfs_കണ്ണി *prevsis = si_bfs_new (sin, sis);
                   gl_list_add_last (queue, prevsis);
                 }
             }
           gl_list_remove_at (queue, 0);
         }
-    search_end:
+    തിരയൽ_end:
       // prepend path to shift we found
-      if (sis)
+      എങ്കിൽ (sis)
         {
-          gl_list_node_t ln = gl_list_add_first (result, &state_items[sis->si]);
-          for (si_bfs_node *n = sis->parent; n; n = n->parent)
-            ln = gl_list_add_after (result, ln, &state_items[n->si]);
+          gl_list_കണ്ണി_t ln = gl_list_add_first (result, &state_ഇനങ്ങൾ[sis->si]);
+          വേണ്ടി (si_bfs_കണ്ണി *n = sis->parent; n; n = n->parent)
+            ln = gl_list_add_after (result, ln, &state_ഇനങ്ങൾ[n->si]);
 
         }
       si = prevsi;
       gl_list_free (queue);
     }
-  if (trace_flag & trace_cex)
+  എങ്കിൽ (trace_flag & trace_cex)
     {
       fputs ("SHIFT ITEM PATH:\n", stderr);
-      state_item *sip = NULL;
-      for (gl_list_iterator_t it = gl_list_iterator (result);
+      state_item *sip = ശൂന്യ;
+      വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (result);
            state_item_list_next (&it, &sip);
            )
         state_item_print (sip, stderr, "");
     }
-  return result;
+  തിരികെ result;
 }
 
 
@@ -537,20 +537,20 @@ nonunifying_shift_path (state_item_list reduce_path, state_item *shift_conflict)
  * Construct a nonunifying counterexample from the shortest
  * lookahead-sensitive path.
  */
-static counterexample *
+സ്ഥിതം counterexample *
 example_from_path (bool shift_reduce,
-                   state_item_number itm2,
-                   state_item_list shortest_path, symbol_number next_sym)
+                   state_item_സംഖ്യ itm2,
+                   state_item_list shortest_path, ചിഹ്നം_സംഖ്യ next_sym)
 {
   derivation *deriv1 =
-    complete_diverging_example (next_sym, shortest_path, NULL);
+    complete_diverging_example (next_sym, shortest_path, ശൂന്യ);
   state_item_list path_2
     = shift_reduce
-    ? nonunifying_shift_path (shortest_path, &state_items [itm2])
+    ? nonunifying_shift_path (shortest_path, &state_ഇനങ്ങൾ [itm2])
     : shortest_path_from_start (itm2, next_sym);
-  derivation *deriv2 = complete_diverging_example (next_sym, path_2, NULL);
+  derivation *deriv2 = complete_diverging_example (next_sym, path_2, ശൂന്യ);
   gl_list_free (path_2);
-  return new_counterexample (deriv1, deriv2, shift_reduce, false, true);
+  തിരികെ new_counterexample (deriv1, deriv2, shift_reduce, false, true);
 }
 
 /*
@@ -563,65 +563,65 @@ example_from_path (bool shift_reduce,
  * one starting at each conflict. Complexity is a metric
  * which sums different parser actions with varying weights.
  */
-typedef struct
+തരനിർവചനം ഘടന
 {
   parse_state *states[2];
-  int complexity;
-} search_state;
+  പൂർണ്ണസംഖ്യ complexity;
+} തിരയൽ_state;
 
-static search_state *
-initial_search_state (state_item *conflict1, state_item *conflict2)
+സ്ഥിതം തിരയൽ_state *
+initial_തിരയൽ_state (state_item *conflict1, state_item *conflict2)
 {
-  search_state *res = xmalloc (sizeof *res);
+  തിരയൽ_state *res = xmalloc (വലുപ്പം *res);
   res->states[0] = new_parse_state (conflict1);
   res->states[1] = new_parse_state (conflict2);
   parse_state_retain (res->states[0]);
   parse_state_retain (res->states[1]);
   res->complexity = 0;
-  return res;
+  തിരികെ res;
 }
 
-static search_state *
-new_search_state (parse_state *ps1, parse_state *ps2, int complexity)
+സ്ഥിതം തിരയൽ_state *
+new_തിരയൽ_state (parse_state *ps1, parse_state *ps2, പൂർണ്ണസംഖ്യ complexity)
 {
-  search_state *res = xmalloc (sizeof *res);
+  തിരയൽ_state *res = xmalloc (വലുപ്പം *res);
   res->states[0] = ps1;
   res->states[1] = ps2;
   parse_state_retain (res->states[0]);
   parse_state_retain (res->states[1]);
   res->complexity = complexity;
-  return res;
+  തിരികെ res;
 }
 
-static search_state *
-copy_search_state (search_state *parent)
+സ്ഥിതം തിരയൽ_state *
+copy_തിരയൽ_state (തിരയൽ_state *parent)
 {
-  search_state *res = xmalloc (sizeof *res);
+  തിരയൽ_state *res = xmalloc (വലുപ്പം *res);
   *res = *parent;
   parse_state_retain (res->states[0]);
   parse_state_retain (res->states[1]);
-  return res;
+  തിരികെ res;
 }
 
-static void
-search_state_free_children (search_state *ss)
+സ്ഥിതം ശൂന്യം
+തിരയൽ_state_free_children (തിരയൽ_state *ss)
 {
   free_parse_state (ss->states[0]);
   free_parse_state (ss->states[1]);
 }
 
-static void
-search_state_free (search_state *ss)
+സ്ഥിതം ശൂന്യം
+തിരയൽ_state_free (തിരയൽ_state *ss)
 {
-  if (ss == NULL)
-    return;
-  search_state_free_children (ss);
-  free (ss);
+  എങ്കിൽ (ss == ശൂന്യ)
+    തിരികെ;
+  തിരയൽ_state_free_children (ss);
+  സ്വതന്ത്രം (ss);
 }
 
 /* For debugging traces.  */
-static void
-search_state_print (search_state *ss)
+സ്ഥിതം ശൂന്യം
+തിരയൽ_state_print (തിരയൽ_state *ss)
 {
   fputs ("CONFLICT 1 ", stderr);
   print_parse_state (ss->states[0]);
@@ -630,26 +630,26 @@ search_state_print (search_state *ss)
   putc ('\n', stderr);
 }
 
-typedef gl_list_t search_state_list;
+തരനിർവചനം gl_list_t തിരയൽ_state_list;
 
-static inline bool
-search_state_list_next (gl_list_iterator_t *it, search_state **ss)
+സ്ഥിതം വരിയിൽ bool
+തിരയൽ_state_list_next (gl_list_iterator_t *it, തിരയൽ_state **ss)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
-    *ss = (search_state*) p;
-  else
+  സ്ഥിരം ശൂന്യം *p = ശൂന്യ;
+  bool res = gl_list_iterator_next (it, &p, ശൂന്യ);
+  എങ്കിൽ (res)
+    *ss = (തിരയൽ_state*) p;
+  അല്ലെങ്കിൽ
     gl_list_iterator_free (it);
-  return res;
+  തിരികെ res;
 }
 
 /*
  * When a search state is copied, this is used to
  * directly set one of the parse states
  */
-static inline void
-ss_set_parse_state (search_state *ss, int idx, parse_state *ps)
+സ്ഥിതം വരിയിൽ ശൂന്യം
+ss_set_parse_state (തിരയൽ_state *ss, പൂർണ്ണസംഖ്യ idx, parse_state *ps)
 {
   free_parse_state (ss->states[idx]);
   ss->states[idx] = ps;
@@ -661,13 +661,13 @@ ss_set_parse_state (search_state *ss, int idx, parse_state *ps)
  * which has its parse states unified at the beginning
  * but not the end of the example.
  */
-static counterexample *
-complete_diverging_examples (search_state *ss,
-                             symbol_number next_sym,
+സ്ഥിതം counterexample *
+complete_diverging_examples (തിരയൽ_state *ss,
+                             ചിഹ്നം_സംഖ്യ next_sym,
                              bool shift_reduce)
 {
   derivation *new_derivs[2];
-  for (int i = 0; i < 2; ++i)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < 2; ++i)
     {
       state_item_list sitems;
       derivation_list derivs;
@@ -675,7 +675,7 @@ complete_diverging_examples (search_state *ss,
       new_derivs[i] = complete_diverging_example (next_sym, sitems, derivs);
       gl_list_free (sitems);
     }
-  return new_counterexample (new_derivs[0], new_derivs[1],
+  തിരികെ new_counterexample (new_derivs[0], new_derivs[1],
                              shift_reduce, false, true);
 }
 
@@ -684,68 +684,68 @@ complete_diverging_examples (search_state *ss,
  * share the same complexity. This is so the priority
  * queue takes less overhead.
  */
-typedef struct
+തരനിർവചനം ഘടന
 {
-  search_state_list states;
-  int complexity;
-} search_state_bundle;
+  തിരയൽ_state_list states;
+  പൂർണ്ണസംഖ്യ complexity;
+} തിരയൽ_state_bundle;
 
-static void
-ssb_free (search_state_bundle *ssb)
+സ്ഥിതം ശൂന്യം
+ssb_free (തിരയൽ_state_bundle *ssb)
 {
   gl_list_free (ssb->states);
-  free (ssb);
+  സ്വതന്ത്രം (ssb);
 }
 
-static size_t
-ssb_hasher (search_state_bundle *ssb)
+സ്ഥിതം size_t
+ssb_hasher (തിരയൽ_state_bundle *ssb)
 {
-  return ssb->complexity;
+  തിരികെ ssb->complexity;
 }
 
-static int
-ssb_comp (const search_state_bundle *s1, const search_state_bundle *s2)
+സ്ഥിതം പൂർണ്ണസംഖ്യ
+ssb_comp (സ്ഥിരം തിരയൽ_state_bundle *s1, സ്ഥിരം തിരയൽ_state_bundle *s2)
 {
-  return s1->complexity - s2->complexity;
+  തിരികെ s1->complexity - s2->complexity;
 }
 
-static bool
-ssb_equals (const search_state_bundle *s1, const search_state_bundle *s2)
+സ്ഥിതം bool
+ssb_equals (സ്ഥിരം തിരയൽ_state_bundle *s1, സ്ഥിരം തിരയൽ_state_bundle *s2)
 {
-  return s1->complexity == s2->complexity;
+  തിരികെ s1->complexity == s2->complexity;
 }
 
-typedef gl_list_t ssb_list;
+തരനിർവചനം gl_list_t ssb_list;
 
-static size_t
-visited_hasher (const search_state *ss, size_t max)
+സ്ഥിതം size_t
+visited_hasher (സ്ഥിരം തിരയൽ_state *ss, size_t max)
 {
-  return (parse_state_hasher (ss->states[0], max)
+  തിരികെ (parse_state_hasher (ss->states[0], max)
           + parse_state_hasher (ss->states[1], max)) % max;
 }
 
-static bool
-visited_comparator (const search_state *ss1, const search_state *ss2)
+സ്ഥിതം bool
+visited_comparator (സ്ഥിരം തിരയൽ_state *ss1, സ്ഥിരം തിരയൽ_state *ss2)
 {
-  return parse_state_comparator (ss1->states[0], ss2->states[0])
+  തിരികെ parse_state_comparator (ss1->states[0], ss2->states[0])
     && parse_state_comparator (ss1->states[1], ss2->states[1]);
 }
 
 /* Priority queue for search states with minimal complexity. */
-static ssb_list ssb_queue;
-static Hash_table *visited;
+സ്ഥിതം ssb_list ssb_queue;
+സ്ഥിതം Hash_table *visited;
 /* The set of parser states on the shortest lookahead-sensitive path. */
-static bitset scp_set = NULL;
+സ്ഥിതം bitset scp_set = ശൂന്യ;
 /* The set of parser states used for the conflict reduction rule. */
-static bitset rpp_set = NULL;
+സ്ഥിതം bitset rpp_set = ശൂന്യ;
 
-static void
-ssb_append (search_state *ss)
+സ്ഥിതം ശൂന്യം
+ssb_append (തിരയൽ_state *ss)
 {
-  if (hash_lookup (visited, ss))
+  എങ്കിൽ (hash_lookup (visited, ss))
     {
-      search_state_free (ss);
-      return;
+      തിരയൽ_state_free (ss);
+      തിരികെ;
     }
   hash_xinsert (visited, ss);
   // if states are only referenced by the visited set,
@@ -755,21 +755,21 @@ ssb_append (search_state *ss)
   parse_state_free_contents_early (ss->states[1]);
   parse_state_retain (ss->states[0]);
   parse_state_retain (ss->states[1]);
-  search_state_bundle *ssb = xmalloc (sizeof *ssb);
+  തിരയൽ_state_bundle *ssb = xmalloc (വലുപ്പം *ssb);
   ssb->complexity = ss->complexity;
-  gl_list_node_t n = gl_list_search (ssb_queue, ssb);
-  if (!n)
+  gl_list_കണ്ണി_t n = gl_list_തിരയൽ (ssb_queue, ssb);
+  എങ്കിൽ (!n)
     {
       ssb->states =
-        gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
-                              (gl_listelement_dispose_fn)search_state_free_children,
+        gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ,
+                              (gl_listelement_dispose_fn)തിരയൽ_state_free_children,
                               true);
       gl_sortedlist_add (ssb_queue, (gl_listelement_compar_fn) ssb_comp, ssb);
     }
-  else
+  അല്ലെങ്കിൽ
     {
-      free (ssb);
-      ssb = (search_state_bundle *) gl_list_node_value (ssb_queue, n);
+      സ്വതന്ത്രം (ssb);
+      ssb = (തിരയൽ_state_bundle *) gl_list_കണ്ണി_മൂല്യം (ssb_queue, n);
     }
   gl_list_add_last (ssb->states, ss);
 }
@@ -778,21 +778,21 @@ ssb_append (search_state *ss)
  * The following functions perform various actions on parse states
  * and assign complexities to the newly generated search states.
  */
-static void
-production_step (search_state *ss, int parser_state)
+സ്ഥിതം ശൂന്യം
+production_step (തിരയൽ_state *ss, പൂർണ്ണസംഖ്യ parser_state)
 {
-  const state_item *other_si = parse_state_tail (ss->states[1 - parser_state]);
-  symbol_number other_sym = item_number_as_symbol_number (*other_si->item);
+  സ്ഥിരം state_item *other_si = parse_state_tail (ss->states[1 - parser_state]);
+  ചിഹ്നം_സംഖ്യ other_sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*other_si->item);
   parse_state_list prods =
     simulate_production (ss->states[parser_state], other_sym);
-  int complexity = ss->complexity + PRODUCTION_COST;
+  പൂർണ്ണസംഖ്യ complexity = ss->complexity + PRODUCTION_COST;
 
-  parse_state *ps = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (prods);
+  parse_state *ps = ശൂന്യ;
+  വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (prods);
        parse_state_list_next (&it, &ps);
        )
     {
-      search_state *copy = copy_search_state (ss);
+      തിരയൽ_state *copy = copy_തിരയൽ_state (ss);
       ss_set_parse_state (copy, parser_state, ps);
       copy->complexity = complexity;
       ssb_append (copy);
@@ -800,58 +800,58 @@ production_step (search_state *ss, int parser_state)
   gl_list_free (prods);
 }
 
-static inline int
-reduction_cost (const parse_state *ps)
+സ്ഥിതം വരിയിൽ പൂർണ്ണസംഖ്യ
+reduction_cost (സ്ഥിരം parse_state *ps)
 {
-  int shifts;
-  int productions;
+  പൂർണ്ണസംഖ്യ shifts;
+  പൂർണ്ണസംഖ്യ productions;
   parse_state_completed_steps (ps, &shifts, &productions);
-  return SHIFT_COST * shifts + PRODUCTION_COST * productions;
+  തിരികെ SHIFT_COST * shifts + PRODUCTION_COST * productions;
 }
 
-static search_state_list
-reduction_step (search_state *ss, const item_number *conflict_item,
-                int parser_state, int rule_len)
+സ്ഥിതം തിരയൽ_state_list
+reduction_step (തിരയൽ_state *ss, സ്ഥിരം item_സംഖ്യ *conflict_item,
+                പൂർണ്ണസംഖ്യ parser_state, പൂർണ്ണസംഖ്യ rule_len)
 {
-  (void) conflict_item; // FIXME: Unused
-  search_state_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, 1);
+  (ശൂന്യം) conflict_item; // FIXME: Unused
+  തിരയൽ_state_list result =
+    gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, 1);
 
   parse_state *ps = ss->states[parser_state];
-  const state_item *si = parse_state_tail (ps);
-  bitset symbol_set = si->lookahead;
+  സ്ഥിരം state_item *si = parse_state_tail (ps);
+  bitset ചിഹ്നം_set = si->lookahead;
   parse_state *other = ss->states[1 - parser_state];
-  const state_item *other_si = parse_state_tail (other);
+  സ്ഥിരം state_item *other_si = parse_state_tail (other);
   // if the other state can transition on a symbol,
   // the reduction needs to have that symbol in its lookahead
-  if (item_number_is_symbol_number (*other_si->item))
+  എങ്കിൽ (item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (*other_si->item))
     {
-      symbol_number other_sym =
-        item_number_as_symbol_number (*other_si->item);
-      if (!intersect_symbol (other_sym, symbol_set))
-        return result;
-      symbol_set = bitset_create (nsyms, BITSET_FIXED);
-      bitset_set (symbol_set, other_sym);
+      ചിഹ്നം_സംഖ്യ other_sym =
+        item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*other_si->item);
+      എങ്കിൽ (!intersect_ചിഹ്നം (other_sym, ചിഹ്നം_set))
+        തിരികെ result;
+      ചിഹ്നം_set = bitset_create (nsyms, BITSET_FIXED);
+      bitset_set (ചിഹ്നം_set, other_sym);
     }
 
   // FIXME: search_state *new_root = copy_search_state (ss);
   parse_state_list reduced =
-    simulate_reduction (ps, rule_len, symbol_set);
-  parse_state *reduced_ps = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (reduced);
+    simulate_reduction (ps, rule_len, ചിഹ്നം_set);
+  parse_state *reduced_ps = ശൂന്യ;
+  വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (reduced);
        parse_state_list_next (&it, &reduced_ps);
        )
     {
-      search_state *copy = copy_search_state (ss);
+      തിരയൽ_state *copy = copy_തിരയൽ_state (ss);
       ss_set_parse_state (copy, parser_state, reduced_ps);
-      int r_cost = reduction_cost (reduced_ps);
+      പൂർണ്ണസംഖ്യ r_cost = reduction_cost (reduced_ps);
       copy->complexity += r_cost + PRODUCTION_COST + 2 * SHIFT_COST;
       gl_list_add_last (result, copy);
     }
   gl_list_free (reduced);
-  if (symbol_set != si->lookahead)
-    bitset_free (symbol_set);
-  return result;
+  എങ്കിൽ (ചിഹ്നം_set != si->lookahead)
+    bitset_free (ചിഹ്നം_set);
+  തിരികെ result;
 }
 
 /**
@@ -859,46 +859,46 @@ reduction_step (search_state *ss, const item_number *conflict_item,
  * the given subsequent next symbol on each path. If a reverse transition
  * cannot be made on both states, possible reverse productions are prepended
  */
-static void
-search_state_prepend (search_state *ss, symbol_number sym, bitset guide)
+സ്ഥിതം ശൂന്യം
+തിരയൽ_state_prepend (തിരയൽ_state *ss, ചിഹ്നം_സംഖ്യ sym, bitset guide)
 {
-  (void) sym; // FIXME: Unused.
-  const state_item *si1src = parse_state_head (ss->states[0]);
-  const state_item *si2src = parse_state_head (ss->states[1]);
+  (ശൂന്യം) sym; // FIXME: Unused.
+  സ്ഥിരം state_item *si1src = parse_state_head (ss->states[0]);
+  സ്ഥിരം state_item *si2src = parse_state_head (ss->states[1]);
 
   bool prod1 = SI_PRODUCTION (si1src);
   // If one can make a reverse transition and the other can't, only apply
   // the reverse productions that the other state can make in an attempt to
   // make progress.
-  if (prod1 != SI_PRODUCTION (si2src))
+  എങ്കിൽ (prod1 != SI_PRODUCTION (si2src))
     {
-      int prod_state = prod1 ? 0 : 1;
+      പൂർണ്ണസംഖ്യ prod_state = prod1 ? 0 : 1;
       parse_state_list prev = parser_prepend (ss->states[prod_state]);
-      parse_state *ps = NULL;
-      for (gl_list_iterator_t iter = gl_list_iterator (prev);
+      parse_state *ps = ശൂന്യ;
+      വേണ്ടി (gl_list_iterator_t iter = gl_list_iterator (prev);
            parse_state_list_next (&iter, &ps);
            )
         {
-          const state_item *psi = parse_state_head (ps);
-          bool guided = bitset_test (guide, psi->state->number);
-          if (!guided && !EXTENDED_SEARCH)
-            continue;
+          സ്ഥിരം state_item *psi = parse_state_head (ps);
+          bool guided = bitset_test (guide, psi->state->സംഖ്യ);
+          എങ്കിൽ (!guided && !EXTENDED_തിരയൽ)
+            തുടരുക;
 
-          search_state *copy = copy_search_state (ss);
+          തിരയൽ_state *copy = copy_തിരയൽ_state (ss);
           ss_set_parse_state (copy, prod_state, ps);
           copy->complexity += PRODUCTION_COST;
-          if (!guided)
+          എങ്കിൽ (!guided)
             copy->complexity += EXTENDED_COST;
           ssb_append (copy);
         }
       gl_list_free (prev);
-      return;
+      തിരികെ;
     }
 
   // The parse state heads are either both production items or both
   // transition items. So all prepend options will either be
   // reverse transitions or reverse productions
-  const int complexity_cost = 2 * (prod1 ? PRODUCTION_COST : UNSHIFT_COST);
+  സ്ഥിരം പൂർണ്ണസംഖ്യ complexity_cost = 2 * (prod1 ? PRODUCTION_COST : UNSHIFT_COST);
 
   parse_state_list prev1 = parser_prepend (ss->states[0]);
   parse_state_list prev2 = parser_prepend (ss->states[1]);
@@ -906,35 +906,35 @@ search_state_prepend (search_state *ss, symbol_number sym, bitset guide)
   // loop through each pair of possible prepend states and append search
   // states for each pair where the parser states correspond to the same
   // parsed input.
-  parse_state *ps1 = NULL;
-  for (gl_list_iterator_t iter1 = gl_list_iterator (prev1);
+  parse_state *ps1 = ശൂന്യ;
+  വേണ്ടി (gl_list_iterator_t iter1 = gl_list_iterator (prev1);
        parse_state_list_next (&iter1, &ps1);
        )
     {
-      const state_item *psi1 = parse_state_head (ps1);
-      bool guided1 = bitset_test (guide, psi1->state->number);
-      if (!guided1 && !EXTENDED_SEARCH)
-        continue;
+      സ്ഥിരം state_item *psi1 = parse_state_head (ps1);
+      bool guided1 = bitset_test (guide, psi1->state->സംഖ്യ);
+      എങ്കിൽ (!guided1 && !EXTENDED_തിരയൽ)
+        തുടരുക;
 
-      parse_state *ps2 = NULL;
-      for (gl_list_iterator_t iter2 = gl_list_iterator (prev2);
+      parse_state *ps2 = ശൂന്യ;
+      വേണ്ടി (gl_list_iterator_t iter2 = gl_list_iterator (prev2);
            parse_state_list_next (&iter2, &ps2);
            )
         {
-          const state_item *psi2 = parse_state_head (ps2);
+          സ്ഥിരം state_item *psi2 = parse_state_head (ps2);
 
-          bool guided2 = bitset_test (guide, psi2->state->number);
-          if (!guided2 && !EXTENDED_SEARCH)
-            continue;
+          bool guided2 = bitset_test (guide, psi2->state->സംഖ്യ);
+          എങ്കിൽ (!guided2 && !EXTENDED_തിരയൽ)
+            തുടരുക;
           // Only consider prepend state items that share the same state.
-          if (psi1->state != psi2->state)
-            continue;
+          എങ്കിൽ (psi1->state != psi2->state)
+            തുടരുക;
 
-          int complexity = ss->complexity + complexity_cost;
+          പൂർണ്ണസംഖ്യ complexity = ss->complexity + complexity_cost;
           // penalty for not being along the guide path
-          if (!guided1 || !guided2)
+          എങ്കിൽ (!guided1 || !guided2)
             complexity += EXTENDED_COST;
-          ssb_append (new_search_state (ps1, ps2, complexity));
+          ssb_append (new_തിരയൽ_state (ps1, ps2, complexity));
         }
     }
   gl_list_free (prev1);
@@ -945,37 +945,37 @@ search_state_prepend (search_state *ss, symbol_number sym, bitset guide)
  * Determine if the productions associated with the given parser items have
  * the same prefix up to the dot.
  */
-static bool
-have_common_prefix (const item_number *itm1, const item_number *itm2)
+സ്ഥിതം bool
+have_common_prefix (സ്ഥിരം item_സംഖ്യ *itm1, സ്ഥിരം item_സംഖ്യ *itm2)
 {
-  int i = 0;
-  for (; !item_number_is_rule_number (itm1[i]); ++i)
-    if (itm1[i] != itm2[i])
-      return false;
-  return item_number_is_rule_number (itm2[i]);
+  പൂർണ്ണസംഖ്യ i = 0;
+  വേണ്ടി (; !item_സംഖ്യ_is_rule_സംഖ്യ (itm1[i]); ++i)
+    എങ്കിൽ (itm1[i] != itm2[i])
+      തിരികെ false;
+  തിരികെ item_സംഖ്യ_is_rule_സംഖ്യ (itm2[i]);
 }
 
 /*
  * The start and end locations of an item in ritem.
  */
-static const item_number *
-item_rule_start (const item_number *item)
+സ്ഥിതം സ്ഥിരം item_സംഖ്യ *
+item_rule_start (സ്ഥിരം item_സംഖ്യ *item)
 {
-  const item_number *res = NULL;
-  for (res = item;
-       ritem < res && item_number_is_symbol_number (*(res - 1));
+  സ്ഥിരം item_സംഖ്യ *res = ശൂന്യ;
+  വേണ്ടി (res = item;
+       ritem < res && item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (*(res - 1));
        --res)
-    continue;
-  return res;
+    തുടരുക;
+  തിരികെ res;
 }
 
-static const item_number *
-item_rule_end (const item_number *item)
+സ്ഥിതം സ്ഥിരം item_സംഖ്യ *
+item_rule_end (സ്ഥിരം item_സംഖ്യ *item)
 {
-  const item_number *res = NULL;
-  for (res = item; item_number_is_symbol_number (*res); ++res)
-    continue;
-  return res;
+  സ്ഥിരം item_സംഖ്യ *res = ശൂന്യ;
+  വേണ്ടി (res = item; item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (*res); ++res)
+    തുടരുക;
+  തിരികെ res;
 }
 
 /*
@@ -983,34 +983,34 @@ item_rule_end (const item_number *item)
  * on a search state and add the results to the
  * search state priority queue.
  */
-static inline void
-generate_next_states (search_state *ss, state_item *conflict1,
+സ്ഥിതം വരിയിൽ ശൂന്യം
+generate_next_states (തിരയൽ_state *ss, state_item *conflict1,
                       state_item *conflict2)
 {
   // Compute the successor configurations.
   parse_state *ps1 = ss->states[0];
   parse_state *ps2 = ss->states[1];
-  const state_item *si1 = parse_state_tail (ps1);
-  const state_item *si2 = parse_state_tail (ps2);
-  bool si1reduce = item_number_is_rule_number (*si1->item);
-  bool si2reduce = item_number_is_rule_number (*si2->item);
-  if (!si1reduce && !si2reduce)
+  സ്ഥിരം state_item *si1 = parse_state_tail (ps1);
+  സ്ഥിരം state_item *si2 = parse_state_tail (ps2);
+  bool si1reduce = item_സംഖ്യ_is_rule_സംഖ്യ (*si1->item);
+  bool si2reduce = item_സംഖ്യ_is_rule_സംഖ്യ (*si2->item);
+  എങ്കിൽ (!si1reduce && !si2reduce)
     {
       // Transition if both paths end at the same symbol
-      if (*si1->item == *si2->item)
+      എങ്കിൽ (*si1->item == *si2->item)
         {
-          int complexity = ss->complexity + 2 * SHIFT_COST;
+          പൂർണ്ണസംഖ്യ complexity = ss->complexity + 2 * SHIFT_COST;
           parse_state_list trans1 = simulate_transition (ps1);
           parse_state_list trans2 = simulate_transition (ps2);
-          parse_state *tps1 = NULL;
-          parse_state *tps2 = NULL;
-          for (gl_list_iterator_t it1 = gl_list_iterator (trans1);
+          parse_state *tps1 = ശൂന്യ;
+          parse_state *tps2 = ശൂന്യ;
+          വേണ്ടി (gl_list_iterator_t it1 = gl_list_iterator (trans1);
                parse_state_list_next (&it1, &tps1);
                )
-            for (gl_list_iterator_t it2 = gl_list_iterator (trans2);
+            വേണ്ടി (gl_list_iterator_t it2 = gl_list_iterator (trans2);
                  parse_state_list_next (&it2, &tps2);
                  )
-              ssb_append (new_search_state (tps1, tps2, complexity));
+              ssb_append (new_തിരയൽ_state (tps1, tps2, complexity));
           gl_list_free (trans1);
           gl_list_free (trans2);
         }
@@ -1020,60 +1020,60 @@ generate_next_states (search_state *ss, state_item *conflict1,
       production_step (ss, 1);
     }
   // One of the states requires a reduction
-  else
+  അല്ലെങ്കിൽ
     {
-      const item_number *rhs1 = item_rule_start (si1->item);
-      const item_number *rhe1 = item_rule_end (si1->item);
-      int len1 = rhe1 - rhs1;
-      int size1 = parse_state_length (ps1);
+      സ്ഥിരം item_സംഖ്യ *rhs1 = item_rule_start (si1->item);
+      സ്ഥിരം item_സംഖ്യ *rhe1 = item_rule_end (si1->item);
+      പൂർണ്ണസംഖ്യ len1 = rhe1 - rhs1;
+      പൂർണ്ണസംഖ്യ size1 = parse_state_length (ps1);
       bool ready1 = si1reduce && len1 < size1;
 
-      const item_number *rhs2 = item_rule_start (si2->item);
-      const item_number *rhe2 = item_rule_end (si2->item);
-      int len2 = rhe2 - rhs2;
-      int size2 = parse_state_length (ps2);
+      സ്ഥിരം item_സംഖ്യ *rhs2 = item_rule_start (si2->item);
+      സ്ഥിരം item_സംഖ്യ *rhe2 = item_rule_end (si2->item);
+      പൂർണ്ണസംഖ്യ len2 = rhe2 - rhs2;
+      പൂർണ്ണസംഖ്യ size2 = parse_state_length (ps2);
       bool ready2 = si2reduce && len2 < size2;
       // If there is a path ready for reduction without being
       // prepended further, reduce.
-      if (ready1 && ready2)
+      എങ്കിൽ (ready1 && ready2)
         {
-          search_state_list reduced1 = reduction_step (ss, conflict1->item, 0, len1);
+          തിരയൽ_state_list reduced1 = reduction_step (ss, conflict1->item, 0, len1);
           gl_list_add_last (reduced1, ss);
-          search_state *red1 = NULL;
-          for (gl_list_iterator_t iter = gl_list_iterator (reduced1);
-               search_state_list_next (&iter, &red1);
+          തിരയൽ_state *red1 = ശൂന്യ;
+          വേണ്ടി (gl_list_iterator_t iter = gl_list_iterator (reduced1);
+               തിരയൽ_state_list_next (&iter, &red1);
                )
             {
-              search_state_list reduced2 =
+              തിരയൽ_state_list reduced2 =
                 reduction_step (red1, conflict2->item, 1, len2);
-              search_state *red2 = NULL;
-              for (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
-                   search_state_list_next (&iter2, &red2);
+              തിരയൽ_state *red2 = ശൂന്യ;
+              വേണ്ടി (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
+                   തിരയൽ_state_list_next (&iter2, &red2);
                    )
                 ssb_append (red2);
               // Avoid duplicates.
-              if (red1 != ss)
+              എങ്കിൽ (red1 != ss)
                 ssb_append (red1);
               gl_list_free (reduced2);
             }
           gl_list_free (reduced1);
         }
-      else if (ready1)
+      അല്ലെങ്കിൽ എങ്കിൽ (ready1)
         {
-          search_state_list reduced1 = reduction_step (ss, conflict1->item, 0, len1);
-          search_state *red1 = NULL;
-          for (gl_list_iterator_t iter = gl_list_iterator (reduced1);
-               search_state_list_next (&iter, &red1);
+          തിരയൽ_state_list reduced1 = reduction_step (ss, conflict1->item, 0, len1);
+          തിരയൽ_state *red1 = ശൂന്യ;
+          വേണ്ടി (gl_list_iterator_t iter = gl_list_iterator (reduced1);
+               തിരയൽ_state_list_next (&iter, &red1);
                )
             ssb_append (red1);
           gl_list_free (reduced1);
         }
-      else if (ready2)
+      അല്ലെങ്കിൽ എങ്കിൽ (ready2)
         {
-          search_state_list reduced2 = reduction_step (ss, conflict2->item, 1, len2);
-          search_state *red2 = NULL;
-          for (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
-               search_state_list_next (&iter2, &red2);
+          തിരയൽ_state_list reduced2 = reduction_step (ss, conflict2->item, 1, len2);
+          തിരയൽ_state *red2 = ശൂന്യ;
+          വേണ്ടി (gl_list_iterator_t iter2 = gl_list_iterator (reduced2);
+               തിരയൽ_state_list_next (&iter2, &red2);
                )
             ssb_append (red2);
           gl_list_free (reduced2);
@@ -1081,13 +1081,13 @@ generate_next_states (search_state *ss, state_item *conflict1,
       /* Both states end with a reduction, yet they don't have enough symbols
        * to reduce. This means symbols are missing from the beginning of the
        * rule, so we must prepend */
-      else
+      അല്ലെങ്കിൽ
         {
-          const symbol_number sym
+          സ്ഥിരം ചിഹ്നം_സംഖ്യ sym
             = si1reduce && !ready1
             ? *(rhe1 - size1)
             : *(rhe2 - size2);
-          search_state_prepend (ss, sym,
+          തിരയൽ_state_prepend (ss, sym,
                                 parse_state_depth (ss->states[0]) >= 0
                                 ? rpp_set : scp_set);
         }
@@ -1100,55 +1100,55 @@ generate_next_states (search_state *ss, state_item *conflict1,
  * we are at and gives the appropriate counterexample
  * type based off of time constraints.
  */
-static counterexample *
-unifying_example (state_item_number itm1,
-                  state_item_number itm2,
+സ്ഥിതം counterexample *
+unifying_example (state_item_സംഖ്യ itm1,
+                  state_item_സംഖ്യ itm2,
                   bool shift_reduce,
-                  state_item_list reduce_path, symbol_number next_sym)
+                  state_item_list reduce_path, ചിഹ്നം_സംഖ്യ next_sym)
 {
-  state_item *conflict1 = &state_items[itm1];
-  state_item *conflict2 = &state_items[itm2];
-  search_state *initial = initial_search_state (conflict1, conflict2);
+  state_item *conflict1 = &state_ഇനങ്ങൾ[itm1];
+  state_item *conflict2 = &state_ഇനങ്ങൾ[itm2];
+  തിരയൽ_state *initial = initial_തിരയൽ_state (conflict1, conflict2);
   ssb_queue = gl_list_create_empty (GL_RBTREEHASH_LIST,
                                     (gl_listelement_equals_fn) ssb_equals,
                                     (gl_listelement_hashcode_fn) ssb_hasher,
                                     (gl_listelement_dispose_fn) ssb_free,
                                     false);
   visited =
-    hash_initialize (32, NULL, (Hash_hasher) visited_hasher,
+    hash_initialize (32, ശൂന്യ, (Hash_hasher) visited_hasher,
                      (Hash_comparator) visited_comparator,
-                     (Hash_data_freer) search_state_free);
+                     (Hash_data_freer) തിരയൽ_state_free);
   ssb_append (initial);
   xtime_t start = gethrxtime ();
   bool assurance_printed = false;
-  search_state *stage3result = NULL;
-  counterexample *cex = NULL;
-  while (gl_list_size (ssb_queue) > 0)
+  തിരയൽ_state *stage3result = ശൂന്യ;
+  counterexample *cex = ശൂന്യ;
+  ആകുമ്പോൾ (gl_list_size (ssb_queue) > 0)
     {
-      const search_state_bundle *ssb = gl_list_get_at (ssb_queue, 0);
+      സ്ഥിരം തിരയൽ_state_bundle *ssb = gl_list_get_at (ssb_queue, 0);
 
-      search_state *ss = NULL;
-      for (gl_list_iterator_t it = gl_list_iterator (ssb->states);
-           search_state_list_next (&it, &ss);
+      തിരയൽ_state *ss = ശൂന്യ;
+      വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (ssb->states);
+           തിരയൽ_state_list_next (&it, &ss);
            )
         {
-          if (trace_flag & trace_cex)
-            search_state_print (ss);
+          എങ്കിൽ (trace_flag & trace_cex)
+            തിരയൽ_state_print (ss);
           // Stage 1/2 completing the rules containing the conflicts
           parse_state *ps1 = ss->states[0];
           parse_state *ps2 = ss->states[1];
-          if (parse_state_depth (ps1) < 0 && parse_state_depth (ps2) < 0)
+          എങ്കിൽ (parse_state_depth (ps1) < 0 && parse_state_depth (ps2) < 0)
             {
               // Stage 3: reduce and shift conflict items completed.
-              const state_item *si1src = parse_state_head (ps1);
-              const state_item *si2src = parse_state_head (ps2);
-              if (item_rule (si1src->item)->lhs == item_rule (si2src->item)->lhs
+              സ്ഥിരം state_item *si1src = parse_state_head (ps1);
+              സ്ഥിരം state_item *si2src = parse_state_head (ps2);
+              എങ്കിൽ (item_rule (si1src->item)->lhs == item_rule (si2src->item)->lhs
                   && have_common_prefix (si1src->item, si2src->item))
                 {
                   // Stage 4: both paths share a prefix
                   derivation *d1 = parse_state_derivation (ps1);
                   derivation *d2 = parse_state_derivation (ps2);
-                  if (parse_state_derivation_completed (ps1)
+                  എങ്കിൽ (parse_state_derivation_completed (ps1)
                       && parse_state_derivation_completed (ps2))
                     {
                       // Once we have two derivations for the same symbol,
@@ -1156,16 +1156,16 @@ unifying_example (state_item_number itm1,
                       cex = new_counterexample (d1, d2, shift_reduce, true, false);
                       derivation_retain (d1);
                       derivation_retain (d2);
-                      goto cex_search_end;
+                      പോകുക cex_തിരയൽ_end;
                     }
-                  if (!stage3result)
-                    stage3result = copy_search_state (ss);
+                  എങ്കിൽ (!stage3result)
+                    stage3result = copy_തിരയൽ_state (ss);
                 }
             }
-          if (TIME_LIMIT_ENFORCED)
+          എങ്കിൽ (TIME_LIMIT_ENFORCED)
             {
-              double time_passed = (gethrxtime () - start) / 1e9;
-              if (!assurance_printed && time_passed > ASSURANCE_LIMIT
+              ഇരട്ട time_passed = (gethrxtime () - start) / 1e9;
+              എങ്കിൽ (!assurance_printed && time_passed > ASSURANCE_LIMIT
                   && stage3result)
                 {
                   fputs ("Productions leading up to the conflict state found.  "
@@ -1173,10 +1173,10 @@ unifying_example (state_item_number itm1,
                          stderr);
                   assurance_printed = true;
                 }
-              if (time_passed > time_limit)
+              എങ്കിൽ (time_passed > time_limit)
                 {
                   fprintf (stderr, "time limit exceeded: %f\n", time_passed);
-                  goto cex_search_end;
+                  പോകുക cex_തിരയൽ_end;
                 }
             }
           generate_next_states (ss, conflict1, conflict2);
@@ -1184,43 +1184,43 @@ unifying_example (state_item_number itm1,
       gl_sortedlist_remove (ssb_queue,
                             (gl_listelement_compar_fn) ssb_comp, ssb);
     }
-cex_search_end:;
-  if (!cex)
+cex_തിരയൽ_end:;
+  എങ്കിൽ (!cex)
     {
       // No unifying counterexamples
       // If a search state from Stage 3 is available, use it
       // to construct a more compact nonunifying counterexample.
-      if (stage3result)
+      എങ്കിൽ (stage3result)
         cex = complete_diverging_examples (stage3result, next_sym, shift_reduce);
       // Otherwise, construct a nonunifying counterexample that
       // begins from the start state using the shortest
       // lookahead-sensitive path to the reduce item.
-      else
+      അല്ലെങ്കിൽ
         cex = example_from_path (shift_reduce, itm2, reduce_path, next_sym);
     }
   gl_list_free (ssb_queue);
   hash_free (visited);
-  if (stage3result)
-    search_state_free (stage3result);
-  return cex;
+  എങ്കിൽ (stage3result)
+    തിരയൽ_state_free (stage3result);
+  തിരികെ cex;
 }
 
-static xtime_t cumulative_time;
+സ്ഥിതം xtime_t cumulative_time;
 
-void
-counterexample_init (void)
+ശൂന്യം
+counterexample_init (ശൂന്യം)
 {
   // Check cex.timeout.
   {
-    const char *variable = "cex.timeout";
-    char *cp = muscle_percent_define_get (variable);
-    if (*cp != '\0')
+    സ്ഥിരം അക്ഷരം *variable = "cex.timeout";
+    അക്ഷരം *cp = muscle_percent_define_get (variable);
+    എങ്കിൽ (*cp != '\0')
       {
-        char *end = NULL;
-        double v = c_strtod (cp, &end);
-        if (*end == '\0' && errno == 0 && v >= 0)
+        അക്ഷരം *end = ശൂന്യ;
+        ഇരട്ട v = c_strtod (cp, &end);
+        എങ്കിൽ (*end == '\0' && errno == 0 && v >= 0)
           time_limit = v;
-        else
+        അല്ലെങ്കിൽ
           {
             location loc = muscle_percent_define_get_loc (variable);
             complain (&loc, complaint,
@@ -1228,23 +1228,23 @@ counterexample_init (void)
                       quote (variable), quote_n (1, cp));
           }
       }
-    free (cp);
+    സ്വതന്ത്രം (cp);
   }
   cumulative_time = gethrxtime ();
   scp_set = bitset_create (nstates, BITSET_FIXED);
   rpp_set = bitset_create (nstates, BITSET_FIXED);
-  state_items_init ();
+  state_ഇനങ്ങൾ_init ();
 }
 
 
-void
-counterexample_free (void)
+ശൂന്യം
+counterexample_free (ശൂന്യം)
 {
-  if (scp_set)
+  എങ്കിൽ (scp_set)
     {
       bitset_free (scp_set);
       bitset_free (rpp_set);
-      state_items_free ();
+      state_ഇനങ്ങൾ_free ();
     }
 }
 
@@ -1252,30 +1252,30 @@ counterexample_free (void)
  * Report a counterexample for conflict on symbol next_sym
  * between the given state-items
  */
-static void
-counterexample_report (state_item_number itm1, state_item_number itm2,
-                       symbol_number next_sym, bool shift_reduce,
-                       FILE *out, const char *prefix)
+സ്ഥിതം ശൂന്യം
+counterexample_report (state_item_സംഖ്യ itm1, state_item_സംഖ്യ itm2,
+                       ചിഹ്നം_സംഖ്യ next_sym, bool shift_reduce,
+                       FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
   // Compute the shortest lookahead-sensitive path and associated sets of
   // parser states.
   state_item_list shortest_path = shortest_path_from_start (itm1, next_sym);
   bool reduce_prod_reached = false;
-  const rule *reduce_rule = item_rule (state_items[itm1].item);
+  സ്ഥിരം rule *reduce_rule = item_rule (state_ഇനങ്ങൾ[itm1].item);
 
   bitset_zero (scp_set);
   bitset_zero (rpp_set);
 
-  state_item *si = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (shortest_path);
+  state_item *si = ശൂന്യ;
+  വേണ്ടി (gl_list_iterator_t it = gl_list_iterator (shortest_path);
        state_item_list_next (&it, &si);
        )
     {
-      bitset_set (scp_set, si->state->number);
+      bitset_set (scp_set, si->state->സംഖ്യ);
       reduce_prod_reached = reduce_prod_reached
                           || item_rule (si->item) == reduce_rule;
-      if (reduce_prod_reached)
-        bitset_set (rpp_set, si->state->number);
+      എങ്കിൽ (reduce_prod_reached)
+        bitset_set (rpp_set, si->state->സംഖ്യ);
     }
   counterexample *cex
     = (gethrxtime () - cumulative_time) / 1e9 < CUMULATIVE_TIME_LIMIT
@@ -1289,116 +1289,116 @@ counterexample_report (state_item_number itm1, state_item_number itm2,
 
 
 // ITM1 denotes a shift, ITM2 a reduce.
-static void
-counterexample_report_shift_reduce (state_item_number itm1, state_item_number itm2,
-                                    symbol_number next_sym,
-                                    FILE *out, const char *prefix)
+സ്ഥിതം ശൂന്യം
+counterexample_report_shift_reduce (state_item_സംഖ്യ itm1, state_item_സംഖ്യ itm2,
+                                    ചിഹ്നം_സംഖ്യ next_sym,
+                                    FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
-  if (out == stderr)
-    complain (NULL, Wcounterexamples,
+  എങ്കിൽ (out == stderr)
+    complain (ശൂന്യ, Wcounterexamples,
               _("shift/reduce conflict on token %s"), symbols[next_sym]->tag);
-  else
+  അല്ലെങ്കിൽ
     {
       fputs (prefix, out);
       fprintf (out, _("shift/reduce conflict on token %s"), symbols[next_sym]->tag);
       fprintf (out, "%s\n", _(":"));
     }
   // In the report, print the items.
-  if (out != stderr || trace_flag & trace_cex)
+  എങ്കിൽ (out != stderr || trace_flag & trace_cex)
     {
-      state_item_print (&state_items[itm1], out, prefix);
-      state_item_print (&state_items[itm2], out, prefix);
+      state_item_print (&state_ഇനങ്ങൾ[itm1], out, prefix);
+      state_item_print (&state_ഇനങ്ങൾ[itm2], out, prefix);
     }
   counterexample_report (itm1, itm2, next_sym, true, out, prefix);
 }
 
-static void
-counterexample_report_reduce_reduce (state_item_number itm1, state_item_number itm2,
+സ്ഥിതം ശൂന്യം
+counterexample_report_reduce_reduce (state_item_സംഖ്യ itm1, state_item_സംഖ്യ itm2,
                                      bitset conflict_syms,
-                                     FILE *out, const char *prefix)
+                                     FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
   {
-    struct obstack obstack;
+    ഘടന obstack obstack;
     obstack_init (&obstack);
     bitset_iterator biter;
-    state_item_number sym;
-    const char *sep = "";
+    state_item_സംഖ്യ sym;
+    സ്ഥിരം അക്ഷരം *sep = "";
     BITSET_FOR_EACH (biter, conflict_syms, sym, 0)
       {
         obstack_printf (&obstack, "%s%s", sep, symbols[sym]->tag);
         sep = ", ";
       }
-    char *tokens = obstack_finish0 (&obstack);
-    if (out == stderr)
-      complain (NULL, Wcounterexamples,
+    അക്ഷരം *tokens = obstack_finish0 (&obstack);
+    എങ്കിൽ (out == stderr)
+      complain (ശൂന്യ, Wcounterexamples,
                 ngettext ("reduce/reduce conflict on token %s",
                           "reduce/reduce conflict on tokens %s",
-                          bitset_count (conflict_syms)),
+                          bitset_എണ്ണം (conflict_syms)),
                 tokens);
-    else
+    അല്ലെങ്കിൽ
       {
         fputs (prefix, out);
         fprintf (out,
                  ngettext ("reduce/reduce conflict on token %s",
                            "reduce/reduce conflict on tokens %s",
-                           bitset_count (conflict_syms)),
+                           bitset_എണ്ണം (conflict_syms)),
                  tokens);
         fprintf (out, "%s\n", _(":"));
       }
-    obstack_free (&obstack, NULL);
+    obstack_free (&obstack, ശൂന്യ);
   }
   // In the report, print the items.
-  if (out != stderr || trace_flag & trace_cex)
+  എങ്കിൽ (out != stderr || trace_flag & trace_cex)
     {
-      state_item_print (&state_items[itm1], out, prefix);
-      state_item_print (&state_items[itm2], out, prefix);
+      state_item_print (&state_ഇനങ്ങൾ[itm1], out, prefix);
+      state_item_print (&state_ഇനങ്ങൾ[itm2], out, prefix);
     }
   counterexample_report (itm1, itm2, bitset_first (conflict_syms),
                          false, out, prefix);
 }
 
-static state_item_number
-find_state_item_number (const rule *r, state_number sn)
+സ്ഥിതം state_item_സംഖ്യ
+find_state_item_സംഖ്യ (സ്ഥിരം rule *r, state_സംഖ്യ sn)
 {
-  for (state_item_number i = state_item_map[sn]; i < state_item_map[sn + 1]; ++i)
-    if (!SI_DISABLED (i)
-        && item_number_as_rule_number (*state_items[i].item) == r->number)
-      return i;
+  വേണ്ടി (state_item_സംഖ്യ i = state_item_map[sn]; i < state_item_map[sn + 1]; ++i)
+    എങ്കിൽ (!SI_DISABLED (i)
+        && item_സംഖ്യ_as_rule_സംഖ്യ (*state_ഇനങ്ങൾ[i].item) == r->സംഖ്യ)
+      തിരികെ i;
   abort ();
 }
 
-void
-counterexample_report_state (const state *s, FILE *out, const char *prefix)
+ശൂന്യം
+counterexample_report_state (സ്ഥിരം state *s, FILE *out, സ്ഥിരം അക്ഷരം *prefix)
 {
-  const state_number sn = s->number;
-  const reductions *reds = s->reductions;
+  സ്ഥിരം state_സംഖ്യ sn = s->സംഖ്യ;
+  സ്ഥിരം reductions *reds = s->reductions;
   bitset lookaheads = bitset_create (ntokens, BITSET_FIXED);
-  for (int i = 0; i < reds->num; ++i)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < reds->അക്കം; ++i)
     {
-      const rule *r1 = reds->rules[i];
-      const state_item_number c1 = find_state_item_number (r1, sn);
-      for (state_item_number c2 = state_item_map[sn]; c2 < state_item_map[sn + 1]; ++c2)
-        if (!SI_DISABLED (c2))
+      സ്ഥിരം rule *r1 = reds->rules[i];
+      സ്ഥിരം state_item_സംഖ്യ c1 = find_state_item_സംഖ്യ (r1, sn);
+      വേണ്ടി (state_item_സംഖ്യ c2 = state_item_map[sn]; c2 < state_item_map[sn + 1]; ++c2)
+        എങ്കിൽ (!SI_DISABLED (c2))
           {
-            item_number conf = *state_items[c2].item;
-            if (item_number_is_symbol_number (conf)
+            item_സംഖ്യ conf = *state_ഇനങ്ങൾ[c2].item;
+            എങ്കിൽ (item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (conf)
                 && bitset_test (reds->lookaheads[i], conf))
               counterexample_report_shift_reduce (c1, c2, conf, out, prefix);
           }
-      for (int j = i+1; j < reds->num; ++j)
+      വേണ്ടി (പൂർണ്ണസംഖ്യ j = i+1; j < reds->അക്കം; ++j)
         {
-          const rule *r2 = reds->rules[j];
+          സ്ഥിരം rule *r2 = reds->rules[j];
           // Conflicts: common lookaheads.
           bitset_intersection (lookaheads,
                                reds->lookaheads[i],
                                reds->lookaheads[j]);
-          if (!bitset_empty_p (lookaheads))
-            for (state_item_number c2 = state_item_map[sn]; c2 < state_item_map[sn + 1]; ++c2)
-              if (!SI_DISABLED (c2)
-                  && item_rule (state_items[c2].item) == r2)
+          എങ്കിൽ (!bitset_empty_p (lookaheads))
+            വേണ്ടി (state_item_സംഖ്യ c2 = state_item_map[sn]; c2 < state_item_map[sn + 1]; ++c2)
+              എങ്കിൽ (!SI_DISABLED (c2)
+                  && item_rule (state_ഇനങ്ങൾ[c2].item) == r2)
                 {
                   counterexample_report_reduce_reduce (c1, c2, lookaheads, out, prefix);
-                  break;
+                  നിർത്തുക;
                 }
         }
     }

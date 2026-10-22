@@ -28,7 +28,7 @@
 /**
  * A unique ID assigned to every \c InadequacyList node.
  */
-typedef long long InadequacyListNodeCount;
+തരനിർവചനം long long Inadequacy_List_കണ്ണി_എണ്ണം;
 
 /**
  * For a conflict, each rule in the grammar can have at most one contributing
@@ -41,25 +41,25 @@ typedef long long InadequacyListNodeCount;
  * sync with this type.  Whatever the type, it must support negatives for sake
  * of the special values below.
  */
-typedef rule_number ContributionIndex;
+തരനിർവചനം rule_സംഖ്യ ContributionIndex;
 
 /* Special \c ContributionIndex used to indicate null result when looking for a
    contribution.  */
-extern ContributionIndex const ContributionIndex__none;
+ബാഹ്യ ContributionIndex സ്ഥിരം ContributionIndex__none;
 
 /* Special \c ContributionIndex used by
    \c AnnotationList__computeDominantContribution to signal when the action
    chosen in a conflict is a syntax error because of a %nonassoc.  */
-extern ContributionIndex const ContributionIndex__error_action;
+ബാഹ്യ ContributionIndex സ്ഥിരം ContributionIndex__error_action;
 
 /**
  * The description of a conflict.  Don't break encapsulation by modifying the
  * fields directly.  Use the provided interface functions for
  * \c InadequacyList.
  */
-typedef struct {
+തരനിർവചനം ഘടന {
   /** The \c token passed to \c InadequacyList__new_conflict.  */
-  symbol *token;
+  ചിഹ്നം *token;
   /** The \c actions passed to \c InadequacyList__new_conflict.  */
   bitset actions;
 } Conflict;
@@ -69,12 +69,12 @@ typedef struct {
  * particular state.  Don't break encapsulation by modifying the fields
  * directly.  Use the provided interface functions.
  */
-typedef struct InadequacyList {
-  struct InadequacyList *next;
-  InadequacyListNodeCount id;
+തരനിർവചനം ഘടന InadequacyList {
+  ഘടന InadequacyList *next;
+  Inadequacy_List_കണ്ണി_എണ്ണം id;
   state *manifestingState;
-  ContributionIndex contributionCount;
-  union {
+  ContributionIndex contribution_എണ്ണം_2;
+  സംഘം {
     Conflict conflict;
   } inadequacy;
 } InadequacyList;
@@ -108,14 +108,14 @@ typedef struct InadequacyList {
  *   - \c result assumes responsibility for the memory of \c actions.
  */
 InadequacyList *InadequacyList__new_conflict (
-  state *manifesting_state, symbol *token, bitset actions,
-  InadequacyListNodeCount *node_count);
+  state *manifesting_state, ചിഹ്നം *token, bitset actions,
+  Inadequacy_List_കണ്ണി_എണ്ണം *കണ്ണി_എണ്ണം);
 
 /**
  * \post
  *   - All memory associated with all nodes in the list \c self was freed.
  */
-void InadequacyList__delete (InadequacyList *self);
+ശൂന്യം InadequacyList__delete (InadequacyList *self);
 
 /**
  * \pre
@@ -127,7 +127,7 @@ void InadequacyList__delete (InadequacyList *self);
  *     - The index of the shift contribution, otherwise.
  */
 ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self);
+InadequacyList__getShiftContributionIndex (InadequacyList സ്ഥിരം *self);
 
 /**
  * \pre
@@ -137,7 +137,7 @@ InadequacyList__getShiftContributionIndex (InadequacyList const *self);
  *   - \c result = the token associated with contribution \c i in the
  *     inadequacy described by the node \c self.
  */
-symbol *InadequacyList__getContributionToken (InadequacyList const *self,
+ചിഹ്നം *InadequacyList__getContributionToken (InadequacyList സ്ഥിരം *self,
                                               ContributionIndex i);
 
 /**
@@ -148,6 +148,6 @@ symbol *InadequacyList__getContributionToken (InadequacyList const *self,
  *   - \c list now contains \c self as its first node.
  *   - \c list assumes responsibility for the memory of \c self.
  */
-void InadequacyList__prependTo (InadequacyList *self, InadequacyList **list);
+ശൂന്യം InadequacyList__prependTo (InadequacyList *self, InadequacyList **list);
 
 #endif /* !INADEQUACY_LIST_H_ */

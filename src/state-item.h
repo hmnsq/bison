@@ -53,61 +53,61 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_ഇനങ്ങൾ[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_ഇനങ്ങൾ || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_ഇനങ്ങൾ && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+തരനിർവചനം പൂർണ്ണസംഖ്യ state_item_സംഖ്യ;
 
-typedef struct
+തരനിർവചനം ഘടന
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  സ്ഥിരം state *state;
+  item_സംഖ്യ *item;
+  state_item_സംഖ്യ trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+തരനിർവചനം gl_list_t state_item_list;
 
-extern bitsetv firsts;
+ബാഹ്യ bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+ബാഹ്യ size_t nstate_ഇനങ്ങൾ;
+ബാഹ്യ state_item_സംഖ്യ *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+ബാഹ്യ state_item *state_ഇനങ്ങൾ;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_സംഖ്യ s, state_item_സംഖ്യ off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+സ്ഥിതം വരിയിൽ state_item_സംഖ്യ
+state_item_index_lookup (state_സംഖ്യ s, state_item_സംഖ്യ off)
 {
-  return state_item_map[s] + off;
+  തിരികെ state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+ശൂന്യം state_ഇനങ്ങൾ_init (ശൂന്യം);
+ശൂന്യം state_ഇനങ്ങൾ_free (ശൂന്യം);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+ശൂന്യം state_item_print (സ്ഥിരം state_item *si, FILE *out, സ്ഥിരം അക്ഷരം *prefix);
+സ്ഥിരം rule *state_item_rule (സ്ഥിരം state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (സ്ഥിരം state_item *si, സ്ഥിരം state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+സ്ഥിതം വരിയിൽ bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  സ്ഥിരം ശൂന്യം *p = ശൂന്യ;
+  bool res = gl_list_iterator_next (it, &p, ശൂന്യ);
+  എങ്കിൽ (res)
     *si = (state_item *) p;
-  else
+  അല്ലെങ്കിൽ
     gl_list_iterator_free (it);
-  return res;
+  തിരികെ res;
 }
 
 

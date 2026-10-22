@@ -17,98 +17,98 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#അന്തര്ഭാവ <config.h>
 
-#include "lssi.h"
+#അന്തര്ഭാവ "lssi.h"
 
-#include <gl_linked_list.h>
-#include <gl_xlist.h>
-#include <stdlib.h>
+#അന്തര്ഭാവ <gl_linked_list.h>
+#അന്തര്ഭാവ <gl_xlist.h>
+#അന്തര്ഭാവ <stdlib.h>
 
-#include "getargs.h"
-#include "nullable.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "nullable.h"
 
 // Lookahead sensitive state item.
-typedef struct lssi
+തരനിർവചനം ഘടന lssi
 {
-  state_item_number si;
-  struct lssi *parent;
+  state_item_സംഖ്യ si;
+  ഘടന lssi *parent;
   // this is the precise lookahead set (follow_L from the CupEx paper)
   bitset lookahead;
   bool free_lookahead;
 } lssi;
 
-static lssi *
-new_lssi (state_item_number si, lssi *p, bitset l, bool free_l)
+സ്ഥിതം lssi *
+new_lssi (state_item_സംഖ്യ si, lssi *p, bitset l, bool free_l)
 {
-  lssi *res = xmalloc (sizeof *res);
+  lssi *res = xmalloc (വലുപ്പം *res);
   res->si = si;
   res->parent = p;
   res->lookahead = l;
   res->free_lookahead = free_l;
-  return res;
+  തിരികെ res;
 }
 
-static void
+സ്ഥിതം ശൂന്യം
 lssi_free (lssi *sn)
 {
-  if (sn == NULL)
-    return;
-  if (sn->free_lookahead)
+  എങ്കിൽ (sn == ശൂന്യ)
+    തിരികെ;
+  എങ്കിൽ (sn->free_lookahead)
     bitset_free (sn->lookahead);
-  free (sn);
+  സ്വതന്ത്രം (sn);
 }
 
-static size_t
+സ്ഥിതം size_t
 lssi_hasher (lssi *sn, size_t max)
 {
   size_t hash = sn->si;
   bitset_iterator biter;
-  symbol_number syn;
+  ചിഹ്നം_സംഖ്യ syn;
   BITSET_FOR_EACH (biter, sn->lookahead, syn, 0)
     hash += syn;
-  return hash % max;
+  തിരികെ hash % max;
 }
 
-static bool
+സ്ഥിതം bool
 lssi_comparator (lssi *s1, lssi *s2)
 {
-  if (s1->si == s2->si)
+  എങ്കിൽ (s1->si == s2->si)
     {
-      if (s1->lookahead == s2->lookahead)
-        return true;
-      return bitset_equal_p (s1->lookahead, s2->lookahead);
+      എങ്കിൽ (s1->lookahead == s2->lookahead)
+        തിരികെ true;
+      തിരികെ bitset_equal_p (s1->lookahead, s2->lookahead);
     }
-  return false;
+  തിരികെ false;
 }
 
-typedef gl_list_t lssi_list;
+തരനിർവചനം gl_list_t lssi_list;
 
-static inline bool
+സ്ഥിതം വരിയിൽ bool
 append_lssi (lssi *sn, Hash_table *visited, lssi_list queue)
 {
-  if (hash_lookup (visited, sn))
+  എങ്കിൽ (hash_lookup (visited, sn))
     {
       sn->free_lookahead = false;
       lssi_free (sn);
-      return false;
+      തിരികെ false;
     }
   hash_xinsert (visited, sn);
   gl_list_add_last (queue, sn);
-  return true;
+  തിരികെ true;
 }
 
-#if 0
-static void
+#എങ്കിൽ 0
+സ്ഥിതം ശൂന്യം
 lssi_print (lssi *l)
 {
   FILE *out = stderr;
-  print_state_item (&state_items[l->si], out);
-  if (l->lookahead)
+  print_state_item (&state_ഇനങ്ങൾ[l->si], out);
+  എങ്കിൽ (l->lookahead)
     {
       fprintf (out, "FOLLOWL = { ");
       bitset_iterator biter;
-      symbol_number sin;
+      ചിഹ്നം_സംഖ്യ sin;
       BITSET_FOR_EACH (biter, l->lookahead, sin, 0)
         fprintf (out, "%s, \n", symbols[sin]->tag);
       fprintf (out, "}\n");
@@ -120,29 +120,29 @@ lssi_print (lssi *l)
  * Compute the set of state-items that can reach the given conflict item via
  * a combination of transitions or production steps.
  */
-static bitset
-eligible_state_items (state_item *target)
+സ്ഥിതം bitset
+eligible_state_ഇനങ്ങൾ (state_item *target)
 {
-  bitset result = bitset_create (nstate_items, BITSET_FIXED);
+  bitset result = bitset_create (nstate_ഇനങ്ങൾ, BITSET_FIXED);
   state_item_list queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true, 1,
-                    (const void **) &target);
-  while (gl_list_size (queue) > 0)
+    gl_list_create (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, true, 1,
+                    (സ്ഥിരം ശൂന്യം **) &target);
+  ആകുമ്പോൾ (gl_list_size (queue) > 0)
     {
       state_item *si = (state_item *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      if (bitset_test (result, si - state_items))
-        continue;
-      bitset_set (result, si - state_items);
+      എങ്കിൽ (bitset_test (result, si - state_ഇനങ്ങൾ))
+        തുടരുക;
+      bitset_set (result, si - state_ഇനങ്ങൾ);
       // search all reverse edges.
       bitset rsi = si->revs;
       bitset_iterator biter;
-      state_item_number sin;
+      state_item_സംഖ്യ sin;
       BITSET_FOR_EACH (biter, rsi, sin, 0)
-        gl_list_add_last (queue, &state_items[sin]);
+        gl_list_add_last (queue, &state_ഇനങ്ങൾ[sin]);
     }
   gl_list_free (queue);
-  return result;
+  തിരികെ result;
 }
 
 /**
@@ -151,38 +151,38 @@ eligible_state_items (state_item *target)
  * that can reach the conflict state.
  */
 state_item_list
-shortest_path_from_start (state_item_number target, symbol_number next_sym)
+shortest_path_from_start (state_item_സംഖ്യ target, ചിഹ്നം_സംഖ്യ next_sym)
 {
-  bitset eligible = eligible_state_items (&state_items[target]);
+  bitset eligible = eligible_state_ഇനങ്ങൾ (&state_ഇനങ്ങൾ[target]);
   Hash_table *visited = hash_initialize (32,
-                                         NULL,
+                                         ശൂന്യ,
                                          (Hash_hasher) lssi_hasher,
                                          (Hash_comparator) lssi_comparator,
                                          (Hash_data_freer) lssi_free);
   bitset il = bitset_create (nsyms, BITSET_FIXED);
   bitset_set (il, 0);
-  lssi *init = new_lssi (0, NULL, il, true);
-  lssi_list queue = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
-                                          NULL, true);
+  lssi *init = new_lssi (0, ശൂന്യ, il, true);
+  lssi_list queue = gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ,
+                                          ശൂന്യ, true);
   append_lssi (init, visited, queue);
   // breadth-first search
   bool finished = false;
   lssi *n;
-  while (gl_list_size (queue) > 0)
+  ആകുമ്പോൾ (gl_list_size (queue) > 0)
     {
       n = (lssi *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      state_item_number last = n->si;
-      if (target == last && bitset_test (n->lookahead, next_sym))
+      state_item_സംഖ്യ last = n->si;
+      എങ്കിൽ (target == last && bitset_test (n->lookahead, next_sym))
         {
           finished = true;
-          break;
+          നിർത്തുക;
         }
-      state_item *si = &state_items[last];
+      state_item *si = &state_ഇനങ്ങൾ[last];
       // Transitions don't change follow_L
-      if (si->trans >= 0)
+      എങ്കിൽ (si->trans >= 0)
         {
-          if (bitset_test (eligible, si->trans))
+          എങ്കിൽ (bitset_test (eligible, si->trans))
             {
               lssi *next = new_lssi (si->trans, n, n->lookahead, false);
               append_lssi (next, visited, queue);
@@ -195,71 +195,71 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
       // if the symbol is not nullable, follow_L is its FIRSTS set
       // if the symbol is nullable, follow_L is its FIRSTS set unioned with
       // this logic applied to the next symbol in the rule
-      if (si->prods)
+      എങ്കിൽ (si->prods)
         {
           // Compute follow_L as above
           bitset lookahead = bitset_create (nsyms, BITSET_FIXED);
-          item_number *pos = si->item + 1;
-          for (; !item_number_is_rule_number (*pos); ++pos)
+          item_സംഖ്യ *pos = si->item + 1;
+          വേണ്ടി (; !item_സംഖ്യ_is_rule_സംഖ്യ (*pos); ++pos)
             {
-              item_number it = *pos;
-              if (ISTOKEN (it))
+              item_സംഖ്യ it = *pos;
+              എങ്കിൽ (ISTOKEN (it))
                 {
                   bitset_set (lookahead, it);
-                  break;
+                  നിർത്തുക;
                 }
-              else
+              അല്ലെങ്കിൽ
                 {
                   bitset_union (lookahead, lookahead, FIRSTS (it));
-                  if (!nullable[it - ntokens])
-                    break;
+                  എങ്കിൽ (!nullable[it - ntokens])
+                    നിർത്തുക;
                 }
             }
-          if (item_number_is_rule_number (*pos))
+          എങ്കിൽ (item_സംഖ്യ_is_rule_സംഖ്യ (*pos))
             bitset_union (lookahead, n->lookahead, lookahead);
 
           bool lookahead_used = false;
           // Try all possible production steps within this parser state.
           bitset_iterator biter;
-          state_item_number nextSI;
+          state_item_സംഖ്യ nextSI;
           BITSET_FOR_EACH (biter, si->prods, nextSI, 0)
             {
-              if (!bitset_test (eligible, nextSI))
-                continue;
+              എങ്കിൽ (!bitset_test (eligible, nextSI))
+                തുടരുക;
               lssi *next = new_lssi (nextSI, n, lookahead,
                                      !lookahead_used);
               lookahead_used = append_lssi (next, visited, queue)
                                || lookahead_used;
             }
-          if (!lookahead_used)
+          എങ്കിൽ (!lookahead_used)
             bitset_free (lookahead);
         }
     }
 
   bitset_free (eligible);
-  if (!finished)
+  എങ്കിൽ (!finished)
     {
       gl_list_free (queue);
       fputs ("Cannot find shortest path to conflict state.", stderr);
       abort ();
     }
   state_item_list res =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  for (lssi *sn = n; sn != NULL; sn = sn->parent)
-    gl_list_add_first (res, &state_items[sn->si]);
+    gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, true);
+  വേണ്ടി (lssi *sn = n; sn != ശൂന്യ; sn = sn->parent)
+    gl_list_add_first (res, &state_ഇനങ്ങൾ[sn->si]);
 
   hash_free (visited);
   gl_list_free (queue);
 
-  if (trace_flag & trace_cex)
+  എങ്കിൽ (trace_flag & trace_cex)
     {
       fputs ("REDUCE ITEM PATH:\n", stderr);
       gl_list_iterator_t it = gl_list_iterator (res);
-      const void *sip;
-      while (gl_list_iterator_next (&it, &sip, NULL))
+      സ്ഥിരം ശൂന്യം *sip;
+      ആകുമ്പോൾ (gl_list_iterator_next (&it, &sip, ശൂന്യ))
         state_item_print ((state_item *) sip, stderr, "");
     }
-  return res;
+  തിരികെ res;
 }
 
 /**
@@ -267,20 +267,20 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
  * a nonterminal in the given symbol set.
  */
 bool
-intersect_symbol (symbol_number sym, bitset syms)
+intersect_ചിഹ്നം (ചിഹ്നം_സംഖ്യ sym, bitset syms)
 {
-  if (!syms)
-    return true;
+  എങ്കിൽ (!syms)
+    തിരികെ true;
   bitset_iterator biter;
-  symbol_number sn;
+  ചിഹ്നം_സംഖ്യ sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (sym == sn)
-        return true;
-      if (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
-        return true;
+      എങ്കിൽ (sym == sn)
+        തിരികെ true;
+      എങ്കിൽ (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
+        തിരികെ true;
     }
-  return false;
+  തിരികെ false;
 }
 
 /**
@@ -290,18 +290,18 @@ intersect_symbol (symbol_number sym, bitset syms)
 bool
 intersect (bitset ts, bitset syms)
 {
-  if (!syms || !ts)
-    return true;
+  എങ്കിൽ (!syms || !ts)
+    തിരികെ true;
   bitset_iterator biter;
-  symbol_number sn;
+  ചിഹ്നം_സംഖ്യ sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (bitset_test (ts, sn))
-        return true;
-      if (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
-        return true;
+      എങ്കിൽ (bitset_test (ts, sn))
+        തിരികെ true;
+      എങ്കിൽ (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
+        തിരികെ true;
     }
-  return false;
+  തിരികെ false;
 }
 
 
@@ -310,34 +310,34 @@ intersect (bitset ts, bitset syms)
  * to its lookahead
  */
 state_item_list
-lssi_reverse_production (const state_item *si, bitset lookahead)
+lssi_reverse_production (സ്ഥിരം state_item *si, bitset lookahead)
 {
   state_item_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  if (SI_TRANSITION (si))
-    return result;
+    gl_list_create_empty (GL_LINKED_LIST, ശൂന്യ, ശൂന്യ, ശൂന്യ, true);
+  എങ്കിൽ (SI_TRANSITION (si))
+    തിരികെ result;
   // A production step was made to the current lalr_item.
   // Check that the next symbol in the parent lalr_item is
   // compatible with the lookahead.
   bitset_iterator biter;
-  state_item_number sin;
+  state_item_സംഖ്യ sin;
   BITSET_FOR_EACH (biter, si->revs, sin, 0)
   {
-    state_item *prevsi = &state_items[sin];
-    if (!production_allowed (prevsi, si))
-      continue;
+    state_item *prevsi = &state_ഇനങ്ങൾ[sin];
+    എങ്കിൽ (!production_allowed (prevsi, si))
+      തുടരുക;
     bitset prev_lookahead = prevsi->lookahead;
-    if (item_number_is_rule_number (*(prevsi->item)))
+    എങ്കിൽ (item_സംഖ്യ_is_rule_സംഖ്യ (*(prevsi->item)))
       {
         // reduce item
         // Check that some lookaheads can be preserved.
-        if (!intersect (prev_lookahead, lookahead))
-          continue;
+        എങ്കിൽ (!intersect (prev_lookahead, lookahead))
+          തുടരുക;
       }
-    else
+    അല്ലെങ്കിൽ
       {
         // shift item
-        if (lookahead)
+        എങ്കിൽ (lookahead)
           {
             // Check that lookahead is compatible with the first
             // possible symbols in the rest of the production.
@@ -346,28 +346,28 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
             // the lookahead of the corresponding item.
             bool applicable = false;
             bool nlable = true;
-            for (item_number *pos = prevsi->item + 1;
-                 !applicable && nlable && item_number_is_symbol_number (*pos);
+            വേണ്ടി (item_സംഖ്യ *pos = prevsi->item + 1;
+                 !applicable && nlable && item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (*pos);
                  ++pos)
               {
-                symbol_number next_sym = item_number_as_symbol_number (*pos);
-                if (ISTOKEN (next_sym))
+                ചിഹ്നം_സംഖ്യ next_sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*pos);
+                എങ്കിൽ (ISTOKEN (next_sym))
                   {
-                    applicable = intersect_symbol (next_sym, lookahead);
+                    applicable = intersect_ചിഹ്നം (next_sym, lookahead);
                     nlable = false;
                   }
-                else
+                അല്ലെങ്കിൽ
                   {
                     applicable = intersect (FIRSTS (next_sym), lookahead);
-                    if (!applicable)
+                    എങ്കിൽ (!applicable)
                       nlable = nullable[next_sym - ntokens];
                   }
               }
-            if (!applicable && !nlable)
-              continue;
+            എങ്കിൽ (!applicable && !nlable)
+              തുടരുക;
           }
       }
     gl_list_add_last (result, prevsi);
   }
-  return result;
+  തിരികെ result;
 }

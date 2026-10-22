@@ -22,38 +22,38 @@
 /* See comments in state.h for the data structures that represent it.
    The entry point is generate_states.  */
 
-#include <config.h>
-#include "system.h"
+#അന്തര്ഭാവ <config.h>
+#അന്തര്ഭാവ "system.h"
 
-#include <bitset.h>
+#അന്തര്ഭാവ <bitset.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
+#അന്തര്ഭാവ "closure.h"
+#അന്തര്ഭാവ "complain.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "gram.h"
+#അന്തര്ഭാവ "lalr.h"
+#അന്തര്ഭാവ "lr0.h"
+#അന്തര്ഭാവ "reader.h"
+#അന്തര്ഭാവ "reduce.h"
+#അന്തര്ഭാവ "state.h"
+#അന്തര്ഭാവ "symtab.h"
 
-typedef struct state_list
+തരനിർവചനം ഘടന state_list
 {
-  struct state_list *next;
+  ഘടന state_list *next;
   state *state;
 } state_list;
 
-static state_list *first_state = NULL;
-static state_list *last_state = NULL;
+സ്ഥിതം state_list *first_state = ശൂന്യ;
+സ്ഥിതം state_list *last_state = ശൂന്യ;
 
 /* Print CORE for debugging. */
-static void
+സ്ഥിതം ശൂന്യം
 core_print (size_t core_size, item_index *core, FILE *out)
 {
-  for (int i = 0; i < core_size; ++i)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < core_size; ++i)
     {
-      item_print (ritem + core[i], NULL, out);
+      item_print (ritem + core[i], ശൂന്യ, out);
       fputc ('\n', out);
     }
 }
@@ -64,67 +64,67 @@ core_print (size_t core_size, item_index *core, FILE *out)
 | its outgoing transitions.  Return it.                            |
 `-----------------------------------------------------------------*/
 
-static state *
-state_list_append (symbol_number sym, size_t core_size, item_index *core)
+സ്ഥിതം state *
+state_list_append (ചിഹ്നം_സംഖ്യ sym, size_t core_size, item_index *core)
 {
-  state_list *node = xmalloc (sizeof *node);
+  state_list *കണ്ണി = xmalloc (വലുപ്പം *കണ്ണി);
   state *res = state_new (sym, core_size, core);
 
-  if (trace_flag & trace_automaton)
+  എങ്കിൽ (trace_flag & trace_automaton)
     fprintf (stderr, "state_list_append (state = %d, symbol = %d (%s))\n",
              nstates, sym, symbols[sym]->tag);
 
-  node->next = NULL;
-  node->state = res;
+  കണ്ണി->next = ശൂന്യ;
+  കണ്ണി->state = res;
 
-  if (!first_state)
-    first_state = node;
-  if (last_state)
-    last_state->next = node;
-  last_state = node;
+  എങ്കിൽ (!first_state)
+    first_state = കണ്ണി;
+  എങ്കിൽ (last_state)
+    last_state->next = കണ്ണി;
+  last_state = കണ്ണി;
 
-  return res;
+  തിരികെ res;
 }
 
 /* Symbols that can be "shifted" (including nonterminals) from the
    current state.  */
-bitset shift_symbol;
+bitset shift_ചിഹ്നം;
 
-static rule **redset;
+സ്ഥിതം rule **redset;
 /* For the current state, the list of pointers to states that can be
    reached via a shift/goto.  Could be indexed by the reaching symbol,
    but labels of incoming transitions can be recovered by the state
    itself.  */
-static state **shiftset;
+സ്ഥിതം state **shiftset;
 
 
 /* KERNEL_BASE[symbol-number] -> list of item indices (offsets inside
    RITEM) of length KERNEL_SIZE[symbol-number]. */
-static item_index **kernel_base;
-static int *kernel_size;
+സ്ഥിതം item_index **kernel_base;
+സ്ഥിതം പൂർണ്ണസംഖ്യ *kernel_size;
 
 /* A single dimension array that serves as storage for
    KERNEL_BASE.  */
-static item_index *kernel_items;
+സ്ഥിതം item_index *kernel_ഇനങ്ങൾ;
 
 
-static void
-allocate_itemsets (void)
+സ്ഥിതം ശൂന്യം
+allocate_itemsets (ശൂന്യം)
 {
   /* Count the number of occurrences of all the symbols in RITEMS.
      Note that useless productions (hence useless nonterminals) are
      browsed too, hence we need to allocate room for _all_ the
      symbols.  */
-  size_t count = 0;
-  size_t *symbol_count = xcalloc (nsyms + nuseless_nonterminals,
-                                  sizeof *symbol_count);
+  size_t എണ്ണം = 0;
+  size_t *ചിഹ്നം_എണ്ണം = xcalloc (nsyms + nuseless_nonterminals,
+                                  വലുപ്പം *ചിഹ്നം_എണ്ണം);
 
-  for (rule_number r = 0; r < nrules; ++r)
-    for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  വേണ്ടി (rule_സംഖ്യ r = 0; r < nrules; ++r)
+    വേണ്ടി (item_സംഖ്യ *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
       {
-        symbol_number sym = item_number_as_symbol_number (*rhsp);
-        count += 1;
-        symbol_count[sym] += 1;
+        ചിഹ്നം_സംഖ്യ sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*rhsp);
+        എണ്ണം += 1;
+        ചിഹ്നം_എണ്ണം[sym] += 1;
       }
 
   /* See comments before new_itemsets.  All the vectors of items
@@ -133,26 +133,26 @@ allocate_itemsets (void)
      appears as an item, which is SYMBOL_COUNT[S].
      We allocate that much space for each symbol.  */
 
-  kernel_base = xnmalloc (nsyms, sizeof *kernel_base);
-  kernel_items = xnmalloc (count, sizeof *kernel_items);
+  kernel_base = xnmalloc (nsyms, വലുപ്പം *kernel_base);
+  kernel_ഇനങ്ങൾ = xnmalloc (എണ്ണം, വലുപ്പം *kernel_ഇനങ്ങൾ);
 
-  count = 0;
-  for (symbol_number i = 0; i < nsyms; i++)
+  എണ്ണം = 0;
+  വേണ്ടി (ചിഹ്നം_സംഖ്യ i = 0; i < nsyms; i++)
     {
-      kernel_base[i] = kernel_items + count;
-      count += symbol_count[i];
+      kernel_base[i] = kernel_ഇനങ്ങൾ + എണ്ണം;
+      എണ്ണം += ചിഹ്നം_എണ്ണം[i];
     }
 
-  free (symbol_count);
-  kernel_size = xnmalloc (nsyms, sizeof *kernel_size);
+  സ്വതന്ത്രം (ചിഹ്നം_എണ്ണം);
+  kernel_size = xnmalloc (nsyms, വലുപ്പം *kernel_size);
 }
 
 /* Print the current kernel (in KERNEL_BASE). */
-static void
+സ്ഥിതം ശൂന്യം
 kernel_print (FILE *out)
 {
-  for (symbol_number i = 0; i < nsyms; ++i)
-    if (kernel_size[i])
+  വേണ്ടി (ചിഹ്നം_സംഖ്യ i = 0; i < nsyms; ++i)
+    എങ്കിൽ (kernel_size[i])
       {
         fprintf (out, "kernel[%s] =\n", symbols[i]->tag);
         core_print (kernel_size[i], kernel_base[i], out);
@@ -160,34 +160,34 @@ kernel_print (FILE *out)
 }
 
 /* Make sure the kernel is in sane state. */
-static void
-kernel_check (void)
+സ്ഥിതം ശൂന്യം
+kernel_check (ശൂന്യം)
 {
-  for (symbol_number i = 0; i < nsyms - 1; ++i)
-    assert (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
+  വേണ്ടി (ചിഹ്നം_സംഖ്യ i = 0; i < nsyms - 1; ++i)
+    പ്രതിജ്ഞാ (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
 }
 
-static void
-allocate_storage (void)
+സ്ഥിതം ശൂന്യം
+allocate_storage (ശൂന്യം)
 {
   allocate_itemsets ();
 
-  shiftset = xnmalloc (nsyms, sizeof *shiftset);
-  redset = xnmalloc (nrules, sizeof *redset);
+  shiftset = xnmalloc (nsyms, വലുപ്പം *shiftset);
+  redset = xnmalloc (nrules, വലുപ്പം *redset);
   state_hash_new ();
-  shift_symbol = bitset_create (nsyms, BITSET_FIXED);
+  shift_ചിഹ്നം = bitset_create (nsyms, BITSET_FIXED);
 }
 
 
-static void
-free_storage (void)
+സ്ഥിതം ശൂന്യം
+free_storage (ശൂന്യം)
 {
-  bitset_free (shift_symbol);
-  free (redset);
-  free (shiftset);
-  free (kernel_base);
-  free (kernel_size);
-  free (kernel_items);
+  bitset_free (shift_ചിഹ്നം);
+  സ്വതന്ത്രം (redset);
+  സ്വതന്ത്രം (shiftset);
+  സ്വതന്ത്രം (kernel_base);
+  സ്വതന്ത്രം (kernel_size);
+  സ്വതന്ത്രം (kernel_ഇനങ്ങൾ);
   state_hash_free ();
 }
 
@@ -208,42 +208,42 @@ free_storage (void)
 | number.  Compute each kernel_base[symbol] with the same sort.     |
 `------------------------------------------------------------------*/
 
-static void
+സ്ഥിതം ശൂന്യം
 new_itemsets (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->number);
+  എങ്കിൽ (trace_flag & trace_automaton)
+    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->സംഖ്യ);
 
-  memset (kernel_size, 0, nsyms * sizeof *kernel_size);
+  memset (kernel_size, 0, nsyms * വലുപ്പം *kernel_size);
 
-  bitset_zero (shift_symbol);
+  bitset_zero (shift_ചിഹ്നം);
 
-  if (trace_flag & trace_automaton)
+  എങ്കിൽ (trace_flag & trace_automaton)
     {
       fprintf (stderr, "initial kernel:\n");
       kernel_print (stderr);
     }
 
-  for (size_t i = 0; i < nitemset; ++i)
-    if (item_number_is_symbol_number (ritem[itemset[i]]))
+  വേണ്ടി (size_t i = 0; i < nitemset; ++i)
+    എങ്കിൽ (item_സംഖ്യ_is_ചിഹ്നം_സംഖ്യ (ritem[itemset[i]]))
       {
-        if (trace_flag & trace_automaton)
+        എങ്കിൽ (trace_flag & trace_automaton)
           {
             fputs ("working on: ", stderr);
-            item_print (ritem + itemset[i], NULL, stderr);
+            item_print (ritem + itemset[i], ശൂന്യ, stderr);
             fputc ('\n', stderr);
           }
-        symbol_number sym = item_number_as_symbol_number (ritem[itemset[i]]);
-        bitset_set (shift_symbol, sym);
+        ചിഹ്നം_സംഖ്യ sym = item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (ritem[itemset[i]]);
+        bitset_set (shift_ചിഹ്നം, sym);
         kernel_base[sym][kernel_size[sym]] = itemset[i] + 1;
         kernel_size[sym]++;
       }
 
-  if (trace_flag & trace_automaton)
+  എങ്കിൽ (trace_flag & trace_automaton)
     {
       fprintf (stderr, "final kernel:\n");
       kernel_print (stderr);
-      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->number);
+      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->സംഖ്യ);
     }
   kernel_check ();
 }
@@ -256,10 +256,10 @@ new_itemsets (state *s)
 | already.  Used by append_states.                              |
 `--------------------------------------------------------------*/
 
-static state *
-get_state (symbol_number sym, size_t core_size, item_index *core)
+സ്ഥിതം state *
+get_state (ചിഹ്നം_സംഖ്യ sym, size_t core_size, item_index *core)
 {
-  if (trace_flag & trace_automaton)
+  എങ്കിൽ (trace_flag & trace_automaton)
     {
       fprintf (stderr, "Entering get_state, symbol = %d (%s), core:\n",
                sym, symbols[sym]->tag);
@@ -268,13 +268,13 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
     }
 
   state *s = state_hash_lookup (core_size, core);
-  if (!s)
+  എങ്കിൽ (!s)
     s = state_list_append (sym, core_size, core);
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "Exiting get_state => %d\n", s->number);
+  എങ്കിൽ (trace_flag & trace_automaton)
+    fprintf (stderr, "Exiting get_state => %d\n", s->സംഖ്യ);
 
-  return s;
+  തിരികെ s;
 }
 
 /*---------------------------------------------------------------.
@@ -284,23 +284,23 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
 | SHIFTSET is set up as a vector of those states.                |
 `---------------------------------------------------------------*/
 
-static void
+സ്ഥിതം ശൂന്യം
 append_states (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: begin: state = %d\n", s->number);
+  എങ്കിൽ (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: begin: state = %d\n", s->സംഖ്യ);
 
   bitset_iterator iter;
-  symbol_number sym;
-  int i = 0;
-  BITSET_FOR_EACH (iter, shift_symbol, sym, 0)
+  ചിഹ്നം_സംഖ്യ sym;
+  പൂർണ്ണസംഖ്യ i = 0;
+  BITSET_FOR_EACH (iter, shift_ചിഹ്നം, sym, 0)
     {
       shiftset[i] = get_state (sym, kernel_size[sym], kernel_base[sym]);
       ++i;
     }
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: end: state = %d\n", s->number);
+  എങ്കിൽ (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: end: state = %d\n", s->സംഖ്യ);
 }
 
 
@@ -310,20 +310,20 @@ append_states (state *s)
 | record their rule numbers.                                      |
 `----------------------------------------------------------------*/
 
-static void
+സ്ഥിതം ശൂന്യം
 save_reductions (state *s)
 {
-  int count = 0;
+  പൂർണ്ണസംഖ്യ എണ്ണം = 0;
 
   /* Find and count the active items that represent ends of rules. */
-  for (size_t i = 0; i < nitemset; ++i)
+  വേണ്ടി (size_t i = 0; i < nitemset; ++i)
     {
-      item_number item = ritem[itemset[i]];
-      if (item_number_is_rule_number (item))
+      item_സംഖ്യ item = ritem[itemset[i]];
+      എങ്കിൽ (item_സംഖ്യ_is_rule_സംഖ്യ (item))
         {
-          rule_number r = item_number_as_rule_number (item);
-          redset[count++] = &rules[r];
-          if (r == 0)
+          rule_സംഖ്യ r = item_സംഖ്യ_as_rule_സംഖ്യ (item);
+          redset[എണ്ണം++] = &rules[r];
+          എങ്കിൽ (r == 0)
             {
               /* This is "reduce 0", i.e., accept. */
               aver (!final_state);
@@ -332,19 +332,19 @@ save_reductions (state *s)
         }
     }
 
-  if (trace_flag & trace_automaton)
+  എങ്കിൽ (trace_flag & trace_automaton)
     {
-      fprintf (stderr, "reduction[%d] = {\n", s->number);
-      for (int i = 0; i < count; ++i)
+      fprintf (stderr, "reduction[%d] = {\n", s->സംഖ്യ);
+      വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < എണ്ണം; ++i)
         {
-          rule_print (redset[i], NULL, stderr);
+          rule_print (redset[i], ശൂന്യ, stderr);
           fputc ('\n', stderr);
         }
       fputs ("}\n", stderr);
     }
 
   /* Make a reductions structure and copy the data into it.  */
-  state_reductions_set (s, count, redset);
+  state_reductions_set (s, എണ്ണം, redset);
 }
 
 
@@ -352,12 +352,12 @@ save_reductions (state *s)
 | Build STATES.  |
 `---------------*/
 
-static void
-set_states (void)
+സ്ഥിതം ശൂന്യം
+set_states (ശൂന്യം)
 {
-  states = xcalloc (nstates, sizeof *states);
+  states = xcalloc (nstates, വലുപ്പം *states);
 
-  while (first_state)
+  ആകുമ്പോൾ (first_state)
     {
       state_list *this = first_state;
 
@@ -366,18 +366,18 @@ set_states (void)
          even if reduced to 0.  It is too soon for errs, which are
          computed later, but set_conflicts.  */
       state *s = this->state;
-      if (!s->transitions)
+      എങ്കിൽ (!s->transitions)
         state_transitions_set (s, 0, 0);
-      if (!s->reductions)
+      എങ്കിൽ (!s->reductions)
         state_reductions_set (s, 0, 0);
 
-      states[s->number] = s;
+      states[s->സംഖ്യ] = s;
 
       first_state = this->next;
-      free (this);
+      സ്വതന്ത്രം (this);
     }
-  first_state = NULL;
-  last_state = NULL;
+  first_state = ശൂന്യ;
+  last_state = ശൂന്യ;
 }
 
 
@@ -386,8 +386,8 @@ set_states (void)
 | grammar.                                                           |
 `-------------------------------------------------------------------*/
 
-void
-generate_states (void)
+ശൂന്യം
+generate_states (ശൂന്യം)
 {
   allocate_storage ();
   closure_new (nritems);
@@ -397,22 +397,22 @@ generate_states (void)
   {
     /* The items of its core: beginning of all the rules of $accept.  */
     kernel_size[0] = 0;
-    for (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
+    വേണ്ടി (rule_സംഖ്യ r = 0; r < nrules && rules[r].lhs->ചിഹ്നം == acceptsymbol; ++r)
       kernel_base[0][kernel_size[0]++] = rules[r].rhs - ritem;
     state_list_append (0, kernel_size[0], kernel_base[0]);
   }
 
   /* States are queued when they are created; process them all.  */
-  for (state_list *list = first_state; list; list = list->next)
+  വേണ്ടി (state_list *list = first_state; list; list = list->next)
     {
       state *s = list->state;
-      if (trace_flag & trace_automaton)
+      എങ്കിൽ (trace_flag & trace_automaton)
         fprintf (stderr, "Processing state %d (reached by %s)\n",
-                 s->number,
-                 symbols[s->accessing_symbol]->tag);
+                 s->സംഖ്യ,
+                 symbols[s->accessing_ചിഹ്നം]->tag);
       /* Set up itemset for the transitions out of this state.  itemset gets a
          vector of all the items that could be accepted next.  */
-      closure (s->items, s->nitems);
+      closure (s->ഇനങ്ങൾ, s->nitems);
       /* Record the reductions allowed out of this state.  */
       save_reductions (s);
       /* Find the itemsets of the states that shifts/gotos can reach.  */
@@ -422,7 +422,7 @@ generate_states (void)
 
       /* Create the shifts structures for the shifts to those states,
          now that the state numbers transitioning to are known.  */
-      state_transitions_set (s, bitset_count (shift_symbol), shiftset);
+      state_transitions_set (s, bitset_എണ്ണം (shift_ചിഹ്നം), shiftset);
     }
 
   /* discard various storage */

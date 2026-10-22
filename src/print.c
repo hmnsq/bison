@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#അന്തര്ഭാവ <config.h>
 
-#include "print.h"
+#അന്തര്ഭാവ "print.h"
 
-#include "system.h"
+#അന്തര്ഭാവ "system.h"
 
-#include <bitset.h>
-#include <mbswidth.h>
+#അന്തര്ഭാവ <bitset.h>
+#അന്തര്ഭാവ <mbswidth.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#അന്തര്ഭാവ "closure.h"
+#അന്തര്ഭാവ "complain.h"
+#അന്തര്ഭാവ "conflicts.h"
+#അന്തര്ഭാവ "counterexample.h"
+#അന്തര്ഭാവ "files.h"
+#അന്തര്ഭാവ "getargs.h"
+#അന്തര്ഭാവ "gram.h"
+#അന്തര്ഭാവ "lalr.h"
+#അന്തര്ഭാവ "lr0.h"
+#അന്തര്ഭാവ "muscle-tab.h"
+#അന്തര്ഭാവ "reader.h"
+#അന്തര്ഭാവ "reduce.h"
+#അന്തര്ഭാവ "state.h"
+#അന്തര്ഭാവ "symtab.h"
+#അന്തര്ഭാവ "tables.h"
 
 /* For a given state, the symbol numbers of the lookahead tokens for
    shifts and errors (i.e. not reduce).  */
-static bitset no_reduce_set;
+സ്ഥിതം bitset no_reduce_set;
 
 
 
@@ -53,11 +53,11 @@ static bitset no_reduce_set;
 | *WIDTH := max (*WIDTH, strlen (STR)).  |
 `---------------------------------------*/
 
-static void
-max_length (size_t *width, const char *str)
+സ്ഥിതം ശൂന്യം
+max_length (size_t *width, സ്ഥിരം അക്ഷരം *str)
 {
   size_t len = mbswidth (str, 0);
-  if (len > *width)
+  എങ്കിൽ (len > *width)
     *width = len;
 }
 
@@ -65,35 +65,35 @@ max_length (size_t *width, const char *str)
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, const state *s)
+സ്ഥിതം ശൂന്യം
+print_core (FILE *out, സ്ഥിരം state *s)
 {
-  const item_index *sitems = s->items;
+  സ്ഥിരം item_index *sitems = s->ഇനങ്ങൾ;
   size_t snritems = s->nitems;
   /* Output all the items of a state, not only its kernel.  */
-  if (report_flag & report_itemsets)
+  എങ്കിൽ (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  if (!snritems)
-    return;
+  എങ്കിൽ (!snritems)
+    തിരികെ;
 
   fputc ('\n', out);
 
-  rule const *previous_rule = NULL;
-  for (size_t i = 0; i < snritems; i++)
+  rule സ്ഥിരം *previous_rule = ശൂന്യ;
+  വേണ്ടി (size_t i = 0; i < snritems; i++)
     {
-      item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
+      item_സംഖ്യ *sp1 = ritem + sitems[i];
+      rule സ്ഥിരം *r = item_rule (sp1);
       item_print (sp1, previous_rule, out);
       previous_rule = r;
 
       /* Display the lookahead tokens?  */
-      if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
+      എങ്കിൽ (report_flag & report_lookaheads
+          && item_സംഖ്യ_is_rule_സംഖ്യ (*sp1))
         state_rule_lookaheads_print (s, r, out);
       fputc ('\n', out);
     }
@@ -105,44 +105,44 @@ print_core (FILE *out, const state *s)
 | OUT.                                                        |
 `------------------------------------------------------------*/
 
-static void
-print_transitions (const state *s, FILE *out, bool display_transitions_p)
+സ്ഥിതം ശൂന്യം
+print_transitions (സ്ഥിരം state *s, FILE *out, bool display_transitions_p)
 {
   transitions *trans = s->transitions;
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < trans->അക്കം; i++)
+    എങ്കിൽ (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
+        ചിഹ്നം *sym = symbols[TRANSITION_ചിഹ്നം (trans, i)];
         max_length (&width, sym->tag);
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  എങ്കിൽ (!width)
+    തിരികെ;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and shifts.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < trans->അക്കം; i++)
+    എങ്കിൽ (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        const char *tag = sym->tag;
-        const state *s1 = trans->states[i];
+        ചിഹ്നം *sym = symbols[TRANSITION_ചിഹ്നം (trans, i)];
+        സ്ഥിരം അക്ഷരം *tag = sym->tag;
+        സ്ഥിരം state *s1 = trans->states[i];
 
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        വേണ്ടി (പൂർണ്ണസംഖ്യ j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
-        if (display_transitions_p)
-          fprintf (out, _("shift, and go to state %d\n"), s1->number);
-        else
-          fprintf (out, _("go to state %d\n"), s1->number);
+        എങ്കിൽ (display_transitions_p)
+          fprintf (out, _("shift, and go to state %d\n"), s1->സംഖ്യ);
+        അല്ലെങ്കിൽ
+          fprintf (out, _("go to state %d\n"), s1->സംഖ്യ);
       }
 }
 
@@ -151,31 +151,31 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, const state *s)
+സ്ഥിതം ശൂന്യം
+print_errs (FILE *out, സ്ഥിരം state *s)
 {
   errs *errp = s->errs;
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < errp->അക്കം; ++i)
+    എങ്കിൽ (errp->symbols[i])
       max_length (&width, errp->symbols[i]->tag);
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  എങ്കിൽ (!width)
+    തിരികെ;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and errors.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < errp->അക്കം; ++i)
+    എങ്കിൽ (errp->symbols[i])
       {
-        const char *tag = errp->symbols[i]->tag;
+        സ്ഥിരം അക്ഷരം *tag = errp->symbols[i]->tag;
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        വേണ്ടി (പൂർണ്ണസംഖ്യ j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
         fputs (_("error (nonassociative)\n"), out);
       }
@@ -188,22 +188,22 @@ print_errs (FILE *out, const state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
+സ്ഥിതം ശൂന്യം
 print_reduction (FILE *out, size_t width,
-                 const char *lookahead,
+                 സ്ഥിരം അക്ഷരം *lookahead,
                  rule *r, bool enabled)
 {
   fprintf (out, "    %s", lookahead);
-  for (int j = width - mbswidth (lookahead, 0); j > 0; --j)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ j = width - mbswidth (lookahead, 0); j > 0; --j)
     fputc (' ', out);
-  if (!enabled)
+  എങ്കിൽ (!enabled)
     fputc ('[', out);
-  if (rule_is_initial (r))
+  എങ്കിൽ (rule_is_initial (r))
     fprintf (out, _("accept"));
-  else
-    fprintf (out, _("reduce using rule %d (%s)"), r->number,
-             r->lhs->symbol->tag);
-  if (!enabled)
+  അല്ലെങ്കിൽ
+    fprintf (out, _("reduce using rule %d (%s)"), r->സംഖ്യ,
+             r->lhs->ചിഹ്നം->tag);
+  എങ്കിൽ (!enabled)
     fputc (']', out);
   fputc ('\n', out);
 }
@@ -213,56 +213,56 @@ print_reduction (FILE *out, size_t width,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, const state *s)
+സ്ഥിതം ശൂന്യം
+print_reductions (FILE *out, സ്ഥിരം state *s)
 {
   reductions *reds = s->reductions;
-  if (reds->num == 0)
-    return;
+  എങ്കിൽ (reds->അക്കം == 0)
+    തിരികെ;
 
-  rule *default_reduction = NULL;
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  rule *default_reduction = ശൂന്യ;
+  എങ്കിൽ (yydefact[s->സംഖ്യ] != 0)
+    default_reduction = &rules[yydefact[s->സംഖ്യ] - 1];
 
   transitions *trans = s->transitions;
 
   bitset_zero (no_reduce_set);
   {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (no_reduce_set, TRANSITION_ചിഹ്നം (trans, i));
   }
-  for (int i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < s->errs->അക്കം; ++i)
+    എങ്കിൽ (s->errs->symbols[i])
+      bitset_set (no_reduce_set, s->errs->symbols[i]->content->സംഖ്യ);
 
   /* Compute the width of the lookahead token column.  */
   size_t width = 0;
-  if (default_reduction)
+  എങ്കിൽ (default_reduction)
     width = mbswidth (_("$default"), 0);
 
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  എങ്കിൽ (reds->lookaheads)
+    വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool എണ്ണം = bitset_test (no_reduce_set, i);
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        വേണ്ടി (പൂർണ്ണസംഖ്യ j = 0; j < reds->അക്കം; ++j)
+          എങ്കിൽ (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              എങ്കിൽ (! എണ്ണം)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  എങ്കിൽ (reds->rules[j] != default_reduction)
                     max_length (&width, symbols[i]->tag);
-                  count = true;
+                  എണ്ണം = true;
                 }
-              else
+              അല്ലെങ്കിൽ
                 max_length (&width, symbols[i]->tag);
             }
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  എങ്കിൽ (!width)
+    തിരികെ;
 
   fputc ('\n', out);
   width += 2;
@@ -270,34 +270,34 @@ print_reductions (FILE *out, const state *s)
   bool default_reduction_only = true;
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  എങ്കിൽ (reds->lookaheads)
+    വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
-        if (count)
+        bool എണ്ണം = bitset_test (no_reduce_set, i);
+        എങ്കിൽ (എണ്ണം)
           default_reduction_only = false;
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        വേണ്ടി (പൂർണ്ണസംഖ്യ j = 0; j < reds->അക്കം; ++j)
+          എങ്കിൽ (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              എങ്കിൽ (! എണ്ണം)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  എങ്കിൽ (reds->rules[j] != default_reduction)
                     {
                       default_reduction_only = false;
                       print_reduction (out, width,
                                        symbols[i]->tag,
                                        reds->rules[j], true);
                     }
-                  else
+                  അല്ലെങ്കിൽ
                     defaulted = true;
-                  count = true;
+                  എണ്ണം = true;
                 }
-              else
+              അല്ലെങ്കിൽ
                 {
                   default_reduction_only = false;
-                  if (defaulted)
+                  എങ്കിൽ (defaulted)
                     print_reduction (out, width,
                                      symbols[i]->tag,
                                      default_reduction, true);
@@ -309,17 +309,17 @@ print_reductions (FILE *out, const state *s)
             }
       }
 
-  if (default_reduction)
+  എങ്കിൽ (default_reduction)
     {
-      char *default_reductions =
+      അക്ഷരം *default_reductions =
         muscle_percent_define_get ("lr.default-reduction");
       print_reduction (out, width, _("$default"), default_reduction, true);
       aver (STREQ (default_reductions, "most")
             || (STREQ (default_reductions, "consistent")
                 && default_reduction_only)
-            || (reds->num == 1 && rule_is_initial (reds->rules[0])));
-      (void) default_reduction_only;
-      free (default_reductions);
+            || (reds->അക്കം == 1 && rule_is_initial (reds->rules[0])));
+      (ശൂന്യം) default_reduction_only;
+      സ്വതന്ത്രം (default_reductions);
     }
 }
 
@@ -329,8 +329,8 @@ print_reductions (FILE *out, const state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, const state *s)
+സ്ഥിതം ശൂന്യം
+print_actions (FILE *out, സ്ഥിരം state *s)
 {
   /* Print shifts.  */
   print_transitions (s, out, true);
@@ -345,20 +345,20 @@ print_actions (FILE *out, const state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, const state *s)
+സ്ഥിതം ശൂന്യം
+print_state (FILE *out, സ്ഥിരം state *s)
 {
   fputs ("\n\n", out);
-  fprintf (out, _("State %d"), s->number);
+  fprintf (out, _("State %d"), s->സംഖ്യ);
   fputc ('\n', out);
   print_core (out, s);
   print_actions (out, s);
-  if ((report_flag & report_solved_conflicts) && s->solved_conflicts)
+  എങ്കിൽ ((report_flag & report_solved_conflicts) && s->solved_conflicts)
     {
       fputc ('\n', out);
       fputs (s->solved_conflicts, out);
     }
-  if (has_conflicts (s)
+  എങ്കിൽ (has_conflicts (s)
       && (report_flag & report_cex
           || warning_is_enabled (Wcounterexamples)))
     {
@@ -371,27 +371,27 @@ print_state (FILE *out, const state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
+സ്ഥിതം ശൂന്യം
 print_terminal_symbols (FILE *out)
 {
   /* TERMINAL (type #) : rule #s terminal is on RHS */
   fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
-  for (int i = 0; i < max_code + 1; ++i)
-    if (token_translations[i] != undeftoken->content->number)
+  വേണ്ടി (പൂർണ്ണസംഖ്യ i = 0; i < max_code + 1; ++i)
+    എങ്കിൽ (token_translations[i] != undeftoken->content->സംഖ്യ)
       {
-        const symbol *sym = symbols[token_translations[i]];
-        const char *tag = sym->tag;
+        സ്ഥിരം ചിഹ്നം *sym = symbols[token_translations[i]];
+        സ്ഥിരം അക്ഷരം *tag = sym->tag;
         fprintf (out, "%4s%s", "", tag);
-        if (sym->content->type_name)
+        എങ്കിൽ (sym->content->type_name)
           fprintf (out, " <%s>", sym->content->type_name);
         fprintf (out, " (%d)", i);
 
-        for (rule_number r = 0; r < nrules; r++)
-          for (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
-            if (item_number_as_symbol_number (*rhsp) == token_translations[i])
+        വേണ്ടി (rule_സംഖ്യ r = 0; r < nrules; r++)
+          വേണ്ടി (item_സംഖ്യ *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
+            എങ്കിൽ (item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*rhsp) == token_translations[i])
               {
                 fprintf (out, " %d", r);
-                break;
+                നിർത്തുക;
               }
         fputc ('\n', out);
       }
@@ -399,57 +399,57 @@ print_terminal_symbols (FILE *out)
 }
 
 
-static void
+സ്ഥിതം ശൂന്യം
 print_nonterminal_symbols (FILE *out)
 {
   fprintf (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
-  for (symbol_number i = ntokens; i < nsyms; i++)
+  വേണ്ടി (ചിഹ്നം_സംഖ്യ i = ntokens; i < nsyms; i++)
     {
-      const symbol *sym = symbols[i];
-      const char *tag = sym->tag;
-      bool on_left = false;
-      bool on_right = false;
+      സ്ഥിരം ചിഹ്നം *sym = symbols[i];
+      സ്ഥിരം അക്ഷരം *tag = sym->tag;
+      bool on_ഇടത് = false;
+      bool on_വലത് = false;
 
-      for (rule_number r = 0; r < nrules; r++)
+      വേണ്ടി (rule_സംഖ്യ r = 0; r < nrules; r++)
         {
-          on_left |= rules[r].lhs->number == i;
-          for (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
-            on_right |= item_number_as_symbol_number (*rhsp) == i;
-          if (on_left && on_right)
-            break;
+          on_ഇടത് |= rules[r].lhs->സംഖ്യ == i;
+          വേണ്ടി (item_സംഖ്യ *rhsp = rules[r].rhs; !on_വലത് && 0 <= *rhsp; ++rhsp)
+            on_വലത് |= item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*rhsp) == i;
+          എങ്കിൽ (on_ഇടത് && on_വലത്)
+            നിർത്തുക;
         }
 
       fprintf (out, "%4s%s", "", tag);
-      if (sym->content->type_name)
+      എങ്കിൽ (sym->content->type_name)
         fprintf (out, " <%s>", sym->content->type_name);
       fprintf (out, " (%d)\n", i);
 
-      if (on_left)
+      എങ്കിൽ (on_ഇടത്)
         {
           fprintf (out, "%8s%s", "", _("on left:"));
-          for (rule_number r = 0; r < nrules; r++)
-            if (rules[r].lhs->number == i)
+          വേണ്ടി (rule_സംഖ്യ r = 0; r < nrules; r++)
+            എങ്കിൽ (rules[r].lhs->സംഖ്യ == i)
               fprintf (out, " %d", r);
           fputc ('\n', out);
         }
 
-      if (on_right)
+      എങ്കിൽ (on_വലത്)
         {
           fprintf (out, "%8s%s", "", _("on right:"));
-          for (rule_number r = 0; r < nrules; r++)
-            for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-              if (item_number_as_symbol_number (*rhsp) == i)
+          വേണ്ടി (rule_സംഖ്യ r = 0; r < nrules; r++)
+            വേണ്ടി (item_സംഖ്യ *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+              എങ്കിൽ (item_സംഖ്യ_as_ചിഹ്നം_സംഖ്യ (*rhsp) == i)
                 {
                   fprintf (out, " %d", r);
-                  break;
+                  നിർത്തുക;
                 }
           fputc ('\n', out);
         }
     }
 }
 
-void
-print_results (void)
+ശൂന്യം
+print_results (ശൂന്യം)
 {
   /* We used to use just .out if SPEC_NAME_PREFIX (-p) was used, but
      that conflicts with Posix.  */
@@ -467,7 +467,7 @@ print_results (void)
 
   /* Storage for print_reductions.  */
   no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
-  for (state_number i = 0; i < nstates; i++)
+  വേണ്ടി (state_സംഖ്യ i = 0; i < nstates; i++)
     print_state (out, states[i]);
   bitset_free (no_reduce_set);
 

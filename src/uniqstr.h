@@ -27,20 +27,20 @@
 | Pointers to unique copies of C strings.  |
 `-----------------------------------------*/
 
-typedef char const *uniqstr;
+തരനിർവചനം അക്ഷരം സ്ഥിരം *uniqstr;
 
 /* Return the uniqstr for STR.  */
-uniqstr uniqstr_new (char const *str);
+uniqstr uniqstr_new (അക്ഷരം സ്ഥിരം *str);
 
 /* Two uniqstr values have the same value iff they are the same.  */
 # define UNIQSTR_EQ(Ustr1, Ustr2) (!!((Ustr1) == (Ustr2)))
 
 /* Compare two uniqstr a la strcmp: negative for <, nul for =, and
    positive for >.  Undefined order, relies on addresses.  */
-int uniqstr_cmp (uniqstr u1, uniqstr u2);
+പൂർണ്ണസംഖ്യ uniqstr_cmp (uniqstr u1, uniqstr u2);
 
 /* Die if STR is not a uniqstr.  */
-void uniqstr_assert (char const *str);
+ശൂന്യം uniqstr_assert (അക്ഷരം സ്ഥിരം *str);
 
 /*----------------.
 | Concatenation.  |
@@ -49,21 +49,21 @@ void uniqstr_assert (char const *str);
 /* Concatenate strings and return a uniqstr.  The goal of
    this macro is to make the caller's code a little more succinct.  */
 # define UNIQSTR_CONCAT(...)                                            \
-  uniqstr_concat (ARRAY_CARDINALITY (((char const *[]) {__VA_ARGS__})), \
+  uniqstr_concat (ARRAY_CARDINALITY (((അക്ഷരം സ്ഥിരം *[]) {__VA_ARGS__})), \
                   __VA_ARGS__)
-uniqstr uniqstr_concat (int nargs, ...);
+uniqstr uniqstr_concat (പൂർണ്ണസംഖ്യ nargs, ...);
 
 /*--------------------.
 | Table of uniqstrs.  |
 `--------------------*/
 
 /* Create the string table.  */
-void uniqstrs_new (void);
+ശൂന്യം uniqstrs_new (ശൂന്യം);
 
 /* Free all the memory allocated for symbols.  */
-void uniqstrs_free (void);
+ശൂന്യം uniqstrs_free (ശൂന്യം);
 
 /* Report them all.  */
-void uniqstrs_print (void);
+ശൂന്യം uniqstrs_print (ശൂന്യം);
 
 #endif /* ! defined UNIQSTR_H_ */

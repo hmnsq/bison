@@ -28,9 +28,9 @@
   */
 
 // Please syntax-check.
-#include <config.h>
+#അന്തര്ഭാവ <config.h>
 
-static const char *const msgid[] =
+സ്ഥിതം സ്ഥിരം അക്ഷരം *സ്ഥിരം msgid[] =
   {
     N_("end of file"),
     N_("invalid token")
