@@ -36,7 +36,7 @@ typedef relation_nodes *relation;
 typedef void (relation_node_print) (relation_node node, FILE* out);
 
 /* Report a relation R that has SIZE vertices.  */
-void relation_print (const char *title,
+void relation_print (const var_na *title,
                      relation r, size_t size,
                      relation_node_print print, FILE *out);
 
