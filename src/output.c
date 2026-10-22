@@ -18,33 +18,33 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাৱ <config.h>
+#অন্তর্ভাৱ "system.h"
 
-#include <filename.h> /* IS_PATH_WITH_DIR */
-#include <get-errno.h>
-#include <mbswidth.h>
-#include <path-join.h>
-#include <quotearg.h>
-#include <spawn-pipe.h>
-#include <timevar.h>
-#include <wait-process.h>
+#অন্তর্ভাৱ <filename.h> /* IS_PATH_WITH_DIR */
+#অন্তর্ভাৱ <get-errno.h>
+#অন্তর্ভাৱ <mbswidth.h>
+#অন্তর্ভাৱ <path-join.h>
+#অন্তর্ভাৱ <quotearg.h>
+#অন্তর্ভাৱ <spawn-pipe.h>
+#অন্তর্ভাৱ <timevar.h>
+#অন্তর্ভাৱ <wait-process.h>
 
-#include "complain.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "muscle-tab.h"
-#include "output.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"    /* max_left_semantic_context */
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "strversion.h"
+#অন্তর্ভাৱ "complain.h"
+#অন্তর্ভাৱ "files.h"
+#অন্তর্ভাৱ "getargs.h"
+#অন্তর্ভাৱ "gram.h"
+#অন্তর্ভাৱ "muscle-tab.h"
+#অন্তর্ভাৱ "output.h"
+#অন্তর্ভাৱ "reader.h"
+#অন্তর্ভাৱ "reduce.h"
+#অন্তর্ভাৱ "scan-code.h"    /* max_left_semantic_context */
+#অন্তর্ভাৱ "scan-skel.h"
+#অন্তর্ভাৱ "symtab.h"
+#অন্তর্ভাৱ "tables.h"
+#অন্তর্ভাৱ "strversion.h"
 
-static struct obstack format_obstack;
+স্থির সংরচনা obstack format_obstack;
 
 
 /*-------------------------------------------------------------------.
@@ -59,50 +59,50 @@ static struct obstack format_obstack;
 `-------------------------------------------------------------------*/
 
 
-#define GENERATE_MUSCLE_INSERT_TABLE(Name, Type)                        \
+#define GENERATE_MUSCLE_ঢোকাও_TABLE(Name, Type)                        \
                                                                         \
-static void                                                             \
-Name (char const *name, Type *table_data, Type first,                   \
-      int begin, int end)                                               \
+স্থির শূন্য                                                             \
+Name (ৱর্ণ ধ্রুৱ *name, Type *table_data, Type first,                   \
+      পূর্ণাঙ্ক begin, পূর্ণাঙ্ক end)                                               \
 {                                                                       \
   Type min = first;                                                     \
   Type max = first;                                                     \
-  int j = 1;                                                            \
+  পূর্ণাঙ্ক j = 1;                                                            \
                                                                         \
   obstack_printf (&format_obstack, "%6d", first);                       \
-  for (int i = begin; i < end; ++i)                                     \
+  বাবে (পূর্ণাঙ্ক i = begin; i < end; ++i)                                     \
     {                                                                   \
       obstack_1grow (&format_obstack, ',');                             \
-      if (j >= 10)                                                      \
+      যদি (j >= 10)                                                      \
         {                                                               \
           obstack_sgrow (&format_obstack, "\n  ");                      \
           j = 1;                                                        \
         }                                                               \
-      else                                                              \
+      অন্যথা                                                              \
         ++j;                                                            \
       obstack_printf (&format_obstack, "%6d", table_data[i]);           \
-      if (table_data[i] < min)                                          \
+      যদি (table_data[i] < min)                                          \
         min = table_data[i];                                            \
-      if (max < table_data[i])                                          \
+      যদি (max < table_data[i])                                          \
         max = table_data[i];                                            \
     }                                                                   \
-  muscle_insert (name, obstack_finish0 (&format_obstack));              \
+  muscle_ঢোকাও (name, obstack_finish0 (&format_obstack));              \
                                                                         \
   long lmin = min;                                                      \
   long lmax = max;                                                      \
   /* Build 'NAME_min' and 'NAME_max' in the obstack. */                 \
   obstack_printf (&format_obstack, "%s_min", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
+  MUSCLE_ঢোকাও_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
   obstack_printf (&format_obstack, "%s_max", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
+  MUSCLE_ঢোকাও_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
 }
 
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_int_table, int)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_base_table, base_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_rule_number_table, rule_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_symbol_number_table, symbol_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_item_number_table, item_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
+GENERATE_MUSCLE_ঢোকাও_TABLE (muscle_ঢোকাও_int_table, পূর্ণাঙ্ক)
+GENERATE_MUSCLE_ঢোকাও_TABLE (muscle_ঢোকাও_base_table, base_সংখ্যা)
+GENERATE_MUSCLE_ঢোকাও_TABLE (muscle_ঢোকাও_rule_সংখ্যা_table, rule_সংখ্যা)
+GENERATE_MUSCLE_ঢোকাও_TABLE (muscle_ঢোকাও_প্ৰতীক_সংখ্যা_table, প্ৰতীক_সংখ্যা)
+GENERATE_MUSCLE_ঢোকাও_TABLE (muscle_ঢোকাও_item_সংখ্যা_table, item_সংখ্যা)
+GENERATE_MUSCLE_ঢোকাও_TABLE (muscle_ঢোকাও_state_সংখ্যা_table, state_সংখ্যা)
 
 
 /*----------------------------------------------------------------.
@@ -111,44 +111,44 @@ GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
 | Keep sync'ed with obstack_escape.                               |
 `----------------------------------------------------------------*/
 
-static void
-output_escaped (FILE *out, const char *cp)
+স্থির শূন্য
+output_escaped (FILE *out, ধ্রুৱ ৱর্ণ *cp)
 {
-  for (; *cp; ++cp)
-    switch (*cp)
+  বাবে (; *cp; ++cp)
+    ৱিকল্প (*cp)
       {
-      case '$': fputs ("$][", out); break;
-      case '@': fputs ("@@",  out); break;
-      case '[': fputs ("@{",  out); break;
-      case ']': fputs ("@}",  out); break;
+      পক্ষ '$': fputs ("$][", out); ভঙ্গ;
+      পক্ষ '@': fputs ("@@",  out); ভঙ্গ;
+      পক্ষ '[': fputs ("@{",  out); ভঙ্গ;
+      পক্ষ ']': fputs ("@}",  out); ভঙ্গ;
 
-      case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+      পক্ষ 'b':
+        যদি (STRPREFIX_LIT ("b4_", cp))
           {
             fputs ("b4@'_", out);
             cp += strlen ("b4_") - 1;
-            break;
+            ভঙ্গ;
           }
-        else
-          goto append;
+        অন্যথা
+          গচ্ছ append;
 
-      case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+      পক্ষ 'm':
+        যদি (STRPREFIX_LIT ("m4_", cp))
           {
             fputs ("m4@'_", out);
             cp += strlen ("m4_") - 1;
-            break;
+            ভঙ্গ;
           }
-        else
-          goto append;
+        অন্যথা
+          গচ্ছ append;
 
       append:
-      default:  fputc (*cp,   out); break;
+      স্ৱভাৱ:  fputc (*cp,   out); ভঙ্গ;
       }
 }
 
-static void
-output_quoted (FILE *out, char const *cp)
+স্থির শূন্য
+output_quoted (FILE *out, ৱর্ণ ধ্রুৱ *cp)
 {
   fprintf (out, "[[");
   output_escaped (out, cp);
@@ -160,8 +160,8 @@ output_quoted (FILE *out, char const *cp)
 | for C and M4.                                                   |
 `----------------------------------------------------------------*/
 
-static void
-string_output (FILE *out, char const *string)
+স্থির শূন্য
+string_output (FILE *out, ৱর্ণ ধ্রুৱ *string)
 {
   output_quoted (out, quotearg_style (c_quoting_style, string));
 }
@@ -170,127 +170,127 @@ string_output (FILE *out, char const *string)
 /* Store in BUFFER a copy of SRC where trigraphs are escaped, return
    the size of the result (including the final NUL).  If called with
    BUFFERSIZE = 0, returns the needed size for BUFFER.  */
-static ptrdiff_t
-escape_trigraphs (char *buffer, ptrdiff_t buffersize, const char *src)
+স্থির ptrdiff_t
+escape_trigraphs (ৱর্ণ *buffer, ptrdiff_t buffersize, ধ্রুৱ ৱর্ণ *src)
 {
 #define STORE(c)                                \
-  do                                            \
+  কৰা                                            \
     {                                           \
-      if (res < buffersize)                     \
+      যদি (res < buffersize)                     \
         buffer[res] = (c);                      \
       ++res;                                    \
     }                                           \
-  while (0)
+  যেতিয়ালৈ (0)
   ptrdiff_t res = 0;
-  for (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
+  বাবে (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
     {
-      if (i + 2 < len
+      যদি (i + 2 < len
           && src[i] == '?' && src[i+1] == '?')
         {
-          switch (src[i+2])
+          ৱিকল্প (src[i+2])
             {
-            case '!': case '\'':
-            case '(': case ')': case '-': case '/':
-            case '<': case '=': case '>':
+            পক্ষ '!': পক্ষ '\'':
+            পক্ষ '(': পক্ষ ')': পক্ষ '-': পক্ষ '/':
+            পক্ষ '<': পক্ষ '=': পক্ষ '>':
               i += 1;
               STORE ('?');
               STORE ('"');
               STORE ('"');
               STORE ('?');
-              continue;
+              অনুৱর্ত;
             }
         }
       STORE (src[i]);
     }
   STORE ('\0');
 #undef STORE
-  return res;
+  ঘূৰাই res;
 }
 
 /* Same as xstrdup, except that trigraphs are escaped.  */
-static char *
-xescape_trigraphs (const char *src)
+স্থির ৱর্ণ *
+xescape_trigraphs (ধ্রুৱ ৱর্ণ *src)
 {
-  ptrdiff_t bufsize = escape_trigraphs (NULL, 0, src);
-  char *buf = xcharalloc (bufsize);
+  ptrdiff_t bufsize = escape_trigraphs (রিক্ত, 0, src);
+  ৱর্ণ *buf = xcharalloc (bufsize);
   escape_trigraphs (buf, bufsize, src);
-  return buf;
+  ঘূৰাই buf;
 }
 
 /* The tag to show in the generated parsers.  Use "end of file" rather
    than "$end".  But keep "$end" in the reports, it's shorter and more
    consistent.  Support i18n if the user already uses it.  */
-static const char *
-symbol_tag (const symbol *sym)
+স্থির ধ্রুৱ ৱর্ণ *
+প্ৰতীক_tag (ধ্রুৱ প্ৰতীক *sym)
 {
-  const bool eof_is_user_defined
+  ধ্রুৱ bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
 
-  if (!eof_is_user_defined && sym->content == eoftoken->content)
-    return "\"end of file\"";
-  else if (sym->content == undeftoken->content)
-    return "\"invalid token\"";
-  else
-    return sym->tag;
+  যদি (!eof_is_user_defined && sym->content == eoftoken->content)
+    ঘূৰাই "\"end of file\"";
+  অন্যথা যদি (sym->content == undeftoken->content)
+    ঘূৰাই "\"invalid token\"";
+  অন্যথা
+    ঘূৰাই sym->tag;
 }
 
 /* Generate the b4_<MUSCLE_NAME> (e.g., b4_tname) table with the
    symbol names (aka tags). */
 
-static void
-prepare_symbol_names (char const *muscle_name)
+স্থির শূন্য
+prepare_প্ৰতীক_names (ৱর্ণ ধ্রুৱ *muscle_name)
 {
   // Whether to add a pair of quotes around the name.
-  const bool quote = STREQ (muscle_name, "tname");
+  ধ্রুৱ bool quote = STREQ (muscle_name, "tname");
   bool has_translations = false;
 
   /* We assume that the table will be output starting at column 2. */
-  int col = 2;
-  struct quoting_options *qo = clone_quoting_options (0);
+  পূর্ণাঙ্ক col = 2;
+  সংরচনা quoting_options *qo = clone_quoting_options (0);
   set_quoting_style (qo, c_quoting_style);
   set_quoting_flags (qo, QA_SPLIT_TRIGRAPHS);
-  for (int i = 0; i < nsyms; i++)
+  বাবে (পূর্ণাঙ্ক i = 0; i < nsyms; i++)
     {
-      const char *tag = symbol_tag (symbols[i]);
+      ধ্রুৱ ৱর্ণ *tag = প্ৰতীক_tag (symbols[i]);
       bool translatable = !quote && symbols[i]->translatable;
-      if (translatable)
+      যদি (translatable)
         has_translations = true;
 
-      char *cp
+      ৱর্ণ *cp
         = tag[0] == '"' && !quote
         ? xescape_trigraphs (tag)
         : quotearg_alloc (tag, -1, qo);
       /* Width of the next token, including the two quotes, the
          comma and the space.  */
-      int width
+      পূর্ণাঙ্ক width
         = mbswidth (cp, 0) + 2
         + (translatable ? strlen ("N_()") : 0);
 
-      if (col + width > 75)
+      যদি (col + width > 75)
         {
           obstack_sgrow (&format_obstack, "\n ");
           col = 1;
         }
 
-      if (i)
+      যদি (i)
         obstack_1grow (&format_obstack, ' ');
-      if (translatable)
+      যদি (translatable)
         obstack_sgrow (&format_obstack, "]b4_symbol_translate""([");
       obstack_escape (&format_obstack, cp);
-      if (translatable)
+      যদি (translatable)
         obstack_sgrow (&format_obstack, "])[");
-      free (cp);
+      মুক্ত (cp);
       obstack_1grow (&format_obstack, ',');
       col += width;
     }
-  free (qo);
+  মুক্ত (qo);
   obstack_sgrow (&format_obstack, " ]b4_null[");
 
   /* Finish table and store. */
-  muscle_insert (muscle_name, obstack_finish0 (&format_obstack));
+  muscle_ঢোকাও (muscle_name, obstack_finish0 (&format_obstack));
 
   /* Announce whether translation support is needed.  */
-  MUSCLE_INSERT_BOOL ("has_translations_flag", has_translations);
+  MUSCLE_ঢোকাও_BOOL ("has_translations_flag", has_translations);
 }
 
 
@@ -299,51 +299,51 @@ prepare_symbol_names (char const *muscle_name)
 | toknum.                                                           |
 `------------------------------------------------------------------*/
 
-static void
-prepare_symbols (void)
+স্থির শূন্য
+prepare_symbols (শূন্য)
 {
-  MUSCLE_INSERT_INT ("tokens_number", ntokens);
-  MUSCLE_INSERT_INT ("nterms_number", nnterms);
-  MUSCLE_INSERT_INT ("symbols_number", nsyms);
-  MUSCLE_INSERT_INT ("code_max", max_code);
+  MUSCLE_ঢোকাও_INT ("tokens_number", ntokens);
+  MUSCLE_ঢোকাও_INT ("nterms_number", nnterms);
+  MUSCLE_ঢোকাও_INT ("symbols_number", nsyms);
+  MUSCLE_ঢোকাও_INT ("code_max", max_code);
 
-  muscle_insert_symbol_number_table ("translate",
+  muscle_ঢোকাও_প্ৰতীক_সংখ্যা_table ("translate",
                                      token_translations,
                                      token_translations[0],
                                      1, max_code + 1);
 
   /* tname -- token names.  */
-  prepare_symbol_names ("tname");
-  prepare_symbol_names ("symbol_names");
+  prepare_প্ৰতীক_names ("tname");
+  prepare_প্ৰতীক_names ("symbol_names");
 
   /* translatable -- whether a token is translatable. */
   {
     bool translatable = false;
-    for (int i = 0; i < ntokens; ++i)
-      if (symbols[i]->translatable)
+    বাবে (পূর্ণাঙ্ক i = 0; i < ntokens; ++i)
+      যদি (symbols[i]->translatable)
         {
           translatable = true;
-          break;
+          ভঙ্গ;
         }
-    if (translatable)
+    যদি (translatable)
       {
-        int *values = xnmalloc (nsyms, sizeof *values);
-        for (int i = 0; i < ntokens; ++i)
-          values[i] = symbols[i]->translatable;
-        muscle_insert_int_table ("translatable", values,
-                                 values[0], 1, ntokens);
-        free (values);
+        পূর্ণাঙ্ক *মানসমূহ = xnmalloc (nsyms, পরিমাণ *মানসমূহ);
+        বাবে (পূর্ণাঙ্ক i = 0; i < ntokens; ++i)
+          মানসমূহ[i] = symbols[i]->translatable;
+        muscle_ঢোকাও_int_table ("translatable", মানসমূহ,
+                                 মানসমূহ[0], 1, ntokens);
+        মুক্ত (মানসমূহ);
       }
   }
 
   /* Output YYTOKNUM. */
   {
-    int *values = xnmalloc (ntokens, sizeof *values);
-    for (int i = 0; i < ntokens; ++i)
-      values[i] = symbols[i]->content->code;
-    muscle_insert_int_table ("toknum", values,
-                             values[0], 1, ntokens);
-    free (values);
+    পূর্ণাঙ্ক *মানসমূহ = xnmalloc (ntokens, পরিমাণ *মানসমূহ);
+    বাবে (পূর্ণাঙ্ক i = 0; i < ntokens; ++i)
+      মানসমূহ[i] = symbols[i]->content->code;
+    muscle_ঢোকাও_int_table ("toknum", মানসমূহ,
+                             মানসমূহ[0], 1, ntokens);
+    মুক্ত (মানসমূহ);
   }
 }
 
@@ -353,34 +353,34 @@ prepare_symbols (void)
 | rline, dprec, merger, immediate.                             |
 `-------------------------------------------------------------*/
 
-static void
-prepare_rules (void)
+স্থির শূন্য
+prepare_rules (শূন্য)
 {
-  int *prhs = xnmalloc (nrules, sizeof *prhs);
-  item_number *rhs = xnmalloc (nritems, sizeof *rhs);
-  int *rline = xnmalloc (nrules, sizeof *rline);
-  symbol_number *r1 = xnmalloc (nrules, sizeof *r1);
-  int *r2 = xnmalloc (nrules, sizeof *r2);
-  int *dprec = xnmalloc (nrules, sizeof *dprec);
-  int *merger = xnmalloc (nrules, sizeof *merger);
-  int *immediate = xnmalloc (nrules, sizeof *immediate);
+  পূর্ণাঙ্ক *prhs = xnmalloc (nrules, পরিমাণ *prhs);
+  item_সংখ্যা *rhs = xnmalloc (nritems, পরিমাণ *rhs);
+  পূর্ণাঙ্ক *rline = xnmalloc (nrules, পরিমাণ *rline);
+  প্ৰতীক_সংখ্যা *r1 = xnmalloc (nrules, পরিমাণ *r1);
+  পূর্ণাঙ্ক *r2 = xnmalloc (nrules, পরিমাণ *r2);
+  পূর্ণাঙ্ক *dprec = xnmalloc (nrules, পরিমাণ *dprec);
+  পূর্ণাঙ্ক *merger = xnmalloc (nrules, পরিমাণ *merger);
+  পূর্ণাঙ্ক *immediate = xnmalloc (nrules, পরিমাণ *immediate);
 
   /* Index in RHS.  */
-  int i = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  পূর্ণাঙ্ক i = 0;
+  বাবে (rule_সংখ্যা r = 0; r < nrules; ++r)
     {
       /* Index of rule R in RHS. */
       prhs[r] = i;
       /* RHS of the rule R. */
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+      বাবে (item_সংখ্যা *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
         rhs[i++] = *rhsp;
       /* Separator in RHS. */
       rhs[i++] = -1;
 
       /* Line where rule was defined. */
-      rline[r] = rules[r].location.start.line;
+      rline[r] = rules[r].location.start.সাৰি;
       /* LHS of the rule R. */
-      r1[r] = rules[r].lhs->number;
+      r1[r] = rules[r].lhs->সংখ্যা;
       /* Length of rule R's RHS. */
       r2[r] = rule_rhs_length (&rules[r]);
       /* Dynamic precedence (GLR).  */
@@ -392,45 +392,45 @@ prepare_rules (void)
     }
   aver (i == nritems);
 
-  muscle_insert_item_number_table ("rhs", rhs, ritem[0], 1, nritems);
-  muscle_insert_int_table ("prhs", prhs, 0, 0, nrules);
-  muscle_insert_int_table ("rline", rline, 0, 0, nrules);
-  muscle_insert_symbol_number_table ("r1", r1, 0, 0, nrules);
-  muscle_insert_int_table ("r2", r2, 0, 0, nrules);
-  muscle_insert_int_table ("dprec", dprec, 0, 0, nrules);
-  muscle_insert_int_table ("merger", merger, 0, 0, nrules);
-  muscle_insert_int_table ("immediate", immediate, 0, 0, nrules);
+  muscle_ঢোকাও_item_সংখ্যা_table ("rhs", rhs, ritem[0], 1, nritems);
+  muscle_ঢোকাও_int_table ("prhs", prhs, 0, 0, nrules);
+  muscle_ঢোকাও_int_table ("rline", rline, 0, 0, nrules);
+  muscle_ঢোকাও_প্ৰতীক_সংখ্যা_table ("r1", r1, 0, 0, nrules);
+  muscle_ঢোকাও_int_table ("r2", r2, 0, 0, nrules);
+  muscle_ঢোকাও_int_table ("dprec", dprec, 0, 0, nrules);
+  muscle_ঢোকাও_int_table ("merger", merger, 0, 0, nrules);
+  muscle_ঢোকাও_int_table ("immediate", immediate, 0, 0, nrules);
 
-  MUSCLE_INSERT_INT ("rules_number", nrules);
-  MUSCLE_INSERT_INT ("max_left_semantic_context", max_left_semantic_context);
+  MUSCLE_ঢোকাও_INT ("rules_number", nrules);
+  MUSCLE_ঢোকাও_INT ("max_left_semantic_context", max_বাম_semantic_context);
 
-  free (prhs);
-  free (rhs);
-  free (rline);
-  free (r1);
-  free (r2);
-  free (dprec);
-  free (merger);
-  free (immediate);
+  মুক্ত (prhs);
+  মুক্ত (rhs);
+  মুক্ত (rline);
+  মুক্ত (r1);
+  মুক্ত (r2);
+  মুক্ত (dprec);
+  মুক্ত (merger);
+  মুক্ত (immediate);
 }
 
 /*--------------------------------------------.
 | Prepare the muscles related to the states.  |
 `--------------------------------------------*/
 
-static void
-prepare_states (void)
+স্থির শূন্য
+prepare_states (শূন্য)
 {
-  symbol_number *values = xnmalloc (nstates, sizeof *values);
-  for (state_number i = 0; i < nstates; ++i)
-    values[i] = states[i]->accessing_symbol;
-  muscle_insert_symbol_number_table ("stos", values,
+  প্ৰতীক_সংখ্যা *মানসমূহ = xnmalloc (nstates, পরিমাণ *মানসমূহ);
+  বাবে (state_সংখ্যা i = 0; i < nstates; ++i)
+    মানসমূহ[i] = states[i]->accessing_প্ৰতীক;
+  muscle_ঢোকাও_প্ৰতীক_সংখ্যা_table ("stos", মানসমূহ,
                                      0, 1, nstates);
-  free (values);
+  মুক্ত (মানসমূহ);
 
-  MUSCLE_INSERT_INT ("last", high);
-  MUSCLE_INSERT_INT ("final_state_number", final_state->number);
-  MUSCLE_INSERT_INT ("states_number", nstates);
+  MUSCLE_ঢোকাও_INT ("last", উপৰেৰ);
+  MUSCLE_ঢোকাও_INT ("final_state_number", final_state->সংখ্যা);
+  MUSCLE_ঢোকাও_INT ("states_number", nstates);
 }
 
 
@@ -438,13 +438,13 @@ prepare_states (void)
 | Compare two symbols by type-name, and then by number.  |
 `-------------------------------------------------------*/
 
-static int
-symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
+স্থির পূর্ণাঙ্ক
+প্ৰতীক_type_name_cmp (ধ্রুৱ প্ৰতীক **lhs, ধ্রুৱ প্ৰতীক **rhs)
 {
-  int res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
-  if (!res)
-    res = (*lhs)->content->number - (*rhs)->content->number;
-  return res;
+  পূর্ণাঙ্ক res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
+  যদি (!res)
+    res = (*lhs)->content->সংখ্যা - (*rhs)->content->সংখ্যা;
+  ঘূৰাই res;
 }
 
 
@@ -452,13 +452,13 @@ symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
 | Return a (malloc'ed) table of the symbols sorted by type-name.  |
 `----------------------------------------------------------------*/
 
-static symbol **
-symbols_by_type_name (void)
+স্থির প্ৰতীক **
+symbols_by_type_name (শূন্য)
 {
-  typedef int (*qcmp_type) (const void *, const void *);
-  symbol **res = xmemdup (symbols, nsyms * sizeof *res);
-  qsort (res, nsyms, sizeof *res, (qcmp_type) &symbol_type_name_cmp);
-  return res;
+  প্রকারনির্দেশ পূর্ণাঙ্ক (*qcmp_type) (ধ্রুৱ শূন্য *, ধ্রুৱ শূন্য *);
+  প্ৰতীক **res = xmemdup (symbols, nsyms * পরিমাণ *res);
+  qsort (res, nsyms, পরিমাণ *res, (qcmp_type) &প্ৰতীক_type_name_cmp);
+  ঘূৰাই res;
 }
 
 
@@ -467,41 +467,41 @@ symbols_by_type_name (void)
 | symbols with same type-name).                                     |
 `------------------------------------------------------------------*/
 
-static void
+স্থির শূন্য
 type_names_output (FILE *out)
 {
-  symbol **syms = symbols_by_type_name ();
+  প্ৰতীক **syms = symbols_by_type_name ();
   fputs ("m4_define([b4_type_names],\n[", out);
-  for (int i = 0; i < nsyms; /* nothing */)
+  বাবে (পূর্ণাঙ্ক i = 0; i < nsyms; /* nothing */)
     {
       /* The index of the first symbol of the current type-name.  */
-      int i0 = i;
+      পূর্ণাঙ্ক i0 = i;
       fputs (i ? ",\n[" : "[", out);
-      for (; i < nsyms
+      বাবে (; i < nsyms
            && syms[i]->content->type_name == syms[i0]->content->type_name; ++i)
-        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->number);
+        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->সংখ্যা);
       fputs ("]", out);
     }
   fputs ("])\n\n", out);
-  free (syms);
+  মুক্ত (syms);
 }
 
 
 /* Define the list of start symbols *if* there are several.  Define
    them by pairs: [START-SYMBOL-NUM, SWITCHING-TOKEN-SYMBOL-NUM]. */
-static void
+স্থির শূন্য
 start_symbols_output (FILE *out)
 {
-  if (start_symbols && start_symbols->next)
+  যদি (start_symbols && start_symbols->next)
     {
       fputs ("m4_define([b4_start_symbols],\n[", out);
-      for (symbol_list *list = start_symbols; list; list = list->next)
+      বাবে (প্ৰতীক_list *list = start_symbols; list; list = list->next)
         {
-          const symbol *start = list->content.sym;
-          const symbol *swtok = switching_token (start);
+          ধ্রুৱ প্ৰতীক *start = list->content.sym;
+          ধ্রুৱ প্ৰতীক *swtok = switching_token (start);
           fprintf (out, "%s[%d, %d]",
                    list == start_symbols ? "" : ", ",
-                   start->content->number, swtok->content->number);
+                   start->content->সংখ্যা, swtok->content->সংখ্যা);
         }
       fputs ("])\n\n", out);
     }
@@ -512,11 +512,11 @@ start_symbols_output (FILE *out)
 | The list of all the symbol numbers.  |
 `-------------------------------------*/
 
-static void
-symbol_numbers_output (FILE *out)
+স্থির শূন্য
+প্ৰতীক_numbers_output (FILE *out)
 {
   fputs ("m4_define([b4_symbol_numbers],\n[", out);
-  for (int i = 0; i < nsyms; ++i)
+  বাবে (পূর্ণাঙ্ক i = 0; i < nsyms; ++i)
     fprintf (out, "%s[%d]", i ? ", " : "", i);
   fputs ("])\n\n", out);
 }
@@ -526,36 +526,36 @@ symbol_numbers_output (FILE *out)
 | Output the user reduction actions to OUT.  |
 `-------------------------------------------*/
 
-static void
-rule_output (const rule *r, FILE *out)
+স্থির শূন্য
+rule_output (ধ্রুৱ rule *r, FILE *out)
 {
-  output_escaped (out, r->lhs->symbol->tag);
+  output_escaped (out, r->lhs->প্ৰতীক->tag);
   fputc (':', out);
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  যদি (0 <= *r->rhs)
+    বাবে (item_সংখ্যা *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       {
         fputc (' ', out);
         output_escaped (out, symbols[*rhsp]->tag);
       }
-  else
+  অন্যথা
     fputs (" %empty", out);
 }
 
-static void
+স্থির শূন্য
 user_actions_output (FILE *out)
 {
   fputs ("m4_define([b4_actions], \n[", out);
-  for (rule_number r = 0; r < nrules; ++r)
-    if (rules[r].action)
+  বাবে (rule_সংখ্যা r = 0; r < nrules; ++r)
+    যদি (rules[r].action)
       {
         /* The useless "" is there to pacify syntax-check.  */
         fprintf (out, "%s""(%d, [",
                  rules[r].is_predicate ? "b4_predicate_case" : "b4_case",
                  r + 1);
-        if (!no_lines_flag)
+        যদি (!no_সাৰিগুলি_flag)
           {
             fprintf (out, "b4_syncline(%d, ",
-                     rules[r].action_loc.start.line);
+                     rules[r].action_loc.start.সাৰি);
             string_output (out, map_file_name (rules[r].action_loc.start.file));
             fprintf (out, ")dnl\n");
           }
@@ -572,15 +572,15 @@ user_actions_output (FILE *out)
 | Output the merge functions to OUT.  |
 `------------------------------------*/
 
-static void
+স্থির শূন্য
 merger_output (FILE *out)
 {
   fputs ("m4_define([b4_mergers], \n[[", out);
-  int n;
+  পূর্ণাঙ্ক n;
   merger_list* p;
-  for (n = 1, p = merge_functions; p != NULL; n += 1, p = p->next)
+  বাবে (n = 1, p = merge_functions; p != রিক্ত; n += 1, p = p->next)
     fprintf (out, "]b4_call_merger""([%d], [%s], [%d])[\n",
-             n, p->name, p->sym->content->number);
+             n, p->name, p->sym->content->সংখ্যা);
   fputs ("]])\n\n", out);
 }
 
@@ -589,121 +589,121 @@ merger_output (FILE *out)
 | Prepare the muscles for symbol definitions.  |
 `---------------------------------------------*/
 
-static void
-prepare_symbol_definitions (void)
+স্থির শূন্য
+prepare_প্ৰতীক_definitions (শূন্য)
 {
   /* Map "orig NUM" to new numbers.  See data/README.  */
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
+  বাবে (প্ৰতীক_সংখ্যা i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
     {
       obstack_printf (&format_obstack, "symbol""(orig %d, number)", i);
-      const char *key = obstack_finish0 (&format_obstack);
-      MUSCLE_INSERT_INT (key, nterm_map ? nterm_map[i - ntokens] : i);
+      ধ্রুৱ ৱর্ণ *চাবি = obstack_finish0 (&format_obstack);
+      MUSCLE_ঢোকাও_INT (চাবি, nterm_map ? nterm_map[i - ntokens] : i);
     }
 
-  for (int i = 0; i < nsyms; ++i)
+  বাবে (পূর্ণাঙ্ক i = 0; i < nsyms; ++i)
     {
-      symbol *sym = symbols[i];
-      const char *key;
+      প্ৰতীক *sym = symbols[i];
+      ধ্রুৱ ৱর্ণ *চাবি;
 
-#define SET_KEY(Entry)                                          \
+#define SET_চাবি(Entry)                                          \
       obstack_printf (&format_obstack, "symbol""(%d, %s)",        \
                       i, Entry);                                \
-      key = obstack_finish0 (&format_obstack);
+      চাবি = obstack_finish0 (&format_obstack);
 
 #define SET_KEY2(Entry, Suffix)                                 \
       obstack_printf (&format_obstack, "symbol""(%d, %s_%s)",     \
                       i, Entry, Suffix);                        \
-      key = obstack_finish0 (&format_obstack);
+      চাবি = obstack_finish0 (&format_obstack);
 
       /* Whether the symbol has an identifier.  */
-      const char *id = symbol_id_get (sym);
-      SET_KEY ("has_id");
-      MUSCLE_INSERT_INT (key, !!id);
+      ধ্রুৱ ৱর্ণ *id = প্ৰতীক_id_get (sym);
+      SET_চাবি ("has_id");
+      MUSCLE_ঢোকাও_INT (চাবি, !!id);
 
       /* Its identifier.  */
-      SET_KEY ("id");
-      MUSCLE_INSERT_STRING (key, id ? id : "");
+      SET_চাবি ("id");
+      MUSCLE_ঢোকাও_STRING (চাবি, id ? id : "");
 
       /* Its tag.  Typically for documentation purpose.  */
-      SET_KEY ("tag");
-      MUSCLE_INSERT_STRING (key, symbol_tag (sym));
+      SET_চাবি ("tag");
+      MUSCLE_ঢোকাও_STRING (চাবি, প্ৰতীক_tag (sym));
 
-      SET_KEY ("code");
-      MUSCLE_INSERT_INT (key, sym->content->code);
+      SET_চাবি ("code");
+      MUSCLE_ঢোকাও_INT (চাবি, sym->content->code);
 
-      SET_KEY ("is_token");
-      MUSCLE_INSERT_INT (key, i < ntokens);
+      SET_চাবি ("is_token");
+      MUSCLE_ঢোকাও_INT (চাবি, i < ntokens);
 
-      SET_KEY ("number");
-      MUSCLE_INSERT_INT (key, sym->content->number);
+      SET_চাবি ("number");
+      MUSCLE_ঢোকাও_INT (চাবি, sym->content->সংখ্যা);
 
-      SET_KEY ("has_type");
-      MUSCLE_INSERT_INT (key, !!sym->content->type_name);
+      SET_চাবি ("has_type");
+      MUSCLE_ঢোকাও_INT (চাবি, !!sym->content->type_name);
 
-      SET_KEY ("type");
-      MUSCLE_INSERT_STRING (key, sym->content->type_name
+      SET_চাবি ("type");
+      MUSCLE_ঢোকাও_STRING (চাবি, sym->content->type_name
                             ? sym->content->type_name : "");
 
-      for (int j = 0; j < CODE_PROPS_SIZE; ++j)
+      বাবে (পূর্ণাঙ্ক j = 0; j < CODE_PROPS_SIZE; ++j)
         {
           /* "printer", not "%printer".  */
-          char const *pname = code_props_type_string (j) + 1;
-          code_props const *p = symbol_code_props_get (sym, j);
+          ৱর্ণ ধ্রুৱ *pname = code_props_type_string (j) + 1;
+          code_props ধ্রুৱ *p = প্ৰতীক_code_props_get (sym, j);
           SET_KEY2 ("has", pname);
-          MUSCLE_INSERT_INT (key, !!p->code);
+          MUSCLE_ঢোকাও_INT (চাবি, !!p->code);
 
-          if (p->code)
+          যদি (p->code)
             {
               SET_KEY2 (pname, "file");
-              MUSCLE_INSERT_C_STRING (key, map_file_name (p->location.start.file));
+              MUSCLE_ঢোকাও_C_STRING (চাবি, map_file_name (p->location.start.file));
 
               SET_KEY2 (pname, "line");
-              MUSCLE_INSERT_INT (key, p->location.start.line);
+              MUSCLE_ঢোকাও_INT (চাবি, p->location.start.সাৰি);
 
               SET_KEY2 (pname, "loc");
-              muscle_location_grow (key, p->location);
+              muscle_location_grow (চাবি, p->location);
 
-              SET_KEY (pname);
+              SET_চাবি (pname);
               obstack_printf (&muscle_obstack,
                               "%*s%s", p->location.start.column - 1, "", p->code);
-              muscle_insert (key, obstack_finish0 (&muscle_obstack));
+              muscle_ঢোকাও (চাবি, obstack_finish0 (&muscle_obstack));
             }
         }
 #undef SET_KEY2
-#undef SET_KEY
+#undef SET_চাবি
     }
 }
 
 
-static void
-prepare_actions (void)
+স্থির শূন্য
+prepare_actions (শূন্য)
 {
   /* Figure out the actions for the specified state.  */
-  muscle_insert_rule_number_table ("defact", yydefact,
+  muscle_ঢোকাও_rule_সংখ্যা_table ("defact", yydefact,
                                    yydefact[0], 1, nstates);
 
   /* Figure out what to do after reducing with each rule, depending on
      the saved state from before the beginning of parsing the data
      that matched this rule.  */
-  muscle_insert_state_number_table ("defgoto", yydefgoto,
+  muscle_ঢোকাও_state_সংখ্যা_table ("defgoto", yydefgoto,
                                     yydefgoto[0], 1, nsyms - ntokens);
 
 
   /* Output PACT. */
-  muscle_insert_base_table ("pact", base,
+  muscle_ঢোকাও_base_table ("pact", base,
                              base[0], 1, nstates);
-  MUSCLE_INSERT_INT ("pact_ninf", base_ninf);
+  MUSCLE_ঢোকাও_INT ("pact_ninf", base_ninf);
 
   /* Output PGOTO. */
-  muscle_insert_base_table ("pgoto", base,
+  muscle_ঢোকাও_base_table ("pgoto", base,
                              base[nstates], nstates + 1, nvectors);
 
-  muscle_insert_base_table ("table", table,
-                            table[0], 1, high + 1);
-  MUSCLE_INSERT_INT ("table_ninf", table_ninf);
+  muscle_ঢোকাও_base_table ("table", table,
+                            table[0], 1, উপৰেৰ + 1);
+  MUSCLE_ঢোকাও_INT ("table_ninf", table_ninf);
 
-  muscle_insert_base_table ("check", check,
-                            check[0], 1, high + 1);
+  muscle_ঢোকাও_base_table ("check", check,
+                            check[0], 1, উপৰেৰ + 1);
 
   /* GLR parsing slightly modifies YYTABLE and YYCHECK (and thus
      YYPACT) so that in states with unresolved conflicts, the default
@@ -714,9 +714,9 @@ prepare_actions (void)
      parser, so we could avoid accidents by not writing them out in
      that case.  Nevertheless, it seems even better to be able to use
      the GLR skeletons even without the non-deterministic tables.  */
-  muscle_insert_int_table ("conflict_list_heads", conflict_table,
-                           conflict_table[0], 1, high + 1);
-  muscle_insert_int_table ("conflicting_rules", conflict_list,
+  muscle_ঢোকাও_int_table ("conflict_list_heads", conflict_table,
+                           conflict_table[0], 1, উপৰেৰ + 1);
+  muscle_ঢোকাও_int_table ("conflicting_rules", conflict_list,
                            0, 1, conflict_list_cnt);
 }
 
@@ -725,12 +725,12 @@ prepare_actions (void)
 | Output the definitions of all the muscles.  |
 `--------------------------------------------*/
 
-static void
+স্থির শূন্য
 muscles_output (FILE *out)
 {
   fputs ("m4_init()\n", out);
   merger_output (out);
-  symbol_numbers_output (out);
+  প্ৰতীক_numbers_output (out);
   type_names_output (out);
   start_symbols_output (out);
   user_actions_output (out);
@@ -742,17 +742,17 @@ muscles_output (FILE *out)
 | Call the skeleton parser.  |
 `---------------------------*/
 
-static void
-output_skeleton (void)
+স্থির শূন্য
+output_skeleton (শূন্য)
 {
   /* Compute the names of the package data dir and skeleton files.  */
-  char const *m4 = m4path ();
-  char const *datadir = pkgdatadir ();
-  char *skeldir = xpath_join (datadir, "skeletons");
-  char *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
-  char *m4bison = xpath_join (skeldir, "bison.m4");
-  char *traceon = xpath_join (skeldir, "traceon.m4");
-  char *skel = (IS_PATH_WITH_DIR (skeleton)
+  ৱর্ণ ধ্রুৱ *m4 = m4path ();
+  ৱর্ণ ধ্রুৱ *datadir = pkgdatadir ();
+  ৱর্ণ *skeldir = xpath_join (datadir, "skeletons");
+  ৱর্ণ *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
+  ৱর্ণ *m4bison = xpath_join (skeldir, "bison.m4");
+  ৱর্ণ *traceon = xpath_join (skeldir, "traceon.m4");
+  ৱর্ণ *skel = (IS_PATH_WITH_DIR (skeleton)
                 ? xstrdup (skeleton)
                 : xpath_join (skeldir, skeleton));
 
@@ -763,11 +763,11 @@ output_skeleton (void)
 
   /* Create an m4 subprocess connected to us via two pipes.  */
 
-  int filter_fd[2];
+  পূর্ণাঙ্ক filter_fd[2];
   pid_t pid;
   {
-    char const *argv[11];
-    int i = 0;
+    ৱর্ণ ধ্রুৱ *argv[11];
+    পূর্ণাঙ্ক i = 0;
     argv[i++] = m4;
 
     /* When POSIXLY_CORRECT is set, GNU M4 1.6 and later disable GNU
@@ -779,7 +779,7 @@ output_skeleton (void)
        See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (*M4_GNU_OPTION)
+    যদি (*M4_GNU_OPTION)
       argv[i++] = M4_GNU_OPTION;
 
     argv[i++] = "-I";
@@ -788,40 +788,40 @@ output_skeleton (void)
        -dV in a position-dependent manner.  See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (trace_flag & trace_m4_early)
+    যদি (trace_flag & trace_m4_early)
       argv[i++] = "-dV";
     argv[i++] = m4sugar;
     argv[i++] = "-";
     argv[i++] = m4bison;
-    if (trace_flag & trace_m4)
+    যদি (trace_flag & trace_m4)
       argv[i++] = traceon;
     argv[i++] = skel;
-    argv[i++] = NULL;
+    argv[i++] = রিক্ত;
     aver (i <= ARRAY_CARDINALITY (argv));
 
-    if (trace_flag & trace_tools)
+    যদি (trace_flag & trace_tools)
       {
         fputs ("running:", stderr);
-        for (int j = 0; argv[j]; ++j)
+        বাবে (পূর্ণাঙ্ক j = 0; argv[j]; ++j)
           fprintf (stderr, " %s", argv[j]);
         fputc ('\n', stderr);
       }
 
     pid = create_pipe_bidi ("m4", m4, argv,
-                            /* directory */ NULL,
+                            /* directory */ রিক্ত,
                             /* null_stderr */ false,
                             /* slave_process */ true,
                             /* exit_on_error */ true,
                             filter_fd);
   }
 
-  free (skeldir);
-  free (m4sugar);
-  free (m4bison);
-  free (traceon);
-  free (skel);
+  মুক্ত (skeldir);
+  মুক্ত (m4sugar);
+  মুক্ত (m4bison);
+  মুক্ত (traceon);
+  মুক্ত (skel);
 
-  if (trace_flag & trace_muscles)
+  যদি (trace_flag & trace_muscles)
     muscles_output (stderr);
   {
     FILE *out = xfdopen (filter_fd[1], "w");
@@ -830,7 +830,7 @@ output_skeleton (void)
   }
 
   /* Read and process m4's output.  */
-  timevar_push (tv_m4);
+  timevar_ঠেলো (tv_m4);
   {
     FILE *in = xfdopen (filter_fd[0], "r");
     scan_skel (in);
@@ -840,43 +840,43 @@ output_skeleton (void)
     aver (feof (in));
     xfclose (in);
   }
-  wait_subprocess (pid, "m4", false, false, true, true, NULL);
-  timevar_pop (tv_m4);
+  wait_subprocess (pid, "m4", false, false, true, true, রিক্ত);
+  timevar_বেৰ_কৰো (tv_m4);
 }
 
-static void
-prepare (void)
+স্থির শূন্য
+prepare (শূন্য)
 {
   /* BISON_USE_PUSH_FOR_PULL is for the test suite and should not be
      documented for the user.  */
-  char const *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
-  bool use_push_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
+  ৱর্ণ ধ্রুৱ *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
+  bool use_ঠেলো_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
 
   /* Versions.  */
-  MUSCLE_INSERT_STRING ("version_string", VERSION);
-  MUSCLE_INSERT_INT ("version", strversion_to_int (VERSION));
-  MUSCLE_INSERT_INT ("required_version", required_version);
+  MUSCLE_ঢোকাও_STRING ("version_string", VERSION);
+  MUSCLE_ঢোকাও_INT ("version", strversion_to_int (VERSION));
+  MUSCLE_ঢোকাও_INT ("required_version", required_version);
 
   /* Flags. */
-  MUSCLE_INSERT_BOOL ("header_flag", header_flag);
-  MUSCLE_INSERT_BOOL ("glr_flag", glr_parser);
-  MUSCLE_INSERT_BOOL ("nondeterministic_flag", nondeterministic_parser);
-  MUSCLE_INSERT_BOOL ("synclines_flag", !no_lines_flag);
-  MUSCLE_INSERT_BOOL ("tag_seen_flag", tag_seen);
-  MUSCLE_INSERT_BOOL ("token_table_flag", token_table_flag);
-  MUSCLE_INSERT_BOOL ("use_push_for_pull_flag", use_push_for_pull_flag);
-  MUSCLE_INSERT_BOOL ("yacc_flag", !location_empty (yacc_loc));
+  MUSCLE_ঢোকাও_BOOL ("header_flag", header_flag);
+  MUSCLE_ঢোকাও_BOOL ("glr_flag", glr_parser);
+  MUSCLE_ঢোকাও_BOOL ("nondeterministic_flag", nondeterministic_parser);
+  MUSCLE_ঢোকাও_BOOL ("synclines_flag", !no_সাৰিগুলি_flag);
+  MUSCLE_ঢোকাও_BOOL ("tag_seen_flag", tag_seen);
+  MUSCLE_ঢোকাও_BOOL ("token_table_flag", token_table_flag);
+  MUSCLE_ঢোকাও_BOOL ("use_push_for_pull_flag", use_ঠেলো_for_pull_flag);
+  MUSCLE_ঢোকাও_BOOL ("yacc_flag", !location_empty (yacc_loc));
 
   /* File names.  */
-  if (spec_name_prefix)
-    MUSCLE_INSERT_STRING ("prefix", spec_name_prefix);
+  যদি (spec_name_prefix)
+    MUSCLE_ঢোকাও_STRING ("prefix", spec_name_prefix);
 
-  MUSCLE_INSERT_STRING ("file_name_all_but_ext", all_but_ext);
+  MUSCLE_ঢোকাও_STRING ("file_name_all_but_ext", all_but_ext);
 
-  const char *spec_mapped_header_file = map_file_name (spec_header_file);
-  const char *mapped_dir_prefix = map_file_name (dir_prefix);
+  ধ্রুৱ ৱর্ণ *spec_mapped_header_file = map_file_name (spec_header_file);
+  ধ্রুৱ ৱর্ণ *mapped_dir_prefix = map_file_name (dir_prefix);
 
-#define DEFINE(Name) MUSCLE_INSERT_STRING (#Name, Name ? Name : "")
+#define DEFINE(Name) MUSCLE_ঢোকাও_STRING (#Name, Name ? Name : "")
   DEFINE (dir_prefix);
   DEFINE (mapped_dir_prefix);
   DEFINE (parser_file_name);
@@ -890,9 +890,9 @@ prepare (void)
 #undef DEFINE
 
   /* Find the right skeleton file, and add muscles about the skeletons.  */
-  if (skeleton)
-    MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
-  else
+  যদি (skeleton)
+    MUSCLE_ঢোকাও_C_STRING ("skeleton", skeleton);
+  অন্যথা
     skeleton = language->skeleton;
 
   /* About the skeletons.  */
@@ -900,9 +900,9 @@ prepare (void)
     /* b4_skeletonsdir is used inside m4_include in the skeletons, so digraphs
        would never be expanded.  Hopefully no one has M4-special characters in
        his Bison installation path.  */
-    char *skeldir = xpath_join (pkgdatadir (), "skeletons");
-    MUSCLE_INSERT_STRING_RAW ("skeletonsdir", skeldir);
-    free (skeldir);
+    ৱর্ণ *skeldir = xpath_join (pkgdatadir (), "skeletons");
+    MUSCLE_ঢোকাও_STRING_RAW ("skeletonsdir", skeldir);
+    মুক্ত (skeldir);
   }
 }
 
@@ -911,8 +911,8 @@ prepare (void)
 | Output the parsing tables and the parser code to ftable.  |
 `----------------------------------------------------------*/
 
-void
-output (void)
+শূন্য
+output (শূন্য)
 {
   obstack_init (&format_obstack);
 
@@ -920,7 +920,7 @@ output (void)
   prepare_rules ();
   prepare_states ();
   prepare_actions ();
-  prepare_symbol_definitions ();
+  prepare_প্ৰতীক_definitions ();
 
   prepare ();
 
@@ -929,8 +929,8 @@ output (void)
 
   /* If late errors were generated, destroy the generated source
      files. */
-  if (complaint_status)
+  যদি (complaint_status)
     unlink_generated_sources ();
 
-  obstack_free (&format_obstack, NULL);
+  obstack_free (&format_obstack, রিক্ত);
 }

@@ -25,53 +25,53 @@
 # include "uniqstr.h"
 
 /* File name specified with -o for the output file, or 0 if no -o.  */
-extern char const *spec_outfile;
+বাহ্য ৱর্ণ ধ্রুৱ *spec_outfile;
 
 /* File name for the parser (i.e., the one above, or its default.) */
-extern char *parser_file_name;
+বাহ্য ৱর্ণ *parser_file_name;
 
 /* Symbol prefix specified with -p, or 0 if no -p.  */
-extern const char *spec_name_prefix;
-extern location spec_name_prefix_loc;
+বাহ্য ধ্রুৱ ৱর্ণ *spec_name_prefix;
+বাহ্য location spec_name_prefix_loc;
 
 /* File name prefix specified with -b, or 0 if no -b.  */
-extern char const *spec_file_prefix;
-extern location spec_file_prefix_loc;
+বাহ্য ৱর্ণ ধ্রুৱ *spec_file_prefix;
+বাহ্য location spec_file_prefix_loc;
 
 /* --verbose. */
-extern char *spec_verbose_file;
+বাহ্য ৱর্ণ *spec_verbose_file;
 
 /* File name specified for the output graph.  */
-extern char *spec_graph_file;
+বাহ্য ৱর্ণ *spec_graph_file;
 
 /* File name specified for the HTML output.  */
-extern char *spec_html_file;
+বাহ্য ৱর্ণ *spec_html_file;
 
 /* File name specified for the XML output.  */
-extern char *spec_xml_file;
+বাহ্য ৱর্ণ *spec_xml_file;
 
 /* File name specified with --header.  */
-extern char *spec_header_file;
+বাহ্য ৱর্ণ *spec_header_file;
 
 /* Directory prefix of output file names.  */
-extern char *dir_prefix;
+বাহ্য ৱর্ণ *dir_prefix;
 
 /* The file name as given on the command line.
    Not named "input_file" because Flex uses this name for an argument,
    and therefore GCC warns about a name clash. */
-extern uniqstr grammar_file;
+বাহ্য uniqstr grammar_file;
 
 /* The computed base for output file names.  */
-extern char *all_but_ext;
+বাহ্য ৱর্ণ *all_but_ext;
 
 /* Where our data files are installed.  */
-char const *pkgdatadir (void);
+ৱর্ণ ধ্রুৱ *pkgdatadir (শূন্য);
 
 /* Where the m4 program is installed.  */
-char const *m4path (void);
+ৱর্ণ ধ্রুৱ *m4path (শূন্য);
 
-void compute_output_file_names (void);
-void output_file_names_free (void);
+শূন্য compute_output_file_names (শূন্য);
+শূন্য output_file_names_free (শূন্য);
 
 /** Record that we generate a file.
  *
@@ -79,22 +79,22 @@ void output_file_names_free (void);
  *  \param source whether this is a source file (*c, *.java...)
  *                as opposed to a report (*.output, *.dot...).
  */
-void output_file_name_check (char **file_name, bool source);
+শূন্য output_file_name_check (ৱর্ণ **file_name, bool source);
 
 /** Remove all the generated source files. */
-void unlink_generated_sources (void);
+শূন্য unlink_generated_sources (শূন্য);
 
-FILE *xfopen (const char *name, char const *mode);
-void xfclose (FILE *ptr);
-FILE *xfdopen (int fd, char const *mode);
+FILE *xfopen (ধ্রুৱ ৱর্ণ *name, ৱর্ণ ধ্রুৱ *mode);
+শূন্য xfclose (FILE *ptr);
+FILE *xfdopen (পূর্ণাঙ্ক fd, ৱর্ণ ধ্রুৱ *mode);
 
 /* Given an input file path, return a string that contains the path
    with the file prefix mapping rules applied, or NULL if the input
    was NULL.  Do not free the return value.  */
-const char *map_file_name (char const *filename);
+ধ্রুৱ ৱর্ণ *map_file_name (ৱর্ণ ধ্রুৱ *filename);
 
 /* Add a new file prefix mapping. If a file path starts with
    oldprefix, it will be replaced with newprefix.  */
-void add_prefix_map (char const *oldprefix, char const *newprefix);
+শূন্য add_prefix_map (ৱর্ণ ধ্রুৱ *oldprefix, ৱর্ণ ধ্রুৱ *newprefix);
 
 #endif /* !FILES_H_ */
