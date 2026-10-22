@@ -17,30 +17,30 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include "named-ref.h"
+#अन्तर्भाव "named-ref.h"
 
 named_ref *
 named_ref_new (uniqstr id, location loc)
 {
-  named_ref *res = xmalloc (sizeof *res);
+  named_ref *res = xmalloc (परिमाण *res);
 
   res->id = id;
   res->loc = loc;
 
-  return res;
+  पटिनिवत्त res;
 }
 
 named_ref *
-named_ref_copy (const named_ref *r)
+named_ref_copy (ध्रुव named_ref *r)
 {
-  return named_ref_new (r->id, r->loc);
+  पटिनिवत्त named_ref_new (r->id, r->loc);
 }
 
-void
+शून्य
 named_ref_free (named_ref *r)
 {
-  free (r);
+  मुक्त (r);
 }

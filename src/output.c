@@ -18,33 +18,33 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <filename.h> /* IS_PATH_WITH_DIR */
-#include <get-errno.h>
-#include <mbswidth.h>
-#include <path-join.h>
-#include <quotearg.h>
-#include <spawn-pipe.h>
-#include <timevar.h>
-#include <wait-process.h>
+#अन्तर्भाव <filename.h> /* IS_PATH_WITH_DIR */
+#अन्तर्भाव <get-errno.h>
+#अन्तर्भाव <mbswidth.h>
+#अन्तर्भाव <path-join.h>
+#अन्तर्भाव <quotearg.h>
+#अन्तर्भाव <spawn-pipe.h>
+#अन्तर्भाव <timevar.h>
+#अन्तर्भाव <wait-process.h>
 
-#include "complain.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "muscle-tab.h"
-#include "output.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"    /* max_left_semantic_context */
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "strversion.h"
+#अन्तर्भाव "complain.h"
+#अन्तर्भाव "files.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "muscle-tab.h"
+#अन्तर्भाव "output.h"
+#अन्तर्भाव "reader.h"
+#अन्तर्भाव "reduce.h"
+#अन्तर्भाव "scan-code.h"    /* max_left_semantic_context */
+#अन्तर्भाव "scan-skel.h"
+#अन्तर्भाव "symtab.h"
+#अन्तर्भाव "tables.h"
+#अन्तर्भाव "strversion.h"
 
-static struct obstack format_obstack;
+स्थिर संरचना obstack format_obstack;
 
 
 /*-------------------------------------------------------------------.
@@ -59,50 +59,50 @@ static struct obstack format_obstack;
 `-------------------------------------------------------------------*/
 
 
-#define GENERATE_MUSCLE_INSERT_TABLE(Name, Type)                        \
+#define GENERATE_MUSCLE_निवेशय_TABLE(Name, Type)                        \
                                                                         \
-static void                                                             \
-Name (char const *name, Type *table_data, Type first,                   \
-      int begin, int end)                                               \
+स्थिर शून्य                                                             \
+Name (वर्ण ध्रुव *name, Type *table_data, Type first,                   \
+      पूर्णाङ्क begin, पूर्णाङ्क end)                                               \
 {                                                                       \
   Type min = first;                                                     \
   Type max = first;                                                     \
-  int j = 1;                                                            \
+  पूर्णाङ्क j = 1;                                                            \
                                                                         \
   obstack_printf (&format_obstack, "%6d", first);                       \
-  for (int i = begin; i < end; ++i)                                     \
+  अत्थाय (पूर्णाङ्क i = begin; i < end; ++i)                                     \
     {                                                                   \
       obstack_1grow (&format_obstack, ',');                             \
-      if (j >= 10)                                                      \
+      सचे (j >= 10)                                                      \
         {                                                               \
           obstack_sgrow (&format_obstack, "\n  ");                      \
           j = 1;                                                        \
         }                                                               \
-      else                                                              \
+      अञ्ञथा                                                              \
         ++j;                                                            \
       obstack_printf (&format_obstack, "%6d", table_data[i]);           \
-      if (table_data[i] < min)                                          \
+      सचे (table_data[i] < min)                                          \
         min = table_data[i];                                            \
-      if (max < table_data[i])                                          \
+      सचे (max < table_data[i])                                          \
         max = table_data[i];                                            \
     }                                                                   \
-  muscle_insert (name, obstack_finish0 (&format_obstack));              \
+  muscle_निवेशय (name, obstack_finish0 (&format_obstack));              \
                                                                         \
   long lmin = min;                                                      \
   long lmax = max;                                                      \
   /* Build 'NAME_min' and 'NAME_max' in the obstack. */                 \
   obstack_printf (&format_obstack, "%s_min", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
+  MUSCLE_निवेशय_LONG_INT (obstack_finish0 (&format_obstack), lmin);     \
   obstack_printf (&format_obstack, "%s_max", name);                     \
-  MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
+  MUSCLE_निवेशय_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
 }
 
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_int_table, int)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_base_table, base_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_rule_number_table, rule_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_symbol_number_table, symbol_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_item_number_table, item_number)
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
+GENERATE_MUSCLE_निवेशय_TABLE (muscle_निवेशय_int_table, पूर्णाङ्क)
+GENERATE_MUSCLE_निवेशय_TABLE (muscle_निवेशय_base_table, base_सङ्ख्या)
+GENERATE_MUSCLE_निवेशय_TABLE (muscle_निवेशय_rule_सङ्ख्या_table, rule_सङ्ख्या)
+GENERATE_MUSCLE_निवेशय_TABLE (muscle_निवेशय_चिह्नम्_सङ्ख्या_table, चिह्नम्_सङ्ख्या)
+GENERATE_MUSCLE_निवेशय_TABLE (muscle_निवेशय_item_सङ्ख्या_table, item_सङ्ख्या)
+GENERATE_MUSCLE_निवेशय_TABLE (muscle_निवेशय_state_सङ्ख्या_table, state_सङ्ख्या)
 
 
 /*----------------------------------------------------------------.
@@ -111,44 +111,44 @@ GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
 | Keep sync'ed with obstack_escape.                               |
 `----------------------------------------------------------------*/
 
-static void
-output_escaped (FILE *out, const char *cp)
+स्थिर शून्य
+output_escaped (FILE *out, ध्रुव वर्ण *cp)
 {
-  for (; *cp; ++cp)
-    switch (*cp)
+  अत्थाय (; *cp; ++cp)
+    विकल्प (*cp)
       {
-      case '$': fputs ("$][", out); break;
-      case '@': fputs ("@@",  out); break;
-      case '[': fputs ("@{",  out); break;
-      case ']': fputs ("@}",  out); break;
+      पक्ष '$': fputs ("$][", out); भङ्ग;
+      पक्ष '@': fputs ("@@",  out); भङ्ग;
+      पक्ष '[': fputs ("@{",  out); भङ्ग;
+      पक्ष ']': fputs ("@}",  out); भङ्ग;
 
-      case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+      पक्ष 'b':
+        सचे (STRPREFIX_LIT ("b4_", cp))
           {
             fputs ("b4@'_", out);
             cp += strlen ("b4_") - 1;
-            break;
+            भङ्ग;
           }
-        else
-          goto append;
+        अञ्ञथा
+          गच्छ append;
 
-      case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+      पक्ष 'm':
+        सचे (STRPREFIX_LIT ("m4_", cp))
           {
             fputs ("m4@'_", out);
             cp += strlen ("m4_") - 1;
-            break;
+            भङ्ग;
           }
-        else
-          goto append;
+        अञ्ञथा
+          गच्छ append;
 
       append:
-      default:  fputc (*cp,   out); break;
+      स्वभाव:  fputc (*cp,   out); भङ्ग;
       }
 }
 
-static void
-output_quoted (FILE *out, char const *cp)
+स्थिर शून्य
+output_quoted (FILE *out, वर्ण ध्रुव *cp)
 {
   fprintf (out, "[[");
   output_escaped (out, cp);
@@ -160,8 +160,8 @@ output_quoted (FILE *out, char const *cp)
 | for C and M4.                                                   |
 `----------------------------------------------------------------*/
 
-static void
-string_output (FILE *out, char const *string)
+स्थिर शून्य
+string_output (FILE *out, वर्ण ध्रुव *string)
 {
   output_quoted (out, quotearg_style (c_quoting_style, string));
 }
@@ -170,127 +170,127 @@ string_output (FILE *out, char const *string)
 /* Store in BUFFER a copy of SRC where trigraphs are escaped, return
    the size of the result (including the final NUL).  If called with
    BUFFERSIZE = 0, returns the needed size for BUFFER.  */
-static ptrdiff_t
-escape_trigraphs (char *buffer, ptrdiff_t buffersize, const char *src)
+स्थिर ptrdiff_t
+escape_trigraphs (वर्ण *buffer, ptrdiff_t buffersize, ध्रुव वर्ण *src)
 {
 #define STORE(c)                                \
-  do                                            \
+  करोहि                                            \
     {                                           \
-      if (res < buffersize)                     \
+      सचे (res < buffersize)                     \
         buffer[res] = (c);                      \
       ++res;                                    \
     }                                           \
-  while (0)
+  याव (0)
   ptrdiff_t res = 0;
-  for (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
+  अत्थाय (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
     {
-      if (i + 2 < len
+      सचे (i + 2 < len
           && src[i] == '?' && src[i+1] == '?')
         {
-          switch (src[i+2])
+          विकल्प (src[i+2])
             {
-            case '!': case '\'':
-            case '(': case ')': case '-': case '/':
-            case '<': case '=': case '>':
+            पक्ष '!': पक्ष '\'':
+            पक्ष '(': पक्ष ')': पक्ष '-': पक्ष '/':
+            पक्ष '<': पक्ष '=': पक्ष '>':
               i += 1;
               STORE ('?');
               STORE ('"');
               STORE ('"');
               STORE ('?');
-              continue;
+              अनुवर्त;
             }
         }
       STORE (src[i]);
     }
   STORE ('\0');
 #undef STORE
-  return res;
+  पटिनिवत्त res;
 }
 
 /* Same as xstrdup, except that trigraphs are escaped.  */
-static char *
-xescape_trigraphs (const char *src)
+स्थिर वर्ण *
+xescape_trigraphs (ध्रुव वर्ण *src)
 {
-  ptrdiff_t bufsize = escape_trigraphs (NULL, 0, src);
-  char *buf = xcharalloc (bufsize);
+  ptrdiff_t bufsize = escape_trigraphs (रिक्त, 0, src);
+  वर्ण *buf = xcharalloc (bufsize);
   escape_trigraphs (buf, bufsize, src);
-  return buf;
+  पटिनिवत्त buf;
 }
 
 /* The tag to show in the generated parsers.  Use "end of file" rather
    than "$end".  But keep "$end" in the reports, it's shorter and more
    consistent.  Support i18n if the user already uses it.  */
-static const char *
-symbol_tag (const symbol *sym)
+स्थिर ध्रुव वर्ण *
+चिह्नम्_tag (ध्रुव चिह्नम् *sym)
 {
-  const bool eof_is_user_defined
+  ध्रुव bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
 
-  if (!eof_is_user_defined && sym->content == eoftoken->content)
-    return "\"end of file\"";
-  else if (sym->content == undeftoken->content)
-    return "\"invalid token\"";
-  else
-    return sym->tag;
+  सचे (!eof_is_user_defined && sym->content == eoftoken->content)
+    पटिनिवत्त "\"end of file\"";
+  अञ्ञथा सचे (sym->content == undeftoken->content)
+    पटिनिवत्त "\"invalid token\"";
+  अञ्ञथा
+    पटिनिवत्त sym->tag;
 }
 
 /* Generate the b4_<MUSCLE_NAME> (e.g., b4_tname) table with the
    symbol names (aka tags). */
 
-static void
-prepare_symbol_names (char const *muscle_name)
+स्थिर शून्य
+prepare_चिह्नम्_names (वर्ण ध्रुव *muscle_name)
 {
   // Whether to add a pair of quotes around the name.
-  const bool quote = STREQ (muscle_name, "tname");
+  ध्रुव bool quote = STREQ (muscle_name, "tname");
   bool has_translations = false;
 
   /* We assume that the table will be output starting at column 2. */
-  int col = 2;
-  struct quoting_options *qo = clone_quoting_options (0);
+  पूर्णाङ्क col = 2;
+  संरचना quoting_options *qo = clone_quoting_options (0);
   set_quoting_style (qo, c_quoting_style);
   set_quoting_flags (qo, QA_SPLIT_TRIGRAPHS);
-  for (int i = 0; i < nsyms; i++)
+  अत्थाय (पूर्णाङ्क i = 0; i < nsyms; i++)
     {
-      const char *tag = symbol_tag (symbols[i]);
+      ध्रुव वर्ण *tag = चिह्नम्_tag (symbols[i]);
       bool translatable = !quote && symbols[i]->translatable;
-      if (translatable)
+      सचे (translatable)
         has_translations = true;
 
-      char *cp
+      वर्ण *cp
         = tag[0] == '"' && !quote
         ? xescape_trigraphs (tag)
         : quotearg_alloc (tag, -1, qo);
       /* Width of the next token, including the two quotes, the
          comma and the space.  */
-      int width
+      पूर्णाङ्क width
         = mbswidth (cp, 0) + 2
         + (translatable ? strlen ("N_()") : 0);
 
-      if (col + width > 75)
+      सचे (col + width > 75)
         {
           obstack_sgrow (&format_obstack, "\n ");
           col = 1;
         }
 
-      if (i)
+      सचे (i)
         obstack_1grow (&format_obstack, ' ');
-      if (translatable)
+      सचे (translatable)
         obstack_sgrow (&format_obstack, "]b4_symbol_translate""([");
       obstack_escape (&format_obstack, cp);
-      if (translatable)
+      सचे (translatable)
         obstack_sgrow (&format_obstack, "])[");
-      free (cp);
+      मुक्त (cp);
       obstack_1grow (&format_obstack, ',');
       col += width;
     }
-  free (qo);
+  मुक्त (qo);
   obstack_sgrow (&format_obstack, " ]b4_null[");
 
   /* Finish table and store. */
-  muscle_insert (muscle_name, obstack_finish0 (&format_obstack));
+  muscle_निवेशय (muscle_name, obstack_finish0 (&format_obstack));
 
   /* Announce whether translation support is needed.  */
-  MUSCLE_INSERT_BOOL ("has_translations_flag", has_translations);
+  MUSCLE_निवेशय_BOOL ("has_translations_flag", has_translations);
 }
 
 
@@ -299,51 +299,51 @@ prepare_symbol_names (char const *muscle_name)
 | toknum.                                                           |
 `------------------------------------------------------------------*/
 
-static void
-prepare_symbols (void)
+स्थिर शून्य
+prepare_symbols (शून्य)
 {
-  MUSCLE_INSERT_INT ("tokens_number", ntokens);
-  MUSCLE_INSERT_INT ("nterms_number", nnterms);
-  MUSCLE_INSERT_INT ("symbols_number", nsyms);
-  MUSCLE_INSERT_INT ("code_max", max_code);
+  MUSCLE_निवेशय_INT ("tokens_number", ntokens);
+  MUSCLE_निवेशय_INT ("nterms_number", nnterms);
+  MUSCLE_निवेशय_INT ("symbols_number", nsyms);
+  MUSCLE_निवेशय_INT ("code_max", max_code);
 
-  muscle_insert_symbol_number_table ("translate",
+  muscle_निवेशय_चिह्नम्_सङ्ख्या_table ("translate",
                                      token_translations,
                                      token_translations[0],
                                      1, max_code + 1);
 
   /* tname -- token names.  */
-  prepare_symbol_names ("tname");
-  prepare_symbol_names ("symbol_names");
+  prepare_चिह्नम्_names ("tname");
+  prepare_चिह्नम्_names ("symbol_names");
 
   /* translatable -- whether a token is translatable. */
   {
     bool translatable = false;
-    for (int i = 0; i < ntokens; ++i)
-      if (symbols[i]->translatable)
+    अत्थाय (पूर्णाङ्क i = 0; i < ntokens; ++i)
+      सचे (symbols[i]->translatable)
         {
           translatable = true;
-          break;
+          भङ्ग;
         }
-    if (translatable)
+    सचे (translatable)
       {
-        int *values = xnmalloc (nsyms, sizeof *values);
-        for (int i = 0; i < ntokens; ++i)
-          values[i] = symbols[i]->translatable;
-        muscle_insert_int_table ("translatable", values,
-                                 values[0], 1, ntokens);
-        free (values);
+        पूर्णाङ्क *मानानि = xnmalloc (nsyms, परिमाण *मानानि);
+        अत्थाय (पूर्णाङ्क i = 0; i < ntokens; ++i)
+          मानानि[i] = symbols[i]->translatable;
+        muscle_निवेशय_int_table ("translatable", मानानि,
+                                 मानानि[0], 1, ntokens);
+        मुक्त (मानानि);
       }
   }
 
   /* Output YYTOKNUM. */
   {
-    int *values = xnmalloc (ntokens, sizeof *values);
-    for (int i = 0; i < ntokens; ++i)
-      values[i] = symbols[i]->content->code;
-    muscle_insert_int_table ("toknum", values,
-                             values[0], 1, ntokens);
-    free (values);
+    पूर्णाङ्क *मानानि = xnmalloc (ntokens, परिमाण *मानानि);
+    अत्थाय (पूर्णाङ्क i = 0; i < ntokens; ++i)
+      मानानि[i] = symbols[i]->content->code;
+    muscle_निवेशय_int_table ("toknum", मानानि,
+                             मानानि[0], 1, ntokens);
+    मुक्त (मानानि);
   }
 }
 
@@ -353,34 +353,34 @@ prepare_symbols (void)
 | rline, dprec, merger, immediate.                             |
 `-------------------------------------------------------------*/
 
-static void
-prepare_rules (void)
+स्थिर शून्य
+prepare_rules (शून्य)
 {
-  int *prhs = xnmalloc (nrules, sizeof *prhs);
-  item_number *rhs = xnmalloc (nritems, sizeof *rhs);
-  int *rline = xnmalloc (nrules, sizeof *rline);
-  symbol_number *r1 = xnmalloc (nrules, sizeof *r1);
-  int *r2 = xnmalloc (nrules, sizeof *r2);
-  int *dprec = xnmalloc (nrules, sizeof *dprec);
-  int *merger = xnmalloc (nrules, sizeof *merger);
-  int *immediate = xnmalloc (nrules, sizeof *immediate);
+  पूर्णाङ्क *prhs = xnmalloc (nrules, परिमाण *prhs);
+  item_सङ्ख्या *rhs = xnmalloc (nritems, परिमाण *rhs);
+  पूर्णाङ्क *rline = xnmalloc (nrules, परिमाण *rline);
+  चिह्नम्_सङ्ख्या *r1 = xnmalloc (nrules, परिमाण *r1);
+  पूर्णाङ्क *r2 = xnmalloc (nrules, परिमाण *r2);
+  पूर्णाङ्क *dprec = xnmalloc (nrules, परिमाण *dprec);
+  पूर्णाङ्क *merger = xnmalloc (nrules, परिमाण *merger);
+  पूर्णाङ्क *immediate = xnmalloc (nrules, परिमाण *immediate);
 
   /* Index in RHS.  */
-  int i = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  पूर्णाङ्क i = 0;
+  अत्थाय (rule_सङ्ख्या r = 0; r < nrules; ++r)
     {
       /* Index of rule R in RHS. */
       prhs[r] = i;
       /* RHS of the rule R. */
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+      अत्थाय (item_सङ्ख्या *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
         rhs[i++] = *rhsp;
       /* Separator in RHS. */
       rhs[i++] = -1;
 
       /* Line where rule was defined. */
-      rline[r] = rules[r].location.start.line;
+      rline[r] = rules[r].location.start.पङ्क्तिः;
       /* LHS of the rule R. */
-      r1[r] = rules[r].lhs->number;
+      r1[r] = rules[r].lhs->सङ्ख्या;
       /* Length of rule R's RHS. */
       r2[r] = rule_rhs_length (&rules[r]);
       /* Dynamic precedence (GLR).  */
@@ -392,45 +392,45 @@ prepare_rules (void)
     }
   aver (i == nritems);
 
-  muscle_insert_item_number_table ("rhs", rhs, ritem[0], 1, nritems);
-  muscle_insert_int_table ("prhs", prhs, 0, 0, nrules);
-  muscle_insert_int_table ("rline", rline, 0, 0, nrules);
-  muscle_insert_symbol_number_table ("r1", r1, 0, 0, nrules);
-  muscle_insert_int_table ("r2", r2, 0, 0, nrules);
-  muscle_insert_int_table ("dprec", dprec, 0, 0, nrules);
-  muscle_insert_int_table ("merger", merger, 0, 0, nrules);
-  muscle_insert_int_table ("immediate", immediate, 0, 0, nrules);
+  muscle_निवेशय_item_सङ्ख्या_table ("rhs", rhs, ritem[0], 1, nritems);
+  muscle_निवेशय_int_table ("prhs", prhs, 0, 0, nrules);
+  muscle_निवेशय_int_table ("rline", rline, 0, 0, nrules);
+  muscle_निवेशय_चिह्नम्_सङ्ख्या_table ("r1", r1, 0, 0, nrules);
+  muscle_निवेशय_int_table ("r2", r2, 0, 0, nrules);
+  muscle_निवेशय_int_table ("dprec", dprec, 0, 0, nrules);
+  muscle_निवेशय_int_table ("merger", merger, 0, 0, nrules);
+  muscle_निवेशय_int_table ("immediate", immediate, 0, 0, nrules);
 
-  MUSCLE_INSERT_INT ("rules_number", nrules);
-  MUSCLE_INSERT_INT ("max_left_semantic_context", max_left_semantic_context);
+  MUSCLE_निवेशय_INT ("rules_number", nrules);
+  MUSCLE_निवेशय_INT ("max_left_semantic_context", max_वामः_semantic_context);
 
-  free (prhs);
-  free (rhs);
-  free (rline);
-  free (r1);
-  free (r2);
-  free (dprec);
-  free (merger);
-  free (immediate);
+  मुक्त (prhs);
+  मुक्त (rhs);
+  मुक्त (rline);
+  मुक्त (r1);
+  मुक्त (r2);
+  मुक्त (dprec);
+  मुक्त (merger);
+  मुक्त (immediate);
 }
 
 /*--------------------------------------------.
 | Prepare the muscles related to the states.  |
 `--------------------------------------------*/
 
-static void
-prepare_states (void)
+स्थिर शून्य
+prepare_states (शून्य)
 {
-  symbol_number *values = xnmalloc (nstates, sizeof *values);
-  for (state_number i = 0; i < nstates; ++i)
-    values[i] = states[i]->accessing_symbol;
-  muscle_insert_symbol_number_table ("stos", values,
+  चिह्नम्_सङ्ख्या *मानानि = xnmalloc (nstates, परिमाण *मानानि);
+  अत्थाय (state_सङ्ख्या i = 0; i < nstates; ++i)
+    मानानि[i] = states[i]->accessing_चिह्नम्;
+  muscle_निवेशय_चिह्नम्_सङ्ख्या_table ("stos", मानानि,
                                      0, 1, nstates);
-  free (values);
+  मुक्त (मानानि);
 
-  MUSCLE_INSERT_INT ("last", high);
-  MUSCLE_INSERT_INT ("final_state_number", final_state->number);
-  MUSCLE_INSERT_INT ("states_number", nstates);
+  MUSCLE_निवेशय_INT ("last", उच्चः);
+  MUSCLE_निवेशय_INT ("final_state_number", final_state->सङ्ख्या);
+  MUSCLE_निवेशय_INT ("states_number", nstates);
 }
 
 
@@ -438,13 +438,13 @@ prepare_states (void)
 | Compare two symbols by type-name, and then by number.  |
 `-------------------------------------------------------*/
 
-static int
-symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
+स्थिर पूर्णाङ्क
+चिह्नम्_type_name_cmp (ध्रुव चिह्नम् **lhs, ध्रुव चिह्नम् **rhs)
 {
-  int res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
-  if (!res)
-    res = (*lhs)->content->number - (*rhs)->content->number;
-  return res;
+  पूर्णाङ्क res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
+  सचे (!res)
+    res = (*lhs)->content->सङ्ख्या - (*rhs)->content->सङ्ख्या;
+  पटिनिवत्त res;
 }
 
 
@@ -452,13 +452,13 @@ symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
 | Return a (malloc'ed) table of the symbols sorted by type-name.  |
 `----------------------------------------------------------------*/
 
-static symbol **
-symbols_by_type_name (void)
+स्थिर चिह्नम् **
+symbols_by_type_name (शून्य)
 {
-  typedef int (*qcmp_type) (const void *, const void *);
-  symbol **res = xmemdup (symbols, nsyms * sizeof *res);
-  qsort (res, nsyms, sizeof *res, (qcmp_type) &symbol_type_name_cmp);
-  return res;
+  प्रकारनिर्देश पूर्णाङ्क (*qcmp_type) (ध्रुव शून्य *, ध्रुव शून्य *);
+  चिह्नम् **res = xmemdup (symbols, nsyms * परिमाण *res);
+  qsort (res, nsyms, परिमाण *res, (qcmp_type) &चिह्नम्_type_name_cmp);
+  पटिनिवत्त res;
 }
 
 
@@ -467,41 +467,41 @@ symbols_by_type_name (void)
 | symbols with same type-name).                                     |
 `------------------------------------------------------------------*/
 
-static void
+स्थिर शून्य
 type_names_output (FILE *out)
 {
-  symbol **syms = symbols_by_type_name ();
+  चिह्नम् **syms = symbols_by_type_name ();
   fputs ("m4_define([b4_type_names],\n[", out);
-  for (int i = 0; i < nsyms; /* nothing */)
+  अत्थाय (पूर्णाङ्क i = 0; i < nsyms; /* nothing */)
     {
       /* The index of the first symbol of the current type-name.  */
-      int i0 = i;
+      पूर्णाङ्क i0 = i;
       fputs (i ? ",\n[" : "[", out);
-      for (; i < nsyms
+      अत्थाय (; i < nsyms
            && syms[i]->content->type_name == syms[i0]->content->type_name; ++i)
-        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->number);
+        fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->सङ्ख्या);
       fputs ("]", out);
     }
   fputs ("])\n\n", out);
-  free (syms);
+  मुक्त (syms);
 }
 
 
 /* Define the list of start symbols *if* there are several.  Define
    them by pairs: [START-SYMBOL-NUM, SWITCHING-TOKEN-SYMBOL-NUM]. */
-static void
+स्थिर शून्य
 start_symbols_output (FILE *out)
 {
-  if (start_symbols && start_symbols->next)
+  सचे (start_symbols && start_symbols->next)
     {
       fputs ("m4_define([b4_start_symbols],\n[", out);
-      for (symbol_list *list = start_symbols; list; list = list->next)
+      अत्थाय (चिह्नम्_list *list = start_symbols; list; list = list->next)
         {
-          const symbol *start = list->content.sym;
-          const symbol *swtok = switching_token (start);
+          ध्रुव चिह्नम् *start = list->content.sym;
+          ध्रुव चिह्नम् *swtok = switching_token (start);
           fprintf (out, "%s[%d, %d]",
                    list == start_symbols ? "" : ", ",
-                   start->content->number, swtok->content->number);
+                   start->content->सङ्ख्या, swtok->content->सङ्ख्या);
         }
       fputs ("])\n\n", out);
     }
@@ -512,11 +512,11 @@ start_symbols_output (FILE *out)
 | The list of all the symbol numbers.  |
 `-------------------------------------*/
 
-static void
-symbol_numbers_output (FILE *out)
+स्थिर शून्य
+चिह्नम्_numbers_output (FILE *out)
 {
   fputs ("m4_define([b4_symbol_numbers],\n[", out);
-  for (int i = 0; i < nsyms; ++i)
+  अत्थाय (पूर्णाङ्क i = 0; i < nsyms; ++i)
     fprintf (out, "%s[%d]", i ? ", " : "", i);
   fputs ("])\n\n", out);
 }
@@ -526,36 +526,36 @@ symbol_numbers_output (FILE *out)
 | Output the user reduction actions to OUT.  |
 `-------------------------------------------*/
 
-static void
-rule_output (const rule *r, FILE *out)
+स्थिर शून्य
+rule_output (ध्रुव rule *r, FILE *out)
 {
-  output_escaped (out, r->lhs->symbol->tag);
+  output_escaped (out, r->lhs->चिह्नम्->tag);
   fputc (':', out);
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  सचे (0 <= *r->rhs)
+    अत्थाय (item_सङ्ख्या *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       {
         fputc (' ', out);
         output_escaped (out, symbols[*rhsp]->tag);
       }
-  else
+  अञ्ञथा
     fputs (" %empty", out);
 }
 
-static void
+स्थिर शून्य
 user_actions_output (FILE *out)
 {
   fputs ("m4_define([b4_actions], \n[", out);
-  for (rule_number r = 0; r < nrules; ++r)
-    if (rules[r].action)
+  अत्थाय (rule_सङ्ख्या r = 0; r < nrules; ++r)
+    सचे (rules[r].action)
       {
         /* The useless "" is there to pacify syntax-check.  */
         fprintf (out, "%s""(%d, [",
                  rules[r].is_predicate ? "b4_predicate_case" : "b4_case",
                  r + 1);
-        if (!no_lines_flag)
+        सचे (!no_पङ्क्तयः_flag)
           {
             fprintf (out, "b4_syncline(%d, ",
-                     rules[r].action_loc.start.line);
+                     rules[r].action_loc.start.पङ्क्तिः);
             string_output (out, map_file_name (rules[r].action_loc.start.file));
             fprintf (out, ")dnl\n");
           }
@@ -572,15 +572,15 @@ user_actions_output (FILE *out)
 | Output the merge functions to OUT.  |
 `------------------------------------*/
 
-static void
+स्थिर शून्य
 merger_output (FILE *out)
 {
   fputs ("m4_define([b4_mergers], \n[[", out);
-  int n;
+  पूर्णाङ्क n;
   merger_list* p;
-  for (n = 1, p = merge_functions; p != NULL; n += 1, p = p->next)
+  अत्थाय (n = 1, p = merge_functions; p != रिक्त; n += 1, p = p->next)
     fprintf (out, "]b4_call_merger""([%d], [%s], [%d])[\n",
-             n, p->name, p->sym->content->number);
+             n, p->name, p->sym->content->सङ्ख्या);
   fputs ("]])\n\n", out);
 }
 
@@ -589,121 +589,121 @@ merger_output (FILE *out)
 | Prepare the muscles for symbol definitions.  |
 `---------------------------------------------*/
 
-static void
-prepare_symbol_definitions (void)
+स्थिर शून्य
+prepare_चिह्नम्_definitions (शून्य)
 {
   /* Map "orig NUM" to new numbers.  See data/README.  */
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
+  अत्थाय (चिह्नम्_सङ्ख्या i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
     {
       obstack_printf (&format_obstack, "symbol""(orig %d, number)", i);
-      const char *key = obstack_finish0 (&format_obstack);
-      MUSCLE_INSERT_INT (key, nterm_map ? nterm_map[i - ntokens] : i);
+      ध्रुव वर्ण *कुञ्चिका = obstack_finish0 (&format_obstack);
+      MUSCLE_निवेशय_INT (कुञ्चिका, nterm_map ? nterm_map[i - ntokens] : i);
     }
 
-  for (int i = 0; i < nsyms; ++i)
+  अत्थाय (पूर्णाङ्क i = 0; i < nsyms; ++i)
     {
-      symbol *sym = symbols[i];
-      const char *key;
+      चिह्नम् *sym = symbols[i];
+      ध्रुव वर्ण *कुञ्चिका;
 
-#define SET_KEY(Entry)                                          \
+#define SET_कुञ्चिका(Entry)                                          \
       obstack_printf (&format_obstack, "symbol""(%d, %s)",        \
                       i, Entry);                                \
-      key = obstack_finish0 (&format_obstack);
+      कुञ्चिका = obstack_finish0 (&format_obstack);
 
 #define SET_KEY2(Entry, Suffix)                                 \
       obstack_printf (&format_obstack, "symbol""(%d, %s_%s)",     \
                       i, Entry, Suffix);                        \
-      key = obstack_finish0 (&format_obstack);
+      कुञ्चिका = obstack_finish0 (&format_obstack);
 
       /* Whether the symbol has an identifier.  */
-      const char *id = symbol_id_get (sym);
-      SET_KEY ("has_id");
-      MUSCLE_INSERT_INT (key, !!id);
+      ध्रुव वर्ण *id = चिह्नम्_id_get (sym);
+      SET_कुञ्चिका ("has_id");
+      MUSCLE_निवेशय_INT (कुञ्चिका, !!id);
 
       /* Its identifier.  */
-      SET_KEY ("id");
-      MUSCLE_INSERT_STRING (key, id ? id : "");
+      SET_कुञ्चिका ("id");
+      MUSCLE_निवेशय_STRING (कुञ्चिका, id ? id : "");
 
       /* Its tag.  Typically for documentation purpose.  */
-      SET_KEY ("tag");
-      MUSCLE_INSERT_STRING (key, symbol_tag (sym));
+      SET_कुञ्चिका ("tag");
+      MUSCLE_निवेशय_STRING (कुञ्चिका, चिह्नम्_tag (sym));
 
-      SET_KEY ("code");
-      MUSCLE_INSERT_INT (key, sym->content->code);
+      SET_कुञ्चिका ("code");
+      MUSCLE_निवेशय_INT (कुञ्चिका, sym->content->code);
 
-      SET_KEY ("is_token");
-      MUSCLE_INSERT_INT (key, i < ntokens);
+      SET_कुञ्चिका ("is_token");
+      MUSCLE_निवेशय_INT (कुञ्चिका, i < ntokens);
 
-      SET_KEY ("number");
-      MUSCLE_INSERT_INT (key, sym->content->number);
+      SET_कुञ्चिका ("number");
+      MUSCLE_निवेशय_INT (कुञ्चिका, sym->content->सङ्ख्या);
 
-      SET_KEY ("has_type");
-      MUSCLE_INSERT_INT (key, !!sym->content->type_name);
+      SET_कुञ्चिका ("has_type");
+      MUSCLE_निवेशय_INT (कुञ्चिका, !!sym->content->type_name);
 
-      SET_KEY ("type");
-      MUSCLE_INSERT_STRING (key, sym->content->type_name
+      SET_कुञ्चिका ("type");
+      MUSCLE_निवेशय_STRING (कुञ्चिका, sym->content->type_name
                             ? sym->content->type_name : "");
 
-      for (int j = 0; j < CODE_PROPS_SIZE; ++j)
+      अत्थाय (पूर्णाङ्क j = 0; j < CODE_PROPS_SIZE; ++j)
         {
           /* "printer", not "%printer".  */
-          char const *pname = code_props_type_string (j) + 1;
-          code_props const *p = symbol_code_props_get (sym, j);
+          वर्ण ध्रुव *pname = code_props_type_string (j) + 1;
+          code_props ध्रुव *p = चिह्नम्_code_props_get (sym, j);
           SET_KEY2 ("has", pname);
-          MUSCLE_INSERT_INT (key, !!p->code);
+          MUSCLE_निवेशय_INT (कुञ्चिका, !!p->code);
 
-          if (p->code)
+          सचे (p->code)
             {
               SET_KEY2 (pname, "file");
-              MUSCLE_INSERT_C_STRING (key, map_file_name (p->location.start.file));
+              MUSCLE_निवेशय_C_STRING (कुञ्चिका, map_file_name (p->location.start.file));
 
               SET_KEY2 (pname, "line");
-              MUSCLE_INSERT_INT (key, p->location.start.line);
+              MUSCLE_निवेशय_INT (कुञ्चिका, p->location.start.पङ्क्तिः);
 
               SET_KEY2 (pname, "loc");
-              muscle_location_grow (key, p->location);
+              muscle_location_grow (कुञ्चिका, p->location);
 
-              SET_KEY (pname);
+              SET_कुञ्चिका (pname);
               obstack_printf (&muscle_obstack,
                               "%*s%s", p->location.start.column - 1, "", p->code);
-              muscle_insert (key, obstack_finish0 (&muscle_obstack));
+              muscle_निवेशय (कुञ्चिका, obstack_finish0 (&muscle_obstack));
             }
         }
 #undef SET_KEY2
-#undef SET_KEY
+#undef SET_कुञ्चिका
     }
 }
 
 
-static void
-prepare_actions (void)
+स्थिर शून्य
+prepare_actions (शून्य)
 {
   /* Figure out the actions for the specified state.  */
-  muscle_insert_rule_number_table ("defact", yydefact,
+  muscle_निवेशय_rule_सङ्ख्या_table ("defact", yydefact,
                                    yydefact[0], 1, nstates);
 
   /* Figure out what to do after reducing with each rule, depending on
      the saved state from before the beginning of parsing the data
      that matched this rule.  */
-  muscle_insert_state_number_table ("defgoto", yydefgoto,
+  muscle_निवेशय_state_सङ्ख्या_table ("defgoto", yydefgoto,
                                     yydefgoto[0], 1, nsyms - ntokens);
 
 
   /* Output PACT. */
-  muscle_insert_base_table ("pact", base,
+  muscle_निवेशय_base_table ("pact", base,
                              base[0], 1, nstates);
-  MUSCLE_INSERT_INT ("pact_ninf", base_ninf);
+  MUSCLE_निवेशय_INT ("pact_ninf", base_ninf);
 
   /* Output PGOTO. */
-  muscle_insert_base_table ("pgoto", base,
+  muscle_निवेशय_base_table ("pgoto", base,
                              base[nstates], nstates + 1, nvectors);
 
-  muscle_insert_base_table ("table", table,
-                            table[0], 1, high + 1);
-  MUSCLE_INSERT_INT ("table_ninf", table_ninf);
+  muscle_निवेशय_base_table ("table", table,
+                            table[0], 1, उच्चः + 1);
+  MUSCLE_निवेशय_INT ("table_ninf", table_ninf);
 
-  muscle_insert_base_table ("check", check,
-                            check[0], 1, high + 1);
+  muscle_निवेशय_base_table ("check", check,
+                            check[0], 1, उच्चः + 1);
 
   /* GLR parsing slightly modifies YYTABLE and YYCHECK (and thus
      YYPACT) so that in states with unresolved conflicts, the default
@@ -714,9 +714,9 @@ prepare_actions (void)
      parser, so we could avoid accidents by not writing them out in
      that case.  Nevertheless, it seems even better to be able to use
      the GLR skeletons even without the non-deterministic tables.  */
-  muscle_insert_int_table ("conflict_list_heads", conflict_table,
-                           conflict_table[0], 1, high + 1);
-  muscle_insert_int_table ("conflicting_rules", conflict_list,
+  muscle_निवेशय_int_table ("conflict_list_heads", conflict_table,
+                           conflict_table[0], 1, उच्चः + 1);
+  muscle_निवेशय_int_table ("conflicting_rules", conflict_list,
                            0, 1, conflict_list_cnt);
 }
 
@@ -725,12 +725,12 @@ prepare_actions (void)
 | Output the definitions of all the muscles.  |
 `--------------------------------------------*/
 
-static void
+स्थिर शून्य
 muscles_output (FILE *out)
 {
   fputs ("m4_init()\n", out);
   merger_output (out);
-  symbol_numbers_output (out);
+  चिह्नम्_numbers_output (out);
   type_names_output (out);
   start_symbols_output (out);
   user_actions_output (out);
@@ -742,17 +742,17 @@ muscles_output (FILE *out)
 | Call the skeleton parser.  |
 `---------------------------*/
 
-static void
-output_skeleton (void)
+स्थिर शून्य
+output_skeleton (शून्य)
 {
   /* Compute the names of the package data dir and skeleton files.  */
-  char const *m4 = m4path ();
-  char const *datadir = pkgdatadir ();
-  char *skeldir = xpath_join (datadir, "skeletons");
-  char *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
-  char *m4bison = xpath_join (skeldir, "bison.m4");
-  char *traceon = xpath_join (skeldir, "traceon.m4");
-  char *skel = (IS_PATH_WITH_DIR (skeleton)
+  वर्ण ध्रुव *m4 = m4path ();
+  वर्ण ध्रुव *datadir = pkgdatadir ();
+  वर्ण *skeldir = xpath_join (datadir, "skeletons");
+  वर्ण *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
+  वर्ण *m4bison = xpath_join (skeldir, "bison.m4");
+  वर्ण *traceon = xpath_join (skeldir, "traceon.m4");
+  वर्ण *skel = (IS_PATH_WITH_DIR (skeleton)
                 ? xstrdup (skeleton)
                 : xpath_join (skeldir, skeleton));
 
@@ -763,11 +763,11 @@ output_skeleton (void)
 
   /* Create an m4 subprocess connected to us via two pipes.  */
 
-  int filter_fd[2];
+  पूर्णाङ्क filter_fd[2];
   pid_t pid;
   {
-    char const *argv[11];
-    int i = 0;
+    वर्ण ध्रुव *argv[11];
+    पूर्णाङ्क i = 0;
     argv[i++] = m4;
 
     /* When POSIXLY_CORRECT is set, GNU M4 1.6 and later disable GNU
@@ -779,7 +779,7 @@ output_skeleton (void)
        See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (*M4_GNU_OPTION)
+    सचे (*M4_GNU_OPTION)
       argv[i++] = M4_GNU_OPTION;
 
     argv[i++] = "-I";
@@ -788,40 +788,40 @@ output_skeleton (void)
        -dV in a position-dependent manner.  See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (trace_flag & trace_m4_early)
+    सचे (trace_flag & trace_m4_early)
       argv[i++] = "-dV";
     argv[i++] = m4sugar;
     argv[i++] = "-";
     argv[i++] = m4bison;
-    if (trace_flag & trace_m4)
+    सचे (trace_flag & trace_m4)
       argv[i++] = traceon;
     argv[i++] = skel;
-    argv[i++] = NULL;
+    argv[i++] = रिक्त;
     aver (i <= ARRAY_CARDINALITY (argv));
 
-    if (trace_flag & trace_tools)
+    सचे (trace_flag & trace_tools)
       {
         fputs ("running:", stderr);
-        for (int j = 0; argv[j]; ++j)
+        अत्थाय (पूर्णाङ्क j = 0; argv[j]; ++j)
           fprintf (stderr, " %s", argv[j]);
         fputc ('\n', stderr);
       }
 
     pid = create_pipe_bidi ("m4", m4, argv,
-                            /* directory */ NULL,
+                            /* directory */ रिक्त,
                             /* null_stderr */ false,
                             /* slave_process */ true,
                             /* exit_on_error */ true,
                             filter_fd);
   }
 
-  free (skeldir);
-  free (m4sugar);
-  free (m4bison);
-  free (traceon);
-  free (skel);
+  मुक्त (skeldir);
+  मुक्त (m4sugar);
+  मुक्त (m4bison);
+  मुक्त (traceon);
+  मुक्त (skel);
 
-  if (trace_flag & trace_muscles)
+  सचे (trace_flag & trace_muscles)
     muscles_output (stderr);
   {
     FILE *out = xfdopen (filter_fd[1], "w");
@@ -830,7 +830,7 @@ output_skeleton (void)
   }
 
   /* Read and process m4's output.  */
-  timevar_push (tv_m4);
+  timevar_प्रक्षिप (tv_m4);
   {
     FILE *in = xfdopen (filter_fd[0], "r");
     scan_skel (in);
@@ -840,43 +840,43 @@ output_skeleton (void)
     aver (feof (in));
     xfclose (in);
   }
-  wait_subprocess (pid, "m4", false, false, true, true, NULL);
-  timevar_pop (tv_m4);
+  wait_subprocess (pid, "m4", false, false, true, true, रिक्त);
+  timevar_निष्कासय (tv_m4);
 }
 
-static void
-prepare (void)
+स्थिर शून्य
+prepare (शून्य)
 {
   /* BISON_USE_PUSH_FOR_PULL is for the test suite and should not be
      documented for the user.  */
-  char const *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
-  bool use_push_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
+  वर्ण ध्रुव *cp = getenv ("BISON_USE_PUSH_FOR_PULL");
+  bool use_प्रक्षिप_for_pull_flag = cp && *cp && strtol (cp, 0, 10);
 
   /* Versions.  */
-  MUSCLE_INSERT_STRING ("version_string", VERSION);
-  MUSCLE_INSERT_INT ("version", strversion_to_int (VERSION));
-  MUSCLE_INSERT_INT ("required_version", required_version);
+  MUSCLE_निवेशय_STRING ("version_string", VERSION);
+  MUSCLE_निवेशय_INT ("version", strversion_to_int (VERSION));
+  MUSCLE_निवेशय_INT ("required_version", required_version);
 
   /* Flags. */
-  MUSCLE_INSERT_BOOL ("header_flag", header_flag);
-  MUSCLE_INSERT_BOOL ("glr_flag", glr_parser);
-  MUSCLE_INSERT_BOOL ("nondeterministic_flag", nondeterministic_parser);
-  MUSCLE_INSERT_BOOL ("synclines_flag", !no_lines_flag);
-  MUSCLE_INSERT_BOOL ("tag_seen_flag", tag_seen);
-  MUSCLE_INSERT_BOOL ("token_table_flag", token_table_flag);
-  MUSCLE_INSERT_BOOL ("use_push_for_pull_flag", use_push_for_pull_flag);
-  MUSCLE_INSERT_BOOL ("yacc_flag", !location_empty (yacc_loc));
+  MUSCLE_निवेशय_BOOL ("header_flag", header_flag);
+  MUSCLE_निवेशय_BOOL ("glr_flag", glr_parser);
+  MUSCLE_निवेशय_BOOL ("nondeterministic_flag", nondeterministic_parser);
+  MUSCLE_निवेशय_BOOL ("synclines_flag", !no_पङ्क्तयः_flag);
+  MUSCLE_निवेशय_BOOL ("tag_seen_flag", tag_seen);
+  MUSCLE_निवेशय_BOOL ("token_table_flag", token_table_flag);
+  MUSCLE_निवेशय_BOOL ("use_push_for_pull_flag", use_प्रक्षिप_for_pull_flag);
+  MUSCLE_निवेशय_BOOL ("yacc_flag", !location_empty (yacc_loc));
 
   /* File names.  */
-  if (spec_name_prefix)
-    MUSCLE_INSERT_STRING ("prefix", spec_name_prefix);
+  सचे (spec_name_prefix)
+    MUSCLE_निवेशय_STRING ("prefix", spec_name_prefix);
 
-  MUSCLE_INSERT_STRING ("file_name_all_but_ext", all_but_ext);
+  MUSCLE_निवेशय_STRING ("file_name_all_but_ext", all_but_ext);
 
-  const char *spec_mapped_header_file = map_file_name (spec_header_file);
-  const char *mapped_dir_prefix = map_file_name (dir_prefix);
+  ध्रुव वर्ण *spec_mapped_header_file = map_file_name (spec_header_file);
+  ध्रुव वर्ण *mapped_dir_prefix = map_file_name (dir_prefix);
 
-#define DEFINE(Name) MUSCLE_INSERT_STRING (#Name, Name ? Name : "")
+#define DEFINE(Name) MUSCLE_निवेशय_STRING (#Name, Name ? Name : "")
   DEFINE (dir_prefix);
   DEFINE (mapped_dir_prefix);
   DEFINE (parser_file_name);
@@ -890,9 +890,9 @@ prepare (void)
 #undef DEFINE
 
   /* Find the right skeleton file, and add muscles about the skeletons.  */
-  if (skeleton)
-    MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
-  else
+  सचे (skeleton)
+    MUSCLE_निवेशय_C_STRING ("skeleton", skeleton);
+  अञ्ञथा
     skeleton = language->skeleton;
 
   /* About the skeletons.  */
@@ -900,9 +900,9 @@ prepare (void)
     /* b4_skeletonsdir is used inside m4_include in the skeletons, so digraphs
        would never be expanded.  Hopefully no one has M4-special characters in
        his Bison installation path.  */
-    char *skeldir = xpath_join (pkgdatadir (), "skeletons");
-    MUSCLE_INSERT_STRING_RAW ("skeletonsdir", skeldir);
-    free (skeldir);
+    वर्ण *skeldir = xpath_join (pkgdatadir (), "skeletons");
+    MUSCLE_निवेशय_STRING_RAW ("skeletonsdir", skeldir);
+    मुक्त (skeldir);
   }
 }
 
@@ -911,8 +911,8 @@ prepare (void)
 | Output the parsing tables and the parser code to ftable.  |
 `----------------------------------------------------------*/
 
-void
-output (void)
+शून्य
+output (शून्य)
 {
   obstack_init (&format_obstack);
 
@@ -920,7 +920,7 @@ output (void)
   prepare_rules ();
   prepare_states ();
   prepare_actions ();
-  prepare_symbol_definitions ();
+  prepare_चिह्नम्_definitions ();
 
   prepare ();
 
@@ -929,8 +929,8 @@ output (void)
 
   /* If late errors were generated, destroy the generated source
      files. */
-  if (complaint_status)
+  सचे (complaint_status)
     unlink_generated_sources ();
 
-  obstack_free (&format_obstack, NULL);
+  obstack_free (&format_obstack, रिक्त);
 }

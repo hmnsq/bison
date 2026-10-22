@@ -19,135 +19,135 @@
 
 %code requires
 {
-  #include "symlist.h"
-  #include "symtab.h"
+  #अन्तर्भाव "symlist.h"
+  #अन्तर्भाव "symtab.h"
 }
 
 %code provides
 {
   /* Initialize unquote.  */
-  void parser_init (void);
+  शून्य parser_init (शून्य);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  शून्य parser_free (शून्य);
 }
 
-%code top
+%code शिखरम्_2
 {
   /* On column 0 to please syntax-check.  */
-#include <config.h>
+#अन्तर्भाव <config.h>
 }
 
 %code
 {
-  #include "system.h"
+  #अन्तर्भाव "system.h"
 
-  #include <c-ctype.h>
-  #include <quotearg.h>
-  #include <vasnprintf.h>
-  #include <xmemdup0.h>
+  #अन्तर्भाव <c-ctype.h>
+  #अन्तर्भाव <quotearg.h>
+  #अन्तर्भाव <vasnprintf.h>
+  #अन्तर्भाव <xmemdup0.h>
 
-  #include "complain.h"
-  #include "conflicts.h"
-  #include "files.h"
-  #include "getargs.h"
-  #include "gram.h"
-  #include "named-ref.h"
-  #include "reader.h"
-  #include "scan-code.h"
-  #include "scan-gram.h"
-  #include "strversion.h"
+  #अन्तर्भाव "complain.h"
+  #अन्तर्भाव "conflicts.h"
+  #अन्तर्भाव "files.h"
+  #अन्तर्भाव "getargs.h"
+  #अन्तर्भाव "gram.h"
+  #अन्तर्भाव "named-ref.h"
+  #अन्तर्भाव "reader.h"
+  #अन्तर्भाव "scan-code.h"
+  #अन्तर्भाव "scan-gram.h"
+  #अन्तर्भाव "strversion.h"
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  स्थिर ध्रुव वर्ण* api_version = "3.8";
 
-  static int current_prec = 0;
-  static location current_lhs_loc;
-  static named_ref *current_lhs_named_ref;
-  static symbol *current_lhs_symbol;
-  static symbol_class current_class = unknown_sym;
+  स्थिर पूर्णाङ्क current_prec = 0;
+  स्थिर location current_lhs_loc;
+  स्थिर named_ref *current_lhs_named_ref;
+  स्थिर चिह्नम् *current_lhs_चिह्नम्;
+  स्थिर चिह्नम्_class current_class = unknown_sym;
 
   /** Set the new current left-hand side symbol, possibly common
    * to several right-hand side parts of rule.
    */
-  static void current_lhs (symbol *sym, location loc, named_ref *ref);
+  स्थिर शून्य current_lhs (चिह्नम् *sym, location loc, named_ref *ref);
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  स्थिर YYLTYPE lloc_default (YYLTYPE ध्रुव *, पूर्णाङ्क);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  स्थिर वर्ण *strip_braces (वर्ण *code);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  स्थिर वर्ण ध्रुव *translate_code (वर्ण *code, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  स्थिर वर्ण ध्रुव *translate_code_braceless (वर्ण *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  स्थिर शून्य handle_header (वर्ण ध्रुव *मानम्);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  स्थिर शून्य handle_error_verbose (location ध्रुव *loc, वर्ण ध्रुव *directive);
 
   /* Handle a %file-prefix directive.  */
-  static void handle_file_prefix (location const *loc,
-                                  location const *dir_loc,
-                                  char const *directive, char const *value);
+  स्थिर शून्य handle_file_prefix (location ध्रुव *loc,
+                                  location ध्रुव *dir_loc,
+                                  वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  स्थिर शून्य handle_language (location ध्रुव *loc, वर्ण ध्रुव *lang);
 
   /* Handle a %name-prefix directive.  */
-  static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+  स्थिर शून्य handle_name_prefix (location ध्रुव *loc,
+                                  वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  स्थिर शून्य handle_pure_parser (location ध्रुव *loc, वर्ण ध्रुव *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  स्थिर शून्य handle_require (location ध्रुव *loc, वर्ण ध्रुव *version);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  स्थिर शून्य handle_skeleton (location ध्रुव *loc, वर्ण ध्रुव *skel);
 
   /* Handle a %yacc directive.  */
-  static void handle_yacc (location const *loc);
+  स्थिर शून्य handle_yacc (location ध्रुव *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  स्थिर शून्य gram_error (location ध्रुव *, वर्ण ध्रुव *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  स्थिर वर्ण ध्रुव *char_name (वर्ण);
 
   /* Add style to semantic values in traces.  */
-  static void tron (FILE *yyo);
-  static void troff (FILE *yyo);
+  स्थिर शून्य tron (FILE *yyo);
+  स्थिर शून्य troff (FILE *yyo);
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  स्थिर वर्ण *unquote (ध्रुव वर्ण *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  स्थिर शून्य unquote_free (वर्ण *last_string);
 }
 
 %define api.header.include {"parse-gram.h"}
 %define api.prefix {gram_}
 %define api.pure full
 %define api.token.raw
-%define api.value.type union
+%define api.मानम्.प्रकार सङ्घ
 %define locations
 %define parse.error custom
 %define parse.lac full
@@ -175,8 +175,8 @@
   PERCENT_DESTRUCTOR  "%destructor"
   PERCENT_PRINTER     "%printer"
 
-  PERCENT_LEFT        "%left"
-  PERCENT_RIGHT       "%right"
+  PERCENT_वामः        "%left"
+  PERCENT_दक्षिणः       "%right"
   PERCENT_NONASSOC    "%nonassoc"
   PERCENT_PRECEDENCE  "%precedence"
 
@@ -198,7 +198,7 @@
   PERCENT_LANGUAGE        "%language"
   PERCENT_NAME_PREFIX     "%name-prefix"
   PERCENT_NO_DEFAULT_PREC "%no-default-prec"
-  PERCENT_NO_LINES        "%no-lines"
+  PERCENT_NO_पङ्क्तयः        "%no-lines"
   PERCENT_NONDETERMINISTIC_PARSER "%nondeterministic-parser"
   PERCENT_OUTPUT          "%output"
   PERCENT_PURE_PARSER     "%pure-parser"
@@ -230,13 +230,13 @@
 %code pre-printer  {tron (yyo);}
 %code post-printer {troff (yyo);}
 
-%type <unsigned char> CHAR_LITERAL
-%printer { fputs (char_name ($$), yyo); } <unsigned char>
+%प्रकार <unsigned वर्ण> CHAR_LITERAL
+%printer { fputs (char_name ($$), yyo); } <unsigned वर्ण>
 
-%type <char*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
-%printer { fputs ($$, yyo); } <char*>
+%प्रकार <वर्ण*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
+%printer { fputs ($$, yyo); } <वर्ण*>
 
-%type <uniqstr>
+%प्रकार <uniqstr>
   BRACKETED_ID ID ID_COLON
   PERCENT_ERROR_VERBOSE PERCENT_FILE_PREFIX PERCENT_FLAG PERCENT_NAME_PREFIX
   PERCENT_PURE_PARSER
@@ -247,26 +247,26 @@
 %printer { fprintf (yyo, "%%%s", $$); } PERCENT_FLAG
 %printer { fprintf (yyo, "<%s>", $$); } TAG tag
 
-%token <int> INT_LITERAL _("integer literal")
-%printer { fprintf (yyo, "%d", $$); } <int>
+%token <पूर्णाङ्क> INT_LITERAL _("integer literal")
+%printer { fprintf (yyo, "%d", $$); } <पूर्णाङ्क>
 
-%type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
-%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
+%प्रकार <चिह्नम्*> id id_colon string_as_id चिह्नम् token_decl token_decl_for_prec
+%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <चिह्नम्*>
 %printer { fprintf (yyo, "%s:", $$->tag); } id_colon
 
-%type <assoc> precedence_declarator
+%प्रकार <assoc> precedence_declarator
 
-%destructor { symbol_list_free ($$); } <symbol_list*>
-%printer { symbol_list_syms_print ($$, yyo); } <symbol_list*>
+%destructor { चिह्नम्_list_free ($$); } <चिह्नम्_list*>
+%printer { चिह्नम्_list_syms_print ($$, yyo); } <चिह्नम्_list*>
 
-%type <named_ref*> named_ref.opt
+%प्रकार <named_ref*> named_ref.opt
 
 /*---------.
 | %param.  |
 `---------*/
 %code requires
 {
-  typedef enum
+  प्रकारनिर्देश गणना
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -282,21 +282,21 @@
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
-  static param_type current_param = param_none;
+  स्थिर शून्य add_param (param_type प्रकार, वर्ण *decl, location loc);
+  स्थिर param_type current_param = param_none;
 };
 %token <param_type> PERCENT_PARAM "%param";
 %printer
 {
-  switch ($$)
+  विकल्प ($$)
     {
 #define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+      पक्ष param_ ## In: fputs ("%" #Out, yyo); भङ्ग
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
 #undef CASE
-      case param_none: aver (false); break;
+      पक्ष param_none: aver (false); भङ्ग;
     }
 } <param_type>;
 
@@ -306,7 +306,7 @@
                      \==========*/
 %%
 
-input:
+निवेशः:
   prologue_declarations "%%" grammar epilogue.opt
 ;
 
@@ -332,9 +332,9 @@ prologue_declaration:
     {
       muscle_percent_define_ensure ($1, @1, true);
     }
-| "%define" variable value
+| "%define" variable मानम्
     {
-      muscle_percent_define_insert ($2, @$, $3.kind, $3.chars,
+      muscle_percent_define_निवेशय ($2, @$, $3.kind, $3.chars,
                                     MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
 | "%header" string.opt             { handle_header ($2); }
@@ -354,7 +354,7 @@ prologue_declaration:
     }
 | "%language" STRING            { handle_language (&@1, $2); }
 | "%name-prefix" STRING         { handle_name_prefix (&@$, $1, $2); }
-| "%no-lines"                   { no_lines_flag = true; }
+| "%no-lines"                   { no_पङ्क्तयः_flag = true; }
 | "%nondeterministic-parser"    { nondeterministic_parser = true; }
 | "%output" STRING              { spec_outfile = unquote ($2); gram_scanner_last_string_free (); }
 | "%param" { current_param = $1; } params { current_param = param_none; }
@@ -379,7 +379,7 @@ params:
 `----------------------*/
 
 grammar_declaration:
-  symbol_declaration
+  चिह्नम्_declaration
 | "%start" symbols.1
     {
       grammar_start_symbols_add ($2);
@@ -387,12 +387,12 @@ grammar_declaration:
 | code_props_type "{...}" generic_symlist
     {
       code_props code;
-      code_props_symbol_action_init (&code, $2, @2);
+      code_props_चिह्नम्_action_init (&code, $2, @2);
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = $3; list; list = list->next)
-          symbol_list_code_props_set (list, $1, &code);
-        symbol_list_free ($3);
+        अत्थाय (चिह्नम्_list *list = $3; list; list = list->next)
+          चिह्नम्_list_code_props_set (list, $1, &code);
+        चिह्नम्_list_free ($3);
       }
     }
 | "%default-prec"
@@ -418,7 +418,7 @@ grammar_declaration:
     }
 ;
 
-%type <code_props_type> code_props_type;
+%प्रकार <code_props_type> code_props_type;
 %printer { fprintf (yyo, "%s", code_props_type_string ($$)); } <code_props_type>;
 code_props_type:
   "%destructor"  { $$ = destructor; }
@@ -433,7 +433,7 @@ code_props_type:
 
 union_name:
   %empty {}
-| ID     { muscle_percent_define_insert ("api.value.union.name",
+| ID     { muscle_percent_define_निवेशय ("api.value.union.name",
                                          @1, muscle_keyword, $1,
                                          MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE); }
 ;
@@ -448,61 +448,61 @@ grammar_declaration:
 ;
 
 
-%type <symbol_list*> nterm_decls symbol_decls symbols.1
+%प्रकार <चिह्नम्_list*> nterm_decls चिह्नम्_decls symbols.1
       token_decls token_decls_for_prec
       token_decl.1 token_decl_for_prec.1;
-symbol_declaration:
+चिह्नम्_declaration:
   "%nterm" { current_class = nterm_sym; } nterm_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      चिह्नम्_list_free ($syms);
     }
 | "%token" { current_class = token_sym; } token_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      चिह्नम्_list_free ($syms);
     }
-| "%type" { current_class = pct_type_sym; } symbol_decls[syms]
+| "%type" { current_class = pct_type_sym; } चिह्नम्_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      चिह्नम्_list_free ($syms);
     }
 | precedence_declarator token_decls_for_prec[syms]
     {
       ++current_prec;
-      for (symbol_list *list = $syms; list; list = list->next)
-        symbol_precedence_set (list->content.sym, current_prec, $1, @1);
-      symbol_list_free ($syms);
+      अत्थाय (चिह्नम्_list *list = $syms; list; list = list->next)
+        चिह्नम्_precedence_set (list->content.sym, current_prec, $1, @1);
+      चिह्नम्_list_free ($syms);
     }
 ;
 
 precedence_declarator:
-  "%left"       { $$ = left_assoc; }
-| "%right"      { $$ = right_assoc; }
+  "%left"       { $$ = वामः_assoc; }
+| "%right"      { $$ = दक्षिणः_assoc; }
 | "%nonassoc"   { $$ = non_assoc; }
 | "%precedence" { $$ = precedence_assoc; }
 ;
 
-%type <char*> string.opt;
+%प्रकार <वर्ण*> string.opt;
 string.opt:
-  %empty  { $$ = NULL; }
+  %empty  { $$ = रिक्त; }
 | STRING  { $$ = $1; }
 ;
 
 tag.opt:
-  %empty { $$ = NULL; }
+  %empty { $$ = रिक्त; }
 | TAG    { $$ = $1; }
 ;
 
-%type <symbol_list*> generic_symlist generic_symlist_item;
+%प्रकार <चिह्नम्_list*> generic_symlist generic_symlist_item;
 generic_symlist:
   generic_symlist_item
-| generic_symlist generic_symlist_item   { $$ = symbol_list_append ($1, $2); }
+| generic_symlist generic_symlist_item   { $$ = चिह्नम्_list_append ($1, $2); }
 ;
 
 generic_symlist_item:
-  symbol    { $$ = symbol_list_sym_new ($1, @1); }
-| tag       { $$ = symbol_list_type_new ($1, @1); }
+  चिह्नम्    { $$ = चिह्नम्_list_sym_new ($1, @1); }
+| tag       { $$ = चिह्नम्_list_type_new ($1, @1); }
 ;
 
 tag:
@@ -536,46 +536,46 @@ token_decls:
     }
 | TAG token_decl.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = चिह्नम्_list_type_set ($syms, $TAG);
     }
 | token_decls TAG token_decl.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = चिह्नम्_list_append ($1, चिह्नम्_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbol declarations for %token or %nterm.
 token_decl.1:
-  token_decl                { $$ = symbol_list_sym_new ($1, @1); }
-| token_decl.1 token_decl   { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+  token_decl                { $$ = चिह्नम्_list_sym_new ($1, @1); }
+| token_decl.1 token_decl   { $$ = चिह्नम्_list_append ($1, चिह्नम्_list_sym_new ($2, @2)); }
 
 // One symbol declaration for %token or %nterm.
 token_decl:
-  id int.opt[num] alias
+  id पूर्णाङ्क.opt[num] alias
     {
       $$ = $id;
-      symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
-      if ($alias)
-        symbol_make_alias ($id, $alias, @alias);
+      चिह्नम्_class_set ($id, current_class, @id, true);
+      सचे (0 <= $अङ्कः)
+        चिह्नम्_code_set ($id, $अङ्कः, @अङ्कः);
+      सचे ($alias)
+        चिह्नम्_make_alias ($id, $alias, @alias);
     }
 ;
 
-%type <int> int.opt;
-int.opt:
+%प्रकार <पूर्णाङ्क> पूर्णाङ्क.opt;
+पूर्णाङ्क.opt:
   %empty  { $$ = -1; }
 | INT_LITERAL
 ;
 
-%type <symbol*> alias;
+%प्रकार <चिह्नम्*> alias;
 alias:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = रिक्त; }
 | string_as_id   { $$ = $1; }
 | TSTRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = चिह्नम्_get ($1, @1);
+      चिह्नम्_class_set ($$, token_sym, @1, false);
       $$->translatable = true;
     }
 ;
@@ -596,29 +596,29 @@ token_decls_for_prec:
     }
 | TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = चिह्नम्_list_type_set ($syms, $TAG);
     }
 | token_decls_for_prec TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = चिह्नम्_list_append ($1, चिह्नम्_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more token declarations for precedence declaration.
 token_decl_for_prec.1:
   token_decl_for_prec
-    { $$ = symbol_list_sym_new ($1, @1); }
+    { $$ = चिह्नम्_list_sym_new ($1, @1); }
 | token_decl_for_prec.1 token_decl_for_prec
-    { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+    { $$ = चिह्नम्_list_append ($1, चिह्नम्_list_sym_new ($2, @2)); }
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
-  id int.opt[num]
+  id पूर्णाङ्क.opt[num]
     {
       $$ = $id;
-      symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
+      चिह्नम्_class_set ($id, token_sym, @id, false);
+      सचे (0 <= $अङ्कः)
+        चिह्नम्_code_set ($id, $अङ्कः, @अङ्कः);
     }
 | string_as_id
 ;
@@ -629,34 +629,34 @@ token_decl_for_prec:
 `-----------------------------------*/
 
 // A non empty list of typed symbols (for %type).
-symbol_decls:
+चिह्नम्_decls:
   symbols.1[syms]
     {
       $$ = $syms;
     }
 | TAG symbols.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = चिह्नम्_list_type_set ($syms, $TAG);
     }
-| symbol_decls TAG symbols.1[syms]
+| चिह्नम्_decls TAG symbols.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = चिह्नम्_list_append ($1, चिह्नम्_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbols.
 symbols.1:
-  symbol
+  चिह्नम्
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_sym_new ($symbol, @symbol);
+      सचे (current_class != unknown_sym)
+        चिह्नम्_class_set ($चिह्नम्, current_class, @चिह्नम्, false);
+      $$ = चिह्नम्_list_sym_new ($चिह्नम्, @चिह्नम्);
     }
-  | symbols.1 symbol
+  | symbols.1 चिह्नम्
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
+      सचे (current_class != unknown_sym)
+        चिह्नम्_class_set ($चिह्नम्, current_class, @चिह्नम्, false);
+      $$ = चिह्नम्_list_append ($1, चिह्नम्_list_sym_new ($चिह्नम्, @चिह्नम्));
     }
 ;
 
@@ -697,17 +697,17 @@ rhses.1:
 %token PERCENT_EMPTY "%empty";
 rhs:
   %empty
-    { grammar_current_rule_begin (current_lhs_symbol, current_lhs_loc,
+    { grammar_current_rule_begin (current_lhs_चिह्नम्, current_lhs_loc,
                                   current_lhs_named_ref); }
-| rhs symbol named_ref.opt
-    { grammar_current_rule_symbol_append ($2, @2, $3); }
+| rhs चिह्नम् named_ref.opt
+    { grammar_current_rule_चिह्नम्_append ($2, @2, $3); }
 | rhs tag.opt "{...}"[action] named_ref.opt[name]
     { grammar_current_rule_action_append ($action, @action, $name, $[tag.opt]); }
 | rhs "%?{...}"
     { grammar_current_rule_predicate_append ($2, @2); }
 | rhs "%empty"
     { grammar_current_rule_empty_set (@2); }
-| rhs "%prec" symbol
+| rhs "%prec" चिह्नम्
     { grammar_current_rule_prec_set ($3, @3); }
 | rhs "%dprec" INT_LITERAL
     { grammar_current_rule_dprec_set ($3, @3); }
@@ -720,7 +720,7 @@ rhs:
 ;
 
 named_ref.opt:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = रिक्त; }
 | BRACKETED_ID   { $$ = named_ref_new ($1, @1); }
 ;
 
@@ -735,25 +735,25 @@ variable:
 
 /* Some content or empty by default. */
 %code requires {
-  #include "muscle-tab.h"
-  typedef struct
+  #अन्तर्भाव "muscle-tab.h"
+  प्रकारनिर्देश संरचना
   {
-    char const *chars;
+    वर्ण ध्रुव *chars;
     muscle_kind kind;
-  } value_type;
+  } मानम्_type;
 };
-%type <value_type> value;
+%प्रकार <मानम्_type> मानम्;
 %printer
 {
-  switch ($$.kind)
+  विकल्प ($$.kind)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   $$.chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); break;
+    पक्ष muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); भङ्ग;
+    पक्ष muscle_keyword: fprintf (yyo,   "%s",   $$.chars); भङ्ग;
+    पक्ष muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); भङ्ग;
     }
-} <value_type>;
+} <मानम्_type>;
 
-value:
+मानम्:
   %empty  { $$.kind = muscle_keyword; $$.chars = ""; }
 | ID      { $$.kind = muscle_keyword; $$.chars = $1; }
 | STRING  { $$.kind = muscle_string;  $$.chars = unquote ($1); gram_scanner_last_string_free ();}
@@ -770,17 +770,17 @@ value:
 
 id:
   ID
-    { $$ = symbol_from_uniqstr ($1, @1); }
+    { $$ = चिह्नम्_from_uniqstr ($1, @1); }
 | CHAR_LITERAL
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      ध्रुव वर्ण *var = "api.token.raw";
+      सचे (current_class == nterm_sym)
         {
           complain (&@1, complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      सचे (muscle_percent_define_ifdef (var))
         {
           complain (&@1, complaint,
                     _("character literals cannot be used together"
@@ -788,18 +788,18 @@ id:
           location loc = muscle_percent_define_get_loc (var);
           subcomplain (&loc, complaint, _("definition of %s"), var);
         }
-      $$ = symbol_get (char_name ($1), @1);
-      symbol_class_set ($$, token_sym, @1, false);
-      symbol_code_set ($$, $1, @1);
+      $$ = चिह्नम्_get (char_name ($1), @1);
+      चिह्नम्_class_set ($$, token_sym, @1, false);
+      चिह्नम्_code_set ($$, $1, @1);
     }
 ;
 
 id_colon:
-  ID_COLON { $$ = symbol_from_uniqstr ($1, @1); }
+  ID_COLON { $$ = चिह्नम्_from_uniqstr ($1, @1); }
 ;
 
 
-symbol:
+चिह्नम्:
   id
 | string_as_id
 ;
@@ -808,8 +808,8 @@ symbol:
 string_as_id:
   STRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = चिह्नम्_get ($1, @1);
+      चिह्नम्_class_set ($$, token_sym, @1, false);
     }
 ;
 
@@ -824,29 +824,29 @@ epilogue.opt:
 
 %%
 
-int
-yyreport_syntax_error (const yypcontext_t *ctx)
+पूर्णाङ्क
+yyreport_syntax_error (ध्रुव yypcontext_t *ctx)
 {
-  int res = 0;
+  पूर्णाङ्क res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
+  गणना { ARGS_MAX = 5 };
+  ध्रुव वर्ण *argv[ARGS_MAX];
+  पूर्णाङ्क argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  सचे (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      पूर्णाङ्क nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      सचे (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      अञ्ञथा
+        अत्थाय (पूर्णाङ्क i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  पटिनिवत्त res;
 }
 
 
@@ -855,8 +855,8 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    the right-hand side, and return an empty location equal to the end
    boundary of RHS[0] if the right-hand side is empty.  */
 
-static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+स्थिर YYLTYPE
+lloc_default (YYLTYPE ध्रुव *rhs, पूर्णाङ्क n)
 {
   YYLTYPE loc;
 
@@ -868,97 +868,97 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  अत्थाय (पूर्णाङ्क i = 1; i <= n; i++)
+    सचे (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
-        break;
+        भङ्ग;
       }
 
-  return loc;
+  पटिनिवत्त loc;
 }
 
-static
-char *strip_braces (char *code)
+स्थिर
+वर्ण *strip_braces (वर्ण *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  पटिनिवत्त code + 1;
 }
 
-static
-char const *
-translate_code (char *code, location loc, bool plain)
+स्थिर
+वर्ण ध्रुव *
+translate_code (वर्ण *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  सचे (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
-    code_props_symbol_action_init (&plain_code, code, loc);
+  अञ्ञथा
+    code_props_चिह्नम्_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  पटिनिवत्त plain_code.code;
 }
 
-static
-char const *
-translate_code_braceless (char *code, location loc)
+स्थिर
+वर्ण ध्रुव *
+translate_code_braceless (वर्ण *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  पटिनिवत्त translate_code (strip_braces (code), loc, true);
 }
 
-static void
-add_param (param_type type, char *decl, location loc)
+स्थिर शून्य
+add_param (param_type प्रकार, वर्ण *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  स्थिर वर्ण ध्रुव alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  वर्ण ध्रुव *name_start = रिक्त;
   {
-    char *p;
+    वर्ण *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+    अत्थाय (p = decl; p[1]; p++)
+      सचे ((p == decl
+           || ! memchr (alphanum, p[-1], परिमाण alphanum - 1))
+          && memchr (alphanum, p[0], परिमाण alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    याव (c_isspace ((unsigned वर्ण) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    याव (c_isspace ((unsigned वर्ण) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  सचे (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  अञ्ञथा
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      वर्ण *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      सचे (प्रकार & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      सचे (प्रकार & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
-      free (name);
+      मुक्त (name);
     }
 
   gram_scanner_last_string_free ();
 }
 
 
-static void
-handle_header (char const *value)
+स्थिर शून्य
+handle_header (वर्ण ध्रुव *मानम्)
 {
   header_flag = true;
-  if (value)
+  सचे (मानम्)
     {
-      char *file = unquote (value);
+      वर्ण *file = unquote (मानम्);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -966,109 +966,109 @@ handle_header (char const *value)
 }
 
 
-static void
-handle_error_verbose (location const *loc, char const *directive)
+स्थिर शून्य
+handle_error_verbose (location ध्रुव *loc, वर्ण ध्रुव *directive)
 {
   bison_directive (loc, directive);
-  muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
+  muscle_percent_define_निवेशय (directive, *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_file_prefix (location const *loc,
-                    location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+स्थिर शून्य
+handle_file_prefix (location ध्रुव *loc,
+                    location ध्रुव *dir_loc,
+                    वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्_quoted)
 {
-  char *value = unquote (value_quoted);
+  वर्ण *मानम् = unquote (मानम्_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  सचे (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
-      spec_file_prefix = value;
+      spec_file_prefix = मानम्;
     }
-  else
+  अञ्ञथा
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  सचे (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
-static void
-handle_language (location const *loc, char const *lang)
+स्थिर शून्य
+handle_language (location ध्रुव *loc, वर्ण ध्रुव *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
 
 
-static void
-handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+स्थिर शून्य
+handle_name_prefix (location ध्रुव *loc,
+                    वर्ण ध्रुव *directive, वर्ण ध्रुव *मानम्_quoted)
 {
-  char *value = unquote (value_quoted);
+  वर्ण *मानम् = unquote (मानम्_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  वर्ण buf1[1024];
+  size_t len1 = परिमाण (buf1);
+  वर्ण *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, मानम्);
+  सचे (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  सचे (location_empty (spec_name_prefix_loc))
     {
-      spec_name_prefix = value;
+      spec_name_prefix = मानम्;
       spec_name_prefix_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      वर्ण buf2[1024];
+      size_t len2 = परिमाण (buf2);
+      वर्ण *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", मानम्);
+      सचे (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
-        free (new);
+      सचे (new != buf2)
+        मुक्त (new);
     }
-  else
+  अञ्ञथा
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
-    free (old);
+  सचे (old != buf1)
+    मुक्त (old);
 }
 
 
-static void
-handle_pure_parser (location const *loc, char const *directive)
+स्थिर शून्य
+handle_pure_parser (location ध्रुव *loc, वर्ण ध्रुव *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
-  muscle_percent_define_insert ("api.pure", *loc, muscle_keyword, "",
+  muscle_percent_define_निवेशय ("api.pure", *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_require (location const *loc, char const *version_quoted)
+स्थिर शून्य
+handle_require (location ध्रुव *loc, वर्ण ध्रुव *version_quoted)
 {
-  char *version = unquote (version_quoted);
+  वर्ण *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  सचे (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  अञ्ञथा
     {
-      const char* package_version =
+      ध्रुव वर्ण* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      सचे (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -1079,86 +1079,86 @@ handle_require (location const *loc, char const *version_quoted)
   gram_scanner_last_string_free ();
 }
 
-static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+स्थिर शून्य
+handle_skeleton (location ध्रुव *loc, वर्ण ध्रुव *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  वर्ण *skel = unquote (skel_quoted);
+  वर्ण ध्रुव *skeleton_user = skel;
+  सचे (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      याव (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      याव (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
-      char *skeleton_build =
+      वर्ण *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      सचे (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
         }
       strcpy (skeleton_build + dir_length, skeleton_user);
       skeleton_user = uniqstr_new (skeleton_build);
-      free (skeleton_build);
+      मुक्त (skeleton_build);
     }
   skeleton_arg (skeleton_user, grammar_prio, *loc);
 }
 
 
-static void
-handle_yacc (location const *loc)
+स्थिर शून्य
+handle_yacc (location ध्रुव *loc)
 {
-  const char *directive = "%yacc";
+  ध्रुव वर्ण *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  सचे (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  अञ्ञथा
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
-static void
-gram_error (location const *loc, char const *msg)
+स्थिर शून्य
+gram_error (location ध्रुव *loc, वर्ण ध्रुव *सन्देशः)
 {
-  complain (loc, complaint, "%s", msg);
+  complain (loc, complaint, "%s", सन्देशः);
 }
 
-static char const *
-char_name (char c)
+स्थिर वर्ण ध्रुव *
+char_name (वर्ण c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  सचे (c == '\'')
+    पटिनिवत्त "'\\''";
+  अञ्ञथा
     {
-      char buf[4];
+      वर्ण buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      पटिनिवत्त quotearg_style (escape_quoting_style, buf);
     }
 }
 
-static void
-current_lhs (symbol *sym, location loc, named_ref *ref)
+स्थिर शून्य
+current_lhs (चिह्नम् *sym, location loc, named_ref *ref)
 {
-  current_lhs_symbol = sym;
+  current_lhs_चिह्नम् = sym;
   current_lhs_loc = loc;
-  if (sym)
-    symbol_location_as_lhs_set (sym, loc);
+  सचे (sym)
+    चिह्नम्_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
      node.  This is because a single named-ref in the grammar may
      result in several uses when the user factors lhs between several
      rules using "|".  Therefore free the parser's original copy.  */
-  free (current_lhs_named_ref);
+  मुक्त (current_lhs_named_ref);
   current_lhs_named_ref = ref;
 }
 
-static void tron (FILE *yyo)
+स्थिर शून्य tron (FILE *yyo)
 {
   begin_use_class ("value", yyo);
 }
 
-static void troff (FILE *yyo)
+स्थिर शून्य troff (FILE *yyo)
 {
   end_use_class ("value", yyo);
 }
@@ -1168,70 +1168,70 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+संरचना obstack obstack_for_unquote;
 
-void
-parser_init (void)
+शून्य
+parser_init (शून्य)
 {
   obstack_init (&obstack_for_unquote);
 }
 
-void
-parser_free (void)
+शून्य
+parser_free (शून्य)
 {
   obstack_free (&obstack_for_unquote, 0);
 }
 
-static void
-unquote_free (char *last_string)
+स्थिर शून्य
+unquote_free (वर्ण *last_string)
 {
   obstack_free (&obstack_for_unquote, last_string);
 }
 
-static char *
-unquote (const char *cp)
+स्थिर वर्ण *
+unquote (ध्रुव वर्ण *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
-    switch (*cp)
+  अत्थाय (++cp; *cp && *cp != '"'; ++cp)
+    विकल्प (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      पक्ष '"':
+        भङ्ग;
+      पक्ष '\\':
         ++cp;
-        switch (*cp)
+        विकल्प (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          पक्ष '0': पक्ष '1': पक्ष '2': पक्ष '3': पक्ष '4':
+          पक्ष '5': पक्ष '6': पक्ष '7': पक्ष '8': पक्ष '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              पूर्णाङ्क c = cp[0] - '0';
+              सचे (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              सचे (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            भङ्ग;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          पक्ष 'a': GROW ('\a'); भङ्ग;
+          पक्ष 'b': GROW ('\b'); भङ्ग;
+          पक्ष 'f': GROW ('\f'); भङ्ग;
+          पक्ष 'n': GROW ('\n'); भङ्ग;
+          पक्ष 'r': GROW ('\r'); भङ्ग;
+          पक्ष 't': GROW ('\t'); भङ्ग;
+          पक्ष 'v': GROW ('\v'); भङ्ग;
 
-          case 'x':
+          पक्ष 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              पूर्णाङ्क c = 0;
+              याव (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -1239,18 +1239,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              भङ्ग;
             }
           }
-        break;
+        भङ्ग;
 
-      default:
+      स्वभाव:
         GROW (*cp);
-        break;
+        भङ्ग;
       }
-  assert (*cp == '"');
+  प्रतिज्ञा (*cp == '"');
   ++cp;
-  assert (*cp == '\0');
+  प्रतिज्ञा (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  पटिनिवत्त obstack_finish0 (&obstack_for_unquote);
 }

@@ -28,13 +28,13 @@
 `---------------*/
 
 /** Enable a style on \a out provided it's stderr.  */
-void begin_use_class (const char *style, FILE *out);
+शून्य begin_use_class (ध्रुव वर्ण *style, FILE *out);
 
 /** Disable a style on \a out provided it's stderr.  */
-void end_use_class (const char *style, FILE *out);
+शून्य end_use_class (ध्रुव वर्ण *style, FILE *out);
 
 /** Flush \a out.  */
-void flush (FILE *out);
+शून्य flush (FILE *out);
 
 /** Whether there's styling on OUT.  */
 bool is_styled (FILE *out);
@@ -44,7 +44,7 @@ bool is_styled (FILE *out);
 `-------------*/
 
 /** The bits assigned to each warning type.  */
-typedef enum
+प्रकारनिर्देश गणना
   {
     warning_conflicts_rr,
     warning_conflicts_sr,
@@ -52,7 +52,7 @@ typedef enum
     warning_dangling_alias,
     warning_deprecated,
     warning_empty_rule,
-    warning_midrule_values,
+    warning_midrule_मानानि,
     warning_other,
     warning_precedence,
     warning_yacc,           /**< POSIXME.  */
@@ -61,10 +61,10 @@ typedef enum
   } warning_bit;
 
 /** Whether -Werror was set. */
-extern bool warnings_are_errors;
+बाह्य bool warnings_are_errors;
 
 /** Document --warning arguments.  */
-void warning_usage (FILE *out);
+शून्य warning_usage (FILE *out);
 
 /** Decode a single argument from -W.
  *
@@ -79,14 +79,14 @@ void warning_usage (FILE *out);
  *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
-void warning_argmatch (char const *arg, size_t no, size_t err);
+शून्य warning_argmatch (वर्ण ध्रुव *arg, size_t no, size_t err);
 
 /** Decode a comma-separated list of arguments from -W.
  *
  *  \param args     comma separated list of effective subarguments to decode.
  *                  If 0, then activate all the flags.
  */
-void warnings_argmatch (char *args);
+शून्य warnings_argmatch (वर्ण *args);
 
 
 /*-----------.
@@ -94,16 +94,16 @@ void warnings_argmatch (char *args);
 `-----------*/
 
 /** Initialize this module.  */
-void complain_init (void);
+शून्य complain_init (शून्य);
 
 /** Reclaim resources.  */
-void complain_free (void);
+शून्य complain_free (शून्य);
 
 /** Initialize support for colored messages.  */
-void complain_init_color (void);
+शून्य complain_init_color (शून्य);
 
 /** Flags passed to diagnostics functions.  */
-typedef enum
+प्रकारनिर्देश गणना
   {
     Wnone             = 0,       /**< Issue no warnings.  */
 
@@ -113,7 +113,7 @@ typedef enum
     Wdangling_alias   = 1 << warning_dangling_alias,
     Wdeprecated       = 1 << warning_deprecated,
     Wempty_rule       = 1 << warning_empty_rule,
-    Wmidrule_values   = 1 << warning_midrule_values,
+    Wmidrule_मानानि   = 1 << warning_midrule_मानानि,
     Wother            = 1 << warning_other,
     Wprecedence       = 1 << warning_precedence,
     Wyacc             = 1 << warning_yacc,
@@ -137,43 +137,43 @@ bool warning_is_unset (warnings flags);
 bool warning_is_enabled (warnings flags);
 
 /** Make a complaint, with maybe a location.  */
-void complain (location const *loc, warnings flags, char const *message, ...)
+शून्य complain (location ध्रुव *loc, warnings flags, वर्ण ध्रुव *message, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 /** Likewise, but with an \a argc/argv interface.  */
-void complain_args (location const *loc, warnings w,
-                    int argc, char *arg[]);
+शून्य complain_args (location ध्रुव *loc, warnings w,
+                    पूर्णाङ्क argc, वर्ण *arg[]);
 
 /** Make a subcomplain with location and note.  */
-void subcomplain (location const *loc, warnings flags,
-                  char const *message, ...)
+शून्य subcomplain (location ध्रुव *loc, warnings flags,
+                  वर्ण ध्रुव *message, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 
 /** GNU Bison extension not valid with POSIX Yacc.  */
-void bison_directive (location const *loc, char const *directive);
+शून्य bison_directive (location ध्रुव *loc, वर्ण ध्रुव *directive);
 
 /** Report an obsolete syntax, suggest the updated one.  */
-void deprecated_directive (location const *loc,
-                           char const *obsolete, char const *updated);
+शून्य deprecated_directive (location ध्रुव *loc,
+                           वर्ण ध्रुव *obsolete, वर्ण ध्रुव *updated);
 
 /** Report a repeated directive.  */
-void duplicate_directive (char const *directive,
+शून्य duplicate_directive (वर्ण ध्रुव *directive,
                           location first, location second);
 
 /** Report a repeated directive for a rule.  */
-void duplicate_rule_directive (char const *directive,
+शून्य duplicate_rule_directive (वर्ण ध्रुव *directive,
                                location first, location second);
 
 /** Report a syntax error, where argv[0] is the unexpected
     token, and argv[1...argc] are the expected ones.  */
-void syntax_error (location loc,
-                   int argc, const char* argv[]);
+शून्य syntax_error (location loc,
+                   पूर्णाङ्क argc, ध्रुव वर्ण* argv[]);
 
 /** Warnings treated as errors shouldn't stop the execution as regular
     errors should (because due to their nature, it is safe to go
     on). Thus, there are three possible execution statuses.  */
-typedef enum
+प्रकारनिर्देश गणना
   {
     status_none,             /**< No diagnostic issued so far.  */
     status_warning_as_error, /**< A warning was issued (but no error).  */
@@ -181,6 +181,6 @@ typedef enum
   } err_status;
 
 /** Whether an error was reported.  */
-extern err_status complaint_status;
+बाह्य err_status complaint_status;
 
 #endif /* !COMPLAIN_H_ */
