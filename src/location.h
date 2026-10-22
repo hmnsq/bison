@@ -28,7 +28,7 @@
 # include "uniqstr.h"
 
 /* A boundary between two characters.  */
-typedef struct
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ସଂରଚନା
 {
   /* The name of the file that contains the boundary.  */
   uniqstr file;
@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଧାଡ଼ି;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,53 +46,53 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା column;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା byte;
 
 } boundary;
 
 /* Set the position of \a p. */
-static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ ଶୂନ୍ୟ
+boundary_set (boundary *p, ଅଚଳ ଅକ୍ଷର *f, ପୂର୍ଣ୍ଣସଂଖ୍ୟା l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c, ପୂର୍ଣ୍ଣସଂଖ୍ୟା b)
 {
   p->file = f;
-  p->line = l;
+  p->ଧାଡ଼ି = l;
   p->column = c;
   p->byte = b;
 }
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ ପୂର୍ଣ୍ଣସଂଖ୍ୟା
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
-    res = a.line - b.line;
-  if (!res)
+  ଯଦି (!res)
+    res = a.ଧାଡ଼ି - b.ଧାଡ଼ି;
+  ଯଦି (!res)
     res = a.column - b.column;
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
-static inline bool
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
-          && a.line == b.line
+  ଫେରନ୍ତୁ (a.column == b.column
+          && a.ଧାଡ଼ି == b.ଧାଡ଼ି
           && UNIQSTR_EQ (a.file, b.file));
 }
 
 /* A location, that is, a region of source code.  */
-typedef struct
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ସଂରଚନା
 {
   /* Boundary just before the location starts.  */
   boundary start;
@@ -104,43 +104,43 @@ typedef struct
 
 # define GRAM_LTYPE location
 
-# define EMPTY_LOCATION_INIT {{NULL, 0, 0, 0}, {NULL, 0, 0, 0}}
-extern location const empty_loc;
+# define EMPTY_LOCATION_INIT {{ଖାଲି, 0, 0, 0}, {ଖାଲି, 0, 0, 0}}
+ବାହ୍ୟ location ଅଚଳ empty_loc;
 
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
-void location_compute (location *loc,
-                       boundary *cur, char const *token, size_t size);
+ଶୂନ୍ୟ location_compute (location *loc,
+                       boundary *cur, ଅକ୍ଷର ଅଚଳ *token, size_t size);
 
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା location_print (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
-void caret_init (void);
+ଶୂନ୍ୟ caret_init (ଶୂନ୍ୟ);
 
 /* Free any allocated resources and close any open file handles that are
    left-over by the usage of location_caret.  */
-void caret_free (void);
+ଶୂନ୍ୟ caret_free (ଶୂନ୍ୟ);
 
 /* If -fcaret is enabled, quote the line containing LOC onto OUT.
    Highlight the part of LOC with the color STYLE.  */
-void location_caret (location loc, const char* style, FILE *out);
+ଶୂନ୍ୟ location_caret (location loc, ଅଚଳ ଅକ୍ଷର* style, FILE *out);
 
 /* If -fcaret is enabled, display a suggestion of replacement for LOC
    with S.  To call after location_caret.  */
-void location_caret_suggestion (location loc, const char *s, FILE *out);
+ଶୂନ୍ୟ location_caret_suggestion (location loc, ଅଚଳ ଅକ୍ଷର *s, FILE *out);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ ପୂର୍ଣ୍ଣସଂଖ୍ୟା
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା res = boundary_cmp (a.start, b.start);
+  ଯଦି (!res)
     res = boundary_cmp (a.end, b.end);
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 /* Whether this is the empty location.  */
@@ -149,6 +149,6 @@ bool location_empty (location loc);
 /* STR must be formatted as 'file:line.column@byte' or 'file:line.column'.
    It may be '<command line>:3.-1@-1', with -1 to denote no-column/no-byte.
    STR will be modified.  */
-void boundary_set_from_string (boundary *bound, char *str);
+ଶୂନ୍ୟ boundary_set_from_string (boundary *bound, ଅକ୍ଷର *str);
 
 #endif /* ! defined LOCATION_H_ */

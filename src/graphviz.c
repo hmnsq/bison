@@ -20,26 +20,26 @@
 
 /* Written by Paul Eggert and Satya Kiran Popuri.  */
 
-#include <config.h>
-#include "system.h"
+#ଅନ୍ତର୍ଭାଵ <config.h>
+#ଅନ୍ତର୍ଭାଵ "system.h"
 
-#include <quotearg.h>
+#ଅନ୍ତର୍ଭାଵ <quotearg.h>
 
-#include "files.h"
-#include "gram.h"
-#include "graphviz.h"
-#include "tables.h"
+#ଅନ୍ତର୍ଭାଵ "files.h"
+#ଅନ୍ତର୍ଭାଵ "gram.h"
+#ଅନ୍ତର୍ଭାଵ "graphviz.h"
+#ଅନ୍ତର୍ଭାଵ "tables.h"
 
 /* Return an unambiguous printable representation for NAME, suitable
    for C strings.  Use slot 2 since the user may use slots 0 and 1.  */
 
-static char *
-quote (char const *name)
+ସ୍ଥିର ଅକ୍ଷର *
+quote (ଅକ୍ଷର ଅଚଳ *name)
 {
-  return quotearg_n_style (2, c_quoting_style, name);
+  ଫେରନ୍ତୁ quotearg_n_style (2, c_quoting_style, name);
 }
 
-void
+ଶୂନ୍ୟ
 start_graph (FILE *fout)
 {
   fprintf (fout,
@@ -60,59 +60,59 @@ start_graph (FILE *fout)
            "\n");
 }
 
-void
-output_node (int id, char const *label, FILE *fout)
+ଶୂନ୍ୟ
+output_ଗଣ୍ଠି (ପୂର୍ଣ୍ଣସଂଖ୍ୟା id, ଅକ୍ଷର ଅଚଳ *label, FILE *fout)
 {
   fprintf (fout, "  %d [label=\"%s\"]\n", id, label);
 }
 
-void
-output_edge (int source, int destination, char const *label,
-             char const *style, FILE *fout)
+ଶୂନ୍ୟ
+output_edge (ପୂର୍ଣ୍ଣସଂଖ୍ୟା source, ପୂର୍ଣ୍ଣସଂଖ୍ୟା destination, ଅକ୍ଷର ଅଚଳ *label,
+             ଅକ୍ଷର ଅଚଳ *style, FILE *fout)
 {
   fprintf (fout, "  %d -> %d [style=%s", source, destination, style);
-  if (label)
+  ଯଦି (label)
     {
       fputs (" label=\"", fout);
-      for (const char *cp = label; *cp; ++cp)
-        switch (*cp)
+      ପାଇଁ (ଅଚଳ ଅକ୍ଷର *cp = label; *cp; ++cp)
+        ବାଛ (*cp)
         {
-        case '"':  fputs ("\\\"", fout); break;
-        case '\\': fputs ("\\\\", fout); break;
-        default:   fputc (*cp,    fout); break;
+        ସ୍ଥିତି '"':  fputs ("\\\"", fout); ଭାଙ୍ଗ;
+        ସ୍ଥିତି '\\': fputs ("\\\\", fout); ଭାଙ୍ଗ;
+        ପୂର୍ବନିର୍ଦ୍ଧାରିତ:   fputc (*cp,    fout); ଭାଙ୍ଗ;
         }
       fputc ('"', fout);
     }
   fputs ("]\n", fout);
 }
 
-static void
-no_reduce_bitset_init (state const *s, bitset *no_reduce_set)
+ସ୍ଥିର ଶୂନ୍ୟ
+no_reduce_bitset_init (state ଅଚଳ *s, bitset *no_reduce_set)
 {
   *no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
   bitset_zero (*no_reduce_set);
   {
-    int n;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା n;
     FOR_EACH_SHIFT (s->transitions, n)
-      bitset_set (*no_reduce_set, TRANSITION_SYMBOL (s->transitions, n));
+      bitset_set (*no_reduce_set, TRANSITION_ପ୍ରତୀକ (s->transitions, n));
   }
-  for (int n = 0; n < s->errs->num; ++n)
-    if (s->errs->symbols[n])
-      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->number);
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା n = 0; n < s->errs->ଅଙ୍କ; ++n)
+    ଯଦି (s->errs->symbols[n])
+      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->ସଂଖ୍ୟା);
 }
 
 /* Show the reductions from state SOURCE on rule RULENO. */
-static void
-conclude_red (struct obstack *out, int source, rule_number ruleno,
+ସ୍ଥିର ଶୂନ୍ୟ
+conclude_red (ସଂରଚନା obstack *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା source, rule_ସଂଖ୍ୟା ruleno,
               bool enabled, bool first, FILE *fout)
 {
   /* If no lookahead tokens were valid transitions, this reduction is
      actually hidden, so cancel everything. */
-  if (first)
-    (void) obstack_finish0 (out);
-  else
+  ଯଦି (first)
+    (ଶୂନ୍ୟ) obstack_finish0 (out);
+  ଅନ୍ୟଥା
     {
-      char const *ed = enabled ? "" : "d";
+      ଅକ୍ଷର ଅଚଳ *ed = enabled ? "" : "d";
       /* First, build the edge's head. The name of reduction nodes is "nRm",
          with n the source state and m the rule number. This is because we
          don't want all the reductions bearing a same rule number to point to
@@ -122,9 +122,9 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
 
       /* (The lookahead tokens have been added to the beginning of the
          obstack, in the caller function.) */
-      if (! obstack_empty_p (out))
+      ଯଦି (! obstack_empty_p (out))
         {
-          char *label = obstack_finish0 (out);
+          ଅକ୍ଷର *label = obstack_finish0 (out);
           fprintf (fout, "label=\"[%s]\", ", label);
           obstack_free (out, label);
         }
@@ -135,13 +135,13 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
       /* Build the associated diamond representation of the target rule. */
       fprintf (fout, " \"%dR%d%s\" [label=\"",
                source, ruleno, ed);
-      bool const final = rule_is_initial (&rules[ruleno]);
-      if (final)
+      bool ଅଚଳ final = rule_is_initial (&rules[ruleno]);
+      ଯଦି (final)
         fprintf (fout, "Acc");
-      else
+      ଅନ୍ୟଥା
         fprintf (fout, "R%d", ruleno);
 
-      char const *color
+      ଅକ୍ଷର ଅଚଳ *color
         = !enabled ? "5"
         : final    ? "1"
         :            "3";
@@ -150,35 +150,35 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
     }
 }
 
-static bool
-print_token (struct obstack *out, bool first, char const *tok)
+ସ୍ଥିର bool
+print_token (ସଂରଚନା obstack *out, bool first, ଅକ୍ଷର ଅଚଳ *tok)
 {
-  if (! first)
+  ଯଦି (! first)
     obstack_sgrow (out, ", ");
   obstack_backslash (out, tok);
-  return false;
+  ଫେରନ୍ତୁ false;
 }
 
-void
-output_red (state const *s, reductions const *reds, FILE *fout)
+ଶୂନ୍ୟ
+output_red (state ଅଚଳ *s, reductions ଅଚଳ *reds, FILE *fout)
 {
   bitset no_reduce_set;
   no_reduce_bitset_init (s, &no_reduce_set);
 
   rule *default_reduction
-    = yydefact[s->number] ? &rules[yydefact[s->number] - 1] : NULL;
+    = yydefact[s->ସଂଖ୍ୟା] ? &rules[yydefact[s->ସଂଖ୍ୟା] - 1] : ଖାଲି;
 
   /* Two obstacks are needed: one for the enabled reductions, and one
      for the disabled reductions, because in the end we want two
      separate edges, even though in most cases only one will actually
      be printed. */
-  struct obstack dout;
-  struct obstack eout;
+  ସଂରଚନା obstack dout;
+  ସଂରଚନା obstack eout;
   obstack_init (&dout);
   obstack_init (&eout);
 
-  const int source = s->number;
-  for (int j = 0; j < reds->num; ++j)
+  ଅଚଳ ପୂର୍ଣ୍ଣସଂଖ୍ୟା source = s->ସଂଖ୍ୟା;
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା j = 0; j < reds->ଅଙ୍କ; ++j)
     {
       bool defaulted = default_reduction && default_reduction == reds->rules[j];
 
@@ -186,17 +186,17 @@ output_red (state const *s, reductions const *reds, FILE *fout)
          and one for disabled transitions. */
       bool firstd = true;
       bool firste = true;
-      rule_number ruleno = reds->rules[j]->number;
+      rule_ସଂଖ୍ୟା ruleno = reds->rules[j]->ସଂଖ୍ୟା;
 
-      if (reds->lookaheads)
-        for (int i = 0; i < ntokens; i++)
-          if (bitset_test (reds->lookaheads[j], i))
+      ଯଦି (reds->lookaheads)
+        ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = 0; i < ntokens; i++)
+          ଯଦି (bitset_test (reds->lookaheads[j], i))
             {
-              if (bitset_test (no_reduce_set, i))
+              ଯଦି (bitset_test (no_reduce_set, i))
                 firstd = print_token (&dout, firstd, symbols[i]->tag);
-              else
+              ଅନ୍ୟଥା
                 {
-                  if (! defaulted)
+                  ଯଦି (! defaulted)
                     firste = print_token (&eout, firste, symbols[i]->tag);
                   bitset_set (no_reduce_set, i);
                 }
@@ -211,7 +211,7 @@ output_red (state const *s, reductions const *reds, FILE *fout)
   bitset_free (no_reduce_set);
 }
 
-void
+ଶୂନ୍ୟ
 finish_graph (FILE *fout)
 {
   fputs ("}\n", fout);

@@ -21,6 +21,6 @@
 #ifndef LR0_H_
 # define LR0_H_
 
-void generate_states (void);
+ଶୂନ୍ୟ generate_states (ଶୂନ୍ୟ);
 
 #endif /* !LR0_H_ */

@@ -23,57 +23,57 @@
 
 # include "location.h"
 
-enum { command_line_prio, grammar_prio, default_prio };
+ଗଣନା { command_ଧାଡ଼ି_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */
 
 /* for -S */
-extern char const *skeleton;
-extern int skeleton_prio;
+ବାହ୍ୟ ଅକ୍ଷର ଅଚଳ *skeleton;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା skeleton_prio;
 
 /* for -I */
-extern char const *include;
+ବାହ୍ୟ ଅକ୍ଷର ଅଚଳ *include;
 
-extern bool header_flag;                /* for -d/-H */
-extern bool graph_flag;                 /* for -g */
-extern bool html_flag;                  /* for --html */
-extern bool xml_flag;                   /* for -x */
-extern bool no_lines_flag;              /* for -l */
-extern bool token_table_flag;           /* for -k */
-extern location yacc_loc;               /* for -y */
-extern bool update_flag;                /* for -u */
-extern bool color_debug;                /* --color=debug. */
+ବାହ୍ୟ bool header_flag;                /* for -d/-H */
+ବାହ୍ୟ bool graph_flag;                 /* for -g */
+ବାହ୍ୟ bool html_flag;                  /* for --html */
+ବାହ୍ୟ bool xml_flag;                   /* for -x */
+ବାହ୍ୟ bool no_ଧାଡ଼ିଗୁଡ଼ିକ_flag;              /* for -l */
+ବାହ୍ୟ bool token_table_flag;           /* for -k */
+ବାହ୍ୟ location yacc_loc;               /* for -y */
+ବାହ୍ୟ bool update_flag;                /* for -u */
+ବାହ୍ୟ bool color_debug;                /* --color=debug. */
 /* GLR_PARSER is true if the input file says to use the GLR
    (Generalized LR) parser, and to output some additional information
    used by the GLR algorithm.  */
 
-extern bool glr_parser;
+ବାହ୍ୟ bool glr_parser;
 
 /* NONDETERMINISTIC_PARSER is true iff conflicts are accepted.  This
    is used by the GLR parser, and might be used in BackTracking
    parsers too.  */
 
-extern bool nondeterministic_parser;
+ବାହ୍ୟ bool nondeterministic_parser;
 
 
 /* --language.  */
-struct bison_language
+ସଂରଚନା bison_language
 {
-  char language[sizeof "Java"];
-  char skeleton[sizeof "java-skel.m4"];
-  char src_extension[sizeof ".java"];
-  char header_extension[sizeof ".java"];
+  ଅକ୍ଷର language[ଆକାର "Java"];
+  ଅକ୍ଷର skeleton[ଆକାର "java-skel.m4"];
+  ଅକ୍ଷର src_extension[ଆକାର ".java"];
+  ଅକ୍ଷର header_extension[ଆକାର ".java"];
   bool add_tab;
 };
 
-extern int language_prio;
-extern struct bison_language const *language;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା language_prio;
+ବାହ୍ୟ ସଂରଚନା bison_language ଅଚଳ *language;
 
 /*-----------.
 | --report.  |
 `-----------*/
 
-enum report
+ଗଣନା report
   {
     report_none             = 0,
     report_states           = 1 << 0,
@@ -84,12 +84,12 @@ enum report
     report_all              = ~0
   };
 /** What appears in the *.output file.  */
-extern int report_flag;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା report_flag;
 
 /*----------.
 | --trace.  |
 `----------*/
-enum trace
+ଗଣନା trace
   {
     trace_none      = 0,       /**< No traces. */
     trace_scan      = 1 << 0,  /**< Grammar scanner traces. */
@@ -112,13 +112,13 @@ enum trace
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
-extern int trace_flag;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା trace_flag;
 
 /*-------------.
 | --features.  |
 `-------------*/
 
-enum feature
+ଗଣନା feature
   {
     feature_none             = 0,      /**< No additional feature.  */
     feature_caret            = 1 << 0, /**< Output errors with carets.  */
@@ -127,7 +127,7 @@ enum feature
     feature_all              = ~0      /**< All above features.  */
   };
 /** What additional features to use.  */
-extern int feature_flag;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା feature_flag;
 
 
 /** Process the command line arguments.
@@ -135,14 +135,14 @@ extern int feature_flag;
  *  \param argc   size of \a argv
  *  \param argv   list of arguments.
  */
-void getargs (int argc, char *argv[]);
+ଶୂନ୍ୟ getargs (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location loc);
-void skeleton_arg (const char *arg, int prio, location loc);
-void set_yacc (location loc);
+ଶୂନ୍ୟ language_argmatch (ଅକ୍ଷର ଅଚଳ *arg, ପୂର୍ଣ୍ଣସଂଖ୍ୟା prio, location loc);
+ଶୂନ୍ୟ skeleton_arg (ଅଚଳ ଅକ୍ଷର *arg, ପୂର୍ଣ୍ଣସଂଖ୍ୟା prio, location loc);
+ଶୂନ୍ୟ set_yacc (location loc);
 
 /** In the string \c s, replace all characters \c from by \c to.  */
-void tr (char *s, char from, char to);
+ଶୂନ୍ୟ tr (ଅକ୍ଷର *s, ଅକ୍ଷର from, ଅକ୍ଷର to);
 
 #endif /* !GETARGS_H_ */

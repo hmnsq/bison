@@ -27,7 +27,7 @@
    data so that closure can be called.  n is the number of elements to
    allocate for itemset.  */
 
-void closure_new (int n);
+ଶୂନ୍ୟ closure_new (ପୂର୍ଣ୍ଣସଂଖ୍ୟା n);
 
 
 /* Given the kernel (aka core) of a state (a sorted vector of item indices
@@ -35,12 +35,12 @@ void closure_new (int n);
    rules could be run and which items could be accepted when those
    items are the active ones.  */
 
-void closure (item_index const *items, size_t n);
+ଶୂନ୍ୟ closure (item_index ଅଚଳ *ବସ୍ତୁଗୁଡ଼ିକ, size_t n);
 
 
 /* Free ITEMSET, RULESET and internal data.  */
 
-void closure_free (void);
+ଶୂନ୍ୟ closure_free (ଶୂନ୍ୟ);
 
 
 /* ITEMSET is a sorted vector of item indices; NITEMSET is its size
@@ -48,7 +48,7 @@ void closure_free (void);
    significant).  CLOSURE places there the indices of all items which
    represent units of input that could arrive next.  */
 
-extern item_index *itemset;
-extern size_t nitemset;
+ବାହ୍ୟ item_index *itemset;
+ବାହ୍ୟ size_t nitemset;
 
 #endif /* !CLOSURE_H_ */

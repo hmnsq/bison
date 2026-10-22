@@ -21,6 +21,6 @@
 #ifndef PRINT_H_
 # define PRINT_H_
 
-void print_results (void);
+ଶୂନ୍ୟ print_results (ଶୂନ୍ୟ);
 
 #endif /* !PRINT_H_ */

@@ -21,15 +21,15 @@
 # include "location.h"
 
 /* Declare a fix to apply.  */
-void fixits_register (location const *loc, char const* update);
+ଶୂନ୍ୟ fixits_register (location ଅଚଳ *loc, ଅକ୍ଷର ଅଚଳ* update);
 
 /* Apply the fixits: update the source file.  */
-void fixits_run (void);
+ଶୂନ୍ୟ fixits_run (ଶୂନ୍ୟ);
 
 /* Whether there are no fixits. */
-bool fixits_empty (void);
+bool fixits_empty (ଶୂନ୍ୟ);
 
 /* Free the registered fixits.  */
-void fixits_free (void);
+ଶୂନ୍ୟ fixits_free (ଶୂନ୍ୟ);
 
 #endif /* !FIXITS_H_ */

@@ -26,7 +26,7 @@
 # include "InadequacyList.h"
 # include "state.h"
 
-typedef int AnnotationIndex;
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ପୂର୍ଣ୍ଣସଂଖ୍ୟା AnnotationIndex;
 
 /**
  * A node in a list of annotations on a particular LR(0) state.  Each
@@ -35,12 +35,12 @@ typedef int AnnotationIndex;
  * break encapsulation by modifying the fields directly.  Use the provided
  * interface functions.
  */
-typedef struct AnnotationList
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ସଂରଚନା AnnotationList
 {
   /** The next node in the list or \c NULL if none.  */
-  struct AnnotationList *next;
+  ସଂରଚନା AnnotationList *next;
   /** The \c InadequacyList node describing how this inadequacy manifests.  */
-  InadequacyList *inadequacyNode;
+  InadequacyList *inadequacy_ଗଣ୍ଠି;
   /**
    * List of how the "always", "never", and potential contributions of the
    * inadequacy might be made by isocores of the annotated LR(0) state:
@@ -106,15 +106,15 @@ typedef struct AnnotationList
  *   - All memory for all new annotations was allocated on
  *     \c annotations_obstackp.
  */
-void
+ଶୂନ୍ୟ
 AnnotationList__compute_from_inadequacies (
-  state *s, bitsetv follow_kernel_items, bitsetv always_follows,
+  state *s, bitsetv follow_kernel_ବସ୍ତୁଗୁଡ଼ିକ, bitsetv always_follows,
   state ***predecessors, bitset **item_lookahead_sets,
   InadequacyList **inadequacy_lists, AnnotationList **annotation_lists,
   AnnotationIndex *annotation_counts,
   ContributionIndex *max_contributionsp,
-  struct obstack *annotations_obstackp,
-  InadequacyListNodeCount *inadequacy_list_node_count);
+  ସଂରଚନା obstack *annotations_obstackp,
+  Inadequacy_List_ଗଣ୍ଠି_ଗଣନା *inadequacy_list_ଗଣ୍ଠି_ଗଣନା);
 
 /**
  * \pre
@@ -125,8 +125,8 @@ AnnotationList__compute_from_inadequacies (
  *   - A textual representation of all nodes in the list \c self was printed to
  *     stderr.  \c spaces spaces were printed before each line of the text.
  */
-void AnnotationList__debug (AnnotationList const *self, size_t nitems,
-                            int spaces);
+ଶୂନ୍ୟ AnnotationList__debug (AnnotationList ଅଚଳ *self, size_t nitems,
+                            ପୂର୍ଣ୍ଣସଂଖ୍ୟା spaces);
 
 /**
  * \pre
@@ -139,7 +139,7 @@ void AnnotationList__debug (AnnotationList const *self, size_t nitems,
  *   - <tt>lookahead_filter[i][j]</tt> is set iff some annotation in the list
  *     \c self lists token \c j in kernel item \c i as a contributor.
  */
-void AnnotationList__computeLookaheadFilter (AnnotationList const *self,
+ଶୂନ୍ୟ AnnotationList__computeLookaheadFilter (AnnotationList ଅଚଳ *self,
                                              size_t nitems,
                                              bitsetv lookahead_filter);
 
@@ -176,7 +176,7 @@ void AnnotationList__computeLookaheadFilter (AnnotationList const *self,
  *     would choose... no matter how crazy conflicts.c's choice is.
  */
 ContributionIndex
-AnnotationList__computeDominantContribution (AnnotationList const *self,
+AnnotationList__computeDominantContribution (AnnotationList ଅଚଳ *self,
                                              size_t nitems, bitset *lookaheads,
                                              bool require_split_stable);
 

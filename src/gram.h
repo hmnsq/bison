@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା nsyms;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା ntokens;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
-# define ITEM_NUMBER_MAX INT_MAX
-extern item_number *ritem;
-extern int nritems;
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ପୂର୍ଣ୍ଣସଂଖ୍ୟା item_ସଂଖ୍ୟା;
+# define ITEM_ସଂଖ୍ୟା_MAX INT_MAX
+ବାହ୍ୟ item_ସଂଖ୍ୟା *ritem;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+ପ୍ରକାରବ୍ୟାଖ୍ୟା unsigned ପୂର୍ଣ୍ଣସଂଖ୍ୟା item_index;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
-symbol_number_as_item_number (symbol_number sym)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ item_ସଂଖ୍ୟା
+ପ୍ରତୀକ_ସଂଖ୍ୟା_as_item_ସଂଖ୍ୟା (ପ୍ରତୀକ_ସଂଖ୍ୟା sym)
 {
-  return sym;
+  ଫେରନ୍ତୁ sym;
 }
 
-static inline symbol_number
-item_number_as_symbol_number (item_number i)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ ପ୍ରତୀକ_ସଂଖ୍ୟା
+item_ସଂଖ୍ୟା_as_ପ୍ରତୀକ_ସଂଖ୍ୟା (item_ସଂଖ୍ୟା i)
 {
-  return i;
+  ଫେରନ୍ତୁ i;
 }
 
-static inline bool
-item_number_is_symbol_number (item_number i)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ bool
+item_ସଂଖ୍ୟା_is_ପ୍ରତୀକ_ସଂଖ୍ୟା (item_ସଂଖ୍ୟା i)
 {
-  return i >= 0;
+  ଫେରନ୍ତୁ i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
-# define RULE_NUMBER_MAX INT_MAX
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ପୂର୍ଣ୍ଣସଂଖ୍ୟା rule_ସଂଖ୍ୟା;
+# define RULE_ସଂଖ୍ୟା_MAX INT_MAX
 
-static inline item_number
-rule_number_as_item_number (rule_number r)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ item_ସଂଖ୍ୟା
+rule_ସଂଖ୍ୟା_as_item_ସଂଖ୍ୟା (rule_ସଂଖ୍ୟା r)
 {
-  return -1 - r;
+  ଫେରନ୍ତୁ -1 - r;
 }
 
-static inline rule_number
-item_number_as_rule_number (item_number i)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ rule_ସଂଖ୍ୟା
+item_ସଂଖ୍ୟା_as_rule_ସଂଖ୍ୟା (item_ସଂଖ୍ୟା i)
 {
-  return -1 - i;
+  ଫେରନ୍ତୁ -1 - i;
 }
 
-static inline bool
-item_number_is_rule_number (item_number i)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ bool
+item_ସଂଖ୍ୟା_is_rule_ସଂଖ୍ୟା (item_ସଂଖ୍ୟା i)
 {
-  return i < 0;
+  ଫେରନ୍ତୁ i < 0;
 }
 
 
@@ -176,24 +176,24 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ସଂରଚନା
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number code;
+  rule_ସଂଖ୍ୟା code;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number number;
+  rule_ସଂଖ୍ୟା ସଂଖ୍ୟା;
 
   sym_content *lhs;
-  item_number *rhs;
+  item_ସଂଖ୍ୟା *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା dprec;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,32 +205,32 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା expected_sr_conflicts;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା expected_rr_conflicts;
 
-  const char *action;
+  ଅଚଳ ଅକ୍ଷର *action;
   location action_loc;
 } rule;
 
 /* The used rules (size NRULES).  */
-extern rule *rules;
-extern rule_number nrules;
+ବାହ୍ୟ rule *rules;
+ବାହ୍ୟ rule_ସଂଖ୍ୟା nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
-item_rule (item_number const *item)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ rule ଅଚଳ *
+item_rule (item_ସଂଖ୍ୟା ଅଚଳ *item)
 {
-  item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  item_ସଂଖ୍ୟା ଅଚଳ *sp = item;
+  ଯେତେବେଳେ (!item_ସଂଖ୍ୟା_is_rule_ସଂଖ୍ୟା (*sp))
     ++sp;
-  rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  rule_ସଂଖ୍ୟା r = item_ସଂଖ୍ୟା_as_rule_ସଂଖ୍ୟା (*sp);
+  ଫେରନ୍ତୁ &rules[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
    RITEM.  PREVIOUS_RULE is used to see if the lhs is common, in which
    case LHS is factored.  Passing NULL is fine.  */
-void item_print (item_number *item, rule const *previous_rule,
+ଶୂନ୍ୟ item_print (item_ସଂଖ୍ୟା *item, rule ଅଚଳ *previous_rule,
                  FILE *out);
 
 /*--------.
@@ -238,93 +238,93 @@ void item_print (item_number *item, rule const *previous_rule,
 `--------*/
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter) (rule const *);
+ପ୍ରକାରବ୍ୟାଖ୍ୟା bool (*rule_filter) (rule ଅଚଳ *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
-rule_is_initial (rule const *r)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ bool
+rule_is_initial (rule ଅଚଳ *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  ଫେରନ୍ତୁ r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
    is useful in the grammar.  */
-bool rule_useful_in_grammar_p (rule const *r);
+bool rule_useful_in_grammar_p (rule ଅଚଳ *r);
 
 /* Whether the rule has a 'number' higher than NRULES.  That is, it is
    useless in the grammar.  */
-bool rule_useless_in_grammar_p (rule const *r);
+bool rule_useless_in_grammar_p (rule ଅଚଳ *r);
 
 /* Whether the rule is not flagged as useful but is useful in the
    grammar.  In other words, it was discarded because of conflicts.  */
-bool rule_useless_in_parser_p (rule const *r);
+bool rule_useless_in_parser_p (rule ଅଚଳ *r);
 
 /* Whether the rule has a single RHS, and no user action. */
-bool rule_useless_chain_p (rule const *r);
+bool rule_useless_chain_p (rule ଅଚଳ *r);
 
 /* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
+ଶୂନ୍ୟ rule_lhs_print (rule ଅଚଳ *r, sym_content ଅଚଳ *previous_lhs,
                      FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+ଶୂନ୍ୟ rule_lhs_print_xml (rule ଅଚଳ *r, FILE *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା level);
 
 /* The length of the RHS.  */
-size_t rule_rhs_length (rule const *r);
+size_t rule_rhs_length (rule ଅଚଳ *r);
 
 /* Print this rule's RHS on OUT.  */
-void rule_rhs_print (rule const *r, FILE *out);
+ଶୂନ୍ୟ rule_rhs_print (rule ଅଚଳ *r, FILE *out);
 
 /* Print this rule on OUT.  If a PREVIOUS_RULE was already displayed,
    avoid useless repetitions of their LHS. */
-void rule_print (rule const *r, rule const *prev_rule, FILE *out);
+ଶୂନ୍ୟ rule_print (rule ଅଚଳ *r, rule ଅଚଳ *prev_rule, FILE *out);
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol **symbols;
+ବାହ୍ୟ ପ୍ରତୀକ **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number *token_translations;
-extern int max_code;
+ବାହ୍ୟ ପ୍ରତୀକ_ସଂଖ୍ୟା *token_translations;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା max_code;
 
 
 
 /* Dump RITEM for traces. */
-void ritem_print (FILE *out);
+ଶୂନ୍ୟ ritem_print (FILE *out);
 
 /* The size of the longest rule RHS.  */
-size_t ritem_longest_rhs (void);
+size_t ritem_longest_rhs (ଶୂନ୍ୟ);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
+ଶୂନ୍ୟ grammar_rules_partial_print (FILE *out, ଅଚଳ ଅକ୍ଷର *title,
                                   rule_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
-void grammar_rules_print (FILE *out);
+ଶୂନ୍ୟ grammar_rules_print (FILE *out);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+ଶୂନ୍ୟ grammar_rules_print_xml (FILE *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+ଶୂନ୍ୟ grammar_dump (FILE *out, ଅଚଳ ଅକ୍ଷର *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+ଶୂନ୍ୟ grammar_rules_useless_report (ଅଚଳ ଅକ୍ଷର *message);
 
 /* Free the packed grammar. */
-void grammar_free (void);
+ଶୂନ୍ୟ grammar_free (ଶୂନ୍ୟ);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+ବାହ୍ୟ ପୂର୍ଣ୍ଣସଂଖ୍ୟା required_version;
 
 #endif /* !GRAM_H_ */

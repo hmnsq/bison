@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "state.h"
+#ଅନ୍ତର୍ଭାଵ <config.h>
+#ଅନ୍ତର୍ଭାଵ "state.h"
 
-#include "system.h"
+#ଅନ୍ତର୍ଭାଵ "system.h"
 
-#include <hash.h>
+#ଅନ୍ତର୍ଭାଵ <hash.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "print-xml.h"
+#ଅନ୍ତର୍ଭାଵ "closure.h"
+#ଅନ୍ତର୍ଭାଵ "complain.h"
+#ଅନ୍ତର୍ଭାଵ "getargs.h"
+#ଅନ୍ତର୍ଭାଵ "gram.h"
+#ଅନ୍ତର୍ଭାଵ "print-xml.h"
 
 
                         /*-------------------.
@@ -41,24 +41,24 @@
 | Create a new array of NUM shifts/gotos.  |
 `-----------------------------------------*/
 
-static transitions *
-transitions_new (int num, state **dst)
+ସ୍ଥିର transitions *
+transitions_new (ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଙ୍କ, state **dst)
 {
-  size_t states_size = num * sizeof *dst;
+  size_t states_size = ଅଙ୍କ * ଆକାର *dst;
   transitions *res = xmalloc (offsetof (transitions, states) + states_size);
-  res->num = num;
+  res->ଅଙ୍କ = ଅଙ୍କ;
   memcpy (res->states, dst, states_size);
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 
 state *
-transitions_to (state *s, symbol_number sym)
+transitions_to (state *s, ପ୍ରତୀକ_ସଂଖ୍ୟା sym)
 {
   transitions *trans = s->transitions;
-  for (int i = 0; i < trans->num; ++i)
-    if (TRANSITION_SYMBOL (trans, i) == sym)
-      return trans->states[i];
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = 0; i < trans->ଅଙ୍କ; ++i)
+    ଯଦି (TRANSITION_ପ୍ରତୀକ (trans, i) == sym)
+      ଫେରନ୍ତୁ trans->states[i];
   abort ();
 }
 
@@ -73,14 +73,14 @@ transitions_to (state *s, symbol_number sym)
 `---------------------------------*/
 
 errs *
-errs_new (int num, symbol **tokens)
+errs_new (ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଙ୍କ, ପ୍ରତୀକ **tokens)
 {
-  size_t symbols_size = num * sizeof *tokens;
+  size_t symbols_size = ଅଙ୍କ * ଆକାର *tokens;
   errs *res = xmalloc (offsetof (errs, symbols) + symbols_size);
-  res->num = num;
-  if (tokens)
+  res->ଅଙ୍କ = ଅଙ୍କ;
+  ଯଦି (tokens)
     memcpy (res->symbols, tokens, symbols_size);
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 
@@ -95,15 +95,15 @@ errs_new (int num, symbol **tokens)
 | Create a new array of NUM reductions.  |
 `---------------------------------------*/
 
-static reductions *
-reductions_new (int num, rule **reds)
+ସ୍ଥିର reductions *
+reductions_new (ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଙ୍କ, rule **reds)
 {
-  size_t rules_size = num * sizeof *reds;
+  size_t rules_size = ଅଙ୍କ * ଆକାର *reds;
   reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
-  res->num = num;
-  res->lookaheads = NULL;
+  res->ଅଙ୍କ = ଅଙ୍କ;
+  res->lookaheads = ଖାଲି;
   memcpy (res->rules, reds, rules_size);
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 
@@ -113,10 +113,10 @@ reductions_new (int num, rule **reds)
                         `---------*/
 
 
-state_number nstates = 0;
+state_ସଂଖ୍ୟା nstates = 0;
 /* FINAL_STATE is properly set by new_state when it recognizes its
    accessing symbol: $end.  */
-state *final_state = NULL;
+state *final_state = ଖାଲି;
 
 
 /*------------------------------------------------------------------.
@@ -125,53 +125,53 @@ state *final_state = NULL;
 `------------------------------------------------------------------*/
 
 state *
-state_new (symbol_number accessing_symbol,
+state_new (ପ୍ରତୀକ_ସଂଖ୍ୟା accessing_ପ୍ରତୀକ,
            size_t nitems, item_index *core)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_ସଂଖ୍ୟା_MAXIMUM);
 
-  size_t items_size = nitems * sizeof *core;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = accessing_symbol;
-  res->transitions = NULL;
-  res->reductions = NULL;
-  res->errs = NULL;
-  res->state_list = NULL;
+  size_t ବସ୍ତୁଗୁଡ଼ିକ_size = nitems * ଆକାର *core;
+  state *res = xmalloc (offsetof (state, ବସ୍ତୁଗୁଡ଼ିକ) + ବସ୍ତୁଗୁଡ଼ିକ_size);
+  res->ସଂଖ୍ୟା = nstates++;
+  res->accessing_ପ୍ରତୀକ = accessing_ପ୍ରତୀକ;
+  res->transitions = ଖାଲି;
+  res->reductions = ଖାଲି;
+  res->errs = ଖାଲି;
+  res->state_list = ଖାଲି;
   res->consistent = false;
-  res->solved_conflicts = NULL;
-  res->solved_conflicts_xml = NULL;
+  res->solved_conflicts = ଖାଲି;
+  res->solved_conflicts_xml = ଖାଲି;
 
   res->nitems = nitems;
-  memcpy (res->items, core, items_size);
+  memcpy (res->ବସ୍ତୁଗୁଡ଼ିକ, core, ବସ୍ତୁଗୁଡ଼ିକ_size);
 
-  state_hash_insert (res);
+  state_hash_ଭର୍ତ୍ତି (res);
 
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 state *
-state_new_isocore (state const *s)
+state_new_isocore (state ଅଚଳ *s)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_ସଂଖ୍ୟା_MAXIMUM);
 
-  size_t items_size = s->nitems * sizeof *s->items;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = s->accessing_symbol;
+  size_t ବସ୍ତୁଗୁଡ଼ିକ_size = s->nitems * ଆକାର *s->ବସ୍ତୁଗୁଡ଼ିକ;
+  state *res = xmalloc (offsetof (state, ବସ୍ତୁଗୁଡ଼ିକ) + ବସ୍ତୁଗୁଡ଼ିକ_size);
+  res->ସଂଖ୍ୟା = nstates++;
+  res->accessing_ପ୍ରତୀକ = s->accessing_ପ୍ରତୀକ;
   res->transitions =
-    transitions_new (s->transitions->num, s->transitions->states);
-  res->reductions = reductions_new (s->reductions->num, s->reductions->rules);
-  res->errs = NULL;
-  res->state_list = NULL;
+    transitions_new (s->transitions->ଅଙ୍କ, s->transitions->states);
+  res->reductions = reductions_new (s->reductions->ଅଙ୍କ, s->reductions->rules);
+  res->errs = ଖାଲି;
+  res->state_list = ଖାଲି;
   res->consistent = s->consistent;
-  res->solved_conflicts = NULL;
-  res->solved_conflicts_xml = NULL;
+  res->solved_conflicts = ଖାଲି;
+  res->solved_conflicts_xml = ଖାଲି;
 
   res->nitems = s->nitems;
-  memcpy (res->items, s->items, items_size);
+  memcpy (res->ବସ୍ତୁଗୁଡ଼ିକ, s->ବସ୍ତୁଗୁଡ଼ିକ, ବସ୍ତୁଗୁଡ଼ିକ_size);
 
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
 
@@ -179,28 +179,28 @@ state_new_isocore (state const *s)
 | Free S.  |
 `---------*/
 
-static void
+ସ୍ଥିର ଶୂନ୍ୟ
 state_free (state *s)
 {
-  free (s->transitions);
-  free (s->reductions);
-  free (s->errs);
-  free (s);
+  ମୁକ୍ତ (s->transitions);
+  ମୁକ୍ତ (s->reductions);
+  ମୁକ୍ତ (s->errs);
+  ମୁକ୍ତ (s);
 }
 
 
-void
-state_transitions_print (const state *s, FILE *out)
+ଶୂନ୍ୟ
+state_transitions_print (ଅଚଳ state *s, FILE *out)
 {
-  const transitions *trans = s->transitions;
+  ଅଚଳ transitions *trans = s->transitions;
   fprintf (out, "transitions of %d (%d):\n",
-           s->number, trans->num);
-  for (int i = 0; i < trans->num; ++i)
+           s->ସଂଖ୍ୟା, trans->ଅଙ୍କ);
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = 0; i < trans->ଅଙ୍କ; ++i)
     fprintf (out, "  %d: (%d, %s, %d)\n",
              i,
-             s->number,
-             symbols[s->transitions->states[i]->accessing_symbol]->tag,
-             s->transitions->states[i]->number);
+             s->ସଂଖ୍ୟା,
+             symbols[s->transitions->states[i]->accessing_ପ୍ରତୀକ]->tag,
+             s->transitions->states[i]->ସଂଖ୍ୟା);
 }
 
 
@@ -208,12 +208,12 @@ state_transitions_print (const state *s, FILE *out)
 | Set the transitions of S.  |
 `---------------------------*/
 
-void
-state_transitions_set (state *s, int num, state **dst)
+ଶୂନ୍ୟ
+state_transitions_set (state *s, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଙ୍କ, state **dst)
 {
   aver (!s->transitions);
-  s->transitions = transitions_new (num, dst);
-  if (trace_flag & trace_automaton)
+  s->transitions = transitions_new (ଅଙ୍କ, dst);
+  ଯଦି (trace_flag & trace_automaton)
     state_transitions_print (s, stderr);
 }
 
@@ -222,21 +222,21 @@ state_transitions_set (state *s, int num, state **dst)
 | Set the reductions of S.  |
 `--------------------------*/
 
-void
-state_reductions_set (state *s, int num, rule **reds)
+ଶୂନ୍ୟ
+state_reductions_set (state *s, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଙ୍କ, rule **reds)
 {
   aver (!s->reductions);
-  s->reductions = reductions_new (num, reds);
+  s->reductions = reductions_new (ଅଙ୍କ, reds);
 }
 
 
-int
-state_reduction_find (state const *s, rule const *r)
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା
+state_reduction_find (state ଅଚଳ *s, rule ଅଚଳ *r)
 {
   reductions *reds = s->reductions;
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
-      return i;
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = 0; i < reds->ଅଙ୍କ; ++i)
+    ଯଦି (reds->rules[i] == r)
+      ଫେରନ୍ତୁ i;
   abort ();
 }
 
@@ -245,11 +245,11 @@ state_reduction_find (state const *s, rule const *r)
 | Set the errs of S.  |
 `--------------------*/
 
-void
-state_errs_set (state *s, int num, symbol **tokens)
+ଶୂନ୍ୟ
+state_errs_set (state *s, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଙ୍କ, ପ୍ରତୀକ **tokens)
 {
   aver (!s->errs);
-  s->errs = errs_new (num, tokens);
+  s->errs = errs_new (ଅଙ୍କ, tokens);
 }
 
 
@@ -259,19 +259,19 @@ state_errs_set (state *s, int num, symbol **tokens)
 | wants to reduce R.                                |
 `--------------------------------------------------*/
 
-void
-state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
+ଶୂନ୍ୟ
+state_rule_lookaheads_print (state ଅଚଳ *s, rule ଅଚଳ *r, FILE *out)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  ଯଦି (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
-      char const *sep = "";
+      ପୂର୍ଣ୍ଣସଂଖ୍ୟା k;
+      ଅକ୍ଷର ଅଚଳ *sep = "";
       fprintf (out, "  [");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
@@ -282,19 +282,19 @@ state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
     }
 }
 
-void
-state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                       FILE *out, int level)
+ଶୂନ୍ୟ
+state_rule_lookaheads_print_xml (state ଅଚଳ *s, rule ଅଚଳ *r,
+                                       FILE *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା level)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  ଯଦି (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
+      ପୂର୍ଣ୍ଣସଂଖ୍ୟା k;
       xml_puts (out, level, "<lookaheads>");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
@@ -313,42 +313,42 @@ state_rule_lookaheads_print_xml (state const *s, rule const *r,
 /* Initial capacity of states hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *state_table = NULL;
+ସ୍ଥିର ସଂରଚନା hash_table *state_table = ଖାଲି;
 
 /* Two states are equal if they have the same core items.  */
-static inline bool
-state_compare (state const *s1, state const *s2)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ bool
+state_compare (state ଅଚଳ *s1, state ଅଚଳ *s2)
 {
-  if (s1->nitems != s2->nitems)
-    return false;
+  ଯଦି (s1->nitems != s2->nitems)
+    ଫେରନ୍ତୁ false;
 
-  for (size_t i = 0; i < s1->nitems; ++i)
-    if (s1->items[i] != s2->items[i])
-      return false;
+  ପାଇଁ (size_t i = 0; i < s1->nitems; ++i)
+    ଯଦି (s1->ବସ୍ତୁଗୁଡ଼ିକ[i] != s2->ବସ୍ତୁଗୁଡ଼ିକ[i])
+      ଫେରନ୍ତୁ false;
 
-  return true;
+  ଫେରନ୍ତୁ true;
 }
 
-static bool
-state_comparator (void const *s1, void const *s2)
+ସ୍ଥିର bool
+state_comparator (ଶୂନ୍ୟ ଅଚଳ *s1, ଶୂନ୍ୟ ଅଚଳ *s2)
 {
-  return state_compare (s1, s2);
+  ଫେରନ୍ତୁ state_compare (s1, s2);
 }
 
-static inline size_t
-state_hash (state const *s, size_t tablesize)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ size_t
+state_hash (state ଅଚଳ *s, size_t tablesize)
 {
   /* Add up the state's item numbers to get a hash key.  */
-  size_t key = 0;
-  for (size_t i = 0; i < s->nitems; ++i)
-    key += s->items[i];
-  return key % tablesize;
+  size_t ଚାବି = 0;
+  ପାଇଁ (size_t i = 0; i < s->nitems; ++i)
+    ଚାବି += s->ବସ୍ତୁଗୁଡ଼ିକ[i];
+  ଫେରନ୍ତୁ ଚାବି % tablesize;
 }
 
-static size_t
-state_hasher (void const *s, size_t tablesize)
+ସ୍ଥିର size_t
+state_hasher (ଶୂନ୍ୟ ଅଚଳ *s, size_t tablesize)
 {
-  return state_hash (s, tablesize);
+  ଫେରନ୍ତୁ state_hash (s, tablesize);
 }
 
 
@@ -356,14 +356,14 @@ state_hasher (void const *s, size_t tablesize)
 | Create the states hash table.  |
 `-------------------------------*/
 
-void
-state_hash_new (void)
+ଶୂନ୍ୟ
+state_hash_new (ଶୂନ୍ୟ)
 {
   state_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                  NULL,
+                                  ଖାଲି,
                                   state_hasher,
                                   state_comparator,
-                                  NULL);
+                                  ଖାଲି);
 }
 
 
@@ -371,8 +371,8 @@ state_hash_new (void)
 | Free the states hash table, not the states.  |
 `---------------------------------------------*/
 
-void
-state_hash_free (void)
+ଶୂନ୍ୟ
+state_hash_free (ଶୂନ୍ୟ)
 {
   hash_free (state_table);
 }
@@ -382,8 +382,8 @@ state_hash_free (void)
 | Insert S in the state hash table.  |
 `-----------------------------------*/
 
-void
-state_hash_insert (state *s)
+ଶୂନ୍ୟ
+state_hash_ଭର୍ତ୍ତି (state *s)
 {
   hash_xinsert (state_table, s);
 }
@@ -395,15 +395,15 @@ state_hash_insert (state *s)
 `------------------------------------------------------------------*/
 
 state *
-state_hash_lookup (size_t nitems, const item_index *core)
+state_hash_lookup (size_t nitems, ଅଚଳ item_index *core)
 {
-  size_t items_size = nitems * sizeof *core;
-  state *probe = xmalloc (offsetof (state, items) + items_size);
+  size_t ବସ୍ତୁଗୁଡ଼ିକ_size = nitems * ଆକାର *core;
+  state *probe = xmalloc (offsetof (state, ବସ୍ତୁଗୁଡ଼ିକ) + ବସ୍ତୁଗୁଡ଼ିକ_size);
   probe->nitems = nitems;
-  memcpy (probe->items, core, items_size);
+  memcpy (probe->ବସ୍ତୁଗୁଡ଼ିକ, core, ବସ୍ତୁଗୁଡ଼ିକ_size);
   state *entry = hash_lookup (state_table, probe);
-  free (probe);
-  return entry;
+  ମୁକ୍ତ (probe);
+  ଫେରନ୍ତୁ entry;
 }
 
 
@@ -411,32 +411,32 @@ state_hash_lookup (size_t nitems, const item_index *core)
 | Record S and all states reachable from S in REACHABLE.  |
 `--------------------------------------------------------*/
 
-static void
+ସ୍ଥିର ଶୂନ୍ୟ
 state_record_reachable_states (state *s, bitset reachable)
 {
-  if (bitset_test (reachable, s->number))
-    return;
-  bitset_set (reachable, s->number);
-  for (int i = 0; i < s->transitions->num; ++i)
-    if (!TRANSITION_IS_DISABLED (s->transitions, i))
+  ଯଦି (bitset_test (reachable, s->ସଂଖ୍ୟା))
+    ଫେରନ୍ତୁ;
+  bitset_set (reachable, s->ସଂଖ୍ୟା);
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = 0; i < s->transitions->ଅଙ୍କ; ++i)
+    ଯଦି (!TRANSITION_IS_DISABLED (s->transitions, i))
       state_record_reachable_states (s->transitions->states[i], reachable);
 }
 
-void
-state_remove_unreachable_states (state_number old_to_new[])
+ଶୂନ୍ୟ
+state_remove_unreachable_states (state_ସଂଖ୍ୟା old_to_new[])
 {
-  state_number nstates_reachable = 0;
+  state_ସଂଖ୍ୟା nstates_reachable = 0;
   bitset reachable = bitset_create (nstates, BITSET_FIXED);
   state_record_reachable_states (states[0], reachable);
-  for (state_number i = 0; i < nstates; ++i)
+  ପାଇଁ (state_ସଂଖ୍ୟା i = 0; i < nstates; ++i)
     {
-      if (bitset_test (reachable, states[i]->number))
+      ଯଦି (bitset_test (reachable, states[i]->ସଂଖ୍ୟା))
         {
           states[nstates_reachable] = states[i];
-          states[nstates_reachable]->number = nstates_reachable;
+          states[nstates_reachable]->ସଂଖ୍ୟା = nstates_reachable;
           old_to_new[i] = nstates_reachable++;
         }
-      else
+      ଅନ୍ୟଥା
         {
           state_free (states[i]);
           old_to_new[i] = nstates;
@@ -447,18 +447,18 @@ state_remove_unreachable_states (state_number old_to_new[])
 }
 
 /* All the decorated states, indexed by the state number.  */
-state **states = NULL;
+state **states = ଖାଲି;
 
 
 /*----------------------.
 | Free all the states.  |
 `----------------------*/
 
-void
-states_free (void)
+ଶୂନ୍ୟ
+states_free (ଶୂନ୍ୟ)
 {
   closure_free ();
-  for (state_number i = 0; i < nstates; ++i)
+  ପାଇଁ (state_ସଂଖ୍ୟା i = 0; i < nstates; ++i)
     state_free (states[i]);
-  free (states);
+  ମୁକ୍ତ (states);
 }

@@ -29,7 +29,7 @@
  *
  * \param fout   output stream.
  */
-void start_graph (FILE *fout);
+ଶୂନ୍ୟ start_graph (FILE *fout);
 
 /** Output a Dot node.
  *
@@ -37,7 +37,7 @@ void start_graph (FILE *fout);
  * \param label  human readable label of the node (no Dot escaping needed).
  * \param fout   output stream.
  */
-void output_node (int id, char const *label, FILE *fout);
+ଶୂନ୍ୟ output_ଗଣ୍ଠି (ପୂର୍ଣ୍ଣସଂଖ୍ୟା id, ଅକ୍ଷର ଅଚଳ *label, FILE *fout);
 
 /** Output a Dot edge.
  * \param source       id of the source node
@@ -47,20 +47,20 @@ void output_node (int id, char const *label, FILE *fout);
  * \param style        Dot style of the edge (e.g., "dotted" or "solid").
  * \param fout         output stream.
  */
-void output_edge (int source, int destination, char const *label,
-                  char const *style, FILE *fout);
+ଶୂନ୍ୟ output_edge (ପୂର୍ଣ୍ଣସଂଖ୍ୟା source, ପୂର୍ଣ୍ଣସଂଖ୍ୟା destination, ଅକ୍ଷର ଅଚଳ *label,
+                  ଅକ୍ଷର ଅଚଳ *style, FILE *fout);
 
 /** Output a reduction.
  * \param s            current state
  * \param reds         the set of reductions
  * \param fout         output stream.
  */
-void output_red (state const *s, reductions const *reds, FILE *fout);
+ଶୂନ୍ୟ output_red (state ଅଚଳ *s, reductions ଅଚଳ *reds, FILE *fout);
 
 /** End a Dot graph.
  *
  * \param fout  output stream.
  */
-void finish_graph (FILE *fout);
+ଶୂନ୍ୟ finish_graph (FILE *fout);
 
 #endif /* ! GRAPHVIZ_H_ */

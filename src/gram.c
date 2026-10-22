@@ -18,128 +18,128 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ଅନ୍ତର୍ଭାଵ <config.h>
+#ଅନ୍ତର୍ଭାଵ "system.h"
 
-#include "complain.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "print-xml.h"
-#include "reader.h"
-#include "reduce.h"
-#include "symtab.h"
+#ଅନ୍ତର୍ଭାଵ "complain.h"
+#ଅନ୍ତର୍ଭାଵ "getargs.h"
+#ଅନ୍ତର୍ଭାଵ "glyphs.h"
+#ଅନ୍ତର୍ଭାଵ "gram.h"
+#ଅନ୍ତର୍ଭାଵ "print-xml.h"
+#ଅନ୍ତର୍ଭାଵ "reader.h"
+#ଅନ୍ତର୍ଭାଵ "reduce.h"
+#ଅନ୍ତର୍ଭାଵ "symtab.h"
 
 /* Comments for these variables are in gram.h.  */
 
-item_number *ritem = NULL;
-int nritems = 0;
+item_ସଂଖ୍ୟା *ritem = ଖାଲି;
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା nritems = 0;
 
-rule *rules = NULL;
-rule_number nrules = 0;
+rule *rules = ଖାଲି;
+rule_ସଂଖ୍ୟା nrules = 0;
 
-symbol **symbols = NULL;
-int nsyms = 0;
-int ntokens = 1;
-int nnterms = 0;
+ପ୍ରତୀକ **symbols = ଖାଲି;
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା nsyms = 0;
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା ntokens = 1;
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା nnterms = 0;
 
-symbol_number *token_translations = NULL;
+ପ୍ରତୀକ_ସଂଖ୍ୟା *token_translations = ଖାଲି;
 
-int max_code = 256;
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା max_code = 256;
 
-int required_version = 0;
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା required_version = 0;
 
-void
-item_print (item_number *item, rule const *previous_rule, FILE *out)
+ଶୂନ୍ୟ
+item_print (item_ସଂଖ୍ୟା *item, rule ଅଚଳ *previous_rule, FILE *out)
 {
-  rule const *r = item_rule (item);
-  rule_lhs_print (r, previous_rule ? previous_rule->lhs : NULL, out);
+  rule ଅଚଳ *r = item_rule (item);
+  rule_lhs_print (r, previous_rule ? previous_rule->lhs : ଖାଲି, out);
 
-  if (0 <= *r->rhs)
+  ଯଦି (0 <= *r->rhs)
     {
       // Non-empty rhs.
-      for (item_number *sp = r->rhs; sp < item; sp++)
+      ପାଇଁ (item_ସଂଖ୍ୟା *sp = r->rhs; sp < item; sp++)
         fprintf (out, " %s", symbols[*sp]->tag);
       fprintf (out, " %s", dot);
-      for (item_number *sp = item; 0 <= *sp; ++sp)
+      ପାଇଁ (item_ସଂଖ୍ୟା *sp = item; 0 <= *sp; ++sp)
         fprintf (out, " %s", symbols[*sp]->tag);
     }
-  else
+  ଅନ୍ୟଥା
     fprintf (out, " %s %s", empty, dot);
 }
 
 
 bool
-rule_useful_in_grammar_p (rule const *r)
+rule_useful_in_grammar_p (rule ଅଚଳ *r)
 {
-  return r->number < nrules;
+  ଫେରନ୍ତୁ r->ସଂଖ୍ୟା < nrules;
 }
 
 bool
-rule_useless_in_grammar_p (rule const *r)
+rule_useless_in_grammar_p (rule ଅଚଳ *r)
 {
-  return !rule_useful_in_grammar_p (r);
+  ଫେରନ୍ତୁ !rule_useful_in_grammar_p (r);
 }
 
 bool
-rule_useless_in_parser_p (rule const *r)
+rule_useless_in_parser_p (rule ଅଚଳ *r)
 {
-  return !r->useful && rule_useful_in_grammar_p (r);
+  ଫେରନ୍ତୁ !r->useful && rule_useful_in_grammar_p (r);
 }
 
 bool
-rule_useless_chain_p (rule const *r)
+rule_useless_chain_p (rule ଅଚଳ *r)
 {
-  return rule_rhs_length (r) == 1 && !r->action;
+  ଫେରନ୍ତୁ rule_rhs_length (r) == 1 && !r->action;
 }
 
-void
-rule_lhs_print (rule const *r, sym_content const *previous_lhs, FILE *out)
+ଶୂନ୍ୟ
+rule_lhs_print (rule ଅଚଳ *r, sym_content ଅଚଳ *previous_lhs, FILE *out)
 {
-  fprintf (out, "  %3d ", r->number);
-  if (previous_lhs != r->lhs)
-    fprintf (out, "%s:", r->lhs->symbol->tag);
-  else
-    fprintf (out, "%*s|", (int) strlen (previous_lhs->symbol->tag), "");
+  fprintf (out, "  %3d ", r->ସଂଖ୍ୟା);
+  ଯଦି (previous_lhs != r->lhs)
+    fprintf (out, "%s:", r->lhs->ପ୍ରତୀକ->tag);
+  ଅନ୍ୟଥା
+    fprintf (out, "%*s|", (ପୂର୍ଣ୍ଣସଂଖ୍ୟା) strlen (previous_lhs->ପ୍ରତୀକ->tag), "");
 }
 
-void
-rule_lhs_print_xml (rule const *r, FILE *out, int level)
+ଶୂନ୍ୟ
+rule_lhs_print_xml (rule ଅଚଳ *r, FILE *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା level)
 {
-  xml_printf (out, level, "<lhs>%s</lhs>", r->lhs->symbol->tag);
+  xml_printf (out, level, "<lhs>%s</lhs>", r->lhs->ପ୍ରତୀକ->tag);
 }
 
 size_t
-rule_rhs_length (rule const *r)
+rule_rhs_length (rule ଅଚଳ *r)
 {
   size_t res = 0;
-  for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  ପାଇଁ (item_ସଂଖ୍ୟା *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
     ++res;
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
-void
-rule_rhs_print (rule const *r, FILE *out)
+ଶୂନ୍ୟ
+rule_rhs_print (rule ଅଚଳ *r, FILE *out)
 {
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  ଯଦି (0 <= *r->rhs)
+    ପାଇଁ (item_ସଂଖ୍ୟା *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       fprintf (out, " %s", symbols[*rhsp]->tag);
-  else
+  ଅନ୍ୟଥା
     fprintf (out, " %s", empty);
 }
 
-static void
-rule_rhs_print_xml (rule const *r, FILE *out, int level)
+ସ୍ଥିର ଶୂନ୍ୟ
+rule_rhs_print_xml (rule ଅଚଳ *r, FILE *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା level)
 {
-  if (*r->rhs >= 0)
+  ଯଦି (*r->rhs >= 0)
     {
       xml_puts (out, level, "<rhs>");
-      for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+      ପାଇଁ (item_ସଂଖ୍ୟା *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
         xml_printf (out, level + 1, "<symbol>%s</symbol>",
                     xml_escape (symbols[*rhsp]->tag));
       xml_puts (out, level, "</rhs>");
     }
-  else
+  ଅନ୍ୟଥା
     {
       xml_puts (out, level, "<rhs>");
       xml_puts (out, level + 1, "<empty/>");
@@ -147,30 +147,30 @@ rule_rhs_print_xml (rule const *r, FILE *out, int level)
     }
 }
 
-void
-rule_print (rule const *r, rule const *prev_rule, FILE *out)
+ଶୂନ୍ୟ
+rule_print (rule ଅଚଳ *r, rule ଅଚଳ *prev_rule, FILE *out)
 {
-  rule_lhs_print (r, prev_rule ? prev_rule->lhs : NULL, out);
+  rule_lhs_print (r, prev_rule ? prev_rule->lhs : ଖାଲି, out);
   rule_rhs_print (r, out);
 }
 
-void
+ଶୂନ୍ୟ
 ritem_print (FILE *out)
 {
   fputs ("RITEM\n", out);
   bool first = true;
-  for (int i = 0; i < nritems; ++i)
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = 0; i < nritems; ++i)
     {
-      if (first)
+      ଯଦି (first)
         {
           fprintf (out, "  %d: ", i);
           first = false;
         }
-      if (ritem[i] >= 0)
+      ଯଦି (ritem[i] >= 0)
         fprintf (out, "  %s", symbols[ritem[i]]->tag);
-      else
+      ଅନ୍ୟଥା
         {
-          fprintf (out, "  (rule %d)\n", item_number_as_rule_number (ritem[i]));
+          fprintf (out, "  (rule %d)\n", item_ସଂଖ୍ୟା_as_rule_ସଂଖ୍ୟା (ritem[i]));
           first = true;
         }
     }
@@ -178,95 +178,95 @@ ritem_print (FILE *out)
 }
 
 size_t
-ritem_longest_rhs (void)
+ritem_longest_rhs (ଶୂନ୍ୟ)
 {
-  int max = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା max = 0;
+  ପାଇଁ (rule_ସଂଖ୍ୟା r = 0; r < nrules; ++r)
     {
       size_t length = rule_rhs_length (&rules[r]);
-      if (length > max)
+      ଯଦି (length > max)
         max = length;
     }
 
-  return max;
+  ଫେରନ୍ତୁ max;
 }
 
-void
-grammar_rules_partial_print (FILE *out, const char *title,
+ଶୂନ୍ୟ
+grammar_rules_partial_print (FILE *out, ଅଚଳ ଅକ୍ଷର *title,
                              rule_filter filter)
 {
   bool first = true;
-  rule *previous_rule = NULL;
+  rule *previous_rule = ଖାଲି;
 
   /* rule # : LHS -> RHS */
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  ପାଇଁ (rule_ସଂଖ୍ୟା r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (filter && !filter (&rules[r]))
-        continue;
-      if (first)
+      ଯଦି (filter && !filter (&rules[r]))
+        ଜାରି;
+      ଯଦି (first)
         fprintf (out, "%s\n\n", title);
-      else if (previous_rule && previous_rule->lhs != rules[r].lhs)
+      ଅନ୍ୟଥା ଯଦି (previous_rule && previous_rule->lhs != rules[r].lhs)
         putc ('\n', out);
       first = false;
       rule_print (&rules[r], previous_rule, out);
       putc ('\n', out);
       previous_rule = &rules[r];
     }
-  if (!first)
+  ଯଦି (!first)
     fputs ("\n\n", out);
 }
 
-void
+ଶୂନ୍ୟ
 grammar_rules_print (FILE *out)
 {
   grammar_rules_partial_print (out, _("Grammar"), rule_useful_in_grammar_p);
 }
 
-void
-grammar_rules_print_xml (FILE *out, int level)
+ଶୂନ୍ୟ
+grammar_rules_print_xml (FILE *out, ପୂର୍ଣ୍ଣସଂଖ୍ୟା level)
 {
   bool first = true;
 
-  for (rule_number r = 0; r < nrules + nuseless_productions; r++)
+  ପାଇଁ (rule_ସଂଖ୍ୟା r = 0; r < nrules + nuseless_productions; r++)
     {
-      if (first)
+      ଯଦି (first)
         xml_puts (out, level + 1, "<rules>");
       first = false;
       {
-        char const *usefulness
+        ଅକ୍ଷର ଅଚଳ *usefulness
           = rule_useless_in_grammar_p (&rules[r]) ? "useless-in-grammar"
           : rule_useless_in_parser_p (&rules[r])  ? "useless-in-parser"
           :                                         "useful";
         xml_indent (out, level + 2);
         fprintf (out, "<rule number=\"%d\" usefulness=\"%s\"",
-                 rules[r].number, usefulness);
-        if (rules[r].precsym)
+                 rules[r].ସଂଖ୍ୟା, usefulness);
+        ଯଦି (rules[r].precsym)
           fprintf (out, " percent_prec=\"%s\"",
-                   xml_escape (rules[r].precsym->symbol->tag));
+                   xml_escape (rules[r].precsym->ପ୍ରତୀକ->tag));
         fputs (">\n", out);
       }
       rule_lhs_print_xml (&rules[r], out, level + 3);
       rule_rhs_print_xml (&rules[r], out, level + 3);
       xml_puts (out, level + 2, "</rule>");
     }
-  if (!first)
+  ଯଦି (!first)
     xml_puts (out, level + 1, "</rules>");
-  else
+  ଅନ୍ୟଥା
    xml_puts (out, level + 1, "<rules/>");
 }
 
-static void
-section (FILE *out, const char *s)
+ସ୍ଥିର ଶୂନ୍ୟ
+section (FILE *out, ଅଚଳ ଅକ୍ଷର *s)
 {
   fprintf (out, "%s\n", s);
-  for (int i = strlen (s); 0 < i; --i)
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = strlen (s); 0 < i; --i)
     putc ('-', out);
   putc ('\n', out);
   putc ('\n', out);
 }
 
-void
-grammar_dump (FILE *out, const char *title)
+ଶୂନ୍ୟ
+grammar_dump (FILE *out, ଅଚଳ ଅକ୍ଷର *title)
 {
   fprintf (out, "%s\n\n", title);
   fprintf (out,
@@ -277,7 +277,7 @@ grammar_dump (FILE *out, const char *title)
   {
     fprintf (out, "Value  Sprec  Sassoc  Tag\n");
 
-    for (symbol_number i = 0; i < ntokens; i++)
+    ପାଇଁ (ପ୍ରତୀକ_ସଂଖ୍ୟା i = 0; i < ntokens; i++)
       fprintf (out, "%5d  %5d   %5d  %s\n",
                i,
                symbols[i]->content->prec, symbols[i]->content->assoc,
@@ -289,7 +289,7 @@ grammar_dump (FILE *out, const char *title)
   {
     fprintf (out, "Value  Tag\n");
 
-    for (symbol_number i = ntokens; i < nsyms; i++)
+    ପାଇଁ (ପ୍ରତୀକ_ସଂଖ୍ୟା i = ntokens; i < nsyms; i++)
       fprintf (out, "%5d  %s\n",
                i, symbols[i]->tag);
     fprintf (out, "\n\n");
@@ -300,22 +300,22 @@ grammar_dump (FILE *out, const char *title)
     fprintf (out,
              "Num (Prec, Assoc, Useful, UselessChain) Lhs"
              " -> (Ritem Range) Rhs\n");
-    for (rule_number i = 0; i < nrules + nuseless_productions; ++i)
+    ପାଇଁ (rule_ସଂଖ୍ୟା i = 0; i < nrules + nuseless_productions; ++i)
       {
-        rule const *rule_i = &rules[i];
-        int const rhs_itemno = rule_i->rhs - ritem;
-        int length = rule_rhs_length (rule_i);
-        aver (item_number_as_rule_number (rule_i->rhs[length]) == i);
+        rule ଅଚଳ *rule_i = &rules[i];
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଅଚଳ rhs_itemno = rule_i->rhs - ritem;
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା length = rule_rhs_length (rule_i);
+        aver (item_ସଂଖ୍ୟା_as_rule_ସଂଖ୍ୟା (rule_i->rhs[length]) == i);
         fprintf (out, "%3d (%2d, %2d, %2s, %2s)   %2d -> (%2u-%2u)",
                  i,
                  rule_i->prec ? rule_i->prec->prec : 0,
                  rule_i->prec ? rule_i->prec->assoc : 0,
                  rule_i->useful ? "t" : "f",
                  rule_useless_chain_p (rule_i) ? "t" : "f",
-                 rule_i->lhs->number,
+                 rule_i->lhs->ସଂଖ୍ୟା,
                  rhs_itemno, rhs_itemno + length - 1);
         /* Dumped the RHS. */
-        for (item_number *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
+        ପାଇଁ (item_ସଂଖ୍ୟା *rhsp = rule_i->rhs; 0 <= *rhsp; ++rhsp)
           fprintf (out, " %3d", *rhsp);
         putc ('\n', out);
       }
@@ -323,33 +323,33 @@ grammar_dump (FILE *out, const char *title)
   fprintf (out, "\n\n");
 
   section (out, "Rules interpreted");
-  for (rule_number r = 0; r < nrules + nuseless_productions; ++r)
+  ପାଇଁ (rule_ସଂଖ୍ୟା r = 0; r < nrules + nuseless_productions; ++r)
     {
-      fprintf (out, "%-5d  %s:", r, rules[r].lhs->symbol->tag);
+      fprintf (out, "%-5d  %s:", r, rules[r].lhs->ପ୍ରତୀକ->tag);
       rule_rhs_print (&rules[r], out);
       putc ('\n', out);
     }
   fprintf (out, "\n\n");
 }
 
-void
-grammar_rules_useless_report (const char *message)
+ଶୂନ୍ୟ
+grammar_rules_useless_report (ଅଚଳ ଅକ୍ଷର *message)
 {
-  for (rule_number r = 0; r < nrules; ++r)
+  ପାଇଁ (rule_ସଂଖ୍ୟା r = 0; r < nrules; ++r)
     /* Don't complain about rules whose LHS is useless, we already
        complained about it.  */
-    if (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
+    ଯଦି (!reduce_nonterminal_useless_in_grammar (rules[r].lhs)
         && !rules[r].useful)
       complain (&rules[r].location, Wother, "%s", message);
 }
 
-void
-grammar_free (void)
+ଶୂନ୍ୟ
+grammar_free (ଶୂନ୍ୟ)
 {
-  if (ritem)
-    free (ritem - 1);
-  free (rules);
-  free (token_translations);
+  ଯଦି (ritem)
+    ମୁକ୍ତ (ritem - 1);
+  ମୁକ୍ତ (rules);
+  ମୁକ୍ତ (token_translations);
   /* Free the symbol table data structure.  */
   symbols_free ();
   free_merger_functions ();

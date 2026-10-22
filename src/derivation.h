@@ -30,48 +30,48 @@
    relevant to the counterexample.  The leaves of a derivation form a
    counterexample when printed.  */
 
-typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+ପ୍ରକାରବ୍ୟାଖ୍ୟା gl_list_t derivation_list;
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ସଂରଚନା derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ derivation_list derivation_list_new (ଶୂନ୍ୟ)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  ଫେରନ୍ତୁ gl_list_create_empty (GL_LINKED_LIST, ଖାଲି, ଖାଲି, ଖାଲି, true);
 }
 
-static inline bool
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ bool
 derivation_list_next (gl_list_iterator_t *it, derivation **d)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ଅଚଳ ଶୂନ୍ୟ *p = ଖାଲି;
+  bool res = gl_list_iterator_next (it, &p, ଖାଲି);
+  ଯଦି (res)
     *d = (derivation *) p;
-  else
+  ଅନ୍ୟଥା
     gl_list_iterator_free (it);
-  return res;
+  ଫେରନ୍ତୁ res;
 }
 
-void derivation_list_append (derivation_list dl, derivation *d);
-void derivation_list_prepend (derivation_list dl, derivation *d);
-void derivation_list_free (derivation_list dl);
+ଶୂନ୍ୟ derivation_list_append (derivation_list dl, derivation *d);
+ଶୂନ୍ୟ derivation_list_prepend (derivation_list dl, derivation *d);
+ଶୂନ୍ୟ derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r);
+derivation_new (ପ୍ରତୀକ_ସଂଖ୍ୟା sym, derivation_list children,
+                ଅଚଳ rule *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ derivation *derivation_new_leaf (ପ୍ରତୀକ_ସଂଖ୍ୟା sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  ଫେରନ୍ତୁ derivation_new (sym, ଖାଲି, ଖାଲି);
 }
 
 // Number of symbols.
-size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
-void derivation_free (derivation *deriv);
-void derivation_retain (derivation *deriv);
+size_t derivation_size (ଅଚଳ derivation *deriv);
+ଶୂନ୍ୟ derivation_print (ଅଚଳ derivation *deriv, FILE *out, ଅଚଳ ଅକ୍ଷର *prefix);
+ଶୂନ୍ୟ derivation_print_leaves (ଅଚଳ derivation *deriv, FILE *out);
+ଶୂନ୍ୟ derivation_free (derivation *deriv);
+ଶୂନ୍ୟ derivation_retain (derivation *deriv);
 
 // A derivation denoting the position of the dot.
-derivation *derivation_dot (void);
+derivation *derivation_dot (ଶୂନ୍ୟ);
 
 #endif /* DERIVATION_H */

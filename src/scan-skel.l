@@ -21,36 +21,36 @@
 %option prefix="skel_" outfile="lex.yy.c"
 
 %{
-#include <dirname.h>
-#include <error.h>
-#include <path-join.h>
-#include <quotearg.h>
+#ଅନ୍ତର୍ଭାଵ <dirname.h>
+#ଅନ୍ତର୍ଭାଵ <error.h>
+#ଅନ୍ତର୍ଭାଵ <path-join.h>
+#ଅନ୍ତର୍ଭାଵ <quotearg.h>
 
-#include "src/complain.h"
-#include "src/files.h"
-#include "src/getargs.h"
-#include "src/scan-skel.h"
+#ଅନ୍ତର୍ଭାଵ "src/complain.h"
+#ଅନ୍ତର୍ଭାଵ "src/files.h"
+#ଅନ୍ତର୍ଭାଵ "src/getargs.h"
+#ଅନ୍ତର୍ଭାଵ "src/scan-skel.h"
 
 #define FLEX_PREFIX(Id) skel_ ## Id
-#include "src/flex-scanner.h"
+#ଅନ୍ତର୍ଭାଵ "src/flex-scanner.h"
 
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <https://bugs.debian.org/333231>.  */
 #undef skel_wrap
 #define skel_wrap() 1
 
-#define YY_DECL static int skel_lex (void)
+#define YY_DECL ସ୍ଥିର ପୂର୍ଣ୍ଣସଂଖ୍ୟା skel_lex (ଶୂନ୍ୟ)
 YY_DECL;
 
-typedef void (*at_directive)(int, char**, char **, int*);
-static void at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun);
-static void at_basename (int argc, char *argv[], char**, int*);
-static void at_complain (int argc, char *argv[], char**, int*);
-static void at_output (int argc, char *argv[], char **name, int *lineno);
-static void fail_for_at_directive_too_many_args (char const *at_directive_name);
-static void fail_for_at_directive_too_few_args (char const *at_directive_name);
-static void fail_for_invalid_at (char const *at);
-static void output_mapped_file (char const *name);
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ଶୂନ୍ୟ (*at_directive)(ପୂର୍ଣ୍ଣସଂଖ୍ୟା, ଅକ୍ଷର**, ଅକ୍ଷର **, ପୂର୍ଣ୍ଣସଂଖ୍ୟା*);
+ସ୍ଥିର ଶୂନ୍ୟ at_init (ପୂର୍ଣ୍ଣସଂଖ୍ୟା *argc, ଅକ୍ଷର *argv[], at_directive *at_ptr, at_directive fun);
+ସ୍ଥିର ଶୂନ୍ୟ at_basename (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[], ଅକ୍ଷର**, ପୂର୍ଣ୍ଣସଂଖ୍ୟା*);
+ସ୍ଥିର ଶୂନ୍ୟ at_complain (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[], ଅକ୍ଷର**, ପୂର୍ଣ୍ଣସଂଖ୍ୟା*);
+ସ୍ଥିର ଶୂନ୍ୟ at_output (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[], ଅକ୍ଷର **name, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *lineno);
+ସ୍ଥିର ଶୂନ୍ୟ fail_for_at_directive_too_many_args (ଅକ୍ଷର ଅଚଳ *at_directive_name);
+ସ୍ଥିର ଶୂନ୍ୟ fail_for_at_directive_too_few_args (ଅକ୍ଷର ଅଚଳ *at_directive_name);
+ସ୍ଥିର ଶୂନ୍ୟ fail_for_invalid_at (ଅକ୍ଷର ଅଚଳ *at);
+ସ୍ଥିର ଶୂନ୍ୟ output_mapped_file (ଅକ୍ଷର ଅଚଳ *name);
 %}
 
 /* Identifiers of our M4 macros.  */
@@ -64,23 +64,23 @@ identifier [A-Za-z_0-9]+
 %%
 
 %{
-  int out_lineno PACIFY_CC (= 0);
-  char *out_name = NULL;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା out_lineno PACIFY_CC (= 0);
+  ଅକ୍ଷର *out_name = ଖାଲି;
 
   /* Currently, only the @complain directive takes multiple arguments, and
      never more than 7, with argv[0] being the directive name and argv[1]
      being the type of complaint to dispatch. */
 #define ARGC_MAX 9
-  int argc = 0;
-  char *argv[ARGC_MAX];
-  at_directive at_ptr = NULL;
+  ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc = 0;
+  ଅକ୍ଷର *argv[ARGC_MAX];
+  at_directive at_ptr = ଖାଲି;
 %}
 
 "@@" fputc ('@', yyout);
 "@{" fputc ('[', yyout);
 "@}" fputc (']', yyout);
-"@'" continue;  /* Used by b4_cat in ../data/bison.m4.  */
-@\n  continue;
+"@'" ଜାରି;  /* Used by b4_cat in ../data/bison.m4.  */
+@\n  ଜାରି;
 
 "@oline@"  fprintf (yyout, "%d", out_lineno + 1);
 "@ofile@"  output_mapped_file (out_name);
@@ -100,7 +100,7 @@ identifier [A-Za-z_0-9]+
 {macro}         {
                   location loc = empty_loc;
                   loc.start.file = map_file_name (out_name);
-                  loc.start.line = out_lineno;
+                  loc.start.ଧାଡ଼ି = out_lineno;
                   loc.end = loc.start;
                   complain (&loc, Wother,
                             "suspicious sequence in the output: %s", yytext);
@@ -110,12 +110,12 @@ identifier [A-Za-z_0-9]+
 .               ECHO;
 
 <INITIAL><<EOF>> {
-  if (out_name)
+  ଯଦି (out_name)
     {
-      free (out_name);
+      ମୁକ୍ତ (out_name);
       xfclose (yyout);
     }
-  return EOF;
+  ଫେରନ୍ତୁ EOF;
 }
 
 <SC_AT_DIRECTIVE_ARGS>
@@ -125,19 +125,19 @@ identifier [A-Za-z_0-9]+
   "@@"   STRING_1GROW ('@');
   "@{"   STRING_1GROW ('[');
   "@}"   STRING_1GROW (']');
-  "@'"   continue; /* For starting an argument that begins with whitespace. */
-  @\n    continue;
+  "@'"   ଜାରି; /* For starting an argument that begins with whitespace. */
+  @\n    ଜାରି;
 
   @[,)] {
-    if (argc >= ARGC_MAX)
+    ଯଦି (argc >= ARGC_MAX)
       fail_for_at_directive_too_many_args (argv[0]);
 
     argv[argc++] = obstack_finish0 (&obstack_for_string);
 
     /* Like M4, skip whitespace after a comma.  */
-    if (yytext[1] == ',')
+    ଯଦି (yytext[1] == ',')
       BEGIN SC_AT_DIRECTIVE_SKIP_WS;
-    else
+    ଅନ୍ୟଥା
       {
         aver (at_ptr);
         at_ptr (argc, argv, &out_name, &out_lineno);
@@ -152,19 +152,19 @@ identifier [A-Za-z_0-9]+
 
 <SC_AT_DIRECTIVE_SKIP_WS>
 {
-  [ \t\r\n]    continue;
+  [ \t\r\n]    ଜାରି;
   .            yyless (0); BEGIN SC_AT_DIRECTIVE_ARGS;
 }
 
 <SC_AT_DIRECTIVE_ARGS,SC_AT_DIRECTIVE_SKIP_WS>
 {
-  <<EOF>>  complain (NULL, fatal, _("unclosed %s directive in skeleton"), argv[0]);
+  <<EOF>>  complain (ଖାଲି, fatal, _("unclosed %s directive in skeleton"), argv[0]);
 }
 
 %%
 
-static void
-at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun)
+ସ୍ଥିର ଶୂନ୍ୟ
+at_init (ପୂର୍ଣ୍ଣସଂଖ୍ୟା *argc, ଅକ୍ଷର *argv[], at_directive *at_ptr, at_directive fun)
 {
   *at_ptr = fun;
   yytext[yyleng-1] = '\0';
@@ -177,11 +177,11 @@ at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun)
 | Scan a Bison skeleton.  |
 `------------------------*/
 
-void
+ଶୂନ୍ୟ
 scan_skel (FILE *in)
 {
-  static bool initialized = false;
-  if (!initialized)
+  ସ୍ଥିର bool initialized = false;
+  ଯଦି (!initialized)
     {
       initialized = true;
       obstack_init (&obstack_for_string);
@@ -191,56 +191,56 @@ scan_skel (FILE *in)
   skel_lex ();
 }
 
-void
-skel_scanner_free (void)
+ଶୂନ୍ୟ
+skel_scanner_free (ଶୂନ୍ୟ)
 {
   obstack_free (&obstack_for_string, 0);
   /* Reclaim Flex's buffers.  */
   yylex_destroy ();
 }
 
-static inline warnings
-flag (const char *arg)
+ସ୍ଥିର ଧାଡ଼ିଭିତରେ warnings
+flag (ଅଚଳ ଅକ୍ଷର *arg)
 {
   /* compare with values issued from b4_error */
-  if (STREQ (arg, "complain"))
-    return complaint;
-  else if (STREQ (arg, "deprecated"))
-    return Wdeprecated;
-  else if (STREQ (arg, "fatal"))
-    return fatal;
-  else if (STREQ (arg, "note"))
-    return silent | complaint | no_caret | note;
-  else if (STREQ (arg, "warn"))
-    return Wother;
-  else
+  ଯଦି (STREQ (arg, "complain"))
+    ଫେରନ୍ତୁ complaint;
+  ଅନ୍ୟଥା ଯଦି (STREQ (arg, "deprecated"))
+    ଫେରନ୍ତୁ Wdeprecated;
+  ଅନ୍ୟଥା ଯଦି (STREQ (arg, "fatal"))
+    ଫେରନ୍ତୁ fatal;
+  ଅନ୍ୟଥା ଯଦି (STREQ (arg, "note"))
+    ଫେରନ୍ତୁ silent | complaint | no_caret | note;
+  ଅନ୍ୟଥା ଯଦି (STREQ (arg, "warn"))
+    ଫେରନ୍ତୁ Wother;
+  ଅନ୍ୟଥା
     abort ();
 }
 
-static void
-at_basename (int argc, char *argv[], char **out_namep, int *out_linenop)
+ସ୍ଥିର ଶୂନ୍ୟ
+at_basename (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[], ଅକ୍ଷର **out_namep, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *out_linenop)
 {
-  (void) out_namep;
-  (void) out_linenop;
-  if (2 < argc)
+  (ଶୂନ୍ୟ) out_namep;
+  (ଶୂନ୍ୟ) out_linenop;
+  ଯଦି (2 < argc)
     fail_for_at_directive_too_many_args (argv[0]);
   fputs (last_component (argv[1]), yyout);
 }
 
-static void
-at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
+ସ୍ଥିର ଶୂନ୍ୟ
+at_complain (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[], ଅକ୍ଷର **out_namep, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *out_linenop)
 {
-  if (argc < 4)
+  ଯଦି (argc < 4)
     fail_for_at_directive_too_few_args (argv[0]);
 
-  (void) out_namep;
-  (void) out_linenop;
+  (ଶୂନ୍ୟ) out_namep;
+  (ଶୂନ୍ୟ) out_linenop;
 
   warnings w = flag (argv[1]);
 
   location loc;
-  location *locp = NULL;
-  if (argv[2] && argv[2][0])
+  location *locp = ଖାଲି;
+  ଯଦି (argv[2] && argv[2][0])
     {
       boundary_set_from_string (&loc.start, argv[2]);
       boundary_set_from_string (&loc.end, argv[3]);
@@ -249,45 +249,45 @@ at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
   complain_args (locp, w, argc - 4, argv + 4);
 }
 
-static void
-at_output (int argc, char *argv[], char **out_namep, int *out_linenop)
+ସ୍ଥିର ଶୂନ୍ୟ
+at_output (ପୂର୍ଣ୍ଣସଂଖ୍ୟା argc, ଅକ୍ଷର *argv[], ଅକ୍ଷର **out_namep, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *out_linenop)
 {
-  if (3 < argc)
+  ଯଦି (3 < argc)
     fail_for_at_directive_too_many_args (argv[0]);
-  if (*out_namep)
+  ଯଦି (*out_namep)
     {
-      free (*out_namep);
+      ମୁକ୍ତ (*out_namep);
       xfclose (yyout);
     }
-  *out_namep = xpath_join (argv[1], 2 < argc ? argv[2] : NULL);
+  *out_namep = xpath_join (argv[1], 2 < argc ? argv[2] : ଖାଲି);
   output_file_name_check (out_namep, true);
   /* If there were errors, do not generate the output.  */
   yyout = xfopen (complaint_status ? "/dev/null" : *out_namep, "w");
   *out_linenop = 1;
 }
 
-static void
-fail_for_at_directive_too_few_args (char const *at_directive_name)
+ସ୍ଥିର ଶୂନ୍ୟ
+fail_for_at_directive_too_few_args (ଅକ୍ଷର ଅଚଳ *at_directive_name)
 {
-  complain (NULL, fatal, _("too few arguments for %s directive in skeleton"),
+  complain (ଖାଲି, fatal, _("too few arguments for %s directive in skeleton"),
             at_directive_name);
 }
 
-static void
-fail_for_at_directive_too_many_args (char const *at_directive_name)
+ସ୍ଥିର ଶୂନ୍ୟ
+fail_for_at_directive_too_many_args (ଅକ୍ଷର ଅଚଳ *at_directive_name)
 {
-  complain (NULL, fatal, _("too many arguments for %s directive in skeleton"),
+  complain (ଖାଲି, fatal, _("too many arguments for %s directive in skeleton"),
             at_directive_name);
 }
 
-static void
-fail_for_invalid_at (char const *at)
+ସ୍ଥିର ଶୂନ୍ୟ
+fail_for_invalid_at (ଅକ୍ଷର ଅଚଳ *at)
 {
-  complain (NULL, fatal, "invalid @ in skeleton: %s", at);
+  complain (ଖାଲି, fatal, "invalid @ in skeleton: %s", at);
 }
 
-static void
-output_mapped_file (char const *name)
+ସ୍ଥିର ଶୂନ୍ୟ
+output_mapped_file (ଅକ୍ଷର ଅଚଳ *name)
 {
   fputs (quotearg_style (c_quoting_style, map_file_name (name)), yyout);
 }

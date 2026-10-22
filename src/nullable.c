@@ -23,113 +23,113 @@
    the null string.  NULLABLE[I - NTOKENS] is nonzero if symbol I can
    do so.  */
 
-#include <config.h>
-#include "system.h"
+#ଅନ୍ତର୍ଭାଵ <config.h>
+#ଅନ୍ତର୍ଭାଵ "system.h"
 
-#include "getargs.h"
-#include "gram.h"
-#include "nullable.h"
-#include "reduce.h"
-#include "symtab.h"
+#ଅନ୍ତର୍ଭାଵ "getargs.h"
+#ଅନ୍ତର୍ଭାଵ "gram.h"
+#ଅନ୍ତର୍ଭାଵ "nullable.h"
+#ଅନ୍ତର୍ଭାଵ "reduce.h"
+#ଅନ୍ତର୍ଭାଵ "symtab.h"
 
 /* Linked list of rules.  */
-typedef struct rule_list
+ପ୍ରକାରବ୍ୟାଖ୍ୟା ସଂରଚନା rule_list
 {
-  struct rule_list *next;
-  const rule *value;
+  ସଂରଚନା rule_list *next;
+  ଅଚଳ rule *ମୂଲ୍ୟ;
 } rule_list;
 
-bool *nullable = NULL;
+bool *nullable = ଖାଲି;
 
-static void
+ସ୍ଥିର ଶୂନ୍ୟ
 nullable_print (FILE *out)
 {
   fputs ("NULLABLE\n", out);
-  for (int i = ntokens; i < nsyms; i++)
+  ପାଇଁ (ପୂର୍ଣ୍ଣସଂଖ୍ୟା i = ntokens; i < nsyms; i++)
     fprintf (out, "  %s: %s\n", symbols[i]->tag,
              nullable[i - ntokens] ? "yes" : "no");
   fputs ("\n\n", out);
 }
 
-void
-nullable_compute (void)
+ଶୂନ୍ୟ
+nullable_compute (ଶୂନ୍ୟ)
 {
-  nullable = xcalloc (nnterms, sizeof *nullable);
+  nullable = xcalloc (nnterms, ଆକାର *nullable);
 
-  size_t *rcount = xcalloc (nrules, sizeof *rcount);
+  size_t *rcount = xcalloc (nrules, ଆକାର *rcount);
   /* RITEM contains all the rules, including useless productions.
      Hence we must allocate room for useless nonterminals too.  */
-  rule_list **rsets = xcalloc (nnterms, sizeof *rsets);
+  rule_list **rsets = xcalloc (nnterms, ଆକାର *rsets);
   /* This is said to be more elements than we actually use.
      Supposedly NRITEMS - NRULES is enough.  But why take the risk?  */
-  rule_list *relts = xnmalloc (nritems + nnterms + 1, sizeof *relts);
+  rule_list *relts = xnmalloc (nritems + nnterms + 1, ଆକାର *relts);
 
-  symbol_number *squeue = xnmalloc (nnterms, sizeof *squeue);
-  symbol_number *s2 = squeue;
+  ପ୍ରତୀକ_ସଂଖ୍ୟା *squeue = xnmalloc (nnterms, ଆକାର *squeue);
+  ପ୍ରତୀକ_ସଂଖ୍ୟା *s2 = squeue;
   {
     rule_list *p = relts;
-    for (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
-      if (rules[ruleno].useful)
+    ପାଇଁ (rule_ସଂଖ୍ୟା ruleno = 0; ruleno < nrules; ++ruleno)
+      ଯଦି (rules[ruleno].useful)
         {
-          const rule *r = &rules[ruleno];
-          if (r->rhs[0] >= 0)
+          ଅଚଳ rule *r = &rules[ruleno];
+          ଯଦି (r->rhs[0] >= 0)
             {
               /* This rule has a non empty RHS. */
               bool any_tokens = false;
-              for (item_number *rp = r->rhs; *rp >= 0; ++rp)
-                if (ISTOKEN (*rp))
+              ପାଇଁ (item_ସଂଖ୍ୟା *rp = r->rhs; *rp >= 0; ++rp)
+                ଯଦି (ISTOKEN (*rp))
                   any_tokens = true;
 
               /* This rule has only nonterminals: schedule it for the second
                  pass.  */
-              if (!any_tokens)
-                for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+              ଯଦି (!any_tokens)
+                ପାଇଁ (item_ସଂଖ୍ୟା *rp = r->rhs; *rp >= 0; ++rp)
                   {
                     rcount[ruleno]++;
                     p->next = rsets[*rp - ntokens];
-                    p->value = r;
+                    p->ମୂଲ୍ୟ = r;
                     rsets[*rp - ntokens] = p;
                     p++;
                   }
             }
-          else
+          ଅନ୍ୟଥା
             {
               /* This rule has an empty RHS. */
-              if (r->useful
-                  && ! nullable[r->lhs->number - ntokens])
+              ଯଦି (r->useful
+                  && ! nullable[r->lhs->ସଂଖ୍ୟା - ntokens])
                 {
-                  nullable[r->lhs->number - ntokens] = true;
-                  *s2++ = r->lhs->number;
+                  nullable[r->lhs->ସଂଖ୍ୟା - ntokens] = true;
+                  *s2++ = r->lhs->ସଂଖ୍ୟା;
                 }
             }
         }
   }
 
-  symbol_number *s1 = squeue;
-  while (s1 < s2)
-    for (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
+  ପ୍ରତୀକ_ସଂଖ୍ୟା *s1 = squeue;
+  ଯେତେବେଳେ (s1 < s2)
+    ପାଇଁ (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
       {
-        const rule *r = p->value;
-        if (--rcount[r->number] == 0)
-          if (r->useful && ! nullable[r->lhs->number - ntokens])
+        ଅଚଳ rule *r = p->ମୂଲ୍ୟ;
+        ଯଦି (--rcount[r->ସଂଖ୍ୟା] == 0)
+          ଯଦି (r->useful && ! nullable[r->lhs->ସଂଖ୍ୟା - ntokens])
             {
-              nullable[r->lhs->number - ntokens] = true;
-              *s2++ = r->lhs->number;
+              nullable[r->lhs->ସଂଖ୍ୟା - ntokens] = true;
+              *s2++ = r->lhs->ସଂଖ୍ୟା;
             }
       }
 
-  free (squeue);
-  free (rcount);
-  free (rsets);
-  free (relts);
+  ମୁକ୍ତ (squeue);
+  ମୁକ୍ତ (rcount);
+  ମୁକ୍ତ (rsets);
+  ମୁକ୍ତ (relts);
 
-  if (trace_flag & trace_sets)
+  ଯଦି (trace_flag & trace_sets)
     nullable_print (stderr);
 }
 
 
-void
-nullable_free (void)
+ଶୂନ୍ୟ
+nullable_free (ଶୂନ୍ୟ)
 {
-  free (nullable);
+  ମୁକ୍ତ (nullable);
 }
