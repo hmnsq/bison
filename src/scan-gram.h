@@ -22,15 +22,15 @@
 # define SCAN_GRAM_H_
 
 /* Initialize the scanner to read file GRAM. */
-void gram_scanner_open (const char *gram);
+शून्य gram_scanner_open (ध्रुव वर्ण *gram);
 /* Close the open files.  */
-void gram_scanner_close (void);
+शून्य gram_scanner_close (शून्य);
 
 /* Free all the memory allocated to the scanner. */
-void gram_scanner_free (void);
-void gram_scanner_last_string_free (void);
+शून्य gram_scanner_free (शून्य);
+शून्य gram_scanner_last_string_free (शून्य);
 
-# define GRAM_LEX_DECL int gram_lex (GRAM_STYPE *val, location *loc)
+# define GRAM_LEX_DECL पूर्णाङ्क gram_lex (GRAM_STYPE *val, location *loc)
 GRAM_LEX_DECL;
 
 #endif /* !SCAN_GRAM_H_ */

@@ -23,14 +23,14 @@
 # include "state.h"
 
 // Init/deinit this module.
-void counterexample_init (void);
-void counterexample_free (void);
+शून्य counterexample_init (शून्य);
+शून्य counterexample_free (शून्य);
 
 // Print the counterexamples for the conflicts of state S.
 //
 // Used both for the warnings on the terminal (OUT = stderr, PREFIX =
 // ""), and for the reports (OUT != stderr, PREFIX != "").
-void
-counterexample_report_state (const state *s, FILE *out, const char *prefix);
+शून्य
+counterexample_report_state (ध्रुव state *s, खाता *out, ध्रुव वर्ण *prefix);
 
 #endif /* COUNTEREXAMPLE_H */
