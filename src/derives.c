@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include "getargs.h"
+#अन्तर्भाव "getargs.h"
 
-#include "derives.h"
-#include "gram.h"
-#include "reader.h"
-#include "symtab.h"
+#अन्तर्भाव "derives.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "reader.h"
+#अन्तर्भाव "symtab.h"
 
 /* Linked list of rule numbers.  */
-typedef struct rule_list
+प्रकारनिर्देश संरचना rule_list
 {
-  struct rule_list *next;
-  rule *value;
+  संरचना rule_list *next;
+  rule *मूल्य;
 } rule_list;
 
 rule ***derives;
 
-static void
-print_derives (void)
+स्थिर शून्य
+print_derives (शून्य)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  प्रति (प्रतीक_संख्या i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
-      for (rule **rp = derives[i - ntokens]; *rp; ++rp)
+      प्रति (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
           rule_rhs_print (*rp, stderr);
@@ -57,61 +57,61 @@ print_derives (void)
 }
 
 
-void
-derives_compute (void)
+शून्य
+derives_compute (शून्य)
 {
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = xcalloc (nnterms, sizeof *dset);
+  rule_list **dset = xcalloc (nnterms, परिमाण *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = xnmalloc (nrules, sizeof *delts);
+  rule_list *delts = xnmalloc (nrules, परिमाण *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  प्रति (rule_संख्या r = nrules - 1; r >= 0; --r)
     {
-      symbol_number lhs = rules[r].lhs->number;
+      प्रतीक_संख्या lhs = rules[r].lhs->संख्या;
       rule_list *p = &delts[r];
       /* A new LHS is found.  */
       p->next = dset[lhs - ntokens];
-      p->value = &rules[r];
+      p->मूल्य = &rules[r];
       dset[lhs - ntokens] = p;
     }
 
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  derives = xnmalloc (nnterms, sizeof *derives);
+  derives = xnmalloc (nnterms, परिमाण *derives);
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
-  rule **q = xnmalloc (nnterms + nrules, sizeof *q);
+  rule **q = xnmalloc (nnterms + nrules, परिमाण *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  प्रति (प्रतीक_संख्या i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      यावत् (p)
         {
-          *q++ = p->value;
+          *q++ = p->मूल्य;
           p = p->next;
         }
-      *q++ = NULL;
+      *q++ = रिक्त;
     }
 
-  if (trace_flag & trace_sets)
+  यदि (trace_flag & trace_sets)
     print_derives ();
 
-  free (dset);
-  free (delts);
+  मुक्त (dset);
+  मुक्त (delts);
 }
 
 
-void
-derives_free (void)
+शून्य
+derives_free (शून्य)
 {
-  if (derives)
+  यदि (derives)
     {
-      free (derives[0]);
-      free (derives);
+      मुक्त (derives[0]);
+      मुक्त (derives);
     }
 }
