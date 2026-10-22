@@ -30,48 +30,48 @@
    relevant to the counterexample.  The leaves of a derivation form a
    counterexample when printed.  */
 
-typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+تعريفنوع gl_list_t derivation_list;
+تعريفنوع بنية derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+ساكن مضمن derivation_list derivation_list_new (فراغ)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  أرجع gl_list_create_empty (GL_LINKED_LIST, عدم, عدم, عدم, true);
 }
 
-static inline bool
+ساكن مضمن bool
 derivation_list_next (gl_list_iterator_t *it, derivation **d)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ثابت فراغ *p = عدم;
+  bool res = gl_list_iterator_next (it, &p, عدم);
+  إذا (res)
     *d = (derivation *) p;
-  else
+  وإلا
     gl_list_iterator_free (it);
-  return res;
+  أرجع res;
 }
 
-void derivation_list_append (derivation_list dl, derivation *d);
-void derivation_list_prepend (derivation_list dl, derivation *d);
-void derivation_list_free (derivation_list dl);
+فراغ derivation_list_append (derivation_list dl, derivation *d);
+فراغ derivation_list_prepend (derivation_list dl, derivation *d);
+فراغ derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r);
+derivation_new (هێما_ژمار sym, derivation_list children,
+                ثابت rule *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+ساكن مضمن derivation *derivation_new_leaf (هێما_ژمار sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  أرجع derivation_new (sym, عدم, عدم);
 }
 
 // Number of symbols.
-size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
-void derivation_free (derivation *deriv);
-void derivation_retain (derivation *deriv);
+size_t derivation_size (ثابت derivation *deriv);
+فراغ derivation_print (ثابت derivation *deriv, FILE *out, ثابت حرف *prefix);
+فراغ derivation_print_leaves (ثابت derivation *deriv, FILE *out);
+فراغ derivation_free (derivation *deriv);
+فراغ derivation_retain (derivation *deriv);
 
 // A derivation denoting the position of the dot.
-derivation *derivation_dot (void);
+derivation *derivation_dot (فراغ);
 
 #endif /* DERIVATION_H */

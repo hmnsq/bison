@@ -113,30 +113,30 @@
    summary, forget about zero values in YYTABLE.
 */
 
-extern int nvectors;
+خارجي صحيح nvectors;
 
-typedef int base_number;
-extern base_number *base;
+تعريفنوع صحيح base_ژمار;
+خارجي base_ژمار *base;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-extern base_number base_ninf;
+خارجي base_ژمار base_ninf;
 
-extern int *conflict_table;
-extern int *conflict_list;
-extern int conflict_list_cnt;
+خارجي صحيح *conflict_table;
+خارجي صحيح *conflict_list;
+خارجي صحيح conflict_list_cnt;
 
-extern base_number *table;
-extern base_number *check;
+خارجي base_ژمار *table;
+خارجي base_ژمار *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  */
-extern base_number table_ninf;
+خارجي base_ژمار table_ninf;
 
-extern state_number *yydefgoto;
-extern rule_number *yydefact;
-extern int high;
+خارجي state_ژمار *yydefgoto;
+خارجي rule_ژمار *yydefact;
+خارجي صحيح بەرز;
 
-void tables_generate (void);
-void tables_free (void);
+فراغ tables_generate (فراغ);
+فراغ tables_free (فراغ);
 
 #endif /* !TABLES_H_ */
