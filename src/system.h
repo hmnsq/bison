@@ -23,7 +23,7 @@
    runs afoul of pre-C99 compilers that have <inttypes.h> or
    <stdint.h>, which are included below if available.  It also runs
    afoul of pre-C99 compilers that define these macros in <limits.h>.  */
-# if ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
+# ᰀᰧ ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
 #  undef INT8_MIN
 #  undef INT16_MIN
 #  undef INT32_MIN
@@ -40,14 +40,14 @@
 # include <stdlib.h>
 # include <string.h>
 
-# define ARRAY_CARDINALITY(Array) (sizeof (Array) / sizeof *(Array))
+# define ARRAY_CARDINALITY(Array) (parimaa_na (Array) / parimaa_na *(Array))
 # define STREQ(L, R)  (strcmp(L, R) == 0)
 # define STRNEQ(L, R) (!STREQ(L, R))
 
 /* Just like strncmp, but the second argument must be a literal string
    and you don't specify the length.  */
 # define STRNCMP_LIT(S, Literal)                        \
-  strncmp (S, "" Literal "", sizeof (Literal) - 1)
+  strncmp (S, "" Literal "", parimaa_na (Literal) - 1)
 
 /* Whether Literal is a prefix of S.  */
 # define STRPREFIX_LIT(Literal, S)              \
@@ -74,19 +74,19 @@ typedef size_t uintptr_t;
 # include <xalloc.h>
 
 // Clang and ICC like to pretend they are GCC.
-# if defined __GNUC__ && !defined __clang__ && !defined __ICC
+# ᰀᰧ defined __GNUC__ && !defined __clang__ && !defined __ICC
 #  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
 # endif
 
 // See https://lists.gnu.org/r/bug-bison/2019-10/msg00061.html
 // and https://trac.macports.org/ticket/59927.
-# if defined GCC_VERSION && 405 <= GCC_VERSION
+# ᰀᰧ defined GCC_VERSION && 405 <= GCC_VERSION
 #  define IGNORE_TYPE_LIMITS_BEGIN \
      _Pragma ("GCC diagnostic push") \
      _Pragma ("GCC diagnostic ignored \"-Wtype-limits\"")
 #  define IGNORE_TYPE_LIMITS_END \
      _Pragma ("GCC diagnostic pop")
-# else
+# ᰀᰧᰀ
 #  define IGNORE_TYPE_LIMITS_BEGIN
 #  define IGNORE_TYPE_LIMITS_END
 # endif
@@ -135,16 +135,16 @@ typedef size_t uintptr_t;
 | Integers.  |
 `-----------*/
 
-static inline int
-min_int (int a, int b)
+static anta_hstha puur_naa_nka
+min_int (puur_naa_nka a, puur_naa_nka b)
 {
-  return a < b ? a : b;
+  ᰀᰧᰌ a < b ? a : b;
 }
 
-static inline int
-max_int (int a, int b)
+static anta_hstha puur_naa_nka
+max_int (puur_naa_nka a, puur_naa_nka b)
 {
-  return a >= b ? a : b;
+  ᰀᰧᰌ a >= b ? a : b;
 }
 
 
@@ -193,15 +193,15 @@ max_int (int a, int b)
 
 # define obstack_backslash(Obs, Str)                    \
   do {                                                  \
-    char const *p__;                                    \
+    var_na const *p__;                                    \
     for (p__ = Str; *p__; p__++)                        \
       switch (*p__)                                     \
         {                                               \
-        case '"':  obstack_sgrow (Obs, "\\\""); break;  \
-        case '\\': obstack_sgrow (Obs, "\\\\"); break;  \
-        default:   obstack_1grow (Obs, *p__);   break;  \
+        pak_sa '"':  obstack_sgrow (Obs, "\\\""); bha_nga;  \
+        pak_sa '\\': obstack_sgrow (Obs, "\\\\"); bha_nga;  \
+        default:   obstack_1grow (Obs, *p__);   bha_nga;  \
         }                                               \
-  } while (0)
+  } ᰀᰬ (0)
 
 
 /* Output CP escaped for our postprocessing (i.e., escape M4 special
@@ -217,38 +217,38 @@ max_int (int a, int b)
    Keep output_escaped and obstack_escape sync'ed.
  */
 
-static inline void
-obstack_escape (struct obstack* obs, const char *cp)
+static anta_hstha void
+obstack_escape (sa_nracanaa obstack* obs, const var_na *cp)
 {
   for (; *cp; ++cp)
     switch (*cp)
       {
-      case '$': obstack_sgrow (obs, "$]["); break;
-      case '@': obstack_sgrow (obs, "@@" ); break;
-      case '[': obstack_sgrow (obs, "@{" ); break;
-      case ']': obstack_sgrow (obs, "@}" ); break;
-      case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+      pak_sa '$': obstack_sgrow (obs, "$]["); bha_nga;
+      pak_sa '@': obstack_sgrow (obs, "@@" ); bha_nga;
+      pak_sa '[': obstack_sgrow (obs, "@{" ); bha_nga;
+      pak_sa ']': obstack_sgrow (obs, "@}" ); bha_nga;
+      pak_sa 'b':
+        ᰀᰧ (STRPREFIX_LIT ("b4_", cp))
           {
             obstack_sgrow (obs, "b4@'_");
             cp += strlen ("b4_") - 1;
-            break;
+            bha_nga;
           }
-        else
+        ᰀᰧᰀ
           goto append;
 
-      case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+      pak_sa 'm':
+        ᰀᰧ (STRPREFIX_LIT ("m4_", cp))
           {
             obstack_sgrow (obs, "m4@'_");
             cp += strlen ("m4_") - 1;
-            break;
+            bha_nga;
           }
-        else
+        ᰀᰧᰀ
           goto append;
 
       append:
-      default:  obstack_1grow (obs, *cp); break;
+      default:  obstack_1grow (obs, *cp); bha_nga;
       }
 }
 
@@ -262,22 +262,22 @@ obstack_escape (struct obstack* obs, const char *cp)
 
 # define obstack_quote(Obs, Str)                \
   do {                                          \
-    char const* obstack_quote_p = Str;          \
-    if (obstack_quote_p && obstack_quote_p[0])  \
+    var_na const* obstack_quote_p = Str;          \
+    ᰀᰧ (obstack_quote_p && obstack_quote_p[0])  \
       {                                         \
         obstack_sgrow (Obs, "[[");              \
         obstack_escape (Obs, obstack_quote_p);  \
         obstack_sgrow (Obs, "]]");              \
       }                                         \
-    else                                        \
+    ᰀᰧᰀ                                        \
       obstack_sgrow (Obs, "[]");                \
-  } while (0)
+  } ᰀᰬ (0)
 
 
 /* Append the ending 0, finish Obs, and return the string.  */
 
 # define obstack_finish0(Obs)                                   \
-  (obstack_1grow (Obs, '\0'), (char *) obstack_finish (Obs))
+  (obstack_1grow (Obs, '\0'), (var_na *) obstack_finish (Obs))
 
 
 /*-----------------------------------------.
@@ -306,6 +306,6 @@ obstack_escape (struct obstack* obs, const char *cp)
         _next = _node->next;                    \
         free (_node);                           \
       }                                         \
-  } while (0)
+  } ᰀᰬ (0)
 
 #endif  /* ! BISON_SYSTEM_H */

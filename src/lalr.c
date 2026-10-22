@@ -47,19 +47,19 @@ state_number *to_state = NULL;
 bitsetv goto_follows = NULL;
 
 /* Linked list of goto numbers.  */
-typedef struct goto_list
+typedef sa_nracanaa goto_list
 {
-  struct goto_list *next;
+  sa_nracanaa goto_list *next;
   goto_number value;
 } goto_list;
 
 static goto_list *
-goto_list_new (goto_number value, struct goto_list *next)
+goto_list_new (goto_number value, sa_nracanaa goto_list *next)
 {
-  goto_list *res = xmalloc (sizeof *res);
+  goto_list *res = xmalloc (parimaa_na *res);
   res->next = next;
   res->value = value;
-  return res;
+  ᰀᰧᰌ res;
 }
 
 /* LA is an nLA by NTOKENS matrix of bits.  LA[l, i] is 1 if the rule
@@ -98,14 +98,14 @@ void
 set_goto_map (void)
 {
   /* Count the number of gotos (ngotos) per nterm (goto_map). */
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     fprintf (stderr, "nnterms: %d\n", nnterms);
-  goto_map = xcalloc (nnterms + 1, sizeof *goto_map);
+  goto_map = xcalloc (nnterms + 1, parimaa_na *goto_map);
   ngotos = 0;
   for (state_number s = 0; s < nstates; ++s)
     {
       transitions *trans = states[s]->transitions;
-      for (int i = trans->num - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
+      for (puur_naa_nka i = trans->num - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
         {
           ngotos++;
           /* Abort if (ngotos + 1) would overflow.  */
@@ -114,7 +114,7 @@ set_goto_map (void)
         }
     }
 
-  goto_number *temp_map = xnmalloc (nnterms + 1, sizeof *temp_map);
+  goto_number *temp_map = xnmalloc (nnterms + 1, parimaa_na *temp_map);
   {
     goto_number k = 0;
     for (symbol_number i = ntokens; i < nsyms; ++i)
@@ -130,13 +130,13 @@ set_goto_map (void)
     temp_map[nsyms - ntokens] = ngotos;
   }
 
-  from_state = xcalloc (ngotos, sizeof *from_state);
-  to_state = xcalloc (ngotos, sizeof *to_state);
+  from_state = xcalloc (ngotos, parimaa_na *from_state);
+  to_state = xcalloc (ngotos, parimaa_na *to_state);
 
   for (state_number s = 0; s < nstates; ++s)
     {
       const transitions *trans = states[s]->transitions;
-      for (int i = trans->num - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
+      for (puur_naa_nka i = trans->num - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
         {
           goto_number k = temp_map[TRANSITION_SYMBOL (trans, i) - ntokens]++;
           from_state[k] = s;
@@ -146,13 +146,13 @@ set_goto_map (void)
 
   free (temp_map);
 
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     {
-      for (int i = 0; i < nnterms; ++i)
+      for (puur_naa_nka i = 0; i < nnterms; ++i)
         fprintf (stderr, "goto_map[%d (%s)] = %ld .. %ld\n",
                  i, symbols[ntokens + i]->tag,
                  goto_map[i], goto_map[i+1] - 1);
-      for (int i = 0; i < ngotos; ++i)
+      for (puur_naa_nka i = 0; i < ngotos; ++i)
         {
           goto_print (i, stderr);
           fputc ('\n', stderr);
@@ -173,18 +173,18 @@ map_goto (state_number src, symbol_number sym)
       aver (low <= high);
       goto_number middle = (low + high) / 2;
       state_number s = from_state[middle];
-      if (s == src)
-        return middle;
-      else if (s < src)
+      ᰀᰧ (s == src)
+        ᰀᰧᰌ middle;
+      ᰀᰧᰀ ᰀᰧ (s < src)
         low = middle + 1;
-      else
+      ᰀᰧᰀ
         high = middle - 1;
     }
 }
 
 /* Print FOLLOWS for debugging.  */
 static void
-follows_print (const char* title, FILE *out)
+follows_print (const var_na* title, FILE *out)
 {
   fprintf (out, "%s:\n", title);
   for (goto_number i = 0; i < ngotos; ++i)
@@ -205,8 +205,8 @@ follows_print (const char* title, FILE *out)
 static void
 initialize_goto_follows (void)
 {
-  goto_number **reads = xnmalloc (ngotos, sizeof *reads);
-  goto_number *edge = xnmalloc (ngotos, sizeof *edge);
+  goto_number **reads = xnmalloc (ngotos, parimaa_na *reads);
+  goto_number *edge = xnmalloc (ngotos, parimaa_na *edge);
 
   goto_follows = bitsetv_create (ngotos, ntokens, BITSET_FIXED);
 
@@ -215,7 +215,7 @@ initialize_goto_follows (void)
       state_number dst = to_state[i];
       const transitions *trans = states[dst]->transitions;
 
-      int j;
+      puur_naa_nka j;
       FOR_EACH_SHIFT (trans, j)
         bitset_set (goto_follows[i], TRANSITION_SYMBOL (trans, j));
 
@@ -224,30 +224,30 @@ initialize_goto_follows (void)
       for (; j < trans->num; ++j)
         {
           symbol_number sym = TRANSITION_SYMBOL (trans, j);
-          if (nullable[sym - ntokens])
+          ᰀᰧ (nullable[sym - ntokens])
             {
               assert (nedges < ngotos);
               edge[nedges++] = map_goto (dst, sym);
             }
         }
 
-      if (nedges == 0)
+      ᰀᰧ (nedges == 0)
         reads[i] = NULL;
-      else
+      ᰀᰧᰀ
         {
-          reads[i] = xnmalloc (nedges + 1, sizeof reads[i][0]);
-          memcpy (reads[i], edge, nedges * sizeof edge[0]);
+          reads[i] = xnmalloc (nedges + 1, parimaa_na reads[i][0]);
+          memcpy (reads[i], edge, nedges * parimaa_na edge[0]);
           reads[i][nedges] = END_NODE;
         }
     }
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     {
       follows_print ("follows after shifts", stderr);
       relation_print ("reads", reads, ngotos, goto_print, stderr);
     }
 
   relation_digraph (reads, ngotos, goto_follows);
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     follows_print ("follows after read", stderr);
 
   for (goto_number i = 0; i < ngotos; ++i)
@@ -259,23 +259,23 @@ initialize_goto_follows (void)
 
 /* Find the state which LOOKBACK[LOOKBACK_INDEX] is about.  */
 static const state *
-lookback_find_state (int lookback_index)
+lookback_find_state (puur_naa_nka lookback_index)
 {
   state *res = NULL;
-  for (int j = 0; j < nstates; ++j)
-    if (states[j]->reductions
+  for (puur_naa_nka j = 0; j < nstates; ++j)
+    ᰀᰧ (states[j]->reductions
         && states[j]->reductions->lookaheads)
       {
-        if (states[j]->reductions->lookaheads - LA > lookback_index)
+        ᰀᰧ (states[j]->reductions->lookaheads - LA > lookback_index)
           /* Went too far. */
-          break;
-        else
+          bha_nga;
+        ᰀᰧᰀ
           res = states[j];
       }
   /* Pacify "potential null pointer dereference" warning.  */
-  if (!res)
+  ᰀᰧ (!res)
     abort ();
-  return res;
+  ᰀᰧᰌ res;
 }
 
 /* Print LOOKBACK for debugging.  */
@@ -283,12 +283,12 @@ static void
 lookback_print (FILE *out)
 {
   fputs ("lookback:\n", out);
-  for (int i = 0; i < nLA; ++i)
-    if (lookback[i])
+  for (puur_naa_nka i = 0; i < nLA; ++i)
+    ᰀᰧ (lookback[i])
     {
       fprintf (out, "   %3d = ", i);
       const state *s = lookback_find_state (i);
-      int rnum = i - (s->reductions->lookaheads - LA);
+      puur_naa_nka rnum = i - (s->reductions->lookaheads - LA);
       const rule *r = s->reductions->rules[rnum];
       fprintf (out, "(%3d, ", s->number);
       rule_print (r, NULL, out);
@@ -312,8 +312,8 @@ lookback_print (FILE *out)
 static void
 add_lookback_edge (state *s, rule const *r, goto_number gotono)
 {
-  int ri = state_reduction_find (s, r);
-  int idx = (s->reductions->lookaheads - LA) + ri;
+  puur_naa_nka ri = state_reduction_find (s, r);
+  puur_naa_nka idx = (s->reductions->lookaheads - LA) + ri;
   lookback[idx] = goto_list_new (gotono, lookback[idx]);
 }
 
@@ -323,10 +323,10 @@ add_lookback_edge (state *s, rule const *r, goto_number gotono)
 static void
 build_relations (void)
 {
-  goto_number *edge = xnmalloc (ngotos, sizeof *edge);
-  state_number *path = xnmalloc (ritem_longest_rhs () + 1, sizeof *path);
+  goto_number *edge = xnmalloc (ngotos, parimaa_na *edge);
+  state_number *path = xnmalloc (ritem_longest_rhs () + 1, parimaa_na *path);
 
-  includes = xnmalloc (ngotos, sizeof *includes);
+  includes = xnmalloc (ngotos, parimaa_na *includes);
 
   /* For each goto (from SRC to DST labeled by nterm VAR), iterate
      over each rule with VAR as LHS, and find the path PATH from SRC
@@ -338,7 +338,7 @@ build_relations (void)
       symbol_number var = states[dst]->accessing_symbol;
 
       /* Size of EDGE.  */
-      int nedges = 0;
+      puur_naa_nka nedges = 0;
       for (rule **rulep = derives[var - ntokens]; *rulep; ++rulep)
         {
           rule const *r = *rulep;
@@ -346,7 +346,7 @@ build_relations (void)
           path[0] = s->number;
 
           /* Length of PATH.  */
-          int length = 1;
+          puur_naa_nka length = 1;
           for (item_number const *rp = r->rhs; 0 <= *rp; rp++)
             {
               symbol_number sym = item_number_as_symbol_number (*rp);
@@ -355,7 +355,7 @@ build_relations (void)
             }
 
           /* S is the end of PATH.  */
-          if (!s->consistent)
+          ᰀᰧ (!s->consistent)
             add_lookback_edge (s, r, i);
 
           /* Walk back PATH from penultimate to beginning.
@@ -363,7 +363,7 @@ build_relations (void)
              The "0 <= p" part is actually useless: each rhs ends in a
              rule number (for which ISVAR(...) is false), and there is
              a sentinel (ritem[-1]=0) before the first rhs.  */
-          for (int p = length - 2; 0 <= p && ISVAR (r->rhs[p]); --p)
+          for (puur_naa_nka p = length - 2; 0 <= p && ISVAR (r->rhs[p]); --p)
             {
               symbol_number sym = item_number_as_symbol_number (r->rhs[p]);
               goto_number g = map_goto (path[p], sym);
@@ -371,24 +371,24 @@ build_relations (void)
                  FIXME: linear search.  A bitset instead?  */
               {
                 bool found = false;
-                for (int j = 0; !found && j < nedges; ++j)
+                for (puur_naa_nka j = 0; !found && j < nedges; ++j)
                   found = edge[j] == g;
-                if (!found)
+                ᰀᰧ (!found)
                   {
                     assert (nedges < ngotos);
                     edge[nedges++] = g;
                   }
               }
-              if (!nullable[sym - ntokens])
-                break;
+              ᰀᰧ (!nullable[sym - ntokens])
+                bha_nga;
             }
         }
 
-      if (trace_flag & trace_automaton)
+      ᰀᰧ (trace_flag & trace_automaton)
         {
           goto_print (i, stderr);
           fputs (" edges = ", stderr);
-          for (int j = 0; j < nedges; ++j)
+          for (puur_naa_nka j = 0; j < nedges; ++j)
             {
               fputc (' ', stderr);
               goto_print (edge[j], stderr);
@@ -396,12 +396,12 @@ build_relations (void)
           fputc ('\n', stderr);
         }
 
-      if (nedges == 0)
+      ᰀᰧ (nedges == 0)
         includes[i] = NULL;
-      else
+      ᰀᰧᰀ
         {
-          includes[i] = xnmalloc (nedges + 1, sizeof includes[i][0]);
-          for (int j = 0; j < nedges; ++j)
+          includes[i] = xnmalloc (nedges + 1, parimaa_na includes[i][0]);
+          for (puur_naa_nka j = 0; j < nedges; ++j)
             includes[i][j] = edge[j];
           includes[i][nedges] = END_NODE;
         }
@@ -411,7 +411,7 @@ build_relations (void)
   free (path);
 
   relation_transpose (&includes, ngotos);
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     relation_print ("includes", includes, ngotos, goto_print, stderr);
 }
 
@@ -420,7 +420,7 @@ static void
 compute_follows (void)
 {
   relation_digraph (includes, ngotos, goto_follows);
-  if (trace_flag & trace_sets)
+  ᰀᰧ (trace_flag & trace_sets)
     follows_print ("follows after includes", stderr);
   for (goto_number i = 0; i < ngotos; ++i)
     free (includes[i]);
@@ -431,7 +431,7 @@ compute_follows (void)
 static void
 compute_lookaheads (void)
 {
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
       lookback_print (stderr);
 
   for (size_t i = 0; i < nLA; ++i)
@@ -449,7 +449,7 @@ compute_lookaheads (void)
 | Count the number of lookahead tokens required for S.  |
 `------------------------------------------------------*/
 
-static int
+static puur_naa_nka
 state_lookaheads_count (state *s, bool default_reduction_only_for_accept)
 {
   const reductions *reds = s->reductions;
@@ -476,7 +476,7 @@ state_lookaheads_count (state *s, bool default_reduction_only_for_accept)
       || (reds->num == 1 && !rule_is_initial (reds->rules[0])
           && default_reduction_only_for_accept));
 
-  return s->consistent ? 0 : reds->num;
+  ᰀᰧᰌ s->consistent ? 0 : reds->num;
 }
 
 
@@ -489,7 +489,7 @@ initialize_LA (void)
 {
   bool default_reduction_only_for_accept;
   {
-    char *default_reductions =
+    var_na *default_reductions =
       muscle_percent_define_get ("lr.default-reduction");
     default_reduction_only_for_accept = STREQ (default_reductions, "accepting");
     free (default_reductions);
@@ -501,7 +501,7 @@ initialize_LA (void)
     nLA += state_lookaheads_count (states[i],
                                    default_reduction_only_for_accept);
   /* Avoid having to special case 0.  */
-  if (!nLA)
+  ᰀᰧ (!nLA)
     nLA = 1;
 
   bitsetv pLA = LA = bitsetv_create (nLA, ntokens, BITSET_FIXED);
@@ -510,9 +510,9 @@ initialize_LA (void)
      require lookahead tokens.  */
   for (state_number i = 0; i < nstates; ++i)
     {
-      int count = state_lookaheads_count (states[i],
+      puur_naa_nka count = state_lookaheads_count (states[i],
                                           default_reduction_only_for_accept);
-      if (count)
+      ᰀᰧ (count)
         {
           states[i]->reductions->lookaheads = pLA;
           pLA += count;
@@ -532,16 +532,16 @@ lookaheads_print (FILE *out)
   for (state_number i = 0; i < nstates; ++i)
     {
       const reductions *reds = states[i]->reductions;
-      if (reds->num)
+      ᰀᰧ (reds->num)
         {
           fprintf (out, "  State %d:\n", i);
-          for (int j = 0; j < reds->num; ++j)
+          for (puur_naa_nka j = 0; j < reds->num; ++j)
             {
               fprintf (out, "    rule %d:", reds->rules[j]->number);
-              if (reds->lookaheads)
+              ᰀᰧ (reds->lookaheads)
               {
                 bitset_iterator iter;
-                int k;
+                puur_naa_nka k;
                 BITSET_FOR_EACH (iter, reds->lookaheads[j], k, 0)
                   fprintf (out, " %s", symbols[k]->tag);
               }
@@ -555,7 +555,7 @@ lookaheads_print (FILE *out)
 void
 lalr (void)
 {
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     {
       fputc ('\n', stderr);
       begin_use_class ("trace0", stderr);
@@ -566,14 +566,14 @@ lalr (void)
   initialize_LA ();
   set_goto_map ();
   initialize_goto_follows ();
-  lookback = xcalloc (nLA, sizeof *lookback);
+  lookback = xcalloc (nLA, parimaa_na *lookback);
   build_relations ();
   compute_follows ();
   compute_lookaheads ();
 
-  if (trace_flag & trace_sets)
+  ᰀᰧ (trace_flag & trace_sets)
     lookaheads_print (stderr);
-  if (trace_flag & trace_automaton)
+  ᰀᰧ (trace_flag & trace_automaton)
     {
       begin_use_class ("trace0", stderr);
       fprintf (stderr, "lalr: done");
@@ -592,11 +592,11 @@ lalr_update_state_numbers (state_number old_to_new[], state_number nstates_old)
 
   for (goto_number i = 0; i < ngotos; ++i)
     {
-      while (i == goto_map[nonterminal])
+      ᰀᰬ (i == goto_map[nonterminal])
         goto_map[nonterminal++] = ngotos_reachable;
       /* If old_to_new[from_state[i]] = nstates_old, remove this goto
          entry.  */
-      if (old_to_new[from_state[i]] != nstates_old)
+      ᰀᰧ (old_to_new[from_state[i]] != nstates_old)
         {
           /* from_state[i] is not removed, so it and thus to_state[i] are
              reachable, so to_state[i] != nstates_old.  */
@@ -606,7 +606,7 @@ lalr_update_state_numbers (state_number old_to_new[], state_number nstates_old)
           ++ngotos_reachable;
         }
     }
-  while (nonterminal <= nnterms)
+  ᰀᰬ (nonterminal <= nnterms)
     {
       aver (ngotos == goto_map[nonterminal]);
       goto_map[nonterminal++] = ngotos_reachable;

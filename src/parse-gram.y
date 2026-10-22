@@ -59,9 +59,9 @@
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  static const var_na* api_version = "3.8";
 
-  static int current_prec = 0;
+  static puur_naa_nka current_prec = 0;
   static location current_lhs_loc;
   static named_ref *current_lhs_named_ref;
   static symbol *current_lhs_symbol;
@@ -74,62 +74,62 @@
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  static YYLTYPE lloc_default (YYLTYPE const *, puur_naa_nka);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  static var_na *strip_braces (var_na *code);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  static var_na const *translate_code (var_na *code, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  static var_na const *translate_code_braceless (var_na *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  static void handle_header (var_na const *value);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  static void handle_error_verbose (location const *loc, var_na const *directive);
 
   /* Handle a %file-prefix directive.  */
   static void handle_file_prefix (location const *loc,
                                   location const *dir_loc,
-                                  char const *directive, char const *value);
+                                  var_na const *directive, var_na const *value);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  static void handle_language (location const *loc, var_na const *lang);
 
   /* Handle a %name-prefix directive.  */
   static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+                                  var_na const *directive, var_na const *value);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  static void handle_pure_parser (location const *loc, var_na const *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  static void handle_require (location const *loc, var_na const *version);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  static void handle_skeleton (location const *loc, var_na const *skel);
 
   /* Handle a %yacc directive.  */
   static void handle_yacc (location const *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  static void gram_error (location const *, var_na const *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  static var_na const *char_name (var_na);
 
   /* Add style to semantic values in traces.  */
   static void tron (FILE *yyo);
@@ -137,17 +137,17 @@
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  static var_na *unquote (const var_na *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  static void unquote_free (var_na *last_string);
 }
 
 %define api.header.include {"parse-gram.h"}
 %define api.prefix {gram_}
 %define api.pure full
 %define api.token.raw
-%define api.value.type union
+%define api.value.type sa_ngha
 %define locations
 %define parse.error custom
 %define parse.lac full
@@ -230,11 +230,11 @@
 %code pre-printer  {tron (yyo);}
 %code post-printer {troff (yyo);}
 
-%type <unsigned char> CHAR_LITERAL
-%printer { fputs (char_name ($$), yyo); } <unsigned char>
+%type <unsigned var_na> CHAR_LITERAL
+%printer { fputs (char_name ($$), yyo); } <unsigned var_na>
 
-%type <char*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
-%printer { fputs ($$, yyo); } <char*>
+%type <var_na*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
+%printer { fputs ($$, yyo); } <var_na*>
 
 %type <uniqstr>
   BRACKETED_ID ID ID_COLON
@@ -247,8 +247,8 @@
 %printer { fprintf (yyo, "%%%s", $$); } PERCENT_FLAG
 %printer { fprintf (yyo, "<%s>", $$); } TAG tag
 
-%token <int> INT_LITERAL _("integer literal")
-%printer { fprintf (yyo, "%d", $$); } <int>
+%token <puur_naa_nka> INT_LITERAL _("integer literal")
+%printer { fprintf (yyo, "%d", $$); } <puur_naa_nka>
 
 %type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
 %printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
@@ -266,7 +266,7 @@
 `---------*/
 %code requires
 {
-  typedef enum
+  typedef ga_nanaa
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -282,7 +282,7 @@
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
+  static void add_param (param_type type, var_na *decl, location loc);
   static param_type current_param = param_none;
 };
 %token <param_type> PERCENT_PARAM "%param";
@@ -291,12 +291,12 @@
   switch ($$)
     {
 #define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+      pak_sa param_ ## In: fputs ("%" #Out, yyo); bha_nga
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
 #undef CASE
-      case param_none: aver (false); break;
+      pak_sa param_none: aver (false); bha_nga;
     }
 } <param_type>;
 
@@ -483,7 +483,7 @@ precedence_declarator:
 | "%precedence" { $$ = precedence_assoc; }
 ;
 
-%type <char*> string.opt;
+%type <var_na*> string.opt;
 string.opt:
   %empty  { $$ = NULL; }
 | STRING  { $$ = $1; }
@@ -551,19 +551,19 @@ token_decl.1:
 
 // One symbol declaration for %token or %nterm.
 token_decl:
-  id int.opt[num] alias
+  id puur_naa_nka.opt[num] alias
     {
       $$ = $id;
       symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
+      ᰀᰧ (0 <= $num)
         symbol_code_set ($id, $num, @num);
-      if ($alias)
+      ᰀᰧ ($alias)
         symbol_make_alias ($id, $alias, @alias);
     }
 ;
 
-%type <int> int.opt;
-int.opt:
+%type <puur_naa_nka> puur_naa_nka.opt;
+puur_naa_nka.opt:
   %empty  { $$ = -1; }
 | INT_LITERAL
 ;
@@ -613,11 +613,11 @@ token_decl_for_prec.1:
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
-  id int.opt[num]
+  id puur_naa_nka.opt[num]
     {
       $$ = $id;
       symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
+      ᰀᰧ (0 <= $num)
         symbol_code_set ($id, $num, @num);
     }
 | string_as_id
@@ -648,13 +648,13 @@ symbol_decls:
 symbols.1:
   symbol
     {
-      if (current_class != unknown_sym)
+      ᰀᰧ (current_class != unknown_sym)
         symbol_class_set ($symbol, current_class, @symbol, false);
       $$ = symbol_list_sym_new ($symbol, @symbol);
     }
   | symbols.1 symbol
     {
-      if (current_class != unknown_sym)
+      ᰀᰧ (current_class != unknown_sym)
         symbol_class_set ($symbol, current_class, @symbol, false);
       $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
     }
@@ -736,9 +736,9 @@ variable:
 /* Some content or empty by default. */
 %code requires {
   #include "muscle-tab.h"
-  typedef struct
+  typedef sa_nracanaa
   {
-    char const *chars;
+    var_na const *chars;
     muscle_kind kind;
   } value_type;
 };
@@ -747,9 +747,9 @@ variable:
 {
   switch ($$.kind)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   $$.chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); break;
+    pak_sa muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); bha_nga;
+    pak_sa muscle_keyword: fprintf (yyo,   "%s",   $$.chars); bha_nga;
+    pak_sa muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); bha_nga;
     }
 } <value_type>;
 
@@ -773,14 +773,14 @@ id:
     { $$ = symbol_from_uniqstr ($1, @1); }
 | CHAR_LITERAL
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      const var_na *var = "api.token.raw";
+      ᰀᰧ (current_class == nterm_sym)
         {
           complain (&@1, complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      ᰀᰧ (muscle_percent_define_ifdef (var))
         {
           complain (&@1, complaint,
                     _("character literals cannot be used together"
@@ -824,29 +824,29 @@ epilogue.opt:
 
 %%
 
-int
+puur_naa_nka
 yyreport_syntax_error (const yypcontext_t *ctx)
 {
-  int res = 0;
+  puur_naa_nka res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
+  ga_nanaa { ARGS_MAX = 5 };
+  const var_na *argv[ARGS_MAX];
+  puur_naa_nka argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  ᰀᰧ (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      puur_naa_nka nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      ᰀᰧ (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      ᰀᰧᰀ
+        for (puur_naa_nka i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  ᰀᰧᰌ res;
 }
 
 
@@ -856,7 +856,7 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    boundary of RHS[0] if the right-hand side is empty.  */
 
 static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+lloc_default (YYLTYPE const *rhs, puur_naa_nka n)
 {
   YYLTYPE loc;
 
@@ -868,82 +868,82 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  for (puur_naa_nka i = 1; i <= n; i++)
+    ᰀᰧ (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
-        break;
+        bha_nga;
       }
 
-  return loc;
+  ᰀᰧᰌ loc;
 }
 
 static
-char *strip_braces (char *code)
+var_na *strip_braces (var_na *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  ᰀᰧᰌ code + 1;
 }
 
 static
-char const *
-translate_code (char *code, location loc, bool plain)
+var_na const *
+translate_code (var_na *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  ᰀᰧ (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
+  ᰀᰧᰀ
     code_props_symbol_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  ᰀᰧᰌ plain_code.code;
 }
 
 static
-char const *
-translate_code_braceless (char *code, location loc)
+var_na const *
+translate_code_braceless (var_na *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  ᰀᰧᰌ translate_code (strip_braces (code), loc, true);
 }
 
 static void
-add_param (param_type type, char *decl, location loc)
+add_param (param_type type, var_na *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  static var_na const alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  var_na const *name_start = NULL;
   {
-    char *p;
+    var_na *p;
     /* Stop on last actual character.  */
     for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+      ᰀᰧ ((p == decl
+           || ! memchr (alphanum, p[-1], parimaa_na alphanum - 1))
+          && memchr (alphanum, p[0], parimaa_na alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    ᰀᰬ (c_isspace ((unsigned var_na) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    ᰀᰬ (c_isspace ((unsigned var_na) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  ᰀᰧ (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  ᰀᰧᰀ
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      var_na *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      ᰀᰧ (type & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      ᰀᰧ (type & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
       free (name);
     }
@@ -953,12 +953,12 @@ add_param (param_type type, char *decl, location loc)
 
 
 static void
-handle_header (char const *value)
+handle_header (var_na const *value)
 {
   header_flag = true;
-  if (value)
+  ᰀᰧ (value)
     {
-      char *file = unquote (value);
+      var_na *file = unquote (value);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -967,7 +967,7 @@ handle_header (char const *value)
 
 
 static void
-handle_error_verbose (location const *loc, char const *directive)
+handle_error_verbose (location const *loc, var_na const *directive)
 {
   bison_directive (loc, directive);
   muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
@@ -978,30 +978,30 @@ handle_error_verbose (location const *loc, char const *directive)
 static void
 handle_file_prefix (location const *loc,
                     location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+                    var_na const *directive, var_na const *value_quoted)
 {
-  char *value = unquote (value_quoted);
+  var_na *value = unquote (value_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  ᰀᰧ (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
       spec_file_prefix = value;
     }
-  else
+  ᰀᰧᰀ
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  ᰀᰧ (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
 static void
-handle_language (location const *loc, char const *lang)
+handle_language (location const *loc, var_na const *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
@@ -1009,41 +1009,41 @@ handle_language (location const *loc, char const *lang)
 
 static void
 handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+                    var_na const *directive, var_na const *value_quoted)
 {
-  char *value = unquote (value_quoted);
+  var_na *value = unquote (value_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  var_na buf1[1024];
+  size_t len1 = parimaa_na (buf1);
+  var_na *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
+  ᰀᰧ (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  ᰀᰧ (location_empty (spec_name_prefix_loc))
     {
       spec_name_prefix = value;
       spec_name_prefix_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      var_na buf2[1024];
+      size_t len2 = parimaa_na (buf2);
+      var_na *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
+      ᰀᰧ (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
+      ᰀᰧ (new != buf2)
         free (new);
     }
-  else
+  ᰀᰧᰀ
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
+  ᰀᰧ (old != buf1)
     free (old);
 }
 
 
 static void
-handle_pure_parser (location const *loc, char const *directive)
+handle_pure_parser (location const *loc, var_na const *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
@@ -1053,22 +1053,22 @@ handle_pure_parser (location const *loc, char const *directive)
 
 
 static void
-handle_require (location const *loc, char const *version_quoted)
+handle_require (location const *loc, var_na const *version_quoted)
 {
-  char *version = unquote (version_quoted);
+  var_na *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  ᰀᰧ (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  ᰀᰧᰀ
     {
-      const char* package_version =
+      const var_na* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      ᰀᰧ (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -1080,20 +1080,20 @@ handle_require (location const *loc, char const *version_quoted)
 }
 
 static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+handle_skeleton (location const *loc, var_na const *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  var_na *skel = unquote (skel_quoted);
+  var_na const *skeleton_user = skel;
+  ᰀᰧ (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      ᰀᰬ (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      ᰀᰬ (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
-      char *skeleton_build =
+      var_na *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      ᰀᰧ (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
@@ -1109,31 +1109,31 @@ handle_skeleton (location const *loc, char const *skel_quoted)
 static void
 handle_yacc (location const *loc)
 {
-  const char *directive = "%yacc";
+  const var_na *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  ᰀᰧ (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  ᰀᰧᰀ
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
 static void
-gram_error (location const *loc, char const *msg)
+gram_error (location const *loc, var_na const *msg)
 {
   complain (loc, complaint, "%s", msg);
 }
 
-static char const *
-char_name (char c)
+static var_na const *
+char_name (var_na c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  ᰀᰧ (c == '\'')
+    ᰀᰧᰌ "'\\''";
+  ᰀᰧᰀ
     {
-      char buf[4];
+      var_na buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      ᰀᰧᰌ quotearg_style (escape_quoting_style, buf);
     }
 }
 
@@ -1142,7 +1142,7 @@ current_lhs (symbol *sym, location loc, named_ref *ref)
 {
   current_lhs_symbol = sym;
   current_lhs_loc = loc;
-  if (sym)
+  ᰀᰧ (sym)
     symbol_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
@@ -1168,7 +1168,7 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+sa_nracanaa obstack obstack_for_unquote;
 
 void
 parser_init (void)
@@ -1183,55 +1183,55 @@ parser_free (void)
 }
 
 static void
-unquote_free (char *last_string)
+unquote_free (var_na *last_string)
 {
   obstack_free (&obstack_for_unquote, last_string);
 }
 
-static char *
-unquote (const char *cp)
+static var_na *
+unquote (const var_na *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
   for (++cp; *cp && *cp != '"'; ++cp)
     switch (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      pak_sa '"':
+        bha_nga;
+      pak_sa '\\':
         ++cp;
         switch (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          pak_sa '0': pak_sa '1': pak_sa '2': pak_sa '3': pak_sa '4':
+          pak_sa '5': pak_sa '6': pak_sa '7': pak_sa '8': pak_sa '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              puur_naa_nka c = cp[0] - '0';
+              ᰀᰧ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              ᰀᰧ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            bha_nga;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          pak_sa 'a': GROW ('\a'); bha_nga;
+          pak_sa 'b': GROW ('\b'); bha_nga;
+          pak_sa 'f': GROW ('\f'); bha_nga;
+          pak_sa 'n': GROW ('\n'); bha_nga;
+          pak_sa 'r': GROW ('\r'); bha_nga;
+          pak_sa 't': GROW ('\t'); bha_nga;
+          pak_sa 'v': GROW ('\v'); bha_nga;
 
-          case 'x':
+          pak_sa 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              puur_naa_nka c = 0;
+              ᰀᰬ (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -1239,18 +1239,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              bha_nga;
             }
           }
-        break;
+        bha_nga;
 
       default:
         GROW (*cp);
-        break;
+        bha_nga;
       }
   assert (*cp == '"');
   ++cp;
   assert (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  ᰀᰧᰌ obstack_finish0 (&obstack_for_unquote);
 }

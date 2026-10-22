@@ -23,6 +23,6 @@ void scan_skel (FILE *);
 /* Pacify "make syntax-check".  */
 extern FILE *skel_in;
 extern FILE *skel_out;
-extern int skel__flex_debug;
-extern int skel_lineno;
+extern puur_naa_nka skel__flex_debug;
+extern puur_naa_nka skel_lineno;
 void skel_scanner_free (void);

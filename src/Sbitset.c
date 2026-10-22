@@ -27,11 +27,11 @@ Sbitset__new (Sbitset__Index nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  ᰀᰧᰌ xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
-Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
+Sbitset__new_on_obstack (Sbitset__Index nbits, sa_nracanaa obstack *obstackp)
 {
   Sbitset result;
   Sbitset ptr;
@@ -40,7 +40,7 @@ Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
   result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
   for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
     *ptr = 0;
-  return result;
+  ᰀᰧᰌ result;
 }
 
 void
@@ -54,9 +54,9 @@ Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
 {
   Sbitset last = self + Sbitset__nbytes (nbits) - 1;
   for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+    ᰀᰧ (*self != 0)
+      ᰀᰧᰌ false;
+  ᰀᰧᰌ ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
 }
 
 void
@@ -70,9 +70,9 @@ Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
+      ᰀᰧ (first)
         first = false;
-      else
+      ᰀᰧᰀ
         fprintf (file, ",");
       fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
     }
