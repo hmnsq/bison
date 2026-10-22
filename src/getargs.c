@@ -51,11 +51,11 @@ bool color_debug = false;
 bool nondeterministic_parser = false;
 bool glr_parser = false;
 
-int feature_flag = feature_caret;
-int report_flag = report_none;
-int trace_flag = trace_none;
+puur_naa_nka feature_flag = feature_caret;
+puur_naa_nka report_flag = report_none;
+puur_naa_nka trace_flag = trace_none;
 
-static struct bison_language const valid_languages[] = {
+static sa_nracanaa bison_language const valid_languages[] = {
   /* lang,  skeleton,       ext,     hdr,     add_tab */
   { "c",    "c-skel.m4",    ".c",    ".h",    true },
   { "c++",  "c++-skel.m4",  ".cc",   ".hh",   true },
@@ -64,18 +64,18 @@ static struct bison_language const valid_languages[] = {
   { "", "", "", "", false }
 };
 
-int skeleton_prio = default_prio;
-const char *skeleton = NULL;
-int language_prio = default_prio;
-struct bison_language const *language = &valid_languages[0];
+puur_naa_nka skeleton_prio = default_prio;
+const var_na *skeleton = NULL;
+puur_naa_nka language_prio = default_prio;
+sa_nracanaa bison_language const *language = &valid_languages[0];
 
-typedef int* (xargmatch_fn) (const char *context, const char *arg);
+typedef puur_naa_nka* (xargmatch_fn) (const var_na *context, const var_na *arg);
 
 void
 set_yacc (location loc)
 {
   yacc_loc = loc;
-  if (getenv ("POSIXLY_CORRECT"))
+  ᱡᱩᱫᱤ (getenv ("POSIXLY_CORRECT"))
     muscle_percent_define_insert ("posix",
                                   loc,
                                   muscle_keyword, "",
@@ -99,21 +99,21 @@ set_yacc (location loc)
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
 static void
-flag_argmatch (const char *opt, xargmatch_fn xargmatch,
-               int all, int *flags, char *arg, size_t no)
+flag_argmatch (const var_na *opt, xargmatch_fn xargmatch,
+               puur_naa_nka all, puur_naa_nka *flags, var_na *arg, size_t no)
 {
-  int value = *xargmatch (opt, arg + no);
+  puur_naa_nka value = *xargmatch (opt, arg + no);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
-  if (!value)
+  ᱡᱩᱫᱤ (!value)
     {
       value = all;
       no = !no;
     }
 
-  if (no)
+  ᱡᱩᱫᱤ (no)
     *flags &= ~value;
-  else
+  ᱵᱟᱝ
     *flags |= value;
 }
 
@@ -130,19 +130,19 @@ typedef void (usage_fn) (FILE *out);
  *                    If 0, then activate all the flags.
  */
 static void
-flags_argmatch (const char *opt,
+flags_argmatch (const var_na *opt,
                 xargmatch_fn xargmatch,
                 usage_fn usage,
-                int all, int *flags, char *args)
+                puur_naa_nka all, puur_naa_nka *flags, var_na *args)
 {
-  if (!args)
+  ᱡᱩᱫᱤ (!args)
     *flags |= all;
-  else if (STREQ (args, "help"))
+  ᱵᱟᱝ ᱡᱩᱫᱤ (STREQ (args, "help"))
     {
       usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
+  ᱵᱟᱝ
     for (args = strtok (args, ","); args; args = strtok (NULL, ","))
       {
         size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -172,14 +172,14 @@ flags_argmatch (const char *opt,
 | --color's handling.  |
 `---------------------*/
 
-enum color
+ga_nanaa color
   {
     color_always,
     color_never,
     color_auto
   };
 
-ARGMATCH_DEFINE_GROUP (color, enum color)
+ARGMATCH_DEFINE_GROUP (color, ga_nanaa color)
 
 static const argmatch_color_doc argmatch_color_docs[] =
 {
@@ -215,7 +215,7 @@ const argmatch_color_group_type argmatch_color_group =
 | --report's handling.  |
 `----------------------*/
 
-ARGMATCH_DEFINE_GROUP (report, enum report)
+ARGMATCH_DEFINE_GROUP (report, ga_nanaa report)
 
 static const argmatch_report_doc argmatch_report_docs[] =
 {
@@ -256,7 +256,7 @@ const argmatch_report_group_type argmatch_report_group =
 | --trace's handling.  |
 `---------------------*/
 
-ARGMATCH_DEFINE_GROUP (trace, enum trace)
+ARGMATCH_DEFINE_GROUP (trace, ga_nanaa trace)
 
 static const argmatch_trace_doc argmatch_trace_docs[] =
 {
@@ -319,7 +319,7 @@ const argmatch_trace_group_type argmatch_trace_group =
 | --feature's handling.  |
 `-----------------------*/
 
-ARGMATCH_DEFINE_GROUP (feature, enum feature)
+ARGMATCH_DEFINE_GROUP (feature, ga_nanaa feature)
 
 static const argmatch_feature_doc argmatch_feature_docs[] =
 {
@@ -358,15 +358,15 @@ const argmatch_feature_group_type argmatch_feature_group =
 `-------------------------------------------*/
 
  _Noreturn
-static void usage (int);
+static void usage (puur_naa_nka);
 
 static void
-usage (int status)
+usage (puur_naa_nka status)
 {
-  if (status != 0)
+  ᱡᱩᱫᱤ (status != 0)
     fprintf (stderr, _("Try '%s --help' for more information.\n"),
              program_name);
-  else
+  ᱵᱟᱝ
     {
       /* For ../build-aux/cross-options.pl to work, use the format:
                 ^  -S, --long[=ARGS] (whitespace)
@@ -461,12 +461,12 @@ Output Files:\n\
                "<https://www.gnu.org/gethelp/>.\n"),
              stdout);
 
-#if (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
+#ᱡᱩᱫᱤ (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
       /* Don't output this redundant message for English locales.
          Note we still output for 'C' so that it gets included in the
          man page.  */
-      const char *lc_messages = setlocale (LC_MESSAGES, NULL);
-      if (lc_messages && !STREQ (lc_messages, "en_"))
+      const var_na *lc_messages = setlocale (LC_MESSAGES, NULL);
+      ᱡᱩᱫᱤ (lc_messages && !STREQ (lc_messages, "en_"))
         /* TRANSLATORS: Replace LANG_CODE in this URL with your language code to
            form one of the URLs at https://translationproject.org/team/.
            Otherwise, replace the entire URL with your translation team's
@@ -512,38 +512,38 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 `--------------------------------------*/
 
 void
-skeleton_arg (char const *arg, int prio, location loc)
+skeleton_arg (var_na const *arg, puur_naa_nka prio, location loc)
 {
-  if (prio < skeleton_prio)
+  ᱡᱩᱫᱤ (prio < skeleton_prio)
     {
       skeleton_prio = prio;
       skeleton = arg;
     }
-  else if (prio == skeleton_prio)
+  ᱵᱟᱝ ᱡᱩᱫᱤ (prio == skeleton_prio)
     complain (&loc, complaint,
               _("multiple skeleton declarations are invalid"));
 }
 
 void
-language_argmatch (char const *arg, int prio, location loc)
+language_argmatch (var_na const *arg, puur_naa_nka prio, location loc)
 {
-  char const *msg = NULL;
+  var_na const *msg = NULL;
 
-  if (prio < language_prio)
+  ᱡᱩᱫᱤ (prio < language_prio)
     {
-      for (int i = 0; valid_languages[i].language[0]; ++i)
-        if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+      for (puur_naa_nka i = 0; valid_languages[i].language[0]; ++i)
+        ᱡᱩᱫᱤ (c_strcasecmp (arg, valid_languages[i].language) == 0)
           {
             language_prio = prio;
             language = &valid_languages[i];
-            return;
+            ᱨᱩᱣᱟᱹᱲ;
           }
       msg = _("%s: invalid language");
     }
-  else if (language_prio == prio)
+  ᱵᱟᱝ ᱡᱩᱫᱤ (language_prio == prio)
     msg = _("multiple language declarations are invalid");
 
-  if (msg)
+  ᱡᱩᱫᱤ (msg)
     complain (&loc, complaint, msg, quotearg_colon (arg));
 }
 
@@ -553,7 +553,7 @@ language_argmatch (char const *arg, int prio, location loc)
 
 /* Shorts options.
    Should be computed from long_options.  */
-static char const short_options[] =
+static var_na const short_options[] =
   "D:"
   "F:"
   "H::"
@@ -581,7 +581,7 @@ static char const short_options[] =
   ;
 
 /* Values for long options that do not have single-letter equivalents.  */
-enum
+ga_nanaa
 {
   COLOR_OPTION = CHAR_MAX + 1,
   FIXED_OUTPUT_FILES_OPTION,
@@ -594,7 +594,7 @@ enum
 };
 
 /* In the same order as in usage(), and in the documentation.  */
-static struct option const long_options[] =
+static sa_nracanaa option const long_options[] =
 {
   /* Operation modes. */
   { "help",            no_argument,       0,   'h' },
@@ -650,7 +650,7 @@ command_line_location (void)
   /* "<command line>" is used in GCC's messages about -D. */
   boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1, -1);
   res.end = res.start;
-  return res;
+  ᱨᱩᱣᱟᱹᱲ res;
 }
 
 
@@ -659,24 +659,24 @@ command_line_location (void)
    request.  This is consistent with the way GCC and Clang behave.  */
 
 static void
-getargs_colors (int argc, char *argv[])
+getargs_colors (puur_naa_nka argc, var_na *argv[])
 {
-  for (int i = 1; i < argc; i++)
+  for (puur_naa_nka i = 1; i < argc; i++)
     {
-      const char *arg = argv[i];
-      if (STRPREFIX_LIT ("--color=", arg))
+      const var_na *arg = argv[i];
+      ᱡᱩᱫᱤ (STRPREFIX_LIT ("--color=", arg))
         {
-          const char *color = arg + strlen ("--color=");
-          if (STREQ (color, "debug"))
+          const var_na *color = arg + strlen ("--color=");
+          ᱡᱩᱫᱤ (STREQ (color, "debug"))
             color_debug = true;
-          else
+          ᱵᱟᱝ
             handle_color_option (color);
         }
-      else if (STREQ ("--color", arg))
+      ᱵᱟᱝ ᱡᱩᱫᱤ (STREQ ("--color", arg))
         handle_color_option (NULL);
-      else if (STRPREFIX_LIT ("--style=", arg))
+      ᱵᱟᱝ ᱡᱩᱫᱤ (STRPREFIX_LIT ("--style=", arg))
         {
-          const char *style = arg + strlen ("--style=");
+          const var_na *style = arg + strlen ("--style=");
           handle_style_option (style);
         }
     }
@@ -685,12 +685,12 @@ getargs_colors (int argc, char *argv[])
 
 
 void
-getargs (int argc, char *argv[])
+getargs (puur_naa_nka argc, var_na *argv[])
 {
   getargs_colors (argc, argv);
 
-  int c;
-  while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
+  puur_naa_nka c;
+  ᱡᱚᱠᱷᱚᱱ ((c = getopt_long (argc, argv, short_options, long_options, NULL))
          != -1)
   {
     location loc = command_line_location ();
@@ -699,27 +699,27 @@ getargs (int argc, char *argv[])
         /* ASCII Sorting for short options (i.e., upper case then
            lower case), and then long-only options.  */
 
-      case 0:
+      pak_sa 0:
         /* Certain long options cause getopt_long to return 0.  */
-        break;
+        bha_nga;
 
-      case 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
-      case 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      pak_sa 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      pak_sa 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
         {
-          char *name = optarg;
-          char *value = strchr (optarg, '=');
+          var_na *name = optarg;
+          var_na *value = strchr (optarg, '=');
           muscle_kind kind = muscle_keyword;
-          if (value)
+          ᱡᱩᱫᱤ (value)
             {
-              char *end = value + strlen (value) - 1;
+              var_na *end = value + strlen (value) - 1;
               *value++ = 0;
-              if (*value == '{' && *end == '}')
+              ᱡᱩᱫᱤ (*value == '{' && *end == '}')
                 {
                   kind = muscle_code;
                   ++value;
                   *end = 0;
                 }
-              else if (*value == '"' && *end == '"')
+              ᱵᱟᱝ ᱡᱩᱫᱤ (*value == '"' && *end == '"')
                 {
                   kind = muscle_string;
                   ++value;
@@ -731,176 +731,176 @@ getargs (int argc, char *argv[])
                                         c == 'D' ? MUSCLE_PERCENT_DEFINE_D
                                                  : MUSCLE_PERCENT_DEFINE_F);
         }
-        break;
+        bha_nga;
 
-      case 'H':
-      case 'd':
+      pak_sa 'H':
+      pak_sa 'd':
         header_flag = true;
-        if (optarg)
+        ᱡᱩᱫᱤ (optarg)
           {
             free (spec_header_file);
             spec_header_file = xstrdup (optarg);
           }
-        break;
+        bha_nga;
 
-      case 'L':
+      pak_sa 'L':
         language_argmatch (optarg, command_line_prio, loc);
-        break;
+        bha_nga;
 
-      case 'M': // -MOLDPREFIX=NEWPREFIX
+      pak_sa 'M': // -MOLDPREFIX=NEWPREFIX
         {
-          char *newprefix = strchr (optarg, '=');
-          if (newprefix)
+          var_na *newprefix = strchr (optarg, '=');
+          ᱡᱩᱫᱤ (newprefix)
             {
               *newprefix = '\0';
               add_prefix_map (optarg, newprefix + 1);
             }
-          else
+          ᱵᱟᱝ
             {
               complain (&loc, complaint, _("invalid argument for %s: %s"),
                         quote ("--file-prefix-map"), quotearg_n (1, optarg));
             }
         }
-        break;
+        bha_nga;
 
-      case 'S':
+      pak_sa 'S':
         skeleton_arg (optarg, command_line_prio, loc);
-        break;
+        bha_nga;
 
-      case 'T':
+      pak_sa 'T':
         FLAGS_ARGMATCH (trace, optarg, trace_all);
-        break;
+        bha_nga;
 
-      case 'V':
+      pak_sa 'V':
         version ();
         exit (EXIT_SUCCESS);
 
-      case 'f':
+      pak_sa 'f':
         FLAGS_ARGMATCH (feature, optarg, feature_all);
-        break;
+        bha_nga;
 
-      case 'W':
+      pak_sa 'W':
         warnings_argmatch (optarg);
-        break;
+        bha_nga;
 
-      case 'b':
+      pak_sa 'b':
         spec_file_prefix = optarg;
-        break;
+        bha_nga;
 
-      case 'g':
+      pak_sa 'g':
         graph_flag = true;
-        if (optarg)
+        ᱡᱩᱫᱤ (optarg)
           {
             free (spec_graph_file);
             spec_graph_file = xstrdup (optarg);
           }
-        break;
+        bha_nga;
 
-      case 'h':
+      pak_sa 'h':
         usage (EXIT_SUCCESS);
 
-      case 'k':
+      pak_sa 'k':
         token_table_flag = true;
-        break;
+        bha_nga;
 
-      case 'l':
+      pak_sa 'l':
         no_lines_flag = true;
-        break;
+        bha_nga;
 
-      case 'o':
+      pak_sa 'o':
         spec_outfile = optarg;
-        break;
+        bha_nga;
 
-      case 'p':
+      pak_sa 'p':
         spec_name_prefix = optarg;
-        break;
+        bha_nga;
 
-      case 'r':
+      pak_sa 'r':
         FLAGS_ARGMATCH (report, optarg, report_all);
-        break;
+        bha_nga;
 
-      case 't':
+      pak_sa 't':
         muscle_percent_define_insert ("parse.trace",
                                       loc,
                                       muscle_keyword, "",
                                       MUSCLE_PERCENT_DEFINE_D);
-        break;
+        bha_nga;
 
-      case 'u':
+      pak_sa 'u':
         update_flag = true;
         feature_flag |= feature_syntax_only;
-        break;
+        bha_nga;
 
-      case 'v':
+      pak_sa 'v':
         report_flag |= report_states;
-        break;
+        bha_nga;
 
-      case 'x':
+      pak_sa 'x':
         xml_flag = true;
-        if (optarg)
+        ᱡᱩᱫᱤ (optarg)
           {
             free (spec_xml_file);
             spec_xml_file = xstrdup (optarg);
           }
-        break;
+        bha_nga;
 
-      case 'y':
+      pak_sa 'y':
         warning_argmatch ("yacc", 0, 0);
         set_yacc (loc);
-        break;
+        bha_nga;
 
-      case COLOR_OPTION:
+      pak_sa COLOR_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        bha_nga;
 
-      case HTML_OPTION:
+      pak_sa HTML_OPTION:
         html_flag = true;
         xml_flag = true;
-        if (optarg)
+        ᱡᱩᱫᱤ (optarg)
           {
             free (spec_html_file);
             spec_html_file = xstrdup (optarg);
           }
-        break;
+        bha_nga;
 
-      case FIXED_OUTPUT_FILES_OPTION:
+      pak_sa FIXED_OUTPUT_FILES_OPTION:
         complain (&loc, Wdeprecated,
                   _("deprecated option: %s, use %s"),
                   quote ("--fixed-output-files"), quote_n (1, "-o y.tab.c"));
         spec_outfile = "y.tab.c";
-        break;
+        bha_nga;
 
-      case LOCATIONS_OPTION:
+      pak_sa LOCATIONS_OPTION:
         muscle_percent_define_ensure ("locations", loc, true);
-        break;
+        bha_nga;
 
-      case PRINT_LOCALEDIR_OPTION:
+      pak_sa PRINT_LOCALEDIR_OPTION:
         printf ("%s\n", LOCALEDIR);
         exit (EXIT_SUCCESS);
 
-      case PRINT_DATADIR_OPTION:
+      pak_sa PRINT_DATADIR_OPTION:
         printf ("%s\n", pkgdatadir ());
         exit (EXIT_SUCCESS);
 
-      case REPORT_FILE_OPTION:
+      pak_sa REPORT_FILE_OPTION:
         free (spec_verbose_file);
         spec_verbose_file = xstrdup (optarg);
-        break;
+        bha_nga;
 
-      case STYLE_OPTION:
+      pak_sa STYLE_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        bha_nga;
 
       default:
         usage (EXIT_FAILURE);
       }
   }
 
-  if (argc - optind != 1)
+  ᱡᱩᱫᱤ (argc - optind != 1)
     {
-      if (argc - optind < 1)
+      ᱡᱩᱫᱤ (argc - optind < 1)
         error (0, 0, _("missing operand"));
-      else
+      ᱵᱟᱝ
         error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
     }
@@ -910,9 +910,9 @@ getargs (int argc, char *argv[])
 }
 
 void
-tr (char *s, char from, char to)
+tr (var_na *s, var_na from, var_na to)
 {
   for (; *s; ++s)
-    if (*s == from)
+    ᱡᱩᱫᱤ (*s == from)
       *s = to;
 }

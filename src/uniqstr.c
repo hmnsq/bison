@@ -36,43 +36,43 @@
 /* Initial capacity of uniqstr hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *uniqstrs_table = NULL;
+static sa_nracanaa hash_table *uniqstrs_table = NULL;
 
 /*-------------------------------------.
 | Create the uniqstr for S if needed.  |
 `-------------------------------------*/
 
 uniqstr
-uniqstr_new (char const *str)
+uniqstr_new (var_na const *str)
 {
   uniqstr res = hash_lookup (uniqstrs_table, str);
-  if (!res)
+  ᱡᱩᱫᱤ (!res)
     {
       /* First insertion in the hash. */
       res = xstrdup (str);
       hash_xinsert (uniqstrs_table, res);
     }
-  return res;
+  ᱨᱩᱣᱟᱹᱲ res;
 }
 
 uniqstr
-uniqstr_concat (int nargs, ...)
+uniqstr_concat (puur_naa_nka nargs, ...)
 {
   va_list args;
 
   va_start (args, nargs);
   size_t reslen = 0;
-  for (int i = 0; i < nargs; i++)
-    reslen += strlen (va_arg (args, char const *));
+  for (puur_naa_nka i = 0; i < nargs; i++)
+    reslen += strlen (va_arg (args, var_na const *));
   va_end (args);
 
-  char *str = xmalloc (reslen + 1);
-  char *p = str;
+  var_na *str = xmalloc (reslen + 1);
+  var_na *p = str;
 
   va_start (args, nargs);
-  for (int i = 0; i < nargs; i++)
+  for (puur_naa_nka i = 0; i < nargs; i++)
     {
-      char const *arg = va_arg (args, char const *);
+      var_na const *arg = va_arg (args, var_na const *);
       size_t arglen = strlen (arg);
       memcpy (p, arg, arglen);
       p += arglen;
@@ -81,9 +81,9 @@ uniqstr_concat (int nargs, ...)
 
   *p = '\0';
   uniqstr res = hash_xinsert (uniqstrs_table, str);
-  if (res != str)
+  ᱡᱩᱫᱤ (res != str)
     free (str);
-  return res;
+  ᱨᱩᱣᱟᱹᱲ res;
 }
 
 /*------------------------------.
@@ -91,10 +91,10 @@ uniqstr_concat (int nargs, ...)
 `------------------------------*/
 
 void
-uniqstr_assert (char const *str)
+uniqstr_assert (var_na const *str)
 {
   uniqstr s = hash_lookup (uniqstrs_table, str);
-  if (!s || s != str)
+  ᱡᱩᱫᱤ (!s || s != str)
     {
       error (0, 0,
              "not a uniqstr: %s", quotearg (str));
@@ -107,23 +107,23 @@ uniqstr_assert (char const *str)
 | Print the uniqstr.  |
 `--------------------*/
 
-static inline bool
+static anta_hstha bool
 uniqstr_print (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
-  return true;
+  ᱨᱩᱣᱟᱹᱲ true;
 }
 
 static bool
 uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
 {
-  return uniqstr_print (ustr);
+  ᱨᱩᱣᱟᱹᱲ uniqstr_print (ustr);
 }
 
-int
+puur_naa_nka
 uniqstr_cmp (uniqstr l, uniqstr r)
 {
-  return (l == r ? 0
+  ᱨᱩᱣᱟᱹᱲ (l == r ? 0
           : !l ? -1
           : !r ? +1
           : strcmp (l, r));
@@ -137,13 +137,13 @@ uniqstr_cmp (uniqstr l, uniqstr r)
 static bool
 hash_compare_uniqstr (void const *m1, void const *m2)
 {
-  return STREQ (m1, m2);
+  ᱨᱩᱣᱟᱹᱲ STREQ (m1, m2);
 }
 
 static size_t
 hash_uniqstr (void const *m, size_t tablesize)
 {
-  return hash_string (m, tablesize);
+  ᱨᱩᱣᱟᱹᱲ hash_string (m, tablesize);
 }
 
 
