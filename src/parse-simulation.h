@@ -71,49 +71,49 @@
 
  */
 
-typedef struct parse_state parse_state;
-typedef gl_list_t parse_state_list;
+تعريفنوع بنية parse_state parse_state;
+تعريفنوع gl_list_t parse_state_list;
 
-static inline bool
+ساكن مضمن bool
 parse_state_list_next (gl_list_iterator_t *it, parse_state **ps)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ثابت فراغ *p = عدم;
+  bool res = gl_list_iterator_next (it, &p, عدم);
+  إذا (res)
     *ps = (parse_state *) p;
-  else
+  وإلا
     gl_list_iterator_free (it);
-  return res;
+  أرجع res;
 }
 
-parse_state *new_parse_state (const state_item *conflict);
+parse_state *new_parse_state (ثابت state_item *conflict);
 
-size_t parse_state_hasher (const parse_state *ps, size_t max);
+size_t parse_state_hasher (ثابت parse_state *ps, size_t max);
 
-bool parse_state_comparator (const parse_state *ps1, const parse_state *ps2);
+bool parse_state_comparator (ثابت parse_state *ps1, ثابت parse_state *ps2);
 
 /* Memory management */
 
-void parse_state_retain (parse_state *ps);
+فراغ parse_state_retain (parse_state *ps);
 /* This allows a parse_state to free its contents list
  * when its reference count reaches 1. This is used to
  * free memory while the parse state is in a hash set. */
-void parse_state_free_contents_early (parse_state *ps);
-void free_parse_state (parse_state *ps);
+فراغ parse_state_free_contents_early (parse_state *ps);
+فراغ free_parse_state (parse_state *ps);
 
 /* counts the amount of shift and production steps in this parse state */
-void parse_state_completed_steps (const parse_state *ps, int *shifts, int *productions);
+فراغ parse_state_completed_steps (ثابت parse_state *ps, صحيح *shifts, صحيح *productions);
 
 /* parse state getters */
-bool parse_state_derivation_completed (const parse_state *ps);
-derivation *parse_state_derivation (const parse_state *ps);
-const state_item *parse_state_head (const parse_state *ps);
-const state_item *parse_state_tail (const parse_state *ps);
-int parse_state_length (const parse_state *ps);
-int parse_state_depth (const parse_state *ps);
+bool parse_state_derivation_completed (ثابت parse_state *ps);
+derivation *parse_state_derivation (ثابت parse_state *ps);
+ثابت state_item *parse_state_head (ثابت parse_state *ps);
+ثابت state_item *parse_state_tail (ثابت parse_state *ps);
+صحيح parse_state_length (ثابت parse_state *ps);
+صحيح parse_state_depth (ثابت parse_state *ps);
 
 /* returns the linked lists that the parse state is supposed to represent */
-void parse_state_lists (parse_state *ps, state_item_list *state_items,
+فراغ parse_state_lists (parse_state *ps, state_item_list *state_ابوبو,
                         derivation_list *derivs);
 
 /* various functions that return a list of states based off of
@@ -128,19 +128,19 @@ parse_state_list simulate_transition (parse_state *ps);
 /* Look at all of the productions for the nonterminal following the dot in the tail
  * state-item. Appends to state-items each production state-item which may start with
  * compat_sym. */
-parse_state_list simulate_production (parse_state *ps, symbol_number compat_sym);
+parse_state_list simulate_production (parse_state *ps, علام_لمب compat_sym);
 
 /* Removes the last rule_len state-items along with their derivations. A new state-item is
  * appended representing the goto after the reduction. A derivation for the nonterminal that
  * was just reduced is appended which consists of the list of derivations that were just removed. */
-parse_state_list simulate_reduction (parse_state *ps, int rule_len,
-                              bitset symbol_set);
+parse_state_list simulate_reduction (parse_state *ps, صحيح rule_len,
+                              bitset علام_set);
 
 /* Generate states with a state-item prepended for each state-item that has a
  * transition or production step to ps's head. */
 parse_state_list parser_prepend (parse_state *ps);
 
 /* For debugging traces.  */
-void print_parse_state (parse_state *ps);
+فراغ بغ_parse_state (parse_state *ps);
 
 #endif /* PARSE_SIMULATION_H */

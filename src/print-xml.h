@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_XML_H_
-# define PRINT_XML_H_
+#ifndef بغ_XML_H
+# define بغ_XML_H
 
 # include <stdio.h>
 
-void xml_indent (FILE *out, int level);
-void xml_puts (FILE *, int, char const *);
-void xml_printf (FILE *, int, char const *, ...);
-char const *xml_escape_n (int n, char const *str);
-char const *xml_escape (char const *str);
-void print_xml (void);
+فراغ xml_indent (FILE *out, صحيح level);
+فراغ xml_puts (FILE *, صحيح, حرف ثابت *);
+فراغ xml_printf (FILE *, صحيح, حرف ثابت *, ...);
+حرف ثابت *xml_escape_n (صحيح n, حرف ثابت *str);
+حرف ثابت *xml_escape (حرف ثابت *str);
+فراغ بغ_xml (فراغ);
 
 /* Use xsltproc to generate HTML from XML output.  */
-void print_html (void);
+فراغ بغ_html (فراغ);
 
 #endif /* !PRINT_XML_H_ */

@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_H_
-# define PRINT_H_
+#ifndef بغ_H
+# define بغ_H
 
-void print_results (void);
+فراغ بغ_results (فراغ);
 
 #endif /* !PRINT_H_ */
