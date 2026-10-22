@@ -63,27 +63,27 @@ static struct obstack format_obstack;
                                                                         \
 static void                                                             \
 Name (char const *name, Type *table_data, Type first,                   \
-      int begin, int end)                                               \
+      整数 begin, 整数 end)                                               \
 {                                                                       \
   Type min = first;                                                     \
   Type max = first;                                                     \
-  int j = 1;                                                            \
+  整数 j = 1;                                                            \
                                                                         \
   obstack_printf (&format_obstack, "%6d", first);                       \
-  for (int i = begin; i < end; ++i)                                     \
+  为 (整数 i = begin; i < end; ++i)                                     \
     {                                                                   \
       obstack_1grow (&format_obstack, ',');                             \
-      if (j >= 10)                                                      \
+      如果 (j >= 10)                                                      \
         {                                                               \
           obstack_sgrow (&format_obstack, "\n  ");                      \
           j = 1;                                                        \
         }                                                               \
-      else                                                              \
+      否则                                                              \
         ++j;                                                            \
       obstack_printf (&format_obstack, "%6d", table_data[i]);           \
-      if (table_data[i] < min)                                          \
+      如果 (table_data[i] < min)                                          \
         min = table_data[i];                                            \
-      if (max < table_data[i])                                          \
+      如果 (max < table_data[i])                                          \
         max = table_data[i];                                            \
     }                                                                   \
   muscle_insert (name, obstack_finish0 (&format_obstack));              \
@@ -97,7 +97,7 @@ Name (char const *name, Type *table_data, Type first,                   \
   MUSCLE_INSERT_LONG_INT (obstack_finish0 (&format_obstack), lmax);     \
 }
 
-GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_int_table, int)
+GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_int_table, 整数)
 GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_base_table, base_number)
 GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_rule_number_table, rule_number)
 GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_symbol_number_table, symbol_number)
@@ -114,7 +114,7 @@ GENERATE_MUSCLE_INSERT_TABLE (muscle_insert_state_number_table, state_number)
 static void
 output_escaped (FILE *out, const char *cp)
 {
-  for (; *cp; ++cp)
+  为 (; *cp; ++cp)
     switch (*cp)
       {
       case '$': fputs ("$][", out); break;
@@ -123,23 +123,23 @@ output_escaped (FILE *out, const char *cp)
       case ']': fputs ("@}",  out); break;
 
       case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+        如果 (STRPREFIX_LIT ("b4_", cp))
           {
             fputs ("b4@'_", out);
             cp += strlen ("b4_") - 1;
             break;
           }
-        else
+        否则
           goto append;
 
       case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+        如果 (STRPREFIX_LIT ("m4_", cp))
           {
             fputs ("m4@'_", out);
             cp += strlen ("m4_") - 1;
             break;
           }
-        else
+        否则
           goto append;
 
       append:
@@ -176,15 +176,15 @@ escape_trigraphs (char *buffer, ptrdiff_t buffersize, const char *src)
 #define STORE(c)                                \
   do                                            \
     {                                           \
-      if (res < buffersize)                     \
+      如果 (res < buffersize)                     \
         buffer[res] = (c);                      \
       ++res;                                    \
     }                                           \
-  while (0)
+  当 (0)
   ptrdiff_t res = 0;
-  for (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
+  为 (ptrdiff_t i = 0, len = strlen (src); i < len; ++i)
     {
-      if (i + 2 < len
+      如果 (i + 2 < len
           && src[i] == '?' && src[i+1] == '?')
         {
           switch (src[i+2])
@@ -204,7 +204,7 @@ escape_trigraphs (char *buffer, ptrdiff_t buffersize, const char *src)
     }
   STORE ('\0');
 #undef STORE
-  return res;
+  返回 res;
 }
 
 /* Same as xstrdup, except that trigraphs are escaped.  */
@@ -214,7 +214,7 @@ xescape_trigraphs (const char *src)
   ptrdiff_t bufsize = escape_trigraphs (NULL, 0, src);
   char *buf = xcharalloc (bufsize);
   escape_trigraphs (buf, bufsize, src);
-  return buf;
+  返回 buf;
 }
 
 /* The tag to show in the generated parsers.  Use "end of file" rather
@@ -226,12 +226,12 @@ symbol_tag (const symbol *sym)
   const bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
 
-  if (!eof_is_user_defined && sym->content == eoftoken->content)
-    return "\"end of file\"";
-  else if (sym->content == undeftoken->content)
-    return "\"invalid token\"";
-  else
-    return sym->tag;
+  如果 (!eof_is_user_defined && sym->content == eoftoken->content)
+    返回 "\"end of file\"";
+  否则 如果 (sym->content == undeftoken->content)
+    返回 "\"invalid token\"";
+  否则
+    返回 sym->tag;
 }
 
 /* Generate the b4_<MUSCLE_NAME> (e.g., b4_tname) table with the
@@ -245,15 +245,15 @@ prepare_symbol_names (char const *muscle_name)
   bool has_translations = false;
 
   /* We assume that the table will be output starting at column 2. */
-  int col = 2;
+  整数 col = 2;
   struct quoting_options *qo = clone_quoting_options (0);
   set_quoting_style (qo, c_quoting_style);
   set_quoting_flags (qo, QA_SPLIT_TRIGRAPHS);
-  for (int i = 0; i < nsyms; i++)
+  为 (整数 i = 0; i < nsyms; i++)
     {
       const char *tag = symbol_tag (symbols[i]);
       bool translatable = !quote && symbols[i]->translatable;
-      if (translatable)
+      如果 (translatable)
         has_translations = true;
 
       char *cp
@@ -262,22 +262,22 @@ prepare_symbol_names (char const *muscle_name)
         : quotearg_alloc (tag, -1, qo);
       /* Width of the next token, including the two quotes, the
          comma and the space.  */
-      int width
+      整数 width
         = mbswidth (cp, 0) + 2
         + (translatable ? strlen ("N_()") : 0);
 
-      if (col + width > 75)
+      如果 (col + width > 75)
         {
           obstack_sgrow (&format_obstack, "\n ");
           col = 1;
         }
 
-      if (i)
+      如果 (i)
         obstack_1grow (&format_obstack, ' ');
-      if (translatable)
+      如果 (translatable)
         obstack_sgrow (&format_obstack, "]b4_symbol_translate""([");
       obstack_escape (&format_obstack, cp);
-      if (translatable)
+      如果 (translatable)
         obstack_sgrow (&format_obstack, "])[");
       free (cp);
       obstack_1grow (&format_obstack, ',');
@@ -319,16 +319,16 @@ prepare_symbols (void)
   /* translatable -- whether a token is translatable. */
   {
     bool translatable = false;
-    for (int i = 0; i < ntokens; ++i)
-      if (symbols[i]->translatable)
+    为 (整数 i = 0; i < ntokens; ++i)
+      如果 (symbols[i]->translatable)
         {
           translatable = true;
           break;
         }
-    if (translatable)
+    如果 (translatable)
       {
-        int *values = xnmalloc (nsyms, sizeof *values);
-        for (int i = 0; i < ntokens; ++i)
+        整数 *values = xnmalloc (nsyms, sizeof *values);
+        为 (整数 i = 0; i < ntokens; ++i)
           values[i] = symbols[i]->translatable;
         muscle_insert_int_table ("translatable", values,
                                  values[0], 1, ntokens);
@@ -338,8 +338,8 @@ prepare_symbols (void)
 
   /* Output YYTOKNUM. */
   {
-    int *values = xnmalloc (ntokens, sizeof *values);
-    for (int i = 0; i < ntokens; ++i)
+    整数 *values = xnmalloc (ntokens, sizeof *values);
+    为 (整数 i = 0; i < ntokens; ++i)
       values[i] = symbols[i]->content->code;
     muscle_insert_int_table ("toknum", values,
                              values[0], 1, ntokens);
@@ -356,23 +356,23 @@ prepare_symbols (void)
 static void
 prepare_rules (void)
 {
-  int *prhs = xnmalloc (nrules, sizeof *prhs);
+  整数 *prhs = xnmalloc (nrules, sizeof *prhs);
   item_number *rhs = xnmalloc (nritems, sizeof *rhs);
-  int *rline = xnmalloc (nrules, sizeof *rline);
+  整数 *rline = xnmalloc (nrules, sizeof *rline);
   symbol_number *r1 = xnmalloc (nrules, sizeof *r1);
-  int *r2 = xnmalloc (nrules, sizeof *r2);
-  int *dprec = xnmalloc (nrules, sizeof *dprec);
-  int *merger = xnmalloc (nrules, sizeof *merger);
-  int *immediate = xnmalloc (nrules, sizeof *immediate);
+  整数 *r2 = xnmalloc (nrules, sizeof *r2);
+  整数 *dprec = xnmalloc (nrules, sizeof *dprec);
+  整数 *merger = xnmalloc (nrules, sizeof *merger);
+  整数 *immediate = xnmalloc (nrules, sizeof *immediate);
 
   /* Index in RHS.  */
-  int i = 0;
-  for (rule_number r = 0; r < nrules; ++r)
+  整数 i = 0;
+  为 (rule_number r = 0; r < nrules; ++r)
     {
       /* Index of rule R in RHS. */
       prhs[r] = i;
       /* RHS of the rule R. */
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+      为 (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
         rhs[i++] = *rhsp;
       /* Separator in RHS. */
       rhs[i++] = -1;
@@ -422,7 +422,7 @@ static void
 prepare_states (void)
 {
   symbol_number *values = xnmalloc (nstates, sizeof *values);
-  for (state_number i = 0; i < nstates; ++i)
+  为 (state_number i = 0; i < nstates; ++i)
     values[i] = states[i]->accessing_symbol;
   muscle_insert_symbol_number_table ("stos", values,
                                      0, 1, nstates);
@@ -438,13 +438,13 @@ prepare_states (void)
 | Compare two symbols by type-name, and then by number.  |
 `-------------------------------------------------------*/
 
-static int
+static 整数
 symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
 {
-  int res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
-  if (!res)
+  整数 res = uniqstr_cmp ((*lhs)->content->type_name, (*rhs)->content->type_name);
+  如果 (!res)
     res = (*lhs)->content->number - (*rhs)->content->number;
-  return res;
+  返回 res;
 }
 
 
@@ -455,10 +455,10 @@ symbol_type_name_cmp (const symbol **lhs, const symbol **rhs)
 static symbol **
 symbols_by_type_name (void)
 {
-  typedef int (*qcmp_type) (const void *, const void *);
+  typedef 整数 (*qcmp_type) (const void *, const void *);
   symbol **res = xmemdup (symbols, nsyms * sizeof *res);
   qsort (res, nsyms, sizeof *res, (qcmp_type) &symbol_type_name_cmp);
-  return res;
+  返回 res;
 }
 
 
@@ -472,12 +472,12 @@ type_names_output (FILE *out)
 {
   symbol **syms = symbols_by_type_name ();
   fputs ("m4_define([b4_type_names],\n[", out);
-  for (int i = 0; i < nsyms; /* nothing */)
+  为 (整数 i = 0; i < nsyms; /* nothing */)
     {
       /* The index of the first symbol of the current type-name.  */
-      int i0 = i;
+      整数 i0 = i;
       fputs (i ? ",\n[" : "[", out);
-      for (; i < nsyms
+      为 (; i < nsyms
            && syms[i]->content->type_name == syms[i0]->content->type_name; ++i)
         fprintf (out, "%s%d", i != i0 ? ", " : "", syms[i]->content->number);
       fputs ("]", out);
@@ -492,10 +492,10 @@ type_names_output (FILE *out)
 static void
 start_symbols_output (FILE *out)
 {
-  if (start_symbols && start_symbols->next)
+  如果 (start_symbols && start_symbols->next)
     {
       fputs ("m4_define([b4_start_symbols],\n[", out);
-      for (symbol_list *list = start_symbols; list; list = list->next)
+      为 (symbol_list *list = start_symbols; list; list = list->next)
         {
           const symbol *start = list->content.sym;
           const symbol *swtok = switching_token (start);
@@ -516,7 +516,7 @@ static void
 symbol_numbers_output (FILE *out)
 {
   fputs ("m4_define([b4_symbol_numbers],\n[", out);
-  for (int i = 0; i < nsyms; ++i)
+  为 (整数 i = 0; i < nsyms; ++i)
     fprintf (out, "%s[%d]", i ? ", " : "", i);
   fputs ("])\n\n", out);
 }
@@ -531,13 +531,13 @@ rule_output (const rule *r, FILE *out)
 {
   output_escaped (out, r->lhs->symbol->tag);
   fputc (':', out);
-  if (0 <= *r->rhs)
-    for (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
+  如果 (0 <= *r->rhs)
+    为 (item_number *rhsp = r->rhs; 0 <= *rhsp; ++rhsp)
       {
         fputc (' ', out);
         output_escaped (out, symbols[*rhsp]->tag);
       }
-  else
+  否则
     fputs (" %empty", out);
 }
 
@@ -545,14 +545,14 @@ static void
 user_actions_output (FILE *out)
 {
   fputs ("m4_define([b4_actions], \n[", out);
-  for (rule_number r = 0; r < nrules; ++r)
-    if (rules[r].action)
+  为 (rule_number r = 0; r < nrules; ++r)
+    如果 (rules[r].action)
       {
         /* The useless "" is there to pacify syntax-check.  */
         fprintf (out, "%s""(%d, [",
                  rules[r].is_predicate ? "b4_predicate_case" : "b4_case",
                  r + 1);
-        if (!no_lines_flag)
+        如果 (!no_lines_flag)
           {
             fprintf (out, "b4_syncline(%d, ",
                      rules[r].action_loc.start.line);
@@ -576,9 +576,9 @@ static void
 merger_output (FILE *out)
 {
   fputs ("m4_define([b4_mergers], \n[[", out);
-  int n;
+  整数 n;
   merger_list* p;
-  for (n = 1, p = merge_functions; p != NULL; n += 1, p = p->next)
+  为 (n = 1, p = merge_functions; p != NULL; n += 1, p = p->next)
     fprintf (out, "]b4_call_merger""([%d], [%s], [%d])[\n",
              n, p->name, p->sym->content->number);
   fputs ("]])\n\n", out);
@@ -593,14 +593,14 @@ static void
 prepare_symbol_definitions (void)
 {
   /* Map "orig NUM" to new numbers.  See data/README.  */
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
+  为 (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; ++i)
     {
       obstack_printf (&format_obstack, "symbol""(orig %d, number)", i);
       const char *key = obstack_finish0 (&format_obstack);
       MUSCLE_INSERT_INT (key, nterm_map ? nterm_map[i - ntokens] : i);
     }
 
-  for (int i = 0; i < nsyms; ++i)
+  为 (整数 i = 0; i < nsyms; ++i)
     {
       symbol *sym = symbols[i];
       const char *key;
@@ -644,7 +644,7 @@ prepare_symbol_definitions (void)
       MUSCLE_INSERT_STRING (key, sym->content->type_name
                             ? sym->content->type_name : "");
 
-      for (int j = 0; j < CODE_PROPS_SIZE; ++j)
+      为 (整数 j = 0; j < CODE_PROPS_SIZE; ++j)
         {
           /* "printer", not "%printer".  */
           char const *pname = code_props_type_string (j) + 1;
@@ -652,7 +652,7 @@ prepare_symbol_definitions (void)
           SET_KEY2 ("has", pname);
           MUSCLE_INSERT_INT (key, !!p->code);
 
-          if (p->code)
+          如果 (p->code)
             {
               SET_KEY2 (pname, "file");
               MUSCLE_INSERT_C_STRING (key, map_file_name (p->location.start.file));
@@ -763,11 +763,11 @@ output_skeleton (void)
 
   /* Create an m4 subprocess connected to us via two pipes.  */
 
-  int filter_fd[2];
+  整数 filter_fd[2];
   pid_t pid;
   {
     char const *argv[11];
-    int i = 0;
+    整数 i = 0;
     argv[i++] = m4;
 
     /* When POSIXLY_CORRECT is set, GNU M4 1.6 and later disable GNU
@@ -779,7 +779,7 @@ output_skeleton (void)
        See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (*M4_GNU_OPTION)
+    如果 (*M4_GNU_OPTION)
       argv[i++] = M4_GNU_OPTION;
 
     argv[i++] = "-I";
@@ -788,21 +788,21 @@ output_skeleton (void)
        -dV in a position-dependent manner.  See the thread starting at
        <https://lists.gnu.org/r/bug-bison/2008-07/msg00000.html>
        for details.  */
-    if (trace_flag & trace_m4_early)
+    如果 (trace_flag & trace_m4_early)
       argv[i++] = "-dV";
     argv[i++] = m4sugar;
     argv[i++] = "-";
     argv[i++] = m4bison;
-    if (trace_flag & trace_m4)
+    如果 (trace_flag & trace_m4)
       argv[i++] = traceon;
     argv[i++] = skel;
     argv[i++] = NULL;
     aver (i <= ARRAY_CARDINALITY (argv));
 
-    if (trace_flag & trace_tools)
+    如果 (trace_flag & trace_tools)
       {
         fputs ("running:", stderr);
-        for (int j = 0; argv[j]; ++j)
+        为 (整数 j = 0; argv[j]; ++j)
           fprintf (stderr, " %s", argv[j]);
         fputc ('\n', stderr);
       }
@@ -821,7 +821,7 @@ output_skeleton (void)
   free (traceon);
   free (skel);
 
-  if (trace_flag & trace_muscles)
+  如果 (trace_flag & trace_muscles)
     muscles_output (stderr);
   {
     FILE *out = xfdopen (filter_fd[1], "w");
@@ -868,7 +868,7 @@ prepare (void)
   MUSCLE_INSERT_BOOL ("yacc_flag", !location_empty (yacc_loc));
 
   /* File names.  */
-  if (spec_name_prefix)
+  如果 (spec_name_prefix)
     MUSCLE_INSERT_STRING ("prefix", spec_name_prefix);
 
   MUSCLE_INSERT_STRING ("file_name_all_but_ext", all_but_ext);
@@ -890,9 +890,9 @@ prepare (void)
 #undef DEFINE
 
   /* Find the right skeleton file, and add muscles about the skeletons.  */
-  if (skeleton)
+  如果 (skeleton)
     MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
-  else
+  否则
     skeleton = language->skeleton;
 
   /* About the skeletons.  */
@@ -929,7 +929,7 @@ output (void)
 
   /* If late errors were generated, destroy the generated source
      files. */
-  if (complaint_status)
+  如果 (complaint_status)
     unlink_generated_sources ();
 
   obstack_free (&format_obstack, NULL);

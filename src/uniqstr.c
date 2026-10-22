@@ -46,23 +46,23 @@ uniqstr
 uniqstr_new (char const *str)
 {
   uniqstr res = hash_lookup (uniqstrs_table, str);
-  if (!res)
+  如果 (!res)
     {
       /* First insertion in the hash. */
       res = xstrdup (str);
       hash_xinsert (uniqstrs_table, res);
     }
-  return res;
+  返回 res;
 }
 
 uniqstr
-uniqstr_concat (int nargs, ...)
+uniqstr_concat (整数 nargs, ...)
 {
   va_list args;
 
   va_start (args, nargs);
   size_t reslen = 0;
-  for (int i = 0; i < nargs; i++)
+  为 (整数 i = 0; i < nargs; i++)
     reslen += strlen (va_arg (args, char const *));
   va_end (args);
 
@@ -70,7 +70,7 @@ uniqstr_concat (int nargs, ...)
   char *p = str;
 
   va_start (args, nargs);
-  for (int i = 0; i < nargs; i++)
+  为 (整数 i = 0; i < nargs; i++)
     {
       char const *arg = va_arg (args, char const *);
       size_t arglen = strlen (arg);
@@ -81,9 +81,9 @@ uniqstr_concat (int nargs, ...)
 
   *p = '\0';
   uniqstr res = hash_xinsert (uniqstrs_table, str);
-  if (res != str)
+  如果 (res != str)
     free (str);
-  return res;
+  返回 res;
 }
 
 /*------------------------------.
@@ -94,7 +94,7 @@ void
 uniqstr_assert (char const *str)
 {
   uniqstr s = hash_lookup (uniqstrs_table, str);
-  if (!s || s != str)
+  如果 (!s || s != str)
     {
       error (0, 0,
              "not a uniqstr: %s", quotearg (str));
@@ -111,19 +111,19 @@ static inline bool
 uniqstr_print (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
-  return true;
+  返回 true;
 }
 
 static bool
 uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
 {
-  return uniqstr_print (ustr);
+  返回 uniqstr_print (ustr);
 }
 
-int
+整数
 uniqstr_cmp (uniqstr l, uniqstr r)
 {
-  return (l == r ? 0
+  返回 (l == r ? 0
           : !l ? -1
           : !r ? +1
           : strcmp (l, r));
@@ -137,13 +137,13 @@ uniqstr_cmp (uniqstr l, uniqstr r)
 static bool
 hash_compare_uniqstr (void const *m1, void const *m2)
 {
-  return STREQ (m1, m2);
+  返回 STREQ (m1, m2);
 }
 
 static size_t
 hash_uniqstr (void const *m, size_t tablesize)
 {
-  return hash_string (m, tablesize);
+  返回 hash_string (m, tablesize);
 }
 
 

@@ -30,19 +30,19 @@ assoc_to_string (assoc a)
   switch (a)
     {
     case undef_assoc:
-      return "undefined associativity";
+      返回 "undefined associativity";
 
     case right_assoc:
-      return "%right";
+      返回 "%right";
 
     case left_assoc:
-      return "%left";
+      返回 "%left";
 
     case non_assoc:
-      return "%nonassoc";
+      返回 "%nonassoc";
 
     case precedence_assoc:
-      return "%precedence";
+      返回 "%precedence";
     }
   abort ();
 }

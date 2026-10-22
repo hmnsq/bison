@@ -68,15 +68,15 @@ extern struct obstack muscle_obstack;
 
 # define MUSCLE_INSERT_BOOL(Key, Value)         \
   do {                                          \
-    int v__ = Value;                            \
+    整数 v__ = Value;                            \
     MUSCLE_INSERT_INT (Key, v__);               \
-  } while (0)
+  } 当 (0)
 
 # define MUSCLE_INSERTF(Key, Format, Value)                     \
   do {                                                          \
     obstack_printf (&muscle_obstack, Format, Value);            \
     muscle_insert (Key, obstack_finish0 (&muscle_obstack));     \
-  } while (0)
+  } 当 (0)
 
 # define MUSCLE_INSERT_INT(Key, Value)          \
   MUSCLE_INSERTF (Key, "%d", Value)
@@ -93,7 +93,7 @@ extern struct obstack muscle_obstack;
   do {                                                          \
     obstack_escape (&muscle_obstack, Value);                    \
     muscle_insert (Key, obstack_finish0 (&muscle_obstack));     \
-  } while (0)
+  } 当 (0)
 
 /* Key -> Value, applying C escaping to Value (and then M4). */
 # define MUSCLE_INSERT_C_STRING(Key, Value)                     \

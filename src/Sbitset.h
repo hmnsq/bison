@@ -50,25 +50,25 @@ void Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
   do {                                                                  \
     *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
       *Sbitset__byteAddress ((SELF), (INDEX)) | Sbitset__bit_mask (INDEX); \
-  } while (0)
+  } 当 (0)
 
 # define Sbitset__reset(SELF, INDEX)                                    \
   do {                                                                  \
     *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
       *Sbitset__byteAddress ((SELF), (INDEX)) & ~Sbitset__bit_mask (INDEX); \
-  } while (0)
+  } 当 (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be reset.  */
 # define Sbitset__zero(SELF, NBITS)             \
   do {                                          \
     memset (SELF, 0, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } 当 (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be set.  */
 # define Sbitset__ones(SELF, NBITS)                     \
   do {                                                  \
     memset (SELF, UCHAR_MAX, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } 当 (0)
 
 /* NBITS is the size of every bitset.  More than NBITS bits might be set.  */
 # define Sbitset__or(SELF, OTHER1, OTHER2, NBITS)                       \
@@ -77,18 +77,18 @@ void Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
     Sbitset ptr_other1 = (OTHER1);                                      \
     Sbitset ptr_other2 = (OTHER2);                                      \
     Sbitset end_self = ptr_self + Sbitset__nbytes (NBITS);              \
-    for (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
+    为 (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
       *ptr_self = *ptr_other1 | *ptr_other2;                            \
-  } while (0)
+  } 当 (0)
 
 /* ATTENTION: there are *two* loops here, "break" and "continue" will
    not apply to the whole loop, just the inner one.  */
 # define SBITSET__FOR_EACH(SELF, NBITS, ITER, INDEX)                    \
-  for ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
-    if (*(ITER) != 0)                                                   \
-      for ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
+  为 ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
+    如果 (*(ITER) != 0)                                                   \
+      为 ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
            (INDEX) < (NBITS) && (SELF)+(INDEX)/CHAR_BIT < (ITER)+1;     \
            ++(INDEX))                                                   \
-        if (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
+        如果 (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
 
 #endif /* !SBITSET_H_ */

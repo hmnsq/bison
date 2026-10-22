@@ -39,18 +39,18 @@
 # define YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
 /* Debug traces.  */
 #ifndef GRAM_DEBUG
-# if defined YYDEBUG
-#if YYDEBUG
+# 如果 defined YYDEBUG
+#如果 YYDEBUG
 #   define GRAM_DEBUG 1
-#  else
+#  否则
 #   define GRAM_DEBUG 0
 #  endif
-# else /* ! defined YYDEBUG */
+# 否则 /* ! defined YYDEBUG */
 #  define GRAM_DEBUG 1
 # endif /* ! defined YYDEBUG */
 #endif  /* ! defined GRAM_DEBUG */
-#if GRAM_DEBUG
-extern int gram_debug;
+#如果 GRAM_DEBUG
+extern 整数 gram_debug;
 #endif
 /* "%code requires" blocks.  */
 
@@ -145,7 +145,7 @@ extern int gram_debug;
 #endif
 
 /* Value type.  */
-#if ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
+#如果 ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
 union GRAM_STYPE
 {
   assoc precedence_declarator;             /* precedence_declarator  */
@@ -157,8 +157,8 @@ union GRAM_STYPE
   char* PROLOGUE;                          /* "%{...%}"  */
   char* yykind_75;                         /* string.opt  */
   code_props_type code_props_type;         /* code_props_type  */
-  int INT_LITERAL;                         /* "integer literal"  */
-  int yykind_84;                           /* int.opt  */
+  整数 INT_LITERAL;                         /* "integer literal"  */
+  整数 yykind_84;                           /* int.opt  */
   named_ref* yykind_97;                    /* named_ref.opt  */
   param_type PERCENT_PARAM;                /* "%param"  */
   symbol* token_decl;                      /* token_decl  */
@@ -200,14 +200,14 @@ typedef union GRAM_STYPE GRAM_STYPE;
 #endif
 
 /* Location type.  */
-#if ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
+#如果 ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
 typedef struct GRAM_LTYPE GRAM_LTYPE;
 struct GRAM_LTYPE
 {
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
+  整数 first_line;
+  整数 first_column;
+  整数 last_line;
+  整数 last_column;
 };
 # define GRAM_LTYPE_IS_DECLARED 1
 # define GRAM_LTYPE_IS_TRIVIAL 1
@@ -216,7 +216,7 @@ struct GRAM_LTYPE
 
 
 
-int gram_parse (void);
+整数 gram_parse (void);
 
 /* "%code provides" blocks.  */
 

@@ -32,12 +32,12 @@
 muscle_kind
 muscle_kind_new (char const *k)
 {
-  if (STREQ (k, "code"))
-    return muscle_code;
-  else if (STREQ (k, "keyword"))
-    return muscle_keyword;
-  else if (STREQ (k, "string"))
-    return muscle_string;
+  如果 (STREQ (k, "code"))
+    返回 muscle_code;
+  否则 如果 (STREQ (k, "keyword"))
+    返回 muscle_keyword;
+  否则 如果 (STREQ (k, "string"))
+    返回 muscle_string;
   abort ();
 }
 
@@ -46,9 +46,9 @@ muscle_kind_string (muscle_kind k)
 {
   switch (k)
     {
-    case muscle_code:    return "code";
-    case muscle_keyword: return "keyword";
-    case muscle_string:  return "string";
+    case muscle_code:    返回 "code";
+    case muscle_keyword: 返回 "keyword";
+    case muscle_string:  返回 "string";
     }
   abort ();
 }
@@ -70,10 +70,10 @@ typedef struct
 static uniqstr
 muscle_name (char const *var, char const *field)
 {
-  if (field)
-    return UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
-  else
-    return UNIQSTR_CONCAT ("percent_define(", var, ")");
+  如果 (field)
+    返回 UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
+  否则
+    返回 UNIQSTR_CONCAT ("percent_define(", var, ")");
 }
 
 /* An obstack used to create some entries.  */
@@ -89,14 +89,14 @@ hash_compare_muscles (void const *x, void const *y)
 {
   muscle_entry const *m1 = x;
   muscle_entry const *m2 = y;
-  return STREQ (m1->key, m2->key);
+  返回 STREQ (m1->key, m2->key);
 }
 
 static size_t
 hash_muscle (const void *x, size_t tablesize)
 {
   muscle_entry const *m = x;
-  return hash_string (m->key, tablesize);
+  返回 hash_string (m->key, tablesize);
 }
 
 /* Create a fresh muscle name KEY, and insert in the hash table.  */
@@ -108,7 +108,7 @@ muscle_entry_new (char const *key)
   res->value = NULL;
   res->storage = NULL;
   hash_xinsert (muscle_table, res);
-  return res;
+  返回 res;
 }
 
 static void
@@ -146,7 +146,7 @@ muscle_lookup (char const *key)
 {
   muscle_entry probe;
   probe.key = key;
-  return hash_lookup (muscle_table, &probe);
+  返回 hash_lookup (muscle_table, &probe);
 }
 
 
@@ -154,9 +154,9 @@ void
 muscle_insert (char const *key, char const *value)
 {
   muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  如果 (entry)
     free (entry->storage);
-  else
+  否则
     /* First insertion in the hash. */
     entry = muscle_entry_new (key);
   entry->value = value;
@@ -174,20 +174,20 @@ muscle_grow (const char *key, const char *val,
              const char *separator, const char *terminator)
 {
   muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  如果 (entry)
     {
       obstack_sgrow (&muscle_obstack, entry->value);
       obstack_sgrow (&muscle_obstack, separator);
       free (entry->storage);
     }
-  else
+  否则
     entry = muscle_entry_new (key);
 
   obstack_sgrow (&muscle_obstack, val);
 
   size_t vals = strlen (val);
   size_t terms = strlen (terminator);
-  if (terms <= vals
+  如果 (terms <= vals
       && STRNEQ (val + vals - terms, terminator))
     obstack_sgrow (&muscle_obstack, terminator);
 
@@ -248,7 +248,7 @@ char const *
 muscle_find_const (char const *key)
 {
   muscle_entry *entry = muscle_lookup (key);
-  return entry ? entry->value : NULL;
+  返回 entry ? entry->value : NULL;
 }
 
 
@@ -256,12 +256,12 @@ char *
 muscle_find (char const *key)
 {
   muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  如果 (entry)
     {
       aver (entry->value == entry->storage);
-      return entry->storage;
+      返回 entry->storage;
     }
-  return NULL;
+  返回 NULL;
 }
 
 
@@ -313,8 +313,8 @@ static char *
 string_decode (char const *key)
 {
   char const *value = muscle_find_const (key);
-  if (!value)
-    return NULL;
+  如果 (!value)
+    返回 NULL;
   do {
     switch (*value)
       {
@@ -324,11 +324,11 @@ string_decode (char const *key)
           aver (false);
           break;
       }
-  } while (*value++);
+  } 当 (*value++);
   char const *value_decoded = obstack_finish (&muscle_obstack);
   char *res = xstrdup (value_decoded);
   obstack_free (&muscle_obstack, value_decoded);
-  return res;
+  返回 res;
 }
 
 /* Reverse of muscle_location_grow.  */
@@ -339,7 +339,7 @@ location_decode (char const *value)
   aver (*value == '[');
   ++value; aver (*value == '[');
   location loc;
-  while (*++value)
+  当 (*++value)
     switch (*value)
       {
         COMMON_DECODE (value)
@@ -361,7 +361,7 @@ location_decode (char const *value)
             case '\0':
               boundary_set_from_string (&loc.end, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              return loc;
+              返回 loc;
               break;
             default:
               aver (false);
@@ -370,7 +370,7 @@ location_decode (char const *value)
           break;
       }
   aver (false);
-  return loc;
+  返回 loc;
 }
 
 void
@@ -416,9 +416,9 @@ define_directive (char const *assignment,
                        + (value ? strlen (value) : 0));
   sprintf (res, fmt, assignment, value);
   eq = strchr (res, '=');
-  if (eq)
+  如果 (eq)
     *eq = eq[1] ? ' ' : '\0';
-  return res;
+  返回 res;
 }
 
 /** If the \a variable name is obsolete, return the name to use,
@@ -467,10 +467,10 @@ muscle_percent_variable_update (char const *variable,
     { NULL, NULL, -1, }
   };
 
-  for (conversion_type const *c = conversion; c->obsolete; ++c)
+  为 (conversion_type const *c = conversion; c->obsolete; ++c)
     {
       char const *eq = strchr (c->obsolete, '=');
-      if (eq
+      如果 (eq
           ? (!strncmp (c->obsolete, variable, eq - c->obsolete)
              && STREQ (eq + 1, *value))
           : STREQ (c->obsolete, variable))
@@ -484,16 +484,16 @@ muscle_percent_variable_update (char const *variable,
           {
             char *res = xstrdup (c->updated);
             char *eq2 = strchr (res, '=');
-            if (eq2)
+            如果 (eq2)
               {
                 *eq2 = '\0';
                 *value = eq2 + 1;
               }
-            return res;
+            返回 res;
           }
         }
     }
-  return variable;
+  返回 variable;
 }
 
 void
@@ -516,15 +516,15 @@ muscle_percent_define_insert (char const *var, location variable_loc,
 
   /* Command-line options are processed before the grammar file.  */
   bool warned = false;
-  if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
+  如果 (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
     {
       char const *current_value = muscle_find_const (name);
-      if (current_value)
+      如果 (current_value)
         {
           long l = strtol (muscle_find_const (how_name), NULL, 10);
           muscle_percent_define_how how_old
             = 0 <= l && l <= INT_MAX ? l : INT_MAX;
-          if (how_old == MUSCLE_PERCENT_DEFINE_F)
+          如果 (how_old == MUSCLE_PERCENT_DEFINE_F)
             goto end;
           /* If assigning the same value, make it a warning.  */
           warnings warn = STREQ (value, current_value) ? Wother : complaint;
@@ -538,7 +538,7 @@ muscle_percent_define_insert (char const *var, location variable_loc,
         }
     }
 
-  if (!warned && old && upd)
+  如果 (!warned && old && upd)
     deprecated_directive (&variable_loc, old, upd);
 
   MUSCLE_INSERT_STRING (name, value);
@@ -553,7 +553,7 @@ muscle_percent_define_insert (char const *var, location variable_loc,
  end:
   free (old);
   free (upd);
-  if (variable != var)
+  如果 (variable != var)
     free ((char *) variable);
 }
 
@@ -568,7 +568,7 @@ muscle_percent_define_ensure (char const *variable, location loc,
 
   /* Don't complain is VARIABLE is already defined, but be sure to set
      its value to VAL.  */
-  if (!muscle_find_const (name)
+  如果 (!muscle_find_const (name)
       || muscle_percent_define_flag_if (variable) != value)
     muscle_percent_define_insert (variable, loc, muscle_keyword, val,
                                   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
@@ -590,10 +590,10 @@ muscle_percent_define_get_raw (char const *variable, char const *field)
 {
   uniqstr name = muscle_name (variable, field);
   char const *res = muscle_find_const (name);
-  if (!res)
+  如果 (!res)
     complain (NULL, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_get_raw", quote (variable));
-  return res;
+  返回 res;
 }
 
 char *
@@ -601,24 +601,24 @@ muscle_percent_define_get (char const *variable)
 {
   uniqstr name = muscle_name (variable, NULL);
   char *value = string_decode (name);
-  if (!value)
+  如果 (!value)
     value = xstrdup ("");
   muscle_percent_define_use (variable);
-  return value;
+  返回 value;
 }
 
 /* The kind of VARIABLE.  An error if undefined.  */
 static muscle_kind
 muscle_percent_define_get_kind (char const *variable)
 {
-  return muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
+  返回 muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
 }
 
 /* Check the kind of VARIABLE.  An error if undefined.  */
 static void
 muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
 {
-  if (muscle_percent_define_get_kind (variable) != kind)
+  如果 (muscle_percent_define_get_kind (variable) != kind)
     {
       location loc = muscle_percent_define_get_loc (variable);
       switch (kind)
@@ -646,25 +646,25 @@ muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
 location
 muscle_percent_define_get_loc (char const *variable)
 {
-  return location_decode (muscle_percent_define_get_raw (variable, "loc"));
+  返回 location_decode (muscle_percent_define_get_raw (variable, "loc"));
 }
 
 char const *
 muscle_percent_define_get_syncline (char const *variable)
 {
-  return muscle_percent_define_get_raw (variable, "syncline");
+  返回 muscle_percent_define_get_raw (variable, "syncline");
 }
 
 bool
 muscle_percent_define_ifdef (char const *variable)
 {
-  if (muscle_find_const (muscle_name (variable, NULL)))
+  如果 (muscle_find_const (muscle_name (variable, NULL)))
     {
       muscle_percent_define_use (variable);
-      return true;
+      返回 true;
     }
-  else
-    return false;
+  否则
+    返回 false;
 }
 
 bool
@@ -673,15 +673,15 @@ muscle_percent_define_flag_if (char const *variable)
   uniqstr invalid_boolean_name = muscle_name (variable, "invalid_boolean");
   bool res = false;
 
-  if (muscle_percent_define_ifdef (variable))
+  如果 (muscle_percent_define_ifdef (variable))
     {
       char *value = muscle_percent_define_get (variable);
       muscle_percent_define_check_kind (variable, muscle_keyword);
-      if (value[0] == '\0' || STREQ (value, "true"))
+      如果 (value[0] == '\0' || STREQ (value, "true"))
         res = true;
-      else if (STREQ (value, "false"))
+      否则 如果 (STREQ (value, "false"))
         res = false;
-      else if (!muscle_find_const (invalid_boolean_name))
+      否则 如果 (!muscle_find_const (invalid_boolean_name))
         {
           muscle_insert (invalid_boolean_name, "");
           location loc = muscle_percent_define_get_loc (variable);
@@ -691,18 +691,18 @@ muscle_percent_define_flag_if (char const *variable)
         }
       free (value);
     }
-  else
+  否则
     complain (NULL, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_flag", quote (variable));
 
-  return res;
+  返回 res;
 }
 
 void
 muscle_percent_define_default (char const *variable, char const *value)
 {
   uniqstr name = muscle_name (variable, NULL);
-  if (!muscle_find_const (name))
+  如果 (!muscle_find_const (name))
     {
       MUSCLE_INSERT_STRING (name, value);
       MUSCLE_INSERT_STRING (muscle_name (variable, "kind"), "keyword");
@@ -724,33 +724,33 @@ muscle_percent_define_default (char const *variable, char const *value)
 void
 muscle_percent_define_check_values (char const * const *values)
 {
-  for (; *values; ++values)
+  为 (; *values; ++values)
     {
       char const * const *variablep = values;
       uniqstr name = muscle_name (*variablep, NULL);
       char *value = string_decode (name);
       muscle_percent_define_check_kind (*variablep, muscle_keyword);
-      if (value)
+      如果 (value)
         {
-          for (++values; *values; ++values)
-            if (STREQ (value, *values))
+          为 (++values; *values; ++values)
+            如果 (STREQ (value, *values))
               break;
-          if (!*values)
+          如果 (!*values)
             {
               location loc = muscle_percent_define_get_loc (*variablep);
               complain (&loc, complaint,
                         _("invalid value for %%define variable %s: %s"),
                         quote (*variablep), quote_n (1, value));
-              for (values = variablep + 1; *values; ++values)
+              为 (values = variablep + 1; *values; ++values)
                 subcomplain (&loc, complaint | no_caret | silent,
                              _("accepted value: %s"), quote (*values));
             }
-          else
-            while (*values)
+          否则
+            当 (*values)
               ++values;
           free (value);
         }
-      else
+      否则
         complain (NULL, fatal, _("%s: undefined %%define variable %s"),
                   "muscle_percent_define_check_values", quote (*variablep));
     }
@@ -777,13 +777,13 @@ muscle_m4_output (muscle_entry *entry, FILE *out)
   fprintf (out,
            "m4_define([b4_%s],\n"
            "[[%s]])\n\n\n", entry->key, entry->value);
-  return true;
+  返回 true;
 }
 
 static bool
 muscle_m4_output_processor (void *entry, void *out)
 {
-  return muscle_m4_output (entry, out);
+  返回 muscle_m4_output (entry, out);
 }
 
 

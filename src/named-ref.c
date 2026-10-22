@@ -30,13 +30,13 @@ named_ref_new (uniqstr id, location loc)
   res->id = id;
   res->loc = loc;
 
-  return res;
+  返回 res;
 }
 
 named_ref *
 named_ref_copy (const named_ref *r)
 {
-  return named_ref_new (r->id, r->loc);
+  返回 named_ref_new (r->id, r->loc);
 }
 
 void
