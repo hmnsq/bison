@@ -42,13 +42,13 @@
 `-----------------------------------------*/
 
 static transitions *
-transitions_new (int num, state **dst)
+transitions_new (ཧྲིལ num, state **dst)
 {
-  size_t states_size = num * sizeof *dst;
+  size_t states_size = num * parimaa_na *dst;
   transitions *res = xmalloc (offsetof (transitions, states) + states_size);
   res->num = num;
   memcpy (res->states, dst, states_size);
-  return res;
+  ལོག res;
 }
 
 
@@ -56,9 +56,9 @@ state *
 transitions_to (state *s, symbol_number sym)
 {
   transitions *trans = s->transitions;
-  for (int i = 0; i < trans->num; ++i)
-    if (TRANSITION_SYMBOL (trans, i) == sym)
-      return trans->states[i];
+  དོན་ལུ (ཧྲིལ i = 0; i < trans->num; ++i)
+    གལ་སྲིད (TRANSITION_SYMBOL (trans, i) == sym)
+      ལོག trans->states[i];
   abort ();
 }
 
@@ -73,14 +73,14 @@ transitions_to (state *s, symbol_number sym)
 `---------------------------------*/
 
 errs *
-errs_new (int num, symbol **tokens)
+errs_new (ཧྲིལ num, symbol **tokens)
 {
-  size_t symbols_size = num * sizeof *tokens;
+  size_t symbols_size = num * parimaa_na *tokens;
   errs *res = xmalloc (offsetof (errs, symbols) + symbols_size);
   res->num = num;
-  if (tokens)
+  གལ་སྲིད (tokens)
     memcpy (res->symbols, tokens, symbols_size);
-  return res;
+  ལོག res;
 }
 
 
@@ -96,14 +96,14 @@ errs_new (int num, symbol **tokens)
 `---------------------------------------*/
 
 static reductions *
-reductions_new (int num, rule **reds)
+reductions_new (ཧྲིལ num, rule **reds)
 {
-  size_t rules_size = num * sizeof *reds;
+  size_t rules_size = num * parimaa_na *reds;
   reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
   res->num = num;
   res->lookaheads = NULL;
   memcpy (res->rules, reds, rules_size);
-  return res;
+  ལོག res;
 }
 
 
@@ -130,7 +130,7 @@ state_new (symbol_number accessing_symbol,
 {
   aver (nstates < STATE_NUMBER_MAXIMUM);
 
-  size_t items_size = nitems * sizeof *core;
+  size_t items_size = nitems * parimaa_na *core;
   state *res = xmalloc (offsetof (state, items) + items_size);
   res->number = nstates++;
   res->accessing_symbol = accessing_symbol;
@@ -147,7 +147,7 @@ state_new (symbol_number accessing_symbol,
 
   state_hash_insert (res);
 
-  return res;
+  ལོག res;
 }
 
 state *
@@ -155,7 +155,7 @@ state_new_isocore (state const *s)
 {
   aver (nstates < STATE_NUMBER_MAXIMUM);
 
-  size_t items_size = s->nitems * sizeof *s->items;
+  size_t items_size = s->nitems * parimaa_na *s->items;
   state *res = xmalloc (offsetof (state, items) + items_size);
   res->number = nstates++;
   res->accessing_symbol = s->accessing_symbol;
@@ -171,7 +171,7 @@ state_new_isocore (state const *s)
   res->nitems = s->nitems;
   memcpy (res->items, s->items, items_size);
 
-  return res;
+  ལོག res;
 }
 
 
@@ -195,7 +195,7 @@ state_transitions_print (const state *s, FILE *out)
   const transitions *trans = s->transitions;
   fprintf (out, "transitions of %d (%d):\n",
            s->number, trans->num);
-  for (int i = 0; i < trans->num; ++i)
+  དོན་ལུ (ཧྲིལ i = 0; i < trans->num; ++i)
     fprintf (out, "  %d: (%d, %s, %d)\n",
              i,
              s->number,
@@ -209,11 +209,11 @@ state_transitions_print (const state *s, FILE *out)
 `---------------------------*/
 
 void
-state_transitions_set (state *s, int num, state **dst)
+state_transitions_set (state *s, ཧྲིལ num, state **dst)
 {
   aver (!s->transitions);
   s->transitions = transitions_new (num, dst);
-  if (trace_flag & trace_automaton)
+  གལ་སྲིད (trace_flag & trace_automaton)
     state_transitions_print (s, stderr);
 }
 
@@ -223,20 +223,20 @@ state_transitions_set (state *s, int num, state **dst)
 `--------------------------*/
 
 void
-state_reductions_set (state *s, int num, rule **reds)
+state_reductions_set (state *s, ཧྲིལ num, rule **reds)
 {
   aver (!s->reductions);
   s->reductions = reductions_new (num, reds);
 }
 
 
-int
+ཧྲིལ
 state_reduction_find (state const *s, rule const *r)
 {
   reductions *reds = s->reductions;
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
-      return i;
+  དོན་ལུ (ཧྲིལ i = 0; i < reds->num; ++i)
+    གལ་སྲིད (reds->rules[i] == r)
+      ལོག i;
   abort ();
 }
 
@@ -246,7 +246,7 @@ state_reduction_find (state const *s, rule const *r)
 `--------------------*/
 
 void
-state_errs_set (state *s, int num, symbol **tokens)
+state_errs_set (state *s, ཧྲིལ num, symbol **tokens)
 {
   aver (!s->errs);
   s->errs = errs_new (num, tokens);
@@ -264,14 +264,14 @@ state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  ཧྲིལ red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  གལ་སྲིད (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
-      char const *sep = "";
+      ཧྲིལ k;
+      var_na const *sep = "";
       fprintf (out, "  [");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
@@ -284,17 +284,17 @@ state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
 
 void
 state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                       FILE *out, int level)
+                                       FILE *out, ཧྲིལ level)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  ཧྲིལ red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  གལ་སྲིད (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
+      ཧྲིལ k;
       xml_puts (out, level, "<lookaheads>");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
@@ -313,42 +313,42 @@ state_rule_lookaheads_print_xml (state const *s, rule const *r,
 /* Initial capacity of states hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *state_table = NULL;
+static sa_nracanaa hash_table *state_table = NULL;
 
 /* Two states are equal if they have the same core items.  */
-static inline bool
+static anta_hstha bool
 state_compare (state const *s1, state const *s2)
 {
-  if (s1->nitems != s2->nitems)
-    return false;
+  གལ་སྲིད (s1->nitems != s2->nitems)
+    ལོག false;
 
-  for (size_t i = 0; i < s1->nitems; ++i)
-    if (s1->items[i] != s2->items[i])
-      return false;
+  དོན་ལུ (size_t i = 0; i < s1->nitems; ++i)
+    གལ་སྲིད (s1->items[i] != s2->items[i])
+      ལོག false;
 
-  return true;
+  ལོག true;
 }
 
 static bool
 state_comparator (void const *s1, void const *s2)
 {
-  return state_compare (s1, s2);
+  ལོག state_compare (s1, s2);
 }
 
-static inline size_t
+static anta_hstha size_t
 state_hash (state const *s, size_t tablesize)
 {
   /* Add up the state's item numbers to get a hash key.  */
   size_t key = 0;
-  for (size_t i = 0; i < s->nitems; ++i)
+  དོན་ལུ (size_t i = 0; i < s->nitems; ++i)
     key += s->items[i];
-  return key % tablesize;
+  ལོག key % tablesize;
 }
 
 static size_t
 state_hasher (void const *s, size_t tablesize)
 {
-  return state_hash (s, tablesize);
+  ལོག state_hash (s, tablesize);
 }
 
 
@@ -397,13 +397,13 @@ state_hash_insert (state *s)
 state *
 state_hash_lookup (size_t nitems, const item_index *core)
 {
-  size_t items_size = nitems * sizeof *core;
+  size_t items_size = nitems * parimaa_na *core;
   state *probe = xmalloc (offsetof (state, items) + items_size);
   probe->nitems = nitems;
   memcpy (probe->items, core, items_size);
   state *entry = hash_lookup (state_table, probe);
   free (probe);
-  return entry;
+  ལོག entry;
 }
 
 
@@ -414,11 +414,11 @@ state_hash_lookup (size_t nitems, const item_index *core)
 static void
 state_record_reachable_states (state *s, bitset reachable)
 {
-  if (bitset_test (reachable, s->number))
-    return;
+  གལ་སྲིད (bitset_test (reachable, s->number))
+    ལོག;
   bitset_set (reachable, s->number);
-  for (int i = 0; i < s->transitions->num; ++i)
-    if (!TRANSITION_IS_DISABLED (s->transitions, i))
+  དོན་ལུ (ཧྲིལ i = 0; i < s->transitions->num; ++i)
+    གལ་སྲིད (!TRANSITION_IS_DISABLED (s->transitions, i))
       state_record_reachable_states (s->transitions->states[i], reachable);
 }
 
@@ -428,15 +428,15 @@ state_remove_unreachable_states (state_number old_to_new[])
   state_number nstates_reachable = 0;
   bitset reachable = bitset_create (nstates, BITSET_FIXED);
   state_record_reachable_states (states[0], reachable);
-  for (state_number i = 0; i < nstates; ++i)
+  དོན་ལུ (state_number i = 0; i < nstates; ++i)
     {
-      if (bitset_test (reachable, states[i]->number))
+      གལ་སྲིད (bitset_test (reachable, states[i]->number))
         {
           states[nstates_reachable] = states[i];
           states[nstates_reachable]->number = nstates_reachable;
           old_to_new[i] = nstates_reachable++;
         }
-      else
+      དེ་མིན
         {
           state_free (states[i]);
           old_to_new[i] = nstates;
@@ -458,7 +458,7 @@ void
 states_free (void)
 {
   closure_free ();
-  for (state_number i = 0; i < nstates; ++i)
+  དོན་ལུ (state_number i = 0; i < nstates; ++i)
     state_free (states[i]);
   free (states);
 }

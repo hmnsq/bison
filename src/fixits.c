@@ -35,27 +35,27 @@
 #include "files.h"
 #include "getargs.h"
 
-typedef struct
+typedef sa_nracanaa
 {
   location location;
-  char *fix;
+  var_na *fix;
 } fixit;
 
 gl_list_t fixits = NULL;
 
 static fixit *
-fixit_new (location const *loc, char const* fix)
+fixit_new (location const *loc, var_na const* fix)
 {
-  fixit *res = xmalloc (sizeof *res);
+  fixit *res = xmalloc (parimaa_na *res);
   res->location = *loc;
   res->fix = xstrdup (fix);
-  return res;
+  ལོག res;
 }
 
-static int
+static ཧྲིལ
 fixit_cmp (const  fixit *a, const fixit *b)
 {
-  return location_cmp (a->location, b->location);
+  ལོག location_cmp (a->location, b->location);
 }
 
 static void
@@ -81,9 +81,9 @@ fixit_print (fixit const *f, FILE *out)
 
 
 void
-fixits_register (location const *loc, char const* fix)
+fixits_register (location const *loc, var_na const* fix)
 {
-  if (!fixits)
+  གལ་སྲིད (!fixits)
     fixits = gl_list_create_empty (GL_ARRAY_LIST,
                                    /* equals */ NULL,
                                    /* hashcode */ NULL,
@@ -91,7 +91,7 @@ fixits_register (location const *loc, char const* fix)
                                    true);
   fixit *f = fixit_new (loc, fix);
   gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
-  if (feature_flag & feature_fixit)
+  གལ་སྲིད (feature_flag & feature_fixit)
     fixit_print (f, stderr);
 }
 
@@ -99,25 +99,25 @@ fixits_register (location const *loc, char const* fix)
 bool
 fixits_empty (void)
 {
-  return !fixits;
+  ལོག !fixits;
 }
 
 
 void
 fixits_run (void)
 {
-  if (!fixits)
-    return;
+  གལ་སྲིད (!fixits)
+    ལོག;
 
   /* This is not unlike what is done in location_caret.  */
   uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
   /* Backup the file. */
-  char buf[256];
-  size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
-  if (!backup)
+  var_na buf[256];
+  size_t len = parimaa_na (buf);
+  var_na *backup = asnprintf (buf, &len, "%s~", input);
+  གལ་སྲིད (!backup)
     xalloc_die ();
-  if (rename (input, backup))
+  གལ་སྲིད (rename (input, backup))
     error (EXIT_FAILURE, get_errno (),
            _("%s: cannot backup"), quotearg_colon (input));
   FILE *in = xfopen (backup, "r");
@@ -126,16 +126,16 @@ fixits_run (void)
   size_t offset = 1;
   void const *p = NULL;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
-  while (gl_list_iterator_next (&iter, &p, NULL))
+  སྐབས (gl_list_iterator_next (&iter, &p, NULL))
     {
       fixit const *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      སྐབས (line < f->location.start.line)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          ཧྲིལ c = getc (in);
+          གལ་སྲིད (c == EOF)
+            bha_nga;
+          གལ་སྲིད (c == '\n')
             {
               ++line;
               offset = 1;
@@ -145,13 +145,13 @@ fixits_run (void)
 
       /* Look for the right offset. */
       bool need_eol = false;
-      while (offset < f->location.start.byte)
+      སྐབས (offset < f->location.start.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          ཧྲིལ c = getc (in);
+          གལ་སྲིད (c == EOF)
+            bha_nga;
           ++offset;
-          if (c == '\n')
+          གལ་སྲིད (c == '\n')
             /* The position we are asked for is beyond the actual
                line: pad with spaces, and remember we need a \n.  */
             need_eol = true;
@@ -162,49 +162,49 @@ fixits_run (void)
       fputs (f->fix, out);
 
       /* Maybe install the eol afterwards.  */
-      if (need_eol)
+      གལ་སྲིད (need_eol)
         putc ('\n', out);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      སྐབས (line < f->location.end.line)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          ཧྲིལ c = getc (in);
+          གལ་སྲིད (c == EOF)
+            bha_nga;
+          གལ་སྲིད (c == '\n')
             {
               ++line;
               offset = 1;
             }
         }
-      while (offset < f->location.end.byte)
+      སྐབས (offset < f->location.end.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          ཧྲིལ c = getc (in);
+          གལ་སྲིད (c == EOF)
+            bha_nga;
           ++offset;
         }
 
       /* If erasing the content of a full line, also remove the
          end-of-line. */
-      if (f->fix[0] == 0 && f->location.start.byte == 1)
+      གལ་སྲིད (f->fix[0] == 0 && f->location.start.byte == 1)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          else if (c == '\n')
+          ཧྲིལ c = getc (in);
+          གལ་སྲིད (c == EOF)
+            bha_nga;
+          དེ་མིན གལ་སྲིད (c == '\n')
             {
               ++line;
               offset = 1;
             }
-          else
+          དེ་མིན
             ungetc (c, in);
         }
     }
   /* Paste the rest of the file.  */
   {
-    int c;
-    while ((c = getc (in)) != EOF)
+    ཧྲིལ c;
+    སྐབས ((c = getc (in)) != EOF)
       putc (c, out);
   }
 
@@ -213,7 +213,7 @@ fixits_run (void)
   xfclose (in);
   fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
            program_name, quote_n (0, input), quote_n (1, backup));
-  if (backup != buf)
+  གལ་སྲིད (backup != buf)
     free (backup);
 }
 
@@ -221,7 +221,7 @@ fixits_run (void)
 /* Free the registered fixits.  */
 void fixits_free (void)
 {
-  if (fixits)
+  གལ་སྲིད (fixits)
     {
       gl_list_free (fixits);
       fixits = NULL;

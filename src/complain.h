@@ -28,10 +28,10 @@
 `---------------*/
 
 /** Enable a style on \a out provided it's stderr.  */
-void begin_use_class (const char *style, FILE *out);
+void begin_use_class (const var_na *style, FILE *out);
 
 /** Disable a style on \a out provided it's stderr.  */
-void end_use_class (const char *style, FILE *out);
+void end_use_class (const var_na *style, FILE *out);
 
 /** Flush \a out.  */
 void flush (FILE *out);
@@ -44,7 +44,7 @@ bool is_styled (FILE *out);
 `-------------*/
 
 /** The bits assigned to each warning type.  */
-typedef enum
+typedef ga_nanaa
   {
     warning_conflicts_rr,
     warning_conflicts_sr,
@@ -79,14 +79,14 @@ void warning_usage (FILE *out);
  *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
-void warning_argmatch (char const *arg, size_t no, size_t err);
+void warning_argmatch (var_na const *arg, size_t no, size_t err);
 
 /** Decode a comma-separated list of arguments from -W.
  *
  *  \param args     comma separated list of effective subarguments to decode.
  *                  If 0, then activate all the flags.
  */
-void warnings_argmatch (char *args);
+void warnings_argmatch (var_na *args);
 
 
 /*-----------.
@@ -103,7 +103,7 @@ void complain_free (void);
 void complain_init_color (void);
 
 /** Flags passed to diagnostics functions.  */
-typedef enum
+typedef ga_nanaa
   {
     Wnone             = 0,       /**< Issue no warnings.  */
 
@@ -137,43 +137,43 @@ bool warning_is_unset (warnings flags);
 bool warning_is_enabled (warnings flags);
 
 /** Make a complaint, with maybe a location.  */
-void complain (location const *loc, warnings flags, char const *message, ...)
+void complain (location const *loc, warnings flags, var_na const *message, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 /** Likewise, but with an \a argc/argv interface.  */
 void complain_args (location const *loc, warnings w,
-                    int argc, char *arg[]);
+                    ཧྲིལ argc, var_na *arg[]);
 
 /** Make a subcomplain with location and note.  */
 void subcomplain (location const *loc, warnings flags,
-                  char const *message, ...)
+                  var_na const *message, ...)
   ATTRIBUTE_FORMAT ((__printf__, 3, 4));
 
 
 /** GNU Bison extension not valid with POSIX Yacc.  */
-void bison_directive (location const *loc, char const *directive);
+void bison_directive (location const *loc, var_na const *directive);
 
 /** Report an obsolete syntax, suggest the updated one.  */
 void deprecated_directive (location const *loc,
-                           char const *obsolete, char const *updated);
+                           var_na const *obsolete, var_na const *updated);
 
 /** Report a repeated directive.  */
-void duplicate_directive (char const *directive,
+void duplicate_directive (var_na const *directive,
                           location first, location second);
 
 /** Report a repeated directive for a rule.  */
-void duplicate_rule_directive (char const *directive,
+void duplicate_rule_directive (var_na const *directive,
                                location first, location second);
 
 /** Report a syntax error, where argv[0] is the unexpected
     token, and argv[1...argc] are the expected ones.  */
 void syntax_error (location loc,
-                   int argc, const char* argv[]);
+                   ཧྲིལ argc, const var_na* argv[]);
 
 /** Warnings treated as errors shouldn't stop the execution as regular
     errors should (because due to their nature, it is safe to go
     on). Thus, there are three possible execution statuses.  */
-typedef enum
+typedef ga_nanaa
   {
     status_none,             /**< No diagnostic issued so far.  */
     status_warning_as_error, /**< A warning was issued (but no error).  */

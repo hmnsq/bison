@@ -33,10 +33,10 @@
 /* Return an unambiguous printable representation for NAME, suitable
    for C strings.  Use slot 2 since the user may use slots 0 and 1.  */
 
-static char *
-quote (char const *name)
+static var_na *
+quote (var_na const *name)
 {
-  return quotearg_n_style (2, c_quoting_style, name);
+  ལོག quotearg_n_style (2, c_quoting_style, name);
 }
 
 void
@@ -61,25 +61,25 @@ start_graph (FILE *fout)
 }
 
 void
-output_node (int id, char const *label, FILE *fout)
+output_node (ཧྲིལ id, var_na const *label, FILE *fout)
 {
   fprintf (fout, "  %d [label=\"%s\"]\n", id, label);
 }
 
 void
-output_edge (int source, int destination, char const *label,
-             char const *style, FILE *fout)
+output_edge (ཧྲིལ source, ཧྲིལ destination, var_na const *label,
+             var_na const *style, FILE *fout)
 {
   fprintf (fout, "  %d -> %d [style=%s", source, destination, style);
-  if (label)
+  གལ་སྲིད (label)
     {
       fputs (" label=\"", fout);
-      for (const char *cp = label; *cp; ++cp)
+      དོན་ལུ (const var_na *cp = label; *cp; ++cp)
         switch (*cp)
         {
-        case '"':  fputs ("\\\"", fout); break;
-        case '\\': fputs ("\\\\", fout); break;
-        default:   fputc (*cp,    fout); break;
+        pak_sa '"':  fputs ("\\\"", fout); bha_nga;
+        pak_sa '\\': fputs ("\\\\", fout); bha_nga;
+        default:   fputc (*cp,    fout); bha_nga;
         }
       fputc ('"', fout);
     }
@@ -92,27 +92,27 @@ no_reduce_bitset_init (state const *s, bitset *no_reduce_set)
   *no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
   bitset_zero (*no_reduce_set);
   {
-    int n;
+    ཧྲིལ n;
     FOR_EACH_SHIFT (s->transitions, n)
       bitset_set (*no_reduce_set, TRANSITION_SYMBOL (s->transitions, n));
   }
-  for (int n = 0; n < s->errs->num; ++n)
-    if (s->errs->symbols[n])
+  དོན་ལུ (ཧྲིལ n = 0; n < s->errs->num; ++n)
+    གལ་སྲིད (s->errs->symbols[n])
       bitset_set (*no_reduce_set, s->errs->symbols[n]->content->number);
 }
 
 /* Show the reductions from state SOURCE on rule RULENO. */
 static void
-conclude_red (struct obstack *out, int source, rule_number ruleno,
+conclude_red (sa_nracanaa obstack *out, ཧྲིལ source, rule_number ruleno,
               bool enabled, bool first, FILE *fout)
 {
   /* If no lookahead tokens were valid transitions, this reduction is
      actually hidden, so cancel everything. */
-  if (first)
+  གལ་སྲིད (first)
     (void) obstack_finish0 (out);
-  else
+  དེ་མིན
     {
-      char const *ed = enabled ? "" : "d";
+      var_na const *ed = enabled ? "" : "d";
       /* First, build the edge's head. The name of reduction nodes is "nRm",
          with n the source state and m the rule number. This is because we
          don't want all the reductions bearing a same rule number to point to
@@ -122,9 +122,9 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
 
       /* (The lookahead tokens have been added to the beginning of the
          obstack, in the caller function.) */
-      if (! obstack_empty_p (out))
+      གལ་སྲིད (! obstack_empty_p (out))
         {
-          char *label = obstack_finish0 (out);
+          var_na *label = obstack_finish0 (out);
           fprintf (fout, "label=\"[%s]\", ", label);
           obstack_free (out, label);
         }
@@ -136,12 +136,12 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
       fprintf (fout, " \"%dR%d%s\" [label=\"",
                source, ruleno, ed);
       bool const final = rule_is_initial (&rules[ruleno]);
-      if (final)
+      གལ་སྲིད (final)
         fprintf (fout, "Acc");
-      else
+      དེ་མིན
         fprintf (fout, "R%d", ruleno);
 
-      char const *color
+      var_na const *color
         = !enabled ? "5"
         : final    ? "1"
         :            "3";
@@ -151,12 +151,12 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
 }
 
 static bool
-print_token (struct obstack *out, bool first, char const *tok)
+print_token (sa_nracanaa obstack *out, bool first, var_na const *tok)
 {
-  if (! first)
+  གལ་སྲིད (! first)
     obstack_sgrow (out, ", ");
   obstack_backslash (out, tok);
-  return false;
+  ལོག false;
 }
 
 void
@@ -172,13 +172,13 @@ output_red (state const *s, reductions const *reds, FILE *fout)
      for the disabled reductions, because in the end we want two
      separate edges, even though in most cases only one will actually
      be printed. */
-  struct obstack dout;
-  struct obstack eout;
+  sa_nracanaa obstack dout;
+  sa_nracanaa obstack eout;
   obstack_init (&dout);
   obstack_init (&eout);
 
-  const int source = s->number;
-  for (int j = 0; j < reds->num; ++j)
+  const ཧྲིལ source = s->number;
+  དོན་ལུ (ཧྲིལ j = 0; j < reds->num; ++j)
     {
       bool defaulted = default_reduction && default_reduction == reds->rules[j];
 
@@ -188,15 +188,15 @@ output_red (state const *s, reductions const *reds, FILE *fout)
       bool firste = true;
       rule_number ruleno = reds->rules[j]->number;
 
-      if (reds->lookaheads)
-        for (int i = 0; i < ntokens; i++)
-          if (bitset_test (reds->lookaheads[j], i))
+      གལ་སྲིད (reds->lookaheads)
+        དོན་ལུ (ཧྲིལ i = 0; i < ntokens; i++)
+          གལ་སྲིད (bitset_test (reds->lookaheads[j], i))
             {
-              if (bitset_test (no_reduce_set, i))
+              གལ་སྲིད (bitset_test (no_reduce_set, i))
                 firstd = print_token (&dout, firstd, symbols[i]->tag);
-              else
+              དེ་མིན
                 {
-                  if (! defaulted)
+                  གལ་སྲིད (! defaulted)
                     firste = print_token (&eout, firste, symbols[i]->tag);
                   bitset_set (no_reduce_set, i);
                 }

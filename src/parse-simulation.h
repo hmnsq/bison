@@ -71,19 +71,19 @@
 
  */
 
-typedef struct parse_state parse_state;
+typedef sa_nracanaa parse_state parse_state;
 typedef gl_list_t parse_state_list;
 
-static inline bool
+static anta_hstha bool
 parse_state_list_next (gl_list_iterator_t *it, parse_state **ps)
 {
   const void *p = NULL;
   bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  གལ་སྲིད (res)
     *ps = (parse_state *) p;
-  else
+  དེ་མིན
     gl_list_iterator_free (it);
-  return res;
+  ལོག res;
 }
 
 parse_state *new_parse_state (const state_item *conflict);
@@ -102,15 +102,15 @@ void parse_state_free_contents_early (parse_state *ps);
 void free_parse_state (parse_state *ps);
 
 /* counts the amount of shift and production steps in this parse state */
-void parse_state_completed_steps (const parse_state *ps, int *shifts, int *productions);
+void parse_state_completed_steps (const parse_state *ps, ཧྲིལ *shifts, ཧྲིལ *productions);
 
 /* parse state getters */
 bool parse_state_derivation_completed (const parse_state *ps);
 derivation *parse_state_derivation (const parse_state *ps);
 const state_item *parse_state_head (const parse_state *ps);
 const state_item *parse_state_tail (const parse_state *ps);
-int parse_state_length (const parse_state *ps);
-int parse_state_depth (const parse_state *ps);
+ཧྲིལ parse_state_length (const parse_state *ps);
+ཧྲིལ parse_state_depth (const parse_state *ps);
 
 /* returns the linked lists that the parse state is supposed to represent */
 void parse_state_lists (parse_state *ps, state_item_list *state_items,
@@ -133,7 +133,7 @@ parse_state_list simulate_production (parse_state *ps, symbol_number compat_sym)
 /* Removes the last rule_len state-items along with their derivations. A new state-item is
  * appended representing the goto after the reduction. A derivation for the nonterminal that
  * was just reduced is appended which consists of the list of derivations that were just removed. */
-parse_state_list simulate_reduction (parse_state *ps, int rule_len,
+parse_state_list simulate_reduction (parse_state *ps, ཧྲིལ rule_len,
                               bitset symbol_set);
 
 /* Generate states with a state-item prepended for each state-item that has a
