@@ -18,32 +18,32 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include "symlist.h"
+#अन्तर्भाव "symlist.h"
 
 /*--------------------------------------.
 | Create a list containing SYM at LOC.  |
 `--------------------------------------*/
 
-symbol_list *
-symbol_list_sym_new (symbol *sym, location loc)
+चिह्नम्_list *
+चिह्नम्_list_sym_new (चिह्नम् *sym, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  चिह्नम्_list *res = xmalloc (परिमाण *res);
 
-  res->content_type = SYMLIST_SYMBOL;
+  res->content_type = SYMLIST_चिह्नम्;
   res->content.sym = sym;
   res->sym_loc = loc;
-  res->named_ref = NULL;
+  res->named_ref = रिक्त;
 
-  res->midrule = NULL;
-  res->midrule_parent_rule = NULL;
+  res->midrule = रिक्त;
+  res->midrule_parent_rule = रिक्त;
   res->midrule_parent_rhs_index = 0;
 
   /* Members used for LHS only.  */
   res->rhs_loc = empty_loc;
-  res->ruleprec = NULL;
+  res->ruleprec = रिक्त;
   res->percent_empty_loc = empty_loc;
   code_props_none_init (&res->action_props);
   res->dprec = 0;
@@ -53,9 +53,9 @@ symbol_list_sym_new (symbol *sym, location loc)
   res->expected_sr_conflicts = -1;
   res->expected_rr_conflicts = -1;
 
-  res->next = NULL;
+  res->next = रिक्त;
 
-  return res;
+  प्रत्यागम res;
 }
 
 
@@ -63,41 +63,41 @@ symbol_list_sym_new (symbol *sym, location loc)
 | Create a list containing TYPE_NAME at LOC.  |
 `--------------------------------------------*/
 
-symbol_list *
-symbol_list_type_new (uniqstr type_name, location loc)
+चिह्नम्_list *
+चिह्नम्_list_type_new (uniqstr type_name, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  चिह्नम्_list *res = xmalloc (परिमाण *res);
 
   res->content_type = SYMLIST_TYPE;
-  res->content.sem_type = xmalloc (sizeof (semantic_type));
+  res->content.sem_type = xmalloc (परिमाण (semantic_type));
   res->content.sem_type->tag = type_name;
   res->content.sem_type->location = loc;
   res->content.sem_type->status = undeclared;
 
   res->sym_loc = loc;
-  res->named_ref = NULL;
-  res->next = NULL;
+  res->named_ref = रिक्त;
+  res->next = रिक्त;
 
-  return res;
+  प्रत्यागम res;
 }
 
 
-symbol_list *
-symbol_list_type_set (symbol_list *syms, uniqstr type_name)
+चिह्नम्_list *
+चिह्नम्_list_type_set (चिह्नम्_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
-    symbol_type_set (l->content.sym, type_name, l->sym_loc);
-  return syms;
+  प्रति (चिह्नम्_list *l = syms; l; l = l->next)
+    चिह्नम्_type_set (l->content.sym, type_name, l->sym_loc);
+  प्रत्यागम syms;
 }
 
 
-symbol_list *
-symbol_list_find_symbol (symbol_list *l, const symbol *sym)
+चिह्नम्_list *
+चिह्नम्_list_find_चिह्नम् (चिह्नम्_list *l, ध्रुव चिह्नम् *sym)
 {
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
-    if (l->content.sym == sym)
-      return l;
-  return NULL;
+  प्रति (/* Nothing. */; l && l->content.sym; l = l->next)
+    जइ (l->content.sym == sym)
+      प्रत्यागम l;
+  प्रत्यागम रिक्त;
 }
 
 
@@ -105,21 +105,21 @@ symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 | Print this list, for which every content_type must be SYMLIST_SYMBOL.  |
 `-----------------------------------------------------------------------*/
 
-void
-symbol_list_syms_print (const symbol_list *l, FILE *out)
+शून्य
+चिह्नम्_list_syms_print (ध्रुव चिह्नम्_list *l, FILE *out)
 {
   fputc ('[', out);
-  char const *sep = "";
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
+  वर्ण ध्रुव *sep = "";
+  प्रति (/* Nothing. */; l && l->content.sym; l = l->next)
     {
       fputs (sep, out);
-      fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
+      fputs (l->content_type == SYMLIST_चिह्नम् ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
              out);
-      if (l->content_type == SYMLIST_SYMBOL)
-        symbol_print (l->content.sym, out);
-      fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
+      जइ (l->content_type == SYMLIST_चिह्नम्)
+        चिह्नम्_print (l->content.sym, out);
+      fputs (l->action_props.is_मानम्_used ? " (used)" : " (unused)", out);
       putc ('}', out);
       sep = ", ";
     }
@@ -131,33 +131,33 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 | Prepend NODE to the LIST.  |
 `---------------------------*/
 
-symbol_list *
-symbol_list_prepend (symbol_list *list, symbol_list *node)
+चिह्नम्_list *
+चिह्नम्_list_prepend (चिह्नम्_list *list, चिह्नम्_list *ग्रन्थिः)
 {
-  node->next = list;
-  return node;
+  ग्रन्थिः->next = list;
+  प्रत्यागम ग्रन्थिः;
 }
 
 
-symbol_list *
-symbol_list_last (symbol_list *list)
+चिह्नम्_list *
+चिह्नम्_list_last (चिह्नम्_list *list)
 {
-  if (!list)
-    return NULL;
-  symbol_list *next = list;
-  while (next->next)
+  जइ (!list)
+    प्रत्यागम रिक्त;
+  चिह्नम्_list *next = list;
+  जाव (next->next)
     next = next->next;
-  return next;
+  प्रत्यागम next;
 }
 
-symbol_list *
-symbol_list_append (symbol_list *list, symbol_list *node)
+चिह्नम्_list *
+चिह्नम्_list_append (चिह्नम्_list *list, चिह्नम्_list *ग्रन्थिः)
 {
-  if (list)
-    symbol_list_last (list)->next = node;
-  else
-    list = node;
-  return list;
+  जइ (list)
+    चिह्नम्_list_last (list)->next = ग्रन्थिः;
+  अण्णहा
+    list = ग्रन्थिः;
+  प्रत्यागम list;
 }
 
 
@@ -166,16 +166,16 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 | Free the LIST, but not the items it contains.  |
 `-----------------------------------------------*/
 
-void
-symbol_list_free (symbol_list *list)
+शून्य
+चिह्नम्_list_free (चिह्नम्_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  प्रति (चिह्नम्_list *next; list; list = next)
     {
       next = list->next;
       named_ref_free (list->named_ref);
-      if (list->content_type == SYMLIST_TYPE)
-        free (list->content.sem_type);
-      free (list);
+      जइ (list->content_type == SYMLIST_TYPE)
+        मुक्त (list->content.sem_type);
+      मुक्त (list);
     }
 }
 
@@ -184,15 +184,15 @@ symbol_list_free (symbol_list *list)
 | Return its length.  |
 `--------------------*/
 
-int
-symbol_list_length (symbol_list const *l)
+पूर्णाङ्क
+चिह्नम्_list_length (चिह्नम्_list ध्रुव *l)
 {
-  int res = 0;
-  for (/* Nothing. */;
-       l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
+  पूर्णाङ्क res = 0;
+  प्रति (/* Nothing. */;
+       l && !(l->content_type == SYMLIST_चिह्नम् && l->content.sym == रिक्त);
        l = l->next)
     ++res;
-  return res;
+  प्रत्यागम res;
 }
 
 
@@ -200,18 +200,18 @@ symbol_list_length (symbol_list const *l)
 | Get item N in symbol list L.  |
 `------------------------------*/
 
-symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+चिह्नम्_list *
+चिह्नम्_list_n_get (चिह्नम्_list *l, पूर्णाङ्क n)
 {
   aver (0 <= n);
-  for (int i = 0; i < n; ++i)
+  प्रति (पूर्णाङ्क i = 0; i < n; ++i)
     {
       l = l->next;
       aver (l);
     }
-  aver (l->content_type == SYMLIST_SYMBOL);
+  aver (l->content_type == SYMLIST_चिह्नम्);
   aver (l->content.sym);
-  return l;
+  प्रत्यागम l;
 }
 
 /*--------------------------------------------------------------.
@@ -220,36 +220,36 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+चिह्नम्_list_n_type_name_get (चिह्नम्_list *l, पूर्णाङ्क n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  प्रत्यागम चिह्नम्_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
-symbol_list_null (symbol_list *node)
+चिह्नम्_list_null (चिह्नम्_list *ग्रन्थिः)
 {
-  return (!node
-          || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
+  प्रत्यागम (!ग्रन्थिः
+          || (ग्रन्थिः->content_type == SYMLIST_चिह्नम् && !ग्रन्थिः->content.sym));
 }
 
-void
-symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                            code_props const *cprops)
+शून्य
+चिह्नम्_list_code_props_set (चिह्नम्_list *ग्रन्थिः, code_props_type kind,
+                            code_props ध्रुव *cprops)
 {
-  switch (node->content_type)
+  विकल्प (ग्रन्थिः->content_type)
     {
-    case SYMLIST_SYMBOL:
-      symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
-        node->content.sym->content->status = used;
-      break;
-    case SYMLIST_TYPE:
+    पक्ष SYMLIST_चिह्नम्:
+      चिह्नम्_code_props_set (ग्रन्थिः->content.sym, kind, cprops);
+      जइ (ग्रन्थिः->content.sym->content->status == undeclared)
+        ग्रन्थिः->content.sym->content->status = used;
+      भङ्ग;
+    पक्ष SYMLIST_TYPE:
       semantic_type_code_props_set
-        (semantic_type_get (node->content.sem_type->tag,
-                            &node->content.sem_type->location),
+        (semantic_type_get (ग्रन्थिः->content.sem_type->tag,
+                            &ग्रन्थिः->content.sem_type->location),
          kind, cprops);
-      if (node->content.sem_type->status == undeclared)
-        node->content.sem_type->status = used;
-      break;
+      जइ (ग्रन्थिः->content.sem_type->status == undeclared)
+        ग्रन्थिः->content.sem_type->status = used;
+      भङ्ग;
     }
 }
