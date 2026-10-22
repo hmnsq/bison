@@ -53,61 +53,61 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_वस्तुसंच[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_वस्तुसंच || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_वस्तुसंच && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+प्रकारव्याख्या पूर्णांक state_item_संख्या;
 
-typedef struct
+प्रकारव्याख्या संरचना
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  स्थिरांक state *state;
+  item_संख्या *item;
+  state_item_संख्या trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+प्रकारव्याख्या gl_list_t state_item_list;
 
-extern bitsetv firsts;
+बाह्य bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+बाह्य माप_प्रकार nstate_वस्तुसंच;
+बाह्य state_item_संख्या *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+बाह्य state_item *state_वस्तुसंच;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_संख्या s, state_item_संख्या off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+स्थिर ओळीत state_item_संख्या
+state_item_index_lookup (state_संख्या s, state_item_संख्या off)
 {
-  return state_item_map[s] + off;
+  परत state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+शून्य state_वस्तुसंच_init (शून्य);
+शून्य state_वस्तुसंच_free (शून्य);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+शून्य state_item_print (स्थिरांक state_item *si, खाता *out, स्थिरांक अक्षर *prefix);
+स्थिरांक rule *state_item_rule (स्थिरांक state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (स्थिरांक state_item *si, स्थिरांक state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+स्थिर ओळीत bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  स्थिरांक शून्य *p = रिक्त;
+  bool res = gl_list_iterator_next (it, &p, रिक्त);
+  जर (res)
     *si = (state_item *) p;
-  else
+  अन्यथा
     gl_list_iterator_free (it);
-  return res;
+  परत res;
 }
 
 

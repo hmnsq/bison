@@ -17,101 +17,101 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#अन्तर्भाव <config.h>
 
-#include "lssi.h"
+#अन्तर्भाव "lssi.h"
 
-#include <gl_linked_list.h>
-#include <gl_xlist.h>
-#include <stdlib.h>
+#अन्तर्भाव <gl_linked_list.h>
+#अन्तर्भाव <gl_xlist.h>
+#अन्तर्भाव <stdlib.h>
 
-#include "getargs.h"
-#include "nullable.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "nullable.h"
 
 // Lookahead sensitive state item.
-typedef struct lssi
+प्रकारव्याख्या संरचना lssi
 {
-  state_item_number si;
-  struct lssi *parent;
+  state_item_संख्या si;
+  संरचना lssi *parent;
   // this is the precise lookahead set (follow_L from the CupEx paper)
   bitset lookahead;
   bool free_lookahead;
 } lssi;
 
-static lssi *
-new_lssi (state_item_number si, lssi *p, bitset l, bool free_l)
+स्थिर lssi *
+new_lssi (state_item_संख्या si, lssi *p, bitset l, bool free_l)
 {
-  lssi *res = xmalloc (sizeof *res);
+  lssi *res = xmalloc (आकार *res);
   res->si = si;
   res->parent = p;
   res->lookahead = l;
   res->free_lookahead = free_l;
-  return res;
+  परत res;
 }
 
-static void
+स्थिर शून्य
 lssi_free (lssi *sn)
 {
-  if (sn == NULL)
-    return;
-  if (sn->free_lookahead)
+  जर (sn == रिक्त)
+    परत;
+  जर (sn->free_lookahead)
     bitset_free (sn->lookahead);
-  free (sn);
+  मुक्त (sn);
 }
 
-static size_t
-lssi_hasher (lssi *sn, size_t max)
+स्थिर माप_प्रकार
+lssi_hasher (lssi *sn, माप_प्रकार max)
 {
-  size_t hash = sn->si;
+  माप_प्रकार hash = sn->si;
   bitset_iterator biter;
-  symbol_number syn;
+  चिन्ह_संख्या syn;
   BITSET_FOR_EACH (biter, sn->lookahead, syn, 0)
     hash += syn;
-  return hash % max;
+  परत hash % max;
 }
 
-static bool
+स्थिर bool
 lssi_comparator (lssi *s1, lssi *s2)
 {
-  if (s1->si == s2->si)
+  जर (s1->si == s2->si)
     {
-      if (s1->lookahead == s2->lookahead)
-        return true;
-      return bitset_equal_p (s1->lookahead, s2->lookahead);
+      जर (s1->lookahead == s2->lookahead)
+        परत true;
+      परत bitset_equal_p (s1->lookahead, s2->lookahead);
     }
-  return false;
+  परत false;
 }
 
-typedef gl_list_t lssi_list;
+प्रकारव्याख्या gl_list_t lssi_list;
 
-static inline bool
+स्थिर ओळीत bool
 append_lssi (lssi *sn, Hash_table *visited, lssi_list queue)
 {
-  if (hash_lookup (visited, sn))
+  जर (hash_lookup (visited, sn))
     {
       sn->free_lookahead = false;
       lssi_free (sn);
-      return false;
+      परत false;
     }
   hash_xinsert (visited, sn);
   gl_list_add_last (queue, sn);
-  return true;
+  परत true;
 }
 
-#if 0
-static void
+#जर 0
+स्थिर शून्य
 lssi_print (lssi *l)
 {
-  FILE *out = stderr;
-  print_state_item (&state_items[l->si], out);
-  if (l->lookahead)
+  खाता *out = मानक_त्रुटि;
+  print_state_item (&state_वस्तुसंच[l->si], out);
+  जर (l->lookahead)
     {
-      fprintf (out, "FOLLOWL = { ");
+      ख_लिखो (out, "FOLLOWL = { ");
       bitset_iterator biter;
-      symbol_number sin;
+      चिन्ह_संख्या sin;
       BITSET_FOR_EACH (biter, l->lookahead, sin, 0)
-        fprintf (out, "%s, \n", symbols[sin]->tag);
-      fprintf (out, "}\n");
+        ख_लिखो (out, "%s, \n", symbols[sin]->tag);
+      ख_लिखो (out, "}\n");
     }
 }
 #endif
@@ -120,29 +120,29 @@ lssi_print (lssi *l)
  * Compute the set of state-items that can reach the given conflict item via
  * a combination of transitions or production steps.
  */
-static bitset
-eligible_state_items (state_item *target)
+स्थिर bitset
+eligible_state_वस्तुसंच (state_item *target)
 {
-  bitset result = bitset_create (nstate_items, BITSET_FIXED);
+  bitset result = bitset_create (nstate_वस्तुसंच, BITSET_FIXED);
   state_item_list queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true, 1,
-                    (const void **) &target);
-  while (gl_list_size (queue) > 0)
+    gl_list_create (GL_LINKED_LIST, रिक्त, रिक्त, रिक्त, true, 1,
+                    (स्थिरांक शून्य **) &target);
+  पर्यंत (gl_list_size (queue) > 0)
     {
       state_item *si = (state_item *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      if (bitset_test (result, si - state_items))
-        continue;
-      bitset_set (result, si - state_items);
+      जर (bitset_test (result, si - state_वस्तुसंच))
+        सुरूठेवा;
+      bitset_set (result, si - state_वस्तुसंच);
       // search all reverse edges.
       bitset rsi = si->revs;
       bitset_iterator biter;
-      state_item_number sin;
+      state_item_संख्या sin;
       BITSET_FOR_EACH (biter, rsi, sin, 0)
-        gl_list_add_last (queue, &state_items[sin]);
+        gl_list_add_last (queue, &state_वस्तुसंच[sin]);
     }
   gl_list_free (queue);
-  return result;
+  परत result;
 }
 
 /**
@@ -151,38 +151,38 @@ eligible_state_items (state_item *target)
  * that can reach the conflict state.
  */
 state_item_list
-shortest_path_from_start (state_item_number target, symbol_number next_sym)
+shortest_path_from_start (state_item_संख्या target, चिन्ह_संख्या next_sym)
 {
-  bitset eligible = eligible_state_items (&state_items[target]);
+  bitset eligible = eligible_state_वस्तुसंच (&state_वस्तुसंच[target]);
   Hash_table *visited = hash_initialize (32,
-                                         NULL,
+                                         रिक्त,
                                          (Hash_hasher) lssi_hasher,
                                          (Hash_comparator) lssi_comparator,
                                          (Hash_data_freer) lssi_free);
   bitset il = bitset_create (nsyms, BITSET_FIXED);
   bitset_set (il, 0);
-  lssi *init = new_lssi (0, NULL, il, true);
-  lssi_list queue = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
-                                          NULL, true);
+  lssi *init = new_lssi (0, रिक्त, il, true);
+  lssi_list queue = gl_list_create_empty (GL_LINKED_LIST, रिक्त, रिक्त,
+                                          रिक्त, true);
   append_lssi (init, visited, queue);
   // breadth-first search
   bool finished = false;
   lssi *n;
-  while (gl_list_size (queue) > 0)
+  पर्यंत (gl_list_size (queue) > 0)
     {
       n = (lssi *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      state_item_number last = n->si;
-      if (target == last && bitset_test (n->lookahead, next_sym))
+      state_item_संख्या last = n->si;
+      जर (target == last && bitset_test (n->lookahead, next_sym))
         {
           finished = true;
-          break;
+          थांबा;
         }
-      state_item *si = &state_items[last];
+      state_item *si = &state_वस्तुसंच[last];
       // Transitions don't change follow_L
-      if (si->trans >= 0)
+      जर (si->trans >= 0)
         {
-          if (bitset_test (eligible, si->trans))
+          जर (bitset_test (eligible, si->trans))
             {
               lssi *next = new_lssi (si->trans, n, n->lookahead, false);
               append_lssi (next, visited, queue);
@@ -195,71 +195,71 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
       // if the symbol is not nullable, follow_L is its FIRSTS set
       // if the symbol is nullable, follow_L is its FIRSTS set unioned with
       // this logic applied to the next symbol in the rule
-      if (si->prods)
+      जर (si->prods)
         {
           // Compute follow_L as above
           bitset lookahead = bitset_create (nsyms, BITSET_FIXED);
-          item_number *pos = si->item + 1;
-          for (; !item_number_is_rule_number (*pos); ++pos)
+          item_संख्या *pos = si->item + 1;
+          साठी (; !item_संख्या_is_rule_संख्या (*pos); ++pos)
             {
-              item_number it = *pos;
-              if (ISTOKEN (it))
+              item_संख्या it = *pos;
+              जर (ISTOKEN (it))
                 {
                   bitset_set (lookahead, it);
-                  break;
+                  थांबा;
                 }
-              else
+              अन्यथा
                 {
                   bitset_union (lookahead, lookahead, FIRSTS (it));
-                  if (!nullable[it - ntokens])
-                    break;
+                  जर (!nullable[it - ntokens])
+                    थांबा;
                 }
             }
-          if (item_number_is_rule_number (*pos))
+          जर (item_संख्या_is_rule_संख्या (*pos))
             bitset_union (lookahead, n->lookahead, lookahead);
 
           bool lookahead_used = false;
           // Try all possible production steps within this parser state.
           bitset_iterator biter;
-          state_item_number nextSI;
+          state_item_संख्या nextSI;
           BITSET_FOR_EACH (biter, si->prods, nextSI, 0)
             {
-              if (!bitset_test (eligible, nextSI))
-                continue;
+              जर (!bitset_test (eligible, nextSI))
+                सुरूठेवा;
               lssi *next = new_lssi (nextSI, n, lookahead,
                                      !lookahead_used);
               lookahead_used = append_lssi (next, visited, queue)
                                || lookahead_used;
             }
-          if (!lookahead_used)
+          जर (!lookahead_used)
             bitset_free (lookahead);
         }
     }
 
   bitset_free (eligible);
-  if (!finished)
+  जर (!finished)
     {
       gl_list_free (queue);
-      fputs ("Cannot find shortest path to conflict state.", stderr);
-      abort ();
+      ख_माला_दो ("Cannot find shortest path to conflict state.", मानक_त्रुटि);
+      पात ();
     }
   state_item_list res =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  for (lssi *sn = n; sn != NULL; sn = sn->parent)
-    gl_list_add_first (res, &state_items[sn->si]);
+    gl_list_create_empty (GL_LINKED_LIST, रिक्त, रिक्त, रिक्त, true);
+  साठी (lssi *sn = n; sn != रिक्त; sn = sn->parent)
+    gl_list_add_first (res, &state_वस्तुसंच[sn->si]);
 
   hash_free (visited);
   gl_list_free (queue);
 
-  if (trace_flag & trace_cex)
+  जर (trace_flag & trace_cex)
     {
-      fputs ("REDUCE ITEM PATH:\n", stderr);
+      ख_माला_दो ("REDUCE ITEM PATH:\n", मानक_त्रुटि);
       gl_list_iterator_t it = gl_list_iterator (res);
-      const void *sip;
-      while (gl_list_iterator_next (&it, &sip, NULL))
-        state_item_print ((state_item *) sip, stderr, "");
+      स्थिरांक शून्य *sip;
+      पर्यंत (gl_list_iterator_next (&it, &sip, रिक्त))
+        state_item_print ((state_item *) sip, मानक_त्रुटि, "");
     }
-  return res;
+  परत res;
 }
 
 /**
@@ -267,20 +267,20 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
  * a nonterminal in the given symbol set.
  */
 bool
-intersect_symbol (symbol_number sym, bitset syms)
+intersect_चिन्ह (चिन्ह_संख्या sym, bitset syms)
 {
-  if (!syms)
-    return true;
+  जर (!syms)
+    परत true;
   bitset_iterator biter;
-  symbol_number sn;
+  चिन्ह_संख्या sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (sym == sn)
-        return true;
-      if (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
-        return true;
+      जर (sym == sn)
+        परत true;
+      जर (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
+        परत true;
     }
-  return false;
+  परत false;
 }
 
 /**
@@ -290,18 +290,18 @@ intersect_symbol (symbol_number sym, bitset syms)
 bool
 intersect (bitset ts, bitset syms)
 {
-  if (!syms || !ts)
-    return true;
+  जर (!syms || !ts)
+    परत true;
   bitset_iterator biter;
-  symbol_number sn;
+  चिन्ह_संख्या sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (bitset_test (ts, sn))
-        return true;
-      if (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
-        return true;
+      जर (bitset_test (ts, sn))
+        परत true;
+      जर (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
+        परत true;
     }
-  return false;
+  परत false;
 }
 
 
@@ -310,34 +310,34 @@ intersect (bitset ts, bitset syms)
  * to its lookahead
  */
 state_item_list
-lssi_reverse_production (const state_item *si, bitset lookahead)
+lssi_reverse_production (स्थिरांक state_item *si, bitset lookahead)
 {
   state_item_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  if (SI_TRANSITION (si))
-    return result;
+    gl_list_create_empty (GL_LINKED_LIST, रिक्त, रिक्त, रिक्त, true);
+  जर (SI_TRANSITION (si))
+    परत result;
   // A production step was made to the current lalr_item.
   // Check that the next symbol in the parent lalr_item is
   // compatible with the lookahead.
   bitset_iterator biter;
-  state_item_number sin;
+  state_item_संख्या sin;
   BITSET_FOR_EACH (biter, si->revs, sin, 0)
   {
-    state_item *prevsi = &state_items[sin];
-    if (!production_allowed (prevsi, si))
-      continue;
+    state_item *prevsi = &state_वस्तुसंच[sin];
+    जर (!production_allowed (prevsi, si))
+      सुरूठेवा;
     bitset prev_lookahead = prevsi->lookahead;
-    if (item_number_is_rule_number (*(prevsi->item)))
+    जर (item_संख्या_is_rule_संख्या (*(prevsi->item)))
       {
         // reduce item
         // Check that some lookaheads can be preserved.
-        if (!intersect (prev_lookahead, lookahead))
-          continue;
+        जर (!intersect (prev_lookahead, lookahead))
+          सुरूठेवा;
       }
-    else
+    अन्यथा
       {
         // shift item
-        if (lookahead)
+        जर (lookahead)
           {
             // Check that lookahead is compatible with the first
             // possible symbols in the rest of the production.
@@ -346,28 +346,28 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
             // the lookahead of the corresponding item.
             bool applicable = false;
             bool nlable = true;
-            for (item_number *pos = prevsi->item + 1;
-                 !applicable && nlable && item_number_is_symbol_number (*pos);
+            साठी (item_संख्या *pos = prevsi->item + 1;
+                 !applicable && nlable && item_संख्या_is_चिन्ह_संख्या (*pos);
                  ++pos)
               {
-                symbol_number next_sym = item_number_as_symbol_number (*pos);
-                if (ISTOKEN (next_sym))
+                चिन्ह_संख्या next_sym = item_संख्या_as_चिन्ह_संख्या (*pos);
+                जर (ISTOKEN (next_sym))
                   {
-                    applicable = intersect_symbol (next_sym, lookahead);
+                    applicable = intersect_चिन्ह (next_sym, lookahead);
                     nlable = false;
                   }
-                else
+                अन्यथा
                   {
                     applicable = intersect (FIRSTS (next_sym), lookahead);
-                    if (!applicable)
+                    जर (!applicable)
                       nlable = nullable[next_sym - ntokens];
                   }
               }
-            if (!applicable && !nlable)
-              continue;
+            जर (!applicable && !nlable)
+              सुरूठेवा;
           }
       }
     gl_list_add_last (result, prevsi);
   }
-  return result;
+  परत result;
 }

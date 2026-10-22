@@ -27,20 +27,20 @@
 | Pointers to unique copies of C strings.  |
 `-----------------------------------------*/
 
-typedef char const *uniqstr;
+प्रकारव्याख्या अक्षर स्थिरांक *uniqstr;
 
 /* Return the uniqstr for STR.  */
-uniqstr uniqstr_new (char const *str);
+uniqstr uniqstr_new (अक्षर स्थिरांक *str);
 
 /* Two uniqstr values have the same value iff they are the same.  */
 # define UNIQSTR_EQ(Ustr1, Ustr2) (!!((Ustr1) == (Ustr2)))
 
 /* Compare two uniqstr a la strcmp: negative for <, nul for =, and
    positive for >.  Undefined order, relies on addresses.  */
-int uniqstr_cmp (uniqstr u1, uniqstr u2);
+पूर्णांक uniqstr_cmp (uniqstr u1, uniqstr u2);
 
 /* Die if STR is not a uniqstr.  */
-void uniqstr_assert (char const *str);
+शून्य uniqstr_assert (अक्षर स्थिरांक *str);
 
 /*----------------.
 | Concatenation.  |
@@ -49,21 +49,21 @@ void uniqstr_assert (char const *str);
 /* Concatenate strings and return a uniqstr.  The goal of
    this macro is to make the caller's code a little more succinct.  */
 # define UNIQSTR_CONCAT(...)                                            \
-  uniqstr_concat (ARRAY_CARDINALITY (((char const *[]) {__VA_ARGS__})), \
+  uniqstr_concat (ARRAY_CARDINALITY (((अक्षर स्थिरांक *[]) {__VA_ARGS__})), \
                   __VA_ARGS__)
-uniqstr uniqstr_concat (int nargs, ...);
+uniqstr uniqstr_concat (पूर्णांक nargs, ...);
 
 /*--------------------.
 | Table of uniqstrs.  |
 `--------------------*/
 
 /* Create the string table.  */
-void uniqstrs_new (void);
+शून्य uniqstrs_new (शून्य);
 
 /* Free all the memory allocated for symbols.  */
-void uniqstrs_free (void);
+शून्य uniqstrs_free (शून्य);
 
 /* Report them all.  */
-void uniqstrs_print (void);
+शून्य uniqstrs_print (शून्य);
 
 #endif /* ! defined UNIQSTR_H_ */

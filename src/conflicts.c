@@ -18,51 +18,51 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <bitset.h>
+#अन्तर्भाव <bitset.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "print-xml.h"
-#include "reader.h"
-#include "state.h"
-#include "symtab.h"
+#अन्तर्भाव "complain.h"
+#अन्तर्भाव "conflicts.h"
+#अन्तर्भाव "counterexample.h"
+#अन्तर्भाव "files.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "lalr.h"
+#अन्तर्भाव "lr0.h"
+#अन्तर्भाव "print-xml.h"
+#अन्तर्भाव "reader.h"
+#अन्तर्भाव "state.h"
+#अन्तर्भाव "symtab.h"
 
 /* -1 stands for not specified. */
-int expected_sr_conflicts = -1;
-int expected_rr_conflicts = -1;
+पूर्णांक expected_sr_conflicts = -1;
+पूर्णांक expected_rr_conflicts = -1;
 
 /* CONFLICTS[STATE-NUM] -- Whether that state has unresolved conflicts.  */
-static bool *conflicts;
+स्थिर bool *conflicts;
 
-static struct obstack solved_conflicts_obstack;
-static struct obstack solved_conflicts_xml_obstack;
+स्थिर संरचना obstack solved_conflicts_obstack;
+स्थिर संरचना obstack solved_conflicts_xml_obstack;
 
-static bitset shift_set;
-static bitset lookahead_set;
+स्थिर bitset shift_set;
+स्थिर bitset lookahead_set;
 
 bool
-has_conflicts (const state *s)
+has_conflicts (स्थिरांक state *s)
 {
-  return conflicts[s->number];
+  परत conflicts[s->संख्या];
 }
 
 
 
-enum conflict_resolution
+गणना conflict_resolution
   {
     shift_resolution,
     reduce_resolution,
-    left_resolution,
-    right_resolution,
+    डावा_resolution,
+    उजवा_resolution,
     nonassoc_resolution
   };
 
@@ -72,151 +72,151 @@ enum conflict_resolution
 | RESOLUTION.                                                     |
 `----------------------------------------------------------------*/
 
-static inline void
-log_resolution (rule *r, symbol_number token,
-                enum conflict_resolution resolution)
+स्थिर ओळीत शून्य
+log_resolution (rule *r, चिन्ह_संख्या token,
+                गणना conflict_resolution resolution)
 {
-  if (report_flag & report_solved_conflicts)
+  जर (report_flag & report_solved_conflicts)
     {
       /* The description of the resolution. */
-      switch (resolution)
+      निवड (resolution)
         {
-        case shift_resolution:
-        case right_resolution:
+        स्थिती shift_resolution:
+        स्थिती उजवा_resolution:
           obstack_sgrow (&solved_conflicts_obstack, "    ");
           obstack_printf (&solved_conflicts_obstack,
                           _("Conflict between rule %d and token %s"
                             " resolved as shift"),
-                          r->number,
+                          r->संख्या,
                           symbols[token]->tag);
-          break;
+          थांबा;
 
-        case reduce_resolution:
-        case left_resolution:
+        स्थिती reduce_resolution:
+        स्थिती डावा_resolution:
           obstack_sgrow (&solved_conflicts_obstack, "    ");
           obstack_printf (&solved_conflicts_obstack,
                           _("Conflict between rule %d and token %s"
                             " resolved as reduce"),
-                          r->number,
+                          r->संख्या,
                           symbols[token]->tag);
-          break;
+          थांबा;
 
-        case nonassoc_resolution:
+        स्थिती nonassoc_resolution:
           obstack_sgrow (&solved_conflicts_obstack, "    ");
           obstack_printf (&solved_conflicts_obstack,
                           _("Conflict between rule %d and token %s"
                             " resolved as an error"),
-                          r->number,
+                          r->संख्या,
                           symbols[token]->tag);
-          break;
+          थांबा;
         }
 
       /* The reason. */
-      switch (resolution)
+      निवड (resolution)
         {
-        case shift_resolution:
+        स्थिती shift_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%s < %s)",
-                          r->prec->symbol->tag,
+                          r->prec->चिन्ह->tag,
                           symbols[token]->tag);
-          break;
+          थांबा;
 
-        case reduce_resolution:
+        स्थिती reduce_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%s < %s)",
                           symbols[token]->tag,
-                          r->prec->symbol->tag);
-          break;
+                          r->prec->चिन्ह->tag);
+          थांबा;
 
-        case left_resolution:
+        स्थिती डावा_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%%left %s)",
                           symbols[token]->tag);
-          break;
+          थांबा;
 
-        case right_resolution:
+        स्थिती उजवा_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%%right %s)",
                           symbols[token]->tag);
-          break;
+          थांबा;
 
-        case nonassoc_resolution:
+        स्थिती nonassoc_resolution:
           obstack_printf (&solved_conflicts_obstack,
                           " (%%nonassoc %s)",
                           symbols[token]->tag);
-          break;
+          थांबा;
         }
 
       obstack_sgrow (&solved_conflicts_obstack, ".\n");
     }
 
   /* XML report */
-  if (xml_flag)
+  जर (xml_flag)
     {
       /* The description of the resolution. */
-      switch (resolution)
+      निवड (resolution)
         {
-        case shift_resolution:
-        case right_resolution:
+        स्थिती shift_resolution:
+        स्थिती उजवा_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "        <resolution rule=\"%d\" symbol=\"%s\""
                           " type=\"shift\">",
-                          r->number,
+                          r->संख्या,
                           xml_escape (symbols[token]->tag));
-          break;
+          थांबा;
 
-        case reduce_resolution:
-        case left_resolution:
+        स्थिती reduce_resolution:
+        स्थिती डावा_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "        <resolution rule=\"%d\" symbol=\"%s\""
                           " type=\"reduce\">",
-                          r->number,
+                          r->संख्या,
                           xml_escape (symbols[token]->tag));
-          break;
+          थांबा;
 
-        case nonassoc_resolution:
+        स्थिती nonassoc_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "        <resolution rule=\"%d\" symbol=\"%s\""
                           " type=\"error\">",
-                          r->number,
+                          r->संख्या,
                           xml_escape (symbols[token]->tag));
-          break;
+          थांबा;
         }
 
       /* The reason. */
-      switch (resolution)
+      निवड (resolution)
         {
-        case shift_resolution:
+        स्थिती shift_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%s &lt; %s",
-                          xml_escape_n (0, r->prec->symbol->tag),
+                          xml_escape_n (0, r->prec->चिन्ह->tag),
                           xml_escape_n (1, symbols[token]->tag));
-          break;
+          थांबा;
 
-        case reduce_resolution:
+        स्थिती reduce_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%s &lt; %s",
                           xml_escape_n (0, symbols[token]->tag),
-                          xml_escape_n (1, r->prec->symbol->tag));
-          break;
+                          xml_escape_n (1, r->prec->चिन्ह->tag));
+          थांबा;
 
-        case left_resolution:
+        स्थिती डावा_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%%left %s",
                           xml_escape (symbols[token]->tag));
-          break;
+          थांबा;
 
-        case right_resolution:
+        स्थिती उजवा_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%%right %s",
                           xml_escape (symbols[token]->tag));
-          break;
+          थांबा;
 
-        case nonassoc_resolution:
+        स्थिती nonassoc_resolution:
           obstack_printf (&solved_conflicts_xml_obstack,
                           "%%nonassoc %s",
                           xml_escape (symbols[token]->tag));
-      break;
+      थांबा;
         }
 
       obstack_sgrow (&solved_conflicts_xml_obstack, "</resolution>\n");
@@ -230,15 +230,15 @@ log_resolution (rule *r, symbol_number token,
 | favor of the reduction or as an error (%nonassoc).                |
 `------------------------------------------------------------------*/
 
-static void
-flush_shift (state *s, int token)
+स्थिर शून्य
+flush_shift (state *s, पूर्णांक token)
 {
   transitions *trans = s->transitions;
 
   bitset_reset (lookahead_set, token);
-  for (int i = 0; i < trans->num; ++i)
-    if (!TRANSITION_IS_DISABLED (trans, i)
-        && TRANSITION_SYMBOL (trans, i) == token)
+  साठी (पूर्णांक i = 0; i < trans->अंक; ++i)
+    जर (!TRANSITION_IS_DISABLED (trans, i)
+        && TRANSITION_चिन्ह (trans, i) == token)
       TRANSITION_DISABLE (trans, i);
 }
 
@@ -249,8 +249,8 @@ flush_shift (state *s, int token)
 | conflict in favor of the shift or as an error (%nonassoc).          |
 `--------------------------------------------------------------------*/
 
-static void
-flush_reduce (bitset lookaheads, int token)
+स्थिर शून्य
+flush_reduce (bitset lookaheads, पूर्णांक token)
 {
   bitset_reset (lookaheads, token);
 }
@@ -268,36 +268,36 @@ flush_reduce (bitset lookaheads, int token)
 | errors.                                                           |
 `------------------------------------------------------------------*/
 
-static void
-resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
+स्थिर शून्य
+resolve_sr_conflict (state *s, पूर्णांक ruleno, चिन्ह **errors, पूर्णांक *nerrs)
 {
   reductions *reds = s->reductions;
   /* Find the rule to reduce by to get precedence of reduction.  */
   rule *redrule = reds->rules[ruleno];
-  int redprec = redrule->prec->prec;
+  पूर्णांक redprec = redrule->prec->prec;
   bitset lookaheads = reds->lookaheads[ruleno];
 
-  for (symbol_number i = 0; i < ntokens; ++i)
-    if (bitset_test (lookaheads, i)
+  साठी (चिन्ह_संख्या i = 0; i < ntokens; ++i)
+    जर (bitset_test (lookaheads, i)
         && bitset_test (lookahead_set, i)
         && symbols[i]->content->prec)
       {
         /* Shift/reduce conflict occurs for token number i
            and it has a precedence.
            The precedence of shifting is that of token i.  */
-        if (symbols[i]->content->prec < redprec)
+        जर (symbols[i]->content->prec < redprec)
           {
-            register_precedence (redrule->prec->number, i);
+            register_precedence (redrule->prec->संख्या, i);
             log_resolution (redrule, i, reduce_resolution);
             flush_shift (s, i);
           }
-        else if (symbols[i]->content->prec > redprec)
+        अन्यथा जर (symbols[i]->content->prec > redprec)
           {
-            register_precedence (i, redrule->prec->number);
+            register_precedence (i, redrule->prec->संख्या);
             log_resolution (redrule, i, shift_resolution);
             flush_reduce (lookaheads, i);
           }
-        else
+        अन्यथा
           /* Matching precedence levels.
              For non-defined associativity, keep both: unexpected
              associativity conflict.
@@ -305,34 +305,34 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
              For right associativity, keep only the shift.
              For nonassociativity, keep neither.  */
 
-          switch (symbols[i]->content->assoc)
+          निवड (symbols[i]->content->assoc)
             {
-            case undef_assoc:
-              abort ();
+            स्थिती undef_assoc:
+              पात ();
 
-            case precedence_assoc:
-              break;
+            स्थिती precedence_assoc:
+              थांबा;
 
-            case right_assoc:
-              register_assoc (i, redrule->prec->number);
-              log_resolution (redrule, i, right_resolution);
+            स्थिती उजवा_assoc:
+              register_assoc (i, redrule->prec->संख्या);
+              log_resolution (redrule, i, उजवा_resolution);
               flush_reduce (lookaheads, i);
-              break;
+              थांबा;
 
-            case left_assoc:
-              register_assoc (i, redrule->prec->number);
-              log_resolution (redrule, i, left_resolution);
+            स्थिती डावा_assoc:
+              register_assoc (i, redrule->prec->संख्या);
+              log_resolution (redrule, i, डावा_resolution);
               flush_shift (s, i);
-              break;
+              थांबा;
 
-            case non_assoc:
-              register_assoc (i, redrule->prec->number);
+            स्थिती non_assoc:
+              register_assoc (i, redrule->prec->संख्या);
               log_resolution (redrule, i, nonassoc_resolution);
               flush_shift (s, i);
               flush_reduce (lookaheads, i);
               /* Record an explicit error for this token.  */
               errors[(*nerrs)++] = symbols[i];
-              break;
+              थांबा;
             }
       }
 }
@@ -345,52 +345,52 @@ resolve_sr_conflict (state *s, int ruleno, symbol **errors, int *nerrs)
 | lookahead tokens on which S raises a syntax error (%nonassoc).     |
 `-------------------------------------------------------------------*/
 
-static void
-set_conflicts (state *s, symbol **errors)
+स्थिर शून्य
+set_conflicts (state *s, चिन्ह **errors)
 {
-  if (s->consistent)
-    return;
+  जर (s->consistent)
+    परत;
 
   reductions *reds = s->reductions;
-  int nerrs = 0;
+  पूर्णांक nerrs = 0;
 
   bitset_zero (lookahead_set);
 
   {
     transitions *trans = s->transitions;
-    int i;
+    पूर्णांक i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (lookahead_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (lookahead_set, TRANSITION_चिन्ह (trans, i));
   }
 
   /* Loop over all rules which require lookahead in this state.  First
      check for shift/reduce conflict, and try to resolve using
      precedence.  */
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i]->prec
+  साठी (पूर्णांक i = 0; i < reds->अंक; ++i)
+    जर (reds->rules[i]->prec
         && reds->rules[i]->prec->prec
         && !bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
       resolve_sr_conflict (s, i, errors, &nerrs);
 
-  if (nerrs)
+  जर (nerrs)
     /* Some tokens have been explicitly made errors.  Allocate a
        permanent errs structure for this state, to record them.  */
     state_errs_set (s, nerrs, errors);
 
-  if (obstack_object_size (&solved_conflicts_obstack))
+  जर (obstack_object_size (&solved_conflicts_obstack))
     s->solved_conflicts = obstack_finish0 (&solved_conflicts_obstack);
-  if (obstack_object_size (&solved_conflicts_xml_obstack))
+  जर (obstack_object_size (&solved_conflicts_xml_obstack))
     s->solved_conflicts_xml = obstack_finish0 (&solved_conflicts_xml_obstack);
 
   /* Loop over all rules which require lookahead in this state.  Check
      for conflicts not resolved above.
 
      reds->lookaheads can be NULL if the LR type is LR(0).  */
-  if (reds->lookaheads)
-    for (int i = 0; i < reds->num; ++i)
+  जर (reds->lookaheads)
+    साठी (पूर्णांक i = 0; i < reds->अंक; ++i)
       {
-        if (!bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
-          conflicts[s->number] = true;
+        जर (!bitset_disjoint_p (reds->lookaheads[i], lookahead_set))
+          conflicts[s->संख्या] = true;
         bitset_or (lookahead_set, lookahead_set, reds->lookaheads[i]);
       }
 }
@@ -401,38 +401,38 @@ set_conflicts (state *s, symbol **errors)
 | and flag as inconsistent the states that still have conflicts.  |
 `----------------------------------------------------------------*/
 
-void
-conflicts_solve (void)
+शून्य
+conflicts_solve (शून्य)
 {
   /* List of lookahead tokens on which we explicitly raise a syntax error.  */
-  symbol **errors = xnmalloc (ntokens + 1, sizeof *errors);
+  चिन्ह **errors = xnmalloc (ntokens + 1, आकार *errors);
 
-  conflicts = xcalloc (nstates, sizeof *conflicts);
+  conflicts = xcalloc (nstates, आकार *conflicts);
   shift_set = bitset_create (ntokens, BITSET_FIXED);
   lookahead_set = bitset_create (ntokens, BITSET_FIXED);
   obstack_init (&solved_conflicts_obstack);
   obstack_init (&solved_conflicts_xml_obstack);
 
-  for (state_number i = 0; i < nstates; ++i)
+  साठी (state_संख्या i = 0; i < nstates; ++i)
     {
       set_conflicts (states[i], errors);
 
       /* For uniformity of the code, make sure all the states have a valid
          'errs' member.  */
-      if (!states[i]->errs)
+      जर (!states[i]->errs)
         states[i]->errs = errs_new (0, 0);
     }
 
-  free (errors);
+  मुक्त (errors);
 }
 
 
-void
-conflicts_update_state_numbers (state_number old_to_new[],
-                                state_number nstates_old)
+शून्य
+conflicts_update_state_numbers (state_संख्या old_to_new[],
+                                state_संख्या nstates_old)
 {
-  for (state_number i = 0; i < nstates_old; ++i)
-    if (old_to_new[i] != nstates_old)
+  साठी (state_संख्या i = 0; i < nstates_old; ++i)
+    जर (old_to_new[i] != nstates_old)
       conflicts[old_to_new[i]] = conflicts[i];
 }
 
@@ -441,45 +441,45 @@ conflicts_update_state_numbers (state_number old_to_new[],
 | Count the number of shift/reduce conflicts.  |
 `---------------------------------------------*/
 
-static size_t
-count_state_sr_conflicts (const state *s)
+स्थिर माप_प्रकार
+मोजणी_state_sr_conflicts (स्थिरांक state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
 
-  if (!trans)
-    return 0;
+  जर (!trans)
+    परत 0;
 
   bitset_zero (lookahead_set);
   bitset_zero (shift_set);
 
   {
-    int i;
+    पूर्णांक i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (shift_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (shift_set, TRANSITION_चिन्ह (trans, i));
   }
 
-  for (int i = 0; i < reds->num; ++i)
+  साठी (पूर्णांक i = 0; i < reds->अंक; ++i)
     bitset_or (lookahead_set, lookahead_set, reds->lookaheads[i]);
 
   bitset_and (lookahead_set, lookahead_set, shift_set);
 
-  return bitset_count (lookahead_set);
+  परत bitset_मोजणी (lookahead_set);
 }
 
 /*---------------------------------------------.
 | The total number of shift/reduce conflicts.  |
 `---------------------------------------------*/
 
-static size_t
-count_sr_conflicts (void)
+स्थिर माप_प्रकार
+मोजणी_sr_conflicts (शून्य)
 {
-  size_t res = 0;
+  माप_प्रकार res = 0;
   /* Conflicts by state.  */
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
-      res += count_state_sr_conflicts (states[i]);
-  return res;
+  साठी (state_संख्या i = 0; i < nstates; ++i)
+    जर (conflicts[i])
+      res += मोजणी_state_sr_conflicts (states[i]);
+  परत res;
 }
 
 
@@ -489,33 +489,33 @@ count_sr_conflicts (void)
 | for each reduction after the first for a given token.            |
 `-----------------------------------------------------------------*/
 
-static size_t
-count_state_rr_conflicts (const state *s)
+स्थिर माप_प्रकार
+मोजणी_state_rr_conflicts (स्थिरांक state *s)
 {
   reductions *reds = s->reductions;
-  size_t res = 0;
+  माप_प्रकार res = 0;
 
-  for (symbol_number i = 0; i < ntokens; ++i)
+  साठी (चिन्ह_संख्या i = 0; i < ntokens; ++i)
     {
-      int count = 0;
-      for (int j = 0; j < reds->num; ++j)
-        count += bitset_test (reds->lookaheads[j], i);
-      if (2 <= count)
-        res += count-1;
+      पूर्णांक मोजणी = 0;
+      साठी (पूर्णांक j = 0; j < reds->अंक; ++j)
+        मोजणी += bitset_test (reds->lookaheads[j], i);
+      जर (2 <= मोजणी)
+        res += मोजणी-1;
     }
 
-  return res;
+  परत res;
 }
 
-static size_t
-count_rr_conflicts (void)
+स्थिर माप_प्रकार
+मोजणी_rr_conflicts (शून्य)
 {
-  size_t res = 0;
+  माप_प्रकार res = 0;
   /* Conflicts by state.  */
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
-      res += count_state_rr_conflicts (states[i]);
-  return res;
+  साठी (state_संख्या i = 0; i < nstates; ++i)
+    जर (conflicts[i])
+      res += मोजणी_state_rr_conflicts (states[i]);
+  परत res;
 }
 
 
@@ -524,23 +524,23 @@ count_rr_conflicts (void)
 | state.                                                            |
 `------------------------------------------------------------------*/
 
-static size_t
-count_rule_state_sr_conflicts (rule *r, state *s)
+स्थिर माप_प्रकार
+मोजणी_rule_state_sr_conflicts (rule *r, state *s)
 {
-  size_t res = 0;
+  माप_प्रकार res = 0;
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
 
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
+  साठी (पूर्णांक i = 0; i < reds->अंक; ++i)
+    जर (reds->rules[i] == r)
       {
         bitset lookaheads = reds->lookaheads[i];
-        int j;
+        पूर्णांक j;
         FOR_EACH_SHIFT (trans, j)
-          res += bitset_test (lookaheads, TRANSITION_SYMBOL (trans, j));
+          res += bitset_test (lookaheads, TRANSITION_चिन्ह (trans, j));
       }
 
-  return res;
+  परत res;
 }
 
 /*----------------------------------------------------------------------.
@@ -548,14 +548,14 @@ count_rule_state_sr_conflicts (rule *r, state *s)
 | in shift/reduce conflicts.                                            |
 `----------------------------------------------------------------------*/
 
-static size_t
-count_rule_sr_conflicts (rule *r)
+स्थिर माप_प्रकार
+मोजणी_rule_sr_conflicts (rule *r)
 {
-  size_t res = 0;
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
-      res += count_rule_state_sr_conflicts (r, states[i]);
-  return res;
+  माप_प्रकार res = 0;
+  साठी (state_संख्या i = 0; i < nstates; ++i)
+    जर (conflicts[i])
+      res += मोजणी_rule_state_sr_conflicts (r, states[i]);
+  परत res;
 }
 
 /*-----------------------------------------------------------------.
@@ -563,106 +563,106 @@ count_rule_sr_conflicts (rule *r)
 | involved in reduce/reduce conflicts.                             |
 `-----------------------------------------------------------------*/
 
-static size_t
-count_rule_state_rr_conflicts (rule *r, state *s)
+स्थिर माप_प्रकार
+मोजणी_rule_state_rr_conflicts (rule *r, state *s)
 {
-  size_t res = 0;
-  const reductions *reds = s->reductions;
+  माप_प्रकार res = 0;
+  स्थिरांक reductions *reds = s->reductions;
   bitset lookaheads = bitset_create (ntokens, BITSET_FIXED);
 
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
-      for (int j = 0; j < reds->num; ++j)
-        if (reds->rules[j] != r)
+  साठी (पूर्णांक i = 0; i < reds->अंक; ++i)
+    जर (reds->rules[i] == r)
+      साठी (पूर्णांक j = 0; j < reds->अंक; ++j)
+        जर (reds->rules[j] != r)
           {
             bitset_and (lookaheads,
                         reds->lookaheads[i],
                         reds->lookaheads[j]);
-            res += bitset_count (lookaheads);
+            res += bitset_मोजणी (lookaheads);
           }
   bitset_free (lookaheads);
-  return res;
+  परत res;
 }
 
-static size_t
-count_rule_rr_conflicts (rule *r)
+स्थिर माप_प्रकार
+मोजणी_rule_rr_conflicts (rule *r)
 {
-  size_t res = 0;
-  for (state_number i = 0; i < nstates; ++i)
-    res += count_rule_state_rr_conflicts (r, states[i]);
-  return res;
+  माप_प्रकार res = 0;
+  साठी (state_संख्या i = 0; i < nstates; ++i)
+    res += मोजणी_rule_state_rr_conflicts (r, states[i]);
+  परत res;
 }
 
 /*-----------------------------------------------------------.
 | Output the detailed description of states with conflicts.  |
 `-----------------------------------------------------------*/
 
-void
-conflicts_output (FILE *out)
+शून्य
+conflicts_output (खाता *out)
 {
   bool printed_sth = false;
-  for (state_number i = 0; i < nstates; ++i)
-    if (conflicts[i])
+  साठी (state_संख्या i = 0; i < nstates; ++i)
+    जर (conflicts[i])
       {
-        const state *s = states[i];
-        int src = count_state_sr_conflicts (s);
-        int rrc = count_state_rr_conflicts (s);
-        fprintf (out, _("State %d "), i);
-        if (src && rrc)
-          fprintf (out,
+        स्थिरांक state *s = states[i];
+        पूर्णांक src = मोजणी_state_sr_conflicts (s);
+        पूर्णांक rrc = मोजणी_state_rr_conflicts (s);
+        ख_लिखो (out, _("State %d "), i);
+        जर (src && rrc)
+          ख_लिखो (out,
                    _("conflicts: %d shift/reduce, %d reduce/reduce\n"),
                    src, rrc);
-        else if (src)
-          fprintf (out, _("conflicts: %d shift/reduce\n"), src);
-        else if (rrc)
-          fprintf (out, _("conflicts: %d reduce/reduce\n"), rrc);
+        अन्यथा जर (src)
+          ख_लिखो (out, _("conflicts: %d shift/reduce\n"), src);
+        अन्यथा जर (rrc)
+          ख_लिखो (out, _("conflicts: %d reduce/reduce\n"), rrc);
         printed_sth = true;
       }
-  if (printed_sth)
-    fputs ("\n\n", out);
+  जर (printed_sth)
+    ख_माला_दो ("\n\n", out);
 }
 
 /*--------------------------------------------.
 | Total the number of S/R and R/R conflicts.  |
 `--------------------------------------------*/
 
-int
-conflicts_total_count (void)
+पूर्णांक
+conflicts_total_मोजणी (शून्य)
 {
-  return count_sr_conflicts () + count_rr_conflicts ();
+  परत मोजणी_sr_conflicts () + मोजणी_rr_conflicts ();
 }
 
-static void
-report_counterexamples (void)
+स्थिर शून्य
+report_counterexamples (शून्य)
 {
-  for (state_number sn = 0; sn < nstates; ++sn)
-    if (conflicts[sn])
-      counterexample_report_state (states[sn], stderr, "");
+  साठी (state_संख्या sn = 0; sn < nstates; ++sn)
+    जर (conflicts[sn])
+      counterexample_report_state (states[sn], मानक_त्रुटि, "");
 }
 
 /*------------------------------------------------.
 | Report per-rule %expect/%expect-rr mismatches.  |
 `------------------------------------------------*/
 
-static void
-report_rule_expectation_mismatches (void)
+स्थिर शून्य
+report_rule_expectation_mismatches (शून्य)
 {
-  for (rule_number i = 0; i < nrules; i += 1)
+  साठी (rule_संख्या i = 0; i < nrules; i += 1)
     {
       rule *r = &rules[i];
-      int expected_sr = r->expected_sr_conflicts;
-      int expected_rr = r->expected_rr_conflicts;
+      पूर्णांक expected_sr = r->expected_sr_conflicts;
+      पूर्णांक expected_rr = r->expected_rr_conflicts;
 
-      if (expected_sr != -1 || expected_rr != -1)
+      जर (expected_sr != -1 || expected_rr != -1)
         {
-          int sr = count_rule_sr_conflicts (r);
-          if (sr != expected_sr && (sr != 0 || expected_sr != -1))
+          पूर्णांक sr = मोजणी_rule_sr_conflicts (r);
+          जर (sr != expected_sr && (sr != 0 || expected_sr != -1))
             complain (&r->location, complaint,
                       _("shift/reduce conflicts for rule %d:"
                         " %d found, %d expected"),
                       r->code, sr, expected_sr);
-          int rr = count_rule_rr_conflicts (r);
-          if (rr != expected_rr && (rr != 0 || expected_rr != -1))
+          पूर्णांक rr = मोजणी_rule_rr_conflicts (r);
+          जर (rr != expected_rr && (rr != 0 || expected_rr != -1))
             complain (&r->location, complaint,
                       _("reduce/reduce conflicts for rule %d:"
                         " %d found, %d expected"),
@@ -675,14 +675,14 @@ report_rule_expectation_mismatches (void)
 | Reporting numbers of conflicts.  |
 `---------------------------------*/
 
-void
-conflicts_print (void)
+शून्य
+conflicts_print (शून्य)
 {
   report_rule_expectation_mismatches ();
 
-  if (! glr_parser && expected_rr_conflicts != -1)
+  जर (! glr_parser && expected_rr_conflicts != -1)
     {
-      complain (NULL, Wother, _("%%expect-rr applies only to GLR parsers"));
+      complain (रिक्त, Wother, _("%%expect-rr applies only to GLR parsers"));
       expected_rr_conflicts = -1;
     }
 
@@ -691,26 +691,26 @@ conflicts_print (void)
   /* The following two blocks scream for factoring, but i18n support
      would make it ugly.  */
   {
-    int total = count_sr_conflicts ();
+    पूर्णांक total = मोजणी_sr_conflicts ();
     /* If %expect is not used, but %expect-rr is, then expect 0 sr.  */
-    int expected =
+    पूर्णांक expected =
       (expected_sr_conflicts == -1 && expected_rr_conflicts != -1)
       ? 0
       : expected_sr_conflicts;
-    if (expected != -1)
+    जर (expected != -1)
       {
-        if (expected != total)
+        जर (expected != total)
           {
-            complain (NULL, complaint,
+            complain (रिक्त, complaint,
                       _("shift/reduce conflicts: %d found, %d expected"),
                       total, expected);
-            if (total)
+            जर (total)
               unexpected_conflicts_warning = complaint;
           }
       }
-    else if (total)
+    अन्यथा जर (total)
       {
-        complain (NULL, Wconflicts_sr,
+        complain (रिक्त, Wconflicts_sr,
                   ngettext ("%d shift/reduce conflict",
                             "%d shift/reduce conflicts",
                             total),
@@ -720,26 +720,26 @@ conflicts_print (void)
   }
 
   {
-    int total = count_rr_conflicts ();
+    पूर्णांक total = मोजणी_rr_conflicts ();
     /* If %expect-rr is not used, but %expect is, then expect 0 rr.  */
-    int expected =
+    पूर्णांक expected =
       (expected_rr_conflicts == -1 && expected_sr_conflicts != -1)
       ? 0
       : expected_rr_conflicts;
-    if (expected != -1)
+    जर (expected != -1)
       {
-        if (expected != total)
+        जर (expected != total)
           {
-            complain (NULL, complaint,
+            complain (रिक्त, complaint,
                       _("reduce/reduce conflicts: %d found, %d expected"),
                       total, expected);
-            if (total)
+            जर (total)
               unexpected_conflicts_warning = complaint;
           }
       }
-    else if (total)
+    अन्यथा जर (total)
       {
-        complain (NULL, Wconflicts_rr,
+        complain (रिक्त, Wconflicts_rr,
                   ngettext ("%d reduce/reduce conflict",
                             "%d reduce/reduce conflicts",
                             total),
@@ -748,20 +748,20 @@ conflicts_print (void)
       }
   }
 
-  if (warning_is_enabled (Wcounterexamples))
+  जर (warning_is_enabled (Wcounterexamples))
     report_counterexamples ();
-  else if (unexpected_conflicts_warning != Wnone)
-    subcomplain (NULL, unexpected_conflicts_warning,
+  अन्यथा जर (unexpected_conflicts_warning != Wnone)
+    subcomplain (रिक्त, unexpected_conflicts_warning,
                  _("rerun with option '-Wcounterexamples'"
                    " to generate conflict counterexamples"));
 }
 
-void
-conflicts_free (void)
+शून्य
+conflicts_free (शून्य)
 {
-  free (conflicts);
+  मुक्त (conflicts);
   bitset_free (shift_set);
   bitset_free (lookahead_set);
-  obstack_free (&solved_conflicts_obstack, NULL);
-  obstack_free (&solved_conflicts_xml_obstack, NULL);
+  obstack_free (&solved_conflicts_obstack, रिक्त);
+  obstack_free (&solved_conflicts_xml_obstack, रिक्त);
 }
