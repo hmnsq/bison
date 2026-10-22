@@ -23,11 +23,11 @@
 
 /* A vector saying which nonterminals can expand into the null string.
    NULLABLE[I - NTOKENS] is nonzero if symbol I can do so.  */
-extern bool *nullable;
+बाह्य bool *nullable;
 
 /* Set up NULLABLE. */
-extern void nullable_compute (void);
+बाह्य शून्य nullable_compute (शून्य);
 
 /* Free NULLABLE. */
-extern void nullable_free (void);
+बाह्य शून्य nullable_free (शून्य);
 #endif /* !NULLABLE_H_ */

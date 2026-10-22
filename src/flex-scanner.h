@@ -38,7 +38,7 @@
 // ./src/scan-skel.c:2031:19: error: potential null pointer dereference [-Werror=null-dereference]
 //   b->yy_input_file = file;
 //   ~~~~~~~~~~~~~~~~~^~~~~~
-#if defined __GNUC__ && ! defined __clang__ && 6 <= __GNUC__
+#यदि defined __GNUC__ && ! defined __clang__ && 6 <= __GNUC__
 # pragma GCC diagnostic ignored "-Wnull-dereference"
 #endif
 
@@ -50,23 +50,23 @@
 //   * @param line_number
 //     ~~~~~~~~~~~~~~~~~^
 //  1 error generated.
-#if FLEX_VERSION <= 20060000 && defined __clang__
+#यदि FLEX_VERSION <= 20060000 && defined __clang__
 # pragma clang diagnostic ignored "-Wdocumentation"
 #endif
 
 /* Pacify "gcc -Wmissing-prototypes" when flex 2.5.31 is used.  */
-#if FLEX_VERSION <= 2005031
-int   FLEX_PREFIX (get_lineno) (void);
-FILE *FLEX_PREFIX (get_in) (void);
-FILE *FLEX_PREFIX (get_out) (void);
-int   FLEX_PREFIX (get_leng) (void);
-char *FLEX_PREFIX (get_text) (void);
-void  FLEX_PREFIX (set_lineno) (int);
-void  FLEX_PREFIX (set_in) (FILE *);
-void  FLEX_PREFIX (set_out) (FILE *);
-int   FLEX_PREFIX (get_debug) (void);
-void  FLEX_PREFIX (set_debug) (int);
-int   FLEX_PREFIX (lex_destroy) (void);
+#यदि FLEX_VERSION <= 2005031
+पूर्णाङ्क   FLEX_PREFIX (get_lineno) (शून्य);
+खाता *FLEX_PREFIX (get_in) (शून्य);
+खाता *FLEX_PREFIX (get_out) (शून्य);
+पूर्णाङ्क   FLEX_PREFIX (get_leng) (शून्य);
+वर्ण *FLEX_PREFIX (get_text) (शून्य);
+शून्य  FLEX_PREFIX (set_lineno) (पूर्णाङ्क);
+शून्य  FLEX_PREFIX (set_in) (खाता *);
+शून्य  FLEX_PREFIX (set_out) (खाता *);
+पूर्णाङ्क   FLEX_PREFIX (get_debug) (शून्य);
+शून्य  FLEX_PREFIX (set_debug) (पूर्णाङ्क);
+पूर्णाङ्क   FLEX_PREFIX (lex_destroy) (शून्य);
 #endif
 
 #define last_string    FLEX_PREFIX (last_string)
@@ -86,7 +86,7 @@ int   FLEX_PREFIX (lex_destroy) (void);
    versions according to the Flex manual) leak memory if yylex_destroy is not
    invoked.  However, yylex_destroy is not defined before Flex 2.5.9, so give
    an implementation here that at least appears to work with Flex 2.5.4.  */
-#if FLEX_VERSION <= 2005009
+#यदि FLEX_VERSION <= 2005009
 # define yylex_destroy() yy_delete_buffer (YY_CURRENT_BUFFER)
 #endif
 
@@ -101,7 +101,7 @@ int   FLEX_PREFIX (lex_destroy) (void);
 
 #ifndef FLEX_NO_OBSTACK
 
-static struct obstack obstack_for_string;
+स्थिर संरचना obstack obstack_for_string;
 
 # define STRING_GROW()                                  \
   obstack_grow (&obstack_for_string, yytext, yyleng)
@@ -115,15 +115,15 @@ static struct obstack obstack_for_string;
 # define STRING_1GROW(Char)                     \
   obstack_1grow (&obstack_for_string, Char)
 
-# ifdef NDEBUG
+# ifdef न_संशोधन
 #  define STRING_FREE()                                 \
   obstack_free (&obstack_for_string, last_string)
-# else
+# अन्यथा
 #  define STRING_FREE()                                  \
-  do {                                                   \
+  कुरु {                                                   \
     obstack_free (&obstack_for_string, last_string);     \
-    last_string = NULL;                                  \
-  } while (0)
+    last_string = रिक्त;                                  \
+  } यावत् (0)
 # endif
 
 #endif
