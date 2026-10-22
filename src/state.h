@@ -96,26 +96,26 @@
 | Numbering states.  |
 `-------------------*/
 
-typedef int state_number;
+تعريفنوع صحيح state_number;
 # define STATE_NUMBER_MAXIMUM INT_MAX
 
 /* Be ready to map a state_number to an int.  */
-static inline int
+ساكن مضمن صحيح
 state_number_as_int (state_number s)
 {
-  return s;
+  החזר s;
 }
 
 
-typedef struct state state;
+تعريفنوع بنية state state;
 
 /*--------------.
 | Transitions.  |
 `--------------*/
 
-typedef struct
+تعريفنوع بنية
 {
-  int num;            /** Size of destination STATES.  */
+  صحيح num;            /** Size of destination STATES.  */
   state *states[1];
 } transitions;
 
@@ -146,47 +146,47 @@ typedef struct
    disabled.  */
 
 # define TRANSITION_DISABLE(Transitions, Num) \
-  (Transitions->states[Num] = NULL)
+  (Transitions->states[Num] = عدم)
 
 # define TRANSITION_IS_DISABLED(Transitions, Num) \
-  (Transitions->states[Num] == NULL)
+  (Transitions->states[Num] == عدم)
 
 
 /* Iterate over each transition over a token (shifts).  */
 # define FOR_EACH_SHIFT(Transitions, Iter)                      \
-  for (Iter = 0;                                                \
+  עבור (Iter = 0;                                                \
        Iter < Transitions->num                                  \
          && (TRANSITION_IS_DISABLED (Transitions, Iter)         \
              || TRANSITION_IS_SHIFT (Transitions, Iter));       \
        ++Iter)                                                  \
-    if (!TRANSITION_IS_DISABLED (Transitions, Iter))
+    אם (!TRANSITION_IS_DISABLED (Transitions, Iter))
 
 
 /* The destination of the transition (shift/goto) from state S on
    label SYM (term or nterm).  Abort if none found.  */
-struct state *transitions_to (state *s, symbol_number sym);
+بنية state *transitions_to (state *s, symbol_number sym);
 
 
 /*-------.
 | Errs.  |
 `-------*/
 
-typedef struct
+تعريفنوع بنية
 {
-  int num;
+  صحيح num;
   symbol *symbols[1];
 } errs;
 
-errs *errs_new (int num, symbol **tokens);
+errs *errs_new (صحيح num, symbol **tokens);
 
 
 /*-------------.
 | Reductions.  |
 `-------------*/
 
-typedef struct
+تعريفنوع بنية
 {
-  int num;
+  صحيح num;
   bitset *lookaheads;
   /* Sorted ascendingly on rule number.  */
   rule *rules[1];
@@ -198,9 +198,9 @@ typedef struct
 | states.  |
 `---------*/
 
-struct state_list;
+بنية state_list;
 
-struct state
+بنية state
 {
   state_number number;
   symbol_number accessing_symbol;
@@ -211,7 +211,7 @@ struct state
   /* When an includer (such as ielr.c) needs to store states in a list, the
      includer can define struct state_list as the list node structure and can
      store in this member a reference to the node containing each state.  */
-  struct state_list *state_list;
+  بنية state_list *state_list;
 
   /* Whether no lookahead sets on reduce actions are needed to decide
      what to do in state S.  */
@@ -219,8 +219,8 @@ struct state
 
   /* If some conflicts were solved thanks to precedence/associativity,
      a human readable description of the resolution.  */
-  const char *solved_conflicts;
-  const char *solved_conflicts_xml;
+  ثابت حرف *solved_conflicts;
+  ثابت حرف *solved_conflicts_xml;
 
   /* Its items.  Must be last, since ITEMS can be arbitrarily large.  Sorted
      ascendingly on item index in RITEM, which is sorted on rule number.  */
@@ -228,59 +228,59 @@ struct state
   item_index items[1];
 };
 
-extern state_number nstates;
-extern state *final_state;
+خارجي state_number nstates;
+خارجي state *final_state;
 
 /* Create a new state with ACCESSING_SYMBOL for those items.  */
 state *state_new (symbol_number accessing_symbol,
                   size_t core_size, item_index *core);
 /* Create a new state with the same kernel as S (same accessing
    symbol, transitions, reductions, consistency and items).  */
-state *state_new_isocore (state const *s);
+state *state_new_isocore (state ثابت *s);
 
 /* Record that from S we can reach all the DST states (NUM of them).  */
-void state_transitions_set (state *s, int num, state **dst);
+فراغ state_transitions_set (state *s, صحيح num, state **dst);
 
 /* Print the transitions of state s for debug.  */
-void state_transitions_print (const state *s, FILE *out);
+فراغ state_transitions_print (ثابت state *s, FILE *out);
 
 /* Set the reductions of STATE.  */
-void state_reductions_set (state *s, int num, rule **reds);
+فراغ state_reductions_set (state *s, صحيح num, rule **reds);
 
 /* The index of the reduction of state S that corresponds to rule R.
    Aborts if there is no reduction of R in S.  */
-int state_reduction_find (state const *s, rule const *r);
+صحيح state_reduction_find (state ثابت *s, rule ثابت *r);
 
 /* Set the errs of STATE.  */
-void state_errs_set (state *s, int num, symbol **errors);
+فراغ state_errs_set (state *s, صحيح num, symbol **errors);
 
 /* Print on OUT all the lookahead tokens such that this STATE wants to
    reduce R.  */
-void state_rule_lookaheads_print (state const *s, rule const *r, FILE *out);
-void state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                      FILE *out, int level);
+فراغ state_rule_lookaheads_print (state ثابت *s, rule ثابت *r, FILE *out);
+فراغ state_rule_lookaheads_print_xml (state ثابت *s, rule ثابت *r,
+                                      FILE *out, صحيح level);
 
 /* Create/destroy the states hash table.  */
-void state_hash_new (void);
-void state_hash_free (void);
+فراغ state_hash_new (فراغ);
+فراغ state_hash_free (فراغ);
 
 /* Find the state associated to the CORE, and return it.  If it does
    not exist yet, return NULL.  */
-state *state_hash_lookup (size_t core_size, const item_index *core);
+state *state_hash_lookup (size_t core_size, ثابت item_index *core);
 
 /* Insert STATE in the state hash table.  */
-void state_hash_insert (state *s);
+فراغ state_hash_insert (state *s);
 
 /* Remove unreachable states, renumber remaining states, update NSTATES, and
    write to OLD_TO_NEW a mapping of old state numbers to new state numbers such
    that the old value of NSTATES is written as the new state number for removed
    states.  The size of OLD_TO_NEW must be the old value of NSTATES.  */
-void state_remove_unreachable_states (state_number old_to_new[]);
+فراغ state_remove_unreachable_states (state_number old_to_new[]);
 
 /* All the states, indexed by the state number.  */
-extern state **states;
+خارجي state **states;
 
 /* Free all the states.  */
-void states_free (void);
+فراغ states_free (فراغ);
 
 #endif /* !STATE_H_ */

@@ -19,26 +19,26 @@
 /* Based on error.c and error.h,
    written by David MacKenzie <djm@gnu.ai.mit.edu>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <argmatch.h>
-#include <c-ctype.h>
-#include <progname.h>
-#include <stdarg.h>
-#include <sys/stat.h>
-#include <textstyle.h>
+#ضمن <argmatch.h>
+#ضمن <c-ctype.h>
+#ضمن <progname.h>
+#ضمن <stdarg.h>
+#ضمن <sys/stat.h>
+#ضمن <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "quote.h"
+#ضمن "complain.h"
+#ضمن "files.h"
+#ضمن "fixits.h"
+#ضمن "getargs.h"
+#ضمن "quote.h"
 
 // The URL of the manual page about diagnostics.  Use the per-node
 // manual, to avoid downloading repeatedly the whole manual over the
 // Internet.
-static const char *diagnostics_url
+ساكن ثابت حرف *diagnostics_url
   = "https://www.gnu.org/software/bison/manual/html_node/Diagnostics.html";
 
 
@@ -47,7 +47,7 @@ err_status complaint_status = status_none;
 bool warnings_are_errors = false;
 
 /** Whether -Werror/-Wno-error was applied to a warning.  */
-typedef enum
+تعريفنوع تعداد
   {
     errority_unset = 0,     /** No explicit status.  */
     errority_disabled = 1,  /** Explicitly disabled with -Wno-error=foo.  */
@@ -55,10 +55,10 @@ typedef enum
   } errority;
 
 /** For each warning type, its errority.  */
-static errority errority_flag[warnings_size];
+ساكن errority errority_flag[warnings_size];
 
 /** Diagnostics severity.  */
-typedef enum
+تعريفنوع تعداد
   {
     severity_disabled = 0, /**< Explicitly disabled via -Wno-foo.  */
     severity_unset = 1,    /**< Unspecified status.  */
@@ -69,18 +69,18 @@ typedef enum
 
 
 /** For each warning type, its severity.  */
-static severity warnings_flag[warnings_size];
+ساكن severity warnings_flag[warnings_size];
 
-styled_ostream_t errstream = NULL;
+styled_ostream_t errstream = عدم;
 
-void
-begin_use_class (const char *s, FILE *out)
+فراغ
+begin_use_class (ثابت حرف *s, FILE *out)
 {
-  if (out == stderr)
+  אם (out == stderr)
     {
-      if (color_debug)
+      אם (color_debug)
         fprintf (out, "<%s>", s);
-      else
+      אחרת
         {
           styled_ostream_begin_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -88,14 +88,14 @@ begin_use_class (const char *s, FILE *out)
     }
 }
 
-void
-end_use_class (const char *s, FILE *out)
+فراغ
+end_use_class (ثابت حرف *s, FILE *out)
 {
-  if (out == stderr)
+  אם (out == stderr)
     {
-      if (color_debug)
+      אם (color_debug)
         fprintf (out, "</%s>", s);
-      else
+      אחרת
         {
           styled_ostream_end_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -103,24 +103,24 @@ end_use_class (const char *s, FILE *out)
     }
 }
 
-static void
-begin_hyperlink (FILE *out, const char *ref)
+ساكن فراغ
+begin_hyperlink (FILE *out, ثابت حرف *ref)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, ref, NULL);
+  אם (out == stderr)
+    styled_ostream_set_hyperlink (errstream, ref, عدم);
 }
 
-static void
+ساكن فراغ
 end_hyperlink (FILE *out)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, NULL, NULL);
+  אם (out == stderr)
+    styled_ostream_set_hyperlink (errstream, عدم, عدم);
 }
 
-void
+فراغ
 flush (FILE *out)
 {
-  if (out == stderr)
+  אם (out == stderr)
     ostream_flush (errstream, FLUSH_THIS_STREAM);
   fflush (out);
 }
@@ -128,16 +128,16 @@ flush (FILE *out)
 bool
 is_styled (FILE *out)
 {
-  if (out != stderr)
-    return false;
-  if (color_debug)
-    return true;
-#if HAVE_LIBTEXTSTYLE
-  return (color_mode == color_yes
+  אם (out != stderr)
+    החזר false;
+  אם (color_debug)
+    החזר true;
+#אם HAVE_LIBTEXTSTYLE
+  החזר (color_mode == color_yes
           || color_mode == color_html
           || (color_mode == color_tty && isatty (STDERR_FILENO)));
-#else
-  return false;
+#אחרת
+  החזר false;
 #endif
 }
 
@@ -148,7 +148,7 @@ is_styled (FILE *out)
 
 ARGMATCH_DEFINE_GROUP (warning, warnings)
 
-static const argmatch_warning_doc argmatch_warning_docs[] =
+ساكن ثابت argmatch_warning_doc argmatch_warning_docs[] =
 {
   { "conflicts-sr",     N_("S/R conflicts (enabled by default)") },
   { "conflicts-rr",     N_("R/R conflicts (enabled by default)") },
@@ -164,10 +164,10 @@ static const argmatch_warning_doc argmatch_warning_docs[] =
   { "no-CATEGORY",      N_("turn off warnings in CATEGORY") },
   { "none",             N_("turn off all the warnings") },
   { "error[=CATEGORY]", N_("treat warnings as errors") },
-  { NULL, NULL }
+  { عدم, عدم }
 };
 
-static const argmatch_warning_arg argmatch_warning_args[] =
+ساكن ثابت argmatch_warning_arg argmatch_warning_args[] =
 {
   { "all",             Wall },
   { "conflicts-rr",    Wconflicts_rr },
@@ -182,51 +182,51 @@ static const argmatch_warning_arg argmatch_warning_args[] =
   { "other",           Wother },
   { "precedence",      Wprecedence },
   { "yacc",            Wyacc },
-  { NULL, Wnone }
+  { عدم, Wnone }
 };
 
-const argmatch_warning_group_type argmatch_warning_group =
+ثابت argmatch_warning_group_type argmatch_warning_group =
 {
   argmatch_warning_args,
   argmatch_warning_docs,
   N_("Warning categories include:"),
-  NULL
+  عدم
 };
 
-void
+فراغ
 warning_usage (FILE *out)
 {
   argmatch_warning_usage (out);
 }
 
-void
-warning_argmatch (char const *arg, size_t no, size_t err)
+فراغ
+warning_argmatch (حرف ثابت *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  صحيح value = *argmatch_warning_value ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  אם (!value)
     {
       value = Weverything;
       no = !no;
     }
 
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+  עבור (size_t b = 0; b < warnings_size; ++b)
+    אם (value & 1 << b)
       {
-        if (err && no)
+        אם (err && no)
           /* -Wno-error=foo.  */
           errority_flag[b] = errority_disabled;
-        else if (err && !no)
+        אחרת אם (err && !no)
           {
             /* -Werror=foo: enables -Wfoo. */
             errority_flag[b] = errority_enabled;
             warnings_flag[b] = severity_warning;
           }
-        else if (no)
+        אחרת אם (no)
           /* -Wno-foo.  */
           warnings_flag[b] = severity_disabled;
-        else
+        אחרת
           /* -Wfoo. */
           warnings_flag[b] = severity_warning;
       }
@@ -238,23 +238,23 @@ warning_argmatch (char const *arg, size_t no, size_t err)
  *                  If 0, then activate all the flags.
  */
 
-void
-warnings_argmatch (char *args)
+فراغ
+warnings_argmatch (حرف *args)
 {
-  if (!args)
+  אם (!args)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  אחרת אם (STREQ (args, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+  אחרת
+    עבור (args = strtok (args, ","); args; args = strtok (عدم, ","))
+      אם (STREQ (args, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      אחרת אם (STREQ (args, "no-error"))
         warnings_are_errors = false;
-      else
+      אחרת
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
           size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -267,49 +267,49 @@ warnings_argmatch (char *args)
 }
 
 /* Color style for this type of message.  */
-static const char*
+ساكن ثابت حرف*
 severity_style (severity s)
 {
-  switch (s)
+  بدل (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "note";
-    case severity_warning:
-      return "warning";
-    case severity_error:
-    case severity_fatal:
-      return "error";
+    حالة severity_disabled:
+    حالة severity_unset:
+      החזר "note";
+    حالة severity_warning:
+      החזר "warning";
+    حالة severity_error:
+    حالة severity_fatal:
+      החזר "error";
     }
   abort ();
 }
 
 /* Prefix for this type of message.  */
-static const char*
+ساكن ثابت حرف*
 severity_prefix (severity s)
 {
-  switch (s)
+  بدل (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "";
-    case severity_warning:
-      return _("warning");
-    case severity_error:
-      return  _("error");
-    case severity_fatal:
-      return _("fatal error");
+    حالة severity_disabled:
+    حالة severity_unset:
+      החזר "";
+    حالة severity_warning:
+      החזר _("warning");
+    حالة severity_error:
+      החזר  _("error");
+    حالة severity_fatal:
+      החזר _("fatal error");
     }
   abort ();
 }
 
 
-static void
+ساكن فراغ
 severity_print (severity s, FILE *out)
 {
-  if (s != severity_disabled)
+  אם (s != severity_disabled)
     {
-      const char* style = severity_style (s);
+      ثابت حرف* style = severity_style (s);
       begin_use_class (style, out);
       fprintf (out, "%s:", severity_prefix (s));
       end_use_class (style, out);
@@ -322,23 +322,23 @@ severity_print (severity s, FILE *out)
 | complain.  |
 `-----------*/
 
-void
-complain_init_color (void)
+فراغ
+complain_init_color (فراغ)
 {
-#if HAVE_LIBTEXTSTYLE
-  if (is_styled (stderr))
+#אם HAVE_LIBTEXTSTYLE
+  אם (is_styled (stderr))
     {
       style_file_prepare ("BISON_STYLE", "BISON_STYLEDIR", pkgdatadir (),
                           "bison-default.css");
       /* As a fallback, use the default in the current directory.  */
-      struct stat statbuf;
-      if ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
+      بنية stat statbuf;
+      אם ((style_file_name == عدم || stat (style_file_name, &statbuf) < 0)
           && stat ("bison-default.css", &statbuf) == 0)
         style_file_name = "bison-default.css";
     }
-  else
+  אחרת
     /* No styling.  */
-    style_file_name = NULL;
+    style_file_name = عدم;
 #endif
 
   /* Workaround clang's warning (starting at Clang 3.5) about the stub
@@ -347,7 +347,7 @@ complain_init_color (void)
      | src/complain.c:274:7: error: code will never be executed [-Werror,-Wunreachable-code]
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#if defined __clang__
+#אם defined __clang__
 # pragma clang diagnostic push
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
@@ -357,20 +357,20 @@ complain_init_color (void)
                                   style_file_name)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
-#if defined __clang__
+#אם defined __clang__
 # pragma clang diagnostic pop
 #endif
 }
 
-void
-complain_init (void)
+فراغ
+complain_init (فراغ)
 {
   caret_init ();
 
   warnings warnings_default =
     Wconflicts_sr | Wconflicts_rr | Wdeprecated | Wother;
 
-  for (size_t b = 0; b < warnings_size; ++b)
+  עבור (size_t b = 0; b < warnings_size; ++b)
     {
       warnings_flag[b] = (1 << b & warnings_default
                           ? severity_warning
@@ -379,8 +379,8 @@ complain_init (void)
     }
 }
 
-void
-complain_free (void)
+فراغ
+complain_free (فراغ)
 {
   caret_free ();
   styled_ostream_free (errstream);
@@ -390,68 +390,68 @@ complain_free (void)
    (severity_fatal, severity_error, severity_disabled, or
    severity_warning.) */
 
-static severity
+ساكن severity
 warning_severity (warnings flags)
 {
-  if (flags & fatal)
+  אם (flags & fatal)
     /* Diagnostics about fatal errors.  */
-    return severity_fatal;
-  else if (flags & complaint)
+    החזר severity_fatal;
+  אחרת אם (flags & complaint)
     /* Diagnostics about errors.  */
-    return severity_error;
-  else
+    החזר severity_error;
+  אחרת
     {
       /* Diagnostics about warnings.  */
       severity res = severity_disabled;
-      for (size_t b = 0; b < warnings_size; ++b)
-        if (flags & 1 << b)
+      עבור (size_t b = 0; b < warnings_size; ++b)
+        אם (flags & 1 << b)
           {
             res = res < warnings_flag[b] ? warnings_flag[b] : res;
             /* If the diagnostic is enabled, and -Werror is enabled,
                and -Wno-error=foo was not explicitly requested, this
                is an error. */
-            if (res == severity_warning
+            אם (res == severity_warning
                 && (errority_flag[b] == errority_enabled
                     || (warnings_are_errors
                         && errority_flag[b] != errority_disabled)))
               res = severity_error;
           }
-      return res;
+      החזר res;
     }
 }
 
 bool
 warning_is_unset (warnings flags)
 {
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (flags & 1 << b && warnings_flag[b] != severity_unset)
-      return false;
-  return true;
+  עבור (size_t b = 0; b < warnings_size; ++b)
+    אם (flags & 1 << b && warnings_flag[b] != severity_unset)
+      החזר false;
+  החזר true;
 }
 
 bool
 warning_is_enabled (warnings flags)
 {
-  return severity_warning <= warning_severity (flags);
+  החזר severity_warning <= warning_severity (flags);
 }
 
 /** Display a "[-Wyacc]" like message on \a out.  */
 
-static void
+ساكن فراغ
 warnings_print_categories (warnings warn_flags, FILE *out)
 {
-  for (int wbit = 0; wbit < warnings_size; ++wbit)
-    if (warn_flags & (1 << wbit))
+  עבור (صحيح wbit = 0; wbit < warnings_size; ++wbit)
+    אם (warn_flags & (1 << wbit))
       {
         warnings w = 1 << wbit;
         severity s = warning_severity (w);
-        const char* style = severity_style (s);
+        ثابت حرف* style = severity_style (s);
         fputs (" [", out);
         begin_use_class (style, out);
         // E.g., "counterexamples".
-        const char *warning = argmatch_warning_argument (&w);
-        char ref[200];
-        snprintf (ref, sizeof ref,
+        ثابت حرف *warning = argmatch_warning_argument (&w);
+        حرف ref[200];
+        snprintf (ref, حجم ref,
                   "%s#W%s", diagnostics_url, warning);
         begin_hyperlink (out, ref);
         ostream_printf (errstream,
@@ -465,7 +465,7 @@ warnings_print_categories (warnings warn_flags, FILE *out)
         end_use_class (style, out);
         fputc (']', out);
         /* Display only the first match, the second is "-Wall".  */
-        return;
+        החזר;
       }
 }
 
@@ -482,20 +482,20 @@ warnings_print_categories (warnings warn_flags, FILE *out)
  *                newline-terminated message to stderr.
  * \param args    the arguments of the format string.
  */
-static
-void
-error_message (const location *loc, warnings flags,
-               severity sever, const char *message, va_list args)
+ساكن
+فراغ
+error_message (ثابت location *loc, warnings flags,
+               severity sever, ثابت حرف *message, va_list args)
 {
-  const char* style = flags & note ? "note" : severity_style (sever);
+  ثابت حرف* style = flags & note ? "note" : severity_style (sever);
 
-  if (loc)
+  אם (loc)
     location_print (*loc, stderr);
-  else
+  אחרת
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
 
-  if (sever != severity_disabled)
+  אם (sever != severity_disabled)
     {
       begin_use_class (style, stderr);
       fprintf (stderr, "%s:", flags & note ? _("note") : severity_prefix (sever));
@@ -506,15 +506,15 @@ error_message (const location *loc, warnings flags,
   vfprintf (stderr, message, args);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
-  if (! (flags & silent) && sever != severity_disabled)
+  אם (! (flags & silent) && sever != severity_disabled)
     warnings_print_categories (flags, stderr);
 
   size_t l = strlen (message);
-  if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+  אם (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
     {
       putc ('\n', stderr);
       flush (stderr);
-      if (loc && !(flags & no_caret))
+      אם (loc && !(flags & no_caret))
         location_caret (*loc, style, stderr);
     }
   flush (stderr);
@@ -522,27 +522,27 @@ error_message (const location *loc, warnings flags,
 
 /** Raise a complaint (fatal error, error or just warning).  */
 
-static void
-complains (const location *loc, warnings flags,
-           const char *message, va_list args)
+ساكن فراغ
+complains (ثابت location *loc, warnings flags,
+           ثابت حرف *message, va_list args)
 {
-  if ((flags & complaint) && complaint_status < status_complaint)
+  אם ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
 
   severity s = warning_severity (flags);
-  if (severity_warning <= s)
+  אם (severity_warning <= s)
     {
-      if (severity_error <= s && ! complaint_status)
+      אם (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
       error_message (loc, flags, s, message, args);
     }
 
-  if (flags & fatal)
+  אם (flags & fatal)
     exit (EXIT_FAILURE);
 }
 
-void
-complain (location const *loc, warnings flags, const char *message, ...)
+فراغ
+complain (location ثابت *loc, warnings flags, ثابت حرف *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -550,8 +550,8 @@ complain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-subcomplain (location const *loc, warnings flags, const char *message, ...)
+فراغ
+subcomplain (location ثابت *loc, warnings flags, ثابت حرف *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -559,45 +559,45 @@ subcomplain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-complain_args (location const *loc, warnings w,
-               int argc, char *argv[])
+فراغ
+complain_args (location ثابت *loc, warnings w,
+               صحيح argc, حرف *argv[])
 {
-  switch (argc)
+  بدل (argc)
   {
-  case 1:
+  حالة 1:
     complain (loc, w, "%s", _(argv[0]));
-    break;
-  case 2:
+    اكسر;
+  حالة 2:
     complain (loc, w, _(argv[0]), argv[1]);
-    break;
-  case 3:
+    اكسر;
+  حالة 3:
     complain (loc, w, _(argv[0]), argv[1], argv[2]);
-    break;
-  case 4:
+    اكسر;
+  حالة 4:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3]);
-    break;
-  case 5:
+    اكسر;
+  حالة 5:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3], argv[4]);
-    break;
-  default:
+    اكسر;
+  افتراضي:
     complain (loc, fatal, "too many arguments for complains");
-    break;
+    اكسر;
   }
 }
 
 
-void
-bison_directive (location const *loc, char const *directive)
+فراغ
+bison_directive (location ثابت *loc, حرف ثابت *directive)
 {
   complain (loc, Wyacc,
             _("POSIX Yacc does not support %s"), directive);
 }
 
-void
-deprecated_directive (location const *loc, char const *old, char const *upd)
+فراغ
+deprecated_directive (location ثابت *loc, حرف ثابت *old, حرف ثابت *upd)
 {
-  if (warning_is_enabled (Wdeprecated))
+  אם (warning_is_enabled (Wdeprecated))
     {
       complain (loc, Wdeprecated,
                 _("deprecated directive: %s, use %s"),
@@ -608,20 +608,20 @@ deprecated_directive (location const *loc, char const *old, char const *upd)
     }
 }
 
-void
-duplicate_directive (char const *directive,
+فراغ
+duplicate_directive (حرف ثابت *directive,
                      location first, location second)
 {
-  if (feature_flag & feature_caret)
+  אם (feature_flag & feature_caret)
     complain (&second, Wother, _("duplicate directive"));
-  else
+  אחרת
     complain (&second, Wother, _("duplicate directive: %s"), quote (directive));
   subcomplain (&first, Wother, _("previous declaration"));
   fixits_register (&second, "");
 }
 
-void
-duplicate_rule_directive (char const *directive,
+فراغ
+duplicate_rule_directive (حرف ثابت *directive,
                           location first, location second)
 {
   complain (&second, complaint, _("only one %s allowed per rule"), directive);
@@ -629,21 +629,21 @@ duplicate_rule_directive (char const *directive,
   fixits_register (&second, "");
 }
 
-void
+فراغ
 syntax_error (location loc,
-              int argc, const char* argv[])
+              صحيح argc, ثابت حرف* argv[])
 {
-  if (complaint_status < status_complaint)
+  אם (complaint_status < status_complaint)
     complaint_status = status_complaint;
-  assert (argc <= 5);
-  const char *format = NULL;
-  switch (argc)
+  أكد (argc <= 5);
+  ثابت حرف *format = عدم;
+  بدل (argc)
     {
 #define CASE(N, S)                          \
-      case N:                               \
+      حالة N:                               \
         format = S;                         \
-        break
-    default: /* Avoid compiler warnings. */
+        اكسر
+    افتراضي: /* Avoid compiler warnings. */
       CASE (0, _("syntax error"));
       CASE (1, _("unexpected %0$s"));
       CASE (2, _("expected %1$s before %0$s"));
@@ -656,21 +656,21 @@ syntax_error (location loc,
   fputs (": ", stderr);
   severity_print (severity_error, stderr);
 
-  while (*format)
-    if (format[0] == '%'
+  כלעוד (*format)
+    אם (format[0] == '%'
         && c_isdigit (format[1])
         && format[2] == '$'
         && format[3] == 's'
         && (format[1] - '0') < argc)
       {
-        int i = format[1] - '0';
-        const char *style = i == 0 ? "unexpected" : "expected";
+        صحيح i = format[1] - '0';
+        ثابت حرف *style = i == 0 ? "unexpected" : "expected";
         begin_use_class (style, stderr);
         fputs (argv[i], stderr);
         end_use_class (style, stderr);
         format += 4;
       }
-    else
+    אחרת
       {
         fputc (*format, stderr);
         ++format;

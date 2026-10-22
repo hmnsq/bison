@@ -18,48 +18,48 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "print-xml.h"
+#ضمن <config.h>
+#ضمن "print-xml.h"
 
-#include "system.h"
+#ضمن "system.h"
 
-#include <bitset.h>
-#include <stdarg.h>
+#ضمن <bitset.h>
+#ضمن <stdarg.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "execute.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "path-join.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#ضمن "closure.h"
+#ضمن "complain.h"
+#ضمن "conflicts.h"
+#ضمن "execute.h"
+#ضمن "files.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "lalr.h"
+#ضمن "lr0.h"
+#ضمن "muscle-tab.h"
+#ضمن "path-join.h"
+#ضمن "print.h"
+#ضمن "reader.h"
+#ضمن "reduce.h"
+#ضمن "state.h"
+#ضمن "symtab.h"
+#ضمن "tables.h"
 
-static bitset no_reduce_set;
-struct escape_buf
+ساكن bitset no_reduce_set;
+بنية escape_buf
 {
-  char *ptr;
+  حرف *ptr;
   size_t size;
 };
-enum { num_escape_bufs = 3 };
-static struct escape_buf escape_bufs[num_escape_bufs];
+تعداد { num_escape_bufs = 3 };
+ساكن بنية escape_buf escape_bufs[num_escape_bufs];
 
 
 /*--------------------------------.
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, int level, state *s)
+ساكن فراغ
+print_core (FILE *out, صحيح level, state *s)
 {
   item_index *sitems = s->items;
   size_t snritems = s->nitems;
@@ -69,28 +69,28 @@ print_core (FILE *out, int level, state *s)
   sitems = itemset;
   snritems = nitemset;
 
-  if (!snritems)
+  אם (!snritems)
     {
       xml_puts (out, level, "<itemset/>");
-      return;
+      החזר;
     }
 
   xml_puts (out, level, "<itemset>");
 
-  for (size_t i = 0; i < snritems; i++)
+  עבור (size_t i = 0; i < snritems; i++)
     {
       bool printed = false;
       item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
+      rule ثابت *r = item_rule (sp1);
       item_number *sp = r->rhs;
 
       /* Display the lookahead tokens?  */
-      if (item_number_is_rule_number (*sp1))
+      אם (item_number_is_rule_number (*sp1))
         {
           reductions *reds = s->reductions;
-          int red = state_reduction_find (s, r);
+          صحيح red = state_reduction_find (s, r);
           /* Print item with lookaheads if there are. */
-          if (reds->lookaheads && red != -1)
+          אם (reds->lookaheads && red != -1)
             {
               xml_printf (out, level + 1,
                           "<item rule-number=\"%d\" dot=\"%d\">",
@@ -102,7 +102,7 @@ print_core (FILE *out, int level, state *s)
             }
         }
 
-      if (!printed)
+      אם (!printed)
         xml_printf (out, level + 1,
                     "<item rule-number=\"%d\" dot=\"%d\"/>",
                     r->number,
@@ -117,35 +117,35 @@ print_core (FILE *out, int level, state *s)
 | OUT.                                                       |
 `-----------------------------------------------------------*/
 
-static void
-print_transitions (state *s, FILE *out, int level)
+ساكن فراغ
+print_transitions (state *s, FILE *out, صحيح level)
 {
   transitions *trans = s->transitions;
-  int n = 0;
-  int i;
+  صحيح n = 0;
+  صحيح i;
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  עבור (i = 0; i < trans->num; i++)
+    אם (!TRANSITION_IS_DISABLED (trans, i))
       {
         n++;
       }
 
   /* Nothing to report. */
-  if (!n)
+  אם (!n)
     {
       xml_puts (out, level, "<transitions/>");
-      return;
+      החזר;
     }
 
   /* Report lookahead tokens and shifts.  */
   xml_puts (out, level, "<transitions>");
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  עבור (i = 0; i < trans->num; i++)
+    אם (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i))
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        char const *tag = sym->tag;
+        حرف ثابت *tag = sym->tag;
         state *s1 = trans->states[i];
 
         xml_printf (out, level + 1,
@@ -153,12 +153,12 @@ print_transitions (state *s, FILE *out, int level)
                     xml_escape (tag), s1->number);
       }
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  עבור (i = 0; i < trans->num; i++)
+    אם (!TRANSITION_IS_DISABLED (trans, i)
         && !TRANSITION_IS_SHIFT (trans, i))
       {
         symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        char const *tag = sym->tag;
+        حرف ثابت *tag = sym->tag;
         state *s1 = trans->states[i];
 
         xml_printf (out, level + 1,
@@ -174,30 +174,30 @@ print_transitions (state *s, FILE *out, int level)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, int level, state *s)
+ساكن فراغ
+print_errs (FILE *out, صحيح level, state *s)
 {
   errs *errp = s->errs;
   bool count = false;
-  int i;
+  صحيح i;
 
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  עבור (i = 0; i < errp->num; ++i)
+    אם (errp->symbols[i])
       count = true;
 
   /* Nothing to report. */
-  if (!count)
+  אם (!count)
     {
       xml_puts (out, level, "<errors/>");
-      return;
+      החזר;
     }
 
   /* Report lookahead tokens and errors.  */
   xml_puts (out, level, "<errors>");
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  עבור (i = 0; i < errp->num; ++i)
+    אם (errp->symbols[i])
       {
-        char const *tag = errp->symbols[i]->tag;
+        حرف ثابت *tag = errp->symbols[i]->tag;
         xml_printf (out, level + 1,
                     "<error symbol=\"%s\">nonassociative</error>",
                     xml_escape (tag));
@@ -212,16 +212,16 @@ print_errs (FILE *out, int level, state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
-print_reduction (FILE *out, int level, char const *lookahead,
+ساكن فراغ
+print_reduction (FILE *out, صحيح level, حرف ثابت *lookahead,
                  rule *r, bool enabled)
 {
-  if (rule_is_initial (r))
+  אם (rule_is_initial (r))
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"accept\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
                 enabled ? "true" : "false");
-  else
+  אחרת
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"%d\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
@@ -234,49 +234,49 @@ print_reduction (FILE *out, int level, char const *lookahead,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, int level, state *s)
+ساكن فراغ
+print_reductions (FILE *out, صحيح level, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
-  rule *default_reduction = NULL;
-  int report = false;
-  int i, j;
+  rule *default_reduction = عدم;
+  صحيح report = false;
+  صحيح i, j;
 
-  if (reds->num == 0)
+  אם (reds->num == 0)
     {
       xml_puts (out, level, "<reductions/>");
-      return;
+      החזר;
     }
 
-  if (yydefact[s->number] != 0)
+  אם (yydefact[s->number] != 0)
     default_reduction = &rules[yydefact[s->number] - 1];
 
   bitset_zero (no_reduce_set);
   FOR_EACH_SHIFT (trans, i)
     bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
-  for (i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
+  עבור (i = 0; i < s->errs->num; ++i)
+    אם (s->errs->symbols[i])
       bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
 
-  if (default_reduction)
+  אם (default_reduction)
     report = true;
 
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  אם (reds->lookaheads)
+    עבור (i = 0; i < ntokens; i++)
       {
         bool count = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        עבור (j = 0; j < reds->num; ++j)
+          אם (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              אם (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  אם (reds->rules[j] != default_reduction)
                     report = true;
                   count = true;
                 }
-              else
+              אחרת
                 {
                   report = true;
                 }
@@ -284,36 +284,36 @@ print_reductions (FILE *out, int level, state *s)
       }
 
   /* Nothing to report. */
-  if (!report)
+  אם (!report)
     {
       xml_puts (out, level, "<reductions/>");
-      return;
+      החזר;
     }
 
   xml_puts (out, level, "<reductions>");
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  אם (reds->lookaheads)
+    עבור (i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
         bool count = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        עבור (j = 0; j < reds->num; ++j)
+          אם (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              אם (! count)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  אם (reds->rules[j] != default_reduction)
                     print_reduction (out, level + 1, symbols[i]->tag,
                                      reds->rules[j], true);
-                  else
+                  אחרת
                     defaulted = true;
                   count = true;
                 }
-              else
+              אחרת
                 {
-                  if (defaulted)
+                  אם (defaulted)
                     print_reduction (out, level + 1, symbols[i]->tag,
                                      default_reduction, true);
                   defaulted = false;
@@ -323,7 +323,7 @@ print_reductions (FILE *out, int level, state *s)
             }
       }
 
-  if (default_reduction)
+  אם (default_reduction)
     print_reduction (out, level + 1,
                      "$default", default_reduction, true);
 
@@ -336,8 +336,8 @@ print_reductions (FILE *out, int level, state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, int level, state *s)
+ساكن فراغ
+print_actions (FILE *out, صحيح level, state *s)
 {
   xml_puts (out, level, "<actions>");
   print_transitions (s, out, level + 1);
@@ -351,20 +351,20 @@ print_actions (FILE *out, int level, state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, int level, state *s)
+ساكن فراغ
+print_state (FILE *out, صحيح level, state *s)
 {
   fputc ('\n', out);
   xml_printf (out, level, "<state number=\"%d\">", s->number);
   print_core (out, level + 1, s);
   print_actions (out, level + 1, s);
-  if (s->solved_conflicts_xml)
+  אם (s->solved_conflicts_xml)
     {
       xml_puts (out, level + 1, "<solved-conflicts>");
       fputs (s->solved_conflicts_xml, out);
       xml_puts (out, level + 1, "</solved-conflicts>");
     }
-  else
+  אחרת
     xml_puts (out, level + 1, "<solved-conflicts/>");
   xml_puts (out, level, "</state>");
 }
@@ -374,8 +374,8 @@ print_state (FILE *out, int level, state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
-print_grammar (FILE *out, int level)
+ساكن فراغ
+print_grammar (FILE *out, صحيح level)
 {
   fputc ('\n', out);
   xml_puts (out, level, "<grammar>");
@@ -383,13 +383,13 @@ print_grammar (FILE *out, int level)
 
   /* Terminals */
   xml_puts (out, level + 1, "<terminals>");
-  for (int i = 0; i < max_code + 1; i++)
-    if (token_translations[i] != undeftoken->content->number)
+  עבור (صحيح i = 0; i < max_code + 1; i++)
+    אם (token_translations[i] != undeftoken->content->number)
       {
-        symbol const *sym = symbols[token_translations[i]];
-        char const *tag = sym->tag;
-        char const *type = sym->content->type_name;
-        int precedence = sym->content->prec;
+        symbol ثابت *sym = symbols[token_translations[i]];
+        حرف ثابت *tag = sym->tag;
+        حرف ثابت *type = sym->content->type_name;
+        صحيح precedence = sym->content->prec;
         assoc associativity = sym->content->assoc;
         xml_indent (out, level + 2);
         fprintf (out,
@@ -399,9 +399,9 @@ print_grammar (FILE *out, int level)
                  type ? xml_escape_n (1, type) : "",
                  reduce_token_unused_in_grammar (token_translations[i])
                    ? "unused-in-grammar" : "useful");
-        if (precedence)
+        אם (precedence)
           fprintf (out, " prec=\"%d\"", precedence);
-        if (associativity != undef_assoc)
+        אם (associativity != undef_assoc)
           fprintf (out, " assoc=\"%s\"", assoc_to_string (associativity) + 1);
         fputs ("/>\n", out);
       }
@@ -409,11 +409,11 @@ print_grammar (FILE *out, int level)
 
   /* Nonterminals */
   xml_puts (out, level + 1, "<nonterminals>");
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
+  עבור (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
     {
-      symbol const *sym = symbols[i];
-      char const *tag = sym->tag;
-      char const *type = sym->content->type_name;
+      symbol ثابت *sym = symbols[i];
+      حرف ثابت *tag = sym->tag;
+      حرف ثابت *type = sym->content->type_name;
       xml_printf (out, level + 2,
                   "<nonterminal symbol-number=\"%d\" name=\"%s\""
                   " type=\"%s\""
@@ -427,23 +427,23 @@ print_grammar (FILE *out, int level)
   xml_puts (out, level, "</grammar>");
 }
 
-void
-xml_indent (FILE *out, int level)
+فراغ
+xml_indent (FILE *out, صحيح level)
 {
-  for (int i = 0; i < level; i++)
+  עבור (صحيح i = 0; i < level; i++)
     fputs ("  ", out);
 }
 
-void
-xml_puts (FILE *out, int level, char const *s)
+فراغ
+xml_puts (FILE *out, صحيح level, حرف ثابت *s)
 {
   xml_indent (out, level);
   fputs (s, out);
   fputc ('\n', out);
 }
 
-void
-xml_printf (FILE *out, int level, char const *fmt, ...)
+فراغ
+xml_printf (FILE *out, صحيح level, حرف ثابت *fmt, ...)
 {
   va_list arglist;
 
@@ -456,53 +456,53 @@ xml_printf (FILE *out, int level, char const *fmt, ...)
   fputc ('\n', out);
 }
 
-static char const *
-xml_escape_string (struct escape_buf *buf, char const *str)
+ساكن حرف ثابت *
+xml_escape_string (بنية escape_buf *buf, حرف ثابت *str)
 {
   size_t len = strlen (str);
-  size_t max_expansion = sizeof "&quot;" - 1;
+  size_t max_expansion = حجم "&quot;" - 1;
 
-  if (buf->size <= max_expansion * len)
+  אם (buf->size <= max_expansion * len)
     {
       buf->size = max_expansion * len + 1;
       buf->ptr = x2realloc (buf->ptr, &buf->size);
     }
-  char *p = buf->ptr;
+  حرف *p = buf->ptr;
 
-  for (; *str; str++)
-    switch (*str)
+  עבור (; *str; str++)
+    بدل (*str)
       {
-      default: *p++ = *str; break;
-      case '&': p = stpcpy (p, "&amp;" ); break;
-      case '<': p = stpcpy (p, "&lt;"  ); break;
-      case '>': p = stpcpy (p, "&gt;"  ); break;
-      case '"': p = stpcpy (p, "&quot;"); break;
+      افتراضي: *p++ = *str; اكسر;
+      حالة '&': p = stpcpy (p, "&amp;" ); اكسر;
+      حالة '<': p = stpcpy (p, "&lt;"  ); اكسر;
+      حالة '>': p = stpcpy (p, "&gt;"  ); اكسر;
+      حالة '"': p = stpcpy (p, "&quot;"); اكسر;
       }
 
   *p = '\0';
-  return buf->ptr;
+  החזר buf->ptr;
 }
 
-char const *
-xml_escape_n (int n, char const *str)
+حرف ثابت *
+xml_escape_n (صحيح n, حرف ثابت *str)
 {
-  return xml_escape_string (escape_bufs + n, str);
+  החזר xml_escape_string (escape_bufs + n, str);
 }
 
-char const *
-xml_escape (char const *str)
+حرف ثابت *
+xml_escape (حرف ثابت *str)
 {
-  return xml_escape_n (0, str);
+  החזר xml_escape_n (0, str);
 }
 
-void
-print_xml (void)
+فراغ
+print_xml (فراغ)
 {
   FILE *out = xfopen (spec_xml_file, "w");
 
   fputs ("<?xml version=\"1.0\"?>\n\n", out);
 
-  int level = 0;
+  صحيح level = 0;
   xml_printf (out, level,
               "<bison-xml-report version=\"%s\" bug-report=\"%s\""
               " url=\"%s\">",
@@ -522,7 +522,7 @@ print_xml (void)
   /* print automaton */
   fputc ('\n', out);
   xml_puts (out, level + 1, "<automaton>");
-  for (state_number i = 0; i < nstates; i++)
+  עבור (state_number i = 0; i < nstates; i++)
     print_state (out, level + 2, states[i]);
   xml_puts (out, level + 1, "</automaton>");
 
@@ -530,48 +530,48 @@ print_xml (void)
 
   xml_puts (out, 0, "</bison-xml-report>");
 
-  for (int i = 0; i < num_escape_bufs; ++i)
-    free (escape_bufs[i].ptr);
+  עבור (صحيح i = 0; i < num_escape_bufs; ++i)
+    حرر (escape_bufs[i].ptr);
 
   xfclose (out);
 }
 
 
-void
-print_html (void)
+فراغ
+print_html (فراغ)
 {
-  assert (xml_flag);
+  أكد (xml_flag);
 
-  char *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
-  char *xsltproc = muscle_percent_define_get ("tool.xsltproc");
-  char const *argv[11];
-  int i = 0;
+  حرف *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
+  حرف *xsltproc = muscle_percent_define_get ("tool.xsltproc");
+  حرف ثابت *argv[11];
+  صحيح i = 0;
   argv[i++] = xsltproc;
   argv[i++] = "-o";
   argv[i++] = spec_html_file;
   argv[i++] = xml2html;
   argv[i++] = spec_xml_file;
-  argv[i++] = NULL;
+  argv[i++] = عدم;
   aver (i <= ARRAY_CARDINALITY (argv));
 
-  if (trace_flag & trace_tools)
+  אם (trace_flag & trace_tools)
     {
       fputs ("running:", stderr);
-      for (int j = 0; argv[j]; ++j)
+      עבור (صحيح j = 0; argv[j]; ++j)
         fprintf (stderr, " %s", argv[j]);
       fputc ('\n', stderr);
     }
 
-  int status
+  صحيح status
     = execute (argv[0],
                argv[0], argv,
-               /* directory */ NULL,
+               /* directory */ عدم,
                /* ignore_sigpipe */ false,
                /* null_stdin, null_stdout, null_stderr */ true, true, true,
                /* slave_process */ true, /* exit_on_error */ false,
-               /* termsigp */ NULL);
-  if (status)
-    complain (NULL, complaint, _("%s failed with status %d"), argv[0], status);
-  free (xsltproc);
-  free (xml2html);
+               /* termsigp */ عدم);
+  אם (status)
+    complain (عدم, complaint, _("%s failed with status %d"), argv[0], status);
+  حرر (xsltproc);
+  حرر (xml2html);
 }
