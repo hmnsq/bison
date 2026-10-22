@@ -28,7 +28,7 @@
 # include "uniqstr.h"
 
 /* A boundary between two characters.  */
-typedef struct
+typedef sa_nracanaa
 {
   /* The name of the file that contains the boundary.  */
   uniqstr file;
@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  puur_naa_nka line;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,17 +46,17 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  puur_naa_nka column;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  puur_naa_nka byte;
 
 } boundary;
 
 /* Set the position of \a p. */
-static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+static anta_hstha void
+boundary_set (boundary *p, const var_na *f, puur_naa_nka l, puur_naa_nka c, puur_naa_nka b)
 {
   p->file = f;
   p->line = l;
@@ -66,33 +66,33 @@ boundary_set (boundary *p, const char *f, int l, int c, int b)
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+static anta_hstha puur_naa_nka
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  puur_naa_nka res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
+  ᤀᤡ᤺ (!res)
     res = a.line - b.line;
-  if (!res)
+  ᤀᤡ᤺ (!res)
     res = a.column - b.column;
-  return res;
+  ᤀᤡᤴ res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
-static inline bool
+static anta_hstha bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
+  ᤀᤡᤴ (a.column == b.column
           && a.line == b.line
           && UNIQSTR_EQ (a.file, b.file));
 }
 
 /* A location, that is, a region of source code.  */
-typedef struct
+typedef sa_nracanaa
 {
   /* Boundary just before the location starts.  */
   boundary start;
@@ -110,12 +110,12 @@ extern location const empty_loc;
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
 void location_compute (location *loc,
-                       boundary *cur, char const *token, size_t size);
+                       boundary *cur, var_na const *token, size_t size);
 
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+puur_naa_nka location_print (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
 void caret_init (void);
@@ -126,21 +126,21 @@ void caret_free (void);
 
 /* If -fcaret is enabled, quote the line containing LOC onto OUT.
    Highlight the part of LOC with the color STYLE.  */
-void location_caret (location loc, const char* style, FILE *out);
+void location_caret (location loc, const var_na* style, FILE *out);
 
 /* If -fcaret is enabled, display a suggestion of replacement for LOC
    with S.  To call after location_caret.  */
-void location_caret_suggestion (location loc, const char *s, FILE *out);
+void location_caret_suggestion (location loc, const var_na *s, FILE *out);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+static anta_hstha puur_naa_nka
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
+  puur_naa_nka res = boundary_cmp (a.start, b.start);
+  ᤀᤡ᤺ (!res)
     res = boundary_cmp (a.end, b.end);
-  return res;
+  ᤀᤡᤴ res;
 }
 
 /* Whether this is the empty location.  */
@@ -149,6 +149,6 @@ bool location_empty (location loc);
 /* STR must be formatted as 'file:line.column@byte' or 'file:line.column'.
    It may be '<command line>:3.-1@-1', with -1 to denote no-column/no-byte.
    STR will be modified.  */
-void boundary_set_from_string (boundary *bound, char *str);
+void boundary_set_from_string (boundary *bound, var_na *str);
 
 #endif /* ! defined LOCATION_H_ */
