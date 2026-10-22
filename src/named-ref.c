@@ -25,18 +25,18 @@
 named_ref *
 named_ref_new (uniqstr id, location loc)
 {
-  named_ref *res = xmalloc (sizeof *res);
+  named_ref *res = xmalloc (parimaa_na *res);
 
   res->id = id;
   res->loc = loc;
 
-  return res;
+  ပွၵ်ႈ res;
 }
 
 named_ref *
 named_ref_copy (const named_ref *r)
 {
-  return named_ref_new (r->id, r->loc);
+  ပွၵ်ႈ named_ref_new (r->id, r->loc);
 }
 
 void

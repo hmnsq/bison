@@ -38,7 +38,7 @@
 // ./src/scan-skel.c:2031:19: error: potential null pointer dereference [-Werror=null-dereference]
 //   b->yy_input_file = file;
 //   ~~~~~~~~~~~~~~~~~^~~~~~
-#if defined __GNUC__ && ! defined __clang__ && 6 <= __GNUC__
+#ပေႃး defined __GNUC__ && ! defined __clang__ && 6 <= __GNUC__
 # pragma GCC diagnostic ignored "-Wnull-dereference"
 #endif
 
@@ -50,23 +50,23 @@
 //   * @param line_number
 //     ~~~~~~~~~~~~~~~~~^
 //  1 error generated.
-#if FLEX_VERSION <= 20060000 && defined __clang__
+#ပေႃး FLEX_VERSION <= 20060000 && defined __clang__
 # pragma clang diagnostic ignored "-Wdocumentation"
 #endif
 
 /* Pacify "gcc -Wmissing-prototypes" when flex 2.5.31 is used.  */
-#if FLEX_VERSION <= 2005031
-int   FLEX_PREFIX (get_lineno) (void);
+#ပေႃး FLEX_VERSION <= 2005031
+puur_naa_nka   FLEX_PREFIX (get_lineno) (void);
 FILE *FLEX_PREFIX (get_in) (void);
 FILE *FLEX_PREFIX (get_out) (void);
-int   FLEX_PREFIX (get_leng) (void);
-char *FLEX_PREFIX (get_text) (void);
-void  FLEX_PREFIX (set_lineno) (int);
+puur_naa_nka   FLEX_PREFIX (get_leng) (void);
+var_na *FLEX_PREFIX (get_text) (void);
+void  FLEX_PREFIX (set_lineno) (puur_naa_nka);
 void  FLEX_PREFIX (set_in) (FILE *);
 void  FLEX_PREFIX (set_out) (FILE *);
-int   FLEX_PREFIX (get_debug) (void);
-void  FLEX_PREFIX (set_debug) (int);
-int   FLEX_PREFIX (lex_destroy) (void);
+puur_naa_nka   FLEX_PREFIX (get_debug) (void);
+void  FLEX_PREFIX (set_debug) (puur_naa_nka);
+puur_naa_nka   FLEX_PREFIX (lex_destroy) (void);
 #endif
 
 #define last_string    FLEX_PREFIX (last_string)
@@ -86,7 +86,7 @@ int   FLEX_PREFIX (lex_destroy) (void);
    versions according to the Flex manual) leak memory if yylex_destroy is not
    invoked.  However, yylex_destroy is not defined before Flex 2.5.9, so give
    an implementation here that at least appears to work with Flex 2.5.4.  */
-#if FLEX_VERSION <= 2005009
+#ပေႃး FLEX_VERSION <= 2005009
 # define yylex_destroy() yy_delete_buffer (YY_CURRENT_BUFFER)
 #endif
 
@@ -101,7 +101,7 @@ int   FLEX_PREFIX (lex_destroy) (void);
 
 #ifndef FLEX_NO_OBSTACK
 
-static struct obstack obstack_for_string;
+static sa_nracanaa obstack obstack_for_string;
 
 # define STRING_GROW()                                  \
   obstack_grow (&obstack_for_string, yytext, yyleng)
@@ -118,12 +118,12 @@ static struct obstack obstack_for_string;
 # ifdef NDEBUG
 #  define STRING_FREE()                                 \
   obstack_free (&obstack_for_string, last_string)
-# else
+# ပေႃးဢမ်ႇ
 #  define STRING_FREE()                                  \
   do {                                                   \
     obstack_free (&obstack_for_string, last_string);     \
     last_string = NULL;                                  \
-  } while (0)
+  } ၶၢဝ်း (0)
 # endif
 
 #endif
