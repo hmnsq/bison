@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef DERIVATION_H
+#अगर_अघोषित DERIVATION_H
 # define DERIVATION_H
 
 # include <gl_linked_list.h>
@@ -30,48 +30,48 @@
    relevant to the counterexample.  The leaves of a derivation form a
    counterexample when printed.  */
 
-typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+प्रकार gl_list_t derivation_list;
+प्रकार काष्ठा derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+अटल अंतरभूत derivation_list derivation_list_new (व्योम)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  वापस gl_list_create_empty (GL_LINKED_LIST, शून्य, शून्य, शून्य, true);
 }
 
-static inline bool
-derivation_list_next (gl_list_iterator_t *it, derivation **d)
+अटल अंतरभूत bool
+derivation_list_अग्र (gl_list_iterator_t *it, derivation **d)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  स्थिर व्योम *p = शून्य;
+  bool res = gl_list_iterator_अग्र (it, &p, शून्य);
+  अगर (res)
     *d = (derivation *) p;
-  else
+  अन्यथा
     gl_list_iterator_free (it);
-  return res;
+  वापस res;
 }
 
-void derivation_list_append (derivation_list dl, derivation *d);
-void derivation_list_prepend (derivation_list dl, derivation *d);
-void derivation_list_free (derivation_list dl);
+व्योम derivation_list_append (derivation_list dl, derivation *d);
+व्योम derivation_list_prepend (derivation_list dl, derivation *d);
+व्योम derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r);
+derivation_new (प्रतीक_संख्या sym, derivation_list children,
+                स्थिर rule *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+अटल अंतरभूत derivation *derivation_new_leaf (प्रतीक_संख्या sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  वापस derivation_new (sym, शून्य, शून्य);
 }
 
 // Number of symbols.
-size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
-void derivation_free (derivation *deriv);
-void derivation_retain (derivation *deriv);
+माप_प्रकार derivation_आकार (स्थिर derivation *deriv);
+व्योम derivation_print (स्थिर derivation *deriv, खाता *out, स्थिर अक्षर *prefix);
+व्योम derivation_print_leaves (स्थिर derivation *deriv, खाता *out);
+व्योम derivation_free (derivation *deriv);
+व्योम derivation_retain (derivation *deriv);
 
 // A derivation denoting the position of the dot.
-derivation *derivation_dot (void);
+derivation *derivation_dot (व्योम);
 
-#endif /* DERIVATION_H */
+#पूर्ण_अगर /* DERIVATION_H */

@@ -17,150 +17,150 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#समावेश <config.h>
+#समावेश "system.h"
 
-#include <hash.h>
-#include <quote.h>
+#समावेश <hash.h>
+#समावेश <quote.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "muscle-tab.h"
+#समावेश "complain.h"
+#समावेश "files.h"
+#समावेश "fixits.h"
+#समावेश "getargs.h"
+#समावेश "muscle-tab.h"
 
 muscle_kind
-muscle_kind_new (char const *k)
+muscle_kind_new (अक्षर स्थिर *k)
 {
-  if (STREQ (k, "code"))
-    return muscle_code;
-  else if (STREQ (k, "keyword"))
-    return muscle_keyword;
-  else if (STREQ (k, "string"))
-    return muscle_string;
-  abort ();
+  अगर (STREQ (k, "code"))
+    वापस muscle_code;
+  अन्यथा अगर (STREQ (k, "keyword"))
+    वापस muscle_keyword;
+  अन्यथा अगर (STREQ (k, "string"))
+    वापस muscle_string;
+  पात ();
 }
 
-char const *
+अक्षर स्थिर *
 muscle_kind_string (muscle_kind k)
 {
-  switch (k)
+  चयन (k)
     {
-    case muscle_code:    return "code";
-    case muscle_keyword: return "keyword";
-    case muscle_string:  return "string";
+    हाल muscle_code:    वापस "code";
+    हाल muscle_keyword: वापस "keyword";
+    हाल muscle_string:  वापस "string";
     }
-  abort ();
+  पात ();
 }
 
 
 /* A key-value pair, along with storage that can be reclaimed when
    this pair is no longer needed.  */
-typedef struct
+प्रकार काष्ठा
 {
-  char const *key;
-  char const *value;
-  char *storage;
+  अक्षर स्थिर *कुंजी;
+  अक्षर स्थिर *मूल्य;
+  अक्षर *storage;
   muscle_kind kind;
 } muscle_entry;
 
 
 /* The name of muscle for the %define variable VAR (corresponding to
    FIELD, if defined).  */
-static uniqstr
-muscle_name (char const *var, char const *field)
+अटल uniqstr
+muscle_name (अक्षर स्थिर *var, अक्षर स्थिर *field)
 {
-  if (field)
-    return UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
-  else
-    return UNIQSTR_CONCAT ("percent_define(", var, ")");
+  अगर (field)
+    वापस UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
+  अन्यथा
+    वापस UNIQSTR_CONCAT ("percent_define(", var, ")");
 }
 
 /* An obstack used to create some entries.  */
-struct obstack muscle_obstack;
+काष्ठा obstack muscle_obstack;
 
 /* Initial capacity of muscles hash table.  */
-#define HT_INITIAL_CAPACITY 257
+#घोषणा HT_INITIAL_CAPACITY 257
 
-static struct hash_table *muscle_table = NULL;
+अटल काष्ठा hash_table *muscle_table = शून्य;
 
-static bool
-hash_compare_muscles (void const *x, void const *y)
+अटल bool
+hash_compare_muscles (व्योम स्थिर *x, व्योम स्थिर *y)
 {
-  muscle_entry const *m1 = x;
-  muscle_entry const *m2 = y;
-  return STREQ (m1->key, m2->key);
+  muscle_entry स्थिर *m1 = x;
+  muscle_entry स्थिर *m2 = y;
+  वापस STREQ (m1->कुंजी, m2->कुंजी);
 }
 
-static size_t
-hash_muscle (const void *x, size_t tablesize)
+अटल माप_प्रकार
+hash_muscle (स्थिर व्योम *x, माप_प्रकार tablesize)
 {
-  muscle_entry const *m = x;
-  return hash_string (m->key, tablesize);
+  muscle_entry स्थिर *m = x;
+  वापस hash_string (m->कुंजी, tablesize);
 }
 
 /* Create a fresh muscle name KEY, and insert in the hash table.  */
-static void *
-muscle_entry_new (char const *key)
+अटल व्योम *
+muscle_entry_new (अक्षर स्थिर *कुंजी)
 {
-  muscle_entry *res = xmalloc (sizeof *res);
-  res->key = key;
-  res->value = NULL;
-  res->storage = NULL;
+  muscle_entry *res = xmalloc (माप *res);
+  res->कुंजी = कुंजी;
+  res->मूल्य = शून्य;
+  res->storage = शून्य;
   hash_xinsert (muscle_table, res);
-  return res;
+  वापस res;
 }
 
-static void
-muscle_entry_free (void *entry)
+अटल व्योम
+muscle_entry_free (व्योम *entry)
 {
   muscle_entry *mentry = entry;
-  free (mentry->storage);
-  free (mentry);
+  मुक्त (mentry->storage);
+  मुक्त (mentry);
 }
 
-void
-muscle_init (void)
+व्योम
+muscle_init (व्योम)
 {
   /* Initialize the muscle obstack.  */
   obstack_init (&muscle_obstack);
 
-  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, NULL, hash_muscle,
+  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, शून्य, hash_muscle,
                                    hash_compare_muscles, muscle_entry_free);
   /* Avoid warnings if the user defined this variable, but did not
      actually call -Wcex.  */
-  free (muscle_percent_define_get ("cex.timeout"));
+  मुक्त (muscle_percent_define_get ("cex.timeout"));
 }
 
 
-void
-muscle_free (void)
+व्योम
+muscle_free (व्योम)
 {
   hash_free (muscle_table);
-  obstack_free (&muscle_obstack, NULL);
+  obstack_free (&muscle_obstack, शून्य);
 }
 
 /* Look for the muscle named KEY.  Return NULL if does not exist.  */
-static muscle_entry *
-muscle_lookup (char const *key)
+अटल muscle_entry *
+muscle_lookup (अक्षर स्थिर *कुंजी)
 {
   muscle_entry probe;
-  probe.key = key;
-  return hash_lookup (muscle_table, &probe);
+  probe.कुंजी = कुंजी;
+  वापस hash_lookup (muscle_table, &probe);
 }
 
 
-void
-muscle_insert (char const *key, char const *value)
+व्योम
+muscle_जोड़ो (अक्षर स्थिर *कुंजी, अक्षर स्थिर *मूल्य)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
-    free (entry->storage);
-  else
+  muscle_entry *entry = muscle_lookup (कुंजी);
+  अगर (entry)
+    मुक्त (entry->storage);
+  अन्यथा
     /* First insertion in the hash. */
-    entry = muscle_entry_new (key);
-  entry->value = value;
-  entry->storage = NULL;
+    entry = muscle_entry_new (कुंजी);
+  entry->मूल्य = मूल्य;
+  entry->storage = शून्य;
 }
 
 
@@ -169,31 +169,31 @@ muscle_insert (char const *key, char const *value)
    associated value.  Copy VALUE and SEPARATOR.  If VALUE does not end
    with TERMINATOR, append one.  */
 
-static void
-muscle_grow (const char *key, const char *val,
-             const char *separator, const char *terminator)
+अटल व्योम
+muscle_grow (स्थिर अक्षर *कुंजी, स्थिर अक्षर *val,
+             स्थिर अक्षर *separator, स्थिर अक्षर *terminator)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (कुंजी);
+  अगर (entry)
     {
-      obstack_sgrow (&muscle_obstack, entry->value);
+      obstack_sgrow (&muscle_obstack, entry->मूल्य);
       obstack_sgrow (&muscle_obstack, separator);
-      free (entry->storage);
+      मुक्त (entry->storage);
     }
-  else
-    entry = muscle_entry_new (key);
+  अन्यथा
+    entry = muscle_entry_new (कुंजी);
 
   obstack_sgrow (&muscle_obstack, val);
 
-  size_t vals = strlen (val);
-  size_t terms = strlen (terminator);
-  if (terms <= vals
+  माप_प्रकार vals = म_माप (val);
+  माप_प्रकार terms = म_माप (terminator);
+  अगर (terms <= vals
       && STRNEQ (val + vals - terms, terminator))
     obstack_sgrow (&muscle_obstack, terminator);
 
   {
-    char const *new_val = obstack_finish0 (&muscle_obstack);
-    entry->value = entry->storage = xstrdup (new_val);
+    अक्षर स्थिर *new_val = obstack_finish0 (&muscle_obstack);
+    entry->मूल्य = entry->storage = xstrdup (new_val);
     obstack_free (&muscle_obstack, new_val);
   }
 }
@@ -203,15 +203,15 @@ muscle_grow (const char *key, const char *val,
 | LOC to the current value of KEY.                                  |
 `------------------------------------------------------------------*/
 
-static void
-muscle_syncline_grow (char const *key, location loc)
+अटल व्योम
+muscle_syncline_grow (अक्षर स्थिर *कुंजी, location loc)
 {
-  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.line);
+  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.पंक्ति);
   obstack_quote (&muscle_obstack,
                  quotearg_style (c_quoting_style, map_file_name (loc.start.file)));
   obstack_sgrow (&muscle_obstack, ")dnl\n[");
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  अक्षर स्थिर *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (कुंजी, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
@@ -221,167 +221,167 @@ muscle_syncline_grow (char const *key, location loc)
 | using muscle_syncline_grow.                                       |
 `------------------------------------------------------------------*/
 
-void
-muscle_code_grow (const char *key, const char *val, location loc)
+व्योम
+muscle_code_grow (स्थिर अक्षर *कुंजी, स्थिर अक्षर *val, location loc)
 {
-  muscle_syncline_grow (key, loc);
-  muscle_grow (key, val, "", "\n");
+  muscle_syncline_grow (कुंजी, loc);
+  muscle_grow (कुंजी, val, "", "\n");
 }
 
 
-void
-muscle_pair_list_grow (const char *muscle,
-                       const char *a1, const char *a2)
+व्योम
+muscle_pair_list_grow (स्थिर अक्षर *muscle,
+                       स्थिर अक्षर *a1, स्थिर अक्षर *a2)
 {
   obstack_sgrow (&muscle_obstack, "[");
   obstack_quote (&muscle_obstack, a1);
   obstack_sgrow (&muscle_obstack, ", ");
   obstack_quote (&muscle_obstack, a2);
   obstack_sgrow (&muscle_obstack, "]");
-  char const *pair = obstack_finish0 (&muscle_obstack);
+  अक्षर स्थिर *pair = obstack_finish0 (&muscle_obstack);
   muscle_grow (muscle, pair, ",\n", "");
   obstack_free (&muscle_obstack, pair);
 }
 
 
-char const *
-muscle_find_const (char const *key)
+अक्षर स्थिर *
+muscle_find_const (अक्षर स्थिर *कुंजी)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  return entry ? entry->value : NULL;
+  muscle_entry *entry = muscle_lookup (कुंजी);
+  वापस entry ? entry->मूल्य : शून्य;
 }
 
 
-char *
-muscle_find (char const *key)
+अक्षर *
+muscle_find (अक्षर स्थिर *कुंजी)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (कुंजी);
+  अगर (entry)
     {
-      aver (entry->value == entry->storage);
-      return entry->storage;
+      aver (entry->मूल्य == entry->storage);
+      वापस entry->storage;
     }
-  return NULL;
+  वापस शून्य;
 }
 
 
 /* In the format 'file_name:line.column', append BOUND to MUSCLE.  Use
    digraphs for special characters in the file name.  */
 
-static void
-muscle_boundary_grow (char const *key, boundary bound)
+अटल व्योम
+muscle_boundary_grow (अक्षर स्थिर *कुंजी, boundary bound)
 {
   obstack_sgrow  (&muscle_obstack, "[[");
   obstack_escape (&muscle_obstack, bound.file);
-  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.line, bound.column, bound.byte);
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.पंक्ति, bound.column, bound.byte);
+  अक्षर स्थिर *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (कुंजी, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
 
-void
-muscle_location_grow (char const *key, location loc)
+व्योम
+muscle_location_grow (अक्षर स्थिर *कुंजी, location loc)
 {
-  muscle_boundary_grow (key, loc.start);
-  muscle_grow (key, "", ", ", "");
-  muscle_boundary_grow (key, loc.end);
+  muscle_boundary_grow (कुंजी, loc.start);
+  muscle_grow (कुंजी, "", ", ", "");
+  muscle_boundary_grow (कुंजी, loc.end);
 }
 
-#define COMMON_DECODE(Value)                                    \
-  case '$':                                                     \
-    ++(Value); aver (*(Value) == ']');                          \
-    ++(Value); aver (*(Value) == '[');                          \
+#घोषणा COMMON_DECODE(मूल्य_4)                                    \
+  हाल '$':                                                     \
+    ++(मूल्य_4); aver (*(मूल्य_4) == ']');                          \
+    ++(मूल्य_4); aver (*(मूल्य_4) == '[');                          \
     obstack_sgrow (&muscle_obstack, "$");                       \
-    break;                                                      \
-  case '@':                                                     \
-    switch (*++(Value))                                         \
+    अवरोध;                                                      \
+  हाल '@':                                                     \
+    चयन (*++(मूल्य_4))                                         \
       {                                                         \
-      case '\'': /* Ignore "@'" */ break;                       \
-      case '@': obstack_sgrow (&muscle_obstack, "@" ); break;   \
-      case '{': obstack_sgrow (&muscle_obstack, "[" ); break;   \
-      case '}': obstack_sgrow (&muscle_obstack, "]" ); break;   \
-      default: aver (false); break;                             \
+      हाल '\'': /* Ignore "@'" */ अवरोध;                       \
+      हाल '@': obstack_sgrow (&muscle_obstack, "@" ); अवरोध;   \
+      हाल '{': obstack_sgrow (&muscle_obstack, "[" ); अवरोध;   \
+      हाल '}': obstack_sgrow (&muscle_obstack, "]" ); अवरोध;   \
+      शेष: aver (false); अवरोध;                             \
       }                                                         \
-    break;                                                      \
-  default:                                                      \
-    obstack_1grow (&muscle_obstack, *(Value));                  \
-    break;
+    अवरोध;                                                      \
+  शेष:                                                      \
+    obstack_1grow (&muscle_obstack, *(मूल्य_4));                  \
+    अवरोध;
 
 /* Reverse of obstack_escape.  */
-static char *
-string_decode (char const *key)
+अटल अक्षर *
+string_decode (अक्षर स्थिर *कुंजी)
 {
-  char const *value = muscle_find_const (key);
-  if (!value)
-    return NULL;
-  do {
-    switch (*value)
+  अक्षर स्थिर *मूल्य = muscle_find_const (कुंजी);
+  अगर (!मूल्य)
+    वापस शून्य;
+  करो {
+    चयन (*मूल्य)
       {
-        COMMON_DECODE (value)
-        case '[':
-        case ']':
+        COMMON_DECODE (मूल्य)
+        हाल '[':
+        हाल ']':
           aver (false);
-          break;
+          अवरोध;
       }
-  } while (*value++);
-  char const *value_decoded = obstack_finish (&muscle_obstack);
-  char *res = xstrdup (value_decoded);
-  obstack_free (&muscle_obstack, value_decoded);
-  return res;
+  } जबतक (*मूल्य++);
+  अक्षर स्थिर *मूल्य_decoded = obstack_finish (&muscle_obstack);
+  अक्षर *res = xstrdup (मूल्य_decoded);
+  obstack_free (&muscle_obstack, मूल्य_decoded);
+  वापस res;
 }
 
 /* Reverse of muscle_location_grow.  */
-static location
-location_decode (char const *value)
+अटल location
+location_decode (अक्षर स्थिर *मूल्य)
 {
-  aver (value);
-  aver (*value == '[');
-  ++value; aver (*value == '[');
+  aver (मूल्य);
+  aver (*मूल्य == '[');
+  ++मूल्य; aver (*मूल्य == '[');
   location loc;
-  while (*++value)
-    switch (*value)
+  जबतक (*++मूल्य)
+    चयन (*मूल्य)
       {
-        COMMON_DECODE (value)
-        case '[':
+        COMMON_DECODE (मूल्य)
+        हाल '[':
           aver (false);
-          break;
-        case ']':
-          ++value; aver (*value == ']');
-          char *boundary_str = obstack_finish0 (&muscle_obstack);
-          switch (*++value)
+          अवरोध;
+        हाल ']':
+          ++मूल्य; aver (*मूल्य == ']');
+          अक्षर *boundary_str = obstack_finish0 (&muscle_obstack);
+          चयन (*++मूल्य)
             {
-            case ',':
+            हाल ',':
               boundary_set_from_string (&loc.start, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              ++value; aver (*value == ' ');
-              ++value; aver (*value == '[');
-              ++value; aver (*value == '[');
-              break;
-            case '\0':
+              ++मूल्य; aver (*मूल्य == ' ');
+              ++मूल्य; aver (*मूल्य == '[');
+              ++मूल्य; aver (*मूल्य == '[');
+              अवरोध;
+            हाल '\0':
               boundary_set_from_string (&loc.end, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              return loc;
-              break;
-            default:
+              वापस loc;
+              अवरोध;
+            शेष:
               aver (false);
-              break;
+              अवरोध;
             }
-          break;
+          अवरोध;
       }
   aver (false);
-  return loc;
+  वापस loc;
 }
 
-void
-muscle_user_name_list_grow (char const *key, char const *user_name,
+व्योम
+muscle_user_name_list_grow (अक्षर स्थिर *कुंजी, अक्षर स्थिर *user_name,
                             location loc)
 {
-  muscle_grow (key, "[[[[", ",", "");
-  muscle_grow (key, user_name, "", "");
-  muscle_grow (key, "]], ", "", "");
-  muscle_location_grow (key, loc);
-  muscle_grow (key, "]]", "", "");
+  muscle_grow (कुंजी, "[[[[", ",", "");
+  muscle_grow (कुंजी, user_name, "", "");
+  muscle_grow (कुंजी, "]], ", "", "");
+  muscle_location_grow (कुंजी, loc);
+  muscle_grow (कुंजी, "]]", "", "");
 }
 
 
@@ -400,25 +400,25 @@ muscle_user_name_list_grow (char const *key, char const *user_name,
     "foo=", "baz"    => "%define foo"
  */
 
-static
-char *
-define_directive (char const *assignment,
+अटल
+अक्षर *
+define_directive (अक्षर स्थिर *assignment,
                   muscle_kind kind,
-                  char const *value)
+                  अक्षर स्थिर *मूल्य)
 {
-  char *eq = strchr (assignment, '=');
-  char const *fmt
-    = eq || !value || !*value ? "%%define %s"
+  अक्षर *eq = म_अक्षर (assignment, '=');
+  अक्षर स्थिर *fmt
+    = eq || !मूल्य || !*मूल्य ? "%%define %s"
     : kind == muscle_code     ? "%%define %s {%s}"
     : kind == muscle_string   ? "%%define %s \"%s\""
     :                           "%%define %s %s";
-  char *res = xmalloc (strlen (fmt) + strlen (assignment)
-                       + (value ? strlen (value) : 0));
-  sprintf (res, fmt, assignment, value);
-  eq = strchr (res, '=');
-  if (eq)
+  अक्षर *res = xmalloc (म_माप (fmt) + म_माप (assignment)
+                       + (मूल्य ? म_माप (मूल्य) : 0));
+  प्र_लिखो (res, fmt, assignment, मूल्य);
+  eq = म_अक्षर (res, '=');
+  अगर (eq)
     *eq = eq[1] ? ' ' : '\0';
-  return res;
+  वापस res;
 }
 
 /** If the \a variable name is obsolete, return the name to use,
@@ -426,20 +426,20 @@ define_directive (char const *assignment,
  *
  * Allocates the returned value if needed, otherwise the returned
  * value is exactly \a variable.  */
-static
-char const *
-muscle_percent_variable_update (char const *variable,
+अटल
+अक्षर स्थिर *
+muscle_percent_variable_update (अक्षर स्थिर *variable,
                                 muscle_kind kind,
-                                char const **value,
-                                char **old, char **upd)
+                                अक्षर स्थिर **मूल्य,
+                                अक्षर **old, अक्षर **upd)
 {
-  typedef struct
+  प्रकार काष्ठा
   {
-    const char *obsolete;
-    const char *updated;
+    स्थिर अक्षर *obsolete;
+    स्थिर अक्षर *updated;
     muscle_kind kind;
   } conversion_type;
-  const conversion_type conversion[] =
+  स्थिर conversion_type conversion[] =
   {
     { "%error-verbose",             "parse.error=verbose",       muscle_keyword },
     { "%error_verbose",             "parse.error=verbose",       muscle_keyword },
@@ -464,51 +464,51 @@ muscle_percent_variable_update (char const *variable,
     { "stype",                      "api.value.type",            -1 },
     { "variant=",                   "api.value.type=variant",    -1 },
     { "variant=true",               "api.value.type=variant",    -1 },
-    { NULL, NULL, -1, }
+    { शून्य, शून्य, -1, }
   };
 
-  for (conversion_type const *c = conversion; c->obsolete; ++c)
+  क्रम (conversion_type स्थिर *c = conversion; c->obsolete; ++c)
     {
-      char const *eq = strchr (c->obsolete, '=');
-      if (eq
-          ? (!strncmp (c->obsolete, variable, eq - c->obsolete)
-             && STREQ (eq + 1, *value))
+      अक्षर स्थिर *eq = म_अक्षर (c->obsolete, '=');
+      अगर (eq
+          ? (!म_भेदन (c->obsolete, variable, eq - c->obsolete)
+             && STREQ (eq + 1, *मूल्य))
           : STREQ (c->obsolete, variable))
         {
           /* Generate the deprecation warning. */
           *old = c->obsolete[0] == '%'
             ? xstrdup (c->obsolete)
-            : define_directive (c->obsolete, kind, *value);
-          *upd = define_directive (c->updated, c->kind, *value);
+            : define_directive (c->obsolete, kind, *मूल्य);
+          *upd = define_directive (c->updated, c->kind, *मूल्य);
           /* Update the variable and its value.  */
           {
-            char *res = xstrdup (c->updated);
-            char *eq2 = strchr (res, '=');
-            if (eq2)
+            अक्षर *res = xstrdup (c->updated);
+            अक्षर *eq2 = म_अक्षर (res, '=');
+            अगर (eq2)
               {
                 *eq2 = '\0';
-                *value = eq2 + 1;
+                *मूल्य = eq2 + 1;
               }
-            return res;
+            वापस res;
           }
         }
     }
-  return variable;
+  वापस variable;
 }
 
-void
-muscle_percent_define_insert (char const *var, location variable_loc,
+व्योम
+muscle_percent_define_जोड़ो (अक्षर स्थिर *var, location variable_loc,
                               muscle_kind kind,
-                              char const *value,
+                              अक्षर स्थिर *मूल्य,
                               muscle_percent_define_how how)
 {
   /* Backward compatibility.  */
-  char *old = NULL;
-  char *upd = NULL;
-  char const *variable
+  अक्षर *old = शून्य;
+  अक्षर *upd = शून्य;
+  अक्षर स्थिर *variable
     = muscle_percent_variable_update (var, kind,
-                                      &value, &old, &upd);
-  uniqstr name = muscle_name (variable, NULL);
+                                      &मूल्य, &old, &upd);
+  uniqstr name = muscle_name (variable, शून्य);
   uniqstr loc_name = muscle_name (variable, "loc");
   uniqstr syncline_name = muscle_name (variable, "syncline");
   uniqstr how_name = muscle_name (variable, "how");
@@ -516,18 +516,18 @@ muscle_percent_define_insert (char const *var, location variable_loc,
 
   /* Command-line options are processed before the grammar file.  */
   bool warned = false;
-  if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
+  अगर (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
     {
-      char const *current_value = muscle_find_const (name);
-      if (current_value)
+      अक्षर स्थिर *current_मूल्य = muscle_find_const (name);
+      अगर (current_मूल्य)
         {
-          long l = strtol (muscle_find_const (how_name), NULL, 10);
+          दीर्घ l = म_से_दीर्घ (muscle_find_const (how_name), शून्य, 10);
           muscle_percent_define_how how_old
-            = 0 <= l && l <= INT_MAX ? l : INT_MAX;
-          if (how_old == MUSCLE_PERCENT_DEFINE_F)
-            goto end;
+            = 0 <= l && l <= पूर्णांक_उच्च ? l : पूर्णांक_उच्च;
+          अगर (how_old == MUSCLE_PERCENT_DEFINE_F)
+            जाओ end;
           /* If assigning the same value, make it a warning.  */
-          warnings warn = STREQ (value, current_value) ? Wother : complaint;
+          warnings warn = STREQ (मूल्य, current_मूल्य) ? Wother : complaint;
           complain (&variable_loc, warn,
                     _("%%define variable %s redefined"),
                     quote (variable));
@@ -538,229 +538,229 @@ muscle_percent_define_insert (char const *var, location variable_loc,
         }
     }
 
-  if (!warned && old && upd)
+  अगर (!warned && old && upd)
     deprecated_directive (&variable_loc, old, upd);
 
-  MUSCLE_INSERT_STRING (name, value);
-  muscle_insert (loc_name, "");
+  MUSCLE_जोड़ो_STRING (name, मूल्य);
+  muscle_जोड़ो (loc_name, "");
   muscle_location_grow (loc_name, variable_loc);
-  muscle_insert (syncline_name, "");
+  muscle_जोड़ो (syncline_name, "");
   muscle_syncline_grow (syncline_name, variable_loc);
   muscle_user_name_list_grow ("percent_define_user_variables", variable,
                               variable_loc);
-  MUSCLE_INSERT_INT (how_name, how);
-  MUSCLE_INSERT_STRING (kind_name, muscle_kind_string (kind));
+  MUSCLE_जोड़ो_INT (how_name, how);
+  MUSCLE_जोड़ो_STRING (kind_name, muscle_kind_string (kind));
  end:
-  free (old);
-  free (upd);
-  if (variable != var)
-    free ((char *) variable);
+  मुक्त (old);
+  मुक्त (upd);
+  अगर (variable != var)
+    मुक्त ((अक्षर *) variable);
 }
 
 /* This is used for backward compatibility, e.g., "%define api.pure"
    supersedes "%pure-parser".  */
-void
-muscle_percent_define_ensure (char const *variable, location loc,
-                              bool value)
+व्योम
+muscle_percent_define_ensure (अक्षर स्थिर *variable, location loc,
+                              bool मूल्य)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char const *val = value ? "" : "false";
+  uniqstr name = muscle_name (variable, शून्य);
+  अक्षर स्थिर *val = मूल्य ? "" : "false";
 
   /* Don't complain is VARIABLE is already defined, but be sure to set
      its value to VAL.  */
-  if (!muscle_find_const (name)
-      || muscle_percent_define_flag_if (variable) != value)
-    muscle_percent_define_insert (variable, loc, muscle_keyword, val,
+  अगर (!muscle_find_const (name)
+      || muscle_percent_define_flag_if (variable) != मूल्य)
+    muscle_percent_define_जोड़ो (variable, loc, muscle_keyword, val,
                                   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 /* Mark %define VARIABLE as used.  */
-static void
-muscle_percent_define_use (char const *variable)
+अटल व्योम
+muscle_percent_define_use (अक्षर स्थिर *variable)
 {
-  muscle_insert (muscle_name (variable, "bison_variables"), "");
+  muscle_जोड़ो (muscle_name (variable, "bison_variables"), "");
 }
 
 /* The value of %define variable VARIABLE (corresponding to FIELD, if
    defined).  Do not register as used, but diagnose unset variables.  */
 
-static
-char const *
-muscle_percent_define_get_raw (char const *variable, char const *field)
+अटल
+अक्षर स्थिर *
+muscle_percent_define_get_raw (अक्षर स्थिर *variable, अक्षर स्थिर *field)
 {
   uniqstr name = muscle_name (variable, field);
-  char const *res = muscle_find_const (name);
-  if (!res)
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  अक्षर स्थिर *res = muscle_find_const (name);
+  अगर (!res)
+    complain (शून्य, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_get_raw", quote (variable));
-  return res;
+  वापस res;
 }
 
-char *
-muscle_percent_define_get (char const *variable)
+अक्षर *
+muscle_percent_define_get (अक्षर स्थिर *variable)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char *value = string_decode (name);
-  if (!value)
-    value = xstrdup ("");
+  uniqstr name = muscle_name (variable, शून्य);
+  अक्षर *मूल्य = string_decode (name);
+  अगर (!मूल्य)
+    मूल्य = xstrdup ("");
   muscle_percent_define_use (variable);
-  return value;
+  वापस मूल्य;
 }
 
 /* The kind of VARIABLE.  An error if undefined.  */
-static muscle_kind
-muscle_percent_define_get_kind (char const *variable)
+अटल muscle_kind
+muscle_percent_define_get_kind (अक्षर स्थिर *variable)
 {
-  return muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
+  वापस muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
 }
 
 /* Check the kind of VARIABLE.  An error if undefined.  */
-static void
-muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
+अटल व्योम
+muscle_percent_define_check_kind (अक्षर स्थिर *variable, muscle_kind kind)
 {
-  if (muscle_percent_define_get_kind (variable) != kind)
+  अगर (muscle_percent_define_get_kind (variable) != kind)
     {
       location loc = muscle_percent_define_get_loc (variable);
-      switch (kind)
+      चयन (kind)
         {
-        case muscle_code:
+        हाल muscle_code:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '{...}' values"),
                     variable);
-          break;
-        case muscle_keyword:
+          अवरोध;
+        हाल muscle_keyword:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires keyword values"),
                     variable);
-          break;
-        case muscle_string:
+          अवरोध;
+        हाल muscle_string:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '\"...\"' values"),
                     variable);
-          break;
+          अवरोध;
         }
     }
 }
 
 
 location
-muscle_percent_define_get_loc (char const *variable)
+muscle_percent_define_get_loc (अक्षर स्थिर *variable)
 {
-  return location_decode (muscle_percent_define_get_raw (variable, "loc"));
+  वापस location_decode (muscle_percent_define_get_raw (variable, "loc"));
 }
 
-char const *
-muscle_percent_define_get_syncline (char const *variable)
+अक्षर स्थिर *
+muscle_percent_define_get_syncline (अक्षर स्थिर *variable)
 {
-  return muscle_percent_define_get_raw (variable, "syncline");
+  वापस muscle_percent_define_get_raw (variable, "syncline");
 }
 
 bool
-muscle_percent_define_ifdef (char const *variable)
+muscle_percent_define_ifdef (अक्षर स्थिर *variable)
 {
-  if (muscle_find_const (muscle_name (variable, NULL)))
+  अगर (muscle_find_const (muscle_name (variable, शून्य)))
     {
       muscle_percent_define_use (variable);
-      return true;
+      वापस true;
     }
-  else
-    return false;
+  अन्यथा
+    वापस false;
 }
 
 bool
-muscle_percent_define_flag_if (char const *variable)
+muscle_percent_define_flag_if (अक्षर स्थिर *variable)
 {
   uniqstr invalid_boolean_name = muscle_name (variable, "invalid_boolean");
   bool res = false;
 
-  if (muscle_percent_define_ifdef (variable))
+  अगर (muscle_percent_define_ifdef (variable))
     {
-      char *value = muscle_percent_define_get (variable);
+      अक्षर *मूल्य = muscle_percent_define_get (variable);
       muscle_percent_define_check_kind (variable, muscle_keyword);
-      if (value[0] == '\0' || STREQ (value, "true"))
+      अगर (मूल्य[0] == '\0' || STREQ (मूल्य, "true"))
         res = true;
-      else if (STREQ (value, "false"))
+      अन्यथा अगर (STREQ (मूल्य, "false"))
         res = false;
-      else if (!muscle_find_const (invalid_boolean_name))
+      अन्यथा अगर (!muscle_find_const (invalid_boolean_name))
         {
-          muscle_insert (invalid_boolean_name, "");
+          muscle_जोड़ो (invalid_boolean_name, "");
           location loc = muscle_percent_define_get_loc (variable);
           complain (&loc, complaint,
                     _("invalid value for %%define Boolean variable %s"),
                     quote (variable));
         }
-      free (value);
+      मुक्त (मूल्य);
     }
-  else
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  अन्यथा
+    complain (शून्य, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_flag", quote (variable));
 
-  return res;
+  वापस res;
 }
 
-void
-muscle_percent_define_default (char const *variable, char const *value)
+व्योम
+muscle_percent_define_default (अक्षर स्थिर *variable, अक्षर स्थिर *मूल्य)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  if (!muscle_find_const (name))
+  uniqstr name = muscle_name (variable, शून्य);
+  अगर (!muscle_find_const (name))
     {
-      MUSCLE_INSERT_STRING (name, value);
-      MUSCLE_INSERT_STRING (muscle_name (variable, "kind"), "keyword");
+      MUSCLE_जोड़ो_STRING (name, मूल्य);
+      MUSCLE_जोड़ो_STRING (muscle_name (variable, "kind"), "keyword");
       {
         uniqstr loc_name = muscle_name (variable, "loc");
         location loc;
         loc.start.file = "<default value>";
-        loc.start.line = -1;
+        loc.start.पंक्ति = -1;
         loc.start.column = -1;
         loc.start.byte = -1;
         loc.end = loc.start;
-        muscle_insert (loc_name, "");
+        muscle_जोड़ो (loc_name, "");
         muscle_location_grow (loc_name, loc);
       }
-      muscle_insert (muscle_name (variable, "syncline"), "");
+      muscle_जोड़ो (muscle_name (variable, "syncline"), "");
     }
 }
 
-void
-muscle_percent_define_check_values (char const * const *values)
+व्योम
+muscle_percent_define_check_मूल्यावली (अक्षर स्थिर * स्थिर *मूल्यावली)
 {
-  for (; *values; ++values)
+  क्रम (; *मूल्यावली; ++मूल्यावली)
     {
-      char const * const *variablep = values;
-      uniqstr name = muscle_name (*variablep, NULL);
-      char *value = string_decode (name);
+      अक्षर स्थिर * स्थिर *variablep = मूल्यावली;
+      uniqstr name = muscle_name (*variablep, शून्य);
+      अक्षर *मूल्य = string_decode (name);
       muscle_percent_define_check_kind (*variablep, muscle_keyword);
-      if (value)
+      अगर (मूल्य)
         {
-          for (++values; *values; ++values)
-            if (STREQ (value, *values))
-              break;
-          if (!*values)
+          क्रम (++मूल्यावली; *मूल्यावली; ++मूल्यावली)
+            अगर (STREQ (मूल्य, *मूल्यावली))
+              अवरोध;
+          अगर (!*मूल्यावली)
             {
               location loc = muscle_percent_define_get_loc (*variablep);
               complain (&loc, complaint,
                         _("invalid value for %%define variable %s: %s"),
-                        quote (*variablep), quote_n (1, value));
-              for (values = variablep + 1; *values; ++values)
+                        quote (*variablep), quote_n (1, मूल्य));
+              क्रम (मूल्यावली = variablep + 1; *मूल्यावली; ++मूल्यावली)
                 subcomplain (&loc, complaint | no_caret | silent,
-                             _("accepted value: %s"), quote (*values));
+                             _("accepted value: %s"), quote (*मूल्यावली));
             }
-          else
-            while (*values)
-              ++values;
-          free (value);
+          अन्यथा
+            जबतक (*मूल्यावली)
+              ++मूल्यावली;
+          मुक्त (मूल्य);
         }
-      else
-        complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+      अन्यथा
+        complain (शून्य, fatal, _("%s: undefined %%define variable %s"),
                   "muscle_percent_define_check_values", quote (*variablep));
     }
 }
 
-void
-muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
-                          char const *code, location code_loc)
+व्योम
+muscle_percent_code_grow (अक्षर स्थिर *qualifier, location qualifier_loc,
+                          अक्षर स्थिर *code, location code_loc)
 {
-  char const *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
+  अक्षर स्थिर *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
   muscle_code_grow (name, code, code_loc);
   muscle_user_name_list_grow ("percent_code_user_qualifiers", qualifier,
                                qualifier_loc);
@@ -771,24 +771,24 @@ muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
 | Output the definition of ENTRY as a m4_define.  |
 `------------------------------------------------*/
 
-static inline bool
-muscle_m4_output (muscle_entry *entry, FILE *out)
+अटल अंतरभूत bool
+muscle_m4_output (muscle_entry *entry, खाता *out)
 {
-  fprintf (out,
+  ख_लिखो (out,
            "m4_define([b4_%s],\n"
-           "[[%s]])\n\n\n", entry->key, entry->value);
-  return true;
+           "[[%s]])\n\n\n", entry->कुंजी, entry->मूल्य);
+  वापस true;
 }
 
-static bool
-muscle_m4_output_processor (void *entry, void *out)
+अटल bool
+muscle_m4_output_processor (व्योम *entry, व्योम *out)
 {
-  return muscle_m4_output (entry, out);
+  वापस muscle_m4_output (entry, out);
 }
 
 
-void
-muscles_m4_output (FILE *out)
+व्योम
+muscles_m4_output (खाता *out)
 {
   hash_do_for_each (muscle_table, muscle_m4_output_processor, out);
 }

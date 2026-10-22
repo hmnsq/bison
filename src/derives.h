@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef DERIVES_H_
+#अगर_अघोषित DERIVES_H_
 # define DERIVES_H_
 
 # include "gram.h"
 
 /* DERIVES[SYMBOL - NTOKENS] points to a vector of the rules that
    SYMBOL derives, terminated with NULL.  */
-extern rule ***derives;
+बाह्य rule ***derives;
 
 /* Compute DERIVES.  */
 
-void derives_compute (void);
-void derives_free (void);
+व्योम derives_compute (व्योम);
+व्योम derives_free (व्योम);
 
-#endif /* !DERIVES_H_ */
+#पूर्ण_अगर /* !DERIVES_H_ */

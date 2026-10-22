@@ -17,64 +17,64 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#समावेश <config.h>
+#समावेश "system.h"
 
-#include "Sbitset.h"
+#समावेश "Sbitset.h"
 
 Sbitset
-Sbitset__new (Sbitset__Index nbits)
+Sbitset__new (Sbitset_सूचकांक nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  वापस xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
-Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
+Sbitset__new_on_obstack (Sbitset_सूचकांक nbits, काष्ठा obstack *obstackp)
 {
-  Sbitset result;
+  Sbitset परिणाम;
   Sbitset ptr;
   Sbitset end;
   aver (nbits);
-  result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
-  for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
+  परिणाम = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
+  क्रम (ptr = परिणाम, end = परिणाम + Sbitset__nbytes (nbits); ptr < end; ++ptr)
     *ptr = 0;
-  return result;
+  वापस परिणाम;
 }
 
-void
+व्योम
 Sbitset__delete (Sbitset self)
 {
-  free (self);
+  मुक्त (self);
 }
 
 bool
-Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
+Sbitset__isEmpty (Sbitset self, Sbitset_सूचकांक nbits)
 {
   Sbitset last = self + Sbitset__nbytes (nbits) - 1;
-  for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+  क्रम (; self < last; ++self)
+    अगर (*self != 0)
+      वापस false;
+  वापस ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
 }
 
-void
-Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
+व्योम
+Sbitset__fprint (Sbitset self, Sbitset_सूचकांक nbits, खाता *file)
 {
-  Sbitset__Index i;
+  Sbitset_सूचकांक i;
   Sbitset itr;
   bool first = true;
-  fprintf (file,
-           "nbits = %" SBITSET__INDEX__CONVERSION_SPEC ", set = {",
+  ख_लिखो (file,
+           "nbits = %" SBITSET_सूचकांक_CONVERSION_SPEC ", set = {",
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
+      अगर (first)
         first = false;
-      else
-        fprintf (file, ",");
-      fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
+      अन्यथा
+        ख_लिखो (file, ",");
+      ख_लिखो (file, " %" SBITSET_सूचकांक_CONVERSION_SPEC, i);
     }
-  fprintf (file, " }");
+  ख_लिखो (file, " }");
 }

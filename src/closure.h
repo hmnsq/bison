@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef CLOSURE_H_
+#अगर_अघोषित CLOSURE_H_
 # define CLOSURE_H_
 
 # include "gram.h"
@@ -27,7 +27,7 @@
    data so that closure can be called.  n is the number of elements to
    allocate for itemset.  */
 
-void closure_new (int n);
+व्योम closure_new (पूर्णांक n);
 
 
 /* Given the kernel (aka core) of a state (a sorted vector of item indices
@@ -35,12 +35,12 @@ void closure_new (int n);
    rules could be run and which items could be accepted when those
    items are the active ones.  */
 
-void closure (item_index const *items, size_t n);
+व्योम closure (item_सूचकांक स्थिर *वस्तुएँ, माप_प्रकार n);
 
 
 /* Free ITEMSET, RULESET and internal data.  */
 
-void closure_free (void);
+व्योम closure_free (व्योम);
 
 
 /* ITEMSET is a sorted vector of item indices; NITEMSET is its size
@@ -48,7 +48,7 @@ void closure_free (void);
    significant).  CLOSURE places there the indices of all items which
    represent units of input that could arrive next.  */
 
-extern item_index *itemset;
-extern size_t nitemset;
+बाह्य item_सूचकांक *itemset;
+बाह्य माप_प्रकार nitemset;
 
-#endif /* !CLOSURE_H_ */
+#पूर्ण_अगर /* !CLOSURE_H_ */

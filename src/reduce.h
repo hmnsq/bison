@@ -18,25 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef REDUCE_H_
+#अगर_अघोषित REDUCE_H_
 # define REDUCE_H_
 
-void reduce_grammar (void);
-void reduce_output (FILE *out);
-bool reduce_token_unused_in_grammar (symbol_number i);
+व्योम reduce_grammar (व्योम);
+व्योम reduce_output (खाता *out);
+bool reduce_token_unused_in_grammar (प्रतीक_संख्या i);
 
 /** Whether symbol \a i is useless in the grammar.
  * \pre  reduce_grammar was called before.
  */
-bool reduce_nonterminal_useless_in_grammar (const sym_content *sym);
+bool reduce_nonterminal_useless_in_grammar (स्थिर sym_content *sym);
 
-void reduce_free (void);
+व्योम reduce_free (व्योम);
 
 /** Map initial nterm numbers to the new ones.  Built by
  * reduce_grammar.  Size nnterms + nuseless_nonterminals.  */
-extern symbol_number *nterm_map;
+बाह्य प्रतीक_संख्या *nterm_map;
 
-extern int nuseless_nonterminals;
-extern int nuseless_productions;
+बाह्य पूर्णांक nuseless_nonterminals;
+बाह्य पूर्णांक nuseless_productions;
 
-#endif /* !REDUCE_H_ */
+#पूर्ण_अगर /* !REDUCE_H_ */

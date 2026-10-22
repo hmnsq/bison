@@ -21,107 +21,107 @@
 %option prefix="gram_" outfile="lex.yy.c"
 
 %{
-#include <c-ctype.h>
-#include <errno.h>
-#include <mbswidth.h>
-#include <quote.h>
-#include <quotearg.h>
+#समावेश <c-ctype.h>
+#समावेश <errno.h>
+#समावेश <mbswidth.h>
+#समावेश <quote.h>
+#समावेश <quotearg.h>
 
-#include "src/complain.h"
-#include "src/files.h"
-#include "src/getargs.h"
-#include "src/gram.h"
-#include "src/reader.h"
-#include "src/scan-gram.h"
-#include "src/uniqstr.h"
+#समावेश "src/complain.h"
+#समावेश "src/files.h"
+#समावेश "src/getargs.h"
+#समावेश "src/gram.h"
+#समावेश "src/reader.h"
+#समावेश "src/scan-gram.h"
+#समावेश "src/uniqstr.h"
 
-#define FLEX_PREFIX(Id) gram_ ## Id
-#include "src/flex-scanner.h"
+#घोषणा FLEX_PREFIX(Id) gram_ ## Id
+#समावेश "src/flex-scanner.h"
 
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <https://bugs.debian.org/333231>.  */
-#undef gram_wrap
-#define gram_wrap() 1
+#अघोषित gram_wrap
+#घोषणा gram_wrap() 1
 
-#define YY_DECL GRAM_LEX_DECL
+#घोषणा YY_DECL GRAM_LEX_DECL
 
 /* Location of scanner cursor.  */
-static boundary scanner_cursor;
+अटल boundary scanner_cursor;
 
-#define YY_USER_ACTION  location_compute (loc, &scanner_cursor, yytext, yyleng);
+#घोषणा YY_USER_ACTION  location_compute (loc, &scanner_cursor, श_माला, yyleng);
 
 /* Report that yytext is an extension, and evaluate to its token kind.  */
-#define BISON_DIRECTIVE(Directive)                              \
-  (bison_directive (loc, yytext), PERCENT_ ## Directive)
+#घोषणा BISON_DIRECTIVE(Directive)                              \
+  (bison_directive (loc, श_माला), PERCENT_ ## Directive)
 
-#define RETURN_PERCENT_PARAM(Value)             \
-  RETURN_VALUE(PERCENT_PARAM, param_ ## Value)
+#घोषणा RETURN_PERCENT_PARAM(मूल्य_4)             \
+  RETURN_मूल्य(PERCENT_PARAM, param_ ## मूल्य_4)
 
-#define RETURN_PERCENT_FLAG(Value)                      \
-  RETURN_VALUE(PERCENT_FLAG, uniqstr_new (Value))
+#घोषणा RETURN_PERCENT_FLAG(मूल्य_4)                      \
+  RETURN_मूल्य(PERCENT_FLAG, uniqstr_new (मूल्य_4))
 
-#define RETURN_VALUE(Token, Value)              \
-  do {                                          \
-    val->Token = Value;                         \
-    return Token;                               \
-  } while (0)
+#घोषणा RETURN_मूल्य(Token, मूल्य_4)              \
+  करो {                                          \
+    val->Token = मूल्य_4;                         \
+    वापस Token;                               \
+  } जबतक (0)
 
-#define ROLLBACK_CURRENT_TOKEN                                  \
-  do {                                                          \
-    scanner_cursor.column -= mbsnwidth (yytext, yyleng, 0);     \
+#घोषणा ROLLBACK_CURRENT_TOKEN                                  \
+  करो {                                                          \
+    scanner_cursor.column -= mbsnwidth (श_माला, yyleng, 0);     \
     scanner_cursor.byte -= yyleng;                              \
     yyless (0);                                                 \
-  } while (0)
+  } जबतक (0)
 
-#define DEPRECATED_DIRECTIVE(Msg)                               \
-  do {                                                          \
-    deprecated_directive (loc, yytext, Msg);                    \
-    scanner_cursor.column -= mbsnwidth (Msg, strlen (Msg), 0);  \
-    scanner_cursor.byte -= strlen (Msg);                        \
-    for (size_t i = strlen (Msg); i != 0; --i)                  \
-      unput (Msg[i - 1]);                                       \
-  } while (0)
+#घोषणा DEPRECATED_DIRECTIVE(संदेश_2)                               \
+  करो {                                                          \
+    deprecated_directive (loc, श_माला, संदेश_2);                    \
+    scanner_cursor.column -= mbsnwidth (संदेश_2, म_माप (संदेश_2), 0);  \
+    scanner_cursor.byte -= म_माप (संदेश_2);                        \
+    क्रम (माप_प्रकार i = म_माप (संदेश_2); i != 0; --i)                  \
+      unput (संदेश_2[i - 1]);                                       \
+  } जबतक (0)
 
 
-#define STRING_GROW_ESCAPE(Char)                                \
-  do {                                                          \
-    verify (UCHAR_MAX < ULONG_MAX);                             \
-    long c = Char;                                              \
-    bool valid = 0 < c && c <= UCHAR_MAX;                       \
-    if (!valid)                                                 \
+#घोषणा STRING_GROW_ESCAPE(Char)                                \
+  करो {                                                          \
+    verify (अच_अक्षर_उच्च < अच_दीर्घ_उच्च);                             \
+    दीर्घ c = Char;                                              \
+    bool valid = 0 < c && c <= अच_अक्षर_उच्च;                       \
+    अगर (!valid)                                                 \
       complain (loc, complaint,                                 \
                 _("invalid number after \\-escape: %s"),        \
-                yytext + 1);                                    \
-    if (YY_START == SC_ESCAPED_CHARACTER)                       \
+                श_माला + 1);                                    \
+    अगर (YY_START == SC_ESCAPED_CHARACTER)                       \
       STRING_1GROW (valid ? c : '?');                           \
-    else                                                        \
+    अन्यथा                                                        \
       STRING_GROW ();                                           \
-  } while (0)
+  } जबतक (0)
 
 
 /* The current file name.  Might change with #line.  */
-static uniqstr current_file = NULL;
+अटल uniqstr current_file = शून्य;
 
 /* A string representing the most recently saved token.  */
-static char *last_string = NULL;
+अटल अक्षर *last_string = शून्य;
 
 /* Bracketed identifier. */
-static uniqstr bracketed_id_str = NULL;
-static location bracketed_id_loc;
-static boundary bracketed_id_start;
-static int bracketed_id_context_state = 0;
+अटल uniqstr bracketed_id_str = शून्य;
+अटल location bracketed_id_loc;
+अटल boundary bracketed_id_start;
+अटल पूर्णांक bracketed_id_context_state = 0;
 
-void
-gram_scanner_last_string_free (void)
+व्योम
+gram_scanner_last_string_free (व्योम)
 {
   STRING_FREE ();
 }
 
-static void handle_syncline (char *, location);
-static int scan_integer (char const *p, int base, location loc);
-static int convert_ucn_to_byte (char const *hex_text);
-static void unexpected_eof (boundary, char const *);
-static void unexpected_newline (boundary, char const *);
+अटल व्योम handle_syncline (अक्षर *, location);
+अटल पूर्णांक scan_integer (अक्षर स्थिर *p, पूर्णांक base, location loc);
+अटल पूर्णांक convert_ucn_to_byte (अक्षर स्थिर *hex_text);
+अटल व्योम unexpected_eof (boundary, अक्षर स्थिर *);
+अटल व्योम unexpected_newline (boundary, अक्षर स्थिर *);
 
 %}
  /* A C-like comment in directives/rules. */
@@ -146,7 +146,7 @@ static void unexpected_newline (boundary, char const *);
     - predicate (code between '%?{' and '{' in middle section); */
 %x SC_PROLOGUE SC_BRACED_CODE SC_EPILOGUE SC_PREDICATE
  /* C and C++ comments in code. */
-%x SC_COMMENT SC_LINE_COMMENT
+%x SC_COMMENT SC_पंक्ति_COMMENT
  /* Strings and characters in code. */
 %x SC_STRING SC_CHARACTER
  /* Bracketed identifiers support. */
@@ -154,7 +154,7 @@ static void unexpected_newline (boundary, char const *);
 
 letter    [.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]
 id        {letter}({letter}|[-0-9])*
-int       [0-9]+
+पूर्णांक       [0-9]+
 xint      0[xX][0-9abcdefABCDEF]+
 
 eol       \n|\r\n
@@ -175,10 +175,10 @@ eqopt    ({sp}=)?
 %{
   /* Nesting level.  Either for nested braces, or nested angle brackets
      (but not mixed).  */
-  int nesting PACIFY_CC (= 0);
+  पूर्णांक nesting PACIFY_CC (= 0);
 
   /* Parent context state, when applicable.  */
-  int context_state PACIFY_CC (= 0);
+  पूर्णांक context_state PACIFY_CC (= 0);
 
   /* Location of most recent identifier, when applicable.  */
   location id_loc PACIFY_CC (= empty_loc);
@@ -194,8 +194,8 @@ eqopt    ({sp}=)?
 
   /* We cannot trust YY_USER_INIT, whose semantics changes over time
      (it moved in Flex 2.5.38).  */
-  static bool first = true;
-  if (first)
+  अटल bool first = true;
+  अगर (first)
     {
       scanner_cursor = loc->start;
       first = false;
@@ -214,15 +214,15 @@ eqopt    ({sp}=)?
      complain (loc, Wother, _("stray ',' treated as white space"));
   }
   [ \f\t\v\r]|{eol}  |
-  "//".*       continue;
+  "//".*       जारी;
   "/*" {
     token_start = loc->start;
     context_state = YY_START;
     BEGIN SC_YACC_COMMENT;
   }
 
-  ^"#line "{int}(" \"".*"\"")?{eol} {
-    handle_syncline (yytext + sizeof "#line " - 1, *loc);
+  ^"#line "{पूर्णांक}(" \"".*"\"")?{eol} {
+    handle_syncline (श_माला + माप "#line " - 1, *loc);
   }
 }
 
@@ -239,66 +239,66 @@ eqopt    ({sp}=)?
 
 <INITIAL>
 {
-  "%binary"                         return BISON_DIRECTIVE (NONASSOC);
-  "%code"                           return BISON_DIRECTIVE (CODE);
+  "%binary"                         वापस BISON_DIRECTIVE (NONASSOC);
+  "%code"                           वापस BISON_DIRECTIVE (CODE);
   "%debug"                          RETURN_PERCENT_FLAG ("parse.trace");
-  "%default-prec"                   return BISON_DIRECTIVE (DEFAULT_PREC);
-  "%define"                         return BISON_DIRECTIVE (DEFINE);
-  "%defines"                        return BISON_DIRECTIVE (HEADER); // Deprecated in 3.8.
-  "%destructor"                     return BISON_DIRECTIVE (DESTRUCTOR);
-  "%dprec"                          return BISON_DIRECTIVE (DPREC);
-  "%empty"                          return BISON_DIRECTIVE (EMPTY);
-  "%expect"                         return BISON_DIRECTIVE (EXPECT);
-  "%expect-rr"                      return BISON_DIRECTIVE (EXPECT_RR);
-  "%file-prefix"                    RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
-  "%glr-parser"                     return BISON_DIRECTIVE (GLR_PARSER);
-  "%header"                         return BISON_DIRECTIVE (HEADER);
-  "%initial-action"                 return BISON_DIRECTIVE (INITIAL_ACTION);
-  "%language"                       return BISON_DIRECTIVE (LANGUAGE);
-  "%left"                           return PERCENT_LEFT;
+  "%default-prec"                   वापस BISON_DIRECTIVE (DEFAULT_PREC);
+  "%define"                         वापस BISON_DIRECTIVE (DEFINE);
+  "%defines"                        वापस BISON_DIRECTIVE (HEADER); // Deprecated in 3.8.
+  "%destructor"                     वापस BISON_DIRECTIVE (DESTRUCTOR);
+  "%dprec"                          वापस BISON_DIRECTIVE (DPREC);
+  "%empty"                          वापस BISON_DIRECTIVE (EMPTY);
+  "%expect"                         वापस BISON_DIRECTIVE (EXPECT);
+  "%expect-rr"                      वापस BISON_DIRECTIVE (EXPECT_RR);
+  "%file-prefix"                    RETURN_मूल्य (PERCENT_FILE_PREFIX, uniqstr_new (श_माला));
+  "%glr-parser"                     वापस BISON_DIRECTIVE (GLR_PARSER);
+  "%header"                         वापस BISON_DIRECTIVE (HEADER);
+  "%initial-action"                 वापस BISON_DIRECTIVE (INITIAL_ACTION);
+  "%language"                       वापस BISON_DIRECTIVE (LANGUAGE);
+  "%left"                           वापस PERCENT_बायाँ;
   "%lex-param"                      RETURN_PERCENT_PARAM (lex);
   "%locations"                      RETURN_PERCENT_FLAG ("locations");
-  "%merge"                          return BISON_DIRECTIVE (MERGE);
-  "%no-default-prec"                return BISON_DIRECTIVE (NO_DEFAULT_PREC);
-  "%no-lines"                       return BISON_DIRECTIVE (NO_LINES);
-  "%nonassoc"                       return PERCENT_NONASSOC;
-  "%nondeterministic-parser"        return BISON_DIRECTIVE (NONDETERMINISTIC_PARSER);
-  "%nterm"                          return BISON_DIRECTIVE (NTERM);
-  "%output"                         return BISON_DIRECTIVE (OUTPUT);
+  "%merge"                          वापस BISON_DIRECTIVE (MERGE);
+  "%no-default-prec"                वापस BISON_DIRECTIVE (NO_DEFAULT_PREC);
+  "%no-lines"                       वापस BISON_DIRECTIVE (NO_पंक्तियाँ);
+  "%nonassoc"                       वापस PERCENT_NONASSOC;
+  "%nondeterministic-parser"        वापस BISON_DIRECTIVE (NONDETERMINISTIC_PARSER);
+  "%nterm"                          वापस BISON_DIRECTIVE (NTERM);
+  "%output"                         वापस BISON_DIRECTIVE (OUTPUT);
   "%param"                          RETURN_PERCENT_PARAM (both);
   "%parse-param"                    RETURN_PERCENT_PARAM (parse);
-  "%prec"                           return PERCENT_PREC;
-  "%precedence"                     return BISON_DIRECTIVE (PRECEDENCE);
-  "%printer"                        return BISON_DIRECTIVE (PRINTER);
-  "%require"                        return BISON_DIRECTIVE (REQUIRE);
-  "%right"                          return PERCENT_RIGHT;
-  "%skeleton"                       return BISON_DIRECTIVE (SKELETON);
-  "%start"                          return PERCENT_START;
-  "%term"                           return BISON_DIRECTIVE (TOKEN);
-  "%token"                          return PERCENT_TOKEN;
-  "%token-table"                    return BISON_DIRECTIVE (TOKEN_TABLE);
-  "%type"                           return PERCENT_TYPE;
-  "%union"                          return PERCENT_UNION;
-  "%verbose"                        return BISON_DIRECTIVE (VERBOSE);
-  "%yacc"                           return PERCENT_YACC;
+  "%prec"                           वापस PERCENT_PREC;
+  "%precedence"                     वापस BISON_DIRECTIVE (PRECEDENCE);
+  "%printer"                        वापस BISON_DIRECTIVE (PRINTER);
+  "%require"                        वापस BISON_DIRECTIVE (REQUIRE);
+  "%right"                          वापस PERCENT_दायाँ;
+  "%skeleton"                       वापस BISON_DIRECTIVE (SKELETON);
+  "%start"                          वापस PERCENT_START;
+  "%term"                           वापस BISON_DIRECTIVE (TOKEN);
+  "%token"                          वापस PERCENT_TOKEN;
+  "%token-table"                    वापस BISON_DIRECTIVE (TOKEN_TABLE);
+  "%type"                           वापस PERCENT_TYPE;
+  "%union"                          वापस PERCENT_UNION;
+  "%verbose"                        वापस BISON_DIRECTIVE (VERBOSE);
+  "%yacc"                           वापस PERCENT_YACC;
 
   /* Deprecated since Bison 2.3b (2008-05-27), but the warning is
      issued only since Bison 3.4. */
-  "%pure"[-_]"parser"               RETURN_VALUE (PERCENT_PURE_PARSER, uniqstr_new (yytext));
+  "%pure"[-_]"parser"               RETURN_मूल्य (PERCENT_PURE_PARSER, uniqstr_new (श_माला));
 
   /* Deprecated since Bison 3.0 (2013-07-25), but the warning is
      issued only since Bison 3.3. */
-  "%error-verbose"                  RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%error-verbose"                  RETURN_मूल्य (PERCENT_ERROR_VERBOSE, uniqstr_new (श_माला));
 
   /* Deprecated since Bison 2.6 (2012-07-19), but the warning is
      issued only since Bison 3.3. */
-  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_VALUE (PERCENT_NAME_PREFIX, uniqstr_new (yytext));
+  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_मूल्य (PERCENT_NAME_PREFIX, uniqstr_new (श_माला));
 
   /* Deprecated since Bison 2.7.90, 2012. */
   "%default"[-_]"prec"              DEPRECATED_DIRECTIVE ("%default-prec");
-  "%error"[-_]"verbose"             RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%error"[-_]"verbose"             RETURN_मूल्य (PERCENT_ERROR_VERBOSE, uniqstr_new (श_माला));
   "%expect"[-_]"rr"                 DEPRECATED_DIRECTIVE ("%expect-rr");
-  "%file-prefix"{eqopt}             RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%file-prefix"{eqopt}             RETURN_मूल्य (PERCENT_FILE_PREFIX, uniqstr_new (श_माला));
   "%fixed"[-_]"output"[-_]"files"   DEPRECATED_DIRECTIVE ("%output \"y.tab.c\"");
   "%no"[-_]"default"[-_]"prec"      DEPRECATED_DIRECTIVE ("%no-default-prec");
   "%no"[-_]"lines"                  DEPRECATED_DIRECTIVE ("%no-lines");
@@ -306,30 +306,30 @@ eqopt    ({sp}=)?
   "%token"[-_]"table"               DEPRECATED_DIRECTIVE ("%token-table");
 
   "%"{id} {
-    complain (loc, complaint, _("invalid directive: %s"), quote (yytext));
-    return GRAM_error;
+    complain (loc, complaint, _("invalid directive: %s"), quote (श_माला));
+    वापस GRAM_error;
   }
 
-  ":"                     return COLON;
-  "="                     return EQUAL;
-  "|"                     return PIPE;
-  ";"                     return SEMICOLON;
+  ":"                     वापस COLON;
+  "="                     वापस EQUAL;
+  "|"                     वापस PIPE;
+  ";"                     वापस SEMICOLON;
 
   {id} {
-    val->ID = uniqstr_new (yytext);
+    val->ID = uniqstr_new (श_माला);
     id_loc = *loc;
-    bracketed_id_str = NULL;
+    bracketed_id_str = शून्य;
     BEGIN SC_AFTER_IDENTIFIER;
   }
 
-  {int}      RETURN_VALUE (INT_LITERAL, scan_integer (yytext, 10, *loc));
-  {xint}     RETURN_VALUE (INT_LITERAL, scan_integer (yytext, 16, *loc));
+  {पूर्णांक}      RETURN_मूल्य (INT_LITERAL, scan_integer (श_माला, 10, *loc));
+  {xint}     RETURN_मूल्य (INT_LITERAL, scan_integer (श_माला, 16, *loc));
 
   /* Identifiers may not start with a digit.  Yet, don't silently
      accept "1FOO" as "1 FOO".  */
-  {int}{id} {
-    complain (loc, complaint, _("invalid identifier: %s"), quote (yytext));
-    return GRAM_error;
+  {पूर्णांक}{id} {
+    complain (loc, complaint, _("invalid identifier: %s"), quote (श_माला));
+    वापस GRAM_error;
   }
 
   /* Characters.  */
@@ -358,8 +358,8 @@ eqopt    ({sp}=)?
   }
 
   /* A type. */
-  "<*>"       return TAG_ANY;
-  "<>"        return TAG_NONE;
+  "<*>"       वापस TAG_ANY;
+  "<>"        वापस TAG_NONE;
   "<"         {
     nesting = 0;
     token_start = loc->start;
@@ -367,14 +367,14 @@ eqopt    ({sp}=)?
   }
 
   "%%" {
-    static int percent_percent_count;
-    if (++percent_percent_count == 2)
+    अटल पूर्णांक percent_percent_गिनती;
+    अगर (++percent_percent_गिनती == 2)
       BEGIN SC_EPILOGUE;
-    return PERCENT_PERCENT;
+    वापस PERCENT_PERCENT;
   }
 
   "[" {
-    bracketed_id_str = NULL;
+    bracketed_id_str = शून्य;
     bracketed_id_start = loc->start;
     bracketed_id_context_state = YY_START;
     BEGIN SC_BRACKETED_ID;
@@ -383,11 +383,11 @@ eqopt    ({sp}=)?
   [^\[%A-Za-z0-9_<>{}""''*;|=/, \f\r\n\t\v]+|. {
     complain (loc, complaint, "%s: %s",
               ngettext ("invalid character", "invalid characters", yyleng),
-              quote_mem (yytext, yyleng));
-    return GRAM_error;
+              quote_mem (श_माला, yyleng));
+    वापस GRAM_error;
   }
 
-  <<EOF>> {
+  <<खातापूर्ण>> {
     loc->start = loc->end = scanner_cursor;
     yyterminate ();
   }
@@ -405,7 +405,7 @@ eqopt    ({sp}=)?
     complain (loc, complaint, _("invalid null character"));
     STRING_FINISH ();
     STRING_FREE ();
-    return GRAM_error;
+    वापस GRAM_error;
   }
 }
 
@@ -417,14 +417,14 @@ eqopt    ({sp}=)?
 <SC_AFTER_IDENTIFIER>
 {
   "[" {
-    if (bracketed_id_str)
+    अगर (bracketed_id_str)
       {
         ROLLBACK_CURRENT_TOKEN;
         BEGIN SC_RETURN_BRACKETED_ID;
         *loc = id_loc;
-        return ID;
+        वापस ID;
       }
-    else
+    अन्यथा
       {
         bracketed_id_start = loc->start;
         bracketed_id_context_state = YY_START;
@@ -435,18 +435,18 @@ eqopt    ({sp}=)?
     ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
-    return ID_COLON;
+    वापस ID_COLON;
   }
   . {
     ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
-    return ID;
+    वापस ID;
   }
-  <<EOF>> {
+  <<खातापूर्ण>> {
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
-    return ID;
+    वापस ID;
   }
 }
 
@@ -457,35 +457,35 @@ eqopt    ({sp}=)?
 <SC_BRACKETED_ID>
 {
   {id} {
-    if (bracketed_id_str)
+    अगर (bracketed_id_str)
       {
         complain (loc, complaint,
                   _("unexpected identifier in bracketed name: %s"),
-                  quote (yytext));
-        return GRAM_error;
+                  quote (श_माला));
+        वापस GRAM_error;
       }
-    else
+    अन्यथा
       {
-        bracketed_id_str = uniqstr_new (yytext);
+        bracketed_id_str = uniqstr_new (श_माला);
         bracketed_id_loc = *loc;
       }
   }
   "]" {
     BEGIN bracketed_id_context_state;
-    if (bracketed_id_str)
+    अगर (bracketed_id_str)
       {
-        if (INITIAL == bracketed_id_context_state)
+        अगर (INITIAL == bracketed_id_context_state)
           {
             val->BRACKETED_ID = bracketed_id_str;
             bracketed_id_str = 0;
             *loc = bracketed_id_loc;
-            return BRACKETED_ID;
+            वापस BRACKETED_ID;
           }
       }
-    else
+    अन्यथा
       {
         complain (loc, complaint, _("an identifier expected"));
-        return GRAM_error;
+        वापस GRAM_error;
       }
   }
 
@@ -493,11 +493,11 @@ eqopt    ({sp}=)?
     complain (loc, complaint, "%s: %s",
               ngettext ("invalid character in bracketed name",
                         "invalid characters in bracketed name", yyleng),
-              quote_mem (yytext, yyleng));
-    return GRAM_error;
+              quote_mem (श_माला, yyleng));
+    वापस GRAM_error;
   }
 
-  <<EOF>> {
+  <<खातापूर्ण>> {
     BEGIN bracketed_id_context_state;
     unexpected_eof (bracketed_id_start, "]");
   }
@@ -511,7 +511,7 @@ eqopt    ({sp}=)?
     bracketed_id_str = 0;
     *loc = bracketed_id_loc;
     BEGIN INITIAL;
-    return BRACKETED_ID;
+    वापस BRACKETED_ID;
   }
 }
 
@@ -523,8 +523,8 @@ eqopt    ({sp}=)?
 <SC_YACC_COMMENT>
 {
   "*/"     BEGIN context_state;
-  .|{eol}  continue;
-  <<EOF>>  unexpected_eof (token_start, "*/"); BEGIN context_state;
+  .|{eol}  जारी;
+  <<खातापूर्ण>>  unexpected_eof (token_start, "*/"); BEGIN context_state;
 }
 
 
@@ -535,7 +535,7 @@ eqopt    ({sp}=)?
 <SC_COMMENT>
 {
   "*"{splice}"/"  STRING_GROW (); BEGIN context_state;
-  <<EOF>>         unexpected_eof (token_start, "*/"); BEGIN context_state;
+  <<खातापूर्ण>>         unexpected_eof (token_start, "*/"); BEGIN context_state;
 }
 
 
@@ -543,11 +543,11 @@ eqopt    ({sp}=)?
   | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
-<SC_LINE_COMMENT>
+<SC_पंक्ति_COMMENT>
 {
   {eol}          STRING_GROW (); BEGIN context_state;
   {splice}       STRING_GROW ();
-  <<EOF>>        BEGIN context_state;
+  <<खातापूर्ण>>        BEGIN context_state;
 }
 
 
@@ -565,9 +565,9 @@ eqopt    ({sp}=)?
     loc->start = token_start;
     complain (loc, Wyacc,
               _("POSIX Yacc does not support string literals"));
-    RETURN_VALUE (STRING, last_string);
+    RETURN_मूल्य (STRING, last_string);
   }
-  <<EOF>>   unexpected_eof (token_start, "\"");
+  <<खातापूर्ण>>   unexpected_eof (token_start, "\"");
   "\n"      unexpected_newline (token_start, "\"");
 }
 
@@ -580,9 +580,9 @@ eqopt    ({sp}=)?
     loc->start = token_start;
     complain (loc, Wyacc,
               _("POSIX Yacc does not support string literals"));
-    RETURN_VALUE (TSTRING, last_string);
+    RETURN_मूल्य (TSTRING, last_string);
   }
-  <<EOF>>   unexpected_eof (token_start, "\")");
+  <<खातापूर्ण>>   unexpected_eof (token_start, "\")");
   "\n"      unexpected_newline (token_start, "\")");
 }
 
@@ -600,27 +600,27 @@ eqopt    ({sp}=)?
     BEGIN INITIAL;
     loc->start = token_start;
 
-    if (last_string[0] == '\0')
+    अगर (last_string[0] == '\0')
       {
         complain (loc, complaint, _("empty character literal"));
         STRING_FREE ();
-        return GRAM_error;
+        वापस GRAM_error;
       }
-    else if (last_string[1] != '\0')
+    अन्यथा अगर (last_string[1] != '\0')
       {
         complain (loc, complaint, _("extra characters in character literal"));
         STRING_FREE ();
-        return GRAM_error;
+        वापस GRAM_error;
       }
-    else
+    अन्यथा
       {
         val->CHAR_LITERAL = last_string[0];
         STRING_FREE ();
-        return CHAR_LITERAL;
+        वापस CHAR_LITERAL;
       }
   }
   {eol}     unexpected_newline (token_start, "'");
-  <<EOF>>   unexpected_eof (token_start, "'");
+  <<खातापूर्ण>>   unexpected_eof (token_start, "'");
 }
 
 
@@ -633,14 +633,14 @@ eqopt    ({sp}=)?
 {
   ">" {
     --nesting;
-    if (nesting < 0)
+    अगर (nesting < 0)
       {
         STRING_FINISH ();
         loc->start = token_start;
         val->TAG = uniqstr_new (last_string);
         STRING_FREE ();
         BEGIN INITIAL;
-        return TAG;
+        वापस TAG;
       }
     STRING_GROW ();
   }
@@ -648,7 +648,7 @@ eqopt    ({sp}=)?
   ([^<>]|->)+ STRING_GROW ();
   "<"+   STRING_GROW (); nesting += yyleng;
 
-  <<EOF>>   unexpected_eof (token_start, ">");
+  <<खातापूर्ण>>   unexpected_eof (token_start, ">");
 }
 
   /*----------------------------.
@@ -658,11 +658,11 @@ eqopt    ({sp}=)?
 <SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
 {
   \\[0-7]{1,3} {
-    STRING_GROW_ESCAPE (strtol (yytext + 1, NULL, 8));
+    STRING_GROW_ESCAPE (म_से_दीर्घ (श_माला + 1, शून्य, 8));
   }
 
   \\x[0-9abcdefABCDEF]+ {
-    STRING_GROW_ESCAPE (strtol (yytext + 2, NULL, 16));
+    STRING_GROW_ESCAPE (म_से_दीर्घ (श_माला + 2, शून्य, 16));
   }
 
   \\a   STRING_GROW_ESCAPE ('\a');
@@ -674,18 +674,18 @@ eqopt    ({sp}=)?
   \\v   STRING_GROW_ESCAPE ('\v');
 
   /* \\[\"\'?\\] would be shorter, but it confuses xgettext.  */
-  \\("\""|"'"|"?"|"\\")  STRING_GROW_ESCAPE (yytext[1]);
+  \\("\""|"'"|"?"|"\\")  STRING_GROW_ESCAPE (श_माला[1]);
 
   \\(u|U[0-9abcdefABCDEF]{4})[0-9abcdefABCDEF]{4} {
-    STRING_GROW_ESCAPE (convert_ucn_to_byte (yytext));
+    STRING_GROW_ESCAPE (convert_ucn_to_byte (श_माला));
   }
 
   \\(.|{eol})      {
-    char const *p = yytext + 1;
+    अक्षर स्थिर *p = श_माला + 1;
     /* Quote only if escaping won't make the character visible.  */
-    if (c_isspace ((unsigned char) *p) && c_isprint ((unsigned char) *p))
+    अगर (c_isspace ((अचिन्हित अक्षर) *p) && c_isprint ((अचिन्हित अक्षर) *p))
       p = quote (p);
-    else
+    अन्यथा
       p = quotearg_style_mem (escape_quoting_style, p, 1);
     complain (loc, complaint, _("invalid character after \\-escape: %s"),
               p);
@@ -715,14 +715,14 @@ eqopt    ({sp}=)?
 {
   "'"           STRING_GROW (); BEGIN context_state;
   {eol}         unexpected_newline (token_start, "'");
-  <<EOF>>       unexpected_eof (token_start, "'");
+  <<खातापूर्ण>>       unexpected_eof (token_start, "'");
 }
 
 <SC_STRING>
 {
   "\""          STRING_GROW (); BEGIN context_state;
   {eol}         unexpected_newline (token_start, "\"");
-  <<EOF>>       unexpected_eof (token_start, "\"");
+  <<खातापूर्ण>>       unexpected_eof (token_start, "\"");
 }
 
 
@@ -753,7 +753,7 @@ eqopt    ({sp}=)?
   "/"{splice}"/" {
     STRING_GROW ();
     context_state = YY_START;
-    BEGIN SC_LINE_COMMENT;
+    BEGIN SC_पंक्ति_COMMENT;
   }
 }
 
@@ -773,7 +773,7 @@ eqopt    ({sp}=)?
      (as '<' '<%').  */
   "<"{splice}"<"  STRING_GROW ();
 
-  <<EOF>>   unexpected_eof (code_start, "}");
+  <<खातापूर्ण>>   unexpected_eof (code_start, "}");
 }
 
 <SC_BRACED_CODE>
@@ -782,12 +782,12 @@ eqopt    ({sp}=)?
     STRING_1GROW ('}');
 
     --nesting;
-    if (nesting < 0)
+    अगर (nesting < 0)
       {
         STRING_FINISH ();
         loc->start = code_start;
         BEGIN INITIAL;
-        RETURN_VALUE (BRACED_CODE, last_string);
+        RETURN_मूल्य (BRACED_CODE, last_string);
       }
   }
 }
@@ -796,14 +796,14 @@ eqopt    ({sp}=)?
 {
   "}" {
     --nesting;
-    if (nesting < 0)
+    अगर (nesting < 0)
       {
         STRING_FINISH ();
         loc->start = code_start;
         BEGIN INITIAL;
-        RETURN_VALUE (BRACED_PREDICATE, last_string);
+        RETURN_मूल्य (BRACED_PREDICATE, last_string);
       }
-    else
+    अन्यथा
       STRING_1GROW ('}');
   }
 }
@@ -818,10 +818,10 @@ eqopt    ({sp}=)?
     STRING_FINISH ();
     loc->start = code_start;
     BEGIN INITIAL;
-    RETURN_VALUE (PROLOGUE, last_string);
+    RETURN_मूल्य (PROLOGUE, last_string);
   }
 
-  <<EOF>>   unexpected_eof (code_start, "%}");
+  <<खातापूर्ण>>   unexpected_eof (code_start, "%}");
 }
 
 
@@ -832,11 +832,11 @@ eqopt    ({sp}=)?
 
 <SC_EPILOGUE>
 {
-  <<EOF>> {
+  <<खातापूर्ण>> {
     STRING_FINISH ();
     loc->start = code_start;
     BEGIN INITIAL;
-    RETURN_VALUE (EPILOGUE, last_string);
+    RETURN_मूल्य (EPILOGUE, last_string);
   }
 }
 
@@ -845,7 +845,7 @@ eqopt    ({sp}=)?
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 
-<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
+<SC_COMMENT,SC_पंक्ति_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
 {
   /* Accept multibyte characters in one block instead of byte after
      byte, so that add_column_width and mbsnwidth can compute correct
@@ -863,25 +863,25 @@ eqopt    ({sp}=)?
 | Scan NUMBER for a base-BASE integer at location LOC.  |
 `------------------------------------------------------*/
 
-static int
-scan_integer (char const *number, int base, location loc)
+अटल पूर्णांक
+scan_integer (अक्षर स्थिर *संख्या, पूर्णांक base, location loc)
 {
-  verify (INT_MAX < ULONG_MAX);
-  if (base == 16)
+  verify (पूर्णांक_उच्च < अच_दीर्घ_उच्च);
+  अगर (base == 16)
     complain (&loc, Wyacc,
               _("POSIX Yacc does not support hexadecimal literals"));
 
-  errno = 0;
-  long num = strtol (number, NULL, base);
+  त्रुटि_सं = 0;
+  दीर्घ अंक = म_से_दीर्घ (संख्या, शून्य, base);
 
-  if (! (0 <= num && num <= INT_MAX && errno == 0))
+  अगर (! (0 <= अंक && अंक <= पूर्णांक_उच्च && त्रुटि_सं == 0))
     {
       complain (&loc, complaint, _("integer out of range: %s"),
-                quote (number));
-      num = INT_MAX;
+                quote (संख्या));
+      अंक = पूर्णांक_उच्च;
     }
 
-  return num;
+  वापस अंक;
 }
 
 
@@ -891,11 +891,11 @@ scan_integer (char const *number, int base, location loc)
 | to a single-byte character.                                       |
 `------------------------------------------------------------------*/
 
-static int
-convert_ucn_to_byte (char const *ucn)
+अटल पूर्णांक
+convert_ucn_to_byte (अक्षर स्थिर *ucn)
 {
-  verify (UCHAR_MAX <= INT_MAX);
-  long code = strtol (ucn + 2, NULL, 16);
+  verify (अच_अक्षर_उच्च <= पूर्णांक_उच्च);
+  दीर्घ code = म_से_दीर्घ (ucn + 2, शून्य, 16);
 
   /* FIXME: Currently we assume Unicode-compatible unibyte characters
      on ASCII hosts (i.e., Latin-1 on hosts with 8-bit bytes).  On
@@ -903,10 +903,10 @@ convert_ucn_to_byte (char const *ucn)
      These limitations should be removed once we add support for
      multibyte characters.  */
 
-  if (! (0 <= code && code <= UCHAR_MAX))
-    return -1;
+  अगर (! (0 <= code && code <= अच_अक्षर_उच्च))
+    वापस -1;
 
-#if ! ('$' == 0x24 && '@' == 0x40 && '`' == 0x60 && '~' == 0x7e)
+#अगर ! ('$' == 0x24 && '@' == 0x40 && '`' == 0x60 && '~' == 0x7e)
   {
     /* A non-ASCII host.  Use CODE to index into a table of the C
        basic execution character set, which is guaranteed to exist on
@@ -914,7 +914,7 @@ convert_ucn_to_byte (char const *ucn)
        and '`', which are not in the basic execution character set but
        which are unibyte characters on all the platforms that we know
        about.  */
-    static signed char const table[] =
+    अटल चिन्हित अक्षर स्थिर table[] =
       {
         '\0',   -1,   -1,   -1,   -1,   -1,   -1, '\a',
         '\b', '\t', '\n', '\v', '\f', '\r',   -1,   -1,
@@ -934,11 +934,11 @@ convert_ucn_to_byte (char const *ucn)
          'x',  'y',  'z',  '{',  '|',  '}',  '~'
       };
 
-    code = code < sizeof table ? table[code] : -1;
+    code = code < माप table ? table[code] : -1;
   }
-#endif
+#पूर्ण_अगर
 
-  return code;
+  वापस code;
 }
 
 
@@ -946,22 +946,22 @@ convert_ucn_to_byte (char const *ucn)
 | Handle '#line INT_LITERAL( "FILE")?\n'.  ARGS has already skipped '#line '. |
 `----------------------------------------------------------------------------*/
 
-static void
-handle_syncline (char *args, location loc)
+अटल व्योम
+handle_syncline (अक्षर *args, location loc)
 {
-  char *file;
-  errno = 0;
-  long lineno = strtol (args, &file, 10);
-  if (! (0 <= lineno && lineno <= INT_MAX && errno == 0))
+  अक्षर *file;
+  त्रुटि_सं = 0;
+  दीर्घ lineno = म_से_दीर्घ (args, &file, 10);
+  अगर (! (0 <= lineno && lineno <= पूर्णांक_उच्च && त्रुटि_सं == 0))
     {
       complain (&loc, Wother, _("line number overflow"));
-      lineno = INT_MAX;
+      lineno = पूर्णांक_उच्च;
     }
 
-  file = strchr (file, '"');
-  if (file)
+  file = म_अक्षर (file, '"');
+  अगर (file)
     {
-      *strchr (file + 1, '"') = '\0';
+      *म_अक्षर (file + 1, '"') = '\0';
       current_file = uniqstr_new (file + 1);
     }
   boundary_set (&scanner_cursor, current_file, lineno, 1, 1);
@@ -974,25 +974,25 @@ handle_syncline (char *args, location loc)
 | expected TOKEN_END. Then, pretend that TOKEN_END was found.     |
 `----------------------------------------------------------------*/
 
-static void
-unexpected_end (boundary start, char const *msgid, char const *token_end)
+अटल व्योम
+unexpected_end (boundary start, अक्षर स्थिर *msgid, अक्षर स्थिर *token_end)
 {
   location loc;
   loc.start = start;
   loc.end = scanner_cursor;
-  size_t i = strlen (token_end);
+  माप_प्रकार i = म_माप (token_end);
 
   /* Adjust scanner cursor so that any later message does not count
      the characters about to be inserted.  */
   scanner_cursor.column -= i;
   scanner_cursor.byte -= i;
 
-  while (i != 0)
+  जबतक (i != 0)
     unput (token_end[--i]);
 
   token_end = quote (token_end);
   /* Instead of '\'', display "'".  */
-  if (STREQ (token_end, "'\\''"))
+  अगर (STREQ (token_end, "'\\''"))
     token_end = "\"'\"";
   complain (&loc, complaint, msgid, token_end);
 }
@@ -1004,8 +1004,8 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
 | After reporting the problem, pretend that TOKEN_END was found.          |
 `------------------------------------------------------------------------*/
 
-static void
-unexpected_eof (boundary start, char const *token_end)
+अटल व्योम
+unexpected_eof (boundary start, अक्षर स्थिर *token_end)
 {
   unexpected_end (start, _("missing %s at end of file"), token_end);
 }
@@ -1015,15 +1015,15 @@ unexpected_eof (boundary start, char const *token_end)
 | Likewise, but for unexpected newlines.  |
 `----------------------------------------*/
 
-static void
-unexpected_newline (boundary start, char const *token_end)
+अटल व्योम
+unexpected_newline (boundary start, अक्षर स्थिर *token_end)
 {
   unexpected_end (start, _("missing %s at end of line"), token_end);
 }
 
 
-void
-gram_scanner_open (const char *gram)
+व्योम
+gram_scanner_open (स्थिर अक्षर *gram)
 {
   gram__flex_debug = trace_flag & trace_scan;
   gram_debug = trace_flag & trace_parse;
@@ -1033,8 +1033,8 @@ gram_scanner_open (const char *gram)
 }
 
 
-void
-gram_scanner_close (void)
+व्योम
+gram_scanner_close (व्योम)
 {
   xfclose (gram_in);
   /* Reclaim Flex's buffers.  */
@@ -1042,8 +1042,8 @@ gram_scanner_close (void)
 }
 
 
-void
-gram_scanner_free (void)
+व्योम
+gram_scanner_free (व्योम)
 {
   obstack_free (&obstack_for_string, 0);
 }

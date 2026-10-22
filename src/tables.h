@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef TABLES_H_
+#अगर_अघोषित TABLES_H_
 # define TABLES_H_
 
 # include "state.h"
@@ -113,30 +113,30 @@
    summary, forget about zero values in YYTABLE.
 */
 
-extern int nvectors;
+बाह्य पूर्णांक nvectors;
 
-typedef int base_number;
-extern base_number *base;
+प्रकार पूर्णांक base_संख्या;
+बाह्य base_संख्या *base;
 /* A distinguished value of BASE, negative infinite.  During the
    computation equals to BASE_MINIMUM, later mapped to BASE_NINF to
    keep parser tables small.  */
-extern base_number base_ninf;
+बाह्य base_संख्या base_ninf;
 
-extern int *conflict_table;
-extern int *conflict_list;
-extern int conflict_list_cnt;
+बाह्य पूर्णांक *conflict_table;
+बाह्य पूर्णांक *conflict_list;
+बाह्य पूर्णांक conflict_list_cnt;
 
-extern base_number *table;
-extern base_number *check;
+बाह्य base_संख्या *table;
+बाह्य base_संख्या *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  */
-extern base_number table_ninf;
+बाह्य base_संख्या table_ninf;
 
-extern state_number *yydefgoto;
-extern rule_number *yydefact;
-extern int high;
+बाह्य state_संख्या *yydefgoto;
+बाह्य rule_संख्या *yydefact;
+बाह्य पूर्णांक ऊपरी;
 
-void tables_generate (void);
-void tables_free (void);
+व्योम tables_generate (व्योम);
+व्योम tables_free (व्योम);
 
-#endif /* !TABLES_H_ */
+#पूर्ण_अगर /* !TABLES_H_ */

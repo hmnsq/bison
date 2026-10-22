@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#समावेश <config.h>
 
-#include "print.h"
+#समावेश "print.h"
 
-#include "system.h"
+#समावेश "system.h"
 
-#include <bitset.h>
-#include <mbswidth.h>
+#समावेश <bitset.h>
+#समावेश <mbswidth.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#समावेश "closure.h"
+#समावेश "complain.h"
+#समावेश "conflicts.h"
+#समावेश "counterexample.h"
+#समावेश "files.h"
+#समावेश "getargs.h"
+#समावेश "gram.h"
+#समावेश "lalr.h"
+#समावेश "lr0.h"
+#समावेश "muscle-tab.h"
+#समावेश "reader.h"
+#समावेश "reduce.h"
+#समावेश "state.h"
+#समावेश "symtab.h"
+#समावेश "tables.h"
 
 /* For a given state, the symbol numbers of the lookahead tokens for
    shifts and errors (i.e. not reduce).  */
-static bitset no_reduce_set;
+अटल bitset no_reduce_set;
 
 
 
@@ -53,11 +53,11 @@ static bitset no_reduce_set;
 | *WIDTH := max (*WIDTH, strlen (STR)).  |
 `---------------------------------------*/
 
-static void
-max_length (size_t *width, const char *str)
+अटल व्योम
+max_लंबाई (माप_प्रकार *width, स्थिर अक्षर *str)
 {
-  size_t len = mbswidth (str, 0);
-  if (len > *width)
+  माप_प्रकार len = mbswidth (str, 0);
+  अगर (len > *width)
     *width = len;
 }
 
@@ -65,37 +65,37 @@ max_length (size_t *width, const char *str)
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, const state *s)
+अटल व्योम
+print_core (खाता *out, स्थिर state *s)
 {
-  const item_index *sitems = s->items;
-  size_t snritems = s->nitems;
+  स्थिर item_सूचकांक *sitems = s->वस्तुएँ;
+  माप_प्रकार snritems = s->nitems;
   /* Output all the items of a state, not only its kernel.  */
-  if (report_flag & report_itemsets)
+  अगर (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  if (!snritems)
-    return;
+  अगर (!snritems)
+    वापस;
 
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
 
-  rule const *previous_rule = NULL;
-  for (size_t i = 0; i < snritems; i++)
+  rule स्थिर *previous_rule = शून्य;
+  क्रम (माप_प्रकार i = 0; i < snritems; i++)
     {
-      item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
+      item_संख्या *sp1 = ritem + sitems[i];
+      rule स्थिर *r = item_rule (sp1);
       item_print (sp1, previous_rule, out);
       previous_rule = r;
 
       /* Display the lookahead tokens?  */
-      if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
+      अगर (report_flag & report_lookaheads
+          && item_संख्या_is_rule_संख्या (*sp1))
         state_rule_lookaheads_print (s, r, out);
-      fputc ('\n', out);
+      ख_अक्षर_दो ('\n', out);
     }
 }
 
@@ -105,44 +105,44 @@ print_core (FILE *out, const state *s)
 | OUT.                                                        |
 `------------------------------------------------------------*/
 
-static void
-print_transitions (const state *s, FILE *out, bool display_transitions_p)
+अटल व्योम
+print_transitions (स्थिर state *s, खाता *out, bool display_transitions_p)
 {
   transitions *trans = s->transitions;
-  size_t width = 0;
+  माप_प्रकार width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  क्रम (पूर्णांक i = 0; i < trans->अंक; i++)
+    अगर (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        max_length (&width, sym->tag);
+        प्रतीक *sym = symbols[TRANSITION_प्रतीक (trans, i)];
+        max_लंबाई (&width, sym->tag);
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  अगर (!width)
+    वापस;
 
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and shifts.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  क्रम (पूर्णांक i = 0; i < trans->अंक; i++)
+    अगर (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        const char *tag = sym->tag;
-        const state *s1 = trans->states[i];
+        प्रतीक *sym = symbols[TRANSITION_प्रतीक (trans, i)];
+        स्थिर अक्षर *tag = sym->tag;
+        स्थिर state *s1 = trans->states[i];
 
-        fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
-          fputc (' ', out);
-        if (display_transitions_p)
-          fprintf (out, _("shift, and go to state %d\n"), s1->number);
-        else
-          fprintf (out, _("go to state %d\n"), s1->number);
+        ख_लिखो (out, "    %s", tag);
+        क्रम (पूर्णांक j = width - mbswidth (tag, 0); j > 0; --j)
+          ख_अक्षर_दो (' ', out);
+        अगर (display_transitions_p)
+          ख_लिखो (out, _("shift, and go to state %d\n"), s1->संख्या);
+        अन्यथा
+          ख_लिखो (out, _("go to state %d\n"), s1->संख्या);
       }
 }
 
@@ -151,33 +151,33 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, const state *s)
+अटल व्योम
+print_errs (खाता *out, स्थिर state *s)
 {
   errs *errp = s->errs;
-  size_t width = 0;
+  माप_प्रकार width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
-      max_length (&width, errp->symbols[i]->tag);
+  क्रम (पूर्णांक i = 0; i < errp->अंक; ++i)
+    अगर (errp->symbols[i])
+      max_लंबाई (&width, errp->symbols[i]->tag);
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  अगर (!width)
+    वापस;
 
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and errors.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  क्रम (पूर्णांक i = 0; i < errp->अंक; ++i)
+    अगर (errp->symbols[i])
       {
-        const char *tag = errp->symbols[i]->tag;
-        fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
-          fputc (' ', out);
-        fputs (_("error (nonassociative)\n"), out);
+        स्थिर अक्षर *tag = errp->symbols[i]->tag;
+        ख_लिखो (out, "    %s", tag);
+        क्रम (पूर्णांक j = width - mbswidth (tag, 0); j > 0; --j)
+          ख_अक्षर_दो (' ', out);
+        ख_माला_दो (_("error (nonassociative)\n"), out);
       }
 }
 
@@ -188,24 +188,24 @@ print_errs (FILE *out, const state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
-print_reduction (FILE *out, size_t width,
-                 const char *lookahead,
+अटल व्योम
+print_reduction (खाता *out, माप_प्रकार width,
+                 स्थिर अक्षर *lookahead,
                  rule *r, bool enabled)
 {
-  fprintf (out, "    %s", lookahead);
-  for (int j = width - mbswidth (lookahead, 0); j > 0; --j)
-    fputc (' ', out);
-  if (!enabled)
-    fputc ('[', out);
-  if (rule_is_initial (r))
-    fprintf (out, _("accept"));
-  else
-    fprintf (out, _("reduce using rule %d (%s)"), r->number,
-             r->lhs->symbol->tag);
-  if (!enabled)
-    fputc (']', out);
-  fputc ('\n', out);
+  ख_लिखो (out, "    %s", lookahead);
+  क्रम (पूर्णांक j = width - mbswidth (lookahead, 0); j > 0; --j)
+    ख_अक्षर_दो (' ', out);
+  अगर (!enabled)
+    ख_अक्षर_दो ('[', out);
+  अगर (rule_is_initial (r))
+    ख_लिखो (out, _("accept"));
+  अन्यथा
+    ख_लिखो (out, _("reduce using rule %d (%s)"), r->संख्या,
+             r->lhs->प्रतीक->tag);
+  अगर (!enabled)
+    ख_अक्षर_दो (']', out);
+  ख_अक्षर_दो ('\n', out);
 }
 
 
@@ -213,91 +213,91 @@ print_reduction (FILE *out, size_t width,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, const state *s)
+अटल व्योम
+print_reductions (खाता *out, स्थिर state *s)
 {
   reductions *reds = s->reductions;
-  if (reds->num == 0)
-    return;
+  अगर (reds->अंक == 0)
+    वापस;
 
-  rule *default_reduction = NULL;
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  rule *default_reduction = शून्य;
+  अगर (yydefact[s->संख्या] != 0)
+    default_reduction = &rules[yydefact[s->संख्या] - 1];
 
   transitions *trans = s->transitions;
 
   bitset_zero (no_reduce_set);
   {
-    int i;
+    पूर्णांक i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (no_reduce_set, TRANSITION_प्रतीक (trans, i));
   }
-  for (int i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+  क्रम (पूर्णांक i = 0; i < s->errs->अंक; ++i)
+    अगर (s->errs->symbols[i])
+      bitset_set (no_reduce_set, s->errs->symbols[i]->content->संख्या);
 
   /* Compute the width of the lookahead token column.  */
-  size_t width = 0;
-  if (default_reduction)
+  माप_प्रकार width = 0;
+  अगर (default_reduction)
     width = mbswidth (_("$default"), 0);
 
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  अगर (reds->lookaheads)
+    क्रम (पूर्णांक i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool गिनती = bitset_test (no_reduce_set, i);
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        क्रम (पूर्णांक j = 0; j < reds->अंक; ++j)
+          अगर (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              अगर (! गिनती)
                 {
-                  if (reds->rules[j] != default_reduction)
-                    max_length (&width, symbols[i]->tag);
-                  count = true;
+                  अगर (reds->rules[j] != default_reduction)
+                    max_लंबाई (&width, symbols[i]->tag);
+                  गिनती = true;
                 }
-              else
-                max_length (&width, symbols[i]->tag);
+              अन्यथा
+                max_लंबाई (&width, symbols[i]->tag);
             }
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  अगर (!width)
+    वापस;
 
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
   width += 2;
 
   bool default_reduction_only = true;
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  अगर (reds->lookaheads)
+    क्रम (पूर्णांक i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
-        if (count)
+        bool गिनती = bitset_test (no_reduce_set, i);
+        अगर (गिनती)
           default_reduction_only = false;
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        क्रम (पूर्णांक j = 0; j < reds->अंक; ++j)
+          अगर (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              अगर (! गिनती)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  अगर (reds->rules[j] != default_reduction)
                     {
                       default_reduction_only = false;
                       print_reduction (out, width,
                                        symbols[i]->tag,
                                        reds->rules[j], true);
                     }
-                  else
+                  अन्यथा
                     defaulted = true;
-                  count = true;
+                  गिनती = true;
                 }
-              else
+              अन्यथा
                 {
                   default_reduction_only = false;
-                  if (defaulted)
+                  अगर (defaulted)
                     print_reduction (out, width,
                                      symbols[i]->tag,
                                      default_reduction, true);
@@ -309,17 +309,17 @@ print_reductions (FILE *out, const state *s)
             }
       }
 
-  if (default_reduction)
+  अगर (default_reduction)
     {
-      char *default_reductions =
+      अक्षर *default_reductions =
         muscle_percent_define_get ("lr.default-reduction");
       print_reduction (out, width, _("$default"), default_reduction, true);
       aver (STREQ (default_reductions, "most")
             || (STREQ (default_reductions, "consistent")
                 && default_reduction_only)
-            || (reds->num == 1 && rule_is_initial (reds->rules[0])));
-      (void) default_reduction_only;
-      free (default_reductions);
+            || (reds->अंक == 1 && rule_is_initial (reds->rules[0])));
+      (व्योम) default_reduction_only;
+      मुक्त (default_reductions);
     }
 }
 
@@ -329,8 +329,8 @@ print_reductions (FILE *out, const state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, const state *s)
+अटल व्योम
+print_actions (खाता *out, स्थिर state *s)
 {
   /* Print shifts.  */
   print_transitions (s, out, true);
@@ -345,24 +345,24 @@ print_actions (FILE *out, const state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, const state *s)
+अटल व्योम
+print_state (खाता *out, स्थिर state *s)
 {
-  fputs ("\n\n", out);
-  fprintf (out, _("State %d"), s->number);
-  fputc ('\n', out);
+  ख_माला_दो ("\n\n", out);
+  ख_लिखो (out, _("State %d"), s->संख्या);
+  ख_अक्षर_दो ('\n', out);
   print_core (out, s);
   print_actions (out, s);
-  if ((report_flag & report_solved_conflicts) && s->solved_conflicts)
+  अगर ((report_flag & report_solved_conflicts) && s->solved_conflicts)
     {
-      fputc ('\n', out);
-      fputs (s->solved_conflicts, out);
+      ख_अक्षर_दो ('\n', out);
+      ख_माला_दो (s->solved_conflicts, out);
     }
-  if (has_conflicts (s)
+  अगर (has_conflicts (s)
       && (report_flag & report_cex
           || warning_is_enabled (Wcounterexamples)))
     {
-      fputc ('\n', out);
+      ख_अक्षर_दो ('\n', out);
       counterexample_report_state (s, out, "    ");
     }
 }
@@ -371,89 +371,89 @@ print_state (FILE *out, const state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
-print_terminal_symbols (FILE *out)
+अटल व्योम
+print_terminal_symbols (खाता *out)
 {
   /* TERMINAL (type #) : rule #s terminal is on RHS */
-  fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
-  for (int i = 0; i < max_code + 1; ++i)
-    if (token_translations[i] != undeftoken->content->number)
+  ख_लिखो (out, "%s\n\n", _("Terminals, with rules where they appear"));
+  क्रम (पूर्णांक i = 0; i < max_code + 1; ++i)
+    अगर (token_translations[i] != undeftoken->content->संख्या)
       {
-        const symbol *sym = symbols[token_translations[i]];
-        const char *tag = sym->tag;
-        fprintf (out, "%4s%s", "", tag);
-        if (sym->content->type_name)
-          fprintf (out, " <%s>", sym->content->type_name);
-        fprintf (out, " (%d)", i);
+        स्थिर प्रतीक *sym = symbols[token_translations[i]];
+        स्थिर अक्षर *tag = sym->tag;
+        ख_लिखो (out, "%4s%s", "", tag);
+        अगर (sym->content->type_name)
+          ख_लिखो (out, " <%s>", sym->content->type_name);
+        ख_लिखो (out, " (%d)", i);
 
-        for (rule_number r = 0; r < nrules; r++)
-          for (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
-            if (item_number_as_symbol_number (*rhsp) == token_translations[i])
+        क्रम (rule_संख्या r = 0; r < nrules; r++)
+          क्रम (item_संख्या *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
+            अगर (item_संख्या_as_प्रतीक_संख्या (*rhsp) == token_translations[i])
               {
-                fprintf (out, " %d", r);
-                break;
+                ख_लिखो (out, " %d", r);
+                अवरोध;
               }
-        fputc ('\n', out);
+        ख_अक्षर_दो ('\n', out);
       }
-  fputs ("\n\n", out);
+  ख_माला_दो ("\n\n", out);
 }
 
 
-static void
-print_nonterminal_symbols (FILE *out)
+अटल व्योम
+print_nonterminal_symbols (खाता *out)
 {
-  fprintf (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
-  for (symbol_number i = ntokens; i < nsyms; i++)
+  ख_लिखो (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
+  क्रम (प्रतीक_संख्या i = ntokens; i < nsyms; i++)
     {
-      const symbol *sym = symbols[i];
-      const char *tag = sym->tag;
-      bool on_left = false;
-      bool on_right = false;
+      स्थिर प्रतीक *sym = symbols[i];
+      स्थिर अक्षर *tag = sym->tag;
+      bool on_बायाँ = false;
+      bool on_दायाँ = false;
 
-      for (rule_number r = 0; r < nrules; r++)
+      क्रम (rule_संख्या r = 0; r < nrules; r++)
         {
-          on_left |= rules[r].lhs->number == i;
-          for (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
-            on_right |= item_number_as_symbol_number (*rhsp) == i;
-          if (on_left && on_right)
-            break;
+          on_बायाँ |= rules[r].lhs->संख्या == i;
+          क्रम (item_संख्या *rhsp = rules[r].rhs; !on_दायाँ && 0 <= *rhsp; ++rhsp)
+            on_दायाँ |= item_संख्या_as_प्रतीक_संख्या (*rhsp) == i;
+          अगर (on_बायाँ && on_दायाँ)
+            अवरोध;
         }
 
-      fprintf (out, "%4s%s", "", tag);
-      if (sym->content->type_name)
-        fprintf (out, " <%s>", sym->content->type_name);
-      fprintf (out, " (%d)\n", i);
+      ख_लिखो (out, "%4s%s", "", tag);
+      अगर (sym->content->type_name)
+        ख_लिखो (out, " <%s>", sym->content->type_name);
+      ख_लिखो (out, " (%d)\n", i);
 
-      if (on_left)
+      अगर (on_बायाँ)
         {
-          fprintf (out, "%8s%s", "", _("on left:"));
-          for (rule_number r = 0; r < nrules; r++)
-            if (rules[r].lhs->number == i)
-              fprintf (out, " %d", r);
-          fputc ('\n', out);
+          ख_लिखो (out, "%8s%s", "", _("on left:"));
+          क्रम (rule_संख्या r = 0; r < nrules; r++)
+            अगर (rules[r].lhs->संख्या == i)
+              ख_लिखो (out, " %d", r);
+          ख_अक्षर_दो ('\n', out);
         }
 
-      if (on_right)
+      अगर (on_दायाँ)
         {
-          fprintf (out, "%8s%s", "", _("on right:"));
-          for (rule_number r = 0; r < nrules; r++)
-            for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-              if (item_number_as_symbol_number (*rhsp) == i)
+          ख_लिखो (out, "%8s%s", "", _("on right:"));
+          क्रम (rule_संख्या r = 0; r < nrules; r++)
+            क्रम (item_संख्या *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+              अगर (item_संख्या_as_प्रतीक_संख्या (*rhsp) == i)
                 {
-                  fprintf (out, " %d", r);
-                  break;
+                  ख_लिखो (out, " %d", r);
+                  अवरोध;
                 }
-          fputc ('\n', out);
+          ख_अक्षर_दो ('\n', out);
         }
     }
 }
 
-void
-print_results (void)
+व्योम
+print_results (व्योम)
 {
   /* We used to use just .out if SPEC_NAME_PREFIX (-p) was used, but
      that conflicts with Posix.  */
-  FILE *out = xfopen (spec_verbose_file, "w");
+  खाता *out = xfopen (spec_verbose_file, "w");
 
   reduce_output (out);
   grammar_rules_partial_print (out,
@@ -467,7 +467,7 @@ print_results (void)
 
   /* Storage for print_reductions.  */
   no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
-  for (state_number i = 0; i < nstates; i++)
+  क्रम (state_संख्या i = 0; i < nstates; i++)
     print_state (out, states[i]);
   bitset_free (no_reduce_set);
 

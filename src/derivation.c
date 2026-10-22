@@ -17,155 +17,155 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#समावेश <config.h>
 
-#include "derivation.h"
-#include "glyphs.h"
+#समावेश "derivation.h"
+#समावेश "glyphs.h"
 
-#include <c-ctype.h>
-#include <gl_linked_list.h>
-#include <mbswidth.h>
-#include <vasnprintf.h>
+#समावेश <c-ctype.h>
+#समावेश <gl_linked_list.h>
+#समावेश <mbswidth.h>
+#समावेश <vasnprintf.h>
 
-#include "system.h"
-#include "complain.h"
+#समावेश "system.h"
+#समावेश "complain.h"
 
-struct derivation
+काष्ठा derivation
 {
-  symbol_number sym;
+  प्रतीक_संख्या sym;
   derivation_list children;
-  int reference_count;
+  पूर्णांक reference_गिनती;
   // The rule SYM -> CHILDREN.
-  const rule *rule;
+  स्थिर rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  पूर्णांक color;
 };
 
-static derivation d_dot = { -1, NULL, -1, NULL, -1 };
+अटल derivation d_dot = { -1, शून्य, -1, शून्य, -1 };
 
 derivation *
-derivation_dot (void)
+derivation_dot (व्योम)
 {
-  return &d_dot;
+  वापस &d_dot;
 }
 
-void
+व्योम
 derivation_list_append (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
   gl_list_add_last (dl, d);
 }
 
-void
+व्योम
 derivation_list_prepend (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
   gl_list_add_first (dl, d);
 }
 
-void derivation_list_free (derivation_list dl)
+व्योम derivation_list_free (derivation_list dl)
 {
-  derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
-       derivation_list_next (&it, &d);
+  derivation *d = शून्य;
+  क्रम (gl_list_iterator_t it = gl_list_iterator (dl);
+       derivation_list_अग्र (&it, &d);
        )
-    if (d != &d_dot)
+    अगर (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r)
+derivation_new (प्रतीक_संख्या sym, derivation_list children,
+                स्थिर rule *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (माप *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
+  res->reference_गिनती = 0;
   res->rule = r;
   res->color = -1;
-  return res;
+  वापस res;
 }
 
-void
+व्योम
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_गिनती;
 }
 
-void
+व्योम
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
+  अगर (!d)
+    वापस;
   derivation_list free_queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
-                    1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+    gl_list_create (GL_LINKED_LIST, शून्य, शून्य, शून्य, true,
+                    1, (स्थिर व्योम **)&d);
+  जबतक (gl_list_आकार (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      अगर (--deriv->reference_गिनती == 0)
         {
-          if (deriv->children)
+          अगर (deriv->children)
             {
-              derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              derivation *child = शून्य;
+              क्रम (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_अग्र (&it, &child);
                    )
-                if (child != &d_dot)
+                अगर (child != &d_dot)
                   gl_list_add_last (free_queue, child);
               gl_list_free (deriv->children);
             }
-          free (deriv);
+          मुक्त (deriv);
         }
       gl_list_remove_at (free_queue, 0);
     }
   gl_list_free (free_queue);
 }
 
-size_t
-derivation_size (const derivation *deriv)
+माप_प्रकार
+derivation_आकार (स्थिर derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
-  derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-       derivation_list_next (&it, &child);
+  अगर (!deriv->children)
+    वापस 1;
+  पूर्णांक आकार = 1;
+  derivation *child = शून्य;
+  क्रम (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+       derivation_list_अग्र (&it, &child);
        )
-    size += derivation_size (child);
-  return size;
+    आकार += derivation_आकार (child);
+  वापस आकार;
 }
 
 
 // Longest distance from root to leaf.
-static int
-derivation_depth (const derivation *deriv)
+अटल पूर्णांक
+derivation_depth (स्थिर derivation *deriv)
 {
-  if (deriv->children)
+  अगर (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
+      पूर्णांक res = 1;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      क्रम (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_अग्र (&it, &child);
            )
         res = max_int (res, derivation_depth (child));
-      return res + 1;
+      वापस res + 1;
     }
-  else
-    return 1;
+  अन्यथा
+    वापस 1;
 }
 
-static bool
-all_spaces (const char *s)
+अटल bool
+all_spaces (स्थिर अक्षर *s)
 {
-  while (c_isspace (*s))
+  जबतक (c_isspace (*s))
     s++;
-  return *s == '\0';
+  वापस *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,58 +194,58 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+अटल पूर्णांक
+fputs_if (bool cond, खाता *out, पूर्णांक *padding, स्थिर अक्षर *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  पूर्णांक res = mbswidth (s, 0);
+  अगर (cond && !all_spaces (s))
     {
-      fprintf (out, "%*s%s", *padding, "", s);
+      ख_लिखो (out, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  अन्यथा
     {
       *padding += res;
     }
-  return res;
+  वापस res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+अटल पूर्णांक
+fprintf_if (bool cond, खाता *out, पूर्णांक *padding, स्थिर अक्षर *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
-  va_list args;
-  va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
-  va_end (args);
-  if (!cp)
+  अक्षर buf[256];
+  माप_प्रकार len = माप (buf);
+  बहु_सूची args;
+  बहु_शुरू (args, fmt);
+  अक्षर *cp = vasnprintf (buf, &len, fmt, args);
+  बहु_पूर्ण (args);
+  अगर (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
-    free (cp);
-  return res;
+  पूर्णांक res = fputs_if (cond, out, padding, cp);
+  अगर (cp != buf)
+    मुक्त (cp);
+  वापस res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
-derivation_width (const derivation *deriv)
+अटल पूर्णांक
+derivation_width (स्थिर derivation *deriv)
 {
-  if (deriv->children)
+  अगर (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      स्थिर प्रतीक *sym = symbols[deriv->sym];
+      पूर्णांक self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      पूर्णांक children_width = down_arrow_width;
+      children_width += snprintf (शून्य, 0, "%d: ", deriv->rule->संख्या);
+      अगर (gl_list_आकार (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
-      else
+      अन्यथा
         {
-          if (gl_list_size (deriv->children) == 1
+          अगर (gl_list_आकार (deriv->children) == 1
               && gl_list_get_first (deriv->children) == &d_dot)
             {
               children_width += empty_width;
@@ -253,24 +253,24 @@ derivation_width (const derivation *deriv)
             }
 
           derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-               derivation_list_next (&it, &child);
+          क्रम (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+               derivation_list_अग्र (&it, &child);
                )
             children_width
               += derivation_separator_width + derivation_width (child);
           // No separator at the beginning.
           children_width -= derivation_separator_width;
         }
-      return max_int (self_width, children_width);
+      वापस max_int (self_width, children_width);
     }
-  else if (deriv == &d_dot)
+  अन्यथा अगर (deriv == &d_dot)
     {
-      return dot_width;
+      वापस dot_width;
     }
-  else // leaf.
+  अन्यथा // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      स्थिर प्रतीक *sym = symbols[deriv->sym];
+      वापस mbswidth (sym->tag, 0);
     }
 }
 
@@ -286,38 +286,38 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+अटल पूर्णांक
+derivation_print_वृक्ष_impl (स्थिर derivation *deriv, खाता *out,
+                            पूर्णांक depth, पूर्णांक *padding)
 {
-  const int width = derivation_width (deriv);
+  स्थिर पूर्णांक width = derivation_width (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  पूर्णांक res = 0;
+  अगर (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      स्थिर प्रतीक *sym = symbols[deriv->sym];
+      अक्षर style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      अगर (depth == 0 || depth == 1)
         {
           begin_use_class (style, out);
           begin_use_class ("cex-step", out);
         }
-      if (depth == 0)
+      अगर (depth == 0)
         {
           res += fputs_if (true, out, padding, sym->tag);
         }
-      else
+      अन्यथा
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->संख्या);
+          अगर (gl_list_आकार (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
-          else
+          अन्यथा
             {
-              if (gl_list_size (deriv->children) == 1
+              अगर (gl_list_आकार (deriv->children) == 1
                   && gl_list_get_first (deriv->children) == &d_dot)
                 {
                   res += fputs_if (depth == 1, out, padding, empty);
@@ -326,18 +326,18 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
 
               bool first = true;
               derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              क्रम (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_अग्र (&it, &child);
                    )
                 {
-                  if (!first)
+                  अगर (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
+                  res += derivation_print_वृक्ष_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      अगर (depth == 0 || depth == 1)
         {
           end_use_class ("cex-step", out);
           end_use_class (style, out);
@@ -345,132 +345,132 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       *padding += width - res;
       res = width;
     }
-  else if (deriv == &d_dot)
+  अन्यथा अगर (deriv == &d_dot)
     {
-      if (depth == 0)
+      अगर (depth == 0)
         begin_use_class ("cex-dot", out);
       res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
+      अगर (depth == 0)
         end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  अन्यथा // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
+      स्थिर प्रतीक *sym = symbols[deriv->sym];
+      अगर (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
+      अगर (depth == 0)
         end_use_class ("cex-leaf", out);
     }
-  return res;
+  वापस res;
 }
 
-static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+अटल व्योम
+derivation_print_वृक्ष (स्थिर derivation *deriv, खाता *out, स्थिर अक्षर *prefix)
 {
-  fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
+  ख_अक्षर_दो ('\n', out);
+  क्रम (पूर्णांक depth = 0, max_depth = derivation_depth (deriv);
        depth < max_depth; ++depth)
     {
-      int padding = 0;
-      fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
-      fputc ('\n', out);
+      पूर्णांक padding = 0;
+      ख_लिखो (out, "    %s", prefix);
+      derivation_print_वृक्ष_impl (deriv, out, depth, &padding);
+      ख_अक्षर_दो ('\n', out);
     }
 }
 
 
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
-static bool
-derivation_print_flat_impl (derivation *deriv, FILE *out,
+अटल bool
+derivation_print_flat_impl (derivation *deriv, खाता *out,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            पूर्णांक *गणक, स्थिर अक्षर *prefix)
 {
-  if (deriv->children)
+  अगर (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      deriv->color = *counter;
-      ++*counter;
-      char style[20];
+      स्थिर प्रतीक *sym = symbols[deriv->sym];
+      deriv->color = *गणक;
+      ++*गणक;
+      अक्षर style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
       begin_use_class (style, out);
 
-      if (!leaves_only)
+      अगर (!leaves_only)
         {
-          fputs (prefix, out);
+          ख_माला_दो (prefix, out);
           begin_use_class ("cex-step", out);
-          fprintf (out, "%s %s [ ", sym->tag, arrow);
+          ख_लिखो (out, "%s %s [ ", sym->tag, arrow);
           end_use_class ("cex-step", out);
           prefix = "";
         }
       bool res = false;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      क्रम (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_अग्र (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
-                                          leaves_only, counter, prefix))
+          अगर (derivation_print_flat_impl (child, out,
+                                          leaves_only, गणक, prefix))
             {
               prefix = " ";
               res = true;
             }
-          else if (!leaves_only)
+          अन्यथा अगर (!leaves_only)
             prefix = " ";
         }
-      if (!leaves_only)
+      अगर (!leaves_only)
         {
           begin_use_class ("cex-step", out);
-          if (res)
-            fputs (" ]", out);
-          else
-            fputs ("]", out);
+          अगर (res)
+            ख_माला_दो (" ]", out);
+          अन्यथा
+            ख_माला_दो ("]", out);
           end_use_class ("cex-step", out);
         }
       end_use_class (style, out);
-      return res;
+      वापस res;
     }
-  else if (deriv == &d_dot)
+  अन्यथा अगर (deriv == &d_dot)
     {
-      fputs (prefix, out);
+      ख_माला_दो (prefix, out);
       begin_use_class ("cex-dot", out);
-      fputs (dot, out);
+      ख_माला_दो (dot, out);
       end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  अन्यथा // leaf.
     {
-      fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
+      ख_माला_दो (prefix, out);
+      स्थिर प्रतीक *sym = symbols[deriv->sym];
       begin_use_class ("cex-leaf", out);
-      fprintf (out, "%s", sym->tag);
+      ख_लिखो (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
     }
-  return true;
+  वापस true;
 }
 
-static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+अटल व्योम
+derivation_print_flat (स्थिर derivation *deriv, खाता *out, स्थिर अक्षर *prefix)
 {
-  int counter = 0;
-  fputs (prefix, out);
-  derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
-  fputc ('\n', out);
+  पूर्णांक गणक = 0;
+  ख_माला_दो (prefix, out);
+  derivation_print_flat_impl ((derivation *)deriv, out, false, &गणक, "");
+  ख_अक्षर_दो ('\n', out);
 }
 
-void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+व्योम
+derivation_print_leaves (स्थिर derivation *deriv, खाता *out)
 {
-  int counter = 0;
-  derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
-  fputc ('\n', out);
+  पूर्णांक गणक = 0;
+  derivation_print_flat_impl ((derivation *)deriv, out, true, &गणक, "");
+  ख_अक्षर_दो ('\n', out);
 }
 
-void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+व्योम
+derivation_print (स्थिर derivation *deriv, खाता *out, स्थिर अक्षर *prefix)
 {
-  if (getenv ("YYFLAT"))
+  अगर (दो_पर्या ("YYFLAT"))
     derivation_print_flat (deriv, out, prefix);
-  else
-    derivation_print_tree (deriv, out, prefix);
+  अन्यथा
+    derivation_print_वृक्ष (deriv, out, prefix);
 }

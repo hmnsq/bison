@@ -17,27 +17,27 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#समावेश <config.h>
 
-#include "ielr.h"
+#समावेश "ielr.h"
 
-#include "system.h"
+#समावेश "system.h"
 
-#include <bitset.h>
-#include <timevar.h>
+#समावेश <bitset.h>
+#समावेश <timevar.h>
 
-#include "AnnotationList.h"
-#include "derives.h"
-#include "getargs.h"
-#include "lalr.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "relation.h"
-#include "state.h"
-#include "symtab.h"
+#समावेश "AnnotationList.h"
+#समावेश "derives.h"
+#समावेश "getargs.h"
+#समावेश "lalr.h"
+#समावेश "muscle-tab.h"
+#समावेश "nullable.h"
+#समावेश "relation.h"
+#समावेश "state.h"
+#समावेश "symtab.h"
 
 /** Records the value of the \%define variable lr.type.  */
-typedef enum
+प्रकार क्रमागत
   {
    LR_TYPE__LR0,
    LR_TYPE__LALR,
@@ -46,26 +46,26 @@ typedef enum
   } LrType;
 
 /* The user's requested LR type.  */
-static LrType
-lr_type_get (void)
+अटल LrType
+lr_type_get (व्योम)
 {
-  char *type = muscle_percent_define_get ("lr.type");
+  अक्षर *type = muscle_percent_define_get ("lr.type");
   LrType res;
-  if (STREQ (type, "lr""(0)"))
+  अगर (STREQ (type, "lr""(0)"))
     res = LR_TYPE__LR0;
-  else if (STREQ (type, "lalr"))
+  अन्यथा अगर (STREQ (type, "lalr"))
     res = LR_TYPE__LALR;
-  else if (STREQ (type, "ielr"))
+  अन्यथा अगर (STREQ (type, "ielr"))
     res = LR_TYPE__IELR;
-  else if (STREQ (type, "canonical-lr"))
+  अन्यथा अगर (STREQ (type, "canonical-lr"))
     res = LR_TYPE__CANONICAL_LR;
-  else
+  अन्यथा
     {
       aver (false);
-      abort ();
+      पात ();
     }
-  free (type);
-  return res;
+  मुक्त (type);
+  वापस res;
 }
 
 /**
@@ -75,33 +75,33 @@ lr_type_get (void)
  *     the same RHS are nullable nonterminals.  In other words, the follows of
  *     a goto on <tt>ritem[i]</tt> include the lookahead set of the item.
  */
-static bitset
-ielr_compute_ritem_sees_lookahead_set (void)
+अटल bitset
+ielr_compute_ritem_sees_lookahead_set (व्योम)
 {
-  bitset result = bitset_create (nritems, BITSET_FIXED);
-  int i = nritems-1;
-  while (0 < i)
+  bitset परिणाम = bitset_create (nritems, BITSET_FIXED);
+  पूर्णांक i = nritems-1;
+  जबतक (0 < i)
     {
       --i;
       // Walk the RHS right to left, as long as it's symbol,
       // nonterminal, nullable.
-      while (!item_number_is_rule_number (ritem[i])
+      जबतक (!item_संख्या_is_rule_संख्या (ritem[i])
              && ISVAR (ritem[i])
-             && nullable [item_number_as_symbol_number (ritem[i]) - ntokens])
-        bitset_set (result, i--);
-      if (!item_number_is_rule_number (ritem[i]) && ISVAR (ritem[i]))
-        bitset_set (result, i--);
+             && nullable [item_संख्या_as_प्रतीक_संख्या (ritem[i]) - ntokens])
+        bitset_set (परिणाम, i--);
+      अगर (!item_संख्या_is_rule_संख्या (ritem[i]) && ISVAR (ritem[i]))
+        bitset_set (परिणाम, i--);
       // Flush the remainder of the RHS.
-      while (!item_number_is_rule_number (ritem[i]) && 0 < i)
+      जबतक (!item_संख्या_is_rule_संख्या (ritem[i]) && 0 < i)
         --i;
     }
-  if (trace_flag & trace_ielr)
+  अगर (trace_flag & trace_ielr)
     {
-      fprintf (stderr, "ritem_sees_lookahead_set (indexes of ritems): ");
-      bitset_dump (stderr, result);
-      fprintf (stderr, "\n");
+      ख_लिखो (मानक_त्रुटि, "ritem_sees_lookahead_set (indexes of ritems): ");
+      bitset_dump (मानक_त्रुटि, परिणाम);
+      ख_लिखो (मानक_त्रुटि, "\n");
     }
-  return result;
+  वापस परिणाम;
 }
 
 /**
@@ -126,21 +126,21 @@ ielr_compute_ritem_sees_lookahead_set (void)
  *       goto \c j and it's an internal edge because the from states are the
  *       same.
  */
-static void
+अटल व्योम
 ielr_compute_internal_follow_edges (bitset ritem_sees_lookahead_set,
-                                    goto_number ***edgesp, int **edge_countsp)
+                                    goto_संख्या ***edgesp, पूर्णांक **edge_countsp)
 {
-  *edgesp = xnmalloc (ngotos, sizeof **edgesp);
-  *edge_countsp = xnmalloc (ngotos, sizeof **edge_countsp);
+  *edgesp = xnmalloc (ngotos, माप **edgesp);
+  *edge_countsp = xnmalloc (ngotos, माप **edge_countsp);
   {
     bitset sources = bitset_create (ngotos, BITSET_FIXED);
-    for (goto_number i = 0; i < ngotos; ++i)
+    क्रम (goto_संख्या i = 0; i < ngotos; ++i)
       (*edge_countsp)[i] = 0;
-    for (goto_number i = 0; i < ngotos; ++i)
+    क्रम (goto_संख्या i = 0; i < ngotos; ++i)
       {
-        int nsources = 0;
+        पूर्णांक nsources = 0;
         {
-          for (rule **rulep = derives[states[to_state[i]]->accessing_symbol
+          क्रम (rule **rulep = derives[states[to_state[i]]->accessing_प्रतीक
                                       - ntokens];
                *rulep;
                ++rulep)
@@ -163,13 +163,13 @@ ielr_compute_internal_follow_edges (bitset ritem_sees_lookahead_set,
                  possibly help performance a little.  I have not proven any of
                  this, but I'm guessing the bitset shouldn't entail much of a
                  performance penalty, if any.  */
-              if (bitset_test (ritem_sees_lookahead_set,
+              अगर (bitset_test (ritem_sees_lookahead_set,
                                (*rulep)->rhs - ritem))
                 {
-                  goto_number source =
+                  goto_संख्या source =
                     map_goto (from_state[i],
-                              item_number_as_symbol_number (*(*rulep)->rhs));
-                  if (i != source && !bitset_test (sources, source))
+                              item_संख्या_as_प्रतीक_संख्या (*(*rulep)->rhs));
+                  अगर (i != source && !bitset_test (sources, source))
                     {
                       bitset_set (sources, source);
                       ++nsources;
@@ -178,19 +178,19 @@ ielr_compute_internal_follow_edges (bitset ritem_sees_lookahead_set,
                 }
             }
         }
-        if (nsources == 0)
-          (*edgesp)[i] = NULL;
-        else
+        अगर (nsources == 0)
+          (*edgesp)[i] = शून्य;
+        अन्यथा
           {
-            (*edgesp)[i] = xnmalloc (nsources + 1, sizeof *(*edgesp)[i]);
+            (*edgesp)[i] = xnmalloc (nsources + 1, माप *(*edgesp)[i]);
             {
               bitset_iterator biter_source;
               bitset_bindex source;
-              int j = 0;
+              पूर्णांक j = 0;
               BITSET_FOR_EACH (biter_source, sources, source, 0)
                 (*edgesp)[i][j++] = source;
             }
-            (*edgesp)[i][nsources] = END_NODE;
+            (*edgesp)[i][nsources] = END_गाँठ;
           }
         bitset_zero (sources);
       }
@@ -199,8 +199,8 @@ ielr_compute_internal_follow_edges (bitset ritem_sees_lookahead_set,
 
   relation_transpose (edgesp, ngotos);
 
-  if (trace_flag & trace_ielr)
-    relation_print ("internal_follow_edges", *edgesp, ngotos, NULL, stderr);
+  अगर (trace_flag & trace_ielr)
+    relation_print ("internal_follow_edges", *edgesp, ngotos, शून्य, मानक_त्रुटि);
 }
 
 /**
@@ -219,37 +219,37 @@ ielr_compute_internal_follow_edges (bitset ritem_sees_lookahead_set,
  *   - Thus, <tt>(*follow_kernel_itemsp)[i][j]</tt> is always unset if there is
  *     no item \c j in the from state of goto \c i.
  */
-static void
-ielr_compute_follow_kernel_items (bitset ritem_sees_lookahead_set,
-                                  goto_number **internal_follow_edges,
+अटल व्योम
+ielr_compute_follow_kernel_वस्तुएँ (bitset ritem_sees_lookahead_set,
+                                  goto_संख्या **internal_follow_edges,
                                   bitsetv *follow_kernel_itemsp)
 {
   {
-    size_t max_nitems = 0;
-    for (state_number i = 0; i < nstates; ++i)
-      if (states[i]->nitems > max_nitems)
+    माप_प्रकार max_nitems = 0;
+    क्रम (state_संख्या i = 0; i < nstates; ++i)
+      अगर (states[i]->nitems > max_nitems)
         max_nitems = states[i]->nitems;
     *follow_kernel_itemsp = bitsetv_create (ngotos, max_nitems, BITSET_FIXED);
   }
-  for (goto_number i = 0; i < ngotos; ++i)
+  क्रम (goto_संख्या i = 0; i < ngotos; ++i)
     {
-      size_t nitems = states[from_state[i]]->nitems;
-      item_index *items = states[from_state[i]]->items;
-      for (size_t j = 0; j < nitems; ++j)
+      माप_प्रकार nitems = states[from_state[i]]->nitems;
+      item_सूचकांक *वस्तुएँ = states[from_state[i]]->वस्तुएँ;
+      क्रम (माप_प्रकार j = 0; j < nitems; ++j)
         /* If this item has this goto and if all subsequent symbols in this
            RHS (if any) are nullable nonterminals, then record this item as
            one whose lookahead set is included in this goto's follows.  */
-        if (item_number_is_symbol_number (ritem[items[j]])
-            && item_number_as_symbol_number (ritem[items[j]])
-            == states[to_state[i]]->accessing_symbol
-            && bitset_test (ritem_sees_lookahead_set, items[j]))
+        अगर (item_संख्या_is_प्रतीक_संख्या (ritem[वस्तुएँ[j]])
+            && item_संख्या_as_प्रतीक_संख्या (ritem[वस्तुएँ[j]])
+            == states[to_state[i]]->accessing_प्रतीक
+            && bitset_test (ritem_sees_lookahead_set, वस्तुएँ[j]))
           bitset_set ((*follow_kernel_itemsp)[i], j);
     }
   relation_digraph (internal_follow_edges, ngotos, *follow_kernel_itemsp);
 
-  if (trace_flag & trace_ielr)
+  अगर (trace_flag & trace_ielr)
     {
-      fprintf (stderr, "follow_kernel_items:\n");
+      ख_लिखो (मानक_त्रुटि, "follow_kernel_items:\n");
       debug_bitsetv (*follow_kernel_itemsp);
     }
 }
@@ -267,46 +267,46 @@ ielr_compute_follow_kernel_items (bitset ritem_sees_lookahead_set,
  *   - Rows of \c *edgesp have been realloc'ed and extended to include
  *     successor follow edges.  \c edge_counts has not been updated.
  */
-static void
-ielr_compute_always_follows (goto_number ***edgesp,
-                             int const edge_counts[],
+अटल व्योम
+ielr_compute_always_follows (goto_संख्या ***edgesp,
+                             पूर्णांक स्थिर edge_counts[],
                              bitsetv *always_followsp)
 {
   *always_followsp = bitsetv_create (ngotos, ntokens, BITSET_FIXED);
   {
-    goto_number *edge_array = xnmalloc (ngotos, sizeof *edge_array);
-    for (goto_number i = 0; i < ngotos; ++i)
+    goto_संख्या *edge_array = xnmalloc (ngotos, माप *edge_array);
+    क्रम (goto_संख्या i = 0; i < ngotos; ++i)
       {
-        goto_number nedges = edge_counts[i];
+        goto_संख्या nedges = edge_counts[i];
         {
-          int j;
+          पूर्णांक j;
           transitions *trans = states[to_state[i]]->transitions;
           FOR_EACH_SHIFT (trans, j)
-            bitset_set ((*always_followsp)[i], TRANSITION_SYMBOL (trans, j));
-          for (; j < trans->num; ++j)
+            bitset_set ((*always_followsp)[i], TRANSITION_प्रतीक (trans, j));
+          क्रम (; j < trans->अंक; ++j)
             {
-              symbol_number sym = TRANSITION_SYMBOL (trans, j);
-              if (nullable[sym - ntokens])
+              प्रतीक_संख्या sym = TRANSITION_प्रतीक (trans, j);
+              अगर (nullable[sym - ntokens])
                 edge_array[nedges++] = map_goto (to_state[i], sym);
             }
         }
-        if (nedges - edge_counts[i])
+        अगर (nedges - edge_counts[i])
           {
             (*edgesp)[i] =
-              xnrealloc ((*edgesp)[i], nedges + 1, sizeof *(*edgesp)[i]);
-            memcpy ((*edgesp)[i] + edge_counts[i], edge_array + edge_counts[i],
-                    (nedges - edge_counts[i]) * sizeof *(*edgesp)[i]);
-            (*edgesp)[i][nedges] = END_NODE;
+              xnrealloc ((*edgesp)[i], nedges + 1, माप *(*edgesp)[i]);
+            स_नकल ((*edgesp)[i] + edge_counts[i], edge_array + edge_counts[i],
+                    (nedges - edge_counts[i]) * माप *(*edgesp)[i]);
+            (*edgesp)[i][nedges] = END_गाँठ;
           }
       }
-    free (edge_array);
+    मुक्त (edge_array);
   }
   relation_digraph (*edgesp, ngotos, *always_followsp);
 
-  if (trace_flag & trace_ielr)
+  अगर (trace_flag & trace_ielr)
     {
-      relation_print ("always follow edges", *edgesp, ngotos, NULL, stderr);
-      fprintf (stderr, "always_follows:\n");
+      relation_print ("always follow edges", *edgesp, ngotos, शून्य, मानक_त्रुटि);
+      ख_लिखो (मानक_त्रुटि, "always_follows:\n");
       debug_bitsetv (*always_followsp);
     }
 }
@@ -318,30 +318,30 @@ ielr_compute_always_follows (goto_number ***edgesp,
  *     <tt>state</tt>'s of state \c i.
  *   - The last element of such an array is \c NULL.
  */
-static state ***
-ielr_compute_predecessors (void)
+अटल state ***
+ielr_compute_predecessors (व्योम)
 {
-  int *predecessor_counts = xnmalloc (nstates, sizeof *predecessor_counts);
-  state ***res = xnmalloc (nstates, sizeof *res);
-  for (state_number i = 0; i < nstates; ++i)
+  पूर्णांक *predecessor_counts = xnmalloc (nstates, माप *predecessor_counts);
+  state ***res = xnmalloc (nstates, माप *res);
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
     predecessor_counts[i] = 0;
-  for (state_number i = 0; i < nstates; ++i)
-    for (int j = 0; j < states[i]->transitions->num; ++j)
-      ++predecessor_counts[states[i]->transitions->states[j]->number];
-  for (state_number i = 0; i < nstates; ++i)
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
+    क्रम (पूर्णांक j = 0; j < states[i]->transitions->अंक; ++j)
+      ++predecessor_counts[states[i]->transitions->states[j]->संख्या];
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
     {
-      res[i] = xnmalloc (predecessor_counts[i]+1, sizeof *res[i]);
-      res[i][predecessor_counts[i]] = NULL;
+      res[i] = xnmalloc (predecessor_counts[i]+1, माप *res[i]);
+      res[i][predecessor_counts[i]] = शून्य;
       predecessor_counts[i] = 0;
     }
-  for (state_number i = 0; i < nstates; ++i)
-    for (int j = 0; j < states[i]->transitions->num; ++j)
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
+    क्रम (पूर्णांक j = 0; j < states[i]->transitions->अंक; ++j)
       {
-        state_number k = states[i]->transitions->states[j]->number;
+        state_संख्या k = states[i]->transitions->states[j]->संख्या;
         res[k][predecessor_counts[k]++] = states[i];
       }
-  free (predecessor_counts);
-  return res;
+  मुक्त (predecessor_counts);
+  वापस res;
 }
 
 /**
@@ -352,27 +352,27 @@ ielr_compute_predecessors (void)
  *   - Iff <tt>predecessorsp != NULL</tt>, then \c *predecessorsp was computed
  *     by \c ielr_compute_predecessors.
  */
-static void
+अटल व्योम
 ielr_compute_auxiliary_tables (bitsetv *follow_kernel_itemsp,
                                bitsetv *always_followsp,
                                state ****predecessorsp)
 {
-  goto_number **edges;
-  int *edge_counts;
+  goto_संख्या **edges;
+  पूर्णांक *edge_counts;
   {
     bitset ritem_sees_lookahead_set = ielr_compute_ritem_sees_lookahead_set ();
     ielr_compute_internal_follow_edges (ritem_sees_lookahead_set,
                                         &edges, &edge_counts);
-    ielr_compute_follow_kernel_items (ritem_sees_lookahead_set, edges,
+    ielr_compute_follow_kernel_वस्तुएँ (ritem_sees_lookahead_set, edges,
                                       follow_kernel_itemsp);
     bitset_free (ritem_sees_lookahead_set);
   }
   ielr_compute_always_follows (&edges, edge_counts, always_followsp);
-  for (int i = 0; i < ngotos; ++i)
-    free (edges[i]);
-  free (edges);
-  free (edge_counts);
-  if (predecessorsp)
+  क्रम (पूर्णांक i = 0; i < ngotos; ++i)
+    मुक्त (edges[i]);
+  मुक्त (edges);
+  मुक्त (edge_counts);
+  अगर (predecessorsp)
     *predecessorsp = ielr_compute_predecessors ();
 }
 
@@ -386,20 +386,20 @@ ielr_compute_auxiliary_tables (bitsetv *follow_kernel_itemsp,
  *       unnecessary.
  */
 bool
-ielr_item_has_lookahead (state *s, symbol_number lhs, size_t item,
-                         symbol_number lookahead, state ***predecessors,
+ielr_item_has_lookahead (state *s, प्रतीक_संख्या lhs, माप_प्रकार item,
+                         प्रतीक_संख्या lookahead, state ***predecessors,
                          bitset **item_lookahead_sets)
 {
-  if (!item_lookahead_sets[s->number])
+  अगर (!item_lookahead_sets[s->संख्या])
     {
-      item_lookahead_sets[s->number] =
-        xnmalloc (s->nitems, sizeof item_lookahead_sets[s->number][0]);
-      for (size_t i = 0; i < s->nitems; ++i)
-        item_lookahead_sets[s->number][i] = NULL;
+      item_lookahead_sets[s->संख्या] =
+        xnmalloc (s->nitems, माप item_lookahead_sets[s->संख्या][0]);
+      क्रम (माप_प्रकार i = 0; i < s->nitems; ++i)
+        item_lookahead_sets[s->संख्या][i] = शून्य;
     }
-  if (!item_lookahead_sets[s->number][item])
+  अगर (!item_lookahead_sets[s->संख्या][item])
     {
-      item_lookahead_sets[s->number][item] =
+      item_lookahead_sets[s->संख्या][item] =
         bitset_create (ntokens, BITSET_FIXED);
       /* If this kernel item is the beginning of a RHS, it must be the kernel
          item in the start state, and so its LHS has no follows and no goto to
@@ -416,57 +416,57 @@ ielr_item_has_lookahead (state *s, symbol_number lhs, size_t item,
          didn't change this test to an aver just in case the usage of this
          function evolves to need those two cases.  In both cases, the current
          implementation returns the right result.  */
-      const rule *r = item_rule (&ritem[s->items[item]]);
-      const bool is_successor_of_initial_item
-        = rule_is_initial (r) && &ritem[s->items[item]] == r->rhs + 1;
+      स्थिर rule *r = item_rule (&ritem[s->वस्तुएँ[item]]);
+      स्थिर bool is_successor_of_initial_item
+        = rule_is_initial (r) && &ritem[s->वस्तुएँ[item]] == r->rhs + 1;
       aver (!is_successor_of_initial_item);
-      if (!is_successor_of_initial_item)
+      अगर (!is_successor_of_initial_item)
         {
           /* If the LHS symbol of this item isn't known (because this is a
              top-level invocation), go get it.  */
-          if (!lhs)
-            lhs = r->lhs->number;
+          अगर (!lhs)
+            lhs = r->lhs->संख्या;
           /* If this kernel item is next to the beginning of the RHS, then
              check all predecessors' goto follows for the LHS.  */
-          if (item_number_is_rule_number (ritem[s->items[item] - 2]))
+          अगर (item_संख्या_is_rule_संख्या (ritem[s->वस्तुएँ[item] - 2]))
             {
-              aver (lhs != acceptsymbol->content->number);
-              for (state **predecessor = predecessors[s->number];
+              aver (lhs != acceptsymbol->content->संख्या);
+              क्रम (state **predecessor = predecessors[s->संख्या];
                    *predecessor;
                    ++predecessor)
-                bitset_or (item_lookahead_sets[s->number][item],
-                           item_lookahead_sets[s->number][item],
-                           goto_follows[map_goto ((*predecessor)->number,
+                bitset_or (item_lookahead_sets[s->संख्या][item],
+                           item_lookahead_sets[s->संख्या][item],
+                           goto_follows[map_goto ((*predecessor)->संख्या,
                                                   lhs)]);
             }
           /* If this kernel item is later in the RHS, then check all
              predecessor items' lookahead sets.  */
-          else
+          अन्यथा
             {
-              for (state **predecessor = predecessors[s->number];
+              क्रम (state **predecessor = predecessors[s->संख्या];
                    *predecessor;
                    ++predecessor)
                 {
-                  size_t predecessor_item;
-                  for (predecessor_item = 0;
+                  माप_प्रकार predecessor_item;
+                  क्रम (predecessor_item = 0;
                        predecessor_item < (*predecessor)->nitems;
                        ++predecessor_item)
-                    if ((*predecessor)->items[predecessor_item]
-                        == s->items[item] - 1)
-                      break;
+                    अगर ((*predecessor)->वस्तुएँ[predecessor_item]
+                        == s->वस्तुएँ[item] - 1)
+                      अवरोध;
                   aver (predecessor_item != (*predecessor)->nitems);
                   ielr_item_has_lookahead (*predecessor, lhs,
                                            predecessor_item, 0 /*irrelevant*/,
                                            predecessors, item_lookahead_sets);
-                  bitset_or (item_lookahead_sets[s->number][item],
-                             item_lookahead_sets[s->number][item],
-                             item_lookahead_sets[(*predecessor)->number]
+                  bitset_or (item_lookahead_sets[s->संख्या][item],
+                             item_lookahead_sets[s->संख्या][item],
+                             item_lookahead_sets[(*predecessor)->संख्या]
                                                 [predecessor_item]);
                 }
             }
         }
     }
-  return bitset_test (item_lookahead_sets[s->number][item], lookahead);
+  वापस bitset_test (item_lookahead_sets[s->संख्या][item], lookahead);
 }
 
 /**
@@ -484,77 +484,77 @@ ielr_item_has_lookahead (state *s, symbol_number lhs, size_t item,
  *   - <tt>*max_annotationsp</tt> is the maximum number of annotations per
  *     state.
  */
-static void
-ielr_compute_annotation_lists (bitsetv follow_kernel_items,
+अटल व्योम
+ielr_compute_annotation_lists (bitsetv follow_kernel_वस्तुएँ,
                                bitsetv always_follows, state ***predecessors,
-                               AnnotationIndex *max_annotationsp,
+                               Annotation_सूचकांक *max_annotationsp,
                                InadequacyList ***inadequacy_listsp,
                                AnnotationList ***annotation_listsp,
-                               struct obstack *annotations_obstackp)
+                               काष्ठा obstack *annotations_obstackp)
 {
   bitset **item_lookahead_sets =
-    xnmalloc (nstates, sizeof *item_lookahead_sets);
-  AnnotationIndex *annotation_counts =
-    xnmalloc (nstates, sizeof *annotation_counts);
-  ContributionIndex max_contributions = 0;
-  int total_annotations = 0;
+    xnmalloc (nstates, माप *item_lookahead_sets);
+  Annotation_सूचकांक *annotation_counts =
+    xnmalloc (nstates, माप *annotation_counts);
+  Contribution_सूचकांक max_contributions = 0;
+  पूर्णांक योग_annotations = 0;
 
-  *inadequacy_listsp = xnmalloc (nstates, sizeof **inadequacy_listsp);
-  *annotation_listsp = xnmalloc (nstates, sizeof **annotation_listsp);
-  for (state_number i = 0; i < nstates; ++i)
+  *inadequacy_listsp = xnmalloc (nstates, माप **inadequacy_listsp);
+  *annotation_listsp = xnmalloc (nstates, माप **annotation_listsp);
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
     {
-      item_lookahead_sets[i] = NULL;
-      (*inadequacy_listsp)[i] = NULL;
-      (*annotation_listsp)[i] = NULL;
+      item_lookahead_sets[i] = शून्य;
+      (*inadequacy_listsp)[i] = शून्य;
+      (*annotation_listsp)[i] = शून्य;
       annotation_counts[i] = 0;
     }
   {
-    InadequacyListNodeCount inadequacy_list_node_count = 0;
-    for (state_number i = 0; i < nstates; ++i)
+    Inadequacy_List_गाँठ_गिनती inadequacy_list_गाँठ_गिनती = 0;
+    क्रम (state_संख्या i = 0; i < nstates; ++i)
       AnnotationList__compute_from_inadequacies (
-        states[i], follow_kernel_items, always_follows, predecessors,
+        states[i], follow_kernel_वस्तुएँ, always_follows, predecessors,
         item_lookahead_sets, *inadequacy_listsp, *annotation_listsp,
         annotation_counts, &max_contributions, annotations_obstackp,
-        &inadequacy_list_node_count);
+        &inadequacy_list_गाँठ_गिनती);
   }
   *max_annotationsp = 0;
-  for (state_number i = 0; i < nstates; ++i)
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
     {
-      if (annotation_counts[i] > *max_annotationsp)
+      अगर (annotation_counts[i] > *max_annotationsp)
         *max_annotationsp = annotation_counts[i];
-      total_annotations += annotation_counts[i];
+      योग_annotations += annotation_counts[i];
     }
-  if (trace_flag & trace_ielr)
+  अगर (trace_flag & trace_ielr)
     {
-      for (state_number i = 0; i < nstates; ++i)
+      क्रम (state_संख्या i = 0; i < nstates; ++i)
         {
-          fprintf (stderr, "Inadequacy annotations for state %d:\n", i);
+          ख_लिखो (मानक_त्रुटि, "Inadequacy annotations for state %d:\n", i);
           AnnotationList__debug ((*annotation_listsp)[i],
                                  states[i]->nitems, 2);
         }
-      fprintf (stderr, "Number of LR(0)/LALR(1) states: %d\n", nstates);
-      fprintf (stderr, "Average number of annotations per state: %f\n",
-               (float)total_annotations/nstates);
-      fprintf (stderr, "Max number of annotations per state: %d\n",
+      ख_लिखो (मानक_त्रुटि, "Number of LR(0)/LALR(1) states: %d\n", nstates);
+      ख_लिखो (मानक_त्रुटि, "Average number of annotations per state: %f\n",
+               (भग्न)योग_annotations/nstates);
+      ख_लिखो (मानक_त्रुटि, "Max number of annotations per state: %d\n",
                *max_annotationsp);
-      fprintf (stderr, "Max number of contributions per annotation: %d\n",
+      ख_लिखो (मानक_त्रुटि, "Max number of contributions per annotation: %d\n",
                max_contributions);
     }
-  for (state_number i = 0; i < nstates; ++i)
-    if (item_lookahead_sets[i])
+  क्रम (state_संख्या i = 0; i < nstates; ++i)
+    अगर (item_lookahead_sets[i])
       {
-        for (size_t j = 0; j < states[i]->nitems; ++j)
-          if (item_lookahead_sets[i][j])
+        क्रम (माप_प्रकार j = 0; j < states[i]->nitems; ++j)
+          अगर (item_lookahead_sets[i][j])
             bitset_free (item_lookahead_sets[i][j]);
-        free (item_lookahead_sets[i]);
+        मुक्त (item_lookahead_sets[i]);
       }
-  free (item_lookahead_sets);
-  free (annotation_counts);
+  मुक्त (item_lookahead_sets);
+  मुक्त (annotation_counts);
 }
 
-typedef struct state_list
+प्रकार काष्ठा state_list
 {
-  struct state_list *next;
+  काष्ठा state_list *अग्र;
   state *state;
   /** Has this state been recomputed as a successor of another state?  */
   bool recomputedAsSuccessor;
@@ -568,26 +568,26 @@ typedef struct state_list
    * with the same core.  The one originally computed by generate_states in
    * lr0.c is lr0Isocore.
    */
-  struct state_list *lr0Isocore;
-  struct state_list *nextIsocore;
+  काष्ठा state_list *lr0Isocore;
+  काष्ठा state_list *अग्र_Isocore;
 } state_list;
 
-MAYBE_UNUSED static void
-state_list_print_ (const state_list *s, FILE *out, const char *sep)
+MAYBE_UNUSED अटल व्योम
+state_list_print_ (स्थिर state_list *s, खाता *out, स्थिर अक्षर *sep)
 {
-  if (s)
+  अगर (s)
     {
-      fprintf (out, "%s%d", sep, s->state->number);
-      state_list_print_ (s->next, out, " ");
+      ख_लिखो (out, "%s%d", sep, s->state->संख्या);
+      state_list_print_ (s->अग्र, out, " ");
     }
 }
 
-MAYBE_UNUSED static void
-state_list_print (const state_list *s, FILE *out)
+MAYBE_UNUSED अटल व्योम
+state_list_print (स्थिर state_list *s, खाता *out)
 {
-  fprintf (out, "{");
+  ख_लिखो (out, "{");
   state_list_print_ (s, out, "");
-  fprintf (out, "}");
+  ख_लिखो (out, "}");
 }
 
 /**
@@ -599,19 +599,19 @@ state_list_print (const state_list *s, FILE *out)
  *   - \c follow_set contains the follow set for the goto on nonterminal \c n
  *     in state \c s based on the lookaheads stored in <tt>s->lookaheads</tt>.
  */
-static void
-ielr_compute_goto_follow_set (bitsetv follow_kernel_items,
+अटल व्योम
+ielr_compute_goto_follow_set (bitsetv follow_kernel_वस्तुएँ,
                               bitsetv always_follows, state_list *s,
                               sym_content *n, bitset follow_set)
 {
-  goto_number n_goto = map_goto (s->lr0Isocore->state->number, n->number);
+  goto_संख्या n_goto = map_goto (s->lr0Isocore->state->संख्या, n->संख्या);
   bitset_copy (follow_set, always_follows[n_goto]);
-  if (s->lookaheads)
+  अगर (s->lookaheads)
     {
       bitset_iterator biter_item;
       bitset_bindex item;
-      BITSET_FOR_EACH (biter_item, follow_kernel_items[n_goto], item, 0)
-        if (s->lookaheads[item])
+      BITSET_FOR_EACH (biter_item, follow_kernel_वस्तुएँ[n_goto], item, 0)
+        अगर (s->lookaheads[item])
           bitset_or (follow_set, follow_set, s->lookaheads[item]);
     }
 }
@@ -631,14 +631,14 @@ ielr_compute_goto_follow_set (bitsetv follow_kernel_items,
  *     - The isocore of \c t that will be the transition successor of \c s will
  *       inherit from \c s token \c j into the lookahead set of item \c i.
  */
-static void
-ielr_compute_lookaheads (bitsetv follow_kernel_items, bitsetv always_follows,
+अटल व्योम
+ielr_compute_lookaheads (bitsetv follow_kernel_वस्तुएँ, bitsetv always_follows,
                          state_list *s, state *t, bitsetv lookahead_filter,
                          bitsetv lookaheads)
 {
-  size_t s_item = 0;
+  माप_प्रकार s_item = 0;
   bitsetv_zero (lookaheads);
-  for (size_t t_item = 0; t_item < t->nitems; ++t_item)
+  क्रम (माप_प्रकार t_item = 0; t_item < t->nitems; ++t_item)
     {
       /* If this kernel item is the beginning of a RHS, it must be the
          kernel item in the start state, but t is supposed to be a successor
@@ -646,29 +646,29 @@ ielr_compute_lookaheads (bitsetv follow_kernel_items, bitsetv always_follows,
          state's kernel item, the lookahead set is empty.  This second case is
          a special case to avoid the - 2 below, but the next successor can be
          handled fine without special casing it.  */
-      aver (t->items[t_item] != 0);
-      const rule *r = item_rule (&ritem[t->items[t_item]]);
-      const bool is_successor_of_initial_item
-        = rule_is_initial (r) && &ritem[t->items[t_item]] == r->rhs + 1;
-      if (!is_successor_of_initial_item
+      aver (t->वस्तुएँ[t_item] != 0);
+      स्थिर rule *r = item_rule (&ritem[t->वस्तुएँ[t_item]]);
+      स्थिर bool is_successor_of_initial_item
+        = rule_is_initial (r) && &ritem[t->वस्तुएँ[t_item]] == r->rhs + 1;
+      अगर (!is_successor_of_initial_item
           && !bitset_empty_p (lookahead_filter[t_item]))
         {
           /* Is this kernel item next to the beginning of the RHS?  */
-          if (item_number_is_rule_number (ritem[t->items[t_item] - 2]))
+          अगर (item_संख्या_is_rule_संख्या (ritem[t->वस्तुएँ[t_item] - 2]))
             ielr_compute_goto_follow_set (
-              follow_kernel_items, always_follows, s,
+              follow_kernel_वस्तुएँ, always_follows, s,
               r->lhs,
               lookaheads[t_item]);
-          else if (s->lookaheads)
+          अन्यथा अगर (s->lookaheads)
             {
               /* We don't have to start the s item search at the beginning
                  every time because items from both states are sorted by their
                  indices in ritem.  */
-              for (; s_item < s->state->nitems; ++s_item)
-                if (s->state->items[s_item] == t->items[t_item] - 1)
-                  break;
+              क्रम (; s_item < s->state->nitems; ++s_item)
+                अगर (s->state->वस्तुएँ[s_item] == t->वस्तुएँ[t_item] - 1)
+                  अवरोध;
               aver (s_item != s->state->nitems);
-              if (s->lookaheads[s_item])
+              अगर (s->lookaheads[s_item])
                 bitset_copy (lookaheads[t_item], s->lookaheads[s_item]);
             }
           bitset_and (lookaheads[t_item],
@@ -713,11 +713,11 @@ ielr_compute_lookaheads (bitsetv follow_kernel_items, bitsetv always_follows,
  *     <tt>lookaheads \@pre</tt> was placed/merged.
  *   - \c lookaheads, \c work1, and \c work2 may have been altered.
  */
-static void
-ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
+अटल व्योम
+ielr_compute_state (bitsetv follow_kernel_वस्तुएँ, bitsetv always_follows,
                     AnnotationList **annotation_lists, state *t,
                     bitsetv lookaheads, state_list **last_statep,
-                    ContributionIndex work1[], bitsetv work2, state **tp)
+                    Contribution_सूचकांक work1[], bitsetv work2, state **tp)
 {
   state_list *lr0_isocore = t->state_list->lr0Isocore;
   state_list **this_isocorep;
@@ -725,108 +725,108 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
   /* Determine whether there's an isocore of t with which these lookaheads can
      be merged.  */
   {
-    if (annotation_lists)
+    अगर (annotation_lists)
       {
-        AnnotationIndex ai;
+        Annotation_सूचकांक ai;
         AnnotationList *a;
-        for (ai = 0, a = annotation_lists[lr0_isocore->state->number];
+        क्रम (ai = 0, a = annotation_lists[lr0_isocore->state->संख्या];
              a;
-             ++ai, a = a->next)
+             ++ai, a = a->अग्र)
         work1[ai] =
           AnnotationList__computeDominantContribution (
             a, lr0_isocore->state->nitems, lookaheads, false);
       }
-    for (this_isocorep = &t->state_list;
+    क्रम (this_isocorep = &t->state_list;
          this_isocorep == &t->state_list || *this_isocorep != t->state_list;
-         this_isocorep = &(*this_isocorep)->nextIsocore)
+         this_isocorep = &(*this_isocorep)->अग्र_Isocore)
       {
-        if (!(*this_isocorep)->recomputedAsSuccessor)
-          break;
-        if (annotation_lists)
+        अगर (!(*this_isocorep)->recomputedAsSuccessor)
+          अवरोध;
+        अगर (annotation_lists)
           {
-            AnnotationIndex ai;
+            Annotation_सूचकांक ai;
             AnnotationList *a;
-            for (ai = 0, a = annotation_lists[lr0_isocore->state->number];
+            क्रम (ai = 0, a = annotation_lists[lr0_isocore->state->संख्या];
                  a;
-                 ++ai, a = a->next)
+                 ++ai, a = a->अग्र)
               {
-                if (work1[ai] != ContributionIndex__none)
+                अगर (work1[ai] != Contribution_सूचकांक_none)
                   {
                     /* This isocore compatibility test depends on the fact
                        that, if the dominant contributions are the same for the
                        two isocores, then merging their lookahead sets will not
                        produce a state with a different dominant contribution.
                        */
-                    ContributionIndex ci =
+                    Contribution_सूचकांक ci =
                       AnnotationList__computeDominantContribution (
                         a, lr0_isocore->state->nitems,
                         (*this_isocorep)->lookaheads, false);
-                    if (ci != ContributionIndex__none && work1[ai] != ci)
-                      break;
+                    अगर (ci != Contribution_सूचकांक_none && work1[ai] != ci)
+                      अवरोध;
                   }
               }
-            if (!a)
-              break;
+            अगर (!a)
+              अवरोध;
           }
-        else
+        अन्यथा
           {
-            size_t i;
-            for (i = 0; i < t->nitems; ++i)
+            माप_प्रकार i;
+            क्रम (i = 0; i < t->nitems; ++i)
               {
-                if (!(*this_isocorep)->lookaheads
+                अगर (!(*this_isocorep)->lookaheads
                     || !(*this_isocorep)->lookaheads[i])
                   {
-                    if (!bitset_empty_p (lookaheads[i]))
-                      break;
+                    अगर (!bitset_empty_p (lookaheads[i]))
+                      अवरोध;
                   }
                 /* bitset_equal_p uses the size of the first argument,
                    so lookaheads[i] must be the second argument.  */
-                else if (!bitset_equal_p ((*this_isocorep)->lookaheads[i],
+                अन्यथा अगर (!bitset_equal_p ((*this_isocorep)->lookaheads[i],
                                           lookaheads[i]))
-                  break;
+                  अवरोध;
               }
-            if (i == t->nitems)
-              break;
+            अगर (i == t->nitems)
+              अवरोध;
           }
       }
   }
 
   bool has_lookaheads = false;
-  for (size_t i = 0; i < lr0_isocore->state->nitems; ++i)
-    if (!bitset_empty_p (lookaheads[i]))
+  क्रम (माप_प्रकार i = 0; i < lr0_isocore->state->nitems; ++i)
+    अगर (!bitset_empty_p (lookaheads[i]))
       {
         has_lookaheads = true;
-        break;
+        अवरोध;
       }
 
   /* Merge with an existing isocore.  */
-  if (this_isocorep == &t->state_list || *this_isocorep != t->state_list)
+  अगर (this_isocorep == &t->state_list || *this_isocorep != t->state_list)
     {
       bool new_lookaheads = false;
       *tp = (*this_isocorep)->state;
 
       /* Merge lookaheads into the state and record whether any of them are
          actually new.  */
-      if (has_lookaheads)
+      अगर (has_lookaheads)
         {
-          if (!(*this_isocorep)->lookaheads)
+          अगर (!(*this_isocorep)->lookaheads)
             {
               (*this_isocorep)->lookaheads =
-                xnmalloc (t->nitems, sizeof (*this_isocorep)->lookaheads);
-              for (size_t i = 0; i < t->nitems; ++i)
-                (*this_isocorep)->lookaheads[i] = NULL;
+                xnmalloc (t->nitems, माप (*this_isocorep)->lookaheads);
+              क्रम (माप_प्रकार i = 0; i < t->nitems; ++i)
+                (*this_isocorep)->lookaheads[i] = शून्य;
             }
-          for (size_t i = 0; i < t->nitems; ++i)
-            if (!bitset_empty_p (lookaheads[i]))
+          क्रम (माप_प्रकार i = 0; i < t->nitems; ++i)
+            अगर (!bitset_empty_p (lookaheads[i]))
               {
-                if (!(*this_isocorep)->lookaheads[i])
+                अगर (!(*this_isocorep)->lookaheads[i])
                   (*this_isocorep)->lookaheads[i] =
                     bitset_create (ntokens, BITSET_FIXED);
                 bitset_andn (lookaheads[i],
                              lookaheads[i], (*this_isocorep)->lookaheads[i]);
                 bitset_or ((*this_isocorep)->lookaheads[i],
                            lookaheads[i], (*this_isocorep)->lookaheads[i]);
-                if (!bitset_empty_p (lookaheads[i]))
+                अगर (!bitset_empty_p (lookaheads[i]))
                   new_lookaheads = true;
               }
         }
@@ -835,14 +835,14 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
          successors, possibly splitting them.  If *tp is being recomputed for
          the first time, this isn't necessary because the main
          ielr_split_states loop will handle the successors later.  */
-      if (!(*this_isocorep)->recomputedAsSuccessor)
+      अगर (!(*this_isocorep)->recomputedAsSuccessor)
         (*this_isocorep)->recomputedAsSuccessor = true;
-      else if (new_lookaheads)
+      अन्यथा अगर (new_lookaheads)
         {
           /* When merging demands identical lookahead sets, it is impossible to
              merge new lookaheads.  */
           aver (annotation_lists);
-          for (int i = 0; i < (*tp)->transitions->num; ++i)
+          क्रम (पूर्णांक i = 0; i < (*tp)->transitions->अंक; ++i)
             {
               state *t2 = (*tp)->transitions->states[i];
               /* At any time, there's at most one state for which we have so
@@ -855,12 +855,12 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
                  some of those.  We'll propagate to them again (but stop when
                  we see nothing changes) and to the others when we reach *tp in
                  the main ielr_split_states loop later.  */
-              if (!t2->state_list->recomputedAsSuccessor)
-                break;
+              अगर (!t2->state_list->recomputedAsSuccessor)
+                अवरोध;
               AnnotationList__computeLookaheadFilter (
-                annotation_lists[t2->state_list->lr0Isocore->state->number],
+                annotation_lists[t2->state_list->lr0Isocore->state->संख्या],
                 t2->nitems, work2);
-              ielr_compute_lookaheads (follow_kernel_items, always_follows,
+              ielr_compute_lookaheads (follow_kernel_वस्तुएँ, always_follows,
                                        (*this_isocorep), t2, work2,
                                        lookaheads);
               /* FIXME: If splitting t2 here, it's possible that lookaheads
@@ -913,7 +913,7 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
                  - Is the latter case common enough to worry about?
                  - Perhaps we should track all predecessors and iterate them
                    now to recreate t2 without those extra lookaheads.  */
-              ielr_compute_state (follow_kernel_items, always_follows,
+              ielr_compute_state (follow_kernel_वस्तुएँ, always_follows,
                                   annotation_lists, t2, lookaheads,
                                   last_statep, work1, work2,
                                   &(*tp)->transitions->states[i]);
@@ -922,25 +922,25 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
     }
 
   /* Create a new isocore.  */
-  else
+  अन्यथा
     {
       state_list *old_isocore = *this_isocorep;
-      (*last_statep)->next = *this_isocorep = xmalloc (sizeof **last_statep);
+      (*last_statep)->अग्र = *this_isocorep = xmalloc (माप **last_statep);
       *last_statep = *this_isocorep;
       (*last_statep)->state = *tp = state_new_isocore (t);
       (*tp)->state_list = *last_statep;
       (*last_statep)->recomputedAsSuccessor = true;
-      (*last_statep)->next = NULL;
-      (*last_statep)->lookaheads = NULL;
-      if (has_lookaheads)
+      (*last_statep)->अग्र = शून्य;
+      (*last_statep)->lookaheads = शून्य;
+      अगर (has_lookaheads)
         {
           (*last_statep)->lookaheads =
-            xnmalloc (t->nitems, sizeof (*last_statep)->lookaheads);
-          for (size_t i = 0; i < t->nitems; ++i)
+            xnmalloc (t->nitems, माप (*last_statep)->lookaheads);
+          क्रम (माप_प्रकार i = 0; i < t->nitems; ++i)
             {
-              if (bitset_empty_p (lookaheads[i]))
-                (*last_statep)->lookaheads[i] = NULL;
-              else
+              अगर (bitset_empty_p (lookaheads[i]))
+                (*last_statep)->lookaheads[i] = शून्य;
+              अन्यथा
                 {
                   (*last_statep)->lookaheads[i] =
                     bitset_create (ntokens, BITSET_FIXED);
@@ -949,7 +949,7 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
             }
         }
       (*last_statep)->lr0Isocore = lr0_isocore;
-      (*last_statep)->nextIsocore = old_isocore;
+      (*last_statep)->अग्र_Isocore = old_isocore;
     }
 }
 
@@ -971,234 +971,234 @@ ielr_compute_state (bitsetv follow_kernel_items, bitsetv always_follows,
  *     computed in all states.  tv_ielr_phase4 was pushed while they were
  *     computed from item lookahead sets.
  */
-static void
-ielr_split_states (bitsetv follow_kernel_items, bitsetv always_follows,
+अटल व्योम
+ielr_split_states (bitsetv follow_kernel_वस्तुएँ, bitsetv always_follows,
                    AnnotationList **annotation_lists,
-                   AnnotationIndex max_annotations)
+                   Annotation_सूचकांक max_annotations)
 {
   state_list *first_state;
   state_list *last_state;
-  bitsetv lookahead_filter = NULL;
+  bitsetv lookahead_filter = शून्य;
   bitsetv lookaheads;
 
   /* Set up state list and some reusable bitsets.  */
   {
-    size_t max_nitems = 0;
+    माप_प्रकार max_nitems = 0;
     state_list **nodep = &first_state;
-    for (state_number i = 0; i < nstates; ++i)
+    क्रम (state_संख्या i = 0; i < nstates; ++i)
       {
-        *nodep = states[i]->state_list = last_state = xmalloc (sizeof **nodep);
+        *nodep = states[i]->state_list = last_state = xmalloc (माप **nodep);
         (*nodep)->state = states[i];
         (*nodep)->recomputedAsSuccessor = false;
-        (*nodep)->lookaheads = NULL;
+        (*nodep)->lookaheads = शून्य;
         (*nodep)->lr0Isocore = *nodep;
-        (*nodep)->nextIsocore = *nodep;
-        nodep = &(*nodep)->next;
-        if (states[i]->nitems > max_nitems)
+        (*nodep)->अग्र_Isocore = *nodep;
+        nodep = &(*nodep)->अग्र;
+        अगर (states[i]->nitems > max_nitems)
           max_nitems = states[i]->nitems;
       }
-    *nodep = NULL;
+    *nodep = शून्य;
     lookahead_filter = bitsetv_create (max_nitems, ntokens, BITSET_FIXED);
-    if (!annotation_lists)
+    अगर (!annotation_lists)
       bitsetv_ones (lookahead_filter);
     lookaheads = bitsetv_create (max_nitems, ntokens, BITSET_FIXED);
   }
 
   /* Recompute states.  */
   {
-    ContributionIndex *work = xnmalloc (max_annotations, sizeof *work);
-    for (state_list *this_state = first_state;
+    Contribution_सूचकांक *work = xnmalloc (max_annotations, माप *work);
+    क्रम (state_list *this_state = first_state;
          this_state;
-         this_state = this_state->next)
+         this_state = this_state->अग्र)
       {
-        const state *s = this_state->state;
-        for (int i = 0; i < s->transitions->num; ++i)
+        स्थिर state *s = this_state->state;
+        क्रम (पूर्णांक i = 0; i < s->transitions->अंक; ++i)
           {
             state *t = s->transitions->states[i];
-            if (annotation_lists)
+            अगर (annotation_lists)
               AnnotationList__computeLookaheadFilter (
-                annotation_lists[t->state_list->lr0Isocore->state->number],
+                annotation_lists[t->state_list->lr0Isocore->state->संख्या],
                 t->nitems, lookahead_filter);
-            ielr_compute_lookaheads (follow_kernel_items, always_follows,
+            ielr_compute_lookaheads (follow_kernel_वस्तुएँ, always_follows,
                                      this_state, t, lookahead_filter,
                                      lookaheads);
-            ielr_compute_state (follow_kernel_items, always_follows,
+            ielr_compute_state (follow_kernel_वस्तुएँ, always_follows,
                                 annotation_lists, t, lookaheads, &last_state,
                                 work, lookahead_filter,
                                 &s->transitions->states[i]);
           }
       }
-    free (work);
+    मुक्त (work);
   }
 
   bitsetv_free (lookahead_filter);
   bitsetv_free (lookaheads);
 
   /* Store states back in the states array.  */
-  states = xnrealloc (states, nstates, sizeof *states);
-  for (state_list *node = first_state; node; node = node->next)
-    states[node->state->number] = node->state;
+  states = xnrealloc (states, nstates, माप *states);
+  क्रम (state_list *गाँठ = first_state; गाँठ; गाँठ = गाँठ->अग्र)
+    states[गाँठ->state->संख्या] = गाँठ->state;
 
   /* In the case of canonical LR(1), copy item lookahead sets to reduction
      lookahead sets.  */
-  if (!annotation_lists)
+  अगर (!annotation_lists)
     {
-      timevar_push (tv_ielr_phase4);
+      timevar_धकेलो (tv_ielr_phase4);
       initialize_LA ();
-      for (state_list *node = first_state; node; node = node->next)
-        if (!node->state->consistent)
+      क्रम (state_list *गाँठ = first_state; गाँठ; गाँठ = गाँठ->अग्र)
+        अगर (!गाँठ->state->consistent)
           {
-            size_t i = 0;
-            item_index *itemset = node->state->items;
-            for (size_t r = 0; r < node->state->reductions->num; ++r)
+            माप_प्रकार i = 0;
+            item_सूचकांक *itemset = गाँठ->state->वस्तुएँ;
+            क्रम (माप_प्रकार r = 0; r < गाँठ->state->reductions->अंक; ++r)
               {
-                rule *this_rule = node->state->reductions->rules[r];
+                rule *this_rule = गाँठ->state->reductions->rules[r];
                 bitset lookahead_set =
-                  node->state->reductions->lookaheads[r];
-                if (item_number_is_rule_number (*this_rule->rhs))
-                  ielr_compute_goto_follow_set (follow_kernel_items,
-                                                always_follows, node,
+                  गाँठ->state->reductions->lookaheads[r];
+                अगर (item_संख्या_is_rule_संख्या (*this_rule->rhs))
+                  ielr_compute_goto_follow_set (follow_kernel_वस्तुएँ,
+                                                always_follows, गाँठ,
                                                 this_rule->lhs, lookahead_set);
-                else if (node->lookaheads)
+                अन्यथा अगर (गाँठ->lookaheads)
                   {
                     /* We don't need to start the kernel item search back at
                        i=0 because both items and reductions are sorted on rule
                        number.  */
-                    while (!item_number_is_rule_number (ritem[itemset[i]])
-                           || item_number_as_rule_number (ritem[itemset[i]])
-                              != this_rule->number)
+                    जबतक (!item_संख्या_is_rule_संख्या (ritem[itemset[i]])
+                           || item_संख्या_as_rule_संख्या (ritem[itemset[i]])
+                              != this_rule->संख्या)
                       {
                         ++i;
-                        aver (i < node->state->nitems);
+                        aver (i < गाँठ->state->nitems);
                       }
-                    if (node->lookaheads[i])
-                      bitset_copy (lookahead_set, node->lookaheads[i]);
+                    अगर (गाँठ->lookaheads[i])
+                      bitset_copy (lookahead_set, गाँठ->lookaheads[i]);
                   }
               }
           }
-      timevar_pop (tv_ielr_phase4);
+      timevar_निकालो (tv_ielr_phase4);
     }
 
   /* Free state list.  */
-  while (first_state)
+  जबतक (first_state)
     {
-      state_list *node = first_state;
-      if (node->lookaheads)
+      state_list *गाँठ = first_state;
+      अगर (गाँठ->lookaheads)
         {
-          for (size_t i = 0; i < node->state->nitems; ++i)
-            if (node->lookaheads[i])
-              bitset_free (node->lookaheads[i]);
-          free (node->lookaheads);
+          क्रम (माप_प्रकार i = 0; i < गाँठ->state->nitems; ++i)
+            अगर (गाँठ->lookaheads[i])
+              bitset_free (गाँठ->lookaheads[i]);
+          मुक्त (गाँठ->lookaheads);
         }
-      first_state = node->next;
-      free (node);
+      first_state = गाँठ->अग्र;
+      मुक्त (गाँठ);
     }
 }
 
 
-void
-ielr (void)
+व्योम
+ielr (व्योम)
 {
   LrType lr_type = lr_type_get ();
 
   /* Phase 0: LALR(1).  */
-  switch (lr_type)
+  चयन (lr_type)
     {
-    case LR_TYPE__LR0:
-      timevar_push (tv_lalr);
+    हाल LR_TYPE__LR0:
+      timevar_धकेलो (tv_lalr);
       set_goto_map ();
-      timevar_pop (tv_lalr);
-      return;
+      timevar_निकालो (tv_lalr);
+      वापस;
 
-    case LR_TYPE__CANONICAL_LR:
-      timevar_push (tv_lalr);
+    हाल LR_TYPE__CANONICAL_LR:
+      timevar_धकेलो (tv_lalr);
       set_goto_map ();
-      timevar_pop (tv_lalr);
-      break;
+      timevar_निकालो (tv_lalr);
+      अवरोध;
 
-    case LR_TYPE__LALR:
-      timevar_push (tv_lalr);
+    हाल LR_TYPE__LALR:
+      timevar_धकेलो (tv_lalr);
       lalr ();
       bitsetv_free (goto_follows);
-      timevar_pop (tv_lalr);
-      return;
+      timevar_निकालो (tv_lalr);
+      वापस;
 
-    case LR_TYPE__IELR:
-      timevar_push (tv_lalr);
+    हाल LR_TYPE__IELR:
+      timevar_धकेलो (tv_lalr);
       lalr ();
-      timevar_pop (tv_lalr);
-      break;
+      timevar_निकालो (tv_lalr);
+      अवरोध;
     }
 
   {
-    bitsetv follow_kernel_items;
+    bitsetv follow_kernel_वस्तुएँ;
     bitsetv always_follows;
-    InadequacyList **inadequacy_lists = NULL;
-    AnnotationList **annotation_lists = NULL;
-    struct obstack annotations_obstack;
-    AnnotationIndex max_annotations = 0;
+    InadequacyList **inadequacy_lists = शून्य;
+    AnnotationList **annotation_lists = शून्य;
+    काष्ठा obstack annotations_obstack;
+    Annotation_सूचकांक max_annotations = 0;
 
     {
       /* Phase 1: Compute Auxiliary Tables.  */
       state ***predecessors;
-      timevar_push (tv_ielr_phase1);
+      timevar_धकेलो (tv_ielr_phase1);
       ielr_compute_auxiliary_tables (
-        &follow_kernel_items, &always_follows,
-        lr_type == LR_TYPE__CANONICAL_LR ? NULL : &predecessors);
-      timevar_pop (tv_ielr_phase1);
+        &follow_kernel_वस्तुएँ, &always_follows,
+        lr_type == LR_TYPE__CANONICAL_LR ? शून्य : &predecessors);
+      timevar_निकालो (tv_ielr_phase1);
 
       /* Phase 2: Compute Annotations.  */
-      timevar_push (tv_ielr_phase2);
-      if (lr_type != LR_TYPE__CANONICAL_LR)
+      timevar_धकेलो (tv_ielr_phase2);
+      अगर (lr_type != LR_TYPE__CANONICAL_LR)
         {
           obstack_init (&annotations_obstack);
-          ielr_compute_annotation_lists (follow_kernel_items, always_follows,
+          ielr_compute_annotation_lists (follow_kernel_वस्तुएँ, always_follows,
                                          predecessors, &max_annotations,
                                          &inadequacy_lists, &annotation_lists,
                                          &annotations_obstack);
-          for (state_number i = 0; i < nstates; ++i)
-            free (predecessors[i]);
-          free (predecessors);
+          क्रम (state_संख्या i = 0; i < nstates; ++i)
+            मुक्त (predecessors[i]);
+          मुक्त (predecessors);
           bitsetv_free (goto_follows);
           lalr_free ();
         }
-      timevar_pop (tv_ielr_phase2);
+      timevar_निकालो (tv_ielr_phase2);
     }
 
     /* Phase 3: Split States.  */
-    timevar_push (tv_ielr_phase3);
+    timevar_धकेलो (tv_ielr_phase3);
     {
-      state_number nstates_lr0 = nstates;
-      ielr_split_states (follow_kernel_items, always_follows,
+      state_संख्या nstates_lr0 = nstates;
+      ielr_split_states (follow_kernel_वस्तुएँ, always_follows,
                          annotation_lists, max_annotations);
-      if (inadequacy_lists)
-        for (state_number i = 0; i < nstates_lr0; ++i)
+      अगर (inadequacy_lists)
+        क्रम (state_संख्या i = 0; i < nstates_lr0; ++i)
           InadequacyList__delete (inadequacy_lists[i]);
     }
-    free (inadequacy_lists);
-    if (annotation_lists)
-      obstack_free (&annotations_obstack, NULL);
-    free (annotation_lists);
-    bitsetv_free (follow_kernel_items);
+    मुक्त (inadequacy_lists);
+    अगर (annotation_lists)
+      obstack_free (&annotations_obstack, शून्य);
+    मुक्त (annotation_lists);
+    bitsetv_free (follow_kernel_वस्तुएँ);
     bitsetv_free (always_follows);
-    timevar_pop (tv_ielr_phase3);
+    timevar_निकालो (tv_ielr_phase3);
   }
 
   /* Phase 4: Compute Reduction Lookaheads.  */
-  timevar_push (tv_ielr_phase4);
-  free (goto_map);
-  free (from_state);
-  free (to_state);
-  if (lr_type == LR_TYPE__CANONICAL_LR)
+  timevar_धकेलो (tv_ielr_phase4);
+  मुक्त (goto_map);
+  मुक्त (from_state);
+  मुक्त (to_state);
+  अगर (lr_type == LR_TYPE__CANONICAL_LR)
     {
       /* Reduction lookaheads are computed in ielr_split_states above
          but are timed as part of phase 4. */
       set_goto_map ();
     }
-  else
+  अन्यथा
     {
       lalr ();
       bitsetv_free (goto_follows);
     }
-  timevar_pop (tv_ielr_phase4);
+  timevar_निकालो (tv_ielr_phase4);
 }

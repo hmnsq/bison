@@ -21,62 +21,62 @@
 %option prefix="code_" outfile="lex.yy.c"
 
 %{
-#include <c-ctype.h>
-#include <get-errno.h>
-#include <quote.h>
+#समावेश <c-ctype.h>
+#समावेश <get-errno.h>
+#समावेश <quote.h>
 
-#include "src/complain.h"
-#include "src/getargs.h"
-#include "src/muscle-tab.h"
-#include "src/reader.h"
-#include "src/scan-code.h"
-#include "src/symlist.h"
+#समावेश "src/complain.h"
+#समावेश "src/getargs.h"
+#समावेश "src/muscle-tab.h"
+#समावेश "src/reader.h"
+#समावेश "src/scan-code.h"
+#समावेश "src/symlist.h"
 
-#define FLEX_PREFIX(Id) code_ ## Id
-#include "src/flex-scanner.h"
+#घोषणा FLEX_PREFIX(Id) code_ ## Id
+#समावेश "src/flex-scanner.h"
 
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <https://bugs.debian.org/333231>.  */
-#undef code_wrap
-#define code_wrap() 1
+#अघोषित code_wrap
+#घोषणा code_wrap() 1
 
-struct obstack *obstack_for_actions = &obstack_for_string;
+काष्ठा obstack *obstack_for_actions = &obstack_for_string;
 
 /* The current calling start condition: SC_RULE_ACTION or
    SC_SYMBOL_ACTION. */
-# define YY_DECL static char *code_lex (code_props *self, int sc_context)
+# define YY_DECL अटल अक्षर *code_lex (code_props *self, पूर्णांक sc_context)
 YY_DECL;
 
-#define YY_USER_ACTION  location_compute (loc, &loc->end, yytext, yyleng);
+#घोषणा YY_USER_ACTION  location_compute (loc, &loc->end, श_माला, yyleng);
 
-static char *fetch_type_name (char *cp, char const **type_name,
-                              const location *dollar_loc);
+अटल अक्षर *fetch_type_name (अक्षर *cp, अक्षर स्थिर **type_name,
+                              स्थिर location *dollar_loc);
 
-static void handle_action_dollar (symbol_list *rule, char *cp,
-                                  const location *dollar_loc);
-static void handle_action_at (symbol_list *rule, char *cp,
-                              const location *at_loc);
+अटल व्योम handle_action_dollar (प्रतीक_list *rule, अक्षर *cp,
+                                  स्थिर location *dollar_loc);
+अटल व्योम handle_action_at (प्रतीक_list *rule, अक्षर *cp,
+                              स्थिर location *at_loc);
 
 /* A string to be pushed to obstack after dollar/at has been handled. */
-static char *ref_tail_fields;
+अटल अक्षर *ref_पुच्छ_fields;
 
-static location current_loc;
-static location *loc = &current_loc;
+अटल location current_loc;
+अटल location *loc = &current_loc;
 
 /* A string representing the most recent translation.  */
-static char *last_string;
+अटल अक्षर *last_string;
 
 /* True if an untyped $$ or $n was seen.  */
-static bool untyped_var_seen;
+अटल bool untyped_var_seen;
 
 %}
  /* C and C++ comments in code. */
-%x SC_COMMENT SC_LINE_COMMENT
+%x SC_COMMENT SC_पंक्ति_COMMENT
  /* Strings and characters in code. */
 %x SC_STRING SC_CHARACTER
  /* Whether in a rule or symbol action.  Specifies the translation
     of $ and @.  */
-%x SC_RULE_ACTION SC_SYMBOL_ACTION
+%x SC_RULE_ACTION SC_प्रतीक_ACTION
 
 
 /* POSIX says that a tag must be both an id and a C union member, but
@@ -102,7 +102,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   /* This scanner is special: it is invoked only once, henceforth
      is expected to return only once.  This initialization is
      therefore done once per action to translate. */
-  aver (sc_context == SC_SYMBOL_ACTION
+  aver (sc_context == SC_प्रतीक_ACTION
         || sc_context == SC_RULE_ACTION
         || sc_context == INITIAL);
   BEGIN sc_context;
@@ -122,7 +122,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
-<SC_LINE_COMMENT>
+<SC_पंक्ति_COMMENT>
 {
   "\n"           STRING_GROW (); BEGIN sc_context;
   {splice}       STRING_GROW ();
@@ -149,44 +149,44 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
 }
 
 
-<SC_RULE_ACTION,SC_SYMBOL_ACTION>
+<SC_RULE_ACTION,SC_प्रतीक_ACTION>
 {
   "'"              STRING_GROW (); BEGIN SC_CHARACTER;
   "\""             STRING_GROW (); BEGIN SC_STRING;
   "/"{splice}"*"   STRING_GROW (); BEGIN SC_COMMENT;
-  "/"{splice}"/"   STRING_GROW (); BEGIN SC_LINE_COMMENT;
+  "/"{splice}"/"   STRING_GROW (); BEGIN SC_पंक्ति_COMMENT;
 
   [$@]  {
-    complain (loc, Wother, _("stray '%s'"), yytext);
-    obstack_escape (&obstack_for_string, yytext);
+    complain (loc, Wother, _("stray '%s'"), श_माला);
+    obstack_escape (&obstack_for_string, श_माला);
   }
 }
 
 <SC_RULE_ACTION>
 {
   "$"("<"{tag}">")?{ref}  {
-    ref_tail_fields = NULL;
-    handle_action_dollar (self->rule, yytext, loc);
-    if (ref_tail_fields)
-      obstack_sgrow (&obstack_for_string, ref_tail_fields);
+    ref_पुच्छ_fields = शून्य;
+    handle_action_dollar (self->rule, श_माला, loc);
+    अगर (ref_पुच्छ_fields)
+      obstack_sgrow (&obstack_for_string, ref_पुच्छ_fields);
   }
   "@"{ref} {
-    ref_tail_fields = NULL;
-    handle_action_at (self->rule, yytext, loc);
-    if (ref_tail_fields)
-      obstack_sgrow (&obstack_for_string, ref_tail_fields);
+    ref_पुच्छ_fields = शून्य;
+    handle_action_at (self->rule, श_माला, loc);
+    अगर (ref_पुच्छ_fields)
+      obstack_sgrow (&obstack_for_string, ref_पुच्छ_fields);
   }
 }
 
-<SC_SYMBOL_ACTION>
+<SC_प्रतीक_ACTION>
 {
   "$"("<"{tag}">")?"$" {
-    const char *type_name = NULL;
-    fetch_type_name (yytext + 1, &type_name, loc)[-1] = 0;
+    स्थिर अक्षर *type_name = शून्य;
+    fetch_type_name (श_माला + 1, &type_name, loc)[-1] = 0;
     obstack_sgrow (&obstack_for_string, "]b4_dollar_dollar(");
     obstack_quote (&obstack_for_string, type_name);
     obstack_sgrow (&obstack_for_string, ")[");
-    self->is_value_used = true;
+    self->is_मूल्य_used = true;
   }
   "@$" {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
@@ -201,34 +201,34 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   "m4_"   STRING_SGROW ("m4@'_");
 
   /* Escape M4 quoting characters in C code.  */
-  [$@\[\]]    obstack_escape (&obstack_for_string, yytext);
+  [$@\[\]]    obstack_escape (&obstack_for_string, श_माला);
 
   /* By default, grow the string obstack with the input.  */
   .|\n        STRING_GROW ();
 
   /* End of processing. */
-  <<EOF>>     STRING_FINISH (); return last_string;
+  <<खातापूर्ण>>     STRING_FINISH (); वापस last_string;
 }
 
 %%
 
-static inline bool
-is_dot_or_dash (char ch)
+अटल अंतरभूत bool
+is_dot_or_dash (अक्षर ch)
 {
-  return ch == '.' || ch == '-';
+  वापस ch == '.' || ch == '-';
 }
 
-static inline bool
-contains_dot_or_dash (const char* p)
+अटल अंतरभूत bool
+contains_dot_or_dash (स्थिर अक्षर* p)
 {
-  return !!strpbrk (p, ".-");
+  वापस !!strpbrk (p, ".-");
 }
 
 /* Defines a variant of a symbolic name resolution. */
-typedef struct
+प्रकार काष्ठा
 {
   /* Index in symbol list. */
-  int symbol_index;
+  पूर्णांक प्रतीक_सूचकांक;
 
   /* Matched symbol id and loc. */
   uniqstr id;
@@ -239,186 +239,186 @@ typedef struct
 
   /* Error flags. May contain zero (no errors) or
      a combination of VARIANT_* values. */
-  unsigned err;
+  अचिन्हित err;
 } variant;
 
 /* Set when the variant refers to a symbol hidden
    by an explicit symbol reference. */
-#define VARIANT_HIDDEN (1 << 0)
+#घोषणा VARIANT_HIDDEN (1 << 0)
 
 /* Set when the variant refers to a symbol containing
    dots or dashes. Will require explicit bracketing. */
-#define VARIANT_BAD_BRACKETING (1 << 1)
+#घोषणा VARIANT_BAD_BRACKETING (1 << 1)
 
 /* Set when the variant refers to a symbol which is
    not visible from current midrule. */
-#define VARIANT_NOT_VISIBLE_FROM_MIDRULE (1 << 2)
+#घोषणा VARIANT_NOT_VISIBLE_FROM_MIDRULE (1 << 2)
 
-static variant *variant_table = NULL;
-static int variant_table_size = 0;
-static int variant_count = 0;
+अटल variant *variant_table = शून्य;
+अटल पूर्णांक variant_table_आकार = 0;
+अटल पूर्णांक variant_गिनती = 0;
 
-static variant *
-variant_table_grow (void)
+अटल variant *
+variant_table_grow (व्योम)
 {
-  ++variant_count;
-  if (variant_count > variant_table_size)
+  ++variant_गिनती;
+  अगर (variant_गिनती > variant_table_आकार)
     {
-      while (variant_count > variant_table_size)
-        variant_table_size = 2 * variant_table_size + 3;
-      variant_table = xnrealloc (variant_table, variant_table_size,
-                                 sizeof *variant_table);
+      जबतक (variant_गिनती > variant_table_आकार)
+        variant_table_आकार = 2 * variant_table_आकार + 3;
+      variant_table = xnrealloc (variant_table, variant_table_आकार,
+                                 माप *variant_table);
     }
-  return &variant_table[variant_count - 1];
+  वापस &variant_table[variant_count - 1];
 }
 
-static void
-variant_table_free (void)
+अटल व्योम
+variant_table_free (व्योम)
 {
-  free (variant_table);
-  variant_table = NULL;
-  variant_table_size = variant_count = 0;
+  मुक्त (variant_table);
+  variant_table = शून्य;
+  variant_table_आकार = variant_गिनती = 0;
 }
 
-static char const *
-find_prefix_end (char const *prefix, char const *cp, char const *end)
+अटल अक्षर स्थिर *
+find_prefix_end (अक्षर स्थिर *prefix, अक्षर स्थिर *cp, अक्षर स्थिर *end)
 {
-  for (; *prefix && cp != end; ++prefix, ++cp)
-    if (*prefix != *cp)
-      return NULL;
+  क्रम (; *prefix && cp != end; ++prefix, ++cp)
+    अगर (*prefix != *cp)
+      वापस शून्य;
 
-  return *prefix ? NULL : cp;
+  वापस *prefix ? शून्य : cp;
 }
 
-static variant *
-variant_add (uniqstr id, location id_loc, int symbol_index,
-             char const *cp, char const *cp_end, bool explicit_bracketing)
+अटल variant *
+variant_add (uniqstr id, location id_loc, पूर्णांक प्रतीक_सूचकांक,
+             अक्षर स्थिर *cp, अक्षर स्थिर *cp_end, bool explicit_bracketing)
 {
-  char const *prefix_end = find_prefix_end (id, cp, cp_end);
-  if (prefix_end &&
+  अक्षर स्थिर *prefix_end = find_prefix_end (id, cp, cp_end);
+  अगर (prefix_end &&
       (prefix_end == cp_end ||
        (!explicit_bracketing && is_dot_or_dash (*prefix_end))))
     {
       variant *r = variant_table_grow ();
-      r->symbol_index = symbol_index;
+      r->प्रतीक_सूचकांक = प्रतीक_सूचकांक;
       r->id = id;
       r->loc = id_loc;
-      r->hidden_by = NULL;
+      r->hidden_by = शून्य;
       r->err = 0;
-      return r;
+      वापस r;
     }
-  else
-    return NULL;
+  अन्यथा
+    वापस शून्य;
 }
 
-static const char *
-get_at_spec(int symbol_index)
+अटल स्थिर अक्षर *
+get_at_spec(पूर्णांक प्रतीक_सूचकांक)
 {
-  static char at_buf[20];
-  if (symbol_index == 0)
-    strcpy (at_buf, "$$");
-  else
-    snprintf (at_buf, sizeof at_buf, "$%u", symbol_index);
-  return at_buf;
+  अटल अक्षर at_buf[20];
+  अगर (प्रतीक_सूचकांक == 0)
+    म_नकल (at_buf, "$$");
+  अन्यथा
+    snprintf (at_buf, माप at_buf, "$%u", प्रतीक_सूचकांक);
+  वापस at_buf;
 }
 
-static void
+अटल व्योम
 show_sub_message (warnings warning,
-                  const char* cp, bool explicit_bracketing,
-                  int midrule_rhs_index, char dollar_or_at,
-                  const variant *var)
+                  स्थिर अक्षर* cp, bool explicit_bracketing,
+                  पूर्णांक midrule_rhs_सूचकांक, अक्षर dollar_or_at,
+                  स्थिर variant *var)
 {
-  const char *at_spec = get_at_spec (var->symbol_index);
+  स्थिर अक्षर *at_spec = get_at_spec (var->प्रतीक_सूचकांक);
 
-  if (var->err == 0)
+  अगर (var->err == 0)
     subcomplain (&var->loc, warning,
                  _("refers to: %c%s at %s"), dollar_or_at,
                  var->id, at_spec);
-  else
+  अन्यथा
     {
-      const char *id;
+      स्थिर अक्षर *id;
       location id_loc;
 
-      if (var->hidden_by)
+      अगर (var->hidden_by)
         {
           id = var->hidden_by->id;
           id_loc = var->hidden_by->loc;
         }
-      else
+      अन्यथा
         {
           id = var->id;
           id_loc = var->loc;
         }
 
-      const char *tail = explicit_bracketing ? "" : cp + strlen (var->id);
+      स्थिर अक्षर *पुच्छ = explicit_bracketing ? "" : cp + म_माप (var->id);
 
       /* Create the explanation message. */
-      static struct obstack msg_buf;
-      obstack_init (&msg_buf);
+      अटल काष्ठा obstack संदेश_buf;
+      obstack_init (&संदेश_buf);
 
-      obstack_printf (&msg_buf, _("possibly meant: %c"), dollar_or_at);
-      if (contains_dot_or_dash (id))
-        obstack_printf (&msg_buf, "[%s]", id);
-      else
-        obstack_sgrow (&msg_buf, id);
-      obstack_sgrow (&msg_buf, tail);
+      obstack_printf (&संदेश_buf, _("possibly meant: %c"), dollar_or_at);
+      अगर (contains_dot_or_dash (id))
+        obstack_printf (&संदेश_buf, "[%s]", id);
+      अन्यथा
+        obstack_sgrow (&संदेश_buf, id);
+      obstack_sgrow (&संदेश_buf, पुच्छ);
 
-      if (var->err & VARIANT_HIDDEN)
+      अगर (var->err & VARIANT_HIDDEN)
         {
-          obstack_printf (&msg_buf, _(", hiding %c"), dollar_or_at);
-          if (contains_dot_or_dash (var->id))
-            obstack_printf (&msg_buf, "[%s]", var->id);
-          else
-            obstack_sgrow (&msg_buf, var->id);
-          obstack_sgrow (&msg_buf, tail);
+          obstack_printf (&संदेश_buf, _(", hiding %c"), dollar_or_at);
+          अगर (contains_dot_or_dash (var->id))
+            obstack_printf (&संदेश_buf, "[%s]", var->id);
+          अन्यथा
+            obstack_sgrow (&संदेश_buf, var->id);
+          obstack_sgrow (&संदेश_buf, पुच्छ);
         }
 
-      obstack_printf (&msg_buf, _(" at %s"), at_spec);
+      obstack_printf (&संदेश_buf, _(" at %s"), at_spec);
 
-      if (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
-        obstack_printf (&msg_buf,
+      अगर (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
+        obstack_printf (&संदेश_buf,
                         _(", cannot be accessed from midrule action at $%d"),
-                        midrule_rhs_index);
+                        midrule_rhs_सूचकांक);
 
       subcomplain (&id_loc, warning, "%s",
-                   obstack_finish0 (&msg_buf));
-      obstack_free (&msg_buf, 0);
+                   obstack_finish0 (&संदेश_buf));
+      obstack_free (&संदेश_buf, 0);
     }
 }
 
-static void
+अटल व्योम
 show_sub_messages (warnings warning,
-                   const char* cp, bool explicit_bracketing,
-                   int midrule_rhs_index, char dollar_or_at)
+                   स्थिर अक्षर* cp, bool explicit_bracketing,
+                   पूर्णांक midrule_rhs_सूचकांक, अक्षर dollar_or_at)
 {
-  for (int i = 0; i < variant_count; ++i)
+  क्रम (पूर्णांक i = 0; i < variant_गिनती; ++i)
     show_sub_message (warning | silent,
                       cp, explicit_bracketing,
-                      midrule_rhs_index, dollar_or_at,
+                      midrule_rhs_सूचकांक, dollar_or_at,
                       &variant_table[i]);
 }
 
 /* Returned from "parse_ref" when the reference
    is inappropriate. */
-#define INVALID_REF (INT_MIN)
+#घोषणा INVALID_REF (पूर्णांक_न्यून)
 
 /* Returned from "parse_ref" when the reference
    points to LHS ($$) of the current rule or midrule. */
-#define LHS_REF (INT_MIN + 1)
+#घोषणा LHS_REF (पूर्णांक_न्यून + 1)
 
 /* Parse a positional reference in RULE.  */
-static long
-parse_positional_ref (char *cp, int rule_length,
-                      char *text, const location *text_loc)
+अटल दीर्घ
+parse_positional_ref (अक्षर *cp, पूर्णांक rule_लंबाई,
+                      अक्षर *text, स्थिर location *text_loc)
 {
-  long num = strtol (cp, &cp, 10);
-  if (1 - INT_MAX + rule_length <= num && num <= rule_length)
-    return num;
-  else
+  दीर्घ अंक = म_से_दीर्घ (cp, &cp, 10);
+  अगर (1 - पूर्णांक_उच्च + rule_लंबाई <= अंक && अंक <= rule_लंबाई)
+    वापस अंक;
+  अन्यथा
     {
       complain (text_loc, complaint, _("integer out of range: %s"),
                 quote (text));
-      return INVALID_REF;
+      वापस INVALID_REF;
     }
 }
 
@@ -426,87 +426,87 @@ parse_positional_ref (char *cp, int rule_length,
 /* Parse named or positional reference. In case of positional
    references, can return negative values for $-n "deep" stack
    accesses. */
-static long
-parse_ref (char *cp, symbol_list *rule, int rule_length,
-           int midrule_rhs_index, char *text, const location *text_loc,
-           char dollar_or_at)
+अटल दीर्घ
+parse_ref (अक्षर *cp, प्रतीक_list *rule, पूर्णांक rule_लंबाई,
+           पूर्णांक midrule_rhs_सूचकांक, अक्षर *text, स्थिर location *text_loc,
+           अक्षर dollar_or_at)
 {
-  if ('$' == *cp)
-    return LHS_REF;
+  अगर ('$' == *cp)
+    वापस LHS_REF;
 
-  if (c_isdigit (*cp) || (*cp == '-' && c_isdigit (cp[1])))
-    return parse_positional_ref (cp, rule_length, text, text_loc);
+  अगर (c_isdigit (*cp) || (*cp == '-' && c_isdigit (cp[1])))
+    वापस parse_positional_ref (cp, rule_लंबाई, text, text_loc);
 
-  bool const explicit_bracketing = *cp == '[';
+  bool स्थिर explicit_bracketing = *cp == '[';
 
-  if (explicit_bracketing)
+  अगर (explicit_bracketing)
     ++cp;
-  else
-    ref_tail_fields = strpbrk (cp, ".-");
+  अन्यथा
+    ref_पुच्छ_fields = strpbrk (cp, ".-");
 
-  char const *cp_end = strchr (cp, explicit_bracketing ? ']' : '\0');
+  अक्षर स्थिर *cp_end = म_अक्षर (cp, explicit_bracketing ? ']' : '\0');
 
   /* Add all relevant variants. */
   {
-    int symbol_index;
-    symbol_list *l;
-    variant_count = 0;
-    for (symbol_index = 0, l = rule; !symbol_list_null (l);
-         ++symbol_index, l = l->next)
+    पूर्णांक प्रतीक_सूचकांक;
+    प्रतीक_list *l;
+    variant_गिनती = 0;
+    क्रम (प्रतीक_सूचकांक = 0, l = rule; !प्रतीक_list_null (l);
+         ++प्रतीक_सूचकांक, l = l->अग्र)
       {
-        if (l->content_type != SYMLIST_SYMBOL)
-          continue;
+        अगर (l->content_type != SYMLIST_प्रतीक)
+          जारी;
 
         variant *var
           = variant_add (l->content.sym->tag, l->sym_loc,
-                         symbol_index, cp, cp_end, explicit_bracketing);
-        if (var && l->named_ref)
+                         प्रतीक_सूचकांक, cp, cp_end, explicit_bracketing);
+        अगर (var && l->named_ref)
           var->hidden_by = l->named_ref;
 
-        if (l->named_ref)
+        अगर (l->named_ref)
           variant_add (l->named_ref->id, l->named_ref->loc,
-                       symbol_index, cp, cp_end, explicit_bracketing);
+                       प्रतीक_सूचकांक, cp, cp_end, explicit_bracketing);
       }
   }
 
   /* Check errors. */
-  int valid_variants = 0;
-  int valid_variant_index = 0;
-  for (int i = 0; i < variant_count; ++i)
+  पूर्णांक valid_variants = 0;
+  पूर्णांक valid_variant_सूचकांक = 0;
+  क्रम (पूर्णांक i = 0; i < variant_गिनती; ++i)
     {
       variant *var = &variant_table[i];
-      int symbol_index = var->symbol_index;
+      पूर्णांक प्रतीक_सूचकांक = var->प्रतीक_सूचकांक;
 
       /* Check visibility from midrule actions. */
-      if (midrule_rhs_index != 0
-          && (symbol_index == 0 || midrule_rhs_index < symbol_index))
+      अगर (midrule_rhs_सूचकांक != 0
+          && (प्रतीक_सूचकांक == 0 || midrule_rhs_सूचकांक < प्रतीक_सूचकांक))
         var->err |= VARIANT_NOT_VISIBLE_FROM_MIDRULE;
 
       /* Check correct bracketing. */
-      if (!explicit_bracketing && contains_dot_or_dash (var->id))
+      अगर (!explicit_bracketing && contains_dot_or_dash (var->id))
         var->err |= VARIANT_BAD_BRACKETING;
 
       /* Check using of hidden symbols. */
-      if (var->hidden_by)
+      अगर (var->hidden_by)
         var->err |= VARIANT_HIDDEN;
 
-      if (!var->err)
+      अगर (!var->err)
         {
-          valid_variant_index = i;
+          valid_variant_सूचकांक = i;
           ++valid_variants;
         }
     }
 
-  switch (valid_variants)
+  चयन (valid_variants)
     {
-    case 0:
+    हाल 0:
       {
-        int len = (explicit_bracketing || !ref_tail_fields) ?
-          cp_end - cp : ref_tail_fields - cp;
+        पूर्णांक len = (explicit_bracketing || !ref_पुच्छ_fields) ?
+          cp_end - cp : ref_पुच्छ_fields - cp;
 
         complain (text_loc, complaint,
                   _("invalid reference: %s"), quote (text));
-        if (len == 0)
+        अगर (len == 0)
           {
             location sym_loc = *text_loc;
             sym_loc.start.column += 1;
@@ -516,47 +516,47 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                          "letter, '_', '[', or '$'"),
                          dollar_or_at);
           }
-        else if (midrule_rhs_index)
+        अन्यथा अगर (midrule_rhs_सूचकांक)
           subcomplain (&rule->rhs_loc, complaint,
                        _("symbol not found in production before $%d: "
                        "%.*s"),
-                       midrule_rhs_index, len, cp);
-        else
+                       midrule_rhs_सूचकांक, len, cp);
+        अन्यथा
           subcomplain (&rule->rhs_loc, complaint,
                        _("symbol not found in production: %.*s"),
                        len, cp);
 
-        if (variant_count > 0)
+        अगर (variant_गिनती > 0)
           show_sub_messages (complaint,
-                             cp, explicit_bracketing, midrule_rhs_index,
+                             cp, explicit_bracketing, midrule_rhs_सूचकांक,
                              dollar_or_at);
-        return INVALID_REF;
+        वापस INVALID_REF;
       }
-    case 1:
+    हाल 1:
       {
-        if (variant_count > 1)
+        अगर (variant_गिनती > 1)
           {
             complain (text_loc, Wother,
                       _("misleading reference: %s"), quote (text));
             show_sub_messages (Wother,
-                               cp, explicit_bracketing, midrule_rhs_index,
+                               cp, explicit_bracketing, midrule_rhs_सूचकांक,
                                dollar_or_at);
           }
         {
-          int symbol_index =
-            variant_table[valid_variant_index].symbol_index;
-          return (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
+          पूर्णांक प्रतीक_सूचकांक =
+            variant_table[valid_variant_index].प्रतीक_सूचकांक;
+          वापस (प्रतीक_सूचकांक == midrule_rhs_सूचकांक) ? LHS_REF : प्रतीक_सूचकांक;
         }
       }
-    case 2:
-    default:
+    हाल 2:
+    शेष:
       {
         complain (text_loc, complaint,
                   _("ambiguous reference: %s"), quote (text));
         show_sub_messages (complaint,
-                           cp, explicit_bracketing, midrule_rhs_index,
+                           cp, explicit_bracketing, midrule_rhs_सूचकांक,
                            dollar_or_at);
-        return INVALID_REF;
+        वापस INVALID_REF;
       }
     }
 }
@@ -564,34 +564,34 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
 /* Keeps track of the maximum number of semantic values to the left of
    a handle (those referenced by $0, $-1, etc.) are required by the
    semantic actions of this grammar. */
-int max_left_semantic_context = 0;
+पूर्णांक max_बायाँ_semantic_context = 0;
 
 
 /* If CP points to a typename (i.e., <.*?>), set TYPE_NAME to its
    beginning (i.e., after the opening "<", and return the pointer
    immediately after it.  */
 
-static
-char *
-fetch_type_name (char *cp, char const **type_name,
-                 const location *dollar_loc)
+अटल
+अक्षर *
+fetch_type_name (अक्षर *cp, अक्षर स्थिर **type_name,
+                 स्थिर location *dollar_loc)
 {
-  if (*cp == '<')
+  अगर (*cp == '<')
     {
       *type_name = ++cp;
       /* Series of non-'>' or "->".  */
-      while (*cp != '>' || cp[-1] == '-')
+      जबतक (*cp != '>' || cp[-1] == '-')
         ++cp;
 
       /* The '>' symbol will be later replaced by '\0'. Original
          'text' is needed for error messages. */
       ++cp;
-      if (untyped_var_seen)
+      अगर (untyped_var_seen)
         complain (dollar_loc, complaint,
                   _("explicit type given in untyped grammar"));
       tag_seen = true;
     }
-  return cp;
+  वापस cp;
 }
 
 /*------------------------------------------------------------------.
@@ -602,108 +602,108 @@ fetch_type_name (char *cp, char const **type_name,
 | Output to OBSTACK_FOR_STRING a reference to this semantic value.  |
 `------------------------------------------------------------------*/
 
-static void
-handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
+अटल व्योम
+handle_action_dollar (प्रतीक_list *rule, अक्षर *text, स्थिर location *dollar_loc)
 {
-  symbol_list *effective_rule;
-  int effective_rule_length;
+  प्रतीक_list *effective_rule;
+  पूर्णांक effective_rule_लंबाई;
 
-  if (rule->midrule_parent_rule)
+  अगर (rule->midrule_parent_rule)
     {
       effective_rule = rule->midrule_parent_rule;
-      effective_rule_length = rule->midrule_parent_rhs_index - 1;
+      effective_rule_लंबाई = rule->midrule_parent_rhs_सूचकांक - 1;
     }
-  else
+  अन्यथा
     {
       effective_rule = rule;
-      effective_rule_length = symbol_list_length (rule->next);
+      effective_rule_लंबाई = प्रतीक_list_लंबाई (rule->अग्र);
     }
 
   /* The type name if explicit, otherwise left null. */
-  char const *type_name = NULL;
-  char *cp = fetch_type_name (text + 1, &type_name, dollar_loc);
-  int n = parse_ref (cp, effective_rule, effective_rule_length,
-                     rule->midrule_parent_rhs_index, text, dollar_loc, '$');
+  अक्षर स्थिर *type_name = शून्य;
+  अक्षर *cp = fetch_type_name (text + 1, &type_name, dollar_loc);
+  पूर्णांक n = parse_ref (cp, effective_rule, effective_rule_लंबाई,
+                     rule->midrule_parent_rhs_सूचकांक, text, dollar_loc, '$');
   /* End type_name.  Don't do it earlier: parse_ref depends on TEXT.  */
-  if (type_name)
+  अगर (type_name)
     cp[-1] = '\0';
 
-  switch (n)
+  चयन (n)
     {
-    case INVALID_REF:
-      break;
+    हाल INVALID_REF:
+      अवरोध;
 
-    case LHS_REF:
+    हाल LHS_REF:
       {
-        symbol_list *sym = symbol_list_n_get (rule, 0);
-        if (!type_name
+        प्रतीक_list *sym = प्रतीक_list_n_get (rule, 0);
+        अगर (!type_name
             && !sym->content.sym->content->type_name)
           {
-            if (union_seen || tag_seen)
+            अगर (union_seen || tag_seen)
               {
-                if (rule->midrule_parent_rule)
+                अगर (rule->midrule_parent_rule)
                   complain (dollar_loc, complaint,
                             _("$$ for the midrule at $%d of %s"
                               " has no declared type"),
-                            rule->midrule_parent_rhs_index,
+                            rule->midrule_parent_rhs_सूचकांक,
                             quote (effective_rule->content.sym->tag));
-                else
+                अन्यथा
                   complain (dollar_loc, complaint,
                             _("$$ of %s has no declared type"),
                             quote (rule->content.sym->tag));
               }
-            else
+            अन्यथा
               untyped_var_seen = true;
           }
 
         obstack_printf (&obstack_for_string, "]b4_lhs_value(orig %d, ",
-                        sym->content.sym->content->number);
+                        sym->content.sym->content->संख्या);
         obstack_quote (&obstack_for_string, type_name);
         obstack_sgrow (&obstack_for_string, ")[");
-        rule->action_props.is_value_used = true;
+        rule->action_props.is_मूल्य_used = true;
       }
-      break;
+      अवरोध;
 
       /* Reference to a RHS symbol.  */
-    default:
+    शेष:
       {
-        if (max_left_semantic_context < 1 - n)
-          max_left_semantic_context = 1 - n;
-        symbol_list *sym = 0 < n ? symbol_list_n_get (effective_rule, n) : NULL;
-        if (!type_name
+        अगर (max_बायाँ_semantic_context < 1 - n)
+          max_बायाँ_semantic_context = 1 - n;
+        प्रतीक_list *sym = 0 < n ? प्रतीक_list_n_get (effective_rule, n) : शून्य;
+        अगर (!type_name
             && (!sym || !sym->content.sym->content->type_name))
           {
-            if (union_seen || tag_seen)
+            अगर (union_seen || tag_seen)
               complain (dollar_loc, complaint,
                         _("$%s of %s has no declared type"), cp,
                         quote (effective_rule->content.sym->tag));
-            else
+            अन्यथा
               untyped_var_seen = true;
           }
 
         obstack_printf (&obstack_for_string,
                         "]b4_rhs_value(%d, %d, ",
-                        effective_rule_length, n);
-        if (sym)
+                        effective_rule_लंबाई, n);
+        अगर (sym)
           obstack_printf (&obstack_for_string, "%s%d, ",
                           sym->content.sym->content->class == nterm_sym ? "orig " : "",
-                          sym->content.sym->content->number);
-        else
+                          sym->content.sym->content->संख्या);
+        अन्यथा
           obstack_sgrow (&obstack_for_string, "[], ");
 
         obstack_quote (&obstack_for_string, type_name);
         obstack_sgrow (&obstack_for_string, ")[");
-        if (0 < n)
+        अगर (0 < n)
           {
-            if (muscle_percent_define_ifdef ("api.value.automove")
-                && sym->action_props.is_value_used)
+            अगर (muscle_percent_define_ifdef ("api.value.automove")
+                && sym->action_props.is_मूल्य_used)
               complain (dollar_loc, Wother,
                         _("multiple occurrences of $%d with api.value.automove"),
                         n);
-            sym->action_props.is_value_used = true;
+            sym->action_props.is_मूल्य_used = true;
           }
       }
-      break;
+      अवरोध;
     }
 }
 
@@ -713,40 +713,40 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
 | OBSTACK_FOR_STRING a reference to this location.      |
 `------------------------------------------------------*/
 
-static void
-handle_action_at (symbol_list *rule, char *text, const location *at_loc)
+अटल व्योम
+handle_action_at (प्रतीक_list *rule, अक्षर *text, स्थिर location *at_loc)
 {
-  symbol_list *effective_rule;
-  int effective_rule_length;
+  प्रतीक_list *effective_rule;
+  पूर्णांक effective_rule_लंबाई;
 
-  if (rule->midrule_parent_rule)
+  अगर (rule->midrule_parent_rule)
     {
       effective_rule = rule->midrule_parent_rule;
-      effective_rule_length = rule->midrule_parent_rhs_index - 1;
+      effective_rule_लंबाई = rule->midrule_parent_rhs_सूचकांक - 1;
     }
-  else
+  अन्यथा
     {
       effective_rule = rule;
-      effective_rule_length = symbol_list_length (rule->next);
+      effective_rule_लंबाई = प्रतीक_list_लंबाई (rule->अग्र);
     }
 
   muscle_percent_define_ensure ("locations", *at_loc, true);
 
-  int n = parse_ref (text + 1, effective_rule, effective_rule_length,
-                     rule->midrule_parent_rhs_index, text, at_loc, '@');
-  switch (n)
+  पूर्णांक n = parse_ref (text + 1, effective_rule, effective_rule_लंबाई,
+                     rule->midrule_parent_rhs_सूचकांक, text, at_loc, '@');
+  चयन (n)
     {
-    case INVALID_REF:
-      break;
+    हाल INVALID_REF:
+      अवरोध;
 
-    case LHS_REF:
+    हाल LHS_REF:
       obstack_sgrow (&obstack_for_string, "]b4_lhs_location[");
-      break;
+      अवरोध;
 
-    default:
+    शेष:
       obstack_printf (&obstack_for_string, "]b4_rhs_location(%d, %d)[",
-                      effective_rule_length, n);
-      break;
+                      effective_rule_लंबाई, n);
+      अवरोध;
     }
 }
 
@@ -758,21 +758,21 @@ handle_action_at (symbol_list *rule, char *text, const location *at_loc)
 /* Translate the '$...' and '@...' in \a self, in the context \a
    sc_context (SC_RULE_ACTION, SC_SYMBOL_ACTION, INITIAL).  */
 
-static char const *
-translate_action (code_props *self, int sc_context)
+अटल अक्षर स्थिर *
+translate_action (code_props *self, पूर्णांक sc_context)
 {
   loc->start = loc->end = self->location.start;
-  yy_switch_to_buffer (yy_scan_string (self->code));
-  char *res = code_lex (self, sc_context);
-  yy_delete_buffer (YY_CURRENT_BUFFER);
-  return res;
+  yy_switch_to_बफर (yy_scan_string (self->code));
+  अक्षर *res = code_lex (self, sc_context);
+  yy_delete_बफर (YY_CURRENT_बफर);
+  वापस res;
 }
 
 /*------------------------------------------------------------------------.
 | Implementation of the public interface as documented in "scan-code.h".  |
 `------------------------------------------------------------------------*/
 
-void
+व्योम
 code_props_none_init (code_props *self)
 {
   *self = code_props_none;
@@ -780,8 +780,8 @@ code_props_none_init (code_props *self)
 
 code_props code_props_none = CODE_PROPS_NONE_INIT;
 
-void
-code_props_plain_init (code_props *self, char const *code,
+व्योम
+code_props_plain_init (code_props *self, अक्षर स्थिर *code,
                        location code_loc)
 {
   code_props_none_init (self);
@@ -790,19 +790,19 @@ code_props_plain_init (code_props *self, char const *code,
   self->location = code_loc;
 }
 
-void
-code_props_symbol_action_init (code_props *self, char const *code,
+व्योम
+code_props_प्रतीक_action_init (code_props *self, अक्षर स्थिर *code,
                                location code_loc)
 {
   code_props_none_init (self);
-  self->kind = CODE_PROPS_SYMBOL_ACTION;
+  self->kind = CODE_PROPS_प्रतीक_ACTION;
   self->code = code;
   self->location = code_loc;
 }
 
-void
-code_props_rule_action_init (code_props *self, char const *code,
-                             location code_loc, symbol_list *rule,
+व्योम
+code_props_rule_action_init (code_props *self, अक्षर स्थिर *code,
+                             location code_loc, प्रतीक_list *rule,
                              named_ref *name, uniqstr type,
                              bool is_predicate)
 {
@@ -816,40 +816,40 @@ code_props_rule_action_init (code_props *self, char const *code,
   self->is_predicate = is_predicate;
 }
 
-void
+व्योम
 code_props_translate_code (code_props *self)
 {
-  switch (self->kind)
+  चयन (self->kind)
     {
-    case CODE_PROPS_NONE:
-      break;
-    case CODE_PROPS_PLAIN:
+    हाल CODE_PROPS_NONE:
+      अवरोध;
+    हाल CODE_PROPS_PLAIN:
       self->code = translate_action (self, INITIAL);
-      break;
-    case CODE_PROPS_SYMBOL_ACTION:
-      self->code = translate_action (self, SC_SYMBOL_ACTION);
-      break;
-    case CODE_PROPS_RULE_ACTION:
+      अवरोध;
+    हाल CODE_PROPS_प्रतीक_ACTION:
+      self->code = translate_action (self, SC_प्रतीक_ACTION);
+      अवरोध;
+    हाल CODE_PROPS_RULE_ACTION:
       self->code = translate_action (self, SC_RULE_ACTION);
-      break;
+      अवरोध;
     }
 }
 
-void
-code_scanner_last_string_free (void)
+व्योम
+code_scanner_last_string_free (व्योम)
 {
   STRING_FREE ();
 }
 
-void
-code_scanner_init (void)
+व्योम
+code_scanner_init (व्योम)
 {
   obstack_init (&obstack_for_string);
   yy_flex_debug = 0;
 }
 
-void
-code_scanner_free (void)
+व्योम
+code_scanner_free (व्योम)
 {
   obstack_free (&obstack_for_string, 0);
   variant_table_free ();

@@ -17,77 +17,77 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#समावेश <config.h>
 
-#include "glyphs.h"
+#समावेश "glyphs.h"
 
-#include <assert.h>
-#include <attribute.h>
-#include <stdbool.h>
-#include <string.h>
-#include <mbswidth.h>
-#include <unicodeio.h>
+#समावेश <assert.h>
+#समावेश <attribute.h>
+#समावेश <stdbool.h>
+#समावेश <string.h>
+#समावेश <mbswidth.h>
+#समावेश <unicodeio.h>
 
 
-glyph_buffer_t arrow;
-int arrow_width;
+glyph_बफर_t arrow;
+पूर्णांक arrow_width;
 
-glyph_buffer_t down_arrow;
-int down_arrow_width;
+glyph_बफर_t down_arrow;
+पूर्णांक down_arrow_width;
 
-glyph_buffer_t dot;
-int dot_width;
+glyph_बफर_t dot;
+पूर्णांक dot_width;
 
-glyph_buffer_t empty;
-int empty_width;
+glyph_बफर_t empty;
+पूर्णांक empty_width;
 
-const char *derivation_separator = " ";
-int derivation_separator_width = 1;
+स्थिर अक्षर *derivation_separator = " ";
+पूर्णांक derivation_separator_width = 1;
 
-typedef struct
+प्रकार काष्ठा
 {
-  glyph_buffer_t *pbuf;
-  const char *fallback;
+  glyph_बफर_t *pbuf;
+  स्थिर अक्षर *fallback;
 } callback_arg_t;
 
 
-static long
-on_success (const char *buf, size_t buflen, void *callback_arg)
+अटल दीर्घ
+on_success (स्थिर अक्षर *buf, माप_प्रकार buflen, व्योम *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (buflen + 1 < sizeof *arg->pbuf);
+  निश्चित (buflen + 1 < माप *arg->pbuf);
   *stpncpy (*arg->pbuf, buf, buflen) = '\0';
-  return 1;
+  वापस 1;
 }
 
-static long
-on_failure (unsigned code MAYBE_UNUSED, const char *msg MAYBE_UNUSED,
-            void *callback_arg)
+अटल दीर्घ
+on_failure (अचिन्हित code MAYBE_UNUSED, स्थिर अक्षर *संदेश MAYBE_UNUSED,
+            व्योम *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (strlen (arg->fallback) + 1 < sizeof *arg->pbuf);
-  strcpy (*arg->pbuf, arg->fallback);
-  return 0;
+  निश्चित (म_माप (arg->fallback) + 1 < माप *arg->pbuf);
+  म_नकल (*arg->pbuf, arg->fallback);
+  वापस 0;
 }
 
-static bool
-glyph_set (glyph_buffer_t *glyph, int *width,
-           unsigned code, const char *fallback)
+अटल bool
+glyph_set (glyph_बफर_t *glyph, पूर्णांक *width,
+           अचिन्हित code, स्थिर अक्षर *fallback)
 {
   callback_arg_t arg = { glyph, fallback };
-  int res = unicode_to_mb (code, on_success, on_failure, &arg);
+  पूर्णांक res = unicode_to_mb (code, on_success, on_failure, &arg);
   *width = mbswidth (*glyph, 0);
-  return res;
+  वापस res;
 }
 
-void
-glyphs_init (void)
+व्योम
+glyphs_init (व्योम)
 {
   glyph_set (&arrow,      &arrow_width,      0x2192, "->");
   glyph_set (&dot,        &dot_width,        0x2022, ".");
   glyph_set (&down_arrow, &down_arrow_width, 0x21b3, "`->");
   glyph_set (&empty,      &empty_width,      0x03b5, "%empty");
 
-  strncat (down_arrow, " ", sizeof down_arrow - strlen (down_arrow) - 1);
+  म_जोड़न (down_arrow, " ", माप down_arrow - म_माप (down_arrow) - 1);
   down_arrow_width += 1;
 }

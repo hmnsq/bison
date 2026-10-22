@@ -18,11 +18,11 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef CONFLICTS_H_
+#अगर_अघोषित CONFLICTS_H_
 # define CONFLICTS_H_
 # include "state.h"
 
-void conflicts_solve (void);
+व्योम conflicts_solve (व्योम);
 
 /**
  * Update state numbers recorded in internal arrays such that:
@@ -33,18 +33,18 @@ void conflicts_solve (void);
  *   - The highest new state number is the number of remaining states - 1.
  *   - The numerical order of the remaining states has not changed.
  */
-void conflicts_update_state_numbers (state_number old_to_new[],
-                                     state_number nstates_old);
+व्योम conflicts_update_state_numbers (state_संख्या old_to_new[],
+                                     state_संख्या nstates_old);
 
-void conflicts_print (void);
-int conflicts_total_count (void);
-void conflicts_output (FILE *out);
-void conflicts_free (void);
+व्योम conflicts_print (व्योम);
+पूर्णांक conflicts_योग_गिनती (व्योम);
+व्योम conflicts_output (खाता *out);
+व्योम conflicts_free (व्योम);
 
-bool has_conflicts (const state *s);
+bool has_conflicts (स्थिर state *s);
 
 /* Were there conflicts? */
-extern int expected_sr_conflicts;
-extern int expected_rr_conflicts;
+बाह्य पूर्णांक expected_sr_conflicts;
+बाह्य पूर्णांक expected_rr_conflicts;
 
-#endif /* !CONFLICTS_H_ */
+#पूर्ण_अगर /* !CONFLICTS_H_ */

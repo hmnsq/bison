@@ -18,41 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#समावेश <config.h>
+#समावेश "system.h"
 
-#include <bitsetv.h>
+#समावेश <bitsetv.h>
 
-#include "getargs.h"
-#include "relation.h"
+#समावेश "getargs.h"
+#समावेश "relation.h"
 
-void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+व्योम
+relation_print (स्थिर अक्षर *title,
+                relation r, relation_गाँठ आकार,
+                relation_गाँठ_print print, खाता *out)
 {
-  if (title)
-    fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  अगर (title)
+    ख_लिखो (out, "%s:\n", title);
+  क्रम (relation_गाँठ i = 0; i < आकार; ++i)
+    अगर (r[i])
       {
-        fputs ("    ", out);
-        if (print)
+        ख_माला_दो ("    ", out);
+        अगर (print)
           print (i, out);
-        else
-          fprintf (out, "%3ld", (long) i);
-        fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        अन्यथा
+          ख_लिखो (out, "%3ld", (दीर्घ) i);
+        ख_अक्षर_दो (':', out);
+        क्रम (relation_गाँठ j = 0; r[i][j] != END_गाँठ; ++j)
           {
-            fputc (' ', out);
-            if (print)
+            ख_अक्षर_दो (' ', out);
+            अगर (print)
               print (r[i][j], out);
-            else
-              fprintf (out, "%3ld", (long) r[i][j]);
+            अन्यथा
+              ख_लिखो (out, "%3ld", (दीर्घ) r[i][j]);
           }
-        fputc ('\n', out);
+        ख_अक्षर_दो ('\n', out);
       }
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
 }
 
 
@@ -63,62 +63,62 @@ relation_print (const char *title,
 | two.                                                           |
 `---------------------------------------------------------------*/
 
-static relation R;
-static relation_nodes indexes;
-static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
-static bitsetv F;
+अटल relation R;
+अटल relation_nodes indexes;
+अटल relation_nodes vertices;
+अटल relation_गाँठ शीर्ष_2;
+अटल relation_गाँठ infinity;
+अटल bitsetv F;
 
-static void
-traverse (relation_node i)
+अटल व्योम
+traverse (relation_गाँठ i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++शीर्ष_2] = i;
+  relation_गाँठ height = indexes[i] = शीर्ष_2;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  अगर (R[i])
+    क्रम (relation_गाँठ j = 0; R[i][j] != END_गाँठ; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        अगर (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        अगर (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  अगर (indexes[i] == height)
+    क्रम (;;)
       {
-        relation_node j = vertices[top--];
+        relation_गाँठ j = vertices[शीर्ष_2--];
         indexes[j] = infinity;
 
-        if (i == j)
-          break;
+        अगर (i == j)
+          अवरोध;
 
         bitset_copy (F[j], F[i]);
       }
 }
 
 
-void
-relation_digraph (relation r, relation_node size, bitsetv function)
+व्योम
+relation_digraph (relation r, relation_गाँठ आकार, bitsetv function)
 {
-  infinity = size + 2;
-  indexes = xcalloc (size + 1, sizeof *indexes);
-  vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  infinity = आकार + 2;
+  indexes = xcalloc (आकार + 1, माप *indexes);
+  vertices = xnmalloc (आकार + 1, माप *vertices);
+  शीर्ष_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  क्रम (relation_गाँठ i = 0; i < आकार; i++)
+    अगर (indexes[i] == 0 && R[i])
       traverse (i);
 
-  free (indexes);
-  free (vertices);
+  मुक्त (indexes);
+  मुक्त (vertices);
 
   function = F;
 }
@@ -128,55 +128,55 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 | Destructively transpose R_ARG, of size N.  |
 `-------------------------------------------*/
 
-void
-relation_transpose (relation *R_arg, relation_node size)
+व्योम
+relation_transpose (relation *R_arg, relation_गाँठ आकार)
 {
   relation r = *R_arg;
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+  अगर (trace_flag & trace_sets)
+    relation_print ("relation_transpose", r, आकार, शून्य, मानक_त्रुटि);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
-  size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  माप_प्रकार *nedges = xcalloc (आकार, माप *nedges);
+  क्रम (relation_गाँठ i = 0; i < आकार; i++)
+    अगर (r[i])
+      क्रम (relation_गाँठ j = 0; r[i][j] != END_गाँठ; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
   /* The result. */
-  relation new_R = xnmalloc (size, sizeof *new_R);
+  relation new_R = xnmalloc (आकार, माप *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
-  relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  relation end_R = xnmalloc (आकार, माप *end_R);
+  क्रम (relation_गाँठ i = 0; i < आकार; i++)
     {
-      relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      relation_गाँठ *sp = शून्य;
+      अगर (nedges[i] > 0)
         {
-          sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp = xnmalloc (nedges[i] + 1, माप *sp);
+          sp[nedges[i]] = END_गाँठ;
         }
       new_R[i] = sp;
       end_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  क्रम (relation_गाँठ i = 0; i < आकार; i++)
+    अगर (r[i])
+      क्रम (relation_गाँठ j = 0; r[i][j] != END_गाँठ; ++j)
         *end_R[r[i][j]]++ = i;
 
-  free (nedges);
-  free (end_R);
+  मुक्त (nedges);
+  मुक्त (end_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
-    free (r[i]);
-  free (r);
+  क्रम (relation_गाँठ i = 0; i < आकार; i++)
+    मुक्त (r[i]);
+  मुक्त (r);
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+  अगर (trace_flag & trace_sets)
+    relation_print ("relation_transpose: output", new_R, आकार, शून्य, मानक_त्रुटि);
 
   *R_arg = new_R;
 }

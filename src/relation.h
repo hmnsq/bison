@@ -19,7 +19,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 
-#ifndef RELATION_H_
+#अगर_अघोषित RELATION_H_
 # define RELATION_H_
 
 /* Performing operations on graphs coded as list of adjacency.
@@ -27,18 +27,18 @@
    If GRAPH is a relation, then GRAPH[Node] is a list of adjacent
    nodes, ended with END_NODE.  */
 
-# define END_NODE ((relation_node) -1)
+# define END_गाँठ ((relation_गाँठ) -1)
 
-typedef size_t relation_node;
-typedef relation_node *relation_nodes;
-typedef relation_nodes *relation;
+प्रकार माप_प्रकार relation_गाँठ;
+प्रकार relation_गाँठ *relation_nodes;
+प्रकार relation_nodes *relation;
 
-typedef void (relation_node_print) (relation_node node, FILE* out);
+प्रकार व्योम (relation_गाँठ_print) (relation_गाँठ गाँठ, खाता* out);
 
 /* Report a relation R that has SIZE vertices.  */
-void relation_print (const char *title,
-                     relation r, size_t size,
-                     relation_node_print print, FILE *out);
+व्योम relation_print (स्थिर अक्षर *title,
+                     relation r, माप_प्रकार आकार,
+                     relation_गाँठ_print print, खाता *out);
 
 /* Compute the transitive closure of the FUNCTION on the relation R
    with SIZE vertices.
@@ -47,9 +47,9 @@ void relation_print (const char *title,
    (unioned) with FUNCTION[NODE2].
 
    FUNCTION is in-out, R is read only.  */
-void relation_digraph (const relation r, relation_node size, bitsetv function);
+व्योम relation_digraph (स्थिर relation r, relation_गाँठ आकार, bitsetv function);
 
 /* Destructively transpose *R_ARG, of size SIZE.  */
-void relation_transpose (relation *R_arg, relation_node size);
+व्योम relation_transpose (relation *R_arg, relation_गाँठ आकार);
 
-#endif /* ! RELATION_H_ */
+#पूर्ण_अगर /* ! RELATION_H_ */

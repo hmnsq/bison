@@ -1,3 +1,3 @@
-#include <config.h>
-#include "system.h"
-#include "src/scan-code.c"
+#समावेश <config.h>
+#समावेश "system.h"
+#समावेश "src/scan-code.c"

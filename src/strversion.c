@@ -17,51 +17,51 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#समावेश <config.h>
+#समावेश "system.h"
 
-#include "strversion.h"
+#समावेश "strversion.h"
 
-#include <errno.h>
-#include <intprops.h>
+#समावेश <errno.h>
+#समावेश <intprops.h>
 
-int
-strversion_to_int (char const *version)
+पूर्णांक
+strversion_to_int (अक्षर स्थिर *version)
 {
   IGNORE_TYPE_LIMITS_BEGIN
-  int res = 0;
-  errno = 0;
-  char *cp = NULL;
+  पूर्णांक res = 0;
+  त्रुटि_सं = 0;
+  अक्षर *cp = शून्य;
 
   {
-    long major = strtol (version, &cp, 10);
-    if (errno || cp == version || *cp != '.' || major < 0
+    दीर्घ major = म_से_दीर्घ (version, &cp, 10);
+    अगर (त्रुटि_सं || cp == version || *cp != '.' || major < 0
         || INT_MULTIPLY_WRAPV (major, 10000, &res))
-      return -1;
+      वापस -1;
   }
 
   {
     ++cp;
-    char *prev = cp;
-    long minor = strtol (cp, &cp, 10);
-    if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+    अक्षर *पूर्व = cp;
+    दीर्घ minor = म_से_दीर्घ (cp, &cp, 10);
+    अगर (त्रुटि_सं || cp == पूर्व || (*cp != '\0' && *cp != '.')
         || ! (0 <= minor && minor < 100)
         || INT_MULTIPLY_WRAPV (minor, 100, &minor)
         || INT_ADD_WRAPV (minor, res, &res))
-      return -1;
+      वापस -1;
   }
 
-  if (*cp == '.')
+  अगर (*cp == '.')
     {
       ++cp;
-      char *prev = cp;
-      long micro = strtol (cp, &cp, 10);
-      if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+      अक्षर *पूर्व = cp;
+      दीर्घ micro = म_से_दीर्घ (cp, &cp, 10);
+      अगर (त्रुटि_सं || cp == पूर्व || (*cp != '\0' && *cp != '.')
           || ! (0 <= micro && micro < 100)
           || INT_ADD_WRAPV (micro, res, &res))
-        return -1;
+        वापस -1;
     }
 
   IGNORE_TYPE_LIMITS_END
-  return res;
+  वापस res;
 }

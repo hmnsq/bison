@@ -17,213 +17,213 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#समावेश <config.h>
 
-#include "fixits.h"
+#समावेश "fixits.h"
 
-#include <error.h>
-#include <get-errno.h>
-#include <gl_array_list.h>
-#include <gl_xlist.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <vasnprintf.h>
+#समावेश <error.h>
+#समावेश <get-errno.h>
+#समावेश <gl_array_list.h>
+#समावेश <gl_xlist.h>
+#समावेश <progname.h>
+#समावेश <quote.h>
+#समावेश <quotearg.h>
+#समावेश <vasnprintf.h>
 
-#include "system.h"
+#समावेश "system.h"
 
-#include "files.h"
-#include "getargs.h"
+#समावेश "files.h"
+#समावेश "getargs.h"
 
-typedef struct
+प्रकार काष्ठा
 {
   location location;
-  char *fix;
+  अक्षर *fix;
 } fixit;
 
-gl_list_t fixits = NULL;
+gl_list_t fixits = शून्य;
 
-static fixit *
-fixit_new (location const *loc, char const* fix)
+अटल fixit *
+fixit_new (location स्थिर *loc, अक्षर स्थिर* fix)
 {
-  fixit *res = xmalloc (sizeof *res);
+  fixit *res = xmalloc (माप *res);
   res->location = *loc;
   res->fix = xstrdup (fix);
-  return res;
+  वापस res;
 }
 
-static int
-fixit_cmp (const  fixit *a, const fixit *b)
+अटल पूर्णांक
+fixit_cmp (स्थिर  fixit *a, स्थिर fixit *b)
 {
-  return location_cmp (a->location, b->location);
+  वापस location_cmp (a->location, b->location);
 }
 
-static void
+अटल व्योम
 fixit_free (fixit *f)
 {
-  free (f->fix);
-  free (f);
+  मुक्त (f->fix);
+  मुक्त (f);
 }
 
 
 /* GCC and Clang follow the same pattern.
    https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
    https://clang.llvm.org/docs/UsersManual.html#cmdoption-fdiagnostics-parseable-fixits */
-static void
-fixit_print (fixit const *f, FILE *out)
+अटल व्योम
+fixit_print (fixit स्थिर *f, खाता *out)
 {
-  fprintf (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
+  ख_लिखो (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
            quotearg_n_style (1, c_quoting_style, f->location.start.file),
-           f->location.start.line, f->location.start.byte,
-           f->location.end.line, f->location.end.byte,
+           f->location.start.पंक्ति, f->location.start.byte,
+           f->location.end.पंक्ति, f->location.end.byte,
            quotearg_n_style (2, c_quoting_style, f->fix));
 }
 
 
-void
-fixits_register (location const *loc, char const* fix)
+व्योम
+fixits_register (location स्थिर *loc, अक्षर स्थिर* fix)
 {
-  if (!fixits)
+  अगर (!fixits)
     fixits = gl_list_create_empty (GL_ARRAY_LIST,
-                                   /* equals */ NULL,
-                                   /* hashcode */ NULL,
+                                   /* equals */ शून्य,
+                                   /* hashcode */ शून्य,
                                    (gl_listelement_dispose_fn) fixit_free,
                                    true);
   fixit *f = fixit_new (loc, fix);
   gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
-  if (feature_flag & feature_fixit)
-    fixit_print (f, stderr);
+  अगर (feature_flag & feature_fixit)
+    fixit_print (f, मानक_त्रुटि);
 }
 
 
 bool
-fixits_empty (void)
+fixits_empty (व्योम)
 {
-  return !fixits;
+  वापस !fixits;
 }
 
 
-void
-fixits_run (void)
+व्योम
+fixits_run (व्योम)
 {
-  if (!fixits)
-    return;
+  अगर (!fixits)
+    वापस;
 
   /* This is not unlike what is done in location_caret.  */
-  uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
+  uniqstr निवेश = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
   /* Backup the file. */
-  char buf[256];
-  size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
-  if (!backup)
+  अक्षर buf[256];
+  माप_प्रकार len = माप (buf);
+  अक्षर *backup = asnprintf (buf, &len, "%s~", निवेश);
+  अगर (!backup)
     xalloc_die ();
-  if (rename (input, backup))
-    error (EXIT_FAILURE, get_errno (),
-           _("%s: cannot backup"), quotearg_colon (input));
-  FILE *in = xfopen (backup, "r");
-  FILE *out = xfopen (input, "w");
-  size_t line = 1;
-  size_t offset = 1;
-  void const *p = NULL;
+  अगर (नाम (निवेश, backup))
+    error (निकास_त्रुटि, get_errno (),
+           _("%s: cannot backup"), quotearg_colon (निवेश));
+  खाता *in = xfopen (backup, "r");
+  खाता *out = xfopen (निवेश, "w");
+  माप_प्रकार पंक्ति = 1;
+  माप_प्रकार offset = 1;
+  व्योम स्थिर *p = शून्य;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
-  while (gl_list_iterator_next (&iter, &p, NULL))
+  जबतक (gl_list_iterator_अग्र (&iter, &p, शून्य))
     {
-      fixit const *f = p;
+      fixit स्थिर *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      जबतक (पंक्ति < f->location.start.पंक्ति)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          पूर्णांक c = अ_लो (in);
+          अगर (c == खातापूर्ण)
+            अवरोध;
+          अगर (c == '\n')
             {
-              ++line;
+              ++पंक्ति;
               offset = 1;
             }
-          putc (c, out);
+          अ_दो (c, out);
         }
 
       /* Look for the right offset. */
       bool need_eol = false;
-      while (offset < f->location.start.byte)
+      जबतक (offset < f->location.start.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          पूर्णांक c = अ_लो (in);
+          अगर (c == खातापूर्ण)
+            अवरोध;
           ++offset;
-          if (c == '\n')
+          अगर (c == '\n')
             /* The position we are asked for is beyond the actual
                line: pad with spaces, and remember we need a \n.  */
             need_eol = true;
-          putc (need_eol ? ' ' : c, out);
+          अ_दो (need_eol ? ' ' : c, out);
         }
 
       /* Paste the fix instead. */
-      fputs (f->fix, out);
+      ख_माला_दो (f->fix, out);
 
       /* Maybe install the eol afterwards.  */
-      if (need_eol)
-        putc ('\n', out);
+      अगर (need_eol)
+        अ_दो ('\n', out);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      जबतक (पंक्ति < f->location.end.पंक्ति)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          पूर्णांक c = अ_लो (in);
+          अगर (c == खातापूर्ण)
+            अवरोध;
+          अगर (c == '\n')
             {
-              ++line;
+              ++पंक्ति;
               offset = 1;
             }
         }
-      while (offset < f->location.end.byte)
+      जबतक (offset < f->location.end.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          पूर्णांक c = अ_लो (in);
+          अगर (c == खातापूर्ण)
+            अवरोध;
           ++offset;
         }
 
       /* If erasing the content of a full line, also remove the
          end-of-line. */
-      if (f->fix[0] == 0 && f->location.start.byte == 1)
+      अगर (f->fix[0] == 0 && f->location.start.byte == 1)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          else if (c == '\n')
+          पूर्णांक c = अ_लो (in);
+          अगर (c == खातापूर्ण)
+            अवरोध;
+          अन्यथा अगर (c == '\n')
             {
-              ++line;
+              ++पंक्ति;
               offset = 1;
             }
-          else
-            ungetc (c, in);
+          अन्यथा
+            अक्षर_वापस (c, in);
         }
     }
   /* Paste the rest of the file.  */
   {
-    int c;
-    while ((c = getc (in)) != EOF)
-      putc (c, out);
+    पूर्णांक c;
+    जबतक ((c = अ_लो (in)) != खातापूर्ण)
+      अ_दो (c, out);
   }
 
   gl_list_iterator_free (&iter);
   xfclose (out);
   xfclose (in);
-  fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
-           program_name, quote_n (0, input), quote_n (1, backup));
-  if (backup != buf)
-    free (backup);
+  ख_लिखो (मानक_त्रुटि, "%s: file %s was updated (backup: %s)\n",
+           program_name, quote_n (0, निवेश), quote_n (1, backup));
+  अगर (backup != buf)
+    मुक्त (backup);
 }
 
 
 /* Free the registered fixits.  */
-void fixits_free (void)
+व्योम fixits_free (व्योम)
 {
-  if (fixits)
+  अगर (fixits)
     {
       gl_list_free (fixits);
-      fixits = NULL;
+      fixits = शून्य;
     }
 }

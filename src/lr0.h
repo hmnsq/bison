@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef LR0_H_
+#अगर_अघोषित LR0_H_
 # define LR0_H_
 
-void generate_states (void);
+व्योम generate_states (व्योम);
 
-#endif /* !LR0_H_ */
+#पूर्ण_अगर /* !LR0_H_ */

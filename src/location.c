@@ -18,107 +18,107 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#समावेश <config.h>
+#समावेश "system.h"
 
-#include <mbfile.h>
-#include <mbswidth.h>
-#include <quotearg.h>
-#include <stdio.h>    /* fileno */
-#include <sys/ioctl.h>
-#include <sys/stat.h> /* fstat */
-#include <termios.h>
+#समावेश <mbfile.h>
+#समावेश <mbswidth.h>
+#समावेश <quotearg.h>
+#समावेश <stdio.h>    /* fileno */
+#समावेश <sys/ioctl.h>
+#समावेश <sys/stat.h> /* fstat */
+#समावेश <termios.h>
 
-#ifdef WINSIZE_IN_PTEM
+#अगर_घोषित WINSIZE_IN_PTEM
 # include <sys/stream.h>
 # include <sys/ptem.h>
-#endif
+#पूर्ण_अगर
 
-#include "complain.h"
-#include "getargs.h"
-#include "location.h"
+#समावेश "complain.h"
+#समावेश "getargs.h"
+#समावेश "location.h"
 
-location const empty_loc = EMPTY_LOCATION_INIT;
+location स्थिर empty_loc = EMPTY_LOCATION_INIT;
 
 /* The terminal width.  Not less than 40.  */
-static int
-columns (void)
+अटल पूर्णांक
+columns (व्योम)
 {
-  const char *cp = getenv ("COLUMNS");
-  int res = 80;
-  if (cp && *cp)
+  स्थिर अक्षर *cp = दो_पर्या ("COLUMNS");
+  पूर्णांक res = 80;
+  अगर (cp && *cp)
     {
-      long l = strtol (cp, NULL, 10);
-      res = 0 <= l && l <= INT_MAX ? l : INT_MAX;
+      दीर्घ l = म_से_दीर्घ (cp, शून्य, 10);
+      res = 0 <= l && l <= पूर्णांक_उच्च ? l : पूर्णांक_उच्च;
     }
-  else
+  अन्यथा
     {
-#ifdef TIOCGWINSZ
-      struct winsize ws;
-      if (ioctl (STDERR_FILENO, TIOCGWINSZ, &ws) != -1
-          && 0 < ws.ws_col && ws.ws_col == (size_t) ws.ws_col)
+#अगर_घोषित TIOCGWINSZ
+      काष्ठा winsize ws;
+      अगर (ioctl (STDERR_FILENO, TIOCGWINSZ, &ws) != -1
+          && 0 < ws.ws_col && ws.ws_col == (माप_प्रकार) ws.ws_col)
         res = ws.ws_col;
-#endif
+#पूर्ण_अगर
     }
-  return max_int (res, 40);
+  वापस max_int (res, 40);
 }
 
 /* Available screen width.  */
-static int screen_width = 80;
+अटल पूर्णांक screen_width = 80;
 
 /* The ellipsis symbol to use for this locale, and the number of
    screen-columns it uses.  */
-static const char *ellipsis = "...";
-static int ellipsize = 3;
+अटल स्थिर अक्षर *ellipsis = "...";
+अटल पूर्णांक ellipsize = 3;
 
 /* If BUF is null, add BUFSIZE (which in this case must be less than
    INT_MAX) to COLUMN; otherwise, add mbsnwidth (BUF, BUFSIZE, 0) to
    COLUMN.  If an overflow occurs, return INT_MAX.  */
 
-static inline int
-add_column_width (int column, char const *buf, size_t bufsize)
+अटल अंतरभूत पूर्णांक
+add_column_width (पूर्णांक column, अक्षर स्थिर *buf, माप_प्रकार bufsize)
 {
-  int width
+  पूर्णांक width
     = buf ? mbsnwidth (buf, bufsize, 0)
-    : INT_MAX <= bufsize ? INT_MAX
+    : पूर्णांक_उच्च <= bufsize ? पूर्णांक_उच्च
     : bufsize;
-  return column <= INT_MAX - width ? column + width : INT_MAX;
+  वापस column <= पूर्णांक_उच्च - width ? column + width : पूर्णांक_उच्च;
 }
 
-static void
-boundary_compute (boundary *cur, char const *token, size_t size)
+अटल व्योम
+boundary_compute (boundary *cur, अक्षर स्थिर *token, माप_प्रकार आकार)
 {
-  int line = cur->line;
-  int column = cur->column;
-  int byte = cur->byte;
-  char const *p0 = token;
-  char const *p = token;
-  char const *lim = token + size;
+  पूर्णांक पंक्ति = cur->पंक्ति;
+  पूर्णांक column = cur->column;
+  पूर्णांक byte = cur->byte;
+  अक्षर स्थिर *p0 = token;
+  अक्षर स्थिर *p = token;
+  अक्षर स्थिर *lim = token + आकार;
 
-  for (p = token; p < lim; ++p)
-    switch (*p)
+  क्रम (p = token; p < lim; ++p)
+    चयन (*p)
       {
-      case '\n':
-        line += line < INT_MAX;
+      हाल '\n':
+        पंक्ति += पंक्ति < पूर्णांक_उच्च;
         column = 1;
         byte = 1;
         p0 = p + 1;
-        break;
+        अवरोध;
 
-      case '\t':
+      हाल '\t':
         column = add_column_width (column, p0, p - p0);
-        column = add_column_width (column, NULL, 8 - ((column - 1) & 7));
+        column = add_column_width (column, शून्य, 8 - ((column - 1) & 7));
         p0 = p + 1;
-        byte += byte < INT_MAX;
-        break;
+        byte += byte < पूर्णांक_उच्च;
+        अवरोध;
 
-      default:
-        byte += byte < INT_MAX;
-        break;
+      शेष:
+        byte += byte < पूर्णांक_उच्च;
+        अवरोध;
       }
   column = add_column_width (column, p0, p - p0);
 
-  cur->line = line;
+  cur->पंक्ति = पंक्ति;
   cur->column = column;
   cur->byte = byte;
 }
@@ -127,90 +127,90 @@ boundary_compute (boundary *cur, char const *token, size_t size)
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
 
-void
-location_compute (location *loc, boundary *cur, char const *token, size_t size)
+व्योम
+location_compute (location *loc, boundary *cur, अक्षर स्थिर *token, माप_प्रकार आकार)
 {
   loc->start = *cur;
-  boundary_compute (cur, token, size);
+  boundary_compute (cur, token, आकार);
   loc->end = *cur;
 
-  if (loc->end.line == INT_MAX && loc->start.line != INT_MAX)
+  अगर (loc->end.पंक्ति == पूर्णांक_उच्च && loc->start.पंक्ति != पूर्णांक_उच्च)
     complain (loc, Wother, _("line number overflow"));
-  if (loc->end.column == INT_MAX && loc->start.column != INT_MAX)
+  अगर (loc->end.column == पूर्णांक_उच्च && loc->start.column != पूर्णांक_उच्च)
     complain (loc, Wother, _("column number overflow"));
   /* TRANSLATORS: we are counting bytes, and there are too many.  */
-  if (loc->end.byte == INT_MAX && loc->start.byte != INT_MAX)
+  अगर (loc->end.byte == पूर्णांक_उच्च && loc->start.byte != पूर्णांक_उच्च)
     complain (loc, Wother, _("byte number overflow"));
 }
 
-static int
-boundary_print (boundary const *b, FILE *out)
+अटल पूर्णांक
+boundary_print (boundary स्थिर *b, खाता *out)
 {
-  return fprintf (out, "%s:%d.%d@%d",
+  वापस ख_लिखो (out, "%s:%d.%d@%d",
                   quotearg_n_style (3, escape_quoting_style, b->file),
-                  b->line, b->column, b->byte);
+                  b->पंक्ति, b->column, b->byte);
 }
 
-int
-location_print (location loc, FILE *out)
+पूर्णांक
+location_print (location loc, खाता *out)
 {
-  int res = 0;
-  if (location_empty (loc))
-    res += fprintf (out, "(empty location)");
-  else if (trace_flag & trace_locations)
+  पूर्णांक res = 0;
+  अगर (location_empty (loc))
+    res += ख_लिखो (out, "(empty location)");
+  अन्यथा अगर (trace_flag & trace_locations)
     {
       res += boundary_print (&loc.start, out);
-      res += fprintf (out, "-");
+      res += ख_लिखो (out, "-");
       res += boundary_print (&loc.end, out);
     }
-  else
+  अन्यथा
     {
       aver (loc.start.file);
       aver (loc.end.file);
-      int end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
-      res += fprintf (out, "%s",
+      पूर्णांक end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
+      res += ख_लिखो (out, "%s",
                       quotearg_n_style (3, escape_quoting_style, loc.start.file));
-      if (0 < loc.start.line)
+      अगर (0 < loc.start.पंक्ति)
         {
-          res += fprintf (out, ":%d", loc.start.line);
-          if (0 < loc.start.column)
-            res += fprintf (out, ".%d", loc.start.column);
+          res += ख_लिखो (out, ":%d", loc.start.पंक्ति);
+          अगर (0 < loc.start.column)
+            res += ख_लिखो (out, ".%d", loc.start.column);
         }
-      if (loc.start.file != loc.end.file)
+      अगर (loc.start.file != loc.end.file)
         {
-          res += fprintf (out, "-%s",
+          res += ख_लिखो (out, "-%s",
                           quotearg_n_style (3, escape_quoting_style,
                                             loc.end.file));
-          if (0 < loc.end.line)
+          अगर (0 < loc.end.पंक्ति)
             {
-              res += fprintf (out, ":%d", loc.end.line);
-              if (0 <= end_col)
-                res += fprintf (out, ".%d", end_col);
+              res += ख_लिखो (out, ":%d", loc.end.पंक्ति);
+              अगर (0 <= end_col)
+                res += ख_लिखो (out, ".%d", end_col);
             }
         }
-      else if (0 < loc.end.line)
+      अन्यथा अगर (0 < loc.end.पंक्ति)
         {
-          if (loc.start.line < loc.end.line)
+          अगर (loc.start.पंक्ति < loc.end.पंक्ति)
             {
-              res += fprintf (out, "-%d", loc.end.line);
-              if (0 <= end_col)
-                res += fprintf (out, ".%d", end_col);
+              res += ख_लिखो (out, "-%d", loc.end.पंक्ति);
+              अगर (0 <= end_col)
+                res += ख_लिखो (out, ".%d", end_col);
             }
-          else if (0 <= end_col && loc.start.column < end_col)
-            res += fprintf (out, "-%d", end_col);
+          अन्यथा अगर (0 <= end_col && loc.start.column < end_col)
+            res += ख_लिखो (out, "-%d", end_col);
         }
     }
 
-  return res;
+  वापस res;
 }
 
 
 /* Persistent data used by location_caret to avoid reopening and rereading the
    same file all over for each error.  */
-static struct
+अटल काष्ठा
 {
   /* Raw input file.  */
-  FILE *file;
+  खाता *file;
   /* Input file as a stream of multibyte characters.  */
   mb_file_t mbfile;
   /* The position within the last file we quoted.  If POS.FILE is non
@@ -219,19 +219,19 @@ static struct
   boundary pos;
   /* Offset in FILE of the current line (i.e., where line POS.LINE
      starts).  */
-  size_t offset;
+  माप_प्रकार offset;
   /* Length of the current line.  */
-  int line_len;
+  पूर्णांक पंक्ति_len;
   /* Given the initial column to display, the offset (number of
      characters to skip at the beginning of the line). */
-  int skip;
+  पूर्णांक skip;
 
   /* Available width to quote the source file.  Eight chars are
      consumed by the left-margin (with line number).  */
-  int width;
+  पूर्णांक width;
 } caret_info;
 
-void caret_init (void)
+व्योम caret_init (व्योम)
 {
   screen_width = columns ();
   /* TRANSLATORS: This is used when a line is too long, and is
@@ -243,175 +243,175 @@ void caret_init (void)
   ellipsize = mbswidth (ellipsis, 0);
 }
 
-void
-caret_free (void)
+व्योम
+caret_free (व्योम)
 {
-  if (caret_info.file)
+  अगर (caret_info.file)
     {
-      fclose (caret_info.file);
-      caret_info.file = NULL;
+      ख_बंद (caret_info.file);
+      caret_info.file = शून्य;
     }
 }
 
 /* Open FILE for quoting, if needed, and if possible.  Return whether
    the file can quoted. */
-static bool
-caret_set_file (const char *file)
+अटल bool
+caret_set_file (स्थिर अक्षर *file)
 {
   /* If a different file than before, close and let the rest open
      the new one. */
-  if (caret_info.pos.file && caret_info.pos.file != file)
+  अगर (caret_info.pos.file && caret_info.pos.file != file)
     {
       caret_free ();
-      caret_info.pos.file = NULL;
+      caret_info.pos.file = शून्य;
     }
-  if (!caret_info.pos.file)
+  अगर (!caret_info.pos.file)
     {
       caret_info.pos.file = file;
-      if ((caret_info.file = fopen (caret_info.pos.file, "rb")))
+      अगर ((caret_info.file = ख_खोलो (caret_info.pos.file, "rb")))
         {
           /* If the file is not regular (imagine #line 1 "/dev/stdin"
              in the input file for instance), don't try to quote the
              file.  Keep caret_info.pos.file set so that we don't try
              to open it again, but leave caret_info.file NULL so that
              we don't try to quote it. */
-          struct stat buf;
-          if (fstat (fileno (caret_info.file), &buf) == 0
+          काष्ठा stat buf;
+          अगर (ख_स्थिति (fileno (caret_info.file), &buf) == 0
               && buf.st_mode & S_IFREG)
             {
-              caret_info.pos.line = 1;
+              caret_info.pos.पंक्ति = 1;
               mbf_init (caret_info.mbfile, caret_info.file);
             }
-          else
+          अन्यथा
             caret_free ();
         }
     }
-  return !!caret_info.file;
+  वापस !!caret_info.file;
 }
 
 /* Getc, but smash \r\n as \n.  */
-static void
+अटल व्योम
 caret_getc_internal (mbchar_t *res)
 {
   mbf_getc (*res, caret_info.mbfile);
-  if (mb_iseq (*res, '\r'))
+  अगर (mb_iseq (*res, '\r'))
     {
       mbchar_t c;
       mbf_getc (c, caret_info.mbfile);
-      if (mb_iseq (c, '\n'))
+      अगर (mb_iseq (c, '\n'))
         mb_copy (res, &c);
-      else
+      अन्यथा
         mbf_ungetc (c, caret_info.mbfile);
     }
 }
 
-#define caret_getc(Var) caret_getc_internal(&Var)
+#घोषणा caret_getc(Var) caret_getc_internal(&Var)
 
 /* Move CARET_INFO (which has a valid FILE) to the line number LINE.
    Compute and cache that line's length in CARET_INFO.LINE_LEN.
    Return whether successful.  */
-static bool
-caret_set_line (int line)
+अटल bool
+caret_set_पंक्ति (पूर्णांक पंक्ति)
 {
   /* If the line we want to quote is seekable (the same line as the previous
      location), just seek it. If it was a previous line, we lost track of it,
      so return to the start of file.  */
-  if (line < caret_info.pos.line)
+  अगर (पंक्ति < caret_info.pos.पंक्ति)
     {
-      caret_info.pos.line = 1;
+      caret_info.pos.पंक्ति = 1;
       caret_info.offset = 0;
     }
-  if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
-    return false;
+  अगर (ख_जाओ (caret_info.file, caret_info.offset, शुरू_से))
+    वापस false;
 
   /* If this is the same line as the previous one, we are done. */
-  if (line < caret_info.pos.line)
-    return true;
+  अगर (पंक्ति < caret_info.pos.पंक्ति)
+    वापस true;
 
   /* Advance to the line's position, keeping track of the offset.  */
-  while (caret_info.pos.line < line)
+  जबतक (caret_info.pos.पंक्ति < पंक्ति)
     {
       mbchar_t c;
       caret_getc (c);
-      if (mb_iseof (c))
+      अगर (mb_iseof (c))
         /* Something is wrong, that line number does not exist.  */
-        return false;
-      caret_info.pos.line += mb_iseq (c, '\n');
+        वापस false;
+      caret_info.pos.पंक्ति += mb_iseq (c, '\n');
     }
-  caret_info.offset = ftell (caret_info.file);
+  caret_info.offset = ख_बताओ (caret_info.file);
   caret_info.pos.column = 1;
   /* Reset mbf's internal state.
      FIXME: should be done in mbfile.  */
   caret_info.mbfile.eof_seen = 0;
 
   /* Find the number of columns of this line.  */
-  while (true)
+  जबतक (true)
     {
       mbchar_t c;
       caret_getc (c);
-      if (mb_iseof (c) || mb_iseq (c, '\n'))
-        break;
+      अगर (mb_iseof (c) || mb_iseq (c, '\n'))
+        अवरोध;
       boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
     }
-  caret_info.line_len = caret_info.pos.column;
+  caret_info.पंक्ति_len = caret_info.pos.column;
   /* Go back to the beginning of line.  */
-  if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
-    return false;
+  अगर (ख_जाओ (caret_info.file, caret_info.offset, शुरू_से))
+    वापस false;
   /* Reset mbf's internal state.
      FIXME: should be done in mbfile.  */
   caret_info.mbfile.eof_seen = 0;
   caret_info.pos.column = 1;
-  return true;
+  वापस true;
 }
 
 /* Compute CARET_INFO.WIDTH and CARET_INFO.SKIP based on the fact that
    the first column to display in the current line is COL.  */
-static bool
-caret_set_column (int col)
+अटल bool
+caret_set_column (पूर्णांक col)
 {
   /* Available width.  Eight chars are consumed by the left-margin
      (with line number).  */
   caret_info.width = screen_width - 8;
   caret_info.skip = 0;
-  if (caret_info.width < caret_info.line_len)
+  अगर (caret_info.width < caret_info.पंक्ति_len)
     {
       /* We cannot quote the whole line.  Make sure we can see the
          beginning of the location.  */
       caret_info.skip = caret_info.width < col ? col - 10 : 0;
     }
   /* If we skip the initial part, we insert "..." before.  */
-  if (caret_info.skip)
+  अगर (caret_info.skip)
     caret_info.width -= ellipsize;
   /* If the end of line does not fit, we also need to truncate the
      end, and leave "..." there.  */
-  if (caret_info.width < caret_info.line_len - caret_info.skip)
+  अगर (caret_info.width < caret_info.पंक्ति_len - caret_info.skip)
     caret_info.width -= ellipsize;
-  return true;
+  वापस true;
 }
 
-void
-location_caret (location loc, const char *style, FILE *out)
+व्योम
+location_caret (location loc, स्थिर अक्षर *style, खाता *out)
 {
-  if (!(feature_flag & feature_caret))
-    return;
-  if (!loc.start.line)
-    return;
-  if (!caret_set_file (loc.start.file))
-    return;
-  if (!caret_set_line (loc.start.line))
-    return;
-  if (!caret_set_column (loc.start.column))
-    return;
+  अगर (!(feature_flag & feature_caret))
+    वापस;
+  अगर (!loc.start.पंक्ति)
+    वापस;
+  अगर (!caret_set_file (loc.start.file))
+    वापस;
+  अगर (!caret_set_पंक्ति (loc.start.पंक्ति))
+    वापस;
+  अगर (!caret_set_column (loc.start.column))
+    वापस;
 
-  const int width = caret_info.width;
-  const int skip = caret_info.skip;
+  स्थिर पूर्णांक width = caret_info.width;
+  स्थिर पूर्णांक skip = caret_info.skip;
 
   /* Read the actual line.  Don't update the offset, so that we keep a pointer
      to the start of the line.  */
   {
     mbchar_t c;
     caret_getc (c);
-    if (!mb_iseof (c))
+    अगर (!mb_iseof (c))
       {
         /* The last column to highlight.  Only the first line of
            multiline locations are quoted, in which case the ending
@@ -420,128 +420,128 @@ location_caret (location loc, const char *style, FILE *out)
            We used to work with byte offsets, and that was much
            easier.  However, we went back to using (visual) columns to
            support truncating of long lines.  */
-        const int col_end
-          = loc.start.line == loc.end.line
+        स्थिर पूर्णांक col_end
+          = loc.start.पंक्ति == loc.end.पंक्ति
           ? loc.end.column
-          : caret_info.line_len;
+          : caret_info.पंक्ति_len;
         /* Quote the file (at most the first line in the case of
            multiline locations).  */
         {
-          fprintf (out, "%5d | %s", loc.start.line, skip ? ellipsis : "");
+          ख_लिखो (out, "%5d | %s", loc.start.पंक्ति, skip ? ellipsis : "");
           /* Whether we opened the style.  If the line is not as
              expected (maybe the file was changed since the scanner
              ran), we might reach the end before we actually saw the
              opening column.  */
-          enum { before, inside, after } state = before;
-          while (!mb_iseof (c) && !mb_iseq (c, '\n'))
+          क्रमागत { before, inside, after } state = before;
+          जबतक (!mb_iseof (c) && !mb_iseq (c, '\n'))
             {
               // We might have already opened (and even closed!) the
               // style and yet have the equality of the columns if we
               // just saw zero-width characters.
-              if (state == before
+              अगर (state == before
                   && caret_info.pos.column == loc.start.column)
                 {
                   begin_use_class (style, out);
                   state = inside;
                 }
-              if (skip < caret_info.pos.column)
+              अगर (skip < caret_info.pos.column)
                 mb_putc (c, out);
               boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
               caret_getc (c);
-              if (state == inside
+              अगर (state == inside
                   && (caret_info.pos.column == col_end
                       || width < caret_info.pos.column - skip))
                 {
                   end_use_class (style, out);
                   state = after;
                 }
-              if (width < caret_info.pos.column - skip)
+              अगर (width < caret_info.pos.column - skip)
                 {
-                  fputs (ellipsis, out);
-                  break;
+                  ख_माला_दो (ellipsis, out);
+                  अवरोध;
                 }
             }
-          if (state == inside)
+          अगर (state == inside)
             {
               // The line is shorter than expected.
               end_use_class (style, out);
               state = after;
             }
-          putc ('\n', out);
+          अ_दो ('\n', out);
         }
 
         /* Print the carets with the same indentation as above.  */
         {
-          fprintf (out, "      | %*s",
+          ख_लिखो (out, "      | %*s",
                    loc.start.column - 1 - skip + (skip ? ellipsize : 0), "");
           begin_use_class (style, out);
-          putc ('^', out);
+          अ_दो ('^', out);
           /* Underlining a multiline location ends with the first
              line.  */
-          for (int i = loc.start.column - 1 - skip + 1,
+          क्रम (पूर्णांक i = loc.start.column - 1 - skip + 1,
                  i_end = min_int (col_end - 1 - skip, width);
                i < i_end; ++i)
-            putc ('~', out);
+            अ_दो ('~', out);
           end_use_class (style, out);
-          putc ('\n', out);
+          अ_दो ('\n', out);
         }
       }
   }
 }
 
-void
-location_caret_suggestion (location loc, const char *s, FILE *out)
+व्योम
+location_caret_suggestion (location loc, स्थिर अक्षर *s, खाता *out)
 {
-  if (!(feature_flag & feature_caret))
-    return;
-  const char *style = "fixit-insert";
-  fprintf (out, "      | %*s",
+  अगर (!(feature_flag & feature_caret))
+    वापस;
+  स्थिर अक्षर *style = "fixit-insert";
+  ख_लिखो (out, "      | %*s",
            loc.start.column - 1 - caret_info.skip
            + (caret_info.skip ? ellipsize : 0),
            "");
   begin_use_class (style, out);
-  fputs (s, out);
+  ख_माला_दो (s, out);
   end_use_class (style, out);
-  putc ('\n', out);
+  अ_दो ('\n', out);
 }
 
 bool
 location_empty (location loc)
 {
-  return !loc.start.file && !loc.start.line && !loc.start.column
-    && !loc.end.file && !loc.end.line && !loc.end.column;
+  वापस !loc.start.file && !loc.start.पंक्ति && !loc.start.column
+    && !loc.end.file && !loc.end.पंक्ति && !loc.end.column;
 }
 
-static inline int
-str_to_int (const char *s)
+अटल अंतरभूत पूर्णांक
+str_to_int (स्थिर अक्षर *s)
 {
-  long l = strtol (s, NULL, 10);
-  return l < 0 ? -1 : l <= INT_MAX ? l : INT_MAX;
+  दीर्घ l = म_से_दीर्घ (s, शून्य, 10);
+  वापस l < 0 ? -1 : l <= पूर्णांक_उच्च ? l : पूर्णांक_उच्च;
 }
 
-void
-boundary_set_from_string (boundary *bound, char *str)
+व्योम
+boundary_set_from_string (boundary *bound, अक्षर *str)
 {
   /* Search backwards: the file name may contain '.'  or ':'.  */
-  char *at = strrchr (str, '@');
-  if (at)
+  अक्षर *at = म_खोजप (str, '@');
+  अगर (at)
     {
       *at = '\0';
       bound->byte = str_to_int (at + 1);
     }
   {
-    char *dot = strrchr (str, '.');
+    अक्षर *dot = म_खोजप (str, '.');
     aver (dot);
     *dot = '\0';
     bound->column = str_to_int (dot + 1);
-    if (!at)
+    अगर (!at)
       bound->byte = bound->column;
   }
   {
-    char *colon = strrchr (str, ':');
+    अक्षर *colon = म_खोजप (str, ':');
     aver (colon);
     *colon = '\0';
-    bound->line = str_to_int (colon + 1);
+    bound->पंक्ति = str_to_int (colon + 1);
   }
   bound->file = uniqstr_new (str);
 }
