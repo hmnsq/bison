@@ -61,7 +61,7 @@
      in that version while developping it.  */
   static const char* api_version = "3.8";
 
-  static int current_prec = 0;
+  static ціле current_prec = 0;
   static location current_lhs_loc;
   static named_ref *current_lhs_named_ref;
   static symbol *current_lhs_symbol;
@@ -74,7 +74,7 @@
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  static YYLTYPE lloc_default (YYLTYPE const *, ціле);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
@@ -247,8 +247,8 @@
 %printer { fprintf (yyo, "%%%s", $$); } PERCENT_FLAG
 %printer { fprintf (yyo, "<%s>", $$); } TAG tag
 
-%token <int> INT_LITERAL _("integer literal")
-%printer { fprintf (yyo, "%d", $$); } <int>
+%token <ціле> INT_LITERAL _("integer literal")
+%printer { fprintf (yyo, "%d", $$); } <ціле>
 
 %type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
 %printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
@@ -390,7 +390,7 @@ grammar_declaration:
       code_props_symbol_action_init (&code, $2, @2);
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = $3; list; list = list->next)
+        для (symbol_list *list = $3; list; list = list->next)
           symbol_list_code_props_set (list, $1, &code);
         symbol_list_free ($3);
       }
@@ -470,7 +470,7 @@ symbol_declaration:
 | precedence_declarator token_decls_for_prec[syms]
     {
       ++current_prec;
-      for (symbol_list *list = $syms; list; list = list->next)
+      для (symbol_list *list = $syms; list; list = list->next)
         symbol_precedence_set (list->content.sym, current_prec, $1, @1);
       symbol_list_free ($syms);
     }
@@ -551,19 +551,19 @@ token_decl.1:
 
 // One symbol declaration for %token or %nterm.
 token_decl:
-  id int.opt[num] alias
+  id ціле.opt[num] alias
     {
       $$ = $id;
       symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
+      якщо (0 <= $num)
         symbol_code_set ($id, $num, @num);
-      if ($alias)
+      якщо ($alias)
         symbol_make_alias ($id, $alias, @alias);
     }
 ;
 
-%type <int> int.opt;
-int.opt:
+%type <ціле> ціле.opt;
+ціле.opt:
   %empty  { $$ = -1; }
 | INT_LITERAL
 ;
@@ -613,11 +613,11 @@ token_decl_for_prec.1:
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
-  id int.opt[num]
+  id ціле.opt[num]
     {
       $$ = $id;
       symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
+      якщо (0 <= $num)
         symbol_code_set ($id, $num, @num);
     }
 | string_as_id
@@ -648,13 +648,13 @@ symbol_decls:
 symbols.1:
   symbol
     {
-      if (current_class != unknown_sym)
+      якщо (current_class != unknown_sym)
         symbol_class_set ($symbol, current_class, @symbol, false);
       $$ = symbol_list_sym_new ($symbol, @symbol);
     }
   | symbols.1 symbol
     {
-      if (current_class != unknown_sym)
+      якщо (current_class != unknown_sym)
         symbol_class_set ($symbol, current_class, @symbol, false);
       $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
     }
@@ -774,13 +774,13 @@ id:
 | CHAR_LITERAL
     {
       const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      якщо (current_class == nterm_sym)
         {
           complain (&@1, complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      якщо (muscle_percent_define_ifdef (var))
         {
           complain (&@1, complaint,
                     _("character literals cannot be used together"
@@ -824,29 +824,29 @@ epilogue.opt:
 
 %%
 
-int
+ціле
 yyreport_syntax_error (const yypcontext_t *ctx)
 {
-  int res = 0;
+  ціле res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
   enum { ARGS_MAX = 5 };
   const char *argv[ARGS_MAX];
-  int argc = 0;
+  ціле argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  якщо (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      ціле nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      якщо (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      інакше
+        для (ціле i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  повернути res;
 }
 
 
@@ -856,7 +856,7 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    boundary of RHS[0] if the right-hand side is empty.  */
 
 static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+lloc_default (YYLTYPE const *rhs, ціле n)
 {
   YYLTYPE loc;
 
@@ -868,21 +868,21 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  для (ціле i = 1; i <= n; i++)
+    якщо (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
         break;
       }
 
-  return loc;
+  повернути loc;
 }
 
 static
 char *strip_braces (char *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  повернути code + 1;
 }
 
 static
@@ -890,20 +890,20 @@ char const *
 translate_code (char *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  якщо (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
+  інакше
     code_props_symbol_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  повернути plain_code.code;
 }
 
 static
 char const *
 translate_code_braceless (char *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  повернути translate_code (strip_braces (code), loc, true);
 }
 
 static void
@@ -919,8 +919,8 @@ add_param (param_type type, char *decl, location loc)
   {
     char *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
+    для (p = decl; p[1]; p++)
+      якщо ((p == decl
            || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
           && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
         name_start = p;
@@ -928,22 +928,22 @@ add_param (param_type type, char *decl, location loc)
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    поки (c_isspace ((unsigned char) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    поки (c_isspace ((unsigned char) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  якщо (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  інакше
     {
       char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      якщо (type & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      якщо (type & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
       free (name);
     }
@@ -956,7 +956,7 @@ static void
 handle_header (char const *value)
 {
   header_flag = true;
-  if (value)
+  якщо (value)
     {
       char *file = unquote (value);
       spec_header_file = xstrdup (file);
@@ -984,18 +984,18 @@ handle_file_prefix (location const *loc,
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  якщо (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
       spec_file_prefix = value;
     }
-  else
+  інакше
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  якщо (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
@@ -1017,10 +1017,10 @@ handle_name_prefix (location const *loc,
   char buf1[1024];
   size_t len1 = sizeof (buf1);
   char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  якщо (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  якщо (location_empty (spec_name_prefix_loc))
     {
       spec_name_prefix = value;
       spec_name_prefix_loc = *loc;
@@ -1028,16 +1028,16 @@ handle_name_prefix (location const *loc,
       char buf2[1024];
       size_t len2 = sizeof (buf2);
       char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      якщо (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
+      якщо (new != buf2)
         free (new);
     }
-  else
+  інакше
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
+  якщо (old != buf1)
     free (old);
 }
 
@@ -1057,18 +1057,18 @@ handle_require (location const *loc, char const *version_quoted)
 {
   char *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  якщо (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  інакше
     {
       const char* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      якщо (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -1084,16 +1084,16 @@ handle_skeleton (location const *loc, char const *skel_quoted)
 {
   char *skel = unquote (skel_quoted);
   char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  якщо (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      поки (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      поки (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
       char *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      якщо (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
@@ -1111,9 +1111,9 @@ handle_yacc (location const *loc)
 {
   const char *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  якщо (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  інакше
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
@@ -1127,13 +1127,13 @@ gram_error (location const *loc, char const *msg)
 static char const *
 char_name (char c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  якщо (c == '\'')
+    повернути "'\\''";
+  інакше
     {
       char buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      повернути quotearg_style (escape_quoting_style, buf);
     }
 }
 
@@ -1142,7 +1142,7 @@ current_lhs (symbol *sym, location loc, named_ref *ref)
 {
   current_lhs_symbol = sym;
   current_lhs_loc = loc;
-  if (sym)
+  якщо (sym)
     symbol_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
@@ -1193,7 +1193,7 @@ unquote (const char *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
+  для (++cp; *cp && *cp != '"'; ++cp)
     switch (*cp)
       {
       case '"':
@@ -1205,13 +1205,13 @@ unquote (const char *cp)
           case '0': case '1': case '2': case '3': case '4':
           case '5': case '6': case '7': case '8': case '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              ціле c = cp[0] - '0';
+              якщо (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              якщо (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
@@ -1230,8 +1230,8 @@ unquote (const char *cp)
 
           case 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              ціле c = 0;
+              поки (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -1252,5 +1252,5 @@ unquote (const char *cp)
   ++cp;
   assert (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  повернути obstack_finish0 (&obstack_for_unquote);
 }

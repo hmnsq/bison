@@ -51,7 +51,7 @@ static state_list *last_state = NULL;
 static void
 core_print (size_t core_size, item_index *core, FILE *out)
 {
-  for (int i = 0; i < core_size; ++i)
+  для (ціле i = 0; i < core_size; ++i)
     {
       item_print (ritem + core[i], NULL, out);
       fputc ('\n', out);
@@ -70,20 +70,20 @@ state_list_append (symbol_number sym, size_t core_size, item_index *core)
   state_list *node = xmalloc (sizeof *node);
   state *res = state_new (sym, core_size, core);
 
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     fprintf (stderr, "state_list_append (state = %d, symbol = %d (%s))\n",
              nstates, sym, symbols[sym]->tag);
 
   node->next = NULL;
   node->state = res;
 
-  if (!first_state)
+  якщо (!first_state)
     first_state = node;
-  if (last_state)
+  якщо (last_state)
     last_state->next = node;
   last_state = node;
 
-  return res;
+  повернути res;
 }
 
 /* Symbols that can be "shifted" (including nonterminals) from the
@@ -101,7 +101,7 @@ static state **shiftset;
 /* KERNEL_BASE[symbol-number] -> list of item indices (offsets inside
    RITEM) of length KERNEL_SIZE[symbol-number]. */
 static item_index **kernel_base;
-static int *kernel_size;
+static ціле *kernel_size;
 
 /* A single dimension array that serves as storage for
    KERNEL_BASE.  */
@@ -119,8 +119,8 @@ allocate_itemsets (void)
   size_t *symbol_count = xcalloc (nsyms + nuseless_nonterminals,
                                   sizeof *symbol_count);
 
-  for (rule_number r = 0; r < nrules; ++r)
-    for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  для (rule_number r = 0; r < nrules; ++r)
+    для (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
       {
         symbol_number sym = item_number_as_symbol_number (*rhsp);
         count += 1;
@@ -137,7 +137,7 @@ allocate_itemsets (void)
   kernel_items = xnmalloc (count, sizeof *kernel_items);
 
   count = 0;
-  for (symbol_number i = 0; i < nsyms; i++)
+  для (symbol_number i = 0; i < nsyms; i++)
     {
       kernel_base[i] = kernel_items + count;
       count += symbol_count[i];
@@ -151,8 +151,8 @@ allocate_itemsets (void)
 static void
 kernel_print (FILE *out)
 {
-  for (symbol_number i = 0; i < nsyms; ++i)
-    if (kernel_size[i])
+  для (symbol_number i = 0; i < nsyms; ++i)
+    якщо (kernel_size[i])
       {
         fprintf (out, "kernel[%s] =\n", symbols[i]->tag);
         core_print (kernel_size[i], kernel_base[i], out);
@@ -163,7 +163,7 @@ kernel_print (FILE *out)
 static void
 kernel_check (void)
 {
-  for (symbol_number i = 0; i < nsyms - 1; ++i)
+  для (symbol_number i = 0; i < nsyms - 1; ++i)
     assert (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
 }
 
@@ -211,23 +211,23 @@ free_storage (void)
 static void
 new_itemsets (state *s)
 {
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     fprintf (stderr, "new_itemsets: begin: state = %d\n", s->number);
 
   memset (kernel_size, 0, nsyms * sizeof *kernel_size);
 
   bitset_zero (shift_symbol);
 
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     {
       fprintf (stderr, "initial kernel:\n");
       kernel_print (stderr);
     }
 
-  for (size_t i = 0; i < nitemset; ++i)
-    if (item_number_is_symbol_number (ritem[itemset[i]]))
+  для (size_t i = 0; i < nitemset; ++i)
+    якщо (item_number_is_symbol_number (ritem[itemset[i]]))
       {
-        if (trace_flag & trace_automaton)
+        якщо (trace_flag & trace_automaton)
           {
             fputs ("working on: ", stderr);
             item_print (ritem + itemset[i], NULL, stderr);
@@ -239,7 +239,7 @@ new_itemsets (state *s)
         kernel_size[sym]++;
       }
 
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     {
       fprintf (stderr, "final kernel:\n");
       kernel_print (stderr);
@@ -259,7 +259,7 @@ new_itemsets (state *s)
 static state *
 get_state (symbol_number sym, size_t core_size, item_index *core)
 {
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     {
       fprintf (stderr, "Entering get_state, symbol = %d (%s), core:\n",
                sym, symbols[sym]->tag);
@@ -268,13 +268,13 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
     }
 
   state *s = state_hash_lookup (core_size, core);
-  if (!s)
+  якщо (!s)
     s = state_list_append (sym, core_size, core);
 
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     fprintf (stderr, "Exiting get_state => %d\n", s->number);
 
-  return s;
+  повернути s;
 }
 
 /*---------------------------------------------------------------.
@@ -287,19 +287,19 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
 static void
 append_states (state *s)
 {
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     fprintf (stderr, "append_states: begin: state = %d\n", s->number);
 
   bitset_iterator iter;
   symbol_number sym;
-  int i = 0;
+  ціле i = 0;
   BITSET_FOR_EACH (iter, shift_symbol, sym, 0)
     {
       shiftset[i] = get_state (sym, kernel_size[sym], kernel_base[sym]);
       ++i;
     }
 
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     fprintf (stderr, "append_states: end: state = %d\n", s->number);
 }
 
@@ -313,17 +313,17 @@ append_states (state *s)
 static void
 save_reductions (state *s)
 {
-  int count = 0;
+  ціле count = 0;
 
   /* Find and count the active items that represent ends of rules. */
-  for (size_t i = 0; i < nitemset; ++i)
+  для (size_t i = 0; i < nitemset; ++i)
     {
       item_number item = ritem[itemset[i]];
-      if (item_number_is_rule_number (item))
+      якщо (item_number_is_rule_number (item))
         {
           rule_number r = item_number_as_rule_number (item);
           redset[count++] = &rules[r];
-          if (r == 0)
+          якщо (r == 0)
             {
               /* This is "reduce 0", i.e., accept. */
               aver (!final_state);
@@ -332,10 +332,10 @@ save_reductions (state *s)
         }
     }
 
-  if (trace_flag & trace_automaton)
+  якщо (trace_flag & trace_automaton)
     {
       fprintf (stderr, "reduction[%d] = {\n", s->number);
-      for (int i = 0; i < count; ++i)
+      для (ціле i = 0; i < count; ++i)
         {
           rule_print (redset[i], NULL, stderr);
           fputc ('\n', stderr);
@@ -357,7 +357,7 @@ set_states (void)
 {
   states = xcalloc (nstates, sizeof *states);
 
-  while (first_state)
+  поки (first_state)
     {
       state_list *this = first_state;
 
@@ -366,9 +366,9 @@ set_states (void)
          even if reduced to 0.  It is too soon for errs, which are
          computed later, but set_conflicts.  */
       state *s = this->state;
-      if (!s->transitions)
+      якщо (!s->transitions)
         state_transitions_set (s, 0, 0);
-      if (!s->reductions)
+      якщо (!s->reductions)
         state_reductions_set (s, 0, 0);
 
       states[s->number] = s;
@@ -397,16 +397,16 @@ generate_states (void)
   {
     /* The items of its core: beginning of all the rules of $accept.  */
     kernel_size[0] = 0;
-    for (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
+    для (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
       kernel_base[0][kernel_size[0]++] = rules[r].rhs - ritem;
     state_list_append (0, kernel_size[0], kernel_base[0]);
   }
 
   /* States are queued when they are created; process them all.  */
-  for (state_list *list = first_state; list; list = list->next)
+  для (state_list *list = first_state; list; list = list->next)
     {
       state *s = list->state;
-      if (trace_flag & trace_automaton)
+      якщо (trace_flag & trace_automaton)
         fprintf (stderr, "Processing state %d (reached by %s)\n",
                  s->number,
                  symbols[s->accessing_symbol]->tag);

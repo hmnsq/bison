@@ -29,7 +29,7 @@ enum { command_line_prio, grammar_prio, default_prio };
 
 /* for -S */
 extern char const *skeleton;
-extern int skeleton_prio;
+extern ціле skeleton_prio;
 
 /* for -I */
 extern char const *include;
@@ -66,7 +66,7 @@ struct bison_language
   bool add_tab;
 };
 
-extern int language_prio;
+extern ціле language_prio;
 extern struct bison_language const *language;
 
 /*-----------.
@@ -84,7 +84,7 @@ enum report
     report_all              = ~0
   };
 /** What appears in the *.output file.  */
-extern int report_flag;
+extern ціле report_flag;
 
 /*----------.
 | --trace.  |
@@ -112,7 +112,7 @@ enum trace
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
-extern int trace_flag;
+extern ціле trace_flag;
 
 /*-------------.
 | --features.  |
@@ -127,7 +127,7 @@ enum feature
     feature_all              = ~0      /**< All above features.  */
   };
 /** What additional features to use.  */
-extern int feature_flag;
+extern ціле feature_flag;
 
 
 /** Process the command line arguments.
@@ -135,11 +135,11 @@ extern int feature_flag;
  *  \param argc   size of \a argv
  *  \param argv   list of arguments.
  */
-void getargs (int argc, char *argv[]);
+void getargs (ціле argc, char *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location loc);
-void skeleton_arg (const char *arg, int prio, location loc);
+void language_argmatch (char const *arg, ціле prio, location loc);
+void skeleton_arg (const char *arg, ціле prio, location loc);
 void set_yacc (location loc);
 
 /** In the string \c s, replace all characters \c from by \c to.  */

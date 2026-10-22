@@ -55,7 +55,7 @@ symbol_list_sym_new (symbol *sym, location loc)
 
   res->next = NULL;
 
-  return res;
+  повернути res;
 }
 
 
@@ -78,26 +78,26 @@ symbol_list_type_new (uniqstr type_name, location loc)
   res->named_ref = NULL;
   res->next = NULL;
 
-  return res;
+  повернути res;
 }
 
 
 symbol_list *
 symbol_list_type_set (symbol_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
+  для (symbol_list *l = syms; l; l = l->next)
     symbol_type_set (l->content.sym, type_name, l->sym_loc);
-  return syms;
+  повернути syms;
 }
 
 
 symbol_list *
 symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 {
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
-    if (l->content.sym == sym)
-      return l;
-  return NULL;
+  для (/* Nothing. */; l && l->content.sym; l = l->next)
+    якщо (l->content.sym == sym)
+      повернути l;
+  повернути NULL;
 }
 
 
@@ -110,14 +110,14 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 {
   fputc ('[', out);
   char const *sep = "";
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
+  для (/* Nothing. */; l && l->content.sym; l = l->next)
     {
       fputs (sep, out);
       fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
              out);
-      if (l->content_type == SYMLIST_SYMBOL)
+      якщо (l->content_type == SYMLIST_SYMBOL)
         symbol_print (l->content.sym, out);
       fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
       putc ('}', out);
@@ -135,29 +135,29 @@ symbol_list *
 symbol_list_prepend (symbol_list *list, symbol_list *node)
 {
   node->next = list;
-  return node;
+  повернути node;
 }
 
 
 symbol_list *
 symbol_list_last (symbol_list *list)
 {
-  if (!list)
-    return NULL;
+  якщо (!list)
+    повернути NULL;
   symbol_list *next = list;
-  while (next->next)
+  поки (next->next)
     next = next->next;
-  return next;
+  повернути next;
 }
 
 symbol_list *
 symbol_list_append (symbol_list *list, symbol_list *node)
 {
-  if (list)
+  якщо (list)
     symbol_list_last (list)->next = node;
-  else
+  інакше
     list = node;
-  return list;
+  повернути list;
 }
 
 
@@ -169,11 +169,11 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 void
 symbol_list_free (symbol_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  для (symbol_list *next; list; list = next)
     {
       next = list->next;
       named_ref_free (list->named_ref);
-      if (list->content_type == SYMLIST_TYPE)
+      якщо (list->content_type == SYMLIST_TYPE)
         free (list->content.sem_type);
       free (list);
     }
@@ -184,15 +184,15 @@ symbol_list_free (symbol_list *list)
 | Return its length.  |
 `--------------------*/
 
-int
+ціле
 symbol_list_length (symbol_list const *l)
 {
-  int res = 0;
-  for (/* Nothing. */;
+  ціле res = 0;
+  для (/* Nothing. */;
        l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
        l = l->next)
     ++res;
-  return res;
+  повернути res;
 }
 
 
@@ -201,17 +201,17 @@ symbol_list_length (symbol_list const *l)
 `------------------------------*/
 
 symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+symbol_list_n_get (symbol_list *l, ціле n)
 {
   aver (0 <= n);
-  for (int i = 0; i < n; ++i)
+  для (ціле i = 0; i < n; ++i)
     {
       l = l->next;
       aver (l);
     }
   aver (l->content_type == SYMLIST_SYMBOL);
   aver (l->content.sym);
-  return l;
+  повернути l;
 }
 
 /*--------------------------------------------------------------.
@@ -220,15 +220,15 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+symbol_list_n_type_name_get (symbol_list *l, ціле n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  повернути symbol_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
 symbol_list_null (symbol_list *node)
 {
-  return (!node
+  повернути (!node
           || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
 }
 
@@ -240,7 +240,7 @@ symbol_list_code_props_set (symbol_list *node, code_props_type kind,
     {
     case SYMLIST_SYMBOL:
       symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
+      якщо (node->content.sym->content->status == undeclared)
         node->content.sym->content->status = used;
       break;
     case SYMLIST_TYPE:
@@ -248,7 +248,7 @@ symbol_list_code_props_set (symbol_list *node, code_props_type kind,
         (semantic_type_get (node->content.sem_type->tag,
                             &node->content.sem_type->location),
          kind, cprops);
-      if (node->content.sem_type->status == undeclared)
+      якщо (node->content.sem_type->status == undeclared)
         node->content.sem_type->status = used;
       break;
     }
