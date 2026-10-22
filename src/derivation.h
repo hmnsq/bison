@@ -31,23 +31,23 @@
    counterexample when printed.  */
 
 typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+typedef sa_nracanaa derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+static anta_hstha derivation_list derivation_list_new (void)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  ආපසු gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
 }
 
-static inline bool
+static anta_hstha bool
 derivation_list_next (gl_list_iterator_t *it, derivation **d)
 {
   const void *p = NULL;
   bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  නම් (res)
     *d = (derivation *) p;
-  else
+  නැතහොත්
     gl_list_iterator_free (it);
-  return res;
+  ආපසු res;
 }
 
 void derivation_list_append (derivation_list dl, derivation *d);
@@ -59,14 +59,14 @@ derivation *
 derivation_new (symbol_number sym, derivation_list children,
                 const rule *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+static anta_hstha derivation *derivation_new_leaf (symbol_number sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  ආපසු derivation_new (sym, NULL, NULL);
 }
 
 // Number of symbols.
 size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
+void derivation_print (const derivation *deriv, FILE *out, const var_na *prefix);
 void derivation_print_leaves (const derivation *deriv, FILE *out);
 void derivation_free (derivation *deriv);
 void derivation_retain (derivation *deriv);
