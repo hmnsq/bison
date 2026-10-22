@@ -17,68 +17,68 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "InadequacyList.h"
+#ضمن "InadequacyList.h"
 
-#include <intprops.h>
+#ضمن <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+Contribution_اشاریہ ثابت Contribution_اشاریہ_none = -1;
+Contribution_اشاریہ ثابت Contribution_اشاریہ_error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, علامت *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_گرہ_گنتی *گرہ_گنتی)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *نتیجہ = xmalloc (حجم *نتیجہ);
+  نتیجہ->id = *گرہ_گنتی;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  إذا (INT_جوڑو_WRAPV (*گرہ_گنتی, 1, گرہ_گنتی))
     aver (false);
-  IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
-  result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
-  result->inadequacy.conflict.token = token;
-  result->inadequacy.conflict.actions = actions;
-  return result;
+  IGNORE_TYPE_LIMITS_سرا
+  نتیجہ->اگلا = عدم;
+  نتیجہ->manifestingState = manifesting_state;
+  نتیجہ->contribution_گنتی_2 = bitset_گنتی (actions);
+  نتیجہ->inadequacy.conflict.token = token;
+  نتیجہ->inadequacy.conflict.actions = actions;
+  أرجع نتیجہ;
 }
 
-void
+فراغ
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  طالما (self)
     {
-      InadequacyList *node = self;
-      self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      InadequacyList *گرہ = self;
+      self = self->اگلا;
+      bitset_free (گرہ->inadequacy.conflict.actions);
+      حرر (گرہ);
     }
 }
 
-ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+Contribution_اشاریہ
+Inadequacy_List_get_کھسکاؤ_Contribution_اشاریہ (InadequacyList ثابت *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  إذا (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->عدد))
+    أرجع Contribution_اشاریہ_none;
+  أرجع self->contribution_گنتی_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
-                                      ContributionIndex i)
+علامت *
+InadequacyList__getContributionToken (InadequacyList ثابت *self,
+                                      Contribution_اشاریہ i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_گنتی_2); (فراغ) i;
+  أرجع self->inadequacy.conflict.token;
 }
 
-void
-InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
+فراغ
+Inadequacy_List_prepend_منزل (InadequacyList *self, InadequacyList **list)
 {
-  InadequacyList *head_old = *list;
+  InadequacyList *سر_old = *list;
   *list = self;
-  self->next = head_old;
+  self->اگلا = سر_old;
 }

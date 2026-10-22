@@ -15,21 +15,21 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef FIXITS_H_
+#جے_بنا_تعریف FIXITS_H_
 # define FIXITS_H_ 1
 
 # include "location.h"
 
 /* Declare a fix to apply.  */
-void fixits_register (location const *loc, char const* update);
+فراغ fixits_رجسٹر (location ثابت *loc, حرف ثابت* update);
 
 /* Apply the fixits: update the source file.  */
-void fixits_run (void);
+فراغ fixits_لگاتار (فراغ);
 
 /* Whether there are no fixits. */
-bool fixits_empty (void);
+bool fixits_خالی_تھاواں (فراغ);
 
 /* Free the registered fixits.  */
-void fixits_free (void);
+فراغ fixits_free (فراغ);
 
-#endif /* !FIXITS_H_ */
+#جے_انت /* !FIXITS_H_ */

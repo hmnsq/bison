@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "state.h"
+#ضمن <config.h>
+#ضمن "state.h"
 
-#include "system.h"
+#ضمن "system.h"
 
-#include <hash.h>
+#ضمن <hash.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "print-xml.h"
+#ضمن "closure.h"
+#ضمن "complain.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "print-xml.h"
 
 
                         /*-------------------.
@@ -41,24 +41,24 @@
 | Create a new array of NUM shifts/gotos.  |
 `-----------------------------------------*/
 
-static transitions *
-transitions_new (int num, state **dst)
+ساكن transitions *
+transitions_new (صحيح عدد, state **dst)
 {
-  size_t states_size = num * sizeof *dst;
-  transitions *res = xmalloc (offsetof (transitions, states) + states_size);
-  res->num = num;
-  memcpy (res->states, dst, states_size);
-  return res;
+  size_t حالتاں_ناپ = عدد * حجم *dst;
+  transitions *res = xmalloc (offsetof (transitions, حالتاں) + حالتاں_ناپ);
+  res->عدد = عدد;
+  حافظہ_نقل (res->حالتاں, dst, حالتاں_ناپ);
+  أرجع res;
 }
 
 
 state *
-transitions_to (state *s, symbol_number sym)
+transitions_منزل (state *s, علامت_نمبر sym)
 {
   transitions *trans = s->transitions;
-  for (int i = 0; i < trans->num; ++i)
-    if (TRANSITION_SYMBOL (trans, i) == sym)
-      return trans->states[i];
+  لكل (صحيح i = 0; i < trans->عدد; ++i)
+    إذا (TRANSITION_علامت (trans, i) == sym)
+      أرجع trans->حالتاں[i];
   abort ();
 }
 
@@ -73,14 +73,14 @@ transitions_to (state *s, symbol_number sym)
 `---------------------------------*/
 
 errs *
-errs_new (int num, symbol **tokens)
+errs_new (صحيح عدد, علامت **ٹوکن)
 {
-  size_t symbols_size = num * sizeof *tokens;
-  errs *res = xmalloc (offsetof (errs, symbols) + symbols_size);
-  res->num = num;
-  if (tokens)
-    memcpy (res->symbols, tokens, symbols_size);
-  return res;
+  size_t symbols_ناپ = عدد * حجم *ٹوکن;
+  errs *res = xmalloc (offsetof (errs, symbols) + symbols_ناپ);
+  res->عدد = عدد;
+  إذا (ٹوکن)
+    حافظہ_نقل (res->symbols, ٹوکن, symbols_ناپ);
+  أرجع res;
 }
 
 
@@ -95,15 +95,15 @@ errs_new (int num, symbol **tokens)
 | Create a new array of NUM reductions.  |
 `---------------------------------------*/
 
-static reductions *
-reductions_new (int num, rule **reds)
+ساكن reductions *
+reductions_new (صحيح عدد, قاعدہ **reds)
 {
-  size_t rules_size = num * sizeof *reds;
-  reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
-  res->num = num;
-  res->lookaheads = NULL;
-  memcpy (res->rules, reds, rules_size);
-  return res;
+  size_t قاعدے_ناپ = عدد * حجم *reds;
+  reductions *res = xmalloc (offsetof (reductions, قاعدے) + قاعدے_ناپ);
+  res->عدد = عدد;
+  res->lookaheads = عدم;
+  حافظہ_نقل (res->قاعدے, reds, قاعدے_ناپ);
+  أرجع res;
 }
 
 
@@ -113,10 +113,10 @@ reductions_new (int num, rule **reds)
                         `---------*/
 
 
-state_number nstates = 0;
+state_نمبر nstates = 0;
 /* FINAL_STATE is properly set by new_state when it recognizes its
    accessing symbol: $end.  */
-state *final_state = NULL;
+state *final_state = عدم;
 
 
 /*------------------------------------------------------------------.
@@ -125,53 +125,53 @@ state *final_state = NULL;
 `------------------------------------------------------------------*/
 
 state *
-state_new (symbol_number accessing_symbol,
-           size_t nitems, item_index *core)
+state_new (علامت_نمبر accessing_علامت,
+           size_t nitems, شے_اشاریہ *core)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_نمبر_ودھ_توں_ودھ);
 
-  size_t items_size = nitems * sizeof *core;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = accessing_symbol;
-  res->transitions = NULL;
-  res->reductions = NULL;
-  res->errs = NULL;
-  res->state_list = NULL;
+  size_t اشیاء_ناپ = nitems * حجم *core;
+  state *res = xmalloc (offsetof (state, اشیاء) + اشیاء_ناپ);
+  res->نمبر = nstates++;
+  res->accessing_علامت = accessing_علامت;
+  res->transitions = عدم;
+  res->reductions = عدم;
+  res->errs = عدم;
+  res->state_list = عدم;
   res->consistent = false;
-  res->solved_conflicts = NULL;
-  res->solved_conflicts_xml = NULL;
+  res->solved_conflicts = عدم;
+  res->solved_conflicts_xml = عدم;
 
   res->nitems = nitems;
-  memcpy (res->items, core, items_size);
+  حافظہ_نقل (res->اشیاء, core, اشیاء_ناپ);
 
-  state_hash_insert (res);
+  state_hash_داخل_کرو (res);
 
-  return res;
+  أرجع res;
 }
 
 state *
-state_new_isocore (state const *s)
+state_new_isocore (state ثابت *s)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_نمبر_ودھ_توں_ودھ);
 
-  size_t items_size = s->nitems * sizeof *s->items;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = s->accessing_symbol;
+  size_t اشیاء_ناپ = s->nitems * حجم *s->اشیاء;
+  state *res = xmalloc (offsetof (state, اشیاء) + اشیاء_ناپ);
+  res->نمبر = nstates++;
+  res->accessing_علامت = s->accessing_علامت;
   res->transitions =
-    transitions_new (s->transitions->num, s->transitions->states);
-  res->reductions = reductions_new (s->reductions->num, s->reductions->rules);
-  res->errs = NULL;
-  res->state_list = NULL;
+    transitions_new (s->transitions->عدد, s->transitions->حالتاں);
+  res->reductions = reductions_new (s->reductions->عدد, s->reductions->قاعدے);
+  res->errs = عدم;
+  res->state_list = عدم;
   res->consistent = s->consistent;
-  res->solved_conflicts = NULL;
-  res->solved_conflicts_xml = NULL;
+  res->solved_conflicts = عدم;
+  res->solved_conflicts_xml = عدم;
 
   res->nitems = s->nitems;
-  memcpy (res->items, s->items, items_size);
+  حافظہ_نقل (res->اشیاء, s->اشیاء, اشیاء_ناپ);
 
-  return res;
+  أرجع res;
 }
 
 
@@ -179,28 +179,28 @@ state_new_isocore (state const *s)
 | Free S.  |
 `---------*/
 
-static void
+ساكن فراغ
 state_free (state *s)
 {
-  free (s->transitions);
-  free (s->reductions);
-  free (s->errs);
-  free (s);
+  حرر (s->transitions);
+  حرر (s->reductions);
+  حرر (s->errs);
+  حرر (s);
 }
 
 
-void
-state_transitions_print (const state *s, FILE *out)
+فراغ
+state_transitions_print (ثابت state *s, FILE *باہرلا)
 {
-  const transitions *trans = s->transitions;
-  fprintf (out, "transitions of %d (%d):\n",
-           s->number, trans->num);
-  for (int i = 0; i < trans->num; ++i)
-    fprintf (out, "  %d: (%d, %s, %d)\n",
+  ثابت transitions *trans = s->transitions;
+  fprintf (باہرلا, "transitions of %d (%d):\n",
+           s->نمبر, trans->عدد);
+  لكل (صحيح i = 0; i < trans->عدد; ++i)
+    fprintf (باہرلا, "  %d: (%d, %s, %d)\n",
              i,
-             s->number,
-             symbols[s->transitions->states[i]->accessing_symbol]->tag,
-             s->transitions->states[i]->number);
+             s->نمبر,
+             symbols[s->transitions->حالتاں[i]->accessing_علامت]->ٹیگ,
+             s->transitions->حالتاں[i]->نمبر);
 }
 
 
@@ -208,12 +208,12 @@ state_transitions_print (const state *s, FILE *out)
 | Set the transitions of S.  |
 `---------------------------*/
 
-void
-state_transitions_set (state *s, int num, state **dst)
+فراغ
+state_transitions_سیٹ (state *s, صحيح عدد, state **dst)
 {
   aver (!s->transitions);
-  s->transitions = transitions_new (num, dst);
-  if (trace_flag & trace_automaton)
+  s->transitions = transitions_new (عدد, dst);
+  إذا (trace_flag & trace_automaton)
     state_transitions_print (s, stderr);
 }
 
@@ -222,21 +222,21 @@ state_transitions_set (state *s, int num, state **dst)
 | Set the reductions of S.  |
 `--------------------------*/
 
-void
-state_reductions_set (state *s, int num, rule **reds)
+فراغ
+state_reductions_سیٹ (state *s, صحيح عدد, قاعدہ **reds)
 {
   aver (!s->reductions);
-  s->reductions = reductions_new (num, reds);
+  s->reductions = reductions_new (عدد, reds);
 }
 
 
-int
-state_reduction_find (state const *s, rule const *r)
+صحيح
+state_reduction_لبھو (state ثابت *s, قاعدہ ثابت *r)
 {
   reductions *reds = s->reductions;
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
-      return i;
+  لكل (صحيح i = 0; i < reds->عدد; ++i)
+    إذا (reds->قاعدے[i] == r)
+      أرجع i;
   abort ();
 }
 
@@ -245,11 +245,11 @@ state_reduction_find (state const *s, rule const *r)
 | Set the errs of S.  |
 `--------------------*/
 
-void
-state_errs_set (state *s, int num, symbol **tokens)
+فراغ
+state_errs_سیٹ (state *s, صحيح عدد, علامت **ٹوکن)
 {
   aver (!s->errs);
-  s->errs = errs_new (num, tokens);
+  s->errs = errs_new (عدد, ٹوکن);
 }
 
 
@@ -259,49 +259,49 @@ state_errs_set (state *s, int num, symbol **tokens)
 | wants to reduce R.                                |
 `--------------------------------------------------*/
 
-void
-state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
+فراغ
+state_قاعدہ_lookaheads_print (state ثابت *s, قاعدہ ثابت *r, FILE *باہرلا)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  صحيح red = state_reduction_لبھو (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  إذا (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
-      char const *sep = "";
-      fprintf (out, "  [");
+      صحيح k;
+      حرف ثابت *sep = "";
+      fprintf (باہرلا, "  [");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
-          fprintf (out, "%s%s", sep, symbols[k]->tag);
+          fprintf (باہرلا, "%s%s", sep, symbols[k]->ٹیگ);
           sep = ", ";
         }
-      fprintf (out, "]");
+      fprintf (باہرلا, "]");
     }
 }
 
-void
-state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                       FILE *out, int level)
+فراغ
+state_قاعدہ_lookaheads_print_xml (state ثابت *s, قاعدہ ثابت *r,
+                                       FILE *باہرلا, صحيح level)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  صحيح red = state_reduction_لبھو (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  إذا (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
-      xml_puts (out, level, "<lookaheads>");
+      صحيح k;
+      xml_puts (باہرلا, level, "<lookaheads>");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
-          xml_printf (out, level + 1, "<symbol>%s</symbol>",
-                      xml_escape (symbols[k]->tag));
+          xml_printf (باہرلا, level + 1, "<symbol>%s</symbol>",
+                      xml_escape (symbols[k]->ٹیگ));
         }
-      xml_puts (out, level, "</lookaheads>");
+      xml_puts (باہرلا, level, "</lookaheads>");
     }
 }
 
@@ -311,44 +311,44 @@ state_rule_lookaheads_print_xml (state const *s, rule const *r,
 `---------------------*/
 
 /* Initial capacity of states hash table.  */
-#define HT_INITIAL_CAPACITY 257
+#تعریف_کرو HT_INITIAL_سمرتھا 257
 
-static struct hash_table *state_table = NULL;
+ساكن بنية hash_جدول *state_جدول = عدم;
 
 /* Two states are equal if they have the same core items.  */
-static inline bool
-state_compare (state const *s1, state const *s2)
+ساكن مضمن bool
+state_compare (state ثابت *s1, state ثابت *s2)
 {
-  if (s1->nitems != s2->nitems)
-    return false;
+  إذا (s1->nitems != s2->nitems)
+    أرجع false;
 
-  for (size_t i = 0; i < s1->nitems; ++i)
-    if (s1->items[i] != s2->items[i])
-      return false;
+  لكل (size_t i = 0; i < s1->nitems; ++i)
+    إذا (s1->اشیاء[i] != s2->اشیاء[i])
+      أرجع false;
 
-  return true;
+  أرجع true;
 }
 
-static bool
-state_comparator (void const *s1, void const *s2)
+ساكن bool
+state_comparator (فراغ ثابت *s1, فراغ ثابت *s2)
 {
-  return state_compare (s1, s2);
+  أرجع state_compare (s1, s2);
 }
 
-static inline size_t
-state_hash (state const *s, size_t tablesize)
+ساكن مضمن size_t
+state_hash (state ثابت *s, size_t tablesize)
 {
   /* Add up the state's item numbers to get a hash key.  */
-  size_t key = 0;
-  for (size_t i = 0; i < s->nitems; ++i)
-    key += s->items[i];
-  return key % tablesize;
+  size_t کلید = 0;
+  لكل (size_t i = 0; i < s->nitems; ++i)
+    کلید += s->اشیاء[i];
+  أرجع کلید % tablesize;
 }
 
-static size_t
-state_hasher (void const *s, size_t tablesize)
+ساكن size_t
+state_hasher (فراغ ثابت *s, size_t tablesize)
 {
-  return state_hash (s, tablesize);
+  أرجع state_hash (s, tablesize);
 }
 
 
@@ -356,14 +356,14 @@ state_hasher (void const *s, size_t tablesize)
 | Create the states hash table.  |
 `-------------------------------*/
 
-void
-state_hash_new (void)
+فراغ
+state_hash_new (فراغ)
 {
-  state_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                  NULL,
+  state_جدول = hash_xinitialize (HT_INITIAL_سمرتھا,
+                                  عدم,
                                   state_hasher,
                                   state_comparator,
-                                  NULL);
+                                  عدم);
 }
 
 
@@ -371,10 +371,10 @@ state_hash_new (void)
 | Free the states hash table, not the states.  |
 `---------------------------------------------*/
 
-void
-state_hash_free (void)
+فراغ
+state_hash_free (فراغ)
 {
-  hash_free (state_table);
+  hash_free (state_جدول);
 }
 
 
@@ -382,10 +382,10 @@ state_hash_free (void)
 | Insert S in the state hash table.  |
 `-----------------------------------*/
 
-void
-state_hash_insert (state *s)
+فراغ
+state_hash_داخل_کرو (state *s)
 {
-  hash_xinsert (state_table, s);
+  hash_xinsert (state_جدول, s);
 }
 
 
@@ -395,15 +395,15 @@ state_hash_insert (state *s)
 `------------------------------------------------------------------*/
 
 state *
-state_hash_lookup (size_t nitems, const item_index *core)
+state_hash_lookup (size_t nitems, ثابت شے_اشاریہ *core)
 {
-  size_t items_size = nitems * sizeof *core;
-  state *probe = xmalloc (offsetof (state, items) + items_size);
+  size_t اشیاء_ناپ = nitems * حجم *core;
+  state *probe = xmalloc (offsetof (state, اشیاء) + اشیاء_ناپ);
   probe->nitems = nitems;
-  memcpy (probe->items, core, items_size);
-  state *entry = hash_lookup (state_table, probe);
-  free (probe);
-  return entry;
+  حافظہ_نقل (probe->اشیاء, core, اشیاء_ناپ);
+  state *اندراج = hash_lookup (state_جدول, probe);
+  حرر (probe);
+  أرجع اندراج;
 }
 
 
@@ -411,35 +411,35 @@ state_hash_lookup (size_t nitems, const item_index *core)
 | Record S and all states reachable from S in REACHABLE.  |
 `--------------------------------------------------------*/
 
-static void
-state_record_reachable_states (state *s, bitset reachable)
+ساكن فراغ
+state_ریکارڈ_reachable_حالتاں (state *s, bitset reachable)
 {
-  if (bitset_test (reachable, s->number))
-    return;
-  bitset_set (reachable, s->number);
-  for (int i = 0; i < s->transitions->num; ++i)
-    if (!TRANSITION_IS_DISABLED (s->transitions, i))
-      state_record_reachable_states (s->transitions->states[i], reachable);
+  إذا (bitset_test (reachable, s->نمبر))
+    أرجع;
+  bitset_سیٹ (reachable, s->نمبر);
+  لكل (صحيح i = 0; i < s->transitions->عدد; ++i)
+    إذا (!TRANSITION_IS_DISABLED (s->transitions, i))
+      state_ریکارڈ_reachable_حالتاں (s->transitions->حالتاں[i], reachable);
 }
 
-void
-state_remove_unreachable_states (state_number old_to_new[])
+فراغ
+state_remove_unreachable_حالتاں (state_نمبر old_منزل_new[])
 {
-  state_number nstates_reachable = 0;
+  state_نمبر nstates_reachable = 0;
   bitset reachable = bitset_create (nstates, BITSET_FIXED);
-  state_record_reachable_states (states[0], reachable);
-  for (state_number i = 0; i < nstates; ++i)
+  state_ریکارڈ_reachable_حالتاں (حالتاں[0], reachable);
+  لكل (state_نمبر i = 0; i < nstates; ++i)
     {
-      if (bitset_test (reachable, states[i]->number))
+      إذا (bitset_test (reachable, حالتاں[i]->نمبر))
         {
-          states[nstates_reachable] = states[i];
-          states[nstates_reachable]->number = nstates_reachable;
-          old_to_new[i] = nstates_reachable++;
+          حالتاں[nstates_reachable] = حالتاں[i];
+          حالتاں[nstates_reachable]->نمبر = nstates_reachable;
+          old_منزل_new[i] = nstates_reachable++;
         }
-      else
+      وإلا
         {
-          state_free (states[i]);
-          old_to_new[i] = nstates;
+          state_free (حالتاں[i]);
+          old_منزل_new[i] = nstates;
         }
     }
   nstates = nstates_reachable;
@@ -447,18 +447,18 @@ state_remove_unreachable_states (state_number old_to_new[])
 }
 
 /* All the decorated states, indexed by the state number.  */
-state **states = NULL;
+state **حالتاں = عدم;
 
 
 /*----------------------.
 | Free all the states.  |
 `----------------------*/
 
-void
-states_free (void)
+فراغ
+حالتاں_free (فراغ)
 {
-  closure_free ();
-  for (state_number i = 0; i < nstates; ++i)
-    state_free (states[i]);
-  free (states);
+  گھیرا_free ();
+  لكل (state_نمبر i = 0; i < nstates; ++i)
+    state_free (حالتاں[i]);
+  حرر (حالتاں);
 }

@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_H_
+#جے_بنا_تعریف PRINT_H_
 # define PRINT_H_
 
-void print_results (void);
+فراغ print_results (فراغ);
 
-#endif /* !PRINT_H_ */
+#جے_انت /* !PRINT_H_ */

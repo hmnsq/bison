@@ -17,8 +17,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef STATE_ITEM_H
-# define STATE_ITEM_H
+#جے_بنا_تعریف STATE_شے_H
+# define STATE_شے_H
 
 # include <bitsetv.h>
 # include <gl_list.h>
@@ -53,62 +53,62 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_اشیاء[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_اشیاء || *((Si)->شے - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_اشیاء && *((Si)->شے - 1) >= 0)
 
-typedef int state_item_number;
+تعريفنوع صحيح state_شے_نمبر;
 
-typedef struct
+تعريفنوع بنية
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  ثابت state *state;
+  شے_نمبر *شے;
+  state_شے_نمبر trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
-} state_item;
+} state_شے;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+تعريفنوع gl_list_t state_شے_list;
 
-extern bitsetv firsts;
+خارجي bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+خارجي size_t nstate_اشیاء;
+خارجي state_شے_نمبر *state_شے_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+خارجي state_شے *state_اشیاء;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_شے *state_شے_lookup (state_نمبر s, state_شے_نمبر off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+ساكن مضمن state_شے_نمبر
+state_شے_اشاریہ_lookup (state_نمبر s, state_شے_نمبر off)
 {
-  return state_item_map[s] + off;
+  أرجع state_شے_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+فراغ state_اشیاء_init (فراغ);
+فراغ state_اشیاء_free (فراغ);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+فراغ state_شے_print (ثابت state_شے *si, FILE *باہرلا, ثابت حرف *اگیتر);
+ثابت قاعدہ *state_شے_قاعدہ (ثابت state_شے *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (ثابت state_شے *si, ثابت state_شے *اگلا);
 
 // Iterating on a state_item_list.
-static inline bool
-state_item_list_next (gl_list_iterator_t *it, state_item **si)
+ساكن مضمن bool
+state_شے_list_اگلا (gl_list_iterator_t *it, state_شے **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
-    *si = (state_item *) p;
-  else
+  ثابت فراغ *p = عدم;
+  bool res = gl_list_iterator_اگلا (it, &p, عدم);
+  إذا (res)
+    *si = (state_شے *) p;
+  وإلا
     gl_list_iterator_free (it);
-  return res;
+  أرجع res;
 }
 
 
-#endif /* STATE_ITEM_H */
+#جے_انت /* STATE_ITEM_H */

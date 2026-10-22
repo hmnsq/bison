@@ -23,113 +23,113 @@
    the null string.  NULLABLE[I - NTOKENS] is nonzero if symbol I can
    do so.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "getargs.h"
-#include "gram.h"
-#include "nullable.h"
-#include "reduce.h"
-#include "symtab.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "nullable.h"
+#ضمن "reduce.h"
+#ضمن "symtab.h"
 
 /* Linked list of rules.  */
-typedef struct rule_list
+تعريفنوع بنية قاعدہ_list
 {
-  struct rule_list *next;
-  const rule *value;
-} rule_list;
+  بنية قاعدہ_list *اگلا;
+  ثابت قاعدہ *قدر;
+} قاعدہ_list;
 
-bool *nullable = NULL;
+bool *nullable = عدم;
 
-static void
-nullable_print (FILE *out)
+ساكن فراغ
+nullable_print (FILE *باہرلا)
 {
-  fputs ("NULLABLE\n", out);
-  for (int i = ntokens; i < nsyms; i++)
-    fprintf (out, "  %s: %s\n", symbols[i]->tag,
+  fputs ("NULLABLE\n", باہرلا);
+  لكل (صحيح i = ntokens; i < nsyms; i++)
+    fprintf (باہرلا, "  %s: %s\n", symbols[i]->ٹیگ,
              nullable[i - ntokens] ? "yes" : "no");
-  fputs ("\n\n", out);
+  fputs ("\n\n", باہرلا);
 }
 
-void
-nullable_compute (void)
+فراغ
+nullable_compute (فراغ)
 {
-  nullable = xcalloc (nnterms, sizeof *nullable);
+  nullable = xcalloc (nnterms, حجم *nullable);
 
-  size_t *rcount = xcalloc (nrules, sizeof *rcount);
+  size_t *rcount = xcalloc (nrules, حجم *rcount);
   /* RITEM contains all the rules, including useless productions.
      Hence we must allocate room for useless nonterminals too.  */
-  rule_list **rsets = xcalloc (nnterms, sizeof *rsets);
+  قاعدہ_list **rsets = xcalloc (nnterms, حجم *rsets);
   /* This is said to be more elements than we actually use.
      Supposedly NRITEMS - NRULES is enough.  But why take the risk?  */
-  rule_list *relts = xnmalloc (nritems + nnterms + 1, sizeof *relts);
+  قاعدہ_list *relts = xnmalloc (nritems + nnterms + 1, حجم *relts);
 
-  symbol_number *squeue = xnmalloc (nnterms, sizeof *squeue);
-  symbol_number *s2 = squeue;
+  علامت_نمبر *squeue = xnmalloc (nnterms, حجم *squeue);
+  علامت_نمبر *s2 = squeue;
   {
-    rule_list *p = relts;
-    for (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
-      if (rules[ruleno].useful)
+    قاعدہ_list *p = relts;
+    لكل (قاعدہ_نمبر ruleno = 0; ruleno < nrules; ++ruleno)
+      إذا (قاعدے[ruleno].useful)
         {
-          const rule *r = &rules[ruleno];
-          if (r->rhs[0] >= 0)
+          ثابت قاعدہ *r = &قاعدے[ruleno];
+          إذا (r->rhs[0] >= 0)
             {
               /* This rule has a non empty RHS. */
-              bool any_tokens = false;
-              for (item_number *rp = r->rhs; *rp >= 0; ++rp)
-                if (ISTOKEN (*rp))
-                  any_tokens = true;
+              bool any_ٹوکن = false;
+              لكل (شے_نمبر *rp = r->rhs; *rp >= 0; ++rp)
+                إذا (ISTOKEN (*rp))
+                  any_ٹوکن = true;
 
               /* This rule has only nonterminals: schedule it for the second
                  pass.  */
-              if (!any_tokens)
-                for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+              إذا (!any_ٹوکن)
+                لكل (شے_نمبر *rp = r->rhs; *rp >= 0; ++rp)
                   {
                     rcount[ruleno]++;
-                    p->next = rsets[*rp - ntokens];
-                    p->value = r;
+                    p->اگلا = rsets[*rp - ntokens];
+                    p->قدر = r;
                     rsets[*rp - ntokens] = p;
                     p++;
                   }
             }
-          else
+          وإلا
             {
               /* This rule has an empty RHS. */
-              if (r->useful
-                  && ! nullable[r->lhs->number - ntokens])
+              إذا (r->useful
+                  && ! nullable[r->lhs->نمبر - ntokens])
                 {
-                  nullable[r->lhs->number - ntokens] = true;
-                  *s2++ = r->lhs->number;
+                  nullable[r->lhs->نمبر - ntokens] = true;
+                  *s2++ = r->lhs->نمبر;
                 }
             }
         }
   }
 
-  symbol_number *s1 = squeue;
-  while (s1 < s2)
-    for (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
+  علامت_نمبر *s1 = squeue;
+  طالما (s1 < s2)
+    لكل (قاعدہ_list *p = rsets[*s1++ - ntokens]; p; p = p->اگلا)
       {
-        const rule *r = p->value;
-        if (--rcount[r->number] == 0)
-          if (r->useful && ! nullable[r->lhs->number - ntokens])
+        ثابت قاعدہ *r = p->قدر;
+        إذا (--rcount[r->نمبر] == 0)
+          إذا (r->useful && ! nullable[r->lhs->نمبر - ntokens])
             {
-              nullable[r->lhs->number - ntokens] = true;
-              *s2++ = r->lhs->number;
+              nullable[r->lhs->نمبر - ntokens] = true;
+              *s2++ = r->lhs->نمبر;
             }
       }
 
-  free (squeue);
-  free (rcount);
-  free (rsets);
-  free (relts);
+  حرر (squeue);
+  حرر (rcount);
+  حرر (rsets);
+  حرر (relts);
 
-  if (trace_flag & trace_sets)
+  إذا (trace_flag & trace_sets)
     nullable_print (stderr);
 }
 
 
-void
-nullable_free (void)
+فراغ
+nullable_free (فراغ)
 {
-  free (nullable);
+  حرر (nullable);
 }

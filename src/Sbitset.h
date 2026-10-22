@@ -17,78 +17,78 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SBITSET_H_
+#جے_بنا_تعریف SBITSET_H_
 # define SBITSET_H_
 
-typedef unsigned char *Sbitset;
-typedef size_t Sbitset__Index;
-# define SBITSET__INDEX__CONVERSION_SPEC "zu"
+تعريفنوع بنانشانی حرف *Sbitset;
+تعريفنوع size_t Sbitset_اشاریہ;
+# define SBITSET_اشاریہ_CONVERSION_SPEC "zu"
 
 # define Sbitset__nbytes(NBITS) \
-  (((NBITS) + CHAR_BIT - 1) / CHAR_BIT)
-# define Sbitset__byteAddress(SELF, INDEX) \
-  (((SELF) + (INDEX) / CHAR_BIT))
-# define Sbitset__bit_mask(INDEX) \
-  (1 << (CHAR_BIT - 1 - (INDEX) % CHAR_BIT))
-# define Sbitset__last_byte_mask(NBITS) \
-  (UCHAR_MAX << (CHAR_BIT - 1 - ((NBITS) - 1) % CHAR_BIT))
+  (((NBITS) + CHAR_ثنائی_ہندسہ - 1) / CHAR_ثنائی_ہندسہ)
+# define Sbitset_byte_پتہ(SELF, اشاریہ) \
+  (((SELF) + (اشاریہ) / CHAR_ثنائی_ہندسہ))
+# define Sbitset_ثنائی_ہندسہ_نقاب(اشاریہ) \
+  (1 << (CHAR_ثنائی_ہندسہ - 1 - (اشاریہ) % CHAR_ثنائی_ہندسہ))
+# define Sbitset_آخری_byte_نقاب(NBITS) \
+  (UCHAR_MAX << (CHAR_ثنائی_ہندسہ - 1 - ((NBITS) - 1) % CHAR_ثنائی_ہندسہ))
 
 /* nbits must not be 0.  */
-Sbitset Sbitset__new (Sbitset__Index nbits);
-Sbitset Sbitset__new_on_obstack (Sbitset__Index nbits,
-                                 struct obstack *obstackp);
-void Sbitset__delete (Sbitset self);
+Sbitset Sbitset__new (Sbitset_اشاریہ nbits);
+Sbitset Sbitset__new_on_obstack (Sbitset_اشاریہ nbits,
+                                 بنية obstack *obstackp);
+فراغ Sbitset__delete (Sbitset self);
 
-# define Sbitset__test(SELF, INDEX)                                     \
-  ((*Sbitset__byteAddress ((SELF), (INDEX)) & Sbitset__bit_mask (INDEX)) != 0)
+# define Sbitset__test(SELF, اشاریہ)                                     \
+  ((*Sbitset_byte_پتہ ((SELF), (اشاریہ)) & Sbitset_ثنائی_ہندسہ_نقاب (اشاریہ)) != 0)
 
-bool Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits);
+bool Sbitset_is_خالی_تھاواں (Sbitset self, Sbitset_اشاریہ nbits);
 
-void Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
+فراغ Sbitset__fprint (Sbitset self, Sbitset_اشاریہ nbits, FILE *file);
 
-# define Sbitset__set(SELF, INDEX)                                      \
-  do {                                                                  \
-    *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
-      *Sbitset__byteAddress ((SELF), (INDEX)) | Sbitset__bit_mask (INDEX); \
-  } while (0)
+# define Sbitset_سیٹ(SELF, اشاریہ)                                      \
+  افعل {                                                                  \
+    *Sbitset_byte_پتہ ((SELF), (اشاریہ)) =                           \
+      *Sbitset_byte_پتہ ((SELF), (اشاریہ)) | Sbitset_ثنائی_ہندسہ_نقاب (اشاریہ); \
+  } طالما (0)
 
-# define Sbitset__reset(SELF, INDEX)                                    \
-  do {                                                                  \
-    *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
-      *Sbitset__byteAddress ((SELF), (INDEX)) & ~Sbitset__bit_mask (INDEX); \
-  } while (0)
+# define Sbitset__reset(SELF, اشاریہ)                                    \
+  افعل {                                                                  \
+    *Sbitset_byte_پتہ ((SELF), (اشاریہ)) =                           \
+      *Sbitset_byte_پتہ ((SELF), (اشاریہ)) & ~Sbitset_ثنائی_ہندسہ_نقاب (اشاریہ); \
+  } طالما (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be reset.  */
 # define Sbitset__zero(SELF, NBITS)             \
-  do {                                          \
+  افعل {                                          \
     memset (SELF, 0, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } طالما (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be set.  */
 # define Sbitset__ones(SELF, NBITS)                     \
-  do {                                                  \
+  افعل {                                                  \
     memset (SELF, UCHAR_MAX, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } طالما (0)
 
 /* NBITS is the size of every bitset.  More than NBITS bits might be set.  */
 # define Sbitset__or(SELF, OTHER1, OTHER2, NBITS)                       \
-  do {                                                                  \
+  افعل {                                                                  \
     Sbitset ptr_self = (SELF);                                          \
     Sbitset ptr_other1 = (OTHER1);                                      \
     Sbitset ptr_other2 = (OTHER2);                                      \
-    Sbitset end_self = ptr_self + Sbitset__nbytes (NBITS);              \
-    for (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
+    Sbitset سرا_self = ptr_self + Sbitset__nbytes (NBITS);              \
+    لكل (; ptr_self < سرا_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
       *ptr_self = *ptr_other1 | *ptr_other2;                            \
-  } while (0)
+  } طالما (0)
 
 /* ATTENTION: there are *two* loops here, "break" and "continue" will
    not apply to the whole loop, just the inner one.  */
-# define SBITSET__FOR_EACH(SELF, NBITS, ITER, INDEX)                    \
-  for ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
-    if (*(ITER) != 0)                                                   \
-      for ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
-           (INDEX) < (NBITS) && (SELF)+(INDEX)/CHAR_BIT < (ITER)+1;     \
-           ++(INDEX))                                                   \
-        if (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
+# define SBITSET__FOR_EACH(SELF, NBITS, ITER, اشاریہ)                    \
+  لكل ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
+    إذا (*(ITER) != 0)                                                   \
+      لكل ((اشاریہ) = ((ITER)-(SELF))*CHAR_ثنائی_ہندسہ;                          \
+           (اشاریہ) < (NBITS) && (SELF)+(اشاریہ)/CHAR_ثنائی_ہندسہ < (ITER)+1;     \
+           ++(اشاریہ))                                                   \
+        إذا (((*ITER) & Sbitset_ثنائی_ہندسہ_نقاب (اشاریہ)) != 0)
 
-#endif /* !SBITSET_H_ */
+#جے_انت /* !SBITSET_H_ */

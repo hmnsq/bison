@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SCAN_GRAM_H_
-# define SCAN_GRAM_H_
+#جے_بنا_تعریف جانچ_GRAM_H
+# define جانچ_GRAM_H
 
 /* Initialize the scanner to read file GRAM. */
-void gram_scanner_open (const char *gram);
+فراغ gram_scanner_open (ثابت حرف *gram);
 /* Close the open files.  */
-void gram_scanner_close (void);
+فراغ gram_scanner_close (فراغ);
 
 /* Free all the memory allocated to the scanner. */
-void gram_scanner_free (void);
-void gram_scanner_last_string_free (void);
+فراغ gram_scanner_free (فراغ);
+فراغ gram_scanner_آخری_string_free (فراغ);
 
-# define GRAM_LEX_DECL int gram_lex (GRAM_STYPE *val, location *loc)
+# define GRAM_LEX_DECL صحيح gram_lex (GRAM_STYPE *val, location *loc)
 GRAM_LEX_DECL;
 
-#endif /* !SCAN_GRAM_H_ */
+#جے_انت /* !SCAN_GRAM_H_ */

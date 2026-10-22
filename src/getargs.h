@@ -18,65 +18,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef GETARGS_H_
+#جے_بنا_تعریف GETARGS_H_
 # define GETARGS_H_
 
 # include "location.h"
 
-enum { command_line_prio, grammar_prio, default_prio };
+تعداد { command_سطر_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */
 
 /* for -S */
-extern char const *skeleton;
-extern int skeleton_prio;
+خارجي حرف ثابت *skeleton;
+خارجي صحيح skeleton_prio;
 
 /* for -I */
-extern char const *include;
+خارجي حرف ثابت *include;
 
-extern bool header_flag;                /* for -d/-H */
-extern bool graph_flag;                 /* for -g */
-extern bool html_flag;                  /* for --html */
-extern bool xml_flag;                   /* for -x */
-extern bool no_lines_flag;              /* for -l */
-extern bool token_table_flag;           /* for -k */
-extern location yacc_loc;               /* for -y */
-extern bool update_flag;                /* for -u */
-extern bool color_debug;                /* --color=debug. */
+خارجي bool سرخی_flag;                /* for -d/-H */
+خارجي bool گراف_flag;                 /* for -g */
+خارجي bool html_flag;                  /* for --html */
+خارجي bool xml_flag;                   /* for -x */
+خارجي bool no_سطریں_flag;              /* for -l */
+خارجي bool token_جدول_flag;           /* for -k */
+خارجي location yacc_loc;               /* for -y */
+خارجي bool update_flag;                /* for -u */
+خارجي bool color_debug;                /* --color=debug. */
 /* GLR_PARSER is true if the input file says to use the GLR
    (Generalized LR) parser, and to output some additional information
    used by the GLR algorithm.  */
 
-extern bool glr_parser;
+خارجي bool glr_parser;
 
 /* NONDETERMINISTIC_PARSER is true iff conflicts are accepted.  This
    is used by the GLR parser, and might be used in BackTracking
    parsers too.  */
 
-extern bool nondeterministic_parser;
+خارجي bool nondeterministic_parser;
 
 
 /* --language.  */
-struct bison_language
+بنية bison_language
 {
-  char language[sizeof "Java"];
-  char skeleton[sizeof "java-skel.m4"];
-  char src_extension[sizeof ".java"];
-  char header_extension[sizeof ".java"];
-  bool add_tab;
+  حرف language[حجم "Java"];
+  حرف skeleton[حجم "java-skel.m4"];
+  حرف src_extension[حجم ".java"];
+  حرف سرخی_extension[حجم ".java"];
+  bool جوڑو_tab;
 };
 
-extern int language_prio;
-extern struct bison_language const *language;
+خارجي صحيح language_prio;
+خارجي بنية bison_language ثابت *language;
 
 /*-----------.
 | --report.  |
 `-----------*/
 
-enum report
+تعداد report
   {
     report_none             = 0,
-    report_states           = 1 << 0,
+    report_حالتاں           = 1 << 0,
     report_itemsets         = 1 << 1,
     report_lookaheads       = 1 << 2,
     report_solved_conflicts = 1 << 3,
@@ -84,15 +84,15 @@ enum report
     report_all              = ~0
   };
 /** What appears in the *.output file.  */
-extern int report_flag;
+خارجي صحيح report_flag;
 
 /*----------.
 | --trace.  |
 `----------*/
-enum trace
+تعداد trace
   {
     trace_none      = 0,       /**< No traces. */
-    trace_scan      = 1 << 0,  /**< Grammar scanner traces. */
+    trace_جانچ      = 1 << 0,  /**< Grammar scanner traces. */
     trace_parse     = 1 << 1,  /**< Grammar parser traces. */
     trace_resource  = 1 << 2,  /**< Memory allocation. */
     trace_sets      = 1 << 3,  /**< Grammar sets: firsts, nullable etc. */
@@ -100,25 +100,25 @@ enum trace
     trace_tools     = 1 << 5,  /**< m4 invocation. */
     trace_automaton = 1 << 6,  /**< Construction of the automaton. */
     trace_grammar   = 1 << 7,  /**< Reading, reducing the grammar. */
-    trace_time      = 1 << 8,  /**< Time consumption. */
+    trace_ویلا      = 1 << 8,  /**< Time consumption. */
     trace_skeleton  = 1 << 9,  /**< Skeleton postprocessing. */
     trace_m4_early  = 1 << 10, /**< M4 early traces. */
     trace_m4        = 1 << 11, /**< M4 traces. */
     trace_muscles   = 1 << 12, /**< M4 definitions of the muscles. */
     trace_ielr      = 1 << 13, /**< IELR conversion. */
-    trace_closure   = 1 << 14, /**< Input/output of closure(). */
+    trace_گھیرا   = 1 << 14, /**< Input/output of closure(). */
     trace_locations = 1 << 15, /**< Full display of locations. */
     trace_cex       = 1 << 16, /**< Counterexample generation */
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
-extern int trace_flag;
+خارجي صحيح trace_flag;
 
 /*-------------.
 | --features.  |
 `-------------*/
 
-enum feature
+تعداد feature
   {
     feature_none             = 0,      /**< No additional feature.  */
     feature_caret            = 1 << 0, /**< Output errors with carets.  */
@@ -127,7 +127,7 @@ enum feature
     feature_all              = ~0      /**< All above features.  */
   };
 /** What additional features to use.  */
-extern int feature_flag;
+خارجي صحيح feature_flag;
 
 
 /** Process the command line arguments.
@@ -135,14 +135,14 @@ extern int feature_flag;
  *  \param argc   size of \a argv
  *  \param argv   list of arguments.
  */
-void getargs (int argc, char *argv[]);
+فراغ getargs (صحيح argc, حرف *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location loc);
-void skeleton_arg (const char *arg, int prio, location loc);
-void set_yacc (location loc);
+فراغ language_argmatch (حرف ثابت *arg, صحيح prio, location loc);
+فراغ skeleton_arg (ثابت حرف *arg, صحيح prio, location loc);
+فراغ سیٹ_yacc (location loc);
 
 /** In the string \c s, replace all characters \c from by \c to.  */
-void tr (char *s, char from, char to);
+فراغ tr (حرف *s, حرف from, حرف منزل);
 
-#endif /* !GETARGS_H_ */
+#جے_انت /* !GETARGS_H_ */

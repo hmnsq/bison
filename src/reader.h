@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef READER_H_
+#جے_بنا_تعریف READER_H_
 # define READER_H_
 
 # include "location.h"
@@ -27,22 +27,22 @@
 
 # include "parse-gram.h"
 
-typedef struct merger_list
+تعريفنوع بنية merger_list
 {
-  struct merger_list* next;
+  بنية merger_list* اگلا;
   uniqstr name;
   /* One symbol whose type is the one used by all the symbols on which
      this merging function is used.  */
-  symbol *sym;
+  علامت *sym;
   /* Where SYM was bound to this merging function.  */
   location type_declaration_loc;
 } merger_list;
 
-void free_merger_functions (void);
-extern merger_list *merge_functions;
+فراغ free_merger_functions (فراغ);
+خارجي merger_list *ملاؤ_functions;
 
 /* List of the start symbols.  */
-extern symbol_list *start_symbols;
+خارجي علامت_list *شروع_symbols;
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
 
@@ -50,36 +50,36 @@ extern symbol_list *start_symbols;
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *switching_token (const symbol *start);
+علامت *switching_token (ثابت علامت *شروع);
 
-void grammar_start_symbols_add (symbol_list *syms);
+فراغ grammar_شروع_symbols_جوڑو (علامت_list *syms);
 
-void grammar_current_rule_begin (symbol *lhs, location loc,
+فراغ grammar_current_قاعدہ_begin (علامت *lhs, location loc,
                                  named_ref *lhs_named_ref);
-void grammar_current_rule_end (location loc);
-void grammar_midrule_action (void);
+فراغ grammar_current_قاعدہ_سرا (location loc);
+فراغ grammar_midrule_action (فراغ);
 /* Apply %empty to the current rule.  */
-void grammar_current_rule_empty_set (location loc);
-void grammar_current_rule_prec_set (symbol *precsym, location loc);
-void grammar_current_rule_dprec_set (int dprec, location loc);
-void grammar_current_rule_merge_set (uniqstr name, location loc);
-void grammar_current_rule_expect_sr (int count, location loc);
-void grammar_current_rule_expect_rr (int count, location loc);
-void grammar_current_rule_symbol_append (symbol *sym, location loc,
+فراغ grammar_current_قاعدہ_خالی_تھاواں_سیٹ (location loc);
+فراغ grammar_current_قاعدہ_prec_سیٹ (علامت *precsym, location loc);
+فراغ grammar_current_قاعدہ_dprec_سیٹ (صحيح dprec, location loc);
+فراغ grammar_current_قاعدہ_ملاؤ_سیٹ (uniqstr name, location loc);
+فراغ grammar_current_قاعدہ_expect_sr (صحيح گنتی, location loc);
+فراغ grammar_current_قاعدہ_expect_rr (صحيح گنتی, location loc);
+فراغ grammar_current_قاعدہ_علامت_append (علامت *sym, location loc,
                                          named_ref *nref);
 /* Attach an ACTION to the current rule.  */
-void grammar_current_rule_action_append (const char *action, location loc,
-                                         named_ref *nref, uniqstr tag);
+فراغ grammar_current_قاعدہ_action_append (ثابت حرف *action, location loc,
+                                         named_ref *nref, uniqstr ٹیگ);
 /* Attach a PREDICATE to the current rule.  */
-void grammar_current_rule_predicate_append (const char *predicate, location loc);
+فراغ grammar_current_قاعدہ_predicate_append (ثابت حرف *predicate, location loc);
 
 /* Read in the grammar specification.  */
-void reader (const char *gram);
+فراغ reader (ثابت حرف *gram);
 
 /* Was %union seen?  */
-extern bool union_seen;
+خارجي bool union_تکیا;
 
 /* Should rules have a default precedence?  */
-extern bool default_prec;
+خارجي bool default_prec;
 
-#endif /* !READER_H_ */
+#جے_انت /* !READER_H_ */

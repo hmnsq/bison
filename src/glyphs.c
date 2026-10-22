@@ -17,77 +17,77 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "glyphs.h"
+#ضمن "glyphs.h"
 
-#include <assert.h>
-#include <attribute.h>
-#include <stdbool.h>
-#include <string.h>
-#include <mbswidth.h>
-#include <unicodeio.h>
+#ضمن <assert.h>
+#ضمن <attribute.h>
+#ضمن <stdbool.h>
+#ضمن <string.h>
+#ضمن <mbswidth.h>
+#ضمن <unicodeio.h>
 
 
-glyph_buffer_t arrow;
-int arrow_width;
+glyph_بفر_t arrow;
+صحيح arrow_چوڑائی;
 
-glyph_buffer_t down_arrow;
-int down_arrow_width;
+glyph_بفر_t تھلے_arrow;
+صحيح تھلے_arrow_چوڑائی;
 
-glyph_buffer_t dot;
-int dot_width;
+glyph_بفر_t dot;
+صحيح dot_چوڑائی;
 
-glyph_buffer_t empty;
-int empty_width;
+glyph_بفر_t خالی_تھاواں;
+صحيح خالی_تھاواں_چوڑائی;
 
-const char *derivation_separator = " ";
-int derivation_separator_width = 1;
+ثابت حرف *derivation_separator = " ";
+صحيح derivation_separator_چوڑائی = 1;
 
-typedef struct
+تعريفنوع بنية
 {
-  glyph_buffer_t *pbuf;
-  const char *fallback;
+  glyph_بفر_t *pbuf;
+  ثابت حرف *fallback;
 } callback_arg_t;
 
 
-static long
-on_success (const char *buf, size_t buflen, void *callback_arg)
+ساكن لما
+on_success (ثابت حرف *buf, size_t buflen, فراغ *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (buflen + 1 < sizeof *arg->pbuf);
+  أكد (buflen + 1 < حجم *arg->pbuf);
   *stpncpy (*arg->pbuf, buf, buflen) = '\0';
-  return 1;
+  أرجع 1;
 }
 
-static long
-on_failure (unsigned code MAYBE_UNUSED, const char *msg MAYBE_UNUSED,
-            void *callback_arg)
+ساكن لما
+on_failure (بنانشانی کوڈ MAYBE_بن_ورتیا, ثابت حرف *پیغام MAYBE_بن_ورتیا,
+            فراغ *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (strlen (arg->fallback) + 1 < sizeof *arg->pbuf);
+  أكد (لڑی_لمبائی (arg->fallback) + 1 < حجم *arg->pbuf);
   strcpy (*arg->pbuf, arg->fallback);
-  return 0;
+  أرجع 0;
 }
 
-static bool
-glyph_set (glyph_buffer_t *glyph, int *width,
-           unsigned code, const char *fallback)
+ساكن bool
+glyph_سیٹ (glyph_بفر_t *glyph, صحيح *چوڑائی,
+           بنانشانی کوڈ, ثابت حرف *fallback)
 {
   callback_arg_t arg = { glyph, fallback };
-  int res = unicode_to_mb (code, on_success, on_failure, &arg);
-  *width = mbswidth (*glyph, 0);
-  return res;
+  صحيح res = unicode_منزل_mb (کوڈ, on_success, on_failure, &arg);
+  *چوڑائی = mbswidth (*glyph, 0);
+  أرجع res;
 }
 
-void
-glyphs_init (void)
+فراغ
+glyphs_init (فراغ)
 {
-  glyph_set (&arrow,      &arrow_width,      0x2192, "->");
-  glyph_set (&dot,        &dot_width,        0x2022, ".");
-  glyph_set (&down_arrow, &down_arrow_width, 0x21b3, "`->");
-  glyph_set (&empty,      &empty_width,      0x03b5, "%empty");
+  glyph_سیٹ (&arrow,      &arrow_چوڑائی,      0x2192, "->");
+  glyph_سیٹ (&dot,        &dot_چوڑائی,        0x2022, ".");
+  glyph_سیٹ (&تھلے_arrow, &تھلے_arrow_چوڑائی, 0x21b3, "`->");
+  glyph_سیٹ (&خالی_تھاواں,      &خالی_تھاواں_چوڑائی,      0x03b5, "%empty");
 
-  strncat (down_arrow, " ", sizeof down_arrow - strlen (down_arrow) - 1);
-  down_arrow_width += 1;
+  strncat (تھلے_arrow, " ", حجم تھلے_arrow - لڑی_لمبائی (تھلے_arrow) - 1);
+  تھلے_arrow_چوڑائی += 1;
 }

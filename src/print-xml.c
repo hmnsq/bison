@@ -18,97 +18,97 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "print-xml.h"
+#ضمن <config.h>
+#ضمن "print-xml.h"
 
-#include "system.h"
+#ضمن "system.h"
 
-#include <bitset.h>
-#include <stdarg.h>
+#ضمن <bitset.h>
+#ضمن <stdarg.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "execute.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "path-join.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#ضمن "closure.h"
+#ضمن "complain.h"
+#ضمن "conflicts.h"
+#ضمن "execute.h"
+#ضمن "files.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "lalr.h"
+#ضمن "lr0.h"
+#ضمن "muscle-tab.h"
+#ضمن "path-join.h"
+#ضمن "print.h"
+#ضمن "reader.h"
+#ضمن "reduce.h"
+#ضمن "state.h"
+#ضمن "symtab.h"
+#ضمن "tables.h"
 
-static bitset no_reduce_set;
-struct escape_buf
+ساكن bitset no_reduce_سیٹ;
+بنية escape_buf
 {
-  char *ptr;
-  size_t size;
+  حرف *ptr;
+  size_t ناپ;
 };
-enum { num_escape_bufs = 3 };
-static struct escape_buf escape_bufs[num_escape_bufs];
+تعداد { عدد_escape_bufs = 3 };
+ساكن بنية escape_buf escape_bufs[عدد_escape_bufs];
 
 
 /*--------------------------------.
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, int level, state *s)
+ساكن فراغ
+print_core (FILE *باہرلا, صحيح level, state *s)
 {
-  item_index *sitems = s->items;
+  شے_اشاریہ *sitems = s->اشیاء;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not only its kernel.  */
-  closure (sitems, snritems);
+  گھیرا (sitems, snritems);
   sitems = itemset;
   snritems = nitemset;
 
-  if (!snritems)
+  إذا (!snritems)
     {
-      xml_puts (out, level, "<itemset/>");
-      return;
+      xml_puts (باہرلا, level, "<itemset/>");
+      أرجع;
     }
 
-  xml_puts (out, level, "<itemset>");
+  xml_puts (باہرلا, level, "<itemset>");
 
-  for (size_t i = 0; i < snritems; i++)
+  لكل (size_t i = 0; i < snritems; i++)
     {
       bool printed = false;
-      item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
-      item_number *sp = r->rhs;
+      شے_نمبر *sp1 = ritem + sitems[i];
+      قاعدہ ثابت *r = شے_قاعدہ (sp1);
+      شے_نمبر *sp = r->rhs;
 
       /* Display the lookahead tokens?  */
-      if (item_number_is_rule_number (*sp1))
+      إذا (شے_نمبر_is_قاعدہ_نمبر (*sp1))
         {
           reductions *reds = s->reductions;
-          int red = state_reduction_find (s, r);
+          صحيح red = state_reduction_لبھو (s, r);
           /* Print item with lookaheads if there are. */
-          if (reds->lookaheads && red != -1)
+          إذا (reds->lookaheads && red != -1)
             {
-              xml_printf (out, level + 1,
+              xml_printf (باہرلا, level + 1,
                           "<item rule-number=\"%d\" dot=\"%d\">",
-                          r->number, sp1 - sp);
-              state_rule_lookaheads_print_xml (s, r,
-                                                     out, level + 2);
-              xml_puts (out, level + 1, "</item>");
+                          r->نمبر, sp1 - sp);
+              state_قاعدہ_lookaheads_print_xml (s, r,
+                                                     باہرلا, level + 2);
+              xml_puts (باہرلا, level + 1, "</item>");
               printed = true;
             }
         }
 
-      if (!printed)
-        xml_printf (out, level + 1,
+      إذا (!printed)
+        xml_printf (باہرلا, level + 1,
                     "<item rule-number=\"%d\" dot=\"%d\"/>",
-                    r->number,
+                    r->نمبر,
                     sp1 - sp);
     }
-  xml_puts (out, level, "</itemset>");
+  xml_puts (باہرلا, level, "</itemset>");
 }
 
 
@@ -117,56 +117,56 @@ print_core (FILE *out, int level, state *s)
 | OUT.                                                       |
 `-----------------------------------------------------------*/
 
-static void
-print_transitions (state *s, FILE *out, int level)
+ساكن فراغ
+print_transitions (state *s, FILE *باہرلا, صحيح level)
 {
   transitions *trans = s->transitions;
-  int n = 0;
-  int i;
+  صحيح n = 0;
+  صحيح i;
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  لكل (i = 0; i < trans->عدد; i++)
+    إذا (!TRANSITION_IS_DISABLED (trans, i))
       {
         n++;
       }
 
   /* Nothing to report. */
-  if (!n)
+  إذا (!n)
     {
-      xml_puts (out, level, "<transitions/>");
-      return;
+      xml_puts (باہرلا, level, "<transitions/>");
+      أرجع;
     }
 
   /* Report lookahead tokens and shifts.  */
-  xml_puts (out, level, "<transitions>");
+  xml_puts (باہرلا, level, "<transitions>");
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
-        && TRANSITION_IS_SHIFT (trans, i))
+  لكل (i = 0; i < trans->عدد; i++)
+    إذا (!TRANSITION_IS_DISABLED (trans, i)
+        && TRANSITION_IS_کھسکاؤ (trans, i))
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        char const *tag = sym->tag;
-        state *s1 = trans->states[i];
+        علامت *sym = symbols[TRANSITION_علامت (trans, i)];
+        حرف ثابت *ٹیگ = sym->ٹیگ;
+        state *s1 = trans->حالتاں[i];
 
-        xml_printf (out, level + 1,
+        xml_printf (باہرلا, level + 1,
                     "<transition type=\"shift\" symbol=\"%s\" state=\"%d\"/>",
-                    xml_escape (tag), s1->number);
+                    xml_escape (ٹیگ), s1->نمبر);
       }
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
-        && !TRANSITION_IS_SHIFT (trans, i))
+  لكل (i = 0; i < trans->عدد; i++)
+    إذا (!TRANSITION_IS_DISABLED (trans, i)
+        && !TRANSITION_IS_کھسکاؤ (trans, i))
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        char const *tag = sym->tag;
-        state *s1 = trans->states[i];
+        علامت *sym = symbols[TRANSITION_علامت (trans, i)];
+        حرف ثابت *ٹیگ = sym->ٹیگ;
+        state *s1 = trans->حالتاں[i];
 
-        xml_printf (out, level + 1,
+        xml_printf (باہرلا, level + 1,
                     "<transition type=\"goto\" symbol=\"%s\" state=\"%d\"/>",
-                    xml_escape (tag), s1->number);
+                    xml_escape (ٹیگ), s1->نمبر);
       }
 
-  xml_puts (out, level, "</transitions>");
+  xml_puts (باہرلا, level, "</transitions>");
 }
 
 
@@ -174,35 +174,35 @@ print_transitions (state *s, FILE *out, int level)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, int level, state *s)
+ساكن فراغ
+print_errs (FILE *باہرلا, صحيح level, state *s)
 {
   errs *errp = s->errs;
-  bool count = false;
-  int i;
+  bool گنتی = false;
+  صحيح i;
 
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
-      count = true;
+  لكل (i = 0; i < errp->عدد; ++i)
+    إذا (errp->symbols[i])
+      گنتی = true;
 
   /* Nothing to report. */
-  if (!count)
+  إذا (!گنتی)
     {
-      xml_puts (out, level, "<errors/>");
-      return;
+      xml_puts (باہرلا, level, "<errors/>");
+      أرجع;
     }
 
   /* Report lookahead tokens and errors.  */
-  xml_puts (out, level, "<errors>");
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  xml_puts (باہرلا, level, "<errors>");
+  لكل (i = 0; i < errp->عدد; ++i)
+    إذا (errp->symbols[i])
       {
-        char const *tag = errp->symbols[i]->tag;
-        xml_printf (out, level + 1,
+        حرف ثابت *ٹیگ = errp->symbols[i]->ٹیگ;
+        xml_printf (باہرلا, level + 1,
                     "<error symbol=\"%s\">nonassociative</error>",
-                    xml_escape (tag));
+                    xml_escape (ٹیگ));
       }
-  xml_puts (out, level, "</errors>");
+  xml_puts (باہرلا, level, "</errors>");
 }
 
 
@@ -212,20 +212,20 @@ print_errs (FILE *out, int level, state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
-print_reduction (FILE *out, int level, char const *lookahead,
-                 rule *r, bool enabled)
+ساكن فراغ
+print_reduction (FILE *باہرلا, صحيح level, حرف ثابت *lookahead,
+                 قاعدہ *r, bool enabled)
 {
-  if (rule_is_initial (r))
-    xml_printf (out, level,
+  إذا (قاعدہ_is_initial (r))
+    xml_printf (باہرلا, level,
                 "<reduction symbol=\"%s\" rule=\"accept\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
                 enabled ? "true" : "false");
-  else
-    xml_printf (out, level,
+  وإلا
+    xml_printf (باہرلا, level,
                 "<reduction symbol=\"%s\" rule=\"%d\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
-                r->number,
+                r->نمبر,
                 enabled ? "true" : "false");
 }
 
@@ -234,49 +234,49 @@ print_reduction (FILE *out, int level, char const *lookahead,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, int level, state *s)
+ساكن فراغ
+print_reductions (FILE *باہرلا, صحيح level, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
-  rule *default_reduction = NULL;
-  int report = false;
-  int i, j;
+  قاعدہ *default_reduction = عدم;
+  صحيح report = false;
+  صحيح i, j;
 
-  if (reds->num == 0)
+  إذا (reds->عدد == 0)
     {
-      xml_puts (out, level, "<reductions/>");
-      return;
+      xml_puts (باہرلا, level, "<reductions/>");
+      أرجع;
     }
 
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  إذا (yydefact[s->نمبر] != 0)
+    default_reduction = &قاعدے[yydefact[s->نمبر] - 1];
 
-  bitset_zero (no_reduce_set);
-  FOR_EACH_SHIFT (trans, i)
-    bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
-  for (i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+  bitset_zero (no_reduce_سیٹ);
+  FOR_EACH_کھسکاؤ (trans, i)
+    bitset_سیٹ (no_reduce_سیٹ, TRANSITION_علامت (trans, i));
+  لكل (i = 0; i < s->errs->عدد; ++i)
+    إذا (s->errs->symbols[i])
+      bitset_سیٹ (no_reduce_سیٹ, s->errs->symbols[i]->content->نمبر);
 
-  if (default_reduction)
+  إذا (default_reduction)
     report = true;
 
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  إذا (reds->lookaheads)
+    لكل (i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool گنتی = bitset_test (no_reduce_سیٹ, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        لكل (j = 0; j < reds->عدد; ++j)
+          إذا (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              إذا (! گنتی)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  إذا (reds->قاعدے[j] != default_reduction)
                     report = true;
-                  count = true;
+                  گنتی = true;
                 }
-              else
+              وإلا
                 {
                   report = true;
                 }
@@ -284,50 +284,50 @@ print_reductions (FILE *out, int level, state *s)
       }
 
   /* Nothing to report. */
-  if (!report)
+  إذا (!report)
     {
-      xml_puts (out, level, "<reductions/>");
-      return;
+      xml_puts (باہرلا, level, "<reductions/>");
+      أرجع;
     }
 
-  xml_puts (out, level, "<reductions>");
+  xml_puts (باہرلا, level, "<reductions>");
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  إذا (reds->lookaheads)
+    لكل (i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
+        bool گنتی = bitset_test (no_reduce_سیٹ, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        لكل (j = 0; j < reds->عدد; ++j)
+          إذا (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              إذا (! گنتی)
                 {
-                  if (reds->rules[j] != default_reduction)
-                    print_reduction (out, level + 1, symbols[i]->tag,
-                                     reds->rules[j], true);
-                  else
+                  إذا (reds->قاعدے[j] != default_reduction)
+                    print_reduction (باہرلا, level + 1, symbols[i]->ٹیگ,
+                                     reds->قاعدے[j], true);
+                  وإلا
                     defaulted = true;
-                  count = true;
+                  گنتی = true;
                 }
-              else
+              وإلا
                 {
-                  if (defaulted)
-                    print_reduction (out, level + 1, symbols[i]->tag,
+                  إذا (defaulted)
+                    print_reduction (باہرلا, level + 1, symbols[i]->ٹیگ,
                                      default_reduction, true);
                   defaulted = false;
-                  print_reduction (out, level + 1, symbols[i]->tag,
-                                   reds->rules[j], false);
+                  print_reduction (باہرلا, level + 1, symbols[i]->ٹیگ,
+                                   reds->قاعدے[j], false);
                 }
             }
       }
 
-  if (default_reduction)
-    print_reduction (out, level + 1,
+  إذا (default_reduction)
+    print_reduction (باہرلا, level + 1,
                      "$default", default_reduction, true);
 
-  xml_puts (out, level, "</reductions>");
+  xml_puts (باہرلا, level, "</reductions>");
 }
 
 
@@ -336,14 +336,14 @@ print_reductions (FILE *out, int level, state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, int level, state *s)
+ساكن فراغ
+print_actions (FILE *باہرلا, صحيح level, state *s)
 {
-  xml_puts (out, level, "<actions>");
-  print_transitions (s, out, level + 1);
-  print_errs (out, level + 1, s);
-  print_reductions (out, level + 1, s);
-  xml_puts (out, level, "</actions>");
+  xml_puts (باہرلا, level, "<actions>");
+  print_transitions (s, باہرلا, level + 1);
+  print_errs (باہرلا, level + 1, s);
+  print_reductions (باہرلا, level + 1, s);
+  xml_puts (باہرلا, level, "</actions>");
 }
 
 
@@ -351,22 +351,22 @@ print_actions (FILE *out, int level, state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, int level, state *s)
+ساكن فراغ
+print_state (FILE *باہرلا, صحيح level, state *s)
 {
-  fputc ('\n', out);
-  xml_printf (out, level, "<state number=\"%d\">", s->number);
-  print_core (out, level + 1, s);
-  print_actions (out, level + 1, s);
-  if (s->solved_conflicts_xml)
+  fputc ('\n', باہرلا);
+  xml_printf (باہرلا, level, "<state number=\"%d\">", s->نمبر);
+  print_core (باہرلا, level + 1, s);
+  print_actions (باہرلا, level + 1, s);
+  إذا (s->solved_conflicts_xml)
     {
-      xml_puts (out, level + 1, "<solved-conflicts>");
-      fputs (s->solved_conflicts_xml, out);
-      xml_puts (out, level + 1, "</solved-conflicts>");
+      xml_puts (باہرلا, level + 1, "<solved-conflicts>");
+      fputs (s->solved_conflicts_xml, باہرلا);
+      xml_puts (باہرلا, level + 1, "</solved-conflicts>");
     }
-  else
-    xml_puts (out, level + 1, "<solved-conflicts/>");
-  xml_puts (out, level, "</state>");
+  وإلا
+    xml_puts (باہرلا, level + 1, "<solved-conflicts/>");
+  xml_puts (باہرلا, level, "</state>");
 }
 
 
@@ -374,204 +374,204 @@ print_state (FILE *out, int level, state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
-print_grammar (FILE *out, int level)
+ساكن فراغ
+print_grammar (FILE *باہرلا, صحيح level)
 {
-  fputc ('\n', out);
-  xml_puts (out, level, "<grammar>");
-  grammar_rules_print_xml (out, level);
+  fputc ('\n', باہرلا);
+  xml_puts (باہرلا, level, "<grammar>");
+  grammar_قاعدے_print_xml (باہرلا, level);
 
   /* Terminals */
-  xml_puts (out, level + 1, "<terminals>");
-  for (int i = 0; i < max_code + 1; i++)
-    if (token_translations[i] != undeftoken->content->number)
+  xml_puts (باہرلا, level + 1, "<terminals>");
+  لكل (صحيح i = 0; i < max_کوڈ + 1; i++)
+    إذا (token_translations[i] != undeftoken->content->نمبر)
       {
-        symbol const *sym = symbols[token_translations[i]];
-        char const *tag = sym->tag;
-        char const *type = sym->content->type_name;
-        int precedence = sym->content->prec;
+        علامت ثابت *sym = symbols[token_translations[i]];
+        حرف ثابت *ٹیگ = sym->ٹیگ;
+        حرف ثابت *type = sym->content->type_name;
+        صحيح precedence = sym->content->prec;
         assoc associativity = sym->content->assoc;
-        xml_indent (out, level + 2);
-        fprintf (out,
+        xml_indent (باہرلا, level + 2);
+        fprintf (باہرلا,
                  "<terminal symbol-number=\"%d\" token-number=\"%d\""
                  " name=\"%s\" type=\"%s\" usefulness=\"%s\"",
-                 token_translations[i], i, xml_escape_n (0, tag),
+                 token_translations[i], i, xml_escape_n (0, ٹیگ),
                  type ? xml_escape_n (1, type) : "",
-                 reduce_token_unused_in_grammar (token_translations[i])
+                 reduce_token_بن_ورتیا_وچ_grammar (token_translations[i])
                    ? "unused-in-grammar" : "useful");
-        if (precedence)
-          fprintf (out, " prec=\"%d\"", precedence);
-        if (associativity != undef_assoc)
-          fprintf (out, " assoc=\"%s\"", assoc_to_string (associativity) + 1);
-        fputs ("/>\n", out);
+        إذا (precedence)
+          fprintf (باہرلا, " prec=\"%d\"", precedence);
+        إذا (associativity != undef_assoc)
+          fprintf (باہرلا, " assoc=\"%s\"", assoc_منزل_string (associativity) + 1);
+        fputs ("/>\n", باہرلا);
       }
-  xml_puts (out, level + 1, "</terminals>");
+  xml_puts (باہرلا, level + 1, "</terminals>");
 
   /* Nonterminals */
-  xml_puts (out, level + 1, "<nonterminals>");
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
+  xml_puts (باہرلا, level + 1, "<nonterminals>");
+  لكل (علامت_نمبر i = ntokens; i < nsyms + nuseless_nonterminals; i++)
     {
-      symbol const *sym = symbols[i];
-      char const *tag = sym->tag;
-      char const *type = sym->content->type_name;
-      xml_printf (out, level + 2,
+      علامت ثابت *sym = symbols[i];
+      حرف ثابت *ٹیگ = sym->ٹیگ;
+      حرف ثابت *type = sym->content->type_name;
+      xml_printf (باہرلا, level + 2,
                   "<nonterminal symbol-number=\"%d\" name=\"%s\""
                   " type=\"%s\""
                   " usefulness=\"%s\"/>",
-                  i, xml_escape_n (0, tag),
+                  i, xml_escape_n (0, ٹیگ),
                   type ? xml_escape_n (1, type) : "",
-                  reduce_nonterminal_useless_in_grammar (sym->content)
+                  reduce_nonterminal_useless_وچ_grammar (sym->content)
                     ? "useless-in-grammar" : "useful");
     }
-  xml_puts (out, level + 1, "</nonterminals>");
-  xml_puts (out, level, "</grammar>");
+  xml_puts (باہرلا, level + 1, "</nonterminals>");
+  xml_puts (باہرلا, level, "</grammar>");
 }
 
-void
-xml_indent (FILE *out, int level)
+فراغ
+xml_indent (FILE *باہرلا, صحيح level)
 {
-  for (int i = 0; i < level; i++)
-    fputs ("  ", out);
+  لكل (صحيح i = 0; i < level; i++)
+    fputs ("  ", باہرلا);
 }
 
-void
-xml_puts (FILE *out, int level, char const *s)
+فراغ
+xml_puts (FILE *باہرلا, صحيح level, حرف ثابت *s)
 {
-  xml_indent (out, level);
-  fputs (s, out);
-  fputc ('\n', out);
+  xml_indent (باہرلا, level);
+  fputs (s, باہرلا);
+  fputc ('\n', باہرلا);
 }
 
-void
-xml_printf (FILE *out, int level, char const *fmt, ...)
+فراغ
+xml_printf (FILE *باہرلا, صحيح level, حرف ثابت *fmt, ...)
 {
   va_list arglist;
 
-  xml_indent (out, level);
+  xml_indent (باہرلا, level);
 
-  va_start (arglist, fmt);
-  vfprintf (out, fmt, arglist);
-  va_end (arglist);
+  va_شروع (arglist, fmt);
+  vfprintf (باہرلا, fmt, arglist);
+  va_سرا (arglist);
 
-  fputc ('\n', out);
+  fputc ('\n', باہرلا);
 }
 
-static char const *
-xml_escape_string (struct escape_buf *buf, char const *str)
+ساكن حرف ثابت *
+xml_escape_string (بنية escape_buf *buf, حرف ثابت *str)
 {
-  size_t len = strlen (str);
-  size_t max_expansion = sizeof "&quot;" - 1;
+  size_t len = لڑی_لمبائی (str);
+  size_t max_expansion = حجم "&quot;" - 1;
 
-  if (buf->size <= max_expansion * len)
+  إذا (buf->ناپ <= max_expansion * len)
     {
-      buf->size = max_expansion * len + 1;
-      buf->ptr = x2realloc (buf->ptr, &buf->size);
+      buf->ناپ = max_expansion * len + 1;
+      buf->ptr = x2realloc (buf->ptr, &buf->ناپ);
     }
-  char *p = buf->ptr;
+  حرف *p = buf->ptr;
 
-  for (; *str; str++)
-    switch (*str)
+  لكل (; *str; str++)
+    بدل (*str)
       {
-      default: *p++ = *str; break;
-      case '&': p = stpcpy (p, "&amp;" ); break;
-      case '<': p = stpcpy (p, "&lt;"  ); break;
-      case '>': p = stpcpy (p, "&gt;"  ); break;
-      case '"': p = stpcpy (p, "&quot;"); break;
+      افتراضي: *p++ = *str; اكسر;
+      حالة '&': p = stpcpy (p, "&amp;" ); اكسر;
+      حالة '<': p = stpcpy (p, "&lt;"  ); اكسر;
+      حالة '>': p = stpcpy (p, "&gt;"  ); اكسر;
+      حالة '"': p = stpcpy (p, "&quot;"); اكسر;
       }
 
   *p = '\0';
-  return buf->ptr;
+  أرجع buf->ptr;
 }
 
-char const *
-xml_escape_n (int n, char const *str)
+حرف ثابت *
+xml_escape_n (صحيح n, حرف ثابت *str)
 {
-  return xml_escape_string (escape_bufs + n, str);
+  أرجع xml_escape_string (escape_bufs + n, str);
 }
 
-char const *
-xml_escape (char const *str)
+حرف ثابت *
+xml_escape (حرف ثابت *str)
 {
-  return xml_escape_n (0, str);
+  أرجع xml_escape_n (0, str);
 }
 
-void
-print_xml (void)
+فراغ
+print_xml (فراغ)
 {
-  FILE *out = xfopen (spec_xml_file, "w");
+  FILE *باہرلا = xfopen (spec_xml_file, "w");
 
-  fputs ("<?xml version=\"1.0\"?>\n\n", out);
+  fputs ("<?xml version=\"1.0\"?>\n\n", باہرلا);
 
-  int level = 0;
-  xml_printf (out, level,
+  صحيح level = 0;
+  xml_printf (باہرلا, level,
               "<bison-xml-report version=\"%s\" bug-report=\"%s\""
               " url=\"%s\">",
-              xml_escape_n (0, VERSION),
+              xml_escape_n (0, نسخہ_2),
               xml_escape_n (1, PACKAGE_BUGREPORT),
               xml_escape_n (2, PACKAGE_URL));
 
-  fputc ('\n', out);
-  xml_printf (out, level + 1, "<filename>%s</filename>",
+  fputc ('\n', باہرلا);
+  xml_printf (باہرلا, level + 1, "<filename>%s</filename>",
               xml_escape (grammar_file));
 
   /* print grammar */
-  print_grammar (out, level + 1);
+  print_grammar (باہرلا, level + 1);
 
-  no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
+  no_reduce_سیٹ = bitset_create (ntokens, BITSET_FIXED);
 
   /* print automaton */
-  fputc ('\n', out);
-  xml_puts (out, level + 1, "<automaton>");
-  for (state_number i = 0; i < nstates; i++)
-    print_state (out, level + 2, states[i]);
-  xml_puts (out, level + 1, "</automaton>");
+  fputc ('\n', باہرلا);
+  xml_puts (باہرلا, level + 1, "<automaton>");
+  لكل (state_نمبر i = 0; i < nstates; i++)
+    print_state (باہرلا, level + 2, حالتاں[i]);
+  xml_puts (باہرلا, level + 1, "</automaton>");
 
-  bitset_free (no_reduce_set);
+  bitset_free (no_reduce_سیٹ);
 
-  xml_puts (out, 0, "</bison-xml-report>");
+  xml_puts (باہرلا, 0, "</bison-xml-report>");
 
-  for (int i = 0; i < num_escape_bufs; ++i)
-    free (escape_bufs[i].ptr);
+  لكل (صحيح i = 0; i < عدد_escape_bufs; ++i)
+    حرر (escape_bufs[i].ptr);
 
-  xfclose (out);
+  xfclose (باہرلا);
 }
 
 
-void
-print_html (void)
+فراغ
+print_html (فراغ)
 {
-  assert (xml_flag);
+  أكد (xml_flag);
 
-  char *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
-  char *xsltproc = muscle_percent_define_get ("tool.xsltproc");
-  char const *argv[11];
-  int i = 0;
+  حرف *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
+  حرف *xsltproc = muscle_percent_define_get ("tool.xsltproc");
+  حرف ثابت *argv[11];
+  صحيح i = 0;
   argv[i++] = xsltproc;
   argv[i++] = "-o";
   argv[i++] = spec_html_file;
   argv[i++] = xml2html;
   argv[i++] = spec_xml_file;
-  argv[i++] = NULL;
+  argv[i++] = عدم;
   aver (i <= ARRAY_CARDINALITY (argv));
 
-  if (trace_flag & trace_tools)
+  إذا (trace_flag & trace_tools)
     {
       fputs ("running:", stderr);
-      for (int j = 0; argv[j]; ++j)
+      لكل (صحيح j = 0; argv[j]; ++j)
         fprintf (stderr, " %s", argv[j]);
       fputc ('\n', stderr);
     }
 
-  int status
+  صحيح حالت
     = execute (argv[0],
                argv[0], argv,
-               /* directory */ NULL,
+               /* directory */ عدم,
                /* ignore_sigpipe */ false,
                /* null_stdin, null_stdout, null_stderr */ true, true, true,
                /* slave_process */ true, /* exit_on_error */ false,
-               /* termsigp */ NULL);
-  if (status)
-    complain (NULL, complaint, _("%s failed with status %d"), argv[0], status);
-  free (xsltproc);
-  free (xml2html);
+               /* termsigp */ عدم);
+  إذا (حالت)
+    complain (عدم, complaint, _("%s failed with status %d"), argv[0], حالت);
+  حرر (xsltproc);
+  حرر (xml2html);
 }

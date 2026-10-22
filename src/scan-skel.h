@@ -18,11 +18,11 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-void scan_skel (FILE *);
+فراغ جانچ_skel (FILE *);
 
 /* Pacify "make syntax-check".  */
-extern FILE *skel_in;
-extern FILE *skel_out;
-extern int skel__flex_debug;
-extern int skel_lineno;
-void skel_scanner_free (void);
+خارجي FILE *skel_وچ;
+خارجي FILE *skel_باہرلا;
+خارجي صحيح skel__flex_debug;
+خارجي صحيح skel_lineno;
+فراغ skel_scanner_free (فراغ);

@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef IELR_H_
+#جے_بنا_تعریف IELR_H_
 # define IELR_H_
 
 # include <bitset.h>
@@ -37,10 +37,10 @@
  *     - \c "ielr".
  *     - \c "canonical-lr".
  */
-void ielr (void);
+فراغ ielr (فراغ);
 
-bool ielr_item_has_lookahead (state *s, symbol_number lhs, size_t item,
-                              symbol_number lookahead, state ***predecessors,
-                              bitset **item_lookahead_sets);
+bool ielr_شے_has_lookahead (state *s, علامت_نمبر lhs, size_t شے,
+                              علامت_نمبر lookahead, state ***predecessors,
+                              bitset **شے_lookahead_sets);
 
-#endif /* !IELR_H_ */
+#جے_انت /* !IELR_H_ */
