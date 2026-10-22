@@ -23,7 +23,7 @@
    runs afoul of pre-C99 compilers that have <inttypes.h> or
    <stdint.h>, which are included below if available.  It also runs
    afoul of pre-C99 compilers that define these macros in <limits.h>.  */
-# if ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
+# यदि ! defined __STDC_VERSION__ || __STDC_VERSION__ < 199901
 #  undef INT8_MIN
 #  undef INT16_MIN
 #  undef INT32_MIN
@@ -40,14 +40,14 @@
 # include <stdlib.h>
 # include <string.h>
 
-# define ARRAY_CARDINALITY(Array) (sizeof (Array) / sizeof *(Array))
+# define ARRAY_CARDINALITY(Array) (परिमाण (Array) / परिमाण *(Array))
 # define STREQ(L, R)  (strcmp(L, R) == 0)
 # define STRNEQ(L, R) (!STREQ(L, R))
 
 /* Just like strncmp, but the second argument must be a literal string
    and you don't specify the length.  */
 # define STRNCMP_LIT(S, Literal)                        \
-  strncmp (S, "" Literal "", sizeof (Literal) - 1)
+  strncmp (S, "" Literal "", परिमाण (Literal) - 1)
 
 /* Whether Literal is a prefix of S.  */
 # define STRPREFIX_LIT(Literal, S)              \
@@ -59,7 +59,7 @@
 # ifndef UINTPTR_MAX
 /* This isn't perfect, but it's good enough for Bison, which needs
    only to hash pointers.  */
-typedef size_t uintptr_t;
+प्रकारनिर्देश size_t uintptr_t;
 # endif
 
 /* Version mismatch. */
@@ -74,19 +74,19 @@ typedef size_t uintptr_t;
 # include <xalloc.h>
 
 // Clang and ICC like to pretend they are GCC.
-# if defined __GNUC__ && !defined __clang__ && !defined __ICC
+# यदि defined __GNUC__ && !defined __clang__ && !defined __ICC
 #  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
 # endif
 
 // See https://lists.gnu.org/r/bug-bison/2019-10/msg00061.html
 // and https://trac.macports.org/ticket/59927.
-# if defined GCC_VERSION && 405 <= GCC_VERSION
+# यदि defined GCC_VERSION && 405 <= GCC_VERSION
 #  define IGNORE_TYPE_LIMITS_BEGIN \
      _Pragma ("GCC diagnostic push") \
      _Pragma ("GCC diagnostic ignored \"-Wtype-limits\"")
 #  define IGNORE_TYPE_LIMITS_END \
      _Pragma ("GCC diagnostic pop")
-# else
+# अन्यथा
 #  define IGNORE_TYPE_LIMITS_BEGIN
 #  define IGNORE_TYPE_LIMITS_END
 # endif
@@ -135,16 +135,16 @@ typedef size_t uintptr_t;
 | Integers.  |
 `-----------*/
 
-static inline int
-min_int (int a, int b)
+स्थिर अन्तःस्थ पूर्णाङ्क
+min_int (पूर्णाङ्क a, पूर्णाङ्क b)
 {
-  return a < b ? a : b;
+  प्रत्यागम a < b ? a : b;
 }
 
-static inline int
-max_int (int a, int b)
+स्थिर अन्तःस्थ पूर्णाङ्क
+max_int (पूर्णाङ्क a, पूर्णाङ्क b)
 {
-  return a >= b ? a : b;
+  प्रत्यागम a >= b ? a : b;
 }
 
 
@@ -171,7 +171,7 @@ max_int (int a, int b)
    we later wish to try another scheme.
 */
 # include <assert.h>
-# define aver assert
+# define aver प्रतिज्ञा
 
 
 /*-----------.
@@ -179,7 +179,7 @@ max_int (int a, int b)
 `-----------*/
 
 # define obstack_chunk_alloc xmalloc
-# define obstack_chunk_free  free
+# define obstack_chunk_free  मुक्त
 # include <obstack.h>
 
 /* String-grow: append Str to Obs.  */
@@ -192,16 +192,16 @@ max_int (int a, int b)
    For instance "\"foo\"" -> "\\\"foo\\\"".  */
 
 # define obstack_backslash(Obs, Str)                    \
-  do {                                                  \
-    char const *p__;                                    \
-    for (p__ = Str; *p__; p__++)                        \
-      switch (*p__)                                     \
+  कुरु {                                                  \
+    वर्ण ध्रुव *p__;                                    \
+    प्रति (p__ = Str; *p__; p__++)                        \
+      विकल्प (*p__)                                     \
         {                                               \
-        case '"':  obstack_sgrow (Obs, "\\\""); break;  \
-        case '\\': obstack_sgrow (Obs, "\\\\"); break;  \
-        default:   obstack_1grow (Obs, *p__);   break;  \
+        पक्ष '"':  obstack_sgrow (Obs, "\\\""); भङ्ग;  \
+        पक्ष '\\': obstack_sgrow (Obs, "\\\\"); भङ्ग;  \
+        स्वभाव:   obstack_1grow (Obs, *p__);   भङ्ग;  \
         }                                               \
-  } while (0)
+  } यावत् (0)
 
 
 /* Output CP escaped for our postprocessing (i.e., escape M4 special
@@ -217,38 +217,38 @@ max_int (int a, int b)
    Keep output_escaped and obstack_escape sync'ed.
  */
 
-static inline void
-obstack_escape (struct obstack* obs, const char *cp)
+स्थिर अन्तःस्थ शून्य
+obstack_escape (संरचना obstack* obs, ध्रुव वर्ण *cp)
 {
-  for (; *cp; ++cp)
-    switch (*cp)
+  प्रति (; *cp; ++cp)
+    विकल्प (*cp)
       {
-      case '$': obstack_sgrow (obs, "$]["); break;
-      case '@': obstack_sgrow (obs, "@@" ); break;
-      case '[': obstack_sgrow (obs, "@{" ); break;
-      case ']': obstack_sgrow (obs, "@}" ); break;
-      case 'b':
-        if (STRPREFIX_LIT ("b4_", cp))
+      पक्ष '$': obstack_sgrow (obs, "$]["); भङ्ग;
+      पक्ष '@': obstack_sgrow (obs, "@@" ); भङ्ग;
+      पक्ष '[': obstack_sgrow (obs, "@{" ); भङ्ग;
+      पक्ष ']': obstack_sgrow (obs, "@}" ); भङ्ग;
+      पक्ष 'b':
+        यदि (STRPREFIX_LIT ("b4_", cp))
           {
             obstack_sgrow (obs, "b4@'_");
             cp += strlen ("b4_") - 1;
-            break;
+            भङ्ग;
           }
-        else
-          goto append;
+        अन्यथा
+          गच्छ append;
 
-      case 'm':
-        if (STRPREFIX_LIT ("m4_", cp))
+      पक्ष 'm':
+        यदि (STRPREFIX_LIT ("m4_", cp))
           {
             obstack_sgrow (obs, "m4@'_");
             cp += strlen ("m4_") - 1;
-            break;
+            भङ्ग;
           }
-        else
-          goto append;
+        अन्यथा
+          गच्छ append;
 
       append:
-      default:  obstack_1grow (obs, *cp); break;
+      स्वभाव:  obstack_1grow (obs, *cp); भङ्ग;
       }
 }
 
@@ -261,23 +261,23 @@ obstack_escape (struct obstack* obs, const char *cp)
    For instance "[foo]" -> "[[@{foo@}]]", "$$" -> "[[$][$][]]".  */
 
 # define obstack_quote(Obs, Str)                \
-  do {                                          \
-    char const* obstack_quote_p = Str;          \
-    if (obstack_quote_p && obstack_quote_p[0])  \
+  कुरु {                                          \
+    वर्ण ध्रुव* obstack_quote_p = Str;          \
+    यदि (obstack_quote_p && obstack_quote_p[0])  \
       {                                         \
         obstack_sgrow (Obs, "[[");              \
         obstack_escape (Obs, obstack_quote_p);  \
         obstack_sgrow (Obs, "]]");              \
       }                                         \
-    else                                        \
+    अन्यथा                                        \
       obstack_sgrow (Obs, "[]");                \
-  } while (0)
+  } यावत् (0)
 
 
 /* Append the ending 0, finish Obs, and return the string.  */
 
 # define obstack_finish0(Obs)                                   \
-  (obstack_1grow (Obs, '\0'), (char *) obstack_finish (Obs))
+  (obstack_1grow (Obs, '\0'), (वर्ण *) obstack_finish (Obs))
 
 
 /*-----------------------------------------.
@@ -299,13 +299,13 @@ obstack_escape (struct obstack* obs, const char *cp)
 `---------------------*/
 
 # define LIST_FREE(Type, List)                  \
-  do {                                          \
-    Type *_node, *_next;                        \
-    for (_node = List; _node; _node = _next)    \
+  कुरु {                                          \
+    Type *गाठ_2, *_next;                        \
+    प्रति (गाठ_2 = List; गाठ_2; गाठ_2 = _next)    \
       {                                         \
-        _next = _node->next;                    \
-        free (_node);                           \
+        _next = गाठ_2->next;                    \
+        मुक्त (गाठ_2);                           \
       }                                         \
-  } while (0)
+  } यावत् (0)
 
 #endif  /* ! BISON_SYSTEM_H */
