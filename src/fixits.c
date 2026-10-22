@@ -17,127 +17,127 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#અન્તર્ભાવ <config.h>
 
-#include "fixits.h"
+#અન્તર્ભાવ "fixits.h"
 
-#include <error.h>
-#include <get-errno.h>
-#include <gl_array_list.h>
-#include <gl_xlist.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <vasnprintf.h>
+#અન્તર્ભાવ <error.h>
+#અન્તર્ભાવ <get-errno.h>
+#અન્તર્ભાવ <gl_array_list.h>
+#અન્તર્ભાવ <gl_xlist.h>
+#અન્તર્ભાવ <progname.h>
+#અન્તર્ભાવ <quote.h>
+#અન્તર્ભાવ <quotearg.h>
+#અન્તર્ભાવ <vasnprintf.h>
 
-#include "system.h"
+#અન્તર્ભાવ "system.h"
 
-#include "files.h"
-#include "getargs.h"
+#અન્તર્ભાવ "files.h"
+#અન્તર્ભાવ "getargs.h"
 
-typedef struct
+પ્રકારવ્યાખ્યા સંરચના
 {
   location location;
-  char *fix;
+  અક્ષર *fix;
 } fixit;
 
-gl_list_t fixits = NULL;
+gl_list_t fixits = ખાલી;
 
-static fixit *
-fixit_new (location const *loc, char const* fix)
+સ્થિર fixit *
+fixit_new (location અચલ *loc, અક્ષર અચલ* fix)
 {
-  fixit *res = xmalloc (sizeof *res);
+  fixit *res = xmalloc (કદ *res);
   res->location = *loc;
   res->fix = xstrdup (fix);
-  return res;
+  પાછા res;
 }
 
-static int
-fixit_cmp (const  fixit *a, const fixit *b)
+સ્થિર પૂર્ણાંક
+fixit_cmp (અચલ  fixit *a, અચલ fixit *b)
 {
-  return location_cmp (a->location, b->location);
+  પાછા location_cmp (a->location, b->location);
 }
 
-static void
+સ્થિર શૂન્ય
 fixit_free (fixit *f)
 {
-  free (f->fix);
-  free (f);
+  મુક્ત (f->fix);
+  મુક્ત (f);
 }
 
 
 /* GCC and Clang follow the same pattern.
    https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
    https://clang.llvm.org/docs/UsersManual.html#cmdoption-fdiagnostics-parseable-fixits */
-static void
-fixit_print (fixit const *f, FILE *out)
+સ્થિર શૂન્ય
+fixit_print (fixit અચલ *f, FILE *out)
 {
   fprintf (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
            quotearg_n_style (1, c_quoting_style, f->location.start.file),
-           f->location.start.line, f->location.start.byte,
-           f->location.end.line, f->location.end.byte,
+           f->location.start.લીટી, f->location.start.byte,
+           f->location.end.લીટી, f->location.end.byte,
            quotearg_n_style (2, c_quoting_style, f->fix));
 }
 
 
-void
-fixits_register (location const *loc, char const* fix)
+શૂન્ય
+fixits_register (location અચલ *loc, અક્ષર અચલ* fix)
 {
-  if (!fixits)
+  જો (!fixits)
     fixits = gl_list_create_empty (GL_ARRAY_LIST,
-                                   /* equals */ NULL,
-                                   /* hashcode */ NULL,
+                                   /* equals */ ખાલી,
+                                   /* hashcode */ ખાલી,
                                    (gl_listelement_dispose_fn) fixit_free,
                                    true);
   fixit *f = fixit_new (loc, fix);
   gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
-  if (feature_flag & feature_fixit)
+  જો (feature_flag & feature_fixit)
     fixit_print (f, stderr);
 }
 
 
 bool
-fixits_empty (void)
+fixits_empty (શૂન્ય)
 {
-  return !fixits;
+  પાછા !fixits;
 }
 
 
-void
-fixits_run (void)
+શૂન્ય
+fixits_run (શૂન્ય)
 {
-  if (!fixits)
-    return;
+  જો (!fixits)
+    પાછા;
 
   /* This is not unlike what is done in location_caret.  */
-  uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
+  uniqstr આગત = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
   /* Backup the file. */
-  char buf[256];
-  size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
-  if (!backup)
+  અક્ષર buf[256];
+  size_t len = કદ (buf);
+  અક્ષર *backup = asnprintf (buf, &len, "%s~", આગત);
+  જો (!backup)
     xalloc_die ();
-  if (rename (input, backup))
+  જો (rename (આગત, backup))
     error (EXIT_FAILURE, get_errno (),
-           _("%s: cannot backup"), quotearg_colon (input));
+           _("%s: cannot backup"), quotearg_colon (આગત));
   FILE *in = xfopen (backup, "r");
-  FILE *out = xfopen (input, "w");
-  size_t line = 1;
+  FILE *out = xfopen (આગત, "w");
+  size_t લીટી = 1;
   size_t offset = 1;
-  void const *p = NULL;
+  શૂન્ય અચલ *p = ખાલી;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
-  while (gl_list_iterator_next (&iter, &p, NULL))
+  જ્યારે (gl_list_iterator_next (&iter, &p, ખાલી))
     {
-      fixit const *f = p;
+      fixit અચલ *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      જ્યારે (લીટી < f->location.start.લીટી)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          પૂર્ણાંક c = getc (in);
+          જો (c == EOF)
+            તોડો;
+          જો (c == '\n')
             {
-              ++line;
+              ++લીટી;
               offset = 1;
             }
           putc (c, out);
@@ -145,13 +145,13 @@ fixits_run (void)
 
       /* Look for the right offset. */
       bool need_eol = false;
-      while (offset < f->location.start.byte)
+      જ્યારે (offset < f->location.start.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          પૂર્ણાંક c = getc (in);
+          જો (c == EOF)
+            તોડો;
           ++offset;
-          if (c == '\n')
+          જો (c == '\n')
             /* The position we are asked for is beyond the actual
                line: pad with spaces, and remember we need a \n.  */
             need_eol = true;
@@ -162,49 +162,49 @@ fixits_run (void)
       fputs (f->fix, out);
 
       /* Maybe install the eol afterwards.  */
-      if (need_eol)
+      જો (need_eol)
         putc ('\n', out);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      જ્યારે (લીટી < f->location.end.લીટી)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          પૂર્ણાંક c = getc (in);
+          જો (c == EOF)
+            તોડો;
+          જો (c == '\n')
             {
-              ++line;
+              ++લીટી;
               offset = 1;
             }
         }
-      while (offset < f->location.end.byte)
+      જ્યારે (offset < f->location.end.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          પૂર્ણાંક c = getc (in);
+          જો (c == EOF)
+            તોડો;
           ++offset;
         }
 
       /* If erasing the content of a full line, also remove the
          end-of-line. */
-      if (f->fix[0] == 0 && f->location.start.byte == 1)
+      જો (f->fix[0] == 0 && f->location.start.byte == 1)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          else if (c == '\n')
+          પૂર્ણાંક c = getc (in);
+          જો (c == EOF)
+            તોડો;
+          નહીંતર જો (c == '\n')
             {
-              ++line;
+              ++લીટી;
               offset = 1;
             }
-          else
+          નહીંતર
             ungetc (c, in);
         }
     }
   /* Paste the rest of the file.  */
   {
-    int c;
-    while ((c = getc (in)) != EOF)
+    પૂર્ણાંક c;
+    જ્યારે ((c = getc (in)) != EOF)
       putc (c, out);
   }
 
@@ -212,18 +212,18 @@ fixits_run (void)
   xfclose (out);
   xfclose (in);
   fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
-           program_name, quote_n (0, input), quote_n (1, backup));
-  if (backup != buf)
-    free (backup);
+           program_name, quote_n (0, આગત), quote_n (1, backup));
+  જો (backup != buf)
+    મુક્ત (backup);
 }
 
 
 /* Free the registered fixits.  */
-void fixits_free (void)
+શૂન્ય fixits_free (શૂન્ય)
 {
-  if (fixits)
+  જો (fixits)
     {
       gl_list_free (fixits);
-      fixits = NULL;
+      fixits = ખાલી;
     }
 }

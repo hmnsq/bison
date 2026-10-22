@@ -18,30 +18,30 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "system.h"
 
-#include <configmake.h> /* PKGDATADIR */
-#include <dirname.h>
-#include <error.h>
-#include <get-errno.h>
-#include <gl_array_list.h>
-#include <gl_hash_map.h>
-#include <gl_xlist.h>
-#include <gl_xmap.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <relocatable.h> /* relocate2 */
-#include <stdio-safer.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <xstrndup.h>
+#અન્તર્ભાવ <configmake.h> /* PKGDATADIR */
+#અન્તર્ભાવ <dirname.h>
+#અન્તર્ભાવ <error.h>
+#અન્તર્ભાવ <get-errno.h>
+#અન્તર્ભાવ <gl_array_list.h>
+#અન્તર્ભાવ <gl_hash_map.h>
+#અન્તર્ભાવ <gl_xlist.h>
+#અન્તર્ભાવ <gl_xmap.h>
+#અન્તર્ભાવ <quote.h>
+#અન્તર્ભાવ <quotearg.h>
+#અન્તર્ભાવ <relocatable.h> /* relocate2 */
+#અન્તર્ભાવ <stdio-safer.h>
+#અન્તર્ભાવ <sys/stat.h>
+#અન્તર્ભાવ <sys/types.h>
+#અન્તર્ભાવ <unistd.h>
+#અન્તર્ભાવ <xstrndup.h>
 
-#include "complain.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
+#અન્તર્ભાવ "complain.h"
+#અન્તર્ભાવ "files.h"
+#અન્તર્ભાવ "getargs.h"
+#અન્તર્ભાવ "gram.h"
 
 /* Initializing some values below (such SPEC_NAME_PREFIX to 'yy') is
    tempting, but don't do that: for the time being our handling of the
@@ -50,32 +50,32 @@
    NULL), then the %directive is ignored.  As a result, %name-prefix,
    for instance, will not be honored.  */
 
-char const *spec_outfile = NULL;       /* for -o. */
-char const *spec_file_prefix = NULL;   /* for -b. */
+અક્ષર અચલ *spec_outfile = ખાલી;       /* for -o. */
+અક્ષર અચલ *spec_file_prefix = ખાલી;   /* for -b. */
 location spec_file_prefix_loc = EMPTY_LOCATION_INIT;
-char const *spec_name_prefix = NULL;   /* for -p. */
+અક્ષર અચલ *spec_name_prefix = ખાલી;   /* for -p. */
 location spec_name_prefix_loc = EMPTY_LOCATION_INIT;
-char *spec_verbose_file = NULL;  /* for --verbose. */
-char *spec_graph_file = NULL;    /* for -g. */
-char *spec_html_file = NULL;     /* for --html. */
-char *spec_xml_file = NULL;      /* for -x. */
-char *spec_header_file = NULL;   /* for --header. */
-char *parser_file_name;
+અક્ષર *spec_verbose_file = ખાલી;  /* for --verbose. */
+અક્ષર *spec_graph_file = ખાલી;    /* for -g. */
+અક્ષર *spec_html_file = ખાલી;     /* for --html. */
+અક્ષર *spec_xml_file = ખાલી;      /* for -x. */
+અક્ષર *spec_header_file = ખાલી;   /* for --header. */
+અક્ષર *parser_file_name;
 
 /* All computed output file names.  */
-typedef struct generated_file
+પ્રકારવ્યાખ્યા સંરચના generated_file
 {
   /** File name.  */
-  char *name;
+  અક્ષર *name;
   /** Whether is a generated source file (e.g., *.c, *.java...), as
       opposed to the report file (e.g., *.output).  When late errors
       are detected, generated source files are removed.  */
   bool is_source;
 } generated_file;
-static generated_file *generated_files = NULL;
-static int generated_files_size = 0;
+સ્થિર generated_file *generated_files = ખાલી;
+સ્થિર પૂર્ણાંક generated_files_size = 0;
 
-uniqstr grammar_file = NULL;
+uniqstr grammar_file = ખાલી;
 
 /* If --output=dir/foo.c was specified,
    DIR_PREFIX gis 'dir/' and ALL_BUT_EXT and ALL_BUT_TAB_EXT are 'dir/foo'.
@@ -93,25 +93,25 @@ uniqstr grammar_file = NULL;
    empty string (meaning the current directory); otherwise it is
    'dir/'.  */
 
-char *all_but_ext;
-static char *all_but_tab_ext;
-char *dir_prefix;
+અક્ષર *all_but_ext;
+સ્થિર અક્ષર *all_but_tab_ext;
+અક્ષર *dir_prefix;
 
 /* C source file extension (the parser source).  */
-static char *src_extension = NULL;
+સ્થિર અક્ષર *src_extension = ખાલી;
 /* Header file extension (if option '`-d'' is specified).  */
-static char *header_extension = NULL;
+સ્થિર અક્ષર *header_extension = ખાલી;
 
-struct prefix_map
+સંરચના prefix_map
 {
-  char *oldprefix;
-  char *newprefix;
+  અક્ષર *oldprefix;
+  અક્ષર *newprefix;
 };
 
-static gl_list_t prefix_maps = NULL;
+સ્થિર gl_list_t prefix_maps = ખાલી;
 
 /* Map file names to prefix-mapped file names. */
-static gl_map_t mapped_files = NULL;
+સ્થિર gl_map_t mapped_files = ખાલી;
 
 
 /*-----------------------------------------------------------------.
@@ -119,15 +119,15 @@ static gl_map_t mapped_files = NULL;
 | STR1, and STR2.                                                  |
 `-----------------------------------------------------------------*/
 
-static char *
-concat2 (char const *str1, char const *str2)
+સ્થિર અક્ષર *
+concat2 (અક્ષર અચલ *str1, અક્ષર અચલ *str2)
 {
   size_t len = strlen (str1) + strlen (str2);
-  char *res = xmalloc (len + 1);
-  char *cp;
+  અક્ષર *res = xmalloc (len + 1);
+  અક્ષર *cp;
   cp = stpcpy (res, str1);
   cp = stpcpy (cp, str2);
-  return res;
+  પાછા res;
 }
 
 /*-----------------------------------------------------------------.
@@ -136,150 +136,150 @@ concat2 (char const *str1, char const *str2)
 `-----------------------------------------------------------------*/
 
 FILE *
-xfopen (const char *name, const char *mode)
+xfopen (અચલ અક્ષર *name, અચલ અક્ષર *mode)
 {
   FILE *res = fopen_safer (name, mode);
-  if (!res)
+  જો (!res)
     error (EXIT_FAILURE, get_errno (),
            _("%s: cannot open"), quotearg_colon (name));
 
-  return res;
+  પાછા res;
 }
 
 /*-------------------------------------------------------------.
 | Try to close file PTR, and print an error message if fails.  |
 `-------------------------------------------------------------*/
 
-void
+શૂન્ય
 xfclose (FILE *ptr)
 {
-  if (ptr == NULL)
-    return;
+  જો (ptr == ખાલી)
+    પાછા;
 
-  if (ferror (ptr))
+  જો (ferror (ptr))
     error (EXIT_FAILURE, 0, _("input/output error"));
 
-  if (fclose (ptr) != 0)
+  જો (fclose (ptr) != 0)
     error (EXIT_FAILURE, get_errno (), _("cannot close file"));
 }
 
 
 FILE *
-xfdopen (int fd, char const *mode)
+xfdopen (પૂર્ણાંક fd, અક્ષર અચલ *mode)
 {
   FILE *res = fdopen (fd, mode);
-  if (! res)
+  જો (! res)
     error (EXIT_FAILURE, get_errno (),
            /* On a separate line to please the "unmarked_diagnostics"
               syntax-check. */
            "fdopen");
-  return res;
+  પાછા res;
 }
 
 /* The mapped name of FILENAME, allocated, if there are prefix maps.
    Otherwise NULL.  */
-static char *
-map_file_name_alloc (char const *filename)
+સ્થિર અક્ષર *
+map_file_name_alloc (અક્ષર અચલ *filename)
 {
-  struct prefix_map const *p = NULL;
-  assert (prefix_maps);
+  સંરચના prefix_map અચલ *p = ખાલી;
+  પ્રતિજ્ઞા (prefix_maps);
   {
-    void const *ptr;
+    શૂન્ય અચલ *ptr;
     gl_list_iterator_t iter = gl_list_iterator (prefix_maps);
-    while (gl_list_iterator_next (&iter, &ptr, NULL))
+    જ્યારે (gl_list_iterator_next (&iter, &ptr, ખાલી))
       {
         p = ptr;
-        if (strncmp (p->oldprefix, filename, strlen (p->oldprefix)) == 0)
-          break;
-        p = NULL;
+        જો (strncmp (p->oldprefix, filename, strlen (p->oldprefix)) == 0)
+          તોડો;
+        p = ખાલી;
       }
     gl_list_iterator_free (&iter);
   }
 
-  if (!p)
-    return xstrdup (filename);
+  જો (!p)
+    પાછા xstrdup (filename);
 
   size_t oldprefix_len = strlen (p->oldprefix);
   size_t newprefix_len = strlen (p->newprefix);
-  char *res = xmalloc (newprefix_len + strlen (filename) - oldprefix_len + 1);
+  અક્ષર *res = xmalloc (newprefix_len + strlen (filename) - oldprefix_len + 1);
 
-  char *end = stpcpy (res, p->newprefix);
+  અક્ષર *end = stpcpy (res, p->newprefix);
   stpcpy (end, filename + oldprefix_len);
 
-  return res;
+  પાછા res;
 }
 
-static bool
-string_equals (const void *x1, const void *x2)
+સ્થિર bool
+string_equals (અચલ શૂન્ય *x1, અચલ શૂન્ય *x2)
 {
-  const char *s1 = x1;
-  const char *s2 = x2;
-  return STREQ (s1, s2);
+  અચલ અક્ષર *s1 = x1;
+  અચલ અક્ષર *s2 = x2;
+  પાછા STREQ (s1, s2);
 }
 
 /* A hash function for NUL-terminated char* strings using
    the method described by Bruno Haible.
    See https://www.haible.de/bruno/hashfunc.html.  */
-static size_t
-string_hash (const void *x)
+સ્થિર size_t
+string_hash (અચલ શૂન્ય *x)
 {
-#define SIZE_BITS (sizeof (size_t) * CHAR_BIT)
+#define SIZE_BITS (કદ (size_t) * CHAR_BIT)
 
-  const char *s = x;
+  અચલ અક્ષર *s = x;
   size_t h = 0;
 
-  for (; *s; s++)
+  માટે (; *s; s++)
     h = *s + ((h << 9) | (h >> (SIZE_BITS - 9)));
 
-  return h;
+  પાછા h;
 }
 
-static void
-string_free (const void *cp)
+સ્થિર શૂન્ય
+string_free (અચલ શૂન્ય *cp)
 {
-  void *p = (void*) cp;
-  free (p);
+  શૂન્ય *p = (શૂન્ય*) cp;
+  મુક્ત (p);
 }
 
-const char *
-map_file_name (char const *filename)
+અચલ અક્ષર *
+map_file_name (અક્ષર અચલ *filename)
 {
-  if (!filename || !prefix_maps)
-    return filename;
-  if (!mapped_files)
+  જો (!filename || !prefix_maps)
+    પાછા filename;
+  જો (!mapped_files)
     mapped_files
       = gl_map_nx_create_empty (GL_HASH_MAP,
                                 string_equals, string_hash,
                                 string_free, string_free);
-  const void *res = gl_map_get (mapped_files, filename);
-  if (!res)
+  અચલ શૂન્ય *res = gl_map_get (mapped_files, filename);
+  જો (!res)
     {
       res = map_file_name_alloc (filename);
       gl_map_put (mapped_files, xstrdup (filename), res);
     }
-  return res;
+  પાછા res;
 }
 
-static void
-prefix_map_free (struct prefix_map *p)
+સ્થિર શૂન્ય
+prefix_map_free (સંરચના prefix_map *p)
 {
-  free (p->oldprefix);
-  free (p->newprefix);
-  free (p);
+  મુક્ત (p->oldprefix);
+  મુક્ત (p->newprefix);
+  મુક્ત (p);
 }
 
-void
-add_prefix_map (char const *oldprefix, char const *newprefix)
+શૂન્ય
+add_prefix_map (અક્ષર અચલ *oldprefix, અક્ષર અચલ *newprefix)
 {
-  if (!prefix_maps)
+  જો (!prefix_maps)
     prefix_maps
       = gl_list_create_empty (GL_ARRAY_LIST,
-                              /* equals */ NULL,
-                              /* hashcode */ NULL,
+                              /* equals */ ખાલી,
+                              /* hashcode */ ખાલી,
                               (gl_listelement_dispose_fn) prefix_map_free,
                               true);
 
-  struct prefix_map *p = xmalloc (sizeof (*p));
+  સંરચના prefix_map *p = xmalloc (કદ (*p));
   p->oldprefix = xstrdup (oldprefix);
   p->newprefix = xstrdup (newprefix);
 
@@ -291,15 +291,15 @@ add_prefix_map (char const *oldprefix, char const *newprefix)
 `------------------------------------------------------------------*/
 
 /* Compute extensions from the grammar file extension.  */
-static void
-compute_exts_from_gf (const char *ext)
+સ્થિર શૂન્ય
+compute_exts_from_gf (અચલ અક્ષર *ext)
 {
-  if (STREQ (ext, ".y"))
+  જો (STREQ (ext, ".y"))
     {
       src_extension = xstrdup (language->src_extension);
       header_extension = xstrdup (language->header_extension);
     }
-  else
+  નહીંતર
     {
       src_extension = xstrdup (ext);
       header_extension = xstrdup (ext);
@@ -311,8 +311,8 @@ compute_exts_from_gf (const char *ext)
 }
 
 /* Compute extensions from the given c source file extension.  */
-static void
-compute_exts_from_src (const char *ext)
+સ્થિર શૂન્ય
+compute_exts_from_src (અચલ અક્ષર *ext)
 {
   /* We use this function when the user specifies `-o' or `--output',
      so the extensions must be computed unconditionally from the file name
@@ -352,23 +352,23 @@ compute_exts_from_src (const char *ext)
 
    'foo' -> *BASE = 'foo', *TAB = NULL, *EXT = NULL.  */
 
-static void
-file_name_split (const char *file_name,
-                 const char **base, const char **tab, const char **ext)
+સ્થિર શૂન્ય
+file_name_split (અચલ અક્ષર *file_name,
+                 અચલ અક્ષર **base, અચલ અક્ષર **tab, અચલ અક્ષર **ext)
 {
   *base = last_component (file_name);
 
   /* Look for the extension, i.e., look for the last dot. */
   *ext = strrchr (*base, '.');
-  *tab = NULL;
+  *tab = ખાલી;
 
   /* If there is an extension, check if there is a '.tab' part right
      before.  */
-  if (*ext)
+  જો (*ext)
     {
       size_t baselen = *ext - *base;
-      size_t dottablen = sizeof (TAB_EXT) - 1;
-      if (dottablen < baselen
+      size_t dottablen = કદ (TAB_EXT) - 1;
+      જો (dottablen < baselen
           && STRPREFIX_LIT (TAB_EXT, *ext - dottablen))
         *tab = *ext - dottablen;
     }
@@ -380,12 +380,12 @@ file_name_split (const char *file_name,
    The precise -o name will be used for FTABLE.  For other output
    files, remove the ".c" or ".tab.c" suffix.  */
 
-static void
-compute_file_name_parts (void)
+સ્થિર શૂન્ય
+compute_file_name_parts (શૂન્ય)
 {
-  if (spec_outfile)
+  જો (spec_outfile)
     {
-      const char *base, *tab, *ext;
+      અચલ અક્ષર *base, *tab, *ext;
       file_name_split (spec_outfile, &base, &tab, &ext);
       dir_prefix = xstrndup (spec_outfile, base - spec_outfile);
 
@@ -400,15 +400,15 @@ compute_file_name_parts (void)
                   (strlen (spec_outfile)
                    - (tab ? strlen (tab) : (ext ? strlen (ext) : 0))));
 
-      if (ext)
+      જો (ext)
         compute_exts_from_src (ext);
     }
-  else
+  નહીંતર
     {
-      const char *base, *tab, *ext;
+      અચલ અક્ષર *base, *tab, *ext;
       file_name_split (grammar_file, &base, &tab, &ext);
 
-      if (spec_file_prefix)
+      જો (spec_file_prefix)
         {
           /* If --file-prefix=foo was specified, ALL_BUT_TAB_EXT = 'foo'.  */
           dir_prefix =
@@ -416,13 +416,13 @@ compute_file_name_parts (void)
                       last_component (spec_file_prefix) - spec_file_prefix);
           all_but_tab_ext = xstrdup (spec_file_prefix);
         }
-      else if (! location_empty (yacc_loc))
+      નહીંતર જો (! location_empty (yacc_loc))
         {
           /* If --yacc, then the output is 'y.tab.c'.  */
           dir_prefix = xstrdup ("");
           all_but_tab_ext = xstrdup ("y");
         }
-      else
+      નહીંતર
         {
           /* Otherwise, ALL_BUT_TAB_EXT is computed from the input
              grammar: 'foo/bar.yy' => 'bar'.  */
@@ -431,13 +431,13 @@ compute_file_name_parts (void)
             xstrndup (base, (strlen (base) - (ext ? strlen (ext) : 0)));
         }
 
-      if (language->add_tab)
+      જો (language->add_tab)
         all_but_ext = concat2 (all_but_tab_ext, TAB_EXT);
-      else
+      નહીંતર
         all_but_ext = xstrdup (all_but_tab_ext);
 
       /* Compute the extensions from the grammar file name.  */
-      if (ext && location_empty (yacc_loc))
+      જો (ext && location_empty (yacc_loc))
         compute_exts_from_gf (ext);
     }
 }
@@ -446,15 +446,15 @@ compute_file_name_parts (void)
 /* Compute the output file names.  Warn if we detect conflicting
    outputs to the same file.  */
 
-void
-compute_output_file_names (void)
+શૂન્ય
+compute_output_file_names (શૂન્ય)
 {
   compute_file_name_parts ();
 
   /* If not yet done. */
-  if (!src_extension)
+  જો (!src_extension)
     src_extension = xstrdup (".c");
-  if (!header_extension)
+  જો (!header_extension)
     header_extension = xstrdup (".h");
 
   parser_file_name =
@@ -462,136 +462,136 @@ compute_output_file_names (void)
      ? xstrdup (spec_outfile)
      : concat2 (all_but_ext, src_extension));
 
-  if (header_flag)
+  જો (header_flag)
     {
-      if (! spec_header_file)
+      જો (! spec_header_file)
         spec_header_file = concat2 (all_but_ext, header_extension);
     }
 
-  if (graph_flag)
+  જો (graph_flag)
     {
-      if (! spec_graph_file)
+      જો (! spec_graph_file)
         spec_graph_file = concat2 (all_but_tab_ext, ".gv");
       output_file_name_check (&spec_graph_file, false);
     }
 
-  if (html_flag)
+  જો (html_flag)
     {
-      if (! spec_html_file)
+      જો (! spec_html_file)
         spec_html_file = concat2 (all_but_tab_ext, ".html");
       output_file_name_check (&spec_html_file, false);
     }
 
-  if (xml_flag)
+  જો (xml_flag)
     {
-      if (! spec_xml_file)
+      જો (! spec_xml_file)
         spec_xml_file = concat2 (all_but_tab_ext, ".xml");
       output_file_name_check (&spec_xml_file, false);
     }
 
-  if (report_flag)
+  જો (report_flag)
     {
-      if (!spec_verbose_file)
+      જો (!spec_verbose_file)
         spec_verbose_file = concat2 (all_but_tab_ext, OUTPUT_EXT);
       output_file_name_check (&spec_verbose_file, false);
     }
 
-  free (all_but_tab_ext);
-  free (src_extension);
-  free (header_extension);
+  મુક્ત (all_but_tab_ext);
+  મુક્ત (src_extension);
+  મુક્ત (header_extension);
 }
 
-void
-output_file_name_check (char **file_name, bool source)
+શૂન્ય
+output_file_name_check (અક્ષર **file_name, bool source)
 {
   bool conflict = false;
-  if (STREQ (*file_name, grammar_file))
+  જો (STREQ (*file_name, grammar_file))
     {
-      complain (NULL, complaint, _("refusing to overwrite the input file %s"),
+      complain (ખાલી, complaint, _("refusing to overwrite the input file %s"),
                 quote (*file_name));
       conflict = true;
     }
-  else
-    for (int i = 0; i < generated_files_size; i++)
-      if (STREQ (generated_files[i].name, *file_name))
+  નહીંતર
+    માટે (પૂર્ણાંક i = 0; i < generated_files_size; i++)
+      જો (STREQ (generated_files[i].name, *file_name))
         {
-          complain (NULL, Wother, _("conflicting outputs to file %s"),
+          complain (ખાલી, Wother, _("conflicting outputs to file %s"),
                     quote (generated_files[i].name));
           conflict = true;
         }
-  if (conflict)
+  જો (conflict)
     {
-      free (*file_name);
+      મુક્ત (*file_name);
       *file_name = strdup ("/dev/null");
     }
-  else
+  નહીંતર
     {
       generated_files = xnrealloc (generated_files, ++generated_files_size,
-                                   sizeof *generated_files);
+                                   કદ *generated_files);
       generated_files[generated_files_size-1].name = xstrdup (*file_name);
       generated_files[generated_files_size-1].is_source = source;
     }
 }
 
-void
-unlink_generated_sources (void)
+શૂન્ય
+unlink_generated_sources (શૂન્ય)
 {
-  for (int i = 0; i < generated_files_size; i++)
-    if (generated_files[i].is_source)
+  માટે (પૂર્ણાંક i = 0; i < generated_files_size; i++)
+    જો (generated_files[i].is_source)
       /* Ignore errors.  The file might not even exist.  */
       unlink (generated_files[i].name);
 }
 
 /* Memory allocated by relocate2, to free.  */
-static char *relocate_buffer = NULL;
+સ્થિર અક્ષર *relocate_buffer = ખાલી;
 
-char const *
-pkgdatadir (void)
+અક્ષર અચલ *
+pkgdatadir (શૂન્ય)
 {
-  if (relocate_buffer)
-    return relocate_buffer;
-  else
+  જો (relocate_buffer)
+    પાછા relocate_buffer;
+  નહીંતર
     {
-      char const *cp = getenv ("BISON_PKGDATADIR");
-      return cp ? cp : relocate2 (PKGDATADIR, &relocate_buffer);
+      અક્ષર અચલ *cp = getenv ("BISON_PKGDATADIR");
+      પાછા cp ? cp : relocate2 (PKGDATADIR, &relocate_buffer);
     }
 }
 
-char const *
-m4path (void)
+અક્ષર અચલ *
+m4path (શૂન્ય)
 {
-  char const *m4 = getenv ("M4");
-  if (m4)
-    return m4;
+  અક્ષર અચલ *m4 = getenv ("M4");
+  જો (m4)
+    પાછા m4;
 
   /* We don't use relocate2() to store the temporary buffer and re-use
      it, because m4path() is only called once.  */
-  char const *m4_relocated = relocate (M4);
-  struct stat buf;
-  if (stat (m4_relocated, &buf) == 0)
-    return m4_relocated;
+  અક્ષર અચલ *m4_relocated = relocate (M4);
+  સંરચના stat buf;
+  જો (stat (m4_relocated, &buf) == 0)
+    પાછા m4_relocated;
 
-  return M4;
+  પાછા M4;
 }
 
-void
-output_file_names_free (void)
+શૂન્ય
+output_file_names_free (શૂન્ય)
 {
-  free (all_but_ext);
-  free (spec_verbose_file);
-  free (spec_graph_file);
-  free (spec_html_file);
-  free (spec_xml_file);
-  free (spec_header_file);
-  free (parser_file_name);
-  free (dir_prefix);
-  for (int i = 0; i < generated_files_size; i++)
-    free (generated_files[i].name);
-  free (generated_files);
-  free (relocate_buffer);
+  મુક્ત (all_but_ext);
+  મુક્ત (spec_verbose_file);
+  મુક્ત (spec_graph_file);
+  મુક્ત (spec_html_file);
+  મુક્ત (spec_xml_file);
+  મુક્ત (spec_header_file);
+  મુક્ત (parser_file_name);
+  મુક્ત (dir_prefix);
+  માટે (પૂર્ણાંક i = 0; i < generated_files_size; i++)
+    મુક્ત (generated_files[i].name);
+  મુક્ત (generated_files);
+  મુક્ત (relocate_buffer);
 
-  if (prefix_maps)
+  જો (prefix_maps)
     gl_list_free (prefix_maps);
-  if (mapped_files)
+  જો (mapped_files)
     gl_map_free (mapped_files);
 }

@@ -53,61 +53,61 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_વસ્તુઓ[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_વસ્તુઓ || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_વસ્તુઓ && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+પ્રકારવ્યાખ્યા પૂર્ણાંક state_item_સંખ્યા;
 
-typedef struct
+પ્રકારવ્યાખ્યા સંરચના
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  અચલ state *state;
+  item_સંખ્યા *item;
+  state_item_સંખ્યા trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+પ્રકારવ્યાખ્યા gl_list_t state_item_list;
 
-extern bitsetv firsts;
+બાહ્ય bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+બાહ્ય size_t nstate_વસ્તુઓ;
+બાહ્ય state_item_સંખ્યા *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+બાહ્ય state_item *state_વસ્તુઓ;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_સંખ્યા s, state_item_સંખ્યા off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+સ્થિર અંતઃરેખ state_item_સંખ્યા
+state_item_index_lookup (state_સંખ્યા s, state_item_સંખ્યા off)
 {
-  return state_item_map[s] + off;
+  પાછા state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+શૂન્ય state_વસ્તુઓ_init (શૂન્ય);
+શૂન્ય state_વસ્તુઓ_free (શૂન્ય);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+શૂન્ય state_item_print (અચલ state_item *si, FILE *out, અચલ અક્ષર *prefix);
+અચલ rule *state_item_rule (અચલ state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (અચલ state_item *si, અચલ state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+સ્થિર અંતઃરેખ bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  અચલ શૂન્ય *p = ખાલી;
+  bool res = gl_list_iterator_next (it, &p, ખાલી);
+  જો (res)
     *si = (state_item *) p;
-  else
+  નહીંતર
     gl_list_iterator_free (it);
-  return res;
+  પાછા res;
 }
 
 

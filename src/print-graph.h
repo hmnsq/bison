@@ -21,6 +21,6 @@
 #ifndef PRINT_GRAPH_H_
 # define PRINT_GRAPH_H_
 
-void print_graph (void);
+શૂન્ય print_graph (શૂન્ય);
 
 #endif /* !PRINT_GRAPH_H_ */

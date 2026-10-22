@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "system.h"
 
-#include "getargs.h"
+#અન્તર્ભાવ "getargs.h"
 
-#include "derives.h"
-#include "gram.h"
-#include "reader.h"
-#include "symtab.h"
+#અન્તર્ભાવ "derives.h"
+#અન્તર્ભાવ "gram.h"
+#અન્તર્ભાવ "reader.h"
+#અન્તર્ભાવ "symtab.h"
 
 /* Linked list of rule numbers.  */
-typedef struct rule_list
+પ્રકારવ્યાખ્યા સંરચના rule_list
 {
-  struct rule_list *next;
-  rule *value;
+  સંરચના rule_list *next;
+  rule *કિંમત;
 } rule_list;
 
 rule ***derives;
 
-static void
-print_derives (void)
+સ્થિર શૂન્ય
+print_derives (શૂન્ય)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  માટે (પ્રતીક_સંખ્યા i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
-      for (rule **rp = derives[i - ntokens]; *rp; ++rp)
+      માટે (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
           rule_rhs_print (*rp, stderr);
@@ -57,61 +57,61 @@ print_derives (void)
 }
 
 
-void
-derives_compute (void)
+શૂન્ય
+derives_compute (શૂન્ય)
 {
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = xcalloc (nnterms, sizeof *dset);
+  rule_list **dset = xcalloc (nnterms, કદ *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = xnmalloc (nrules, sizeof *delts);
+  rule_list *delts = xnmalloc (nrules, કદ *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  માટે (rule_સંખ્યા r = nrules - 1; r >= 0; --r)
     {
-      symbol_number lhs = rules[r].lhs->number;
+      પ્રતીક_સંખ્યા lhs = rules[r].lhs->સંખ્યા;
       rule_list *p = &delts[r];
       /* A new LHS is found.  */
       p->next = dset[lhs - ntokens];
-      p->value = &rules[r];
+      p->કિંમત = &rules[r];
       dset[lhs - ntokens] = p;
     }
 
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  derives = xnmalloc (nnterms, sizeof *derives);
+  derives = xnmalloc (nnterms, કદ *derives);
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
-  rule **q = xnmalloc (nnterms + nrules, sizeof *q);
+  rule **q = xnmalloc (nnterms + nrules, કદ *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  માટે (પ્રતીક_સંખ્યા i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      જ્યારે (p)
         {
-          *q++ = p->value;
+          *q++ = p->કિંમત;
           p = p->next;
         }
-      *q++ = NULL;
+      *q++ = ખાલી;
     }
 
-  if (trace_flag & trace_sets)
+  જો (trace_flag & trace_sets)
     print_derives ();
 
-  free (dset);
-  free (delts);
+  મુક્ત (dset);
+  મુક્ત (delts);
 }
 
 
-void
-derives_free (void)
+શૂન્ય
+derives_free (શૂન્ય)
 {
-  if (derives)
+  જો (derives)
     {
-      free (derives[0]);
-      free (derives);
+      મુક્ત (derives[0]);
+      મુક્ત (derives);
     }
 }

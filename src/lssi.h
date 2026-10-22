@@ -32,14 +32,14 @@
  * find shortest lookahead-sensitive path of state-items to target such that
  * next_sym is in the follow_L set of target in that position.
 */
-state_item_list shortest_path_from_start (state_item_number target,
-                                          symbol_number next_sym);
+state_item_list shortest_path_from_start (state_item_સંખ્યા target,
+                                          પ્રતીક_સંખ્યા next_sym);
 
 /**
  * Determine if the given terminal is in the given symbol set or can begin
  * a nonterminal in the given symbol set.
  */
-bool intersect_symbol (symbol_number sym, bitset syms);
+bool intersect_પ્રતીક (પ્રતીક_સંખ્યા sym, bitset syms);
 
 /**
  * Determine if any symbol in ts is in syms
@@ -52,6 +52,6 @@ bool intersect (bitset ts, bitset syms);
  * to this state-item such that the resulting possible lookahead symbols are
  * as given.
  */
-state_item_list lssi_reverse_production (const state_item *si, bitset lookahead);
+state_item_list lssi_reverse_production (અચલ state_item *si, bitset lookahead);
 
 #endif /* LSSI_H */

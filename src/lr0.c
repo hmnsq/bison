@@ -22,38 +22,38 @@
 /* See comments in state.h for the data structures that represent it.
    The entry point is generate_states.  */
 
-#include <config.h>
-#include "system.h"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "system.h"
 
-#include <bitset.h>
+#અન્તર્ભાવ <bitset.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
+#અન્તર્ભાવ "closure.h"
+#અન્તર્ભાવ "complain.h"
+#અન્તર્ભાવ "getargs.h"
+#અન્તર્ભાવ "gram.h"
+#અન્તર્ભાવ "lalr.h"
+#અન્તર્ભાવ "lr0.h"
+#અન્તર્ભાવ "reader.h"
+#અન્તર્ભાવ "reduce.h"
+#અન્તર્ભાવ "state.h"
+#અન્તર્ભાવ "symtab.h"
 
-typedef struct state_list
+પ્રકારવ્યાખ્યા સંરચના state_list
 {
-  struct state_list *next;
+  સંરચના state_list *next;
   state *state;
 } state_list;
 
-static state_list *first_state = NULL;
-static state_list *last_state = NULL;
+સ્થિર state_list *first_state = ખાલી;
+સ્થિર state_list *last_state = ખાલી;
 
 /* Print CORE for debugging. */
-static void
+સ્થિર શૂન્ય
 core_print (size_t core_size, item_index *core, FILE *out)
 {
-  for (int i = 0; i < core_size; ++i)
+  માટે (પૂર્ણાંક i = 0; i < core_size; ++i)
     {
-      item_print (ritem + core[i], NULL, out);
+      item_print (ritem + core[i], ખાલી, out);
       fputc ('\n', out);
     }
 }
@@ -64,67 +64,67 @@ core_print (size_t core_size, item_index *core, FILE *out)
 | its outgoing transitions.  Return it.                            |
 `-----------------------------------------------------------------*/
 
-static state *
-state_list_append (symbol_number sym, size_t core_size, item_index *core)
+સ્થિર state *
+state_list_append (પ્રતીક_સંખ્યા sym, size_t core_size, item_index *core)
 {
-  state_list *node = xmalloc (sizeof *node);
+  state_list *ગાંઠ = xmalloc (કદ *ગાંઠ);
   state *res = state_new (sym, core_size, core);
 
-  if (trace_flag & trace_automaton)
+  જો (trace_flag & trace_automaton)
     fprintf (stderr, "state_list_append (state = %d, symbol = %d (%s))\n",
              nstates, sym, symbols[sym]->tag);
 
-  node->next = NULL;
-  node->state = res;
+  ગાંઠ->next = ખાલી;
+  ગાંઠ->state = res;
 
-  if (!first_state)
-    first_state = node;
-  if (last_state)
-    last_state->next = node;
-  last_state = node;
+  જો (!first_state)
+    first_state = ગાંઠ;
+  જો (last_state)
+    last_state->next = ગાંઠ;
+  last_state = ગાંઠ;
 
-  return res;
+  પાછા res;
 }
 
 /* Symbols that can be "shifted" (including nonterminals) from the
    current state.  */
-bitset shift_symbol;
+bitset shift_પ્રતીક;
 
-static rule **redset;
+સ્થિર rule **redset;
 /* For the current state, the list of pointers to states that can be
    reached via a shift/goto.  Could be indexed by the reaching symbol,
    but labels of incoming transitions can be recovered by the state
    itself.  */
-static state **shiftset;
+સ્થિર state **shiftset;
 
 
 /* KERNEL_BASE[symbol-number] -> list of item indices (offsets inside
    RITEM) of length KERNEL_SIZE[symbol-number]. */
-static item_index **kernel_base;
-static int *kernel_size;
+સ્થિર item_index **kernel_base;
+સ્થિર પૂર્ણાંક *kernel_size;
 
 /* A single dimension array that serves as storage for
    KERNEL_BASE.  */
-static item_index *kernel_items;
+સ્થિર item_index *kernel_વસ્તુઓ;
 
 
-static void
-allocate_itemsets (void)
+સ્થિર શૂન્ય
+allocate_itemsets (શૂન્ય)
 {
   /* Count the number of occurrences of all the symbols in RITEMS.
      Note that useless productions (hence useless nonterminals) are
      browsed too, hence we need to allocate room for _all_ the
      symbols.  */
-  size_t count = 0;
-  size_t *symbol_count = xcalloc (nsyms + nuseless_nonterminals,
-                                  sizeof *symbol_count);
+  size_t ગણતરી = 0;
+  size_t *પ્રતીક_ગણતરી = xcalloc (nsyms + nuseless_nonterminals,
+                                  કદ *પ્રતીક_ગણતરી);
 
-  for (rule_number r = 0; r < nrules; ++r)
-    for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  માટે (rule_સંખ્યા r = 0; r < nrules; ++r)
+    માટે (item_સંખ્યા *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
       {
-        symbol_number sym = item_number_as_symbol_number (*rhsp);
-        count += 1;
-        symbol_count[sym] += 1;
+        પ્રતીક_સંખ્યા sym = item_સંખ્યા_as_પ્રતીક_સંખ્યા (*rhsp);
+        ગણતરી += 1;
+        પ્રતીક_ગણતરી[sym] += 1;
       }
 
   /* See comments before new_itemsets.  All the vectors of items
@@ -133,26 +133,26 @@ allocate_itemsets (void)
      appears as an item, which is SYMBOL_COUNT[S].
      We allocate that much space for each symbol.  */
 
-  kernel_base = xnmalloc (nsyms, sizeof *kernel_base);
-  kernel_items = xnmalloc (count, sizeof *kernel_items);
+  kernel_base = xnmalloc (nsyms, કદ *kernel_base);
+  kernel_વસ્તુઓ = xnmalloc (ગણતરી, કદ *kernel_વસ્તુઓ);
 
-  count = 0;
-  for (symbol_number i = 0; i < nsyms; i++)
+  ગણતરી = 0;
+  માટે (પ્રતીક_સંખ્યા i = 0; i < nsyms; i++)
     {
-      kernel_base[i] = kernel_items + count;
-      count += symbol_count[i];
+      kernel_base[i] = kernel_વસ્તુઓ + ગણતરી;
+      ગણતરી += પ્રતીક_ગણતરી[i];
     }
 
-  free (symbol_count);
-  kernel_size = xnmalloc (nsyms, sizeof *kernel_size);
+  મુક્ત (પ્રતીક_ગણતરી);
+  kernel_size = xnmalloc (nsyms, કદ *kernel_size);
 }
 
 /* Print the current kernel (in KERNEL_BASE). */
-static void
+સ્થિર શૂન્ય
 kernel_print (FILE *out)
 {
-  for (symbol_number i = 0; i < nsyms; ++i)
-    if (kernel_size[i])
+  માટે (પ્રતીક_સંખ્યા i = 0; i < nsyms; ++i)
+    જો (kernel_size[i])
       {
         fprintf (out, "kernel[%s] =\n", symbols[i]->tag);
         core_print (kernel_size[i], kernel_base[i], out);
@@ -160,34 +160,34 @@ kernel_print (FILE *out)
 }
 
 /* Make sure the kernel is in sane state. */
-static void
-kernel_check (void)
+સ્થિર શૂન્ય
+kernel_check (શૂન્ય)
 {
-  for (symbol_number i = 0; i < nsyms - 1; ++i)
-    assert (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
+  માટે (પ્રતીક_સંખ્યા i = 0; i < nsyms - 1; ++i)
+    પ્રતિજ્ઞા (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
 }
 
-static void
-allocate_storage (void)
+સ્થિર શૂન્ય
+allocate_storage (શૂન્ય)
 {
   allocate_itemsets ();
 
-  shiftset = xnmalloc (nsyms, sizeof *shiftset);
-  redset = xnmalloc (nrules, sizeof *redset);
+  shiftset = xnmalloc (nsyms, કદ *shiftset);
+  redset = xnmalloc (nrules, કદ *redset);
   state_hash_new ();
-  shift_symbol = bitset_create (nsyms, BITSET_FIXED);
+  shift_પ્રતીક = bitset_create (nsyms, BITSET_FIXED);
 }
 
 
-static void
-free_storage (void)
+સ્થિર શૂન્ય
+free_storage (શૂન્ય)
 {
-  bitset_free (shift_symbol);
-  free (redset);
-  free (shiftset);
-  free (kernel_base);
-  free (kernel_size);
-  free (kernel_items);
+  bitset_free (shift_પ્રતીક);
+  મુક્ત (redset);
+  મુક્ત (shiftset);
+  મુક્ત (kernel_base);
+  મુક્ત (kernel_size);
+  મુક્ત (kernel_વસ્તુઓ);
   state_hash_free ();
 }
 
@@ -208,42 +208,42 @@ free_storage (void)
 | number.  Compute each kernel_base[symbol] with the same sort.     |
 `------------------------------------------------------------------*/
 
-static void
+સ્થિર શૂન્ય
 new_itemsets (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->number);
+  જો (trace_flag & trace_automaton)
+    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->સંખ્યા);
 
-  memset (kernel_size, 0, nsyms * sizeof *kernel_size);
+  memset (kernel_size, 0, nsyms * કદ *kernel_size);
 
-  bitset_zero (shift_symbol);
+  bitset_zero (shift_પ્રતીક);
 
-  if (trace_flag & trace_automaton)
+  જો (trace_flag & trace_automaton)
     {
       fprintf (stderr, "initial kernel:\n");
       kernel_print (stderr);
     }
 
-  for (size_t i = 0; i < nitemset; ++i)
-    if (item_number_is_symbol_number (ritem[itemset[i]]))
+  માટે (size_t i = 0; i < nitemset; ++i)
+    જો (item_સંખ્યા_is_પ્રતીક_સંખ્યા (ritem[itemset[i]]))
       {
-        if (trace_flag & trace_automaton)
+        જો (trace_flag & trace_automaton)
           {
             fputs ("working on: ", stderr);
-            item_print (ritem + itemset[i], NULL, stderr);
+            item_print (ritem + itemset[i], ખાલી, stderr);
             fputc ('\n', stderr);
           }
-        symbol_number sym = item_number_as_symbol_number (ritem[itemset[i]]);
-        bitset_set (shift_symbol, sym);
+        પ્રતીક_સંખ્યા sym = item_સંખ્યા_as_પ્રતીક_સંખ્યા (ritem[itemset[i]]);
+        bitset_set (shift_પ્રતીક, sym);
         kernel_base[sym][kernel_size[sym]] = itemset[i] + 1;
         kernel_size[sym]++;
       }
 
-  if (trace_flag & trace_automaton)
+  જો (trace_flag & trace_automaton)
     {
       fprintf (stderr, "final kernel:\n");
       kernel_print (stderr);
-      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->number);
+      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->સંખ્યા);
     }
   kernel_check ();
 }
@@ -256,10 +256,10 @@ new_itemsets (state *s)
 | already.  Used by append_states.                              |
 `--------------------------------------------------------------*/
 
-static state *
-get_state (symbol_number sym, size_t core_size, item_index *core)
+સ્થિર state *
+get_state (પ્રતીક_સંખ્યા sym, size_t core_size, item_index *core)
 {
-  if (trace_flag & trace_automaton)
+  જો (trace_flag & trace_automaton)
     {
       fprintf (stderr, "Entering get_state, symbol = %d (%s), core:\n",
                sym, symbols[sym]->tag);
@@ -268,13 +268,13 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
     }
 
   state *s = state_hash_lookup (core_size, core);
-  if (!s)
+  જો (!s)
     s = state_list_append (sym, core_size, core);
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "Exiting get_state => %d\n", s->number);
+  જો (trace_flag & trace_automaton)
+    fprintf (stderr, "Exiting get_state => %d\n", s->સંખ્યા);
 
-  return s;
+  પાછા s;
 }
 
 /*---------------------------------------------------------------.
@@ -284,23 +284,23 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
 | SHIFTSET is set up as a vector of those states.                |
 `---------------------------------------------------------------*/
 
-static void
+સ્થિર શૂન્ય
 append_states (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: begin: state = %d\n", s->number);
+  જો (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: begin: state = %d\n", s->સંખ્યા);
 
   bitset_iterator iter;
-  symbol_number sym;
-  int i = 0;
-  BITSET_FOR_EACH (iter, shift_symbol, sym, 0)
+  પ્રતીક_સંખ્યા sym;
+  પૂર્ણાંક i = 0;
+  BITSET_FOR_EACH (iter, shift_પ્રતીક, sym, 0)
     {
       shiftset[i] = get_state (sym, kernel_size[sym], kernel_base[sym]);
       ++i;
     }
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: end: state = %d\n", s->number);
+  જો (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: end: state = %d\n", s->સંખ્યા);
 }
 
 
@@ -310,20 +310,20 @@ append_states (state *s)
 | record their rule numbers.                                      |
 `----------------------------------------------------------------*/
 
-static void
+સ્થિર શૂન્ય
 save_reductions (state *s)
 {
-  int count = 0;
+  પૂર્ણાંક ગણતરી = 0;
 
   /* Find and count the active items that represent ends of rules. */
-  for (size_t i = 0; i < nitemset; ++i)
+  માટે (size_t i = 0; i < nitemset; ++i)
     {
-      item_number item = ritem[itemset[i]];
-      if (item_number_is_rule_number (item))
+      item_સંખ્યા item = ritem[itemset[i]];
+      જો (item_સંખ્યા_is_rule_સંખ્યા (item))
         {
-          rule_number r = item_number_as_rule_number (item);
-          redset[count++] = &rules[r];
-          if (r == 0)
+          rule_સંખ્યા r = item_સંખ્યા_as_rule_સંખ્યા (item);
+          redset[ગણતરી++] = &rules[r];
+          જો (r == 0)
             {
               /* This is "reduce 0", i.e., accept. */
               aver (!final_state);
@@ -332,19 +332,19 @@ save_reductions (state *s)
         }
     }
 
-  if (trace_flag & trace_automaton)
+  જો (trace_flag & trace_automaton)
     {
-      fprintf (stderr, "reduction[%d] = {\n", s->number);
-      for (int i = 0; i < count; ++i)
+      fprintf (stderr, "reduction[%d] = {\n", s->સંખ્યા);
+      માટે (પૂર્ણાંક i = 0; i < ગણતરી; ++i)
         {
-          rule_print (redset[i], NULL, stderr);
+          rule_print (redset[i], ખાલી, stderr);
           fputc ('\n', stderr);
         }
       fputs ("}\n", stderr);
     }
 
   /* Make a reductions structure and copy the data into it.  */
-  state_reductions_set (s, count, redset);
+  state_reductions_set (s, ગણતરી, redset);
 }
 
 
@@ -352,12 +352,12 @@ save_reductions (state *s)
 | Build STATES.  |
 `---------------*/
 
-static void
-set_states (void)
+સ્થિર શૂન્ય
+set_states (શૂન્ય)
 {
-  states = xcalloc (nstates, sizeof *states);
+  states = xcalloc (nstates, કદ *states);
 
-  while (first_state)
+  જ્યારે (first_state)
     {
       state_list *this = first_state;
 
@@ -366,18 +366,18 @@ set_states (void)
          even if reduced to 0.  It is too soon for errs, which are
          computed later, but set_conflicts.  */
       state *s = this->state;
-      if (!s->transitions)
+      જો (!s->transitions)
         state_transitions_set (s, 0, 0);
-      if (!s->reductions)
+      જો (!s->reductions)
         state_reductions_set (s, 0, 0);
 
-      states[s->number] = s;
+      states[s->સંખ્યા] = s;
 
       first_state = this->next;
-      free (this);
+      મુક્ત (this);
     }
-  first_state = NULL;
-  last_state = NULL;
+  first_state = ખાલી;
+  last_state = ખાલી;
 }
 
 
@@ -386,8 +386,8 @@ set_states (void)
 | grammar.                                                           |
 `-------------------------------------------------------------------*/
 
-void
-generate_states (void)
+શૂન્ય
+generate_states (શૂન્ય)
 {
   allocate_storage ();
   closure_new (nritems);
@@ -397,22 +397,22 @@ generate_states (void)
   {
     /* The items of its core: beginning of all the rules of $accept.  */
     kernel_size[0] = 0;
-    for (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
+    માટે (rule_સંખ્યા r = 0; r < nrules && rules[r].lhs->પ્રતીક == acceptsymbol; ++r)
       kernel_base[0][kernel_size[0]++] = rules[r].rhs - ritem;
     state_list_append (0, kernel_size[0], kernel_base[0]);
   }
 
   /* States are queued when they are created; process them all.  */
-  for (state_list *list = first_state; list; list = list->next)
+  માટે (state_list *list = first_state; list; list = list->next)
     {
       state *s = list->state;
-      if (trace_flag & trace_automaton)
+      જો (trace_flag & trace_automaton)
         fprintf (stderr, "Processing state %d (reached by %s)\n",
-                 s->number,
-                 symbols[s->accessing_symbol]->tag);
+                 s->સંખ્યા,
+                 symbols[s->accessing_પ્રતીક]->tag);
       /* Set up itemset for the transitions out of this state.  itemset gets a
          vector of all the items that could be accepted next.  */
-      closure (s->items, s->nitems);
+      closure (s->વસ્તુઓ, s->nitems);
       /* Record the reductions allowed out of this state.  */
       save_reductions (s);
       /* Find the itemsets of the states that shifts/gotos can reach.  */
@@ -422,7 +422,7 @@ generate_states (void)
 
       /* Create the shifts structures for the shifts to those states,
          now that the state numbers transitioning to are known.  */
-      state_transitions_set (s, bitset_count (shift_symbol), shiftset);
+      state_transitions_set (s, bitset_ગણતરી (shift_પ્રતીક), shiftset);
     }
 
   /* discard various storage */

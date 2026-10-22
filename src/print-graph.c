@@ -18,23 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "print-graph.h"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "print-graph.h"
 
-#include "system.h"
+#અન્તર્ભાવ "system.h"
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "graphviz.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "reader.h"
-#include "state.h"
-#include "symtab.h"
+#અન્તર્ભાવ "closure.h"
+#અન્તર્ભાવ "complain.h"
+#અન્તર્ભાવ "conflicts.h"
+#અન્તર્ભાવ "files.h"
+#અન્તર્ભાવ "getargs.h"
+#અન્તર્ભાવ "gram.h"
+#અન્તર્ભાવ "graphviz.h"
+#અન્તર્ભાવ "lalr.h"
+#અન્તર્ભાવ "lr0.h"
+#અન્તર્ભાવ "reader.h"
+#અન્તર્ભાવ "state.h"
+#અન્તર્ભાવ "symtab.h"
 
 
 /*----------------------------.
@@ -44,41 +44,41 @@
 /* Print the lhs of a rule in such a manner that there is no vertical
    repetition, like in *.output files. */
 
-static void
-print_core (struct obstack *oout, state *s)
+સ્થિર શૂન્ય
+print_core (સંરચના obstack *oout, state *s)
 {
-  item_index const *sitems = s->items;
-  sym_content *previous_lhs = NULL;
+  item_index અચલ *sitems = s->વસ્તુઓ;
+  sym_content *previous_lhs = ખાલી;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not just its kernel.  */
-  if (report_flag & report_itemsets)
+  જો (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  obstack_printf (oout, _("State %d"), s->number);
+  obstack_printf (oout, _("State %d"), s->સંખ્યા);
   obstack_sgrow (oout, "\\n\\l");
-  for (size_t i = 0; i < snritems; ++i)
+  માટે (size_t i = 0; i < snritems; ++i)
     {
-      item_number const *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
+      item_સંખ્યા અચલ *sp1 = ritem + sitems[i];
+      rule અચલ *r = item_rule (sp1);
 
-      obstack_printf (oout, "%3d ", r->number);
-      if (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
-                                      r->lhs->symbol->tag))
+      obstack_printf (oout, "%3d ", r->સંખ્યા);
+      જો (previous_lhs && UNIQSTR_EQ (previous_lhs->પ્રતીક->tag,
+                                      r->lhs->પ્રતીક->tag))
         obstack_printf (oout, "%*s| ",
-                        (int) strlen (previous_lhs->symbol->tag), "");
-      else
+                        (પૂર્ણાંક) strlen (previous_lhs->પ્રતીક->tag), "");
+      નહીંતર
         {
-          obstack_backslash (oout, r->lhs->symbol->tag);
+          obstack_backslash (oout, r->lhs->પ્રતીક->tag);
           obstack_printf (oout, ": ");
         }
       previous_lhs = r->lhs;
 
-      for (item_number const *sp = r->rhs; sp < sp1; sp++)
+      માટે (item_સંખ્યા અચલ *sp = r->rhs; sp < sp1; sp++)
         {
           obstack_backslash (oout, symbols[*sp]->tag);
           obstack_1grow (oout, ' ');
@@ -86,29 +86,29 @@ print_core (struct obstack *oout, state *s)
 
       obstack_sgrow (oout, "•");
 
-      if (0 <= *r->rhs)
-        for (item_number const *sp = sp1; 0 <= *sp; ++sp)
+      જો (0 <= *r->rhs)
+        માટે (item_સંખ્યા અચલ *sp = sp1; 0 <= *sp; ++sp)
           {
             obstack_1grow (oout, ' ');
             obstack_backslash (oout, symbols[*sp]->tag);
           }
-      else
+      નહીંતર
         obstack_sgrow (oout, " %empty");
 
       /* Experimental feature: display the lookahead tokens. */
-      if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
+      જો (report_flag & report_lookaheads
+          && item_સંખ્યા_is_rule_સંખ્યા (*sp1))
         {
           /* Find the reduction we are handling.  */
           reductions *reds = s->reductions;
-          int redno = state_reduction_find (s, r);
+          પૂર્ણાંક redno = state_reduction_find (s, r);
 
           /* Print them if there are.  */
-          if (reds->lookaheads && redno != -1)
+          જો (reds->lookaheads && redno != -1)
             {
               bitset_iterator biter;
-              int k;
-              char const *sep = "";
+              પૂર્ણાંક k;
+              અક્ષર અચલ *sep = "";
               obstack_sgrow (oout, "  [");
               BITSET_FOR_EACH (biter, reds->lookaheads[redno], k, 0)
                 {
@@ -129,31 +129,31 @@ print_core (struct obstack *oout, state *s)
 | current node.                                                  |
 `---------------------------------------------------------------*/
 
-static void
-print_actions (state const *s, FILE *fgraph)
+સ્થિર શૂન્ય
+print_actions (state અચલ *s, FILE *fgraph)
 {
-  transitions const *trans = s->transitions;
+  transitions અચલ *trans = s->transitions;
 
-  if (!trans->num && !s->reductions)
-    return;
+  જો (!trans->અંક && !s->reductions)
+    પાછા;
 
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  માટે (પૂર્ણાંક i = 0; i < trans->અંક; i++)
+    જો (!TRANSITION_IS_DISABLED (trans, i))
       {
-        const state *s1 = trans->states[i];
-        const symbol_number sym = s1->accessing_symbol;
+        અચલ state *s1 = trans->states[i];
+        અચલ પ્રતીક_સંખ્યા sym = s1->accessing_પ્રતીક;
 
         /* Shifts are solid, gotos are dashed, and error is dotted.  */
-        char const *style =
+        અક્ષર અચલ *style =
           (TRANSITION_IS_ERROR (trans, i) ? "dotted"
            : TRANSITION_IS_SHIFT (trans, i) ? "solid"
            : "dashed");
 
-        if (TRANSITION_IS_ERROR (trans, i)
+        જો (TRANSITION_IS_ERROR (trans, i)
             && STRNEQ (symbols[sym]->tag, "error"))
           abort ();
-        output_edge (s->number, s1->number,
-                     TRANSITION_IS_ERROR (trans, i) ? NULL : symbols[sym]->tag,
+        output_edge (s->સંખ્યા, s1->સંખ્યા,
+                     TRANSITION_IS_ERROR (trans, i) ? ખાલી : symbols[sym]->tag,
                      style, fgraph);
       }
   /* Display reductions. */
@@ -166,30 +166,30 @@ print_actions (state const *s, FILE *fgraph)
 | edges.                                                       |
 `-------------------------------------------------------------*/
 
-static void
+સ્થિર શૂન્ય
 print_state (state *s, FILE *fgraph)
 {
-  struct obstack node_obstack;
+  સંરચના obstack ગાંઠ_obstack;
 
   /* A node's label contains its items.  */
-  obstack_init (&node_obstack);
-  print_core (&node_obstack, s);
-  output_node (s->number, obstack_finish0 (&node_obstack), fgraph);
-  obstack_free (&node_obstack, 0);
+  obstack_init (&ગાંઠ_obstack);
+  print_core (&ગાંઠ_obstack, s);
+  output_ગાંઠ (s->સંખ્યા, obstack_finish0 (&ગાંઠ_obstack), fgraph);
+  obstack_free (&ગાંઠ_obstack, 0);
 
   /* Output the edges.  */
   print_actions (s, fgraph);
 }
 
 
-void
-print_graph (void)
+શૂન્ય
+print_graph (શૂન્ય)
 {
   FILE *fgraph = xfopen (spec_graph_file, "w");
   start_graph (fgraph);
 
   /* Output nodes and edges. */
-  for (int i = 0; i < nstates; i++)
+  માટે (પૂર્ણાંક i = 0; i < nstates; i++)
     print_state (states[i], fgraph);
 
   finish_graph (fgraph);

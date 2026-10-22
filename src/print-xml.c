@@ -18,50 +18,50 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "print-xml.h"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "print-xml.h"
 
-#include "system.h"
+#અન્તર્ભાવ "system.h"
 
-#include <bitset.h>
-#include <stdarg.h>
+#અન્તર્ભાવ <bitset.h>
+#અન્તર્ભાવ <stdarg.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "execute.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "path-join.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#અન્તર્ભાવ "closure.h"
+#અન્તર્ભાવ "complain.h"
+#અન્તર્ભાવ "conflicts.h"
+#અન્તર્ભાવ "execute.h"
+#અન્તર્ભાવ "files.h"
+#અન્તર્ભાવ "getargs.h"
+#અન્તર્ભાવ "gram.h"
+#અન્તર્ભાવ "lalr.h"
+#અન્તર્ભાવ "lr0.h"
+#અન્તર્ભાવ "muscle-tab.h"
+#અન્તર્ભાવ "path-join.h"
+#અન્તર્ભાવ "print.h"
+#અન્તર્ભાવ "reader.h"
+#અન્તર્ભાવ "reduce.h"
+#અન્તર્ભાવ "state.h"
+#અન્તર્ભાવ "symtab.h"
+#અન્તર્ભાવ "tables.h"
 
-static bitset no_reduce_set;
-struct escape_buf
+સ્થિર bitset no_reduce_set;
+સંરચના escape_buf
 {
-  char *ptr;
+  અક્ષર *ptr;
   size_t size;
 };
-enum { num_escape_bufs = 3 };
-static struct escape_buf escape_bufs[num_escape_bufs];
+ગણના { અંક_escape_bufs = 3 };
+સ્થિર સંરચના escape_buf escape_bufs[અંક_escape_bufs];
 
 
 /*--------------------------------.
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, int level, state *s)
+સ્થિર શૂન્ય
+print_core (FILE *out, પૂર્ણાંક level, state *s)
 {
-  item_index *sitems = s->items;
+  item_index *sitems = s->વસ્તુઓ;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not only its kernel.  */
@@ -69,32 +69,32 @@ print_core (FILE *out, int level, state *s)
   sitems = itemset;
   snritems = nitemset;
 
-  if (!snritems)
+  જો (!snritems)
     {
       xml_puts (out, level, "<itemset/>");
-      return;
+      પાછા;
     }
 
   xml_puts (out, level, "<itemset>");
 
-  for (size_t i = 0; i < snritems; i++)
+  માટે (size_t i = 0; i < snritems; i++)
     {
       bool printed = false;
-      item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
-      item_number *sp = r->rhs;
+      item_સંખ્યા *sp1 = ritem + sitems[i];
+      rule અચલ *r = item_rule (sp1);
+      item_સંખ્યા *sp = r->rhs;
 
       /* Display the lookahead tokens?  */
-      if (item_number_is_rule_number (*sp1))
+      જો (item_સંખ્યા_is_rule_સંખ્યા (*sp1))
         {
           reductions *reds = s->reductions;
-          int red = state_reduction_find (s, r);
+          પૂર્ણાંક red = state_reduction_find (s, r);
           /* Print item with lookaheads if there are. */
-          if (reds->lookaheads && red != -1)
+          જો (reds->lookaheads && red != -1)
             {
               xml_printf (out, level + 1,
                           "<item rule-number=\"%d\" dot=\"%d\">",
-                          r->number, sp1 - sp);
+                          r->સંખ્યા, sp1 - sp);
               state_rule_lookaheads_print_xml (s, r,
                                                      out, level + 2);
               xml_puts (out, level + 1, "</item>");
@@ -102,10 +102,10 @@ print_core (FILE *out, int level, state *s)
             }
         }
 
-      if (!printed)
+      જો (!printed)
         xml_printf (out, level + 1,
                     "<item rule-number=\"%d\" dot=\"%d\"/>",
-                    r->number,
+                    r->સંખ્યા,
                     sp1 - sp);
     }
   xml_puts (out, level, "</itemset>");
@@ -117,53 +117,53 @@ print_core (FILE *out, int level, state *s)
 | OUT.                                                       |
 `-----------------------------------------------------------*/
 
-static void
-print_transitions (state *s, FILE *out, int level)
+સ્થિર શૂન્ય
+print_transitions (state *s, FILE *out, પૂર્ણાંક level)
 {
   transitions *trans = s->transitions;
-  int n = 0;
-  int i;
+  પૂર્ણાંક n = 0;
+  પૂર્ણાંક i;
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  માટે (i = 0; i < trans->અંક; i++)
+    જો (!TRANSITION_IS_DISABLED (trans, i))
       {
         n++;
       }
 
   /* Nothing to report. */
-  if (!n)
+  જો (!n)
     {
       xml_puts (out, level, "<transitions/>");
-      return;
+      પાછા;
     }
 
   /* Report lookahead tokens and shifts.  */
   xml_puts (out, level, "<transitions>");
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  માટે (i = 0; i < trans->અંક; i++)
+    જો (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i))
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        char const *tag = sym->tag;
+        પ્રતીક *sym = symbols[TRANSITION_પ્રતીક (trans, i)];
+        અક્ષર અચલ *tag = sym->tag;
         state *s1 = trans->states[i];
 
         xml_printf (out, level + 1,
                     "<transition type=\"shift\" symbol=\"%s\" state=\"%d\"/>",
-                    xml_escape (tag), s1->number);
+                    xml_escape (tag), s1->સંખ્યા);
       }
 
-  for (i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  માટે (i = 0; i < trans->અંક; i++)
+    જો (!TRANSITION_IS_DISABLED (trans, i)
         && !TRANSITION_IS_SHIFT (trans, i))
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        char const *tag = sym->tag;
+        પ્રતીક *sym = symbols[TRANSITION_પ્રતીક (trans, i)];
+        અક્ષર અચલ *tag = sym->tag;
         state *s1 = trans->states[i];
 
         xml_printf (out, level + 1,
                     "<transition type=\"goto\" symbol=\"%s\" state=\"%d\"/>",
-                    xml_escape (tag), s1->number);
+                    xml_escape (tag), s1->સંખ્યા);
       }
 
   xml_puts (out, level, "</transitions>");
@@ -174,30 +174,30 @@ print_transitions (state *s, FILE *out, int level)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, int level, state *s)
+સ્થિર શૂન્ય
+print_errs (FILE *out, પૂર્ણાંક level, state *s)
 {
   errs *errp = s->errs;
-  bool count = false;
-  int i;
+  bool ગણતરી = false;
+  પૂર્ણાંક i;
 
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
-      count = true;
+  માટે (i = 0; i < errp->અંક; ++i)
+    જો (errp->symbols[i])
+      ગણતરી = true;
 
   /* Nothing to report. */
-  if (!count)
+  જો (!ગણતરી)
     {
       xml_puts (out, level, "<errors/>");
-      return;
+      પાછા;
     }
 
   /* Report lookahead tokens and errors.  */
   xml_puts (out, level, "<errors>");
-  for (i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  માટે (i = 0; i < errp->અંક; ++i)
+    જો (errp->symbols[i])
       {
-        char const *tag = errp->symbols[i]->tag;
+        અક્ષર અચલ *tag = errp->symbols[i]->tag;
         xml_printf (out, level + 1,
                     "<error symbol=\"%s\">nonassociative</error>",
                     xml_escape (tag));
@@ -212,20 +212,20 @@ print_errs (FILE *out, int level, state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
-print_reduction (FILE *out, int level, char const *lookahead,
+સ્થિર શૂન્ય
+print_reduction (FILE *out, પૂર્ણાંક level, અક્ષર અચલ *lookahead,
                  rule *r, bool enabled)
 {
-  if (rule_is_initial (r))
+  જો (rule_is_initial (r))
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"accept\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
                 enabled ? "true" : "false");
-  else
+  નહીંતર
     xml_printf (out, level,
                 "<reduction symbol=\"%s\" rule=\"%d\" enabled=\"%s\"/>",
                 xml_escape (lookahead),
-                r->number,
+                r->સંખ્યા,
                 enabled ? "true" : "false");
 }
 
@@ -234,49 +234,49 @@ print_reduction (FILE *out, int level, char const *lookahead,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, int level, state *s)
+સ્થિર શૂન્ય
+print_reductions (FILE *out, પૂર્ણાંક level, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
-  rule *default_reduction = NULL;
-  int report = false;
-  int i, j;
+  rule *default_reduction = ખાલી;
+  પૂર્ણાંક report = false;
+  પૂર્ણાંક i, j;
 
-  if (reds->num == 0)
+  જો (reds->અંક == 0)
     {
       xml_puts (out, level, "<reductions/>");
-      return;
+      પાછા;
     }
 
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  જો (yydefact[s->સંખ્યા] != 0)
+    default_reduction = &rules[yydefact[s->સંખ્યા] - 1];
 
   bitset_zero (no_reduce_set);
   FOR_EACH_SHIFT (trans, i)
-    bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
-  for (i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+    bitset_set (no_reduce_set, TRANSITION_પ્રતીક (trans, i));
+  માટે (i = 0; i < s->errs->અંક; ++i)
+    જો (s->errs->symbols[i])
+      bitset_set (no_reduce_set, s->errs->symbols[i]->content->સંખ્યા);
 
-  if (default_reduction)
+  જો (default_reduction)
     report = true;
 
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  જો (reds->lookaheads)
+    માટે (i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool ગણતરી = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        માટે (j = 0; j < reds->અંક; ++j)
+          જો (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              જો (! ગણતરી)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  જો (reds->rules[j] != default_reduction)
                     report = true;
-                  count = true;
+                  ગણતરી = true;
                 }
-              else
+              નહીંતર
                 {
                   report = true;
                 }
@@ -284,36 +284,36 @@ print_reductions (FILE *out, int level, state *s)
       }
 
   /* Nothing to report. */
-  if (!report)
+  જો (!report)
     {
       xml_puts (out, level, "<reductions/>");
-      return;
+      પાછા;
     }
 
   xml_puts (out, level, "<reductions>");
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (i = 0; i < ntokens; i++)
+  જો (reds->lookaheads)
+    માટે (i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
+        bool ગણતરી = bitset_test (no_reduce_set, i);
 
-        for (j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        માટે (j = 0; j < reds->અંક; ++j)
+          જો (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              જો (! ગણતરી)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  જો (reds->rules[j] != default_reduction)
                     print_reduction (out, level + 1, symbols[i]->tag,
                                      reds->rules[j], true);
-                  else
+                  નહીંતર
                     defaulted = true;
-                  count = true;
+                  ગણતરી = true;
                 }
-              else
+              નહીંતર
                 {
-                  if (defaulted)
+                  જો (defaulted)
                     print_reduction (out, level + 1, symbols[i]->tag,
                                      default_reduction, true);
                   defaulted = false;
@@ -323,7 +323,7 @@ print_reductions (FILE *out, int level, state *s)
             }
       }
 
-  if (default_reduction)
+  જો (default_reduction)
     print_reduction (out, level + 1,
                      "$default", default_reduction, true);
 
@@ -336,8 +336,8 @@ print_reductions (FILE *out, int level, state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, int level, state *s)
+સ્થિર શૂન્ય
+print_actions (FILE *out, પૂર્ણાંક level, state *s)
 {
   xml_puts (out, level, "<actions>");
   print_transitions (s, out, level + 1);
@@ -351,20 +351,20 @@ print_actions (FILE *out, int level, state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, int level, state *s)
+સ્થિર શૂન્ય
+print_state (FILE *out, પૂર્ણાંક level, state *s)
 {
   fputc ('\n', out);
-  xml_printf (out, level, "<state number=\"%d\">", s->number);
+  xml_printf (out, level, "<state number=\"%d\">", s->સંખ્યા);
   print_core (out, level + 1, s);
   print_actions (out, level + 1, s);
-  if (s->solved_conflicts_xml)
+  જો (s->solved_conflicts_xml)
     {
       xml_puts (out, level + 1, "<solved-conflicts>");
       fputs (s->solved_conflicts_xml, out);
       xml_puts (out, level + 1, "</solved-conflicts>");
     }
-  else
+  નહીંતર
     xml_puts (out, level + 1, "<solved-conflicts/>");
   xml_puts (out, level, "</state>");
 }
@@ -374,8 +374,8 @@ print_state (FILE *out, int level, state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
-print_grammar (FILE *out, int level)
+સ્થિર શૂન્ય
+print_grammar (FILE *out, પૂર્ણાંક level)
 {
   fputc ('\n', out);
   xml_puts (out, level, "<grammar>");
@@ -383,13 +383,13 @@ print_grammar (FILE *out, int level)
 
   /* Terminals */
   xml_puts (out, level + 1, "<terminals>");
-  for (int i = 0; i < max_code + 1; i++)
-    if (token_translations[i] != undeftoken->content->number)
+  માટે (પૂર્ણાંક i = 0; i < max_code + 1; i++)
+    જો (token_translations[i] != undeftoken->content->સંખ્યા)
       {
-        symbol const *sym = symbols[token_translations[i]];
-        char const *tag = sym->tag;
-        char const *type = sym->content->type_name;
-        int precedence = sym->content->prec;
+        પ્રતીક અચલ *sym = symbols[token_translations[i]];
+        અક્ષર અચલ *tag = sym->tag;
+        અક્ષર અચલ *type = sym->content->type_name;
+        પૂર્ણાંક precedence = sym->content->prec;
         assoc associativity = sym->content->assoc;
         xml_indent (out, level + 2);
         fprintf (out,
@@ -399,9 +399,9 @@ print_grammar (FILE *out, int level)
                  type ? xml_escape_n (1, type) : "",
                  reduce_token_unused_in_grammar (token_translations[i])
                    ? "unused-in-grammar" : "useful");
-        if (precedence)
+        જો (precedence)
           fprintf (out, " prec=\"%d\"", precedence);
-        if (associativity != undef_assoc)
+        જો (associativity != undef_assoc)
           fprintf (out, " assoc=\"%s\"", assoc_to_string (associativity) + 1);
         fputs ("/>\n", out);
       }
@@ -409,11 +409,11 @@ print_grammar (FILE *out, int level)
 
   /* Nonterminals */
   xml_puts (out, level + 1, "<nonterminals>");
-  for (symbol_number i = ntokens; i < nsyms + nuseless_nonterminals; i++)
+  માટે (પ્રતીક_સંખ્યા i = ntokens; i < nsyms + nuseless_nonterminals; i++)
     {
-      symbol const *sym = symbols[i];
-      char const *tag = sym->tag;
-      char const *type = sym->content->type_name;
+      પ્રતીક અચલ *sym = symbols[i];
+      અક્ષર અચલ *tag = sym->tag;
+      અક્ષર અચલ *type = sym->content->type_name;
       xml_printf (out, level + 2,
                   "<nonterminal symbol-number=\"%d\" name=\"%s\""
                   " type=\"%s\""
@@ -427,23 +427,23 @@ print_grammar (FILE *out, int level)
   xml_puts (out, level, "</grammar>");
 }
 
-void
-xml_indent (FILE *out, int level)
+શૂન્ય
+xml_indent (FILE *out, પૂર્ણાંક level)
 {
-  for (int i = 0; i < level; i++)
+  માટે (પૂર્ણાંક i = 0; i < level; i++)
     fputs ("  ", out);
 }
 
-void
-xml_puts (FILE *out, int level, char const *s)
+શૂન્ય
+xml_puts (FILE *out, પૂર્ણાંક level, અક્ષર અચલ *s)
 {
   xml_indent (out, level);
   fputs (s, out);
   fputc ('\n', out);
 }
 
-void
-xml_printf (FILE *out, int level, char const *fmt, ...)
+શૂન્ય
+xml_printf (FILE *out, પૂર્ણાંક level, અક્ષર અચલ *fmt, ...)
 {
   va_list arglist;
 
@@ -456,53 +456,53 @@ xml_printf (FILE *out, int level, char const *fmt, ...)
   fputc ('\n', out);
 }
 
-static char const *
-xml_escape_string (struct escape_buf *buf, char const *str)
+સ્થિર અક્ષર અચલ *
+xml_escape_string (સંરચના escape_buf *buf, અક્ષર અચલ *str)
 {
   size_t len = strlen (str);
-  size_t max_expansion = sizeof "&quot;" - 1;
+  size_t max_expansion = કદ "&quot;" - 1;
 
-  if (buf->size <= max_expansion * len)
+  જો (buf->size <= max_expansion * len)
     {
       buf->size = max_expansion * len + 1;
       buf->ptr = x2realloc (buf->ptr, &buf->size);
     }
-  char *p = buf->ptr;
+  અક્ષર *p = buf->ptr;
 
-  for (; *str; str++)
-    switch (*str)
+  માટે (; *str; str++)
+    પસંદગી (*str)
       {
-      default: *p++ = *str; break;
-      case '&': p = stpcpy (p, "&amp;" ); break;
-      case '<': p = stpcpy (p, "&lt;"  ); break;
-      case '>': p = stpcpy (p, "&gt;"  ); break;
-      case '"': p = stpcpy (p, "&quot;"); break;
+      મૂળભૂત: *p++ = *str; તોડો;
+      સ્થિતિ '&': p = stpcpy (p, "&amp;" ); તોડો;
+      સ્થિતિ '<': p = stpcpy (p, "&lt;"  ); તોડો;
+      સ્થિતિ '>': p = stpcpy (p, "&gt;"  ); તોડો;
+      સ્થિતિ '"': p = stpcpy (p, "&quot;"); તોડો;
       }
 
   *p = '\0';
-  return buf->ptr;
+  પાછા buf->ptr;
 }
 
-char const *
-xml_escape_n (int n, char const *str)
+અક્ષર અચલ *
+xml_escape_n (પૂર્ણાંક n, અક્ષર અચલ *str)
 {
-  return xml_escape_string (escape_bufs + n, str);
+  પાછા xml_escape_string (escape_bufs + n, str);
 }
 
-char const *
-xml_escape (char const *str)
+અક્ષર અચલ *
+xml_escape (અક્ષર અચલ *str)
 {
-  return xml_escape_n (0, str);
+  પાછા xml_escape_n (0, str);
 }
 
-void
-print_xml (void)
+શૂન્ય
+print_xml (શૂન્ય)
 {
   FILE *out = xfopen (spec_xml_file, "w");
 
   fputs ("<?xml version=\"1.0\"?>\n\n", out);
 
-  int level = 0;
+  પૂર્ણાંક level = 0;
   xml_printf (out, level,
               "<bison-xml-report version=\"%s\" bug-report=\"%s\""
               " url=\"%s\">",
@@ -522,7 +522,7 @@ print_xml (void)
   /* print automaton */
   fputc ('\n', out);
   xml_puts (out, level + 1, "<automaton>");
-  for (state_number i = 0; i < nstates; i++)
+  માટે (state_સંખ્યા i = 0; i < nstates; i++)
     print_state (out, level + 2, states[i]);
   xml_puts (out, level + 1, "</automaton>");
 
@@ -530,48 +530,48 @@ print_xml (void)
 
   xml_puts (out, 0, "</bison-xml-report>");
 
-  for (int i = 0; i < num_escape_bufs; ++i)
-    free (escape_bufs[i].ptr);
+  માટે (પૂર્ણાંક i = 0; i < અંક_escape_bufs; ++i)
+    મુક્ત (escape_bufs[i].ptr);
 
   xfclose (out);
 }
 
 
-void
-print_html (void)
+શૂન્ય
+print_html (શૂન્ય)
 {
-  assert (xml_flag);
+  પ્રતિજ્ઞા (xml_flag);
 
-  char *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
-  char *xsltproc = muscle_percent_define_get ("tool.xsltproc");
-  char const *argv[11];
-  int i = 0;
+  અક્ષર *xml2html = xpath_join (pkgdatadir (), "xslt/xml2xhtml.xsl");
+  અક્ષર *xsltproc = muscle_percent_define_get ("tool.xsltproc");
+  અક્ષર અચલ *argv[11];
+  પૂર્ણાંક i = 0;
   argv[i++] = xsltproc;
   argv[i++] = "-o";
   argv[i++] = spec_html_file;
   argv[i++] = xml2html;
   argv[i++] = spec_xml_file;
-  argv[i++] = NULL;
+  argv[i++] = ખાલી;
   aver (i <= ARRAY_CARDINALITY (argv));
 
-  if (trace_flag & trace_tools)
+  જો (trace_flag & trace_tools)
     {
       fputs ("running:", stderr);
-      for (int j = 0; argv[j]; ++j)
+      માટે (પૂર્ણાંક j = 0; argv[j]; ++j)
         fprintf (stderr, " %s", argv[j]);
       fputc ('\n', stderr);
     }
 
-  int status
+  પૂર્ણાંક status
     = execute (argv[0],
                argv[0], argv,
-               /* directory */ NULL,
+               /* directory */ ખાલી,
                /* ignore_sigpipe */ false,
                /* null_stdin, null_stdout, null_stderr */ true, true, true,
                /* slave_process */ true, /* exit_on_error */ false,
-               /* termsigp */ NULL);
-  if (status)
-    complain (NULL, complaint, _("%s failed with status %d"), argv[0], status);
-  free (xsltproc);
-  free (xml2html);
+               /* termsigp */ ખાલી);
+  જો (status)
+    complain (ખાલી, complaint, _("%s failed with status %d"), argv[0], status);
+  મુક્ત (xsltproc);
+  મુક્ત (xml2html);
 }

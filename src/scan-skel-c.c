@@ -1,3 +1,3 @@
-#include <config.h>
-#include "system.h"
-#include "src/scan-skel.c"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "system.h"
+#અન્તર્ભાવ "src/scan-skel.c"

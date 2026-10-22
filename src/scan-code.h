@@ -25,19 +25,19 @@
 # include "named-ref.h"
 # include "uniqstr.h"
 
-struct symbol_list;
+સંરચના પ્રતીક_list;
 
 /**
  * Keeps track of the maximum number of semantic values to the left of a handle
  * (those referenced by $0, $-1, etc.) that are required by the semantic
  * actions of this grammar.
  */
-extern int max_left_semantic_context;
+બાહ્ય પૂર્ણાંક max_ડાબું_semantic_context;
 
 /**
  * The obstack used to store the translated actions.
  */
-extern struct obstack *obstack_for_actions;
+બાહ્ય સંરચના obstack *obstack_for_actions;
 
 /**
  * A code passage captured from the grammar file and possibly translated,
@@ -45,18 +45,18 @@ extern struct obstack *obstack_for_actions;
  * encapsulation by modifying the fields directly.  Use the provided interface
  * functions.
  */
-typedef struct code_props {
+પ્રકારવ્યાખ્યા સંરચના code_props {
   /** Set by the init functions.  */
-  enum {
+  ગણના {
     CODE_PROPS_NONE, CODE_PROPS_PLAIN,
-    CODE_PROPS_SYMBOL_ACTION, CODE_PROPS_RULE_ACTION
+    CODE_PROPS_પ્રતીક_ACTION, CODE_PROPS_RULE_ACTION
   } kind;
 
   /**
    * \c NULL iff \c code_props::kind is \c CODE_PROPS_NONE.
    * Memory is allocated in an obstack freed elsewhere.
    */
-  char const *code;
+  અક્ષર અચલ *code;
   /** Undefined iff \c code_props::code is \c NULL.  */
   location location;
 
@@ -71,7 +71,7 @@ typedef struct code_props {
    *     but the symbol value associated with this \c code_props was not
    *     referenced in the code passage.
    */
-  bool is_value_used;
+  bool is_કિંમત_used;
 
   /**
    * \c true iff this code is an action that is not to be deferred in
@@ -85,7 +85,7 @@ typedef struct code_props {
   bool is_used;
 
   /** \c NULL iff \c code_props::kind is not \c CODE_PROPS_RULE_ACTION.  */
-  struct symbol_list *rule;
+  સંરચના પ્રતીક_list *rule;
 
   /** Named reference. */
   named_ref *named_ref;
@@ -100,24 +100,24 @@ typedef struct code_props {
  * \post
  *   - \c self has been overwritten to contain no code.
  */
-void code_props_none_init (code_props *self);
+શૂન્ય code_props_none_init (code_props *self);
 
 /** Equivalent to \c code_props_none_init.  */
 # define CODE_PROPS_NONE_INIT                   \
   {                                             \
     /* .kind = */ CODE_PROPS_NONE,              \
-    /* .code = */ NULL,                         \
+    /* .code = */ ખાલી,                         \
     /* .location = */ EMPTY_LOCATION_INIT,      \
     /* .is_value_used = */ false,               \
     /* .is_predicate = */ false,                \
     /* .is_used = */ false,                     \
-    /* .rule = */ NULL,                         \
-    /* .named_ref = */ NULL,                    \
-    /* .type = */ NULL,                         \
+    /* .rule = */ ખાલી,                         \
+    /* .named_ref = */ ખાલી,                    \
+    /* .type = */ ખાલી,                         \
   }
 
 /** Initialized by \c CODE_PROPS_NONE_INIT with no further modification.  */
-extern code_props code_props_none;
+બાહ્ય code_props code_props_none;
 
 /**
  * \pre
@@ -131,7 +131,7 @@ extern code_props code_props_none;
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_plain_init (code_props *self, char const *code,
+શૂન્ય code_props_plain_init (code_props *self, અક્ષર અચલ *code,
                             location code_loc);
 
 /**
@@ -146,7 +146,7 @@ void code_props_plain_init (code_props *self, char const *code,
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_symbol_action_init (code_props *self, char const *code,
+શૂન્ય code_props_પ્રતીક_action_init (code_props *self, અક્ષર અચલ *code,
                                     location code_loc);
 
 /**
@@ -167,8 +167,8 @@ void code_props_symbol_action_init (code_props *self, char const *code,
  *       on \c self.
  *     - The caller frees \c rule.
  */
-void code_props_rule_action_init (code_props *self, char const *code,
-                                  location code_loc, struct symbol_list *rule,
+શૂન્ય code_props_rule_action_init (code_props *self, અક્ષર અચલ *code,
+                                  location code_loc, સંરચના પ્રતીક_list *rule,
                                   named_ref *name, uniqstr type,
                                   bool is_predicate);
 
@@ -183,7 +183,7 @@ void code_props_rule_action_init (code_props *self, char const *code,
  *   - <tt>self->code != self->code\@pre</tt> unless
  *     <tt>self->code\@pre = NULL</tt>.
  */
-void code_props_translate_code (code_props *self);
+શૂન્ય code_props_translate_code (code_props *self);
 
 /**
  * \pre
@@ -194,9 +194,9 @@ void code_props_translate_code (code_props *self);
  *     instance for which \c code_props_translate_code was invoked is now
  *     invalid.
  */
-void code_scanner_last_string_free (void);
+શૂન્ય code_scanner_last_string_free (શૂન્ય);
 
-void code_scanner_init (void);
+શૂન્ય code_scanner_init (શૂન્ય);
 
 /**
  * \pre
@@ -206,6 +206,6 @@ void code_scanner_init (void);
  *     \c code_props_translate_code (if any) has been freed.  All \c code_props
  *     instances may now be invalid.
  */
-void code_scanner_free (void);
+શૂન્ય code_scanner_free (શૂન્ય);
 
 #endif /* !SCAN_CODE_H_ */

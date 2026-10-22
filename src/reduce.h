@@ -21,22 +21,22 @@
 #ifndef REDUCE_H_
 # define REDUCE_H_
 
-void reduce_grammar (void);
-void reduce_output (FILE *out);
-bool reduce_token_unused_in_grammar (symbol_number i);
+શૂન્ય reduce_grammar (શૂન્ય);
+શૂન્ય reduce_output (FILE *out);
+bool reduce_token_unused_in_grammar (પ્રતીક_સંખ્યા i);
 
 /** Whether symbol \a i is useless in the grammar.
  * \pre  reduce_grammar was called before.
  */
-bool reduce_nonterminal_useless_in_grammar (const sym_content *sym);
+bool reduce_nonterminal_useless_in_grammar (અચલ sym_content *sym);
 
-void reduce_free (void);
+શૂન્ય reduce_free (શૂન્ય);
 
 /** Map initial nterm numbers to the new ones.  Built by
  * reduce_grammar.  Size nnterms + nuseless_nonterminals.  */
-extern symbol_number *nterm_map;
+બાહ્ય પ્રતીક_સંખ્યા *nterm_map;
 
-extern int nuseless_nonterminals;
-extern int nuseless_productions;
+બાહ્ય પૂર્ણાંક nuseless_nonterminals;
+બાહ્ય પૂર્ણાંક nuseless_productions;
 
 #endif /* !REDUCE_H_ */

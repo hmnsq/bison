@@ -19,135 +19,135 @@
 
 %code requires
 {
-  #include "symlist.h"
-  #include "symtab.h"
+  #અન્તર્ભાવ "symlist.h"
+  #અન્તર્ભાવ "symtab.h"
 }
 
 %code provides
 {
   /* Initialize unquote.  */
-  void parser_init (void);
+  શૂન્ય parser_init (શૂન્ય);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  શૂન્ય parser_free (શૂન્ય);
 }
 
-%code top
+%code ટોચ_2
 {
   /* On column 0 to please syntax-check.  */
-#include <config.h>
+#અન્તર્ભાવ <config.h>
 }
 
 %code
 {
-  #include "system.h"
+  #અન્તર્ભાવ "system.h"
 
-  #include <c-ctype.h>
-  #include <quotearg.h>
-  #include <vasnprintf.h>
-  #include <xmemdup0.h>
+  #અન્તર્ભાવ <c-ctype.h>
+  #અન્તર્ભાવ <quotearg.h>
+  #અન્તર્ભાવ <vasnprintf.h>
+  #અન્તર્ભાવ <xmemdup0.h>
 
-  #include "complain.h"
-  #include "conflicts.h"
-  #include "files.h"
-  #include "getargs.h"
-  #include "gram.h"
-  #include "named-ref.h"
-  #include "reader.h"
-  #include "scan-code.h"
-  #include "scan-gram.h"
-  #include "strversion.h"
+  #અન્તર્ભાવ "complain.h"
+  #અન્તર્ભાવ "conflicts.h"
+  #અન્તર્ભાવ "files.h"
+  #અન્તર્ભાવ "getargs.h"
+  #અન્તર્ભાવ "gram.h"
+  #અન્તર્ભાવ "named-ref.h"
+  #અન્તર્ભાવ "reader.h"
+  #અન્તર્ભાવ "scan-code.h"
+  #અન્તર્ભાવ "scan-gram.h"
+  #અન્તર્ભાવ "strversion.h"
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  સ્થિર અચલ અક્ષર* api_version = "3.8";
 
-  static int current_prec = 0;
-  static location current_lhs_loc;
-  static named_ref *current_lhs_named_ref;
-  static symbol *current_lhs_symbol;
-  static symbol_class current_class = unknown_sym;
+  સ્થિર પૂર્ણાંક current_prec = 0;
+  સ્થિર location current_lhs_loc;
+  સ્થિર named_ref *current_lhs_named_ref;
+  સ્થિર પ્રતીક *current_lhs_પ્રતીક;
+  સ્થિર પ્રતીક_class current_class = unknown_sym;
 
   /** Set the new current left-hand side symbol, possibly common
    * to several right-hand side parts of rule.
    */
-  static void current_lhs (symbol *sym, location loc, named_ref *ref);
+  સ્થિર શૂન્ય current_lhs (પ્રતીક *sym, location loc, named_ref *ref);
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  સ્થિર YYLTYPE lloc_default (YYLTYPE અચલ *, પૂર્ણાંક);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  સ્થિર અક્ષર *strip_braces (અક્ષર *code);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  સ્થિર અક્ષર અચલ *translate_code (અક્ષર *code, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  સ્થિર અક્ષર અચલ *translate_code_braceless (અક્ષર *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  સ્થિર શૂન્ય handle_header (અક્ષર અચલ *કિંમત);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  સ્થિર શૂન્ય handle_error_verbose (location અચલ *loc, અક્ષર અચલ *directive);
 
   /* Handle a %file-prefix directive.  */
-  static void handle_file_prefix (location const *loc,
-                                  location const *dir_loc,
-                                  char const *directive, char const *value);
+  સ્થિર શૂન્ય handle_file_prefix (location અચલ *loc,
+                                  location અચલ *dir_loc,
+                                  અક્ષર અચલ *directive, અક્ષર અચલ *કિંમત);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  સ્થિર શૂન્ય handle_language (location અચલ *loc, અક્ષર અચલ *lang);
 
   /* Handle a %name-prefix directive.  */
-  static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+  સ્થિર શૂન્ય handle_name_prefix (location અચલ *loc,
+                                  અક્ષર અચલ *directive, અક્ષર અચલ *કિંમત);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  સ્થિર શૂન્ય handle_pure_parser (location અચલ *loc, અક્ષર અચલ *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  સ્થિર શૂન્ય handle_require (location અચલ *loc, અક્ષર અચલ *version);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  સ્થિર શૂન્ય handle_skeleton (location અચલ *loc, અક્ષર અચલ *skel);
 
   /* Handle a %yacc directive.  */
-  static void handle_yacc (location const *loc);
+  સ્થિર શૂન્ય handle_yacc (location અચલ *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  સ્થિર શૂન્ય gram_error (location અચલ *, અક્ષર અચલ *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  સ્થિર અક્ષર અચલ *char_name (અક્ષર);
 
   /* Add style to semantic values in traces.  */
-  static void tron (FILE *yyo);
-  static void troff (FILE *yyo);
+  સ્થિર શૂન્ય tron (FILE *yyo);
+  સ્થિર શૂન્ય troff (FILE *yyo);
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  સ્થિર અક્ષર *unquote (અચલ અક્ષર *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  સ્થિર શૂન્ય unquote_free (અક્ષર *last_string);
 }
 
 %define api.header.include {"parse-gram.h"}
 %define api.prefix {gram_}
 %define api.pure full
 %define api.token.raw
-%define api.value.type union
+%define api.કિંમત.પ્રકાર સંઘ
 %define locations
 %define parse.error custom
 %define parse.lac full
@@ -175,8 +175,8 @@
   PERCENT_DESTRUCTOR  "%destructor"
   PERCENT_PRINTER     "%printer"
 
-  PERCENT_LEFT        "%left"
-  PERCENT_RIGHT       "%right"
+  PERCENT_ડાબું        "%left"
+  PERCENT_જમણું       "%right"
   PERCENT_NONASSOC    "%nonassoc"
   PERCENT_PRECEDENCE  "%precedence"
 
@@ -198,7 +198,7 @@
   PERCENT_LANGUAGE        "%language"
   PERCENT_NAME_PREFIX     "%name-prefix"
   PERCENT_NO_DEFAULT_PREC "%no-default-prec"
-  PERCENT_NO_LINES        "%no-lines"
+  PERCENT_NO_લીટીઓ        "%no-lines"
   PERCENT_NONDETERMINISTIC_PARSER "%nondeterministic-parser"
   PERCENT_OUTPUT          "%output"
   PERCENT_PURE_PARSER     "%pure-parser"
@@ -230,13 +230,13 @@
 %code pre-printer  {tron (yyo);}
 %code post-printer {troff (yyo);}
 
-%type <unsigned char> CHAR_LITERAL
-%printer { fputs (char_name ($$), yyo); } <unsigned char>
+%પ્રકાર <unsigned અક્ષર> CHAR_LITERAL
+%printer { fputs (char_name ($$), yyo); } <unsigned અક્ષર>
 
-%type <char*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
-%printer { fputs ($$, yyo); } <char*>
+%પ્રકાર <અક્ષર*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
+%printer { fputs ($$, yyo); } <અક્ષર*>
 
-%type <uniqstr>
+%પ્રકાર <uniqstr>
   BRACKETED_ID ID ID_COLON
   PERCENT_ERROR_VERBOSE PERCENT_FILE_PREFIX PERCENT_FLAG PERCENT_NAME_PREFIX
   PERCENT_PURE_PARSER
@@ -247,26 +247,26 @@
 %printer { fprintf (yyo, "%%%s", $$); } PERCENT_FLAG
 %printer { fprintf (yyo, "<%s>", $$); } TAG tag
 
-%token <int> INT_LITERAL _("integer literal")
-%printer { fprintf (yyo, "%d", $$); } <int>
+%token <પૂર્ણાંક> INT_LITERAL _("integer literal")
+%printer { fprintf (yyo, "%d", $$); } <પૂર્ણાંક>
 
-%type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
-%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
+%પ્રકાર <પ્રતીક*> id id_colon string_as_id પ્રતીક token_decl token_decl_for_prec
+%printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <પ્રતીક*>
 %printer { fprintf (yyo, "%s:", $$->tag); } id_colon
 
-%type <assoc> precedence_declarator
+%પ્રકાર <assoc> precedence_declarator
 
-%destructor { symbol_list_free ($$); } <symbol_list*>
-%printer { symbol_list_syms_print ($$, yyo); } <symbol_list*>
+%destructor { પ્રતીક_list_free ($$); } <પ્રતીક_list*>
+%printer { પ્રતીક_list_syms_print ($$, yyo); } <પ્રતીક_list*>
 
-%type <named_ref*> named_ref.opt
+%પ્રકાર <named_ref*> named_ref.opt
 
 /*---------.
 | %param.  |
 `---------*/
 %code requires
 {
-  typedef enum
+  પ્રકારવ્યાખ્યા ગણના
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -282,21 +282,21 @@
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
-  static param_type current_param = param_none;
+  સ્થિર શૂન્ય add_param (param_type પ્રકાર, અક્ષર *decl, location loc);
+  સ્થિર param_type current_param = param_none;
 };
 %token <param_type> PERCENT_PARAM "%param";
 %printer
 {
-  switch ($$)
+  પસંદગી ($$)
     {
 #define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+      સ્થિતિ param_ ## In: fputs ("%" #Out, yyo); તોડો
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
 #undef CASE
-      case param_none: aver (false); break;
+      સ્થિતિ param_none: aver (false); તોડો;
     }
 } <param_type>;
 
@@ -306,7 +306,7 @@
                      \==========*/
 %%
 
-input:
+આગત:
   prologue_declarations "%%" grammar epilogue.opt
 ;
 
@@ -332,9 +332,9 @@ prologue_declaration:
     {
       muscle_percent_define_ensure ($1, @1, true);
     }
-| "%define" variable value
+| "%define" variable કિંમત
     {
-      muscle_percent_define_insert ($2, @$, $3.kind, $3.chars,
+      muscle_percent_define_ઉમેરો ($2, @$, $3.kind, $3.chars,
                                     MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
 | "%header" string.opt             { handle_header ($2); }
@@ -354,7 +354,7 @@ prologue_declaration:
     }
 | "%language" STRING            { handle_language (&@1, $2); }
 | "%name-prefix" STRING         { handle_name_prefix (&@$, $1, $2); }
-| "%no-lines"                   { no_lines_flag = true; }
+| "%no-lines"                   { no_લીટીઓ_flag = true; }
 | "%nondeterministic-parser"    { nondeterministic_parser = true; }
 | "%output" STRING              { spec_outfile = unquote ($2); gram_scanner_last_string_free (); }
 | "%param" { current_param = $1; } params { current_param = param_none; }
@@ -379,7 +379,7 @@ params:
 `----------------------*/
 
 grammar_declaration:
-  symbol_declaration
+  પ્રતીક_declaration
 | "%start" symbols.1
     {
       grammar_start_symbols_add ($2);
@@ -387,12 +387,12 @@ grammar_declaration:
 | code_props_type "{...}" generic_symlist
     {
       code_props code;
-      code_props_symbol_action_init (&code, $2, @2);
+      code_props_પ્રતીક_action_init (&code, $2, @2);
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = $3; list; list = list->next)
-          symbol_list_code_props_set (list, $1, &code);
-        symbol_list_free ($3);
+        માટે (પ્રતીક_list *list = $3; list; list = list->next)
+          પ્રતીક_list_code_props_set (list, $1, &code);
+        પ્રતીક_list_free ($3);
       }
     }
 | "%default-prec"
@@ -418,7 +418,7 @@ grammar_declaration:
     }
 ;
 
-%type <code_props_type> code_props_type;
+%પ્રકાર <code_props_type> code_props_type;
 %printer { fprintf (yyo, "%s", code_props_type_string ($$)); } <code_props_type>;
 code_props_type:
   "%destructor"  { $$ = destructor; }
@@ -433,7 +433,7 @@ code_props_type:
 
 union_name:
   %empty {}
-| ID     { muscle_percent_define_insert ("api.value.union.name",
+| ID     { muscle_percent_define_ઉમેરો ("api.value.union.name",
                                          @1, muscle_keyword, $1,
                                          MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE); }
 ;
@@ -448,61 +448,61 @@ grammar_declaration:
 ;
 
 
-%type <symbol_list*> nterm_decls symbol_decls symbols.1
+%પ્રકાર <પ્રતીક_list*> nterm_decls પ્રતીક_decls symbols.1
       token_decls token_decls_for_prec
       token_decl.1 token_decl_for_prec.1;
-symbol_declaration:
+પ્રતીક_declaration:
   "%nterm" { current_class = nterm_sym; } nterm_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      પ્રતીક_list_free ($syms);
     }
 | "%token" { current_class = token_sym; } token_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      પ્રતીક_list_free ($syms);
     }
-| "%type" { current_class = pct_type_sym; } symbol_decls[syms]
+| "%type" { current_class = pct_type_sym; } પ્રતીક_decls[syms]
     {
       current_class = unknown_sym;
-      symbol_list_free ($syms);
+      પ્રતીક_list_free ($syms);
     }
 | precedence_declarator token_decls_for_prec[syms]
     {
       ++current_prec;
-      for (symbol_list *list = $syms; list; list = list->next)
-        symbol_precedence_set (list->content.sym, current_prec, $1, @1);
-      symbol_list_free ($syms);
+      માટે (પ્રતીક_list *list = $syms; list; list = list->next)
+        પ્રતીક_precedence_set (list->content.sym, current_prec, $1, @1);
+      પ્રતીક_list_free ($syms);
     }
 ;
 
 precedence_declarator:
-  "%left"       { $$ = left_assoc; }
-| "%right"      { $$ = right_assoc; }
+  "%left"       { $$ = ડાબું_assoc; }
+| "%right"      { $$ = જમણું_assoc; }
 | "%nonassoc"   { $$ = non_assoc; }
 | "%precedence" { $$ = precedence_assoc; }
 ;
 
-%type <char*> string.opt;
+%પ્રકાર <અક્ષર*> string.opt;
 string.opt:
-  %empty  { $$ = NULL; }
+  %empty  { $$ = ખાલી; }
 | STRING  { $$ = $1; }
 ;
 
 tag.opt:
-  %empty { $$ = NULL; }
+  %empty { $$ = ખાલી; }
 | TAG    { $$ = $1; }
 ;
 
-%type <symbol_list*> generic_symlist generic_symlist_item;
+%પ્રકાર <પ્રતીક_list*> generic_symlist generic_symlist_item;
 generic_symlist:
   generic_symlist_item
-| generic_symlist generic_symlist_item   { $$ = symbol_list_append ($1, $2); }
+| generic_symlist generic_symlist_item   { $$ = પ્રતીક_list_append ($1, $2); }
 ;
 
 generic_symlist_item:
-  symbol    { $$ = symbol_list_sym_new ($1, @1); }
-| tag       { $$ = symbol_list_type_new ($1, @1); }
+  પ્રતીક    { $$ = પ્રતીક_list_sym_new ($1, @1); }
+| tag       { $$ = પ્રતીક_list_type_new ($1, @1); }
 ;
 
 tag:
@@ -536,46 +536,46 @@ token_decls:
     }
 | TAG token_decl.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = પ્રતીક_list_type_set ($syms, $TAG);
     }
 | token_decls TAG token_decl.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = પ્રતીક_list_append ($1, પ્રતીક_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbol declarations for %token or %nterm.
 token_decl.1:
-  token_decl                { $$ = symbol_list_sym_new ($1, @1); }
-| token_decl.1 token_decl   { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+  token_decl                { $$ = પ્રતીક_list_sym_new ($1, @1); }
+| token_decl.1 token_decl   { $$ = પ્રતીક_list_append ($1, પ્રતીક_list_sym_new ($2, @2)); }
 
 // One symbol declaration for %token or %nterm.
 token_decl:
-  id int.opt[num] alias
+  id પૂર્ણાંક.opt[num] alias
     {
       $$ = $id;
-      symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
-      if ($alias)
-        symbol_make_alias ($id, $alias, @alias);
+      પ્રતીક_class_set ($id, current_class, @id, true);
+      જો (0 <= $અંક)
+        પ્રતીક_code_set ($id, $અંક, @અંક);
+      જો ($alias)
+        પ્રતીક_make_alias ($id, $alias, @alias);
     }
 ;
 
-%type <int> int.opt;
-int.opt:
+%પ્રકાર <પૂર્ણાંક> પૂર્ણાંક.opt;
+પૂર્ણાંક.opt:
   %empty  { $$ = -1; }
 | INT_LITERAL
 ;
 
-%type <symbol*> alias;
+%પ્રકાર <પ્રતીક*> alias;
 alias:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = ખાલી; }
 | string_as_id   { $$ = $1; }
 | TSTRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = પ્રતીક_get ($1, @1);
+      પ્રતીક_class_set ($$, token_sym, @1, false);
       $$->translatable = true;
     }
 ;
@@ -596,29 +596,29 @@ token_decls_for_prec:
     }
 | TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = પ્રતીક_list_type_set ($syms, $TAG);
     }
 | token_decls_for_prec TAG token_decl_for_prec.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = પ્રતીક_list_append ($1, પ્રતીક_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more token declarations for precedence declaration.
 token_decl_for_prec.1:
   token_decl_for_prec
-    { $$ = symbol_list_sym_new ($1, @1); }
+    { $$ = પ્રતીક_list_sym_new ($1, @1); }
 | token_decl_for_prec.1 token_decl_for_prec
-    { $$ = symbol_list_append ($1, symbol_list_sym_new ($2, @2)); }
+    { $$ = પ્રતીક_list_append ($1, પ્રતીક_list_sym_new ($2, @2)); }
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
-  id int.opt[num]
+  id પૂર્ણાંક.opt[num]
     {
       $$ = $id;
-      symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
-        symbol_code_set ($id, $num, @num);
+      પ્રતીક_class_set ($id, token_sym, @id, false);
+      જો (0 <= $અંક)
+        પ્રતીક_code_set ($id, $અંક, @અંક);
     }
 | string_as_id
 ;
@@ -629,34 +629,34 @@ token_decl_for_prec:
 `-----------------------------------*/
 
 // A non empty list of typed symbols (for %type).
-symbol_decls:
+પ્રતીક_decls:
   symbols.1[syms]
     {
       $$ = $syms;
     }
 | TAG symbols.1[syms]
     {
-      $$ = symbol_list_type_set ($syms, $TAG);
+      $$ = પ્રતીક_list_type_set ($syms, $TAG);
     }
-| symbol_decls TAG symbols.1[syms]
+| પ્રતીક_decls TAG symbols.1[syms]
     {
-      $$ = symbol_list_append ($1, symbol_list_type_set ($syms, $TAG));
+      $$ = પ્રતીક_list_append ($1, પ્રતીક_list_type_set ($syms, $TAG));
     }
 ;
 
 // One or more symbols.
 symbols.1:
-  symbol
+  પ્રતીક
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_sym_new ($symbol, @symbol);
+      જો (current_class != unknown_sym)
+        પ્રતીક_class_set ($પ્રતીક, current_class, @પ્રતીક, false);
+      $$ = પ્રતીક_list_sym_new ($પ્રતીક, @પ્રતીક);
     }
-  | symbols.1 symbol
+  | symbols.1 પ્રતીક
     {
-      if (current_class != unknown_sym)
-        symbol_class_set ($symbol, current_class, @symbol, false);
-      $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
+      જો (current_class != unknown_sym)
+        પ્રતીક_class_set ($પ્રતીક, current_class, @પ્રતીક, false);
+      $$ = પ્રતીક_list_append ($1, પ્રતીક_list_sym_new ($પ્રતીક, @પ્રતીક));
     }
 ;
 
@@ -697,17 +697,17 @@ rhses.1:
 %token PERCENT_EMPTY "%empty";
 rhs:
   %empty
-    { grammar_current_rule_begin (current_lhs_symbol, current_lhs_loc,
+    { grammar_current_rule_begin (current_lhs_પ્રતીક, current_lhs_loc,
                                   current_lhs_named_ref); }
-| rhs symbol named_ref.opt
-    { grammar_current_rule_symbol_append ($2, @2, $3); }
+| rhs પ્રતીક named_ref.opt
+    { grammar_current_rule_પ્રતીક_append ($2, @2, $3); }
 | rhs tag.opt "{...}"[action] named_ref.opt[name]
     { grammar_current_rule_action_append ($action, @action, $name, $[tag.opt]); }
 | rhs "%?{...}"
     { grammar_current_rule_predicate_append ($2, @2); }
 | rhs "%empty"
     { grammar_current_rule_empty_set (@2); }
-| rhs "%prec" symbol
+| rhs "%prec" પ્રતીક
     { grammar_current_rule_prec_set ($3, @3); }
 | rhs "%dprec" INT_LITERAL
     { grammar_current_rule_dprec_set ($3, @3); }
@@ -720,7 +720,7 @@ rhs:
 ;
 
 named_ref.opt:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = ખાલી; }
 | BRACKETED_ID   { $$ = named_ref_new ($1, @1); }
 ;
 
@@ -735,25 +735,25 @@ variable:
 
 /* Some content or empty by default. */
 %code requires {
-  #include "muscle-tab.h"
-  typedef struct
+  #અન્તર્ભાવ "muscle-tab.h"
+  પ્રકારવ્યાખ્યા સંરચના
   {
-    char const *chars;
+    અક્ષર અચલ *chars;
     muscle_kind kind;
-  } value_type;
+  } કિંમત_type;
 };
-%type <value_type> value;
+%પ્રકાર <કિંમત_type> કિંમત;
 %printer
 {
-  switch ($$.kind)
+  પસંદગી ($$.kind)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   $$.chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); break;
+    સ્થિતિ muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); તોડો;
+    સ્થિતિ muscle_keyword: fprintf (yyo,   "%s",   $$.chars); તોડો;
+    સ્થિતિ muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); તોડો;
     }
-} <value_type>;
+} <કિંમત_type>;
 
-value:
+કિંમત:
   %empty  { $$.kind = muscle_keyword; $$.chars = ""; }
 | ID      { $$.kind = muscle_keyword; $$.chars = $1; }
 | STRING  { $$.kind = muscle_string;  $$.chars = unquote ($1); gram_scanner_last_string_free ();}
@@ -770,17 +770,17 @@ value:
 
 id:
   ID
-    { $$ = symbol_from_uniqstr ($1, @1); }
+    { $$ = પ્રતીક_from_uniqstr ($1, @1); }
 | CHAR_LITERAL
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      અચલ અક્ષર *var = "api.token.raw";
+      જો (current_class == nterm_sym)
         {
           complain (&@1, complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      જો (muscle_percent_define_ifdef (var))
         {
           complain (&@1, complaint,
                     _("character literals cannot be used together"
@@ -788,18 +788,18 @@ id:
           location loc = muscle_percent_define_get_loc (var);
           subcomplain (&loc, complaint, _("definition of %s"), var);
         }
-      $$ = symbol_get (char_name ($1), @1);
-      symbol_class_set ($$, token_sym, @1, false);
-      symbol_code_set ($$, $1, @1);
+      $$ = પ્રતીક_get (char_name ($1), @1);
+      પ્રતીક_class_set ($$, token_sym, @1, false);
+      પ્રતીક_code_set ($$, $1, @1);
     }
 ;
 
 id_colon:
-  ID_COLON { $$ = symbol_from_uniqstr ($1, @1); }
+  ID_COLON { $$ = પ્રતીક_from_uniqstr ($1, @1); }
 ;
 
 
-symbol:
+પ્રતીક:
   id
 | string_as_id
 ;
@@ -808,8 +808,8 @@ symbol:
 string_as_id:
   STRING
     {
-      $$ = symbol_get ($1, @1);
-      symbol_class_set ($$, token_sym, @1, false);
+      $$ = પ્રતીક_get ($1, @1);
+      પ્રતીક_class_set ($$, token_sym, @1, false);
     }
 ;
 
@@ -824,29 +824,29 @@ epilogue.opt:
 
 %%
 
-int
-yyreport_syntax_error (const yypcontext_t *ctx)
+પૂર્ણાંક
+yyreport_syntax_error (અચલ yypcontext_t *ctx)
 {
-  int res = 0;
+  પૂર્ણાંક res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
+  ગણના { ARGS_MAX = 5 };
+  અચલ અક્ષર *argv[ARGS_MAX];
+  પૂર્ણાંક argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  જો (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      પૂર્ણાંક nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      જો (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      નહીંતર
+        માટે (પૂર્ણાંક i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  પાછા res;
 }
 
 
@@ -855,8 +855,8 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    the right-hand side, and return an empty location equal to the end
    boundary of RHS[0] if the right-hand side is empty.  */
 
-static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+સ્થિર YYLTYPE
+lloc_default (YYLTYPE અચલ *rhs, પૂર્ણાંક n)
 {
   YYLTYPE loc;
 
@@ -868,97 +868,97 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  માટે (પૂર્ણાંક i = 1; i <= n; i++)
+    જો (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
-        break;
+        તોડો;
       }
 
-  return loc;
+  પાછા loc;
 }
 
-static
-char *strip_braces (char *code)
+સ્થિર
+અક્ષર *strip_braces (અક્ષર *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  પાછા code + 1;
 }
 
-static
-char const *
-translate_code (char *code, location loc, bool plain)
+સ્થિર
+અક્ષર અચલ *
+translate_code (અક્ષર *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  જો (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
-    code_props_symbol_action_init (&plain_code, code, loc);
+  નહીંતર
+    code_props_પ્રતીક_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  પાછા plain_code.code;
 }
 
-static
-char const *
-translate_code_braceless (char *code, location loc)
+સ્થિર
+અક્ષર અચલ *
+translate_code_braceless (અક્ષર *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  પાછા translate_code (strip_braces (code), loc, true);
 }
 
-static void
-add_param (param_type type, char *decl, location loc)
+સ્થિર શૂન્ય
+add_param (param_type પ્રકાર, અક્ષર *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  સ્થિર અક્ષર અચલ alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  અક્ષર અચલ *name_start = ખાલી;
   {
-    char *p;
+    અક્ષર *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+    માટે (p = decl; p[1]; p++)
+      જો ((p == decl
+           || ! memchr (alphanum, p[-1], કદ alphanum - 1))
+          && memchr (alphanum, p[0], કદ alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    જ્યારે (c_isspace ((unsigned અક્ષર) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    જ્યારે (c_isspace ((unsigned અક્ષર) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  જો (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  નહીંતર
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      અક્ષર *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      જો (પ્રકાર & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      જો (પ્રકાર & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
-      free (name);
+      મુક્ત (name);
     }
 
   gram_scanner_last_string_free ();
 }
 
 
-static void
-handle_header (char const *value)
+સ્થિર શૂન્ય
+handle_header (અક્ષર અચલ *કિંમત)
 {
   header_flag = true;
-  if (value)
+  જો (કિંમત)
     {
-      char *file = unquote (value);
+      અક્ષર *file = unquote (કિંમત);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -966,109 +966,109 @@ handle_header (char const *value)
 }
 
 
-static void
-handle_error_verbose (location const *loc, char const *directive)
+સ્થિર શૂન્ય
+handle_error_verbose (location અચલ *loc, અક્ષર અચલ *directive)
 {
   bison_directive (loc, directive);
-  muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
+  muscle_percent_define_ઉમેરો (directive, *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_file_prefix (location const *loc,
-                    location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+સ્થિર શૂન્ય
+handle_file_prefix (location અચલ *loc,
+                    location અચલ *dir_loc,
+                    અક્ષર અચલ *directive, અક્ષર અચલ *કિંમત_quoted)
 {
-  char *value = unquote (value_quoted);
+  અક્ષર *કિંમત = unquote (કિંમત_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  જો (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
-      spec_file_prefix = value;
+      spec_file_prefix = કિંમત;
     }
-  else
+  નહીંતર
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  જો (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
-static void
-handle_language (location const *loc, char const *lang)
+સ્થિર શૂન્ય
+handle_language (location અચલ *loc, અક્ષર અચલ *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
 
 
-static void
-handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+સ્થિર શૂન્ય
+handle_name_prefix (location અચલ *loc,
+                    અક્ષર અચલ *directive, અક્ષર અચલ *કિંમત_quoted)
 {
-  char *value = unquote (value_quoted);
+  અક્ષર *કિંમત = unquote (કિંમત_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  અક્ષર buf1[1024];
+  size_t len1 = કદ (buf1);
+  અક્ષર *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, કિંમત);
+  જો (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  જો (location_empty (spec_name_prefix_loc))
     {
-      spec_name_prefix = value;
+      spec_name_prefix = કિંમત;
       spec_name_prefix_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      અક્ષર buf2[1024];
+      size_t len2 = કદ (buf2);
+      અક્ષર *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", કિંમત);
+      જો (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
-        free (new);
+      જો (new != buf2)
+        મુક્ત (new);
     }
-  else
+  નહીંતર
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
-    free (old);
+  જો (old != buf1)
+    મુક્ત (old);
 }
 
 
-static void
-handle_pure_parser (location const *loc, char const *directive)
+સ્થિર શૂન્ય
+handle_pure_parser (location અચલ *loc, અક્ષર અચલ *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
-  muscle_percent_define_insert ("api.pure", *loc, muscle_keyword, "",
+  muscle_percent_define_ઉમેરો ("api.pure", *loc, muscle_keyword, "",
                                 MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 
-static void
-handle_require (location const *loc, char const *version_quoted)
+સ્થિર શૂન્ય
+handle_require (location અચલ *loc, અક્ષર અચલ *version_quoted)
 {
-  char *version = unquote (version_quoted);
+  અક્ષર *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  જો (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  નહીંતર
     {
-      const char* package_version =
+      અચલ અક્ષર* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      જો (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -1079,86 +1079,86 @@ handle_require (location const *loc, char const *version_quoted)
   gram_scanner_last_string_free ();
 }
 
-static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+સ્થિર શૂન્ય
+handle_skeleton (location અચલ *loc, અક્ષર અચલ *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  અક્ષર *skel = unquote (skel_quoted);
+  અક્ષર અચલ *skeleton_user = skel;
+  જો (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      જ્યારે (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      જ્યારે (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
-      char *skeleton_build =
+      અક્ષર *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      જો (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
         }
       strcpy (skeleton_build + dir_length, skeleton_user);
       skeleton_user = uniqstr_new (skeleton_build);
-      free (skeleton_build);
+      મુક્ત (skeleton_build);
     }
   skeleton_arg (skeleton_user, grammar_prio, *loc);
 }
 
 
-static void
-handle_yacc (location const *loc)
+સ્થિર શૂન્ય
+handle_yacc (location અચલ *loc)
 {
-  const char *directive = "%yacc";
+  અચલ અક્ષર *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  જો (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  નહીંતર
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
-static void
-gram_error (location const *loc, char const *msg)
+સ્થિર શૂન્ય
+gram_error (location અચલ *loc, અક્ષર અચલ *સંદેશ)
 {
-  complain (loc, complaint, "%s", msg);
+  complain (loc, complaint, "%s", સંદેશ);
 }
 
-static char const *
-char_name (char c)
+સ્થિર અક્ષર અચલ *
+char_name (અક્ષર c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  જો (c == '\'')
+    પાછા "'\\''";
+  નહીંતર
     {
-      char buf[4];
+      અક્ષર buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      પાછા quotearg_style (escape_quoting_style, buf);
     }
 }
 
-static void
-current_lhs (symbol *sym, location loc, named_ref *ref)
+સ્થિર શૂન્ય
+current_lhs (પ્રતીક *sym, location loc, named_ref *ref)
 {
-  current_lhs_symbol = sym;
+  current_lhs_પ્રતીક = sym;
   current_lhs_loc = loc;
-  if (sym)
-    symbol_location_as_lhs_set (sym, loc);
+  જો (sym)
+    પ્રતીક_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
      node.  This is because a single named-ref in the grammar may
      result in several uses when the user factors lhs between several
      rules using "|".  Therefore free the parser's original copy.  */
-  free (current_lhs_named_ref);
+  મુક્ત (current_lhs_named_ref);
   current_lhs_named_ref = ref;
 }
 
-static void tron (FILE *yyo)
+સ્થિર શૂન્ય tron (FILE *yyo)
 {
   begin_use_class ("value", yyo);
 }
 
-static void troff (FILE *yyo)
+સ્થિર શૂન્ય troff (FILE *yyo)
 {
   end_use_class ("value", yyo);
 }
@@ -1168,70 +1168,70 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+સંરચના obstack obstack_for_unquote;
 
-void
-parser_init (void)
+શૂન્ય
+parser_init (શૂન્ય)
 {
   obstack_init (&obstack_for_unquote);
 }
 
-void
-parser_free (void)
+શૂન્ય
+parser_free (શૂન્ય)
 {
   obstack_free (&obstack_for_unquote, 0);
 }
 
-static void
-unquote_free (char *last_string)
+સ્થિર શૂન્ય
+unquote_free (અક્ષર *last_string)
 {
   obstack_free (&obstack_for_unquote, last_string);
 }
 
-static char *
-unquote (const char *cp)
+સ્થિર અક્ષર *
+unquote (અચલ અક્ષર *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
-    switch (*cp)
+  માટે (++cp; *cp && *cp != '"'; ++cp)
+    પસંદગી (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      સ્થિતિ '"':
+        તોડો;
+      સ્થિતિ '\\':
         ++cp;
-        switch (*cp)
+        પસંદગી (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          સ્થિતિ '0': સ્થિતિ '1': સ્થિતિ '2': સ્થિતિ '3': સ્થિતિ '4':
+          સ્થિતિ '5': સ્થિતિ '6': સ્થિતિ '7': સ્થિતિ '8': સ્થિતિ '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              પૂર્ણાંક c = cp[0] - '0';
+              જો (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              જો (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            તોડો;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          સ્થિતિ 'a': GROW ('\a'); તોડો;
+          સ્થિતિ 'b': GROW ('\b'); તોડો;
+          સ્થિતિ 'f': GROW ('\f'); તોડો;
+          સ્થિતિ 'n': GROW ('\n'); તોડો;
+          સ્થિતિ 'r': GROW ('\r'); તોડો;
+          સ્થિતિ 't': GROW ('\t'); તોડો;
+          સ્થિતિ 'v': GROW ('\v'); તોડો;
 
-          case 'x':
+          સ્થિતિ 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              પૂર્ણાંક c = 0;
+              જ્યારે (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -1239,18 +1239,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              તોડો;
             }
           }
-        break;
+        તોડો;
 
-      default:
+      મૂળભૂત:
         GROW (*cp);
-        break;
+        તોડો;
       }
-  assert (*cp == '"');
+  પ્રતિજ્ઞા (*cp == '"');
   ++cp;
-  assert (*cp == '\0');
+  પ્રતિજ્ઞા (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  પાછા obstack_finish0 (&obstack_for_unquote);
 }

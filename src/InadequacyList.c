@@ -17,65 +17,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#અન્તર્ભાવ <config.h>
+#અન્તર્ભાવ "system.h"
 
-#include "InadequacyList.h"
+#અન્તર્ભાવ "InadequacyList.h"
 
-#include <intprops.h>
+#અન્તર્ભાવ <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+ContributionIndex અચલ ContributionIndex__none = -1;
+ContributionIndex અચલ ContributionIndex__error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, પ્રતીક *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_ગાંઠ_ગણતરી *ગાંઠ_ગણતરી)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *result = xmalloc (કદ *result);
+  result->id = *ગાંઠ_ગણતરી;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  જો (INT_ADD_WRAPV (*ગાંઠ_ગણતરી, 1, ગાંઠ_ગણતરી))
     aver (false);
   IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
+  result->next = ખાલી;
   result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
+  result->contribution_ગણતરી_2 = bitset_ગણતરી (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
-  return result;
+  પાછા result;
 }
 
-void
+શૂન્ય
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  જ્યારે (self)
     {
-      InadequacyList *node = self;
+      InadequacyList *ગાંઠ = self;
       self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      bitset_free (ગાંઠ->inadequacy.conflict.actions);
+      મુક્ત (ગાંઠ);
     }
 }
 
 ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+InadequacyList__getShiftContributionIndex (InadequacyList અચલ *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  જો (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->અંક))
+    પાછા ContributionIndex__none;
+  પાછા self->contribution_ગણતરી_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
+પ્રતીક *
+InadequacyList__getContributionToken (InadequacyList અચલ *self,
                                       ContributionIndex i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_ગણતરી_2); (શૂન્ય) i;
+  પાછા self->inadequacy.conflict.token;
 }
 
-void
+શૂન્ય
 InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
 {
   InadequacyList *head_old = *list;
