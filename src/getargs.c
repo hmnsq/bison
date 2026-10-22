@@ -18,31 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "getargs.h"
+#شامل <config.h>
+#شامل "getargs.h"
 
-#include "system.h"
+#شامل "system.h"
 
-#include <argmatch.h>
-#include <c-strcase.h>
-#include <configmake.h>
-#include <error.h>
-#include <getopt.h>
-#include <progname.h>
-#include <quote.h>
-#include <textstyle.h>
+#شامل <argmatch.h>
+#شامل <c-strcase.h>
+#شامل <configmake.h>
+#شامل <error.h>
+#شامل <getopt.h>
+#شامل <progname.h>
+#شامل <quote.h>
+#شامل <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "muscle-tab.h"
-#include "output.h"
-#include "uniqstr.h"
+#شامل "complain.h"
+#شامل "files.h"
+#شامل "muscle-tab.h"
+#شامل "output.h"
+#شامل "uniqstr.h"
 
 bool header_flag = false;
 bool graph_flag = false;
 bool html_flag = false;
 bool xml_flag = false;
-bool no_lines_flag = false;
+bool no_سطرها_flag = false;
 bool token_table_flag = false;
 location yacc_loc = EMPTY_LOCATION_INIT;
 bool update_flag = false; /* for -u */
@@ -51,11 +51,11 @@ bool color_debug = false;
 bool nondeterministic_parser = false;
 bool glr_parser = false;
 
-int feature_flag = feature_caret;
-int report_flag = report_none;
-int trace_flag = trace_none;
+صحیح feature_flag = feature_caret;
+صحیح report_flag = report_none;
+صحیح trace_flag = trace_none;
 
-static struct bison_language const valid_languages[] = {
+ایستا ساختار bison_language ثابت valid_languages[] = {
   /* lang,  skeleton,       ext,     hdr,     add_tab */
   { "c",    "c-skel.m4",    ".c",    ".h",    true },
   { "c++",  "c++-skel.m4",  ".cc",   ".hh",   true },
@@ -64,19 +64,19 @@ static struct bison_language const valid_languages[] = {
   { "", "", "", "", false }
 };
 
-int skeleton_prio = default_prio;
-const char *skeleton = NULL;
-int language_prio = default_prio;
-struct bison_language const *language = &valid_languages[0];
+صحیح skeleton_prio = default_prio;
+ثابت نویسه *skeleton = پوچ;
+صحیح language_prio = default_prio;
+ساختار bison_language ثابت *language = &valid_languages[0];
 
-typedef int* (xargmatch_fn) (const char *context, const char *arg);
+تعریفنوع صحیح* (xargmatch_fn) (ثابت نویسه *context, ثابت نویسه *arg);
 
-void
+تهی
 set_yacc (location loc)
 {
   yacc_loc = loc;
-  if (getenv ("POSIXLY_CORRECT"))
-    muscle_percent_define_insert ("posix",
+  اگر (getenv ("POSIXLY_CORRECT"))
+    muscle_percent_define_درج ("posix",
                                   loc,
                                   muscle_keyword, "",
                                   MUSCLE_PERCENT_DEFINE_D);
@@ -98,26 +98,26 @@ set_yacc (location loc)
  *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
-static void
-flag_argmatch (const char *opt, xargmatch_fn xargmatch,
-               int all, int *flags, char *arg, size_t no)
+ایستا تهی
+flag_argmatch (ثابت نویسه *opt, xargmatch_fn xargmatch,
+               صحیح all, صحیح *flags, نویسه *arg, size_t no)
 {
-  int value = *xargmatch (opt, arg + no);
+  صحیح مقدار = *xargmatch (opt, arg + no);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
-  if (!value)
+  اگر (!مقدار)
     {
-      value = all;
+      مقدار = all;
       no = !no;
     }
 
-  if (no)
-    *flags &= ~value;
-  else
-    *flags |= value;
+  اگر (no)
+    *flags &= ~مقدار;
+  وگرنه
+    *flags |= مقدار;
 }
 
-typedef void (usage_fn) (FILE *out);
+تعریفنوع تهی (usage_fn) (FILE *out);
 
 /** Decode an option's set of keys.
  *
@@ -129,21 +129,21 @@ typedef void (usage_fn) (FILE *out);
  *  \param args       comma separated list of effective subarguments to decode.
  *                    If 0, then activate all the flags.
  */
-static void
-flags_argmatch (const char *opt,
+ایستا تهی
+flags_argmatch (ثابت نویسه *opt,
                 xargmatch_fn xargmatch,
                 usage_fn usage,
-                int all, int *flags, char *args)
+                صحیح all, صحیح *flags, نویسه *args)
 {
-  if (!args)
+  اگر (!args)
     *flags |= all;
-  else if (STREQ (args, "help"))
+  وگرنه اگر (STREQ (args, "help"))
     {
       usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
+  وگرنه
+    برای (args = strtok (args, ","); args; args = strtok (پوچ, ","))
       {
         size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
         flag_argmatch (opt, xargmatch,
@@ -164,7 +164,7 @@ flags_argmatch (const char *opt,
  */
 #define FLAGS_ARGMATCH(FlagName, Args, All)                             \
   flags_argmatch ("--" #FlagName,                                       \
-                  (xargmatch_fn*) argmatch_## FlagName ## _value,       \
+                  (xargmatch_fn*) argmatch_## FlagName ## مقدار_2,       \
                   argmatch_ ## FlagName ## _usage,                      \
                   All, &FlagName ## _flag, Args)
 
@@ -172,24 +172,24 @@ flags_argmatch (const char *opt,
 | --color's handling.  |
 `---------------------*/
 
-enum color
+شمارش color
   {
     color_always,
     color_never,
     color_auto
   };
 
-ARGMATCH_DEFINE_GROUP (color, enum color)
+ARGMATCH_DEFINE_GROUP (color, شمارش color)
 
-static const argmatch_color_doc argmatch_color_docs[] =
+ایستا ثابت argmatch_color_doc argmatch_color_docs[] =
 {
   { "always",     N_("colorize the output") },
   { "never",      N_("don't colorize the output") },
   { "auto",       N_("colorize if the output device is a tty") },
-  { NULL, NULL },
+  { پوچ, پوچ },
 };
 
-static const argmatch_color_arg argmatch_color_args[] =
+ایستا ثابت argmatch_color_arg argmatch_color_args[] =
 {
   { "always",   color_always },
   { "yes",      color_always },
@@ -197,17 +197,17 @@ static const argmatch_color_arg argmatch_color_args[] =
   { "no",       color_never },
   { "auto",     color_auto },
   { "tty",      color_auto },
-  { NULL, color_always },
+  { پوچ, color_always },
 };
 
-const argmatch_color_group_type argmatch_color_group =
+ثابت argmatch_color_group_type argmatch_color_group =
 {
   argmatch_color_args,
   argmatch_color_docs,
   /* TRANSLATORS: Use the same translation for WHEN as in the
      --color=WHEN help message.  */
   N_("WHEN can be one of the following:"),
-  NULL
+  پوچ
 };
 
 
@@ -215,9 +215,9 @@ const argmatch_color_group_type argmatch_color_group =
 | --report's handling.  |
 `----------------------*/
 
-ARGMATCH_DEFINE_GROUP (report, enum report)
+ARGMATCH_DEFINE_GROUP (report, شمارش report)
 
-static const argmatch_report_doc argmatch_report_docs[] =
+ایستا ثابت argmatch_report_doc argmatch_report_docs[] =
 {
   { "states",          N_("describe the states") },
   { "itemsets",        N_("complete the core item sets with their closure") },
@@ -226,10 +226,10 @@ static const argmatch_report_doc argmatch_report_docs[] =
   { "counterexamples", N_("generate conflict counterexamples") },
   { "all",             N_("include all the above information") },
   { "none",            N_("disable the report") },
-  { NULL, NULL },
+  { پوچ, پوچ },
 };
 
-static const argmatch_report_arg argmatch_report_args[] =
+ایستا ثابت argmatch_report_arg argmatch_report_args[] =
 {
   { "none",            report_none },
   { "states",          report_states },
@@ -239,26 +239,26 @@ static const argmatch_report_arg argmatch_report_args[] =
   { "counterexamples", report_cex },
   { "cex",             report_cex },
   { "all",             report_all },
-  { NULL, report_none },
+  { پوچ, report_none },
 };
 
-const argmatch_report_group_type argmatch_report_group =
+ثابت argmatch_report_group_type argmatch_report_group =
 {
   argmatch_report_args,
   argmatch_report_docs,
   /* TRANSLATORS: Use the same translation for THINGS as in the
      --report=THINGS help message.  */
   N_("THINGS is a list of comma separated words that can include:"),
-  NULL
+  پوچ
 };
 
 /*---------------------.
 | --trace's handling.  |
 `---------------------*/
 
-ARGMATCH_DEFINE_GROUP (trace, enum trace)
+ARGMATCH_DEFINE_GROUP (trace, شمارش trace)
 
-static const argmatch_trace_doc argmatch_trace_docs[] =
+ایستا ثابت argmatch_trace_doc argmatch_trace_docs[] =
 {
   /* Meant for developers only, don't translate them.  */
   { "none",       "no traces" },
@@ -280,10 +280,10 @@ static const argmatch_trace_doc argmatch_trace_docs[] =
   { "ielr",       "IELR conversion" },
   { "cex",        "counterexample generation"},
   { "all",        "all of the above" },
-  { NULL, NULL},
+  { پوچ, پوچ},
 };
 
-static const argmatch_trace_arg argmatch_trace_args[] =
+ایستا ثابت argmatch_trace_arg argmatch_trace_args[] =
 {
   { "none",      trace_none },
   { "locations", trace_locations },
@@ -304,34 +304,34 @@ static const argmatch_trace_arg argmatch_trace_args[] =
   { "ielr",      trace_ielr },
   { "cex",       trace_cex },
   { "all",       trace_all },
-  { NULL,        trace_none},
+  { پوچ,        trace_none},
 };
 
-const argmatch_trace_group_type argmatch_trace_group =
+ثابت argmatch_trace_group_type argmatch_trace_group =
 {
   argmatch_trace_args,
   argmatch_trace_docs,
   N_("TRACES is a list of comma separated words that can include:"),
-  NULL
+  پوچ
 };
 
 /*-----------------------.
 | --feature's handling.  |
 `-----------------------*/
 
-ARGMATCH_DEFINE_GROUP (feature, enum feature)
+ARGMATCH_DEFINE_GROUP (feature, شمارش feature)
 
-static const argmatch_feature_doc argmatch_feature_docs[] =
+ایستا ثابت argmatch_feature_doc argmatch_feature_docs[] =
 {
   { "caret",       N_("show errors with carets") },
   { "fixit",       N_("show machine-readable fixes") },
   { "syntax-only", N_("do not generate any file") },
   { "all",         N_("all of the above") },
   { "none",        N_("disable all of the above") },
-  { NULL, NULL }
+  { پوچ, پوچ }
 };
 
-static const argmatch_feature_arg argmatch_feature_args[] =
+ایستا ثابت argmatch_feature_arg argmatch_feature_args[] =
 {
   { "none",                          feature_none },
   { "caret",                         feature_caret },
@@ -340,17 +340,17 @@ static const argmatch_feature_arg argmatch_feature_args[] =
   { "diagnostics-parseable-fixits",  feature_fixit },
   { "syntax-only",                   feature_syntax_only },
   { "all",                           feature_all },
-  { NULL, feature_none}
+  { پوچ, feature_none}
 };
 
-const argmatch_feature_group_type argmatch_feature_group =
+ثابت argmatch_feature_group_type argmatch_feature_group =
 {
   argmatch_feature_args,
   argmatch_feature_docs,
   /* TRANSLATORS: Use the same translation for FEATURES as in the
      --feature=FEATURES help message.  */
   N_("FEATURES is a list of comma separated words that can include:"),
-  NULL
+  پوچ
 };
 
 /*-------------------------------------------.
@@ -358,15 +358,15 @@ const argmatch_feature_group_type argmatch_feature_group =
 `-------------------------------------------*/
 
  _Noreturn
-static void usage (int);
+ایستا تهی usage (صحیح);
 
-static void
-usage (int status)
+ایستا تهی
+usage (صحیح status)
 {
-  if (status != 0)
+  اگر (status != 0)
     fprintf (stderr, _("Try '%s --help' for more information.\n"),
              program_name);
-  else
+  وگرنه
     {
       /* For ../build-aux/cross-options.pl to work, use the format:
                 ^  -S, --long[=ARGS] (whitespace)
@@ -381,10 +381,10 @@ LALR(1), IELR(1), or canonical LR(1) parser tables.\n\
 "), stdout);
 
       fputs (_("\
-Mandatory arguments to long options are mandatory for short options too.\n\
+Mandatory arguments to long options are mandatory برای short options too.\n\
 "), stdout);
       fputs (_("\
-The same is true for optional arguments.\n\
+The same is true برای optional arguments.\n\
 "), stdout);
       putc ('\n', stdout);
 
@@ -408,7 +408,7 @@ Operation Modes:\n\
 Diagnostics:\n\
   -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n\
       --color[=WHEN]         whether to colorize the diagnostics\n\
-      --style=FILE           specify the CSS FILE for colorizer diagnostics\n\
+      --style=FILE           specify the CSS FILE برای colorizer diagnostics\n\
 \n\
 "), stdout);
 
@@ -422,14 +422,14 @@ Diagnostics:\n\
 Tuning the Parser:\n\
   -L, --language=LANGUAGE          specify the output programming language\n\
   -S, --skeleton=FILE              specify the skeleton to use\n\
-  -t, --debug                      instrument the parser for tracing\n\
+  -t, --debug                      instrument the parser برای tracing\n\
                                    same as '-Dparse.trace'\n\
       --locations                  enable location support\n\
-  -D, --define=NAME[=VALUE]        similar to '%define NAME VALUE'\n\
-  -F, --force-define=NAME[=VALUE]  override '%define NAME VALUE'\n\
+  -D, --define=NAME[=مقدار_3]        similar to '%define NAME VALUE'\n\
+  -F, --force-define=NAME[=مقدار_3]  override '%define NAME VALUE'\n\
   -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n\
                                    deprecated by '-Dapi.prefix={PREFIX}'\n\
-  -l, --no-lines                   don't generate '#line' directives\n\
+  -l, --no-سطرها                   don't generate '#line' directives\n\
   -k, --token-table                include a table of token names\n\
   -y, --yacc                       emulate POSIX Yacc\n\
 "), stdout);
@@ -438,11 +438,11 @@ Tuning the Parser:\n\
       fputs (_("\
 Output Files:\n\
   -H, --header=[FILE]           also produce a header file\n\
-  -d                            likewise but cannot specify FILE (for POSIX Yacc)\n\
+  -d                            likewise but cannot specify FILE (برای POSIX Yacc)\n\
   -r, --report=THINGS           also produce details on the automaton\n\
-      --report-file=FILE        write report to FILE\n\
+      --report-file=FILE        اكتب report to FILE\n\
   -v, --verbose                 same as '--report=state'\n\
-  -b, --file-prefix=PREFIX      specify a PREFIX for output files\n\
+  -b, --file-prefix=PREFIX      specify a PREFIX برای output files\n\
   -o, --output=FILE             leave output to FILE\n\
   -g, --graph[=FILE]            also output a graph of the automaton\n\
       --html[=FILE]             also output an HTML report of the automaton\n\
@@ -461,12 +461,12 @@ Output Files:\n\
                "<https://www.gnu.org/gethelp/>.\n"),
              stdout);
 
-#if (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
+#اگر (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
       /* Don't output this redundant message for English locales.
          Note we still output for 'C' so that it gets included in the
          man page.  */
-      const char *lc_messages = setlocale (LC_MESSAGES, NULL);
-      if (lc_messages && !STREQ (lc_messages, "en_"))
+      ثابت نویسه *lc_messages = setlocale (LC_MESSAGES, پوچ);
+      اگر (lc_messages && !STREQ (lc_messages, "en_"))
         /* TRANSLATORS: Replace LANG_CODE in this URL with your language code to
            form one of the URLs at https://translationproject.org/team/.
            Otherwise, replace the entire URL with your translation team's
@@ -485,8 +485,8 @@ Output Files:\n\
 | Display the version message.  |
 `------------------------------*/
 
-static void
-version (void)
+ایستا تهی
+version (تهی)
 {
   /* Some efforts were made to ease the translators' task, please
      continue.  */
@@ -500,8 +500,8 @@ version (void)
            PACKAGE_COPYRIGHT_YEAR);
 
   fputs (_("\
-This is free software; see the source for copying conditions.  There is NO\n\
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
+This is آزاد software; see the source برای copying conditions.  There is NO\n\
+warranty; not even برای MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 "),
          stdout);
 }
@@ -511,40 +511,40 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 | --skeleton and --language handling.  |
 `--------------------------------------*/
 
-void
-skeleton_arg (char const *arg, int prio, location loc)
+تهی
+skeleton_arg (نویسه ثابت *arg, صحیح prio, location loc)
 {
-  if (prio < skeleton_prio)
+  اگر (prio < skeleton_prio)
     {
       skeleton_prio = prio;
       skeleton = arg;
     }
-  else if (prio == skeleton_prio)
+  وگرنه اگر (prio == skeleton_prio)
     complain (&loc, complaint,
               _("multiple skeleton declarations are invalid"));
 }
 
-void
-language_argmatch (char const *arg, int prio, location loc)
+تهی
+language_argmatch (نویسه ثابت *arg, صحیح prio, location loc)
 {
-  char const *msg = NULL;
+  نویسه ثابت *پیام = پوچ;
 
-  if (prio < language_prio)
+  اگر (prio < language_prio)
     {
-      for (int i = 0; valid_languages[i].language[0]; ++i)
-        if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+      برای (صحیح i = 0; valid_languages[i].language[0]; ++i)
+        اگر (c_strcasecmp (arg, valid_languages[i].language) == 0)
           {
             language_prio = prio;
             language = &valid_languages[i];
-            return;
+            بازگشت;
           }
-      msg = _("%s: invalid language");
+      پیام = _("%s: invalid language");
     }
-  else if (language_prio == prio)
-    msg = _("multiple language declarations are invalid");
+  وگرنه اگر (language_prio == prio)
+    پیام = _("multiple language declarations are invalid");
 
-  if (msg)
-    complain (&loc, complaint, msg, quotearg_colon (arg));
+  اگر (پیام)
+    complain (&loc, complaint, پیام, quotearg_colon (arg));
 }
 
 /*----------------------.
@@ -553,7 +553,7 @@ language_argmatch (char const *arg, int prio, location loc)
 
 /* Shorts options.
    Should be computed from long_options.  */
-static char const short_options[] =
+ایستا نویسه ثابت short_options[] =
   "D:"
   "F:"
   "H::"
@@ -581,7 +581,7 @@ static char const short_options[] =
   ;
 
 /* Values for long options that do not have single-letter equivalents.  */
-enum
+شمارش
 {
   COLOR_OPTION = CHAR_MAX + 1,
   FIXED_OUTPUT_FILES_OPTION,
@@ -594,7 +594,7 @@ enum
 };
 
 /* In the same order as in usage(), and in the documentation.  */
-static struct option const long_options[] =
+ایستا ساختار option ثابت long_options[] =
 {
   /* Operation modes. */
   { "help",            no_argument,       0,   'h' },
@@ -643,14 +643,14 @@ static struct option const long_options[] =
 };
 
 /* Build a location for the current command line argument. */
-static location
-command_line_location (void)
+ایستا location
+command_سطر_location (تهی)
 {
   location res;
   /* "<command line>" is used in GCC's messages about -D. */
   boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1, -1);
   res.end = res.start;
-  return res;
+  بازگشت res;
 }
 
 
@@ -658,25 +658,25 @@ command_line_location (void)
    that error messages from getargs be also colored as per the user's
    request.  This is consistent with the way GCC and Clang behave.  */
 
-static void
-getargs_colors (int argc, char *argv[])
+ایستا تهی
+getargs_colors (صحیح argc, نویسه *argv[])
 {
-  for (int i = 1; i < argc; i++)
+  برای (صحیح i = 1; i < argc; i++)
     {
-      const char *arg = argv[i];
-      if (STRPREFIX_LIT ("--color=", arg))
+      ثابت نویسه *arg = argv[i];
+      اگر (STRPREFIX_LIT ("--color=", arg))
         {
-          const char *color = arg + strlen ("--color=");
-          if (STREQ (color, "debug"))
+          ثابت نویسه *color = arg + strlen ("--color=");
+          اگر (STREQ (color, "debug"))
             color_debug = true;
-          else
+          وگرنه
             handle_color_option (color);
         }
-      else if (STREQ ("--color", arg))
-        handle_color_option (NULL);
-      else if (STRPREFIX_LIT ("--style=", arg))
+      وگرنه اگر (STREQ ("--color", arg))
+        handle_color_option (پوچ);
+      وگرنه اگر (STRPREFIX_LIT ("--style=", arg))
         {
-          const char *style = arg + strlen ("--style=");
+          ثابت نویسه *style = arg + strlen ("--style=");
           handle_style_option (style);
         }
     }
@@ -684,235 +684,235 @@ getargs_colors (int argc, char *argv[])
 }
 
 
-void
-getargs (int argc, char *argv[])
+تهی
+getargs (صحیح argc, نویسه *argv[])
 {
   getargs_colors (argc, argv);
 
-  int c;
-  while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
+  صحیح c;
+  وقتی ((c = getopt_long (argc, argv, short_options, long_options, پوچ))
          != -1)
   {
-    location loc = command_line_location ();
-    switch (c)
+    location loc = command_سطر_location ();
+    انتخاب (c)
       {
         /* ASCII Sorting for short options (i.e., upper case then
            lower case), and then long-only options.  */
 
-      case 0:
+      حالت 0:
         /* Certain long options cause getopt_long to return 0.  */
-        break;
+        بشکن;
 
-      case 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
-      case 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      حالت 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      حالت 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
         {
-          char *name = optarg;
-          char *value = strchr (optarg, '=');
+          نویسه *name = optarg;
+          نویسه *مقدار = strchr (optarg, '=');
           muscle_kind kind = muscle_keyword;
-          if (value)
+          اگر (مقدار)
             {
-              char *end = value + strlen (value) - 1;
-              *value++ = 0;
-              if (*value == '{' && *end == '}')
+              نویسه *end = مقدار + strlen (مقدار) - 1;
+              *مقدار++ = 0;
+              اگر (*مقدار == '{' && *end == '}')
                 {
                   kind = muscle_code;
-                  ++value;
+                  ++مقدار;
                   *end = 0;
                 }
-              else if (*value == '"' && *end == '"')
+              وگرنه اگر (*مقدار == '"' && *end == '"')
                 {
                   kind = muscle_string;
-                  ++value;
+                  ++مقدار;
                   *end = 0;
                 }
             }
-          muscle_percent_define_insert (name, loc,
-                                        kind, value ? value : "",
+          muscle_percent_define_درج (name, loc,
+                                        kind, مقدار ? مقدار : "",
                                         c == 'D' ? MUSCLE_PERCENT_DEFINE_D
                                                  : MUSCLE_PERCENT_DEFINE_F);
         }
-        break;
+        بشکن;
 
-      case 'H':
-      case 'd':
+      حالت 'H':
+      حالت 'd':
         header_flag = true;
-        if (optarg)
+        اگر (optarg)
           {
-            free (spec_header_file);
+            آزاد (spec_header_file);
             spec_header_file = xstrdup (optarg);
           }
-        break;
+        بشکن;
 
-      case 'L':
-        language_argmatch (optarg, command_line_prio, loc);
-        break;
+      حالت 'L':
+        language_argmatch (optarg, command_سطر_prio, loc);
+        بشکن;
 
-      case 'M': // -MOLDPREFIX=NEWPREFIX
+      حالت 'M': // -MOLDPREFIX=NEWPREFIX
         {
-          char *newprefix = strchr (optarg, '=');
-          if (newprefix)
+          نویسه *newprefix = strchr (optarg, '=');
+          اگر (newprefix)
             {
               *newprefix = '\0';
               add_prefix_map (optarg, newprefix + 1);
             }
-          else
+          وگرنه
             {
               complain (&loc, complaint, _("invalid argument for %s: %s"),
                         quote ("--file-prefix-map"), quotearg_n (1, optarg));
             }
         }
-        break;
+        بشکن;
 
-      case 'S':
-        skeleton_arg (optarg, command_line_prio, loc);
-        break;
+      حالت 'S':
+        skeleton_arg (optarg, command_سطر_prio, loc);
+        بشکن;
 
-      case 'T':
+      حالت 'T':
         FLAGS_ARGMATCH (trace, optarg, trace_all);
-        break;
+        بشکن;
 
-      case 'V':
+      حالت 'V':
         version ();
         exit (EXIT_SUCCESS);
 
-      case 'f':
+      حالت 'f':
         FLAGS_ARGMATCH (feature, optarg, feature_all);
-        break;
+        بشکن;
 
-      case 'W':
+      حالت 'W':
         warnings_argmatch (optarg);
-        break;
+        بشکن;
 
-      case 'b':
+      حالت 'b':
         spec_file_prefix = optarg;
-        break;
+        بشکن;
 
-      case 'g':
+      حالت 'g':
         graph_flag = true;
-        if (optarg)
+        اگر (optarg)
           {
-            free (spec_graph_file);
+            آزاد (spec_graph_file);
             spec_graph_file = xstrdup (optarg);
           }
-        break;
+        بشکن;
 
-      case 'h':
+      حالت 'h':
         usage (EXIT_SUCCESS);
 
-      case 'k':
+      حالت 'k':
         token_table_flag = true;
-        break;
+        بشکن;
 
-      case 'l':
-        no_lines_flag = true;
-        break;
+      حالت 'l':
+        no_سطرها_flag = true;
+        بشکن;
 
-      case 'o':
+      حالت 'o':
         spec_outfile = optarg;
-        break;
+        بشکن;
 
-      case 'p':
+      حالت 'p':
         spec_name_prefix = optarg;
-        break;
+        بشکن;
 
-      case 'r':
+      حالت 'r':
         FLAGS_ARGMATCH (report, optarg, report_all);
-        break;
+        بشکن;
 
-      case 't':
-        muscle_percent_define_insert ("parse.trace",
+      حالت 't':
+        muscle_percent_define_درج ("parse.trace",
                                       loc,
                                       muscle_keyword, "",
                                       MUSCLE_PERCENT_DEFINE_D);
-        break;
+        بشکن;
 
-      case 'u':
+      حالت 'u':
         update_flag = true;
         feature_flag |= feature_syntax_only;
-        break;
+        بشکن;
 
-      case 'v':
+      حالت 'v':
         report_flag |= report_states;
-        break;
+        بشکن;
 
-      case 'x':
+      حالت 'x':
         xml_flag = true;
-        if (optarg)
+        اگر (optarg)
           {
-            free (spec_xml_file);
+            آزاد (spec_xml_file);
             spec_xml_file = xstrdup (optarg);
           }
-        break;
+        بشکن;
 
-      case 'y':
+      حالت 'y':
         warning_argmatch ("yacc", 0, 0);
         set_yacc (loc);
-        break;
+        بشکن;
 
-      case COLOR_OPTION:
+      حالت COLOR_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        بشکن;
 
-      case HTML_OPTION:
+      حالت HTML_OPTION:
         html_flag = true;
         xml_flag = true;
-        if (optarg)
+        اگر (optarg)
           {
-            free (spec_html_file);
+            آزاد (spec_html_file);
             spec_html_file = xstrdup (optarg);
           }
-        break;
+        بشکن;
 
-      case FIXED_OUTPUT_FILES_OPTION:
+      حالت FIXED_OUTPUT_FILES_OPTION:
         complain (&loc, Wdeprecated,
                   _("deprecated option: %s, use %s"),
                   quote ("--fixed-output-files"), quote_n (1, "-o y.tab.c"));
         spec_outfile = "y.tab.c";
-        break;
+        بشکن;
 
-      case LOCATIONS_OPTION:
+      حالت LOCATIONS_OPTION:
         muscle_percent_define_ensure ("locations", loc, true);
-        break;
+        بشکن;
 
-      case PRINT_LOCALEDIR_OPTION:
+      حالت PRINT_LOCALEDIR_OPTION:
         printf ("%s\n", LOCALEDIR);
         exit (EXIT_SUCCESS);
 
-      case PRINT_DATADIR_OPTION:
+      حالت PRINT_DATADIR_OPTION:
         printf ("%s\n", pkgdatadir ());
         exit (EXIT_SUCCESS);
 
-      case REPORT_FILE_OPTION:
-        free (spec_verbose_file);
+      حالت REPORT_FILE_OPTION:
+        آزاد (spec_verbose_file);
         spec_verbose_file = xstrdup (optarg);
-        break;
+        بشکن;
 
-      case STYLE_OPTION:
+      حالت STYLE_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        بشکن;
 
-      default:
+      پیشفرض:
         usage (EXIT_FAILURE);
       }
   }
 
-  if (argc - optind != 1)
+  اگر (argc - optind != 1)
     {
-      if (argc - optind < 1)
+      اگر (argc - optind < 1)
         error (0, 0, _("missing operand"));
-      else
+      وگرنه
         error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
     }
 
   grammar_file = uniqstr_new (argv[optind]);
-  MUSCLE_INSERT_C_STRING ("file_name", grammar_file);
+  MUSCLE_درج_C_STRING ("file_name", grammar_file);
 }
 
-void
-tr (char *s, char from, char to)
+تهی
+tr (نویسه *s, نویسه from, نویسه to)
 {
-  for (; *s; ++s)
-    if (*s == from)
+  برای (; *s; ++s)
+    اگر (*s == from)
       *s = to;
 }

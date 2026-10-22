@@ -25,42 +25,42 @@
 /* Don't eliminate unreachable terminals: They may be used by the
    user's parser.  */
 
-#include <config.h>
-#include "system.h"
+#شامل <config.h>
+#شامل "system.h"
 
-#include <bitset.h>
+#شامل <bitset.h>
 
-#include "complain.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "print-xml.h"
-#include "reader.h"
-#include "reduce.h"
-#include "symtab.h"
+#شامل "complain.h"
+#شامل "files.h"
+#شامل "getargs.h"
+#شامل "gram.h"
+#شامل "print-xml.h"
+#شامل "reader.h"
+#شامل "reduce.h"
+#شامل "symtab.h"
 
 /* Set of nonterminals whose language is not empty.  */
-static bitset N;
+ایستا bitset N;
 
 /* Set of rules that have no useless nonterminals in their RHS.  */
-static bitset P;
+ایستا bitset P;
 
 /* Set of accessible symbols.  */
-static bitset V;
+ایستا bitset V;
 
 /* Set of symbols used to define rule precedence (so they are
    'useless', but no warning should be issued).  */
-static bitset V1;
+ایستا bitset V1;
 
-int nuseless_productions;
-int nuseless_nonterminals;
+صحیح nuseless_productions;
+صحیح nuseless_nonterminals;
 
 #define bitset_swap(Lhs, Rhs)                   \
-  do {                                          \
+  انجامبده {                                          \
     bitset lhs__ = Lhs;                         \
     Lhs = Rhs;                                  \
     Rhs = lhs__;                                \
-  } while (0)
+  } وقتی (0)
 
 /*-------------------------------------------------------------------.
 | Another way to do this would be with a set for each production and |
@@ -68,16 +68,16 @@ int nuseless_nonterminals;
 | whole reducing process takes only 2 seconds on my 8Mhz AT.         |
 `-------------------------------------------------------------------*/
 
-static bool
-useful_production (rule_number r, bitset N0)
+ایستا bool
+useful_production (rule_عدد r, bitset N0)
 {
   /* A production is useful if all of the nonterminals in its appear
      in the set of useful nonterminals.  */
 
-  for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-    if (ISVAR (*rhsp) && !bitset_test (N0, *rhsp - ntokens))
-      return false;
-  return true;
+  برای (item_عدد *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+    اگر (ISVAR (*rhsp) && !bitset_test (N0, *rhsp - ntokens))
+      بازگشت false;
+  بازگشت true;
 }
 
 
@@ -87,8 +87,8 @@ useful_production (rule_number r, bitset N0)
 | Remember that rules are 1-origin, symbols are 0-origin.          |
 `-----------------------------------------------------------------*/
 
-static void
-useless_nonterminals (void)
+ایستا تهی
+useless_nonterminals (تهی)
 {
   /* N is set as built.  Np is set being built this iteration. P is
      set of all productions which have a RHS all in N.  */
@@ -111,18 +111,18 @@ useless_nonterminals (void)
      saved to be used when finding useful productions: only
      productions in this set will appear in the final grammar.  */
 
-  while (1)
+  وقتی (1)
     {
       bitset_copy (Np, N);
-      for (rule_number r = 0; r < nrules; ++r)
-        if (!bitset_test (P, r)
+      برای (rule_عدد r = 0; r < nrules; ++r)
+        اگر (!bitset_test (P, r)
             && useful_production (r, N))
           {
-            bitset_set (Np, rules[r].lhs->number - ntokens);
+            bitset_set (Np, rules[r].lhs->عدد - ntokens);
             bitset_set (P, r);
           }
-      if (bitset_equal_p (N, Np))
-        break;
+      اگر (bitset_equal_p (N, Np))
+        بشکن;
       bitset_swap (N, Np);
     }
   bitset_free (N);
@@ -130,8 +130,8 @@ useless_nonterminals (void)
 }
 
 
-static void
-inaccessable_symbols (void)
+ایستا تهی
+inaccessable_symbols (تهی)
 {
   /* Find out which productions are reachable and which symbols are
      used.  Starting with an empty set of productions and a set of
@@ -160,25 +160,25 @@ inaccessable_symbols (void)
   bitset Pp = bitset_create (nrules, BITSET_FIXED);
 
   /* If the start symbol isn't useful, then nothing will be useful. */
-  if (bitset_test (N, acceptsymbol->content->number - ntokens))
+  اگر (bitset_test (N, acceptsymbol->content->عدد - ntokens))
     {
-      bitset_set (V, acceptsymbol->content->number);
+      bitset_set (V, acceptsymbol->content->عدد);
 
-      while (1)
+      وقتی (1)
         {
           bitset_copy (Vp, V);
-          for (rule_number r = 0; r < nrules; ++r)
-            if (!bitset_test (Pp, r)
+          برای (rule_عدد r = 0; r < nrules; ++r)
+            اگر (!bitset_test (Pp, r)
                 && bitset_test (P, r)
-                && bitset_test (V, rules[r].lhs->number))
+                && bitset_test (V, rules[r].lhs->عدد))
               {
-                for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-                  if (ISTOKEN (*rhsp) || bitset_test (N, *rhsp - ntokens))
+                برای (item_عدد *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+                  اگر (ISTOKEN (*rhsp) || bitset_test (N, *rhsp - ntokens))
                     bitset_set (Vp, *rhsp);
                 bitset_set (Pp, r);
               }
-          if (bitset_equal_p (V, Vp))
-            break;
+          اگر (bitset_equal_p (V, Vp))
+            بشکن;
           bitset_swap (V, Vp);
         }
     }
@@ -188,25 +188,25 @@ inaccessable_symbols (void)
 
   /* These tokens (numbered 0, 1, and 2) are internal to Bison.
      Consider them useful. */
-  bitset_set (V, eoftoken->content->number);   /* end-of-input token */
-  bitset_set (V, errtoken->content->number);   /* error token */
-  bitset_set (V, undeftoken->content->number); /* some undefined token */
+  bitset_set (V, eoftoken->content->عدد);   /* end-of-input token */
+  bitset_set (V, errtoken->content->عدد);   /* error token */
+  bitset_set (V, undeftoken->content->عدد); /* some undefined token */
 
   bitset_free (P);
   P = Pp;
 
-  int nuseful_productions = bitset_count (P);
+  صحیح nuseful_productions = bitset_شمار (P);
   nuseless_productions = nrules - nuseful_productions;
 
-  int nuseful_nonterminals = 0;
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  صحیح nuseful_nonterminals = 0;
+  برای (نماد_عدد i = ntokens; i < nsyms; ++i)
     nuseful_nonterminals += bitset_test (V, i);
   nuseless_nonterminals = nnterms - nuseful_nonterminals;
 
   /* A token that was used in %prec should not be warned about.  */
-  for (rule_number r = 0; r < nrules; ++r)
-    if (rules[r].precsym != 0)
-      bitset_set (V1, rules[r].precsym->number);
+  برای (rule_عدد r = 0; r < nrules; ++r)
+    اگر (rules[r].precsym != 0)
+      bitset_set (V1, rules[r].precsym->عدد);
 }
 
 
@@ -215,12 +215,12 @@ inaccessable_symbols (void)
 | accordingly.                                                       |
 `-------------------------------------------------------------------*/
 
-static void
-reduce_grammar_tables (void)
+ایستا تهی
+reduce_grammar_tables (تهی)
 {
   /* Report and flag useless productions.  */
   {
-    for (rule_number r = 0; r < nrules; ++r)
+    برای (rule_عدد r = 0; r < nrules; ++r)
       rules[r].useful = bitset_test (P, r);
     grammar_rules_useless_report (_("rule useless in grammar"));
   }
@@ -228,28 +228,28 @@ reduce_grammar_tables (void)
   /* Map the nonterminals to their new index: useful first, useless
      afterwards.  Kept for later report.  */
   {
-    int useful = 0;
-    int useless = nrules - nuseless_productions;
-    rule *rules_sorted = xnmalloc (nrules, sizeof *rules_sorted);
-    for (rule_number r = 0; r < nrules; ++r)
+    صحیح useful = 0;
+    صحیح useless = nrules - nuseless_productions;
+    rule *rules_sorted = xnmalloc (nrules, اندازه *rules_sorted);
+    برای (rule_عدد r = 0; r < nrules; ++r)
       rules_sorted[rules[r].useful ? useful++ : useless++] = rules[r];
-    free (rules);
+    آزاد (rules);
     rules = rules_sorted;
 
     /* Renumber the rules markers in RITEMS.  */
-    for (rule_number r = 0; r < nrules; ++r)
+    برای (rule_عدد r = 0; r < nrules; ++r)
       {
-        item_number *rhsp = rules[r].rhs;
-        for (/* Nothing. */; 0 <= *rhsp; ++rhsp)
-          continue;
-        *rhsp = rule_number_as_item_number (r);
-        rules[r].number = r;
+        item_عدد *rhsp = rules[r].rhs;
+        برای (/* Nothing. */; 0 <= *rhsp; ++rhsp)
+          ادامه;
+        *rhsp = rule_عدد_as_item_عدد (r);
+        rules[r].عدد = r;
       }
     nrules -= nuseless_productions;
   }
 
   /* Adjust NRITEMS.  */
-  for (rule_number r = nrules; r < nrules + nuseless_productions; ++r)
+  برای (rule_عدد r = nrules; r < nrules + nuseless_productions; ++r)
     nritems -= rule_rhs_length (&rules[r]) + 1;
 }
 
@@ -258,24 +258,24 @@ reduce_grammar_tables (void)
 | Remove useless nonterminals.  |
 `------------------------------*/
 
-symbol_number *nterm_map = NULL;
+نماد_عدد *nterm_map = پوچ;
 
-static void
-nonterminals_reduce (void)
+ایستا تهی
+nonterminals_reduce (تهی)
 {
-  nterm_map = xnmalloc (nnterms, sizeof *nterm_map);
+  nterm_map = xnmalloc (nnterms, اندازه *nterm_map);
   /* Map the nonterminals to their new index: useful first, useless
      afterwards.  Kept for later report.  */
   {
-    symbol_number n = ntokens;
-    for (symbol_number i = ntokens; i < nsyms; ++i)
-      if (bitset_test (V, i))
+    نماد_عدد n = ntokens;
+    برای (نماد_عدد i = ntokens; i < nsyms; ++i)
+      اگر (bitset_test (V, i))
         nterm_map[i - ntokens] = n++;
-    for (symbol_number i = ntokens; i < nsyms; ++i)
-      if (!bitset_test (V, i))
+    برای (نماد_عدد i = ntokens; i < nsyms; ++i)
+      اگر (!bitset_test (V, i))
         {
           nterm_map[i - ntokens] = n++;
-          if (symbols[i]->content->status != used
+          اگر (symbols[i]->content->status != used
               && symbols[i] != acceptsymbol)
             complain (&symbols[i]->location, Wother,
                       _("nonterminal useless in grammar: %s"),
@@ -285,24 +285,24 @@ nonterminals_reduce (void)
 
   /* Shuffle elements of tables indexed by symbol number.  */
   {
-    symbol **symbols_sorted = xnmalloc (nnterms, sizeof *symbols_sorted);
-    for (symbol_number i = ntokens; i < nsyms; ++i)
-      symbols[i]->content->number = nterm_map[i - ntokens];
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    نماد **symbols_sorted = xnmalloc (nnterms, اندازه *symbols_sorted);
+    برای (نماد_عدد i = ntokens; i < nsyms; ++i)
+      symbols[i]->content->عدد = nterm_map[i - ntokens];
+    برای (نماد_عدد i = ntokens; i < nsyms; ++i)
       symbols_sorted[nterm_map[i - ntokens] - ntokens] = symbols[i];
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    برای (نماد_عدد i = ntokens; i < nsyms; ++i)
       symbols[i] = symbols_sorted[i - ntokens];
-    free (symbols_sorted);
+    آزاد (symbols_sorted);
   }
 
   /* Update nonterminal numbers in the RHS of the rules.  LHS are
      pointers to the symbol structure, they don't need renumbering. */
   {
-    for (rule_number r = 0; r < nrules; ++r)
-      for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-        if (ISVAR (*rhsp))
-          *rhsp = symbol_number_as_item_number (nterm_map[*rhsp - ntokens]);
-    acceptsymbol->content->number = nterm_map[acceptsymbol->content->number - ntokens];
+    برای (rule_عدد r = 0; r < nrules; ++r)
+      برای (item_عدد *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+        اگر (ISVAR (*rhsp))
+          *rhsp = نماد_عدد_as_item_عدد (nterm_map[*rhsp - ntokens]);
+    acceptsymbol->content->عدد = nterm_map[acceptsymbol->content->عدد - ntokens];
   }
 
   nsyms -= nuseless_nonterminals;
@@ -314,32 +314,32 @@ nonterminals_reduce (void)
 | Output the detailed results of the reductions.  For FILE.output.  |
 `------------------------------------------------------------------*/
 
-void
+تهی
 reduce_output (FILE *out)
 {
-  if (nuseless_nonterminals)
+  اگر (nuseless_nonterminals)
     {
       fprintf (out, "%s\n\n", _("Nonterminals useless in grammar"));
-      for (int i = 0; i < nuseless_nonterminals; ++i)
+      برای (صحیح i = 0; i < nuseless_nonterminals; ++i)
         fprintf (out, "    %s\n", symbols[nsyms + i]->tag);
       fputs ("\n\n", out);
     }
 
   {
     bool b = false;
-    for (int i = 0; i < ntokens; ++i)
-      if (reduce_token_unused_in_grammar (i))
+    برای (صحیح i = 0; i < ntokens; ++i)
+      اگر (reduce_token_unused_in_grammar (i))
         {
-          if (!b)
+          اگر (!b)
             fprintf (out, "%s\n\n", _("Terminals unused in grammar"));
           b = true;
           fprintf (out, "    %s\n", symbols[i]->tag);
         }
-    if (b)
+    اگر (b)
       fputs ("\n\n", out);
   }
 
-  if (nuseless_productions)
+  اگر (nuseless_productions)
     grammar_rules_partial_print (out, _("Rules useless in grammar"),
                                  rule_useless_in_grammar_p);
 }
@@ -349,23 +349,23 @@ reduce_output (FILE *out)
 | Report the results to STDERR.  |
 `-------------------------------*/
 
-static void
-reduce_print (void)
+ایستا تهی
+reduce_print (تهی)
 {
-  if (nuseless_nonterminals)
-    complain (NULL, Wother, ngettext ("%d nonterminal useless in grammar",
+  اگر (nuseless_nonterminals)
+    complain (پوچ, Wother, ngettext ("%d nonterminal useless in grammar",
                                       "%d nonterminals useless in grammar",
                                       nuseless_nonterminals),
               nuseless_nonterminals);
-  if (nuseless_productions)
-    complain (NULL, Wother, ngettext ("%d rule useless in grammar",
+  اگر (nuseless_productions)
+    complain (پوچ, Wother, ngettext ("%d rule useless in grammar",
                                       "%d rules useless in grammar",
                                       nuseless_productions),
               nuseless_productions);
 }
 
-void
-reduce_grammar (void)
+تهی
+reduce_grammar (تهی)
 {
   /* Allocate the global sets used to compute the reduced grammar */
 
@@ -378,33 +378,33 @@ reduce_grammar (void)
   inaccessable_symbols ();
 
   /* Did we reduce something? */
-  if (nuseless_nonterminals || nuseless_productions)
+  اگر (nuseless_nonterminals || nuseless_productions)
     {
       reduce_print ();
 
       // Check that start symbols have non-empty languages.
       bool failure = false;
-      for (symbol_list *list = start_symbols; list; list = list->next)
-        if (!bitset_test (N, list->content.sym->content->number - ntokens))
+      برای (نماد_list *list = start_symbols; list; list = list->next)
+        اگر (!bitset_test (N, list->content.sym->content->عدد - ntokens))
           {
             failure = true;
             complain (&list->sym_loc, complaint,
                       _("start symbol %s does not derive any sentence"),
                       list->content.sym->tag);
           }
-      if (failure)
+      اگر (failure)
         exit (EXIT_FAILURE);
 
       /* First reduce the nonterminals, as they renumber themselves in the
          whole grammar.  If you change the order, nonterms would be
          renumbered only in the reduced grammar.  */
-      if (nuseless_nonterminals)
+      اگر (nuseless_nonterminals)
         nonterminals_reduce ();
-      if (nuseless_productions)
+      اگر (nuseless_productions)
         reduce_grammar_tables ();
     }
 
-  if (trace_flag & trace_grammar)
+  اگر (trace_flag & trace_grammar)
     {
       grammar_dump (stderr, "Reduced Grammar");
 
@@ -415,31 +415,31 @@ reduce_grammar (void)
 }
 
 bool
-reduce_token_unused_in_grammar (symbol_number i)
+reduce_token_unused_in_grammar (نماد_عدد i)
 {
   aver (i < ntokens);
-  return !bitset_test (V, i) && !bitset_test (V1, i);
+  بازگشت !bitset_test (V, i) && !bitset_test (V1, i);
 }
 
 bool
-reduce_nonterminal_useless_in_grammar (const sym_content *sym)
+reduce_nonterminal_useless_in_grammar (ثابت sym_content *sym)
 {
-  symbol_number n = sym->number;
+  نماد_عدد n = sym->عدد;
   aver (ntokens <= n && n < nsyms + nuseless_nonterminals);
-  return nsyms <= n;
+  بازگشت nsyms <= n;
 }
 
 /*-----------------------------------------------------------.
 | Free the global sets used to compute the reduced grammar.  |
 `-----------------------------------------------------------*/
 
-void
-reduce_free (void)
+تهی
+reduce_free (تهی)
 {
   bitset_free (N);
   bitset_free (V);
   bitset_free (V1);
   bitset_free (P);
-  free (nterm_map);
-  nterm_map = NULL;
+  آزاد (nterm_map);
+  nterm_map = پوچ;
 }

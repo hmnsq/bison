@@ -23,14 +23,14 @@
 
 # include <stdio.h>
 
-void xml_indent (FILE *out, int level);
-void xml_puts (FILE *, int, char const *);
-void xml_printf (FILE *, int, char const *, ...);
-char const *xml_escape_n (int n, char const *str);
-char const *xml_escape (char const *str);
-void print_xml (void);
+تهی xml_indent (FILE *out, صحیح level);
+تهی xml_puts (FILE *, صحیح, نویسه ثابت *);
+تهی xml_printf (FILE *, صحیح, نویسه ثابت *, ...);
+نویسه ثابت *xml_escape_n (صحیح n, نویسه ثابت *str);
+نویسه ثابت *xml_escape (نویسه ثابت *str);
+تهی print_xml (تهی);
 
 /* Use xsltproc to generate HTML from XML output.  */
-void print_html (void);
+تهی print_html (تهی);
 
 #endif /* !PRINT_XML_H_ */

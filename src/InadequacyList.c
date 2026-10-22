@@ -17,65 +17,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#شامل <config.h>
+#شامل "system.h"
 
-#include "InadequacyList.h"
+#شامل "InadequacyList.h"
 
-#include <intprops.h>
+#شامل <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+ContributionIndex ثابت ContributionIndex__none = -1;
+ContributionIndex ثابت ContributionIndex__error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, نماد *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_گره_شمار *گره_شمار)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *result = xmalloc (اندازه *result);
+  result->id = *گره_شمار;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  اگر (INT_ADD_WRAPV (*گره_شمار, 1, گره_شمار))
     aver (false);
   IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
+  result->next = پوچ;
   result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
+  result->contribution_شمار_2 = bitset_شمار (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
-  return result;
+  بازگشت result;
 }
 
-void
+تهی
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  وقتی (self)
     {
-      InadequacyList *node = self;
+      InadequacyList *گره = self;
       self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      bitset_free (گره->inadequacy.conflict.actions);
+      آزاد (گره);
     }
 }
 
 ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+InadequacyList__getShiftContributionIndex (InadequacyList ثابت *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  اگر (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->رقم))
+    بازگشت ContributionIndex__none;
+  بازگشت self->contribution_شمار_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
+نماد *
+InadequacyList__getContributionToken (InadequacyList ثابت *self,
                                       ContributionIndex i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_شمار_2); (تهی) i;
+  بازگشت self->inadequacy.conflict.token;
 }
 
-void
+تهی
 InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
 {
   InadequacyList *head_old = *list;

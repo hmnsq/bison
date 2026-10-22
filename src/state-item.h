@@ -53,61 +53,61 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_اقلام[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_اقلام || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_اقلام && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+تعریفنوع صحیح state_item_عدد;
 
-typedef struct
+تعریفنوع ساختار
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  ثابت state *state;
+  item_عدد *item;
+  state_item_عدد trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+تعریفنوع gl_list_t state_item_list;
 
-extern bitsetv firsts;
+بیرونی bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+بیرونی size_t nstate_اقلام;
+بیرونی state_item_عدد *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+بیرونی state_item *state_اقلام;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_عدد s, state_item_عدد off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+ایستا درونخطی state_item_عدد
+state_item_index_lookup (state_عدد s, state_item_عدد off)
 {
-  return state_item_map[s] + off;
+  بازگشت state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+تهی state_اقلام_init (تهی);
+تهی state_اقلام_free (تهی);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+تهی state_item_print (ثابت state_item *si, FILE *out, ثابت نویسه *prefix);
+ثابت rule *state_item_rule (ثابت state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (ثابت state_item *si, ثابت state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+ایستا درونخطی bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ثابت تهی *p = پوچ;
+  bool res = gl_list_iterator_next (it, &p, پوچ);
+  اگر (res)
     *si = (state_item *) p;
-  else
+  وگرنه
     gl_list_iterator_free (it);
-  return res;
+  بازگشت res;
 }
 
 

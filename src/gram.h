@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+بیرونی صحیح nsyms;
+بیرونی صحیح ntokens;
+بیرونی صحیح nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
-# define ITEM_NUMBER_MAX INT_MAX
-extern item_number *ritem;
-extern int nritems;
+تعریفنوع صحیح item_عدد;
+# define ITEM_عدد_MAX INT_MAX
+بیرونی item_عدد *ritem;
+بیرونی صحیح nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+تعریفنوع unsigned صحیح item_index;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
-symbol_number_as_item_number (symbol_number sym)
+ایستا درونخطی item_عدد
+نماد_عدد_as_item_عدد (نماد_عدد sym)
 {
-  return sym;
+  بازگشت sym;
 }
 
-static inline symbol_number
-item_number_as_symbol_number (item_number i)
+ایستا درونخطی نماد_عدد
+item_عدد_as_نماد_عدد (item_عدد i)
 {
-  return i;
+  بازگشت i;
 }
 
-static inline bool
-item_number_is_symbol_number (item_number i)
+ایستا درونخطی bool
+item_عدد_is_نماد_عدد (item_عدد i)
 {
-  return i >= 0;
+  بازگشت i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
-# define RULE_NUMBER_MAX INT_MAX
+تعریفنوع صحیح rule_عدد;
+# define RULE_عدد_MAX INT_MAX
 
-static inline item_number
-rule_number_as_item_number (rule_number r)
+ایستا درونخطی item_عدد
+rule_عدد_as_item_عدد (rule_عدد r)
 {
-  return -1 - r;
+  بازگشت -1 - r;
 }
 
-static inline rule_number
-item_number_as_rule_number (item_number i)
+ایستا درونخطی rule_عدد
+item_عدد_as_rule_عدد (item_عدد i)
 {
-  return -1 - i;
+  بازگشت -1 - i;
 }
 
-static inline bool
-item_number_is_rule_number (item_number i)
+ایستا درونخطی bool
+item_عدد_is_rule_عدد (item_عدد i)
 {
-  return i < 0;
+  بازگشت i < 0;
 }
 
 
@@ -176,24 +176,24 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+تعریفنوع ساختار
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number code;
+  rule_عدد code;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number number;
+  rule_عدد عدد;
 
   sym_content *lhs;
-  item_number *rhs;
+  item_عدد *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  صحیح dprec;
+  صحیح merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,32 +205,32 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  صحیح expected_sr_conflicts;
+  صحیح expected_rr_conflicts;
 
-  const char *action;
+  ثابت نویسه *action;
   location action_loc;
 } rule;
 
 /* The used rules (size NRULES).  */
-extern rule *rules;
-extern rule_number nrules;
+بیرونی rule *rules;
+بیرونی rule_عدد nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
-item_rule (item_number const *item)
+ایستا درونخطی rule ثابت *
+item_rule (item_عدد ثابت *item)
 {
-  item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  item_عدد ثابت *sp = item;
+  وقتی (!item_عدد_is_rule_عدد (*sp))
     ++sp;
-  rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  rule_عدد r = item_عدد_as_rule_عدد (*sp);
+  بازگشت &rules[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
    RITEM.  PREVIOUS_RULE is used to see if the lhs is common, in which
    case LHS is factored.  Passing NULL is fine.  */
-void item_print (item_number *item, rule const *previous_rule,
+تهی item_print (item_عدد *item, rule ثابت *previous_rule,
                  FILE *out);
 
 /*--------.
@@ -238,93 +238,93 @@ void item_print (item_number *item, rule const *previous_rule,
 `--------*/
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter) (rule const *);
+تعریفنوع bool (*rule_filter) (rule ثابت *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
-rule_is_initial (rule const *r)
+ایستا درونخطی bool
+rule_is_initial (rule ثابت *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  بازگشت r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
    is useful in the grammar.  */
-bool rule_useful_in_grammar_p (rule const *r);
+bool rule_useful_in_grammar_p (rule ثابت *r);
 
 /* Whether the rule has a 'number' higher than NRULES.  That is, it is
    useless in the grammar.  */
-bool rule_useless_in_grammar_p (rule const *r);
+bool rule_useless_in_grammar_p (rule ثابت *r);
 
 /* Whether the rule is not flagged as useful but is useful in the
    grammar.  In other words, it was discarded because of conflicts.  */
-bool rule_useless_in_parser_p (rule const *r);
+bool rule_useless_in_parser_p (rule ثابت *r);
 
 /* Whether the rule has a single RHS, and no user action. */
-bool rule_useless_chain_p (rule const *r);
+bool rule_useless_chain_p (rule ثابت *r);
 
 /* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
+تهی rule_lhs_print (rule ثابت *r, sym_content ثابت *previous_lhs,
                      FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+تهی rule_lhs_print_xml (rule ثابت *r, FILE *out, صحیح level);
 
 /* The length of the RHS.  */
-size_t rule_rhs_length (rule const *r);
+size_t rule_rhs_length (rule ثابت *r);
 
 /* Print this rule's RHS on OUT.  */
-void rule_rhs_print (rule const *r, FILE *out);
+تهی rule_rhs_print (rule ثابت *r, FILE *out);
 
 /* Print this rule on OUT.  If a PREVIOUS_RULE was already displayed,
    avoid useless repetitions of their LHS. */
-void rule_print (rule const *r, rule const *prev_rule, FILE *out);
+تهی rule_print (rule ثابت *r, rule ثابت *prev_rule, FILE *out);
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol **symbols;
+بیرونی نماد **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number *token_translations;
-extern int max_code;
+بیرونی نماد_عدد *token_translations;
+بیرونی صحیح max_code;
 
 
 
 /* Dump RITEM for traces. */
-void ritem_print (FILE *out);
+تهی ritem_print (FILE *out);
 
 /* The size of the longest rule RHS.  */
-size_t ritem_longest_rhs (void);
+size_t ritem_longest_rhs (تهی);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
+تهی grammar_rules_partial_print (FILE *out, ثابت نویسه *title,
                                   rule_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
-void grammar_rules_print (FILE *out);
+تهی grammar_rules_print (FILE *out);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+تهی grammar_rules_print_xml (FILE *out, صحیح level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+تهی grammar_dump (FILE *out, ثابت نویسه *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+تهی grammar_rules_useless_report (ثابت نویسه *message);
 
 /* Free the packed grammar. */
-void grammar_free (void);
+تهی grammar_free (تهی);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+بیرونی صحیح required_version;
 
 #endif /* !GRAM_H_ */

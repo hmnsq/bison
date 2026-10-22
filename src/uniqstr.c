@@ -18,16 +18,16 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#شامل <config.h>
+#شامل "system.h"
 
-#include <attribute.h>
-#include <error.h>
-#include <hash.h>
-#include <quotearg.h>
-#include <stdarg.h>
+#شامل <attribute.h>
+#شامل <error.h>
+#شامل <hash.h>
+#شامل <quotearg.h>
+#شامل <stdarg.h>
 
-#include "uniqstr.h"
+#شامل "uniqstr.h"
 
 /*-----------------------.
 | A uniqstr hash table.  |
@@ -36,43 +36,43 @@
 /* Initial capacity of uniqstr hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *uniqstrs_table = NULL;
+ایستا ساختار hash_table *uniqstrs_table = پوچ;
 
 /*-------------------------------------.
 | Create the uniqstr for S if needed.  |
 `-------------------------------------*/
 
 uniqstr
-uniqstr_new (char const *str)
+uniqstr_new (نویسه ثابت *str)
 {
   uniqstr res = hash_lookup (uniqstrs_table, str);
-  if (!res)
+  اگر (!res)
     {
       /* First insertion in the hash. */
       res = xstrdup (str);
       hash_xinsert (uniqstrs_table, res);
     }
-  return res;
+  بازگشت res;
 }
 
 uniqstr
-uniqstr_concat (int nargs, ...)
+uniqstr_concat (صحیح nargs, ...)
 {
   va_list args;
 
   va_start (args, nargs);
   size_t reslen = 0;
-  for (int i = 0; i < nargs; i++)
-    reslen += strlen (va_arg (args, char const *));
+  برای (صحیح i = 0; i < nargs; i++)
+    reslen += strlen (va_arg (args, نویسه ثابت *));
   va_end (args);
 
-  char *str = xmalloc (reslen + 1);
-  char *p = str;
+  نویسه *str = xmalloc (reslen + 1);
+  نویسه *p = str;
 
   va_start (args, nargs);
-  for (int i = 0; i < nargs; i++)
+  برای (صحیح i = 0; i < nargs; i++)
     {
-      char const *arg = va_arg (args, char const *);
+      نویسه ثابت *arg = va_arg (args, نویسه ثابت *);
       size_t arglen = strlen (arg);
       memcpy (p, arg, arglen);
       p += arglen;
@@ -81,20 +81,20 @@ uniqstr_concat (int nargs, ...)
 
   *p = '\0';
   uniqstr res = hash_xinsert (uniqstrs_table, str);
-  if (res != str)
-    free (str);
-  return res;
+  اگر (res != str)
+    آزاد (str);
+  بازگشت res;
 }
 
 /*------------------------------.
 | Abort if S is not a uniqstr.  |
 `------------------------------*/
 
-void
-uniqstr_assert (char const *str)
+تهی
+uniqstr_assert (نویسه ثابت *str)
 {
   uniqstr s = hash_lookup (uniqstrs_table, str);
-  if (!s || s != str)
+  اگر (!s || s != str)
     {
       error (0, 0,
              "not a uniqstr: %s", quotearg (str));
@@ -107,23 +107,23 @@ uniqstr_assert (char const *str)
 | Print the uniqstr.  |
 `--------------------*/
 
-static inline bool
+ایستا درونخطی bool
 uniqstr_print (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
-  return true;
+  بازگشت true;
 }
 
-static bool
-uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
+ایستا bool
+uniqstr_print_processor (تهی *ustr, تهی *null MAYBE_UNUSED)
 {
-  return uniqstr_print (ustr);
+  بازگشت uniqstr_print (ustr);
 }
 
-int
+صحیح
 uniqstr_cmp (uniqstr l, uniqstr r)
 {
-  return (l == r ? 0
+  بازگشت (l == r ? 0
           : !l ? -1
           : !r ? +1
           : strcmp (l, r));
@@ -134,16 +134,16 @@ uniqstr_cmp (uniqstr l, uniqstr r)
 | A uniqstr hash table.  |
 `-----------------------*/
 
-static bool
-hash_compare_uniqstr (void const *m1, void const *m2)
+ایستا bool
+hash_compare_uniqstr (تهی ثابت *m1, تهی ثابت *m2)
 {
-  return STREQ (m1, m2);
+  بازگشت STREQ (m1, m2);
 }
 
-static size_t
-hash_uniqstr (void const *m, size_t tablesize)
+ایستا size_t
+hash_uniqstr (تهی ثابت *m, size_t tablesize)
 {
-  return hash_string (m, tablesize);
+  بازگشت hash_string (m, tablesize);
 }
 
 
@@ -151,14 +151,14 @@ hash_uniqstr (void const *m, size_t tablesize)
 | Create the uniqstrs table.  |
 `----------------------------*/
 
-void
-uniqstrs_new (void)
+تهی
+uniqstrs_new (تهی)
 {
   uniqstrs_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                     NULL,
+                                     پوچ,
                                      hash_uniqstr,
                                      hash_compare_uniqstr,
-                                     free);
+                                     آزاد);
 }
 
 
@@ -166,8 +166,8 @@ uniqstrs_new (void)
 | Perform a task on all the uniqstrs.  |
 `-------------------------------------*/
 
-static void
-uniqstrs_do (Hash_processor processor, void *processor_data)
+ایستا تهی
+uniqstrs_do (Hash_processor processor, تهی *processor_data)
 {
   hash_do_for_each (uniqstrs_table, processor, processor_data);
 }
@@ -177,10 +177,10 @@ uniqstrs_do (Hash_processor processor, void *processor_data)
 | Print them all.  |
 `-----------------*/
 
-void
-uniqstrs_print (void)
+تهی
+uniqstrs_print (تهی)
 {
-  uniqstrs_do (uniqstr_print_processor, NULL);
+  uniqstrs_do (uniqstr_print_processor, پوچ);
 }
 
 
@@ -188,8 +188,8 @@ uniqstrs_print (void)
 | Free the uniqstrs.  |
 `--------------------*/
 
-void
-uniqstrs_free (void)
+تهی
+uniqstrs_free (تهی)
 {
   hash_free (uniqstrs_table);
 }

@@ -28,7 +28,7 @@
 # include "uniqstr.h"
 
 /* A boundary between two characters.  */
-typedef struct
+تعریفنوع ساختار
 {
   /* The name of the file that contains the boundary.  */
   uniqstr file;
@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  صحیح سطر;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,53 +46,53 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  صحیح column;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  صحیح byte;
 
 } boundary;
 
 /* Set the position of \a p. */
-static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+ایستا درونخطی تهی
+boundary_set (boundary *p, ثابت نویسه *f, صحیح l, صحیح c, صحیح b)
 {
   p->file = f;
-  p->line = l;
+  p->سطر = l;
   p->column = c;
   p->byte = b;
 }
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+ایستا درونخطی صحیح
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  صحیح res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
-    res = a.line - b.line;
-  if (!res)
+  اگر (!res)
+    res = a.سطر - b.سطر;
+  اگر (!res)
     res = a.column - b.column;
-  return res;
+  بازگشت res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
-static inline bool
+ایستا درونخطی bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
-          && a.line == b.line
+  بازگشت (a.column == b.column
+          && a.سطر == b.سطر
           && UNIQSTR_EQ (a.file, b.file));
 }
 
 /* A location, that is, a region of source code.  */
-typedef struct
+تعریفنوع ساختار
 {
   /* Boundary just before the location starts.  */
   boundary start;
@@ -104,43 +104,43 @@ typedef struct
 
 # define GRAM_LTYPE location
 
-# define EMPTY_LOCATION_INIT {{NULL, 0, 0, 0}, {NULL, 0, 0, 0}}
-extern location const empty_loc;
+# define EMPTY_LOCATION_INIT {{پوچ, 0, 0, 0}, {پوچ, 0, 0, 0}}
+بیرونی location ثابت empty_loc;
 
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
-void location_compute (location *loc,
-                       boundary *cur, char const *token, size_t size);
+تهی location_compute (location *loc,
+                       boundary *cur, نویسه ثابت *token, size_t size);
 
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+صحیح location_print (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
-void caret_init (void);
+تهی caret_init (تهی);
 
 /* Free any allocated resources and close any open file handles that are
    left-over by the usage of location_caret.  */
-void caret_free (void);
+تهی caret_free (تهی);
 
 /* If -fcaret is enabled, quote the line containing LOC onto OUT.
    Highlight the part of LOC with the color STYLE.  */
-void location_caret (location loc, const char* style, FILE *out);
+تهی location_caret (location loc, ثابت نویسه* style, FILE *out);
 
 /* If -fcaret is enabled, display a suggestion of replacement for LOC
    with S.  To call after location_caret.  */
-void location_caret_suggestion (location loc, const char *s, FILE *out);
+تهی location_caret_suggestion (location loc, ثابت نویسه *s, FILE *out);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+ایستا درونخطی صحیح
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
+  صحیح res = boundary_cmp (a.start, b.start);
+  اگر (!res)
     res = boundary_cmp (a.end, b.end);
-  return res;
+  بازگشت res;
 }
 
 /* Whether this is the empty location.  */
@@ -149,6 +149,6 @@ bool location_empty (location loc);
 /* STR must be formatted as 'file:line.column@byte' or 'file:line.column'.
    It may be '<command line>:3.-1@-1', with -1 to denote no-column/no-byte.
    STR will be modified.  */
-void boundary_set_from_string (boundary *bound, char *str);
+تهی boundary_set_from_string (boundary *bound, نویسه *str);
 
 #endif /* ! defined LOCATION_H_ */

@@ -23,57 +23,57 @@
 
 # include "location.h"
 
-enum { command_line_prio, grammar_prio, default_prio };
+شمارش { command_سطر_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */
 
 /* for -S */
-extern char const *skeleton;
-extern int skeleton_prio;
+بیرونی نویسه ثابت *skeleton;
+بیرونی صحیح skeleton_prio;
 
 /* for -I */
-extern char const *include;
+بیرونی نویسه ثابت *include;
 
-extern bool header_flag;                /* for -d/-H */
-extern bool graph_flag;                 /* for -g */
-extern bool html_flag;                  /* for --html */
-extern bool xml_flag;                   /* for -x */
-extern bool no_lines_flag;              /* for -l */
-extern bool token_table_flag;           /* for -k */
-extern location yacc_loc;               /* for -y */
-extern bool update_flag;                /* for -u */
-extern bool color_debug;                /* --color=debug. */
+بیرونی bool header_flag;                /* for -d/-H */
+بیرونی bool graph_flag;                 /* for -g */
+بیرونی bool html_flag;                  /* for --html */
+بیرونی bool xml_flag;                   /* for -x */
+بیرونی bool no_سطرها_flag;              /* for -l */
+بیرونی bool token_table_flag;           /* for -k */
+بیرونی location yacc_loc;               /* for -y */
+بیرونی bool update_flag;                /* for -u */
+بیرونی bool color_debug;                /* --color=debug. */
 /* GLR_PARSER is true if the input file says to use the GLR
    (Generalized LR) parser, and to output some additional information
    used by the GLR algorithm.  */
 
-extern bool glr_parser;
+بیرونی bool glr_parser;
 
 /* NONDETERMINISTIC_PARSER is true iff conflicts are accepted.  This
    is used by the GLR parser, and might be used in BackTracking
    parsers too.  */
 
-extern bool nondeterministic_parser;
+بیرونی bool nondeterministic_parser;
 
 
 /* --language.  */
-struct bison_language
+ساختار bison_language
 {
-  char language[sizeof "Java"];
-  char skeleton[sizeof "java-skel.m4"];
-  char src_extension[sizeof ".java"];
-  char header_extension[sizeof ".java"];
+  نویسه language[اندازه "Java"];
+  نویسه skeleton[اندازه "java-skel.m4"];
+  نویسه src_extension[اندازه ".java"];
+  نویسه header_extension[اندازه ".java"];
   bool add_tab;
 };
 
-extern int language_prio;
-extern struct bison_language const *language;
+بیرونی صحیح language_prio;
+بیرونی ساختار bison_language ثابت *language;
 
 /*-----------.
 | --report.  |
 `-----------*/
 
-enum report
+شمارش report
   {
     report_none             = 0,
     report_states           = 1 << 0,
@@ -84,12 +84,12 @@ enum report
     report_all              = ~0
   };
 /** What appears in the *.output file.  */
-extern int report_flag;
+بیرونی صحیح report_flag;
 
 /*----------.
 | --trace.  |
 `----------*/
-enum trace
+شمارش trace
   {
     trace_none      = 0,       /**< No traces. */
     trace_scan      = 1 << 0,  /**< Grammar scanner traces. */
@@ -112,13 +112,13 @@ enum trace
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
-extern int trace_flag;
+بیرونی صحیح trace_flag;
 
 /*-------------.
 | --features.  |
 `-------------*/
 
-enum feature
+شمارش feature
   {
     feature_none             = 0,      /**< No additional feature.  */
     feature_caret            = 1 << 0, /**< Output errors with carets.  */
@@ -127,7 +127,7 @@ enum feature
     feature_all              = ~0      /**< All above features.  */
   };
 /** What additional features to use.  */
-extern int feature_flag;
+بیرونی صحیح feature_flag;
 
 
 /** Process the command line arguments.
@@ -135,14 +135,14 @@ extern int feature_flag;
  *  \param argc   size of \a argv
  *  \param argv   list of arguments.
  */
-void getargs (int argc, char *argv[]);
+تهی getargs (صحیح argc, نویسه *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location loc);
-void skeleton_arg (const char *arg, int prio, location loc);
-void set_yacc (location loc);
+تهی language_argmatch (نویسه ثابت *arg, صحیح prio, location loc);
+تهی skeleton_arg (ثابت نویسه *arg, صحیح prio, location loc);
+تهی set_yacc (location loc);
 
 /** In the string \c s, replace all characters \c from by \c to.  */
-void tr (char *s, char from, char to);
+تهی tr (نویسه *s, نویسه from, نویسه to);
 
 #endif /* !GETARGS_H_ */

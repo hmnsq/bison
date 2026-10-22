@@ -18,23 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "print-graph.h"
+#شامل <config.h>
+#شامل "print-graph.h"
 
-#include "system.h"
+#شامل "system.h"
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "graphviz.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "reader.h"
-#include "state.h"
-#include "symtab.h"
+#شامل "closure.h"
+#شامل "complain.h"
+#شامل "conflicts.h"
+#شامل "files.h"
+#شامل "getargs.h"
+#شامل "gram.h"
+#شامل "graphviz.h"
+#شامل "lalr.h"
+#شامل "lr0.h"
+#شامل "reader.h"
+#شامل "state.h"
+#شامل "symtab.h"
 
 
 /*----------------------------.
@@ -44,41 +44,41 @@
 /* Print the lhs of a rule in such a manner that there is no vertical
    repetition, like in *.output files. */
 
-static void
-print_core (struct obstack *oout, state *s)
+ایستا تهی
+print_core (ساختار obstack *oout, state *s)
 {
-  item_index const *sitems = s->items;
-  sym_content *previous_lhs = NULL;
+  item_index ثابت *sitems = s->اقلام;
+  sym_content *previous_lhs = پوچ;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not just its kernel.  */
-  if (report_flag & report_itemsets)
+  اگر (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  obstack_printf (oout, _("State %d"), s->number);
+  obstack_printf (oout, _("State %d"), s->عدد);
   obstack_sgrow (oout, "\\n\\l");
-  for (size_t i = 0; i < snritems; ++i)
+  برای (size_t i = 0; i < snritems; ++i)
     {
-      item_number const *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
+      item_عدد ثابت *sp1 = ritem + sitems[i];
+      rule ثابت *r = item_rule (sp1);
 
-      obstack_printf (oout, "%3d ", r->number);
-      if (previous_lhs && UNIQSTR_EQ (previous_lhs->symbol->tag,
-                                      r->lhs->symbol->tag))
+      obstack_printf (oout, "%3d ", r->عدد);
+      اگر (previous_lhs && UNIQSTR_EQ (previous_lhs->نماد->tag,
+                                      r->lhs->نماد->tag))
         obstack_printf (oout, "%*s| ",
-                        (int) strlen (previous_lhs->symbol->tag), "");
-      else
+                        (صحیح) strlen (previous_lhs->نماد->tag), "");
+      وگرنه
         {
-          obstack_backslash (oout, r->lhs->symbol->tag);
+          obstack_backslash (oout, r->lhs->نماد->tag);
           obstack_printf (oout, ": ");
         }
       previous_lhs = r->lhs;
 
-      for (item_number const *sp = r->rhs; sp < sp1; sp++)
+      برای (item_عدد ثابت *sp = r->rhs; sp < sp1; sp++)
         {
           obstack_backslash (oout, symbols[*sp]->tag);
           obstack_1grow (oout, ' ');
@@ -86,29 +86,29 @@ print_core (struct obstack *oout, state *s)
 
       obstack_sgrow (oout, "•");
 
-      if (0 <= *r->rhs)
-        for (item_number const *sp = sp1; 0 <= *sp; ++sp)
+      اگر (0 <= *r->rhs)
+        برای (item_عدد ثابت *sp = sp1; 0 <= *sp; ++sp)
           {
             obstack_1grow (oout, ' ');
             obstack_backslash (oout, symbols[*sp]->tag);
           }
-      else
+      وگرنه
         obstack_sgrow (oout, " %empty");
 
       /* Experimental feature: display the lookahead tokens. */
-      if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
+      اگر (report_flag & report_lookaheads
+          && item_عدد_is_rule_عدد (*sp1))
         {
           /* Find the reduction we are handling.  */
           reductions *reds = s->reductions;
-          int redno = state_reduction_find (s, r);
+          صحیح redno = state_reduction_find (s, r);
 
           /* Print them if there are.  */
-          if (reds->lookaheads && redno != -1)
+          اگر (reds->lookaheads && redno != -1)
             {
               bitset_iterator biter;
-              int k;
-              char const *sep = "";
+              صحیح k;
+              نویسه ثابت *sep = "";
               obstack_sgrow (oout, "  [");
               BITSET_FOR_EACH (biter, reds->lookaheads[redno], k, 0)
                 {
@@ -129,31 +129,31 @@ print_core (struct obstack *oout, state *s)
 | current node.                                                  |
 `---------------------------------------------------------------*/
 
-static void
-print_actions (state const *s, FILE *fgraph)
+ایستا تهی
+print_actions (state ثابت *s, FILE *fgraph)
 {
-  transitions const *trans = s->transitions;
+  transitions ثابت *trans = s->transitions;
 
-  if (!trans->num && !s->reductions)
-    return;
+  اگر (!trans->رقم && !s->reductions)
+    بازگشت;
 
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i))
+  برای (صحیح i = 0; i < trans->رقم; i++)
+    اگر (!TRANSITION_IS_DISABLED (trans, i))
       {
-        const state *s1 = trans->states[i];
-        const symbol_number sym = s1->accessing_symbol;
+        ثابت state *s1 = trans->states[i];
+        ثابت نماد_عدد sym = s1->accessing_نماد;
 
         /* Shifts are solid, gotos are dashed, and error is dotted.  */
-        char const *style =
+        نویسه ثابت *style =
           (TRANSITION_IS_ERROR (trans, i) ? "dotted"
            : TRANSITION_IS_SHIFT (trans, i) ? "solid"
            : "dashed");
 
-        if (TRANSITION_IS_ERROR (trans, i)
+        اگر (TRANSITION_IS_ERROR (trans, i)
             && STRNEQ (symbols[sym]->tag, "error"))
           abort ();
-        output_edge (s->number, s1->number,
-                     TRANSITION_IS_ERROR (trans, i) ? NULL : symbols[sym]->tag,
+        output_edge (s->عدد, s1->عدد,
+                     TRANSITION_IS_ERROR (trans, i) ? پوچ : symbols[sym]->tag,
                      style, fgraph);
       }
   /* Display reductions. */
@@ -166,30 +166,30 @@ print_actions (state const *s, FILE *fgraph)
 | edges.                                                       |
 `-------------------------------------------------------------*/
 
-static void
+ایستا تهی
 print_state (state *s, FILE *fgraph)
 {
-  struct obstack node_obstack;
+  ساختار obstack گره_obstack;
 
   /* A node's label contains its items.  */
-  obstack_init (&node_obstack);
-  print_core (&node_obstack, s);
-  output_node (s->number, obstack_finish0 (&node_obstack), fgraph);
-  obstack_free (&node_obstack, 0);
+  obstack_init (&گره_obstack);
+  print_core (&گره_obstack, s);
+  output_گره (s->عدد, obstack_finish0 (&گره_obstack), fgraph);
+  obstack_free (&گره_obstack, 0);
 
   /* Output the edges.  */
   print_actions (s, fgraph);
 }
 
 
-void
-print_graph (void)
+تهی
+print_graph (تهی)
 {
   FILE *fgraph = xfopen (spec_graph_file, "w");
   start_graph (fgraph);
 
   /* Output nodes and edges. */
-  for (int i = 0; i < nstates; i++)
+  برای (صحیح i = 0; i < nstates; i++)
     print_state (states[i], fgraph);
 
   finish_graph (fgraph);

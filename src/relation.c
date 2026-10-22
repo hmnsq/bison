@@ -18,36 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#شامل <config.h>
+#شامل "system.h"
 
-#include <bitsetv.h>
+#شامل <bitsetv.h>
 
-#include "getargs.h"
-#include "relation.h"
+#شامل "getargs.h"
+#شامل "relation.h"
 
-void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+تهی
+relation_print (ثابت نویسه *title,
+                relation r, relation_گره size,
+                relation_گره_print print, FILE *out)
 {
-  if (title)
+  اگر (title)
     fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  برای (relation_گره i = 0; i < size; ++i)
+    اگر (r[i])
       {
         fputs ("    ", out);
-        if (print)
+        اگر (print)
           print (i, out);
-        else
+        وگرنه
           fprintf (out, "%3ld", (long) i);
         fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        برای (relation_گره j = 0; r[i][j] != END_گره; ++j)
           {
             fputc (' ', out);
-            if (print)
+            اگر (print)
               print (r[i][j], out);
-            else
+            وگرنه
               fprintf (out, "%3ld", (long) r[i][j]);
           }
         fputc ('\n', out);
@@ -63,62 +63,62 @@ relation_print (const char *title,
 | two.                                                           |
 `---------------------------------------------------------------*/
 
-static relation R;
-static relation_nodes indexes;
-static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
-static bitsetv F;
+ایستا relation R;
+ایستا relation_nodes indexes;
+ایستا relation_nodes vertices;
+ایستا relation_گره بالاترین_2;
+ایستا relation_گره infinity;
+ایستا bitsetv F;
 
-static void
-traverse (relation_node i)
+ایستا تهی
+traverse (relation_گره i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++بالاترین_2] = i;
+  relation_گره height = indexes[i] = بالاترین_2;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  اگر (R[i])
+    برای (relation_گره j = 0; R[i][j] != END_گره; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        اگر (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        اگر (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  اگر (indexes[i] == height)
+    برای (;;)
       {
-        relation_node j = vertices[top--];
+        relation_گره j = vertices[بالاترین_2--];
         indexes[j] = infinity;
 
-        if (i == j)
-          break;
+        اگر (i == j)
+          بشکن;
 
         bitset_copy (F[j], F[i]);
       }
 }
 
 
-void
-relation_digraph (relation r, relation_node size, bitsetv function)
+تهی
+relation_digraph (relation r, relation_گره size, bitsetv function)
 {
   infinity = size + 2;
-  indexes = xcalloc (size + 1, sizeof *indexes);
-  vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  indexes = xcalloc (size + 1, اندازه *indexes);
+  vertices = xnmalloc (size + 1, اندازه *vertices);
+  بالاترین_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  برای (relation_گره i = 0; i < size; i++)
+    اگر (indexes[i] == 0 && R[i])
       traverse (i);
 
-  free (indexes);
-  free (vertices);
+  آزاد (indexes);
+  آزاد (vertices);
 
   function = F;
 }
@@ -128,55 +128,55 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 | Destructively transpose R_ARG, of size N.  |
 `-------------------------------------------*/
 
-void
-relation_transpose (relation *R_arg, relation_node size)
+تهی
+relation_transpose (relation *R_arg, relation_گره size)
 {
   relation r = *R_arg;
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+  اگر (trace_flag & trace_sets)
+    relation_print ("relation_transpose", r, size, پوچ, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
-  size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  size_t *nedges = xcalloc (size, اندازه *nedges);
+  برای (relation_گره i = 0; i < size; i++)
+    اگر (r[i])
+      برای (relation_گره j = 0; r[i][j] != END_گره; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
   /* The result. */
-  relation new_R = xnmalloc (size, sizeof *new_R);
+  relation new_R = xnmalloc (size, اندازه *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
-  relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  relation end_R = xnmalloc (size, اندازه *end_R);
+  برای (relation_گره i = 0; i < size; i++)
     {
-      relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      relation_گره *sp = پوچ;
+      اگر (nedges[i] > 0)
         {
-          sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp = xnmalloc (nedges[i] + 1, اندازه *sp);
+          sp[nedges[i]] = END_گره;
         }
       new_R[i] = sp;
       end_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  برای (relation_گره i = 0; i < size; i++)
+    اگر (r[i])
+      برای (relation_گره j = 0; r[i][j] != END_گره; ++j)
         *end_R[r[i][j]]++ = i;
 
-  free (nedges);
-  free (end_R);
+  آزاد (nedges);
+  آزاد (end_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
-    free (r[i]);
-  free (r);
+  برای (relation_گره i = 0; i < size; i++)
+    آزاد (r[i]);
+  آزاد (r);
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+  اگر (trace_flag & trace_sets)
+    relation_print ("relation_transpose: output", new_R, size, پوچ, stderr);
 
   *R_arg = new_R;
 }
