@@ -17,49 +17,49 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include "Sbitset.h"
+#অন্তর্ভাব "Sbitset.h"
 
 Sbitset
 Sbitset__new (Sbitset__Index nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  প্রত্যাগম xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
-Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
+Sbitset__new_on_obstack (Sbitset__Index nbits, সংরচনা obstack *obstackp)
 {
   Sbitset result;
   Sbitset ptr;
   Sbitset end;
   aver (nbits);
   result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
-  for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
+  প্রতি (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
     *ptr = 0;
-  return result;
+  প্রত্যাগম result;
 }
 
-void
+শূন্য
 Sbitset__delete (Sbitset self)
 {
-  free (self);
+  মুক্ত (self);
 }
 
 bool
 Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
 {
   Sbitset last = self + Sbitset__nbytes (nbits) - 1;
-  for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+  প্রতি (; self < last; ++self)
+    যদি (*self != 0)
+      প্রত্যাগম false;
+  প্রত্যাগম ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
 }
 
-void
+শূন্য
 Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
 {
   Sbitset__Index i;
@@ -70,9 +70,9 @@ Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
+      যদি (first)
         first = false;
-      else
+      অন্যথা
         fprintf (file, ",");
       fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
     }

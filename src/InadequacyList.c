@@ -17,65 +17,65 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include "InadequacyList.h"
+#অন্তর্ভাব "InadequacyList.h"
 
-#include <intprops.h>
+#অন্তর্ভাব <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+ContributionIndex ধ্রুব ContributionIndex__none = -1;
+ContributionIndex ধ্রুব ContributionIndex__error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, প্রতীক *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_গ্রন্থি_গুনতি *গ্রন্থি_গুনতি)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *result = xmalloc (পরিমাণ *result);
+  result->id = *গ্রন্থি_গুনতি;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  যদি (INT_ADD_WRAPV (*গ্রন্থি_গুনতি, 1, গ্রন্থি_গুনতি))
     aver (false);
   IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
+  result->next = রিক্ত;
   result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
+  result->contribution_গুনতি_2 = bitset_গুনতি (actions);
   result->inadequacy.conflict.token = token;
   result->inadequacy.conflict.actions = actions;
-  return result;
+  প্রত্যাগম result;
 }
 
-void
+শূন্য
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  যাবত্ (self)
     {
-      InadequacyList *node = self;
+      InadequacyList *গ্রন্থি = self;
       self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      bitset_free (গ্রন্থি->inadequacy.conflict.actions);
+      মুক্ত (গ্রন্থি);
     }
 }
 
 ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+InadequacyList__getShiftContributionIndex (InadequacyList ধ্রুব *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  যদি (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->অঙ্ক))
+    প্রত্যাগম ContributionIndex__none;
+  প্রত্যাগম self->contribution_গুনতি_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
+প্রতীক *
+InadequacyList__getContributionToken (InadequacyList ধ্রুব *self,
                                       ContributionIndex i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_গুনতি_2); (শূন্য) i;
+  প্রত্যাগম self->inadequacy.conflict.token;
 }
 
-void
+শূন্য
 InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
 {
   InadequacyList *head_old = *list;

@@ -17,14 +17,14 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#অন্তর্ভাব <config.h>
 
-#include "AnnotationList.h"
+#অন্তর্ভাব "AnnotationList.h"
 
-#include "system.h"
+#অন্তর্ভাব "system.h"
 
-#include "ielr.h"
-#include "lalr.h"
+#অন্তর্ভাব "ielr.h"
+#অন্তর্ভাব "lalr.h"
 
 /**
  * \pre
@@ -36,18 +36,18 @@
  *       uninitialized elements.
  *   - All memory was allocated on \c annotations_obstackp.
  */
-static AnnotationList*
-AnnotationList__alloc_on_obstack (ContributionIndex contribution_count,
-                                  struct obstack *annotations_obstackp)
+স্থির AnnotationList*
+AnnotationList__alloc_on_obstack (ContributionIndex contribution_গুনতি,
+                                  সংরচনা obstack *annotations_obstackp)
 {
   AnnotationList *res;
-  size_t contributions_size = contribution_count * sizeof res->contributions[0];
+  size_t contributions_size = contribution_গুনতি * পরিমাণ res->contributions[0];
   res = obstack_alloc (annotations_obstackp,
                        offsetof (AnnotationList, contributions)
                        + contributions_size);
-  res->next = NULL;
-  res->inadequacyNode = NULL;
-  return res;
+  res->next = রিক্ত;
+  res->inadequacy_গ্রন্থি = রিক্ত;
+  প্রত্যাগম res;
 }
 
 /**
@@ -58,12 +58,12 @@ AnnotationList__alloc_on_obstack (ContributionIndex contribution_count,
  *   - \c result = true iff contribution \c ci in \c self represents an
  *     "always" contribution.
  */
-static bool
-AnnotationList__isContributionAlways (AnnotationList const *self,
+স্থির bool
+AnnotationList__isContributionAlways (AnnotationList ধ্রুব *self,
                                       ContributionIndex ci)
 {
-  aver (0 <= ci && ci < self->inadequacyNode->contributionCount);
-  return self->contributions[ci] == NULL;
+  aver (0 <= ci && ci < self->inadequacy_গ্রন্থি->contribution_গুনতি_2);
+  প্রত্যাগম self->contributions[ci] == রিক্ত;
 }
 
 /**
@@ -95,70 +95,70 @@ AnnotationList__isContributionAlways (AnnotationList const *self,
  *    - It determines how the output of \c AnnotationList__debug is sorted.
  *    - Other than that, it's probably not important.
  */
-static bool
-AnnotationList__insertInto (AnnotationList *self, AnnotationList **list,
+স্থির bool
+Annotation_List_ঢোকাও_Into (AnnotationList *self, AnnotationList **list,
                             size_t nitems)
 {
-  AnnotationList **node;
-  for (node = list; *node; node = &(*node)->next)
+  AnnotationList **গ্রন্থি;
+  প্রতি (গ্রন্থি = list; *গ্রন্থি; গ্রন্থি = &(*গ্রন্থি)->next)
     {
-      int cmp = 0;
-      if (self->inadequacyNode->id < (*node)->inadequacyNode->id)
+      পূর্ণাঙ্ক cmp = 0;
+      যদি (self->inadequacy_গ্রন্থি->id < (*গ্রন্থি)->inadequacy_গ্রন্থি->id)
         cmp = 1;
-      else if ((*node)->inadequacyNode->id < self->inadequacyNode->id)
+      অন্যথা যদি ((*গ্রন্থি)->inadequacy_গ্রন্থি->id < self->inadequacy_গ্রন্থি->id)
         cmp = -1;
-      else
-        for (ContributionIndex ci = 0;
-             cmp == 0 && ci < self->inadequacyNode->contributionCount;
+      অন্যথা
+        প্রতি (ContributionIndex ci = 0;
+             cmp == 0 && ci < self->inadequacy_গ্রন্থি->contribution_গুনতি_2;
              ++ci)
           {
-            if (AnnotationList__isContributionAlways (self, ci))
+            যদি (AnnotationList__isContributionAlways (self, ci))
               {
-                if (!AnnotationList__isContributionAlways (*node, ci))
+                যদি (!AnnotationList__isContributionAlways (*গ্রন্থি, ci))
                   cmp = -1;
               }
-            else if (AnnotationList__isContributionAlways (*node, ci))
+            অন্যথা যদি (AnnotationList__isContributionAlways (*গ্রন্থি, ci))
               cmp = 1;
-            else
-              for (size_t item = 0; cmp == 0 && item < nitems; ++item)
+            অন্যথা
+              প্রতি (size_t item = 0; cmp == 0 && item < nitems; ++item)
                 {
-                  if (!Sbitset__test (self->contributions[ci], item))
+                  যদি (!Sbitset__test (self->contributions[ci], item))
                     {
-                      if (Sbitset__test ((*node)->contributions[ci], item))
+                      যদি (Sbitset__test ((*গ্রন্থি)->contributions[ci], item))
                         cmp = -1;
                     }
-                  else if (!Sbitset__test ((*node)->contributions[ci], item))
+                  অন্যথা যদি (!Sbitset__test ((*গ্রন্থি)->contributions[ci], item))
                     cmp = 1;
                 }
           }
-      if (cmp < 0)
+      যদি (cmp < 0)
         {
-          self->next = *node;
-          *node = self;
-          break;
+          self->next = *গ্রন্থি;
+          *গ্রন্থি = self;
+          ভঙ্গ;
         }
-      else if (cmp == 0)
+      অন্যথা যদি (cmp == 0)
         {
-          self = NULL;
-          break;
+          self = রিক্ত;
+          ভঙ্গ;
         }
     }
-  if (!*node)
-    *node = self;
-  return self != NULL;
+  যদি (!*গ্রন্থি)
+    *গ্রন্থি = self;
+  প্রত্যাগম self != রিক্ত;
 }
 
-static bitset
+স্থির bitset
 AnnotationList__compute_shift_tokens (transitions *trans)
 {
   bitset shift_tokens = bitset_create (ntokens, BITSET_FIXED);
-  int i;
+  পূর্ণাঙ্ক i;
   FOR_EACH_SHIFT (trans, i)
-    bitset_set (shift_tokens, TRANSITION_SYMBOL (trans, i));
-  return shift_tokens;
+    bitset_set (shift_tokens, TRANSITION_প্রতীক (trans, i));
+  প্রত্যাগম shift_tokens;
 }
 
-static bitset
+স্থির bitset
 AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
                                            reductions *reds)
 {
@@ -167,7 +167,7 @@ AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
   bitset tokens = bitset_create (ntokens, BITSET_FIXED);
 
   bitset_copy (tokens, shift_tokens);
-  for (int i = 0; i < reds->num; ++i)
+  প্রতি (পূর্ণাঙ্ক i = 0; i < reds->অঙ্ক; ++i)
     {
       bitset_and (conflicted_tokens_rule, tokens, reds->lookaheads[i]);
       bitset_or (conflicted_tokens,
@@ -181,66 +181,66 @@ AnnotationList__compute_conflicted_tokens (bitset shift_tokens,
   bitset_free (tokens);
   bitset_free (conflicted_tokens_rule);
 
-  return conflicted_tokens;
+  প্রত্যাগম conflicted_tokens;
 }
 
-static bool
-AnnotationList__compute_lhs_contributions (state *s, const rule *the_rule,
-                                           symbol_number conflicted_token,
-                                           bitsetv follow_kernel_items,
+স্থির bool
+AnnotationList__compute_lhs_contributions (state *s, ধ্রুব rule *the_rule,
+                                           প্রতীক_সংখ্যা conflicted_token,
+                                           bitsetv follow_kernel_বস্তুসমূহ,
                                            bitsetv always_follows,
                                            state ***predecessors,
                                            bitset **item_lookahead_sets,
-                                           Sbitset *items,
-                                           struct obstack
+                                           Sbitset *বস্তুসমূহ,
+                                           সংরচনা obstack
                                              *annotations_obstackp)
 {
-  goto_number lhs_goto = map_goto (s->number, the_rule->lhs->number);
-  if (bitset_test (always_follows[lhs_goto], conflicted_token))
-    return true;
-  *items = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
+  goto_সংখ্যা lhs_goto = map_goto (s->সংখ্যা, the_rule->lhs->সংখ্যা);
+  যদি (bitset_test (always_follows[lhs_goto], conflicted_token))
+    প্রত্যাগম true;
+  *বস্তুসমূহ = Sbitset__new_on_obstack (s->nitems, annotations_obstackp);
   {
     bitset_iterator biter_item;
     bitset_bindex item;
-    BITSET_FOR_EACH (biter_item, follow_kernel_items[lhs_goto], item, 0)
-      if (ielr_item_has_lookahead (s, 0, item, conflicted_token,
+    BITSET_FOR_EACH (biter_item, follow_kernel_বস্তুসমূহ[lhs_goto], item, 0)
+      যদি (ielr_item_has_lookahead (s, 0, item, conflicted_token,
                                    predecessors, item_lookahead_sets))
-        Sbitset__set (*items, item);
+        Sbitset__set (*বস্তুসমূহ, item);
   }
-  return false;
+  প্রত্যাগম false;
 }
 
-static void
+স্থির শূন্য
 AnnotationList__computePredecessorAnnotations (
   AnnotationList *self, state *s,
-  bitsetv follow_kernel_items,
+  bitsetv follow_kernel_বস্তুসমূহ,
   bitsetv always_follows,
   state ***predecessors,
   bitset **item_lookahead_sets,
   AnnotationList **annotation_lists,
   AnnotationIndex *annotation_counts,
-  struct obstack *annotations_obstackp)
+  সংরচনা obstack *annotations_obstackp)
 {
-  for (state **predecessor = predecessors[s->number]; *predecessor; ++predecessor)
+  প্রতি (state **predecessor = predecessors[s->সংখ্যা]; *predecessor; ++predecessor)
     {
-      AnnotationList *annotation_node =
+      AnnotationList *annotation_গ্রন্থি =
         AnnotationList__alloc_on_obstack (
-          self->inadequacyNode->contributionCount, annotations_obstackp);
-      annotation_node->inadequacyNode = self->inadequacyNode;
+          self->inadequacy_গ্রন্থি->contribution_গুনতি_2, annotations_obstackp);
+      annotation_গ্রন্থি->inadequacy_গ্রন্থি = self->inadequacy_গ্রন্থি;
       bool potential_contribution = false;
-      bitset *lookaheads = NULL;
+      bitset *lookaheads = রিক্ত;
 
-      for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+      প্রতি (ContributionIndex ci = 0; ci < self->inadequacy_গ্রন্থি->contribution_গুনতি_2; ++ci)
         {
-          symbol_number contribution_token =
-            InadequacyList__getContributionToken (self->inadequacyNode, ci)
-            ->content->number;
-          if (AnnotationList__isContributionAlways (self, ci))
+          প্রতীক_সংখ্যা contribution_token =
+            InadequacyList__getContributionToken (self->inadequacy_গ্রন্থি, ci)
+            ->content->সংখ্যা;
+          যদি (AnnotationList__isContributionAlways (self, ci))
             {
-              annotation_node->contributions[ci] = NULL;
-              continue;
+              annotation_গ্রন্থি->contributions[ci] = রিক্ত;
+              অনুবর্ত;
             }
-          annotation_node->contributions[ci] =
+          annotation_গ্রন্থি->contributions[ci] =
             Sbitset__new_on_obstack ((*predecessor)->nitems,
                                      annotations_obstackp);
           {
@@ -259,75 +259,75 @@ AnnotationList__computePredecessorAnnotations (
                    set is still empty, and so it also should never have been
                    identified as a contribution.  This situation is fortunate
                    because we want to avoid the - 2 below in both cases.  */
-                aver (s->items[self_item] > 1);
+                aver (s->বস্তুসমূহ[self_item] > 1);
                 /* If this kernel item is next to the beginning of the RHS,
                    then check all of the predecessor's goto follows for the
                    LHS.  */
-                if (item_number_is_rule_number (ritem[s->items[self_item] - 2]))
+                যদি (item_সংখ্যা_is_rule_সংখ্যা (ritem[s->বস্তুসমূহ[self_item] - 2]))
                   {
-                    Sbitset items;
-                    if (AnnotationList__compute_lhs_contributions (
+                    Sbitset বস্তুসমূহ;
+                    যদি (AnnotationList__compute_lhs_contributions (
                           *predecessor,
-                          item_rule (&ritem[s->items[self_item]]),
+                          item_rule (&ritem[s->বস্তুসমূহ[self_item]]),
                           contribution_token,
-                          follow_kernel_items, always_follows, predecessors,
-                          item_lookahead_sets, &items, annotations_obstackp))
+                          follow_kernel_বস্তুসমূহ, always_follows, predecessors,
+                          item_lookahead_sets, &বস্তুসমূহ, annotations_obstackp))
                       {
                         obstack_free (annotations_obstackp,
-                                      annotation_node->contributions[ci]);
-                        annotation_node->contributions[ci] = NULL;
+                                      annotation_গ্রন্থি->contributions[ci]);
+                        annotation_গ্রন্থি->contributions[ci] = রিক্ত;
                         // "Break" out of SBITSET__FOR_EACH.
-                        goto after_sbitset__for_each;
+                        গচ্ছ after_sbitset__for_each;
                       }
-                    else
+                    অন্যথা
                       {
-                        Sbitset__or (annotation_node->contributions[ci],
-                                     annotation_node->contributions[ci],
-                                     items, (*predecessor)->nitems);
-                        obstack_free (annotations_obstackp, items);
+                        Sbitset__or (annotation_গ্রন্থি->contributions[ci],
+                                     annotation_গ্রন্থি->contributions[ci],
+                                     বস্তুসমূহ, (*predecessor)->nitems);
+                        obstack_free (annotations_obstackp, বস্তুসমূহ);
                       }
                   }
                 /* If this kernel item is later in the RHS, then check the
                    predecessor item's lookahead set.  */
-                else
+                অন্যথা
                   {
                     /* We don't have to start the predecessor item search at
                        the beginning every time because items from both
                        states are sorted by their indices in ritem.  */
-                    for (;
+                    প্রতি (;
                          predecessor_item < (*predecessor)->nitems;
                          ++predecessor_item)
-                      if ((*predecessor)->items[predecessor_item]
-                          == s->items[self_item] - 1)
-                        break;
+                      যদি ((*predecessor)->বস্তুসমূহ[predecessor_item]
+                          == s->বস্তুসমূহ[self_item] - 1)
+                        ভঙ্গ;
                     aver (predecessor_item != (*predecessor)->nitems);
-                    if (ielr_item_has_lookahead (*predecessor, 0,
+                    যদি (ielr_item_has_lookahead (*predecessor, 0,
                                                  predecessor_item,
                                                  contribution_token,
                                                  predecessors,
                                                  item_lookahead_sets))
-                      Sbitset__set (annotation_node->contributions[ci],
+                      Sbitset__set (annotation_গ্রন্থি->contributions[ci],
                                     predecessor_item);
                   }
               }
           after_sbitset__for_each:;
           }
-          if (annotation_node->contributions[ci])
+          যদি (annotation_গ্রন্থি->contributions[ci])
             {
               Sbitset biter;
               Sbitset__Index i;
-              SBITSET__FOR_EACH (annotation_node->contributions[ci],
+              SBITSET__FOR_EACH (annotation_গ্রন্থি->contributions[ci],
                                  (*predecessor)->nitems, biter, i)
                 {
                   potential_contribution = true;
-                  if (!lookaheads)
+                  যদি (!lookaheads)
                     {
                       lookaheads = xnmalloc ((*predecessor)->nitems,
-                                             sizeof *lookaheads);
-                      for (size_t j = 0; j < (*predecessor)->nitems; ++j)
-                        lookaheads[j] = NULL;
+                                             পরিমাণ *lookaheads);
+                      প্রতি (size_t j = 0; j < (*predecessor)->nitems; ++j)
+                        lookaheads[j] = রিক্ত;
                     }
-                  if (!lookaheads[i])
+                  যদি (!lookaheads[i])
                     lookaheads[i] = bitset_create (ntokens, BITSET_FIXED);
                   bitset_set (lookaheads[i], contribution_token);
                 }
@@ -353,57 +353,57 @@ AnnotationList__computePredecessorAnnotations (
            to save space now plus time during state splitting.
          - Otherwise, record the annotation, and compute any resulting
            annotations needed on predecessor states.  */
-      if (potential_contribution)
+      যদি (potential_contribution)
         {
-          if (ContributionIndex__none
+          যদি (ContributionIndex__none
               != AnnotationList__computeDominantContribution (
-                   annotation_node, (*predecessor)->nitems, lookaheads, true))
+                   annotation_গ্রন্থি, (*predecessor)->nitems, lookaheads, true))
             {
-              obstack_free (annotations_obstackp, annotation_node);
-              annotation_node = NULL;
+              obstack_free (annotations_obstackp, annotation_গ্রন্থি);
+              annotation_গ্রন্থি = রিক্ত;
             }
           {
-            for (size_t i = 0; i < (*predecessor)->nitems; ++i)
-              if (lookaheads[i])
+            প্রতি (size_t i = 0; i < (*predecessor)->nitems; ++i)
+              যদি (lookaheads[i])
                 bitset_free (lookaheads[i]);
-            free (lookaheads);
+            মুক্ত (lookaheads);
           }
-          if (annotation_node)
+          যদি (annotation_গ্রন্থি)
             {
-              if (AnnotationList__insertInto (annotation_node,
+              যদি (Annotation_List_ঢোকাও_Into (annotation_গ্রন্থি,
                                               &annotation_lists[(*predecessor)
-                                                                ->number],
+                                                                ->সংখ্যা],
                                               (*predecessor)->nitems))
                 {
-                  ++annotation_counts[(*predecessor)->number];
+                  ++annotation_counts[(*predecessor)->সংখ্যা];
                   AnnotationList__computePredecessorAnnotations (
-                    annotation_node, *predecessor,
-                    follow_kernel_items, always_follows, predecessors,
+                    annotation_গ্রন্থি, *predecessor,
+                    follow_kernel_বস্তুসমূহ, always_follows, predecessors,
                     item_lookahead_sets, annotation_lists, annotation_counts,
                     annotations_obstackp);
                 }
-              else
-                obstack_free (annotations_obstackp, annotation_node);
+              অন্যথা
+                obstack_free (annotations_obstackp, annotation_গ্রন্থি);
             }
         }
-      else
-        obstack_free (annotations_obstackp, annotation_node);
+      অন্যথা
+        obstack_free (annotations_obstackp, annotation_গ্রন্থি);
     }
 }
 
-void
+শূন্য
 AnnotationList__compute_from_inadequacies (
-  state *s, bitsetv follow_kernel_items, bitsetv always_follows,
+  state *s, bitsetv follow_kernel_বস্তুসমূহ, bitsetv always_follows,
   state ***predecessors, bitset **item_lookahead_sets,
   InadequacyList **inadequacy_lists, AnnotationList **annotation_lists,
   AnnotationIndex *annotation_counts,
   ContributionIndex *max_contributionsp,
-  struct obstack *annotations_obstackp,
-  InadequacyListNodeCount *inadequacy_list_node_count)
+  সংরচনা obstack *annotations_obstackp,
+  Inadequacy_List_গ্রন্থি_গুনতি *inadequacy_list_গ্রন্থি_গুনতি)
 {
   /* Return an empty list if s->lookaheads = NULL.  */
-  if (s->consistent)
-    return;
+  যদি (s->consistent)
+    প্রত্যাগম;
 
   bitsetv all_lookaheads = bitsetv_create (s->nitems, ntokens, BITSET_FIXED);
   bitsetv_ones (all_lookaheads);
@@ -416,69 +416,69 @@ AnnotationList__compute_from_inadequacies (
   bitset_bindex conflicted_token;
   BITSET_FOR_EACH (biter_conflict, conflicted_tokens, conflicted_token, 0)
     {
-      AnnotationList *annotation_node;
-      ContributionIndex contribution_count = 0;
+      AnnotationList *annotation_গ্রন্থি;
+      ContributionIndex contribution_গুনতি = 0;
 
       /* Allocate the annotation node.  */
       {
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
-          if (bitset_test (s->reductions->lookaheads[rule_i],
+        প্রতি (পূর্ণাঙ্ক rule_i = 0; rule_i < s->reductions->অঙ্ক; ++rule_i)
+          যদি (bitset_test (s->reductions->lookaheads[rule_i],
                            conflicted_token))
-            ++contribution_count;
-        if (bitset_test (shift_tokens, conflicted_token))
-          ++contribution_count;
-        annotation_node =
-          AnnotationList__alloc_on_obstack (contribution_count,
+            ++contribution_গুনতি;
+        যদি (bitset_test (shift_tokens, conflicted_token))
+          ++contribution_গুনতি;
+        annotation_গ্রন্থি =
+          AnnotationList__alloc_on_obstack (contribution_গুনতি,
                                             annotations_obstackp);
       }
 
       /* FIXME: Would a BITSET_FRUGAL or BITEST_SPARSE be more efficient?  Now
          or convert it inside InadequacyList__new_conflict?  */
-      bitset actions = bitset_create (s->reductions->num + 1, BITSET_FIXED);
+      bitset actions = bitset_create (s->reductions->অঙ্ক + 1, BITSET_FIXED);
       bool potential_contribution = false;
 
       /* Add a contribution for each reduction that has conflicted_token as a
          lookahead.  */
       {
         ContributionIndex ci = 0;
-        int item_i = 0;
-        for (int rule_i = 0; rule_i < s->reductions->num; ++rule_i)
+        পূর্ণাঙ্ক item_i = 0;
+        প্রতি (পূর্ণাঙ্ক rule_i = 0; rule_i < s->reductions->অঙ্ক; ++rule_i)
           {
             rule *the_rule = s->reductions->rules[rule_i];
-            if (bitset_test (s->reductions->lookaheads[rule_i],
+            যদি (bitset_test (s->reductions->lookaheads[rule_i],
                              conflicted_token))
               {
                 bitset_set (actions, rule_i);
                 /* If this reduction is on a kernel item, just add it.  */
-                if (!item_number_is_rule_number (the_rule->rhs[0]))
+                যদি (!item_সংখ্যা_is_rule_সংখ্যা (the_rule->rhs[0]))
                   {
-                    annotation_node->contributions[ci] =
+                    annotation_গ্রন্থি->contributions[ci] =
                       Sbitset__new_on_obstack (s->nitems,
                                                annotations_obstackp);
                     /* Catch item_i up to rule_i.  This works because both are
                        sorted on rule number.  */
-                    while (!item_number_is_rule_number (ritem[s->items[item_i]])
-                           || item_number_as_rule_number (ritem[s->items[item_i]]) != the_rule->number)
+                    যাবত্ (!item_সংখ্যা_is_rule_সংখ্যা (ritem[s->বস্তুসমূহ[item_i]])
+                           || item_সংখ্যা_as_rule_সংখ্যা (ritem[s->বস্তুসমূহ[item_i]]) != the_rule->সংখ্যা)
                       {
                         ++item_i;
                         aver (item_i < s->nitems);
                       }
-                    Sbitset__set (annotation_node->contributions[ci], item_i);
+                    Sbitset__set (annotation_গ্রন্থি->contributions[ci], item_i);
                   }
                 /* Otherwise, add the kernel items whose lookahead sets
                    contribute the conflicted token to this reduction's
                    lookahead set.  */
-                else if (AnnotationList__compute_lhs_contributions (
-                           s, the_rule, conflicted_token, follow_kernel_items,
+                অন্যথা যদি (AnnotationList__compute_lhs_contributions (
+                           s, the_rule, conflicted_token, follow_kernel_বস্তুসমূহ,
                            always_follows, predecessors, item_lookahead_sets,
-                           &annotation_node->contributions[ci],
+                           &annotation_গ্রন্থি->contributions[ci],
                            annotations_obstackp))
                   {
-                    annotation_node->contributions[ci++] = NULL;
-                    continue;
+                    annotation_গ্রন্থি->contributions[ci++] = রিক্ত;
+                    অনুবর্ত;
                   }
                 /* The lookahead token has to come from somewhere.  */
-                aver (!Sbitset__isEmpty (annotation_node->contributions[ci],
+                aver (!Sbitset__isEmpty (annotation_গ্রন্থি->contributions[ci],
                                          s->nitems));
                 ++ci;
                 potential_contribution = true;
@@ -493,37 +493,37 @@ AnnotationList__compute_from_inadequacies (
            the inadequacy to save space now plus time during state splitting.
          - Otherwise, record the annotation and the inadequacy, and compute any
            resulting annotations needed on predecessor states.  */
-      if (potential_contribution)
+      যদি (potential_contribution)
         {
-          if (bitset_test (shift_tokens, conflicted_token))
+          যদি (bitset_test (shift_tokens, conflicted_token))
             {
-              bitset_set (actions, s->reductions->num);
-              annotation_node->contributions[contribution_count - 1] = NULL;
+              bitset_set (actions, s->reductions->অঙ্ক);
+              annotation_গ্রন্থি->contributions[contribution_গুনতি - 1] = রিক্ত;
             }
           {
-            InadequacyList *conflict_node =
+            InadequacyList *conflict_গ্রন্থি =
               InadequacyList__new_conflict (
                 s, symbols[conflicted_token], actions,
-                inadequacy_list_node_count);
-            actions = NULL;
-            annotation_node->inadequacyNode = conflict_node;
-            if (ContributionIndex__none
+                inadequacy_list_গ্রন্থি_গুনতি);
+            actions = রিক্ত;
+            annotation_গ্রন্থি->inadequacy_গ্রন্থি = conflict_গ্রন্থি;
+            যদি (ContributionIndex__none
                 != AnnotationList__computeDominantContribution (
-                     annotation_node, s->nitems, all_lookaheads, true))
+                     annotation_গ্রন্থি, s->nitems, all_lookaheads, true))
               {
-                obstack_free (annotations_obstackp, annotation_node);
-                InadequacyList__delete (conflict_node);
+                obstack_free (annotations_obstackp, annotation_গ্রন্থি);
+                InadequacyList__delete (conflict_গ্রন্থি);
               }
-            else
+            অন্যথা
               {
-                InadequacyList__prependTo (conflict_node,
-                                           &inadequacy_lists[s->number]);
+                InadequacyList__prependTo (conflict_গ্রন্থি,
+                                           &inadequacy_lists[s->সংখ্যা]);
                 {
                   bool b =
-                    AnnotationList__insertInto (annotation_node,
-                                                &annotation_lists[s->number],
+                    Annotation_List_ঢোকাও_Into (annotation_গ্রন্থি,
+                                                &annotation_lists[s->সংখ্যা],
                                                 s->nitems);
-                  aver (b); (void) b;
+                  aver (b); (শূন্য) b;
                 }
                 /* This aver makes sure the
                    AnnotationList__computeDominantContribution check above
@@ -531,21 +531,21 @@ AnnotationList__compute_from_inadequacies (
                    conflict with no token precedence.  */
                 aver (!bitset_test (shift_tokens, conflicted_token)
                       || symbols[conflicted_token]->content->prec);
-                ++annotation_counts[s->number];
-                if (contribution_count > *max_contributionsp)
-                  *max_contributionsp = contribution_count;
+                ++annotation_counts[s->সংখ্যা];
+                যদি (contribution_গুনতি > *max_contributionsp)
+                  *max_contributionsp = contribution_গুনতি;
                 AnnotationList__computePredecessorAnnotations (
-                  annotation_node, s,
-                  follow_kernel_items, always_follows, predecessors,
+                  annotation_গ্রন্থি, s,
+                  follow_kernel_বস্তুসমূহ, always_follows, predecessors,
                   item_lookahead_sets, annotation_lists, annotation_counts,
                   annotations_obstackp);
               }
           }
         }
-      else
+      অন্যথা
         {
           bitset_free (actions);
-          obstack_free (annotations_obstackp, annotation_node);
+          obstack_free (annotations_obstackp, annotation_গ্রন্থি);
         }
     }
 
@@ -554,40 +554,40 @@ AnnotationList__compute_from_inadequacies (
   bitset_free (conflicted_tokens);
 }
 
-void
-AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
+শূন্য
+AnnotationList__debug (AnnotationList ধ্রুব *self, size_t nitems, পূর্ণাঙ্ক spaces)
 {
-  AnnotationList const *a;
+  AnnotationList ধ্রুব *a;
   AnnotationIndex ai;
-  for (a = self, ai = 0; a; a = a->next, ++ai)
+  প্রতি (a = self, ai = 0; a; a = a->next, ++ai)
     {
       fprintf (stderr, "%*sAnnotation %d (manifesting state %d):\n",
                spaces, "",
-               ai, a->inadequacyNode->manifestingState->number);
+               ai, a->inadequacy_গ্রন্থি->manifestingState->সংখ্যা);
       bitset_bindex rulei
-        = bitset_first (a->inadequacyNode->inadequacy.conflict.actions);
-      for (ContributionIndex ci = 0; ci < a->inadequacyNode->contributionCount; ++ci)
+        = bitset_first (a->inadequacy_গ্রন্থি->inadequacy.conflict.actions);
+      প্রতি (ContributionIndex ci = 0; ci < a->inadequacy_গ্রন্থি->contribution_গুনতি_2; ++ci)
         {
-          symbol_number token =
-            InadequacyList__getContributionToken (a->inadequacyNode, ci)
-            ->content->number;
+          প্রতীক_সংখ্যা token =
+            InadequacyList__getContributionToken (a->inadequacy_গ্রন্থি, ci)
+            ->content->সংখ্যা;
           fprintf (stderr, "%*s", spaces+2, "");
-          if (ci == InadequacyList__getShiftContributionIndex (
-                                                               a->inadequacyNode))
+          যদি (ci == InadequacyList__getShiftContributionIndex (
+                                                               a->inadequacy_গ্রন্থি))
             fprintf (stderr, "Contributes shift of token %d.\n", token);
-          else
+          অন্যথা
             {
               fprintf (stderr, "Contributes token %d", token);
               aver (rulei != BITSET_BINDEX_MAX);
               fprintf (stderr, " as lookahead, rule number %d",
-                       a->inadequacyNode->manifestingState
-                       ->reductions->rules[rulei]->number);
+                       a->inadequacy_গ্রন্থি->manifestingState
+                       ->reductions->rules[rulei]->সংখ্যা);
               rulei =
-                bitset_next (a->inadequacyNode->inadequacy.conflict.actions,
+                bitset_next (a->inadequacy_গ্রন্থি->inadequacy.conflict.actions,
                              rulei+1);
-              if (AnnotationList__isContributionAlways (a, ci))
+              যদি (AnnotationList__isContributionAlways (a, ci))
                 fprintf (stderr, " always.");
-              else
+              অন্যথা
                 {
                   fprintf (stderr, ", items: ");
                   Sbitset__fprint (a->contributions[ci], nitems, stderr);
@@ -598,19 +598,19 @@ AnnotationList__debug (AnnotationList const *self, size_t nitems, int spaces)
     }
 }
 
-void
-AnnotationList__computeLookaheadFilter (AnnotationList const *self,
+শূন্য
+AnnotationList__computeLookaheadFilter (AnnotationList ধ্রুব *self,
                                         size_t nitems,
                                         bitsetv lookahead_filter)
 {
   bitsetv_zero (lookahead_filter);
-  for (; self; self = self->next)
-    for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
-      if (!AnnotationList__isContributionAlways (self, ci))
+  প্রতি (; self; self = self->next)
+    প্রতি (ContributionIndex ci = 0; ci < self->inadequacy_গ্রন্থি->contribution_গুনতি_2; ++ci)
+      যদি (!AnnotationList__isContributionAlways (self, ci))
         {
-          symbol_number token =
-            InadequacyList__getContributionToken (self->inadequacyNode, ci)
-            ->content->number;
+          প্রতীক_সংখ্যা token =
+            InadequacyList__getContributionToken (self->inadequacy_গ্রন্থি, ci)
+            ->content->সংখ্যা;
           Sbitset__Index item;
           Sbitset biter;
           SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
@@ -635,138 +635,138 @@ AnnotationList__computeLookaheadFilter (AnnotationList const *self,
  *   - \c result = true iff contribution \c ci in \c self is made by the state
  *     described by \c lookaheads.
  */
-static bool
-AnnotationList__stateMakesContribution (AnnotationList const *self,
+স্থির bool
+AnnotationList__stateMakesContribution (AnnotationList ধ্রুব *self,
                                         size_t nitems, ContributionIndex ci,
                                         bitset *lookaheads)
 {
-  if (AnnotationList__isContributionAlways (self, ci))
-    return true;
-  if (!lookaheads)
-    return false;
+  যদি (AnnotationList__isContributionAlways (self, ci))
+    প্রত্যাগম true;
+  যদি (!lookaheads)
+    প্রত্যাগম false;
   {
-    symbol_number token =
-      InadequacyList__getContributionToken (self->inadequacyNode, ci)
-      ->content->number;
+    প্রতীক_সংখ্যা token =
+      InadequacyList__getContributionToken (self->inadequacy_গ্রন্থি, ci)
+      ->content->সংখ্যা;
     Sbitset__Index item;
     Sbitset biter;
     SBITSET__FOR_EACH (self->contributions[ci], nitems, biter, item)
-      if (lookaheads[item] && bitset_test (lookaheads[item], token))
-        return true;
+      যদি (lookaheads[item] && bitset_test (lookaheads[item], token))
+        প্রত্যাগম true;
   }
-  return false;
+  প্রত্যাগম false;
 }
 
 ContributionIndex
-AnnotationList__computeDominantContribution (AnnotationList const *self,
+AnnotationList__computeDominantContribution (AnnotationList ধ্রুব *self,
                                              size_t nitems, bitset *lookaheads,
                                              bool require_split_stable)
 {
-  ContributionIndex const ci_shift =
-    InadequacyList__getShiftContributionIndex (self->inadequacyNode);
+  ContributionIndex ধ্রুব ci_shift =
+    InadequacyList__getShiftContributionIndex (self->inadequacy_গ্রন্থি);
 
-  symbol *token = self->inadequacyNode->inadequacy.conflict.token;
+  প্রতীক *token = self->inadequacy_গ্রন্থি->inadequacy.conflict.token;
 
   /* S/R conflict.  */
-  if (ci_shift != ContributionIndex__none)
+  যদি (ci_shift != ContributionIndex__none)
     {
       bool find_stable_domination_over_shift = false;
       bool find_stable_error_action_domination = false;
       {
-        int shift_precedence = token->content->prec;
+        পূর্ণাঙ্ক shift_precedence = token->content->prec;
 
         /* If the token has no precedence set, shift is always chosen.  */
-        if (!shift_precedence)
-          return ci_shift;
+        যদি (!shift_precedence)
+          প্রত্যাগম ci_shift;
 
         /* Figure out which reductions contribute, which of those would
            dominate in a R/R comparison, and whether any reduction dominates
            the shift so that the R/R comparison is actually needed.  */
         ContributionIndex ci_rr_dominator = ContributionIndex__none;
-        int actioni;
+        পূর্ণাঙ্ক actioni;
         ContributionIndex ci;
-        for (ci = 0,
-               actioni = bitset_first (self->inadequacyNode->inadequacy
+        প্রতি (ci = 0,
+               actioni = bitset_first (self->inadequacy_গ্রন্থি->inadequacy
                                        .conflict.actions);
-             ci < self->inadequacyNode->contributionCount;
+             ci < self->inadequacy_গ্রন্থি->contribution_গুনতি_2;
              ++ci,
-               actioni = bitset_next (self->inadequacyNode->inadequacy
+               actioni = bitset_next (self->inadequacy_গ্রন্থি->inadequacy
                                       .conflict.actions, actioni+1))
           {
-            int reduce_precedence = 0;
-            if (ci == ci_shift)
-              continue;
+            পূর্ণাঙ্ক reduce_precedence = 0;
+            যদি (ci == ci_shift)
+              অনুবর্ত;
             {
-              rule *r = self->inadequacyNode->manifestingState
+              rule *r = self->inadequacy_গ্রন্থি->manifestingState
                           ->reductions->rules[actioni];
-              if (r->prec)
+              যদি (r->prec)
                 reduce_precedence = r->prec->prec;
             }
             /* If there's no need to check whether this reduction actually
                contributes because the shift eliminates it from the R/R
                comparison anyway, continue to the next reduction.  */
-            if (reduce_precedence
+            যদি (reduce_precedence
                 && (reduce_precedence < shift_precedence
                     || (reduce_precedence == shift_precedence
-                        && token->content->assoc == right_assoc)))
-              continue;
-            if (!AnnotationList__stateMakesContribution (self, nitems, ci,
+                        && token->content->assoc == ডান_assoc)))
+              অনুবর্ত;
+            যদি (!AnnotationList__stateMakesContribution (self, nitems, ci,
                                                          lookaheads))
-              continue;
+              অনুবর্ত;
             /* This uneliminated reduction contributes, so see if it can cause
                an error action.  */
-            if (reduce_precedence == shift_precedence
+            যদি (reduce_precedence == shift_precedence
                  && token->content->assoc == non_assoc)
               {
                 /* It's not possible to find split-stable domination over
                    shift after a potential %nonassoc.  */
-                if (find_stable_domination_over_shift)
-                  return ContributionIndex__none;
-                if (!require_split_stable
+                যদি (find_stable_domination_over_shift)
+                  প্রত্যাগম ContributionIndex__none;
+                যদি (!require_split_stable
                     || AnnotationList__isContributionAlways (self, ci))
-                  return ContributionIndex__error_action;
+                  প্রত্যাগম ContributionIndex__error_action;
                 find_stable_error_action_domination = true;
               }
             /* Consider this uneliminated contributing reduction in the R/R
                comparison.  */
-            if (ci_rr_dominator == ContributionIndex__none)
+            যদি (ci_rr_dominator == ContributionIndex__none)
               ci_rr_dominator = ci;
             /* If precedence is set for this uneliminated contributing
                reduction, it dominates the shift, so try to figure out which
                reduction dominates the R/R comparison.  */
-            if (reduce_precedence)
+            যদি (reduce_precedence)
               {
                 /* It's not possible to find split-stable error action
                    domination after a potential reduction.  */
-                if (find_stable_error_action_domination)
-                  return ContributionIndex__none;
-                if (!require_split_stable)
-                  return ci_rr_dominator;
-                if (!AnnotationList__isContributionAlways (self,
+                যদি (find_stable_error_action_domination)
+                  প্রত্যাগম ContributionIndex__none;
+                যদি (!require_split_stable)
+                  প্রত্যাগম ci_rr_dominator;
+                যদি (!AnnotationList__isContributionAlways (self,
                                                            ci_rr_dominator))
-                  return ContributionIndex__none;
-                if (AnnotationList__isContributionAlways (self, ci))
-                  return ci_rr_dominator;
+                  প্রত্যাগম ContributionIndex__none;
+                যদি (AnnotationList__isContributionAlways (self, ci))
+                  প্রত্যাগম ci_rr_dominator;
                 find_stable_domination_over_shift = true;
               }
           }
       }
-      if (find_stable_domination_over_shift
+      যদি (find_stable_domination_over_shift
           || find_stable_error_action_domination)
-        return ContributionIndex__none;
+        প্রত্যাগম ContributionIndex__none;
       /* No reduce or error action domination found, so shift dominates.  */
-      return ci_shift;
+      প্রত্যাগম ci_shift;
     }
 
   /* R/R conflict, so the reduction with the lowest rule number dominates.
      Fortunately, contributions are sorted by rule number.  */
-  for (ContributionIndex ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
-    if (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
+  প্রতি (ContributionIndex ci = 0; ci < self->inadequacy_গ্রন্থি->contribution_গুনতি_2; ++ci)
+    যদি (AnnotationList__stateMakesContribution (self, nitems, ci, lookaheads))
       {
-        if (require_split_stable
+        যদি (require_split_stable
             && !AnnotationList__isContributionAlways (self, ci))
-          return ContributionIndex__none;
-        return ci;
+          প্রত্যাগম ContributionIndex__none;
+        প্রত্যাগম ci;
       }
-  return ContributionIndex__none;
+  প্রত্যাগম ContributionIndex__none;
 }

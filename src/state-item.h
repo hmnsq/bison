@@ -53,61 +53,61 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_বস্তুসমূহ[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_বস্তুসমূহ || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_বস্তুসমূহ && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+প্রকারনির্দেশ পূর্ণাঙ্ক state_item_সংখ্যা;
 
-typedef struct
+প্রকারনির্দেশ সংরচনা
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  ধ্রুব state *state;
+  item_সংখ্যা *item;
+  state_item_সংখ্যা trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+প্রকারনির্দেশ gl_list_t state_item_list;
 
-extern bitsetv firsts;
+বাহ্য bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+বাহ্য size_t nstate_বস্তুসমূহ;
+বাহ্য state_item_সংখ্যা *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+বাহ্য state_item *state_বস্তুসমূহ;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_সংখ্যা s, state_item_সংখ্যা off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+স্থির অন্তঃস্থ state_item_সংখ্যা
+state_item_index_lookup (state_সংখ্যা s, state_item_সংখ্যা off)
 {
-  return state_item_map[s] + off;
+  প্রত্যাগম state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+শূন্য state_বস্তুসমূহ_init (শূন্য);
+শূন্য state_বস্তুসমূহ_free (শূন্য);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+শূন্য state_item_print (ধ্রুব state_item *si, FILE *out, ধ্রুব বর্ণ *prefix);
+ধ্রুব rule *state_item_rule (ধ্রুব state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (ধ্রুব state_item *si, ধ্রুব state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+স্থির অন্তঃস্থ bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ধ্রুব শূন্য *p = রিক্ত;
+  bool res = gl_list_iterator_next (it, &p, রিক্ত);
+  যদি (res)
     *si = (state_item *) p;
-  else
+  অন্যথা
     gl_list_iterator_free (it);
-  return res;
+  প্রত্যাগম res;
 }
 
 

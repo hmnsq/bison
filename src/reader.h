@@ -27,22 +27,22 @@
 
 # include "parse-gram.h"
 
-typedef struct merger_list
+প্রকারনির্দেশ সংরচনা merger_list
 {
-  struct merger_list* next;
+  সংরচনা merger_list* next;
   uniqstr name;
   /* One symbol whose type is the one used by all the symbols on which
      this merging function is used.  */
-  symbol *sym;
+  প্রতীক *sym;
   /* Where SYM was bound to this merging function.  */
   location type_declaration_loc;
 } merger_list;
 
-void free_merger_functions (void);
-extern merger_list *merge_functions;
+শূন্য free_merger_functions (শূন্য);
+বাহ্য merger_list *merge_functions;
 
 /* List of the start symbols.  */
-extern symbol_list *start_symbols;
+বাহ্য প্রতীক_list *start_symbols;
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
 
@@ -50,36 +50,36 @@ extern symbol_list *start_symbols;
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *switching_token (const symbol *start);
+প্রতীক *switching_token (ধ্রুব প্রতীক *start);
 
-void grammar_start_symbols_add (symbol_list *syms);
+শূন্য grammar_start_symbols_add (প্রতীক_list *syms);
 
-void grammar_current_rule_begin (symbol *lhs, location loc,
+শূন্য grammar_current_rule_begin (প্রতীক *lhs, location loc,
                                  named_ref *lhs_named_ref);
-void grammar_current_rule_end (location loc);
-void grammar_midrule_action (void);
+শূন্য grammar_current_rule_end (location loc);
+শূন্য grammar_midrule_action (শূন্য);
 /* Apply %empty to the current rule.  */
-void grammar_current_rule_empty_set (location loc);
-void grammar_current_rule_prec_set (symbol *precsym, location loc);
-void grammar_current_rule_dprec_set (int dprec, location loc);
-void grammar_current_rule_merge_set (uniqstr name, location loc);
-void grammar_current_rule_expect_sr (int count, location loc);
-void grammar_current_rule_expect_rr (int count, location loc);
-void grammar_current_rule_symbol_append (symbol *sym, location loc,
+শূন্য grammar_current_rule_empty_set (location loc);
+শূন্য grammar_current_rule_prec_set (প্রতীক *precsym, location loc);
+শূন্য grammar_current_rule_dprec_set (পূর্ণাঙ্ক dprec, location loc);
+শূন্য grammar_current_rule_merge_set (uniqstr name, location loc);
+শূন্য grammar_current_rule_expect_sr (পূর্ণাঙ্ক গুনতি, location loc);
+শূন্য grammar_current_rule_expect_rr (পূর্ণাঙ্ক গুনতি, location loc);
+শূন্য grammar_current_rule_প্রতীক_append (প্রতীক *sym, location loc,
                                          named_ref *nref);
 /* Attach an ACTION to the current rule.  */
-void grammar_current_rule_action_append (const char *action, location loc,
+শূন্য grammar_current_rule_action_append (ধ্রুব বর্ণ *action, location loc,
                                          named_ref *nref, uniqstr tag);
 /* Attach a PREDICATE to the current rule.  */
-void grammar_current_rule_predicate_append (const char *predicate, location loc);
+শূন্য grammar_current_rule_predicate_append (ধ্রুব বর্ণ *predicate, location loc);
 
 /* Read in the grammar specification.  */
-void reader (const char *gram);
+শূন্য reader (ধ্রুব বর্ণ *gram);
 
 /* Was %union seen?  */
-extern bool union_seen;
+বাহ্য bool union_seen;
 
 /* Should rules have a default precedence?  */
-extern bool default_prec;
+বাহ্য bool default_prec;
 
 #endif /* !READER_H_ */

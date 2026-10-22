@@ -17,38 +17,38 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include <hash.h>
-#include <quote.h>
+#অন্তর্ভাব <hash.h>
+#অন্তর্ভাব <quote.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "muscle-tab.h"
+#অন্তর্ভাব "complain.h"
+#অন্তর্ভাব "files.h"
+#অন্তর্ভাব "fixits.h"
+#অন্তর্ভাব "getargs.h"
+#অন্তর্ভাব "muscle-tab.h"
 
 muscle_kind
-muscle_kind_new (char const *k)
+muscle_kind_new (বর্ণ ধ্রুব *k)
 {
-  if (STREQ (k, "code"))
-    return muscle_code;
-  else if (STREQ (k, "keyword"))
-    return muscle_keyword;
-  else if (STREQ (k, "string"))
-    return muscle_string;
+  যদি (STREQ (k, "code"))
+    প্রত্যাগম muscle_code;
+  অন্যথা যদি (STREQ (k, "keyword"))
+    প্রত্যাগম muscle_keyword;
+  অন্যথা যদি (STREQ (k, "string"))
+    প্রত্যাগম muscle_string;
   abort ();
 }
 
-char const *
+বর্ণ ধ্রুব *
 muscle_kind_string (muscle_kind k)
 {
-  switch (k)
+  বিকল্প (k)
     {
-    case muscle_code:    return "code";
-    case muscle_keyword: return "keyword";
-    case muscle_string:  return "string";
+    পক্ষ muscle_code:    প্রত্যাগম "code";
+    পক্ষ muscle_keyword: প্রত্যাগম "keyword";
+    পক্ষ muscle_string:  প্রত্যাগম "string";
     }
   abort ();
 }
@@ -56,111 +56,111 @@ muscle_kind_string (muscle_kind k)
 
 /* A key-value pair, along with storage that can be reclaimed when
    this pair is no longer needed.  */
-typedef struct
+প্রকারনির্দেশ সংরচনা
 {
-  char const *key;
-  char const *value;
-  char *storage;
+  বর্ণ ধ্রুব *চাবি;
+  বর্ণ ধ্রুব *মান;
+  বর্ণ *storage;
   muscle_kind kind;
 } muscle_entry;
 
 
 /* The name of muscle for the %define variable VAR (corresponding to
    FIELD, if defined).  */
-static uniqstr
-muscle_name (char const *var, char const *field)
+স্থির uniqstr
+muscle_name (বর্ণ ধ্রুব *var, বর্ণ ধ্রুব *field)
 {
-  if (field)
-    return UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
-  else
-    return UNIQSTR_CONCAT ("percent_define(", var, ")");
+  যদি (field)
+    প্রত্যাগম UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
+  অন্যথা
+    প্রত্যাগম UNIQSTR_CONCAT ("percent_define(", var, ")");
 }
 
 /* An obstack used to create some entries.  */
-struct obstack muscle_obstack;
+সংরচনা obstack muscle_obstack;
 
 /* Initial capacity of muscles hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *muscle_table = NULL;
+স্থির সংরচনা hash_table *muscle_table = রিক্ত;
 
-static bool
-hash_compare_muscles (void const *x, void const *y)
+স্থির bool
+hash_compare_muscles (শূন্য ধ্রুব *x, শূন্য ধ্রুব *y)
 {
-  muscle_entry const *m1 = x;
-  muscle_entry const *m2 = y;
-  return STREQ (m1->key, m2->key);
+  muscle_entry ধ্রুব *m1 = x;
+  muscle_entry ধ্রুব *m2 = y;
+  প্রত্যাগম STREQ (m1->চাবি, m2->চাবি);
 }
 
-static size_t
-hash_muscle (const void *x, size_t tablesize)
+স্থির size_t
+hash_muscle (ধ্রুব শূন্য *x, size_t tablesize)
 {
-  muscle_entry const *m = x;
-  return hash_string (m->key, tablesize);
+  muscle_entry ধ্রুব *m = x;
+  প্রত্যাগম hash_string (m->চাবি, tablesize);
 }
 
 /* Create a fresh muscle name KEY, and insert in the hash table.  */
-static void *
-muscle_entry_new (char const *key)
+স্থির শূন্য *
+muscle_entry_new (বর্ণ ধ্রুব *চাবি)
 {
-  muscle_entry *res = xmalloc (sizeof *res);
-  res->key = key;
-  res->value = NULL;
-  res->storage = NULL;
+  muscle_entry *res = xmalloc (পরিমাণ *res);
+  res->চাবি = চাবি;
+  res->মান = রিক্ত;
+  res->storage = রিক্ত;
   hash_xinsert (muscle_table, res);
-  return res;
+  প্রত্যাগম res;
 }
 
-static void
-muscle_entry_free (void *entry)
+স্থির শূন্য
+muscle_entry_free (শূন্য *entry)
 {
   muscle_entry *mentry = entry;
-  free (mentry->storage);
-  free (mentry);
+  মুক্ত (mentry->storage);
+  মুক্ত (mentry);
 }
 
-void
-muscle_init (void)
+শূন্য
+muscle_init (শূন্য)
 {
   /* Initialize the muscle obstack.  */
   obstack_init (&muscle_obstack);
 
-  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, NULL, hash_muscle,
+  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, রিক্ত, hash_muscle,
                                    hash_compare_muscles, muscle_entry_free);
   /* Avoid warnings if the user defined this variable, but did not
      actually call -Wcex.  */
-  free (muscle_percent_define_get ("cex.timeout"));
+  মুক্ত (muscle_percent_define_get ("cex.timeout"));
 }
 
 
-void
-muscle_free (void)
+শূন্য
+muscle_free (শূন্য)
 {
   hash_free (muscle_table);
-  obstack_free (&muscle_obstack, NULL);
+  obstack_free (&muscle_obstack, রিক্ত);
 }
 
 /* Look for the muscle named KEY.  Return NULL if does not exist.  */
-static muscle_entry *
-muscle_lookup (char const *key)
+স্থির muscle_entry *
+muscle_lookup (বর্ণ ধ্রুব *চাবি)
 {
   muscle_entry probe;
-  probe.key = key;
-  return hash_lookup (muscle_table, &probe);
+  probe.চাবি = চাবি;
+  প্রত্যাগম hash_lookup (muscle_table, &probe);
 }
 
 
-void
-muscle_insert (char const *key, char const *value)
+শূন্য
+muscle_ঢোকাও (বর্ণ ধ্রুব *চাবি, বর্ণ ধ্রুব *মান)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
-    free (entry->storage);
-  else
+  muscle_entry *entry = muscle_lookup (চাবি);
+  যদি (entry)
+    মুক্ত (entry->storage);
+  অন্যথা
     /* First insertion in the hash. */
-    entry = muscle_entry_new (key);
-  entry->value = value;
-  entry->storage = NULL;
+    entry = muscle_entry_new (চাবি);
+  entry->মান = মান;
+  entry->storage = রিক্ত;
 }
 
 
@@ -169,31 +169,31 @@ muscle_insert (char const *key, char const *value)
    associated value.  Copy VALUE and SEPARATOR.  If VALUE does not end
    with TERMINATOR, append one.  */
 
-static void
-muscle_grow (const char *key, const char *val,
-             const char *separator, const char *terminator)
+স্থির শূন্য
+muscle_grow (ধ্রুব বর্ণ *চাবি, ধ্রুব বর্ণ *val,
+             ধ্রুব বর্ণ *separator, ধ্রুব বর্ণ *terminator)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (চাবি);
+  যদি (entry)
     {
-      obstack_sgrow (&muscle_obstack, entry->value);
+      obstack_sgrow (&muscle_obstack, entry->মান);
       obstack_sgrow (&muscle_obstack, separator);
-      free (entry->storage);
+      মুক্ত (entry->storage);
     }
-  else
-    entry = muscle_entry_new (key);
+  অন্যথা
+    entry = muscle_entry_new (চাবি);
 
   obstack_sgrow (&muscle_obstack, val);
 
   size_t vals = strlen (val);
   size_t terms = strlen (terminator);
-  if (terms <= vals
+  যদি (terms <= vals
       && STRNEQ (val + vals - terms, terminator))
     obstack_sgrow (&muscle_obstack, terminator);
 
   {
-    char const *new_val = obstack_finish0 (&muscle_obstack);
-    entry->value = entry->storage = xstrdup (new_val);
+    বর্ণ ধ্রুব *new_val = obstack_finish0 (&muscle_obstack);
+    entry->মান = entry->storage = xstrdup (new_val);
     obstack_free (&muscle_obstack, new_val);
   }
 }
@@ -203,15 +203,15 @@ muscle_grow (const char *key, const char *val,
 | LOC to the current value of KEY.                                  |
 `------------------------------------------------------------------*/
 
-static void
-muscle_syncline_grow (char const *key, location loc)
+স্থির শূন্য
+muscle_syncline_grow (বর্ণ ধ্রুব *চাবি, location loc)
 {
-  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.line);
+  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.সারি);
   obstack_quote (&muscle_obstack,
                  quotearg_style (c_quoting_style, map_file_name (loc.start.file)));
   obstack_sgrow (&muscle_obstack, ")dnl\n[");
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  বর্ণ ধ্রুব *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (চাবি, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
@@ -221,167 +221,167 @@ muscle_syncline_grow (char const *key, location loc)
 | using muscle_syncline_grow.                                       |
 `------------------------------------------------------------------*/
 
-void
-muscle_code_grow (const char *key, const char *val, location loc)
+শূন্য
+muscle_code_grow (ধ্রুব বর্ণ *চাবি, ধ্রুব বর্ণ *val, location loc)
 {
-  muscle_syncline_grow (key, loc);
-  muscle_grow (key, val, "", "\n");
+  muscle_syncline_grow (চাবি, loc);
+  muscle_grow (চাবি, val, "", "\n");
 }
 
 
-void
-muscle_pair_list_grow (const char *muscle,
-                       const char *a1, const char *a2)
+শূন্য
+muscle_pair_list_grow (ধ্রুব বর্ণ *muscle,
+                       ধ্রুব বর্ণ *a1, ধ্রুব বর্ণ *a2)
 {
   obstack_sgrow (&muscle_obstack, "[");
   obstack_quote (&muscle_obstack, a1);
   obstack_sgrow (&muscle_obstack, ", ");
   obstack_quote (&muscle_obstack, a2);
   obstack_sgrow (&muscle_obstack, "]");
-  char const *pair = obstack_finish0 (&muscle_obstack);
+  বর্ণ ধ্রুব *pair = obstack_finish0 (&muscle_obstack);
   muscle_grow (muscle, pair, ",\n", "");
   obstack_free (&muscle_obstack, pair);
 }
 
 
-char const *
-muscle_find_const (char const *key)
+বর্ণ ধ্রুব *
+muscle_find_const (বর্ণ ধ্রুব *চাবি)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  return entry ? entry->value : NULL;
+  muscle_entry *entry = muscle_lookup (চাবি);
+  প্রত্যাগম entry ? entry->মান : রিক্ত;
 }
 
 
-char *
-muscle_find (char const *key)
+বর্ণ *
+muscle_find (বর্ণ ধ্রুব *চাবি)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (চাবি);
+  যদি (entry)
     {
-      aver (entry->value == entry->storage);
-      return entry->storage;
+      aver (entry->মান == entry->storage);
+      প্রত্যাগম entry->storage;
     }
-  return NULL;
+  প্রত্যাগম রিক্ত;
 }
 
 
 /* In the format 'file_name:line.column', append BOUND to MUSCLE.  Use
    digraphs for special characters in the file name.  */
 
-static void
-muscle_boundary_grow (char const *key, boundary bound)
+স্থির শূন্য
+muscle_boundary_grow (বর্ণ ধ্রুব *চাবি, boundary bound)
 {
   obstack_sgrow  (&muscle_obstack, "[[");
   obstack_escape (&muscle_obstack, bound.file);
-  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.line, bound.column, bound.byte);
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.সারি, bound.column, bound.byte);
+  বর্ণ ধ্রুব *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (চাবি, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
 
-void
-muscle_location_grow (char const *key, location loc)
+শূন্য
+muscle_location_grow (বর্ণ ধ্রুব *চাবি, location loc)
 {
-  muscle_boundary_grow (key, loc.start);
-  muscle_grow (key, "", ", ", "");
-  muscle_boundary_grow (key, loc.end);
+  muscle_boundary_grow (চাবি, loc.start);
+  muscle_grow (চাবি, "", ", ", "");
+  muscle_boundary_grow (চাবি, loc.end);
 }
 
-#define COMMON_DECODE(Value)                                    \
-  case '$':                                                     \
-    ++(Value); aver (*(Value) == ']');                          \
-    ++(Value); aver (*(Value) == '[');                          \
+#define COMMON_DECODE(মান_4)                                    \
+  পক্ষ '$':                                                     \
+    ++(মান_4); aver (*(মান_4) == ']');                          \
+    ++(মান_4); aver (*(মান_4) == '[');                          \
     obstack_sgrow (&muscle_obstack, "$");                       \
-    break;                                                      \
-  case '@':                                                     \
-    switch (*++(Value))                                         \
+    ভঙ্গ;                                                      \
+  পক্ষ '@':                                                     \
+    বিকল্প (*++(মান_4))                                         \
       {                                                         \
-      case '\'': /* Ignore "@'" */ break;                       \
-      case '@': obstack_sgrow (&muscle_obstack, "@" ); break;   \
-      case '{': obstack_sgrow (&muscle_obstack, "[" ); break;   \
-      case '}': obstack_sgrow (&muscle_obstack, "]" ); break;   \
-      default: aver (false); break;                             \
+      পক্ষ '\'': /* Ignore "@'" */ ভঙ্গ;                       \
+      পক্ষ '@': obstack_sgrow (&muscle_obstack, "@" ); ভঙ্গ;   \
+      পক্ষ '{': obstack_sgrow (&muscle_obstack, "[" ); ভঙ্গ;   \
+      পক্ষ '}': obstack_sgrow (&muscle_obstack, "]" ); ভঙ্গ;   \
+      স্বভাব: aver (false); ভঙ্গ;                             \
       }                                                         \
-    break;                                                      \
-  default:                                                      \
-    obstack_1grow (&muscle_obstack, *(Value));                  \
-    break;
+    ভঙ্গ;                                                      \
+  স্বভাব:                                                      \
+    obstack_1grow (&muscle_obstack, *(মান_4));                  \
+    ভঙ্গ;
 
 /* Reverse of obstack_escape.  */
-static char *
-string_decode (char const *key)
+স্থির বর্ণ *
+string_decode (বর্ণ ধ্রুব *চাবি)
 {
-  char const *value = muscle_find_const (key);
-  if (!value)
-    return NULL;
-  do {
-    switch (*value)
+  বর্ণ ধ্রুব *মান = muscle_find_const (চাবি);
+  যদি (!মান)
+    প্রত্যাগম রিক্ত;
+  কুরু {
+    বিকল্প (*মান)
       {
-        COMMON_DECODE (value)
-        case '[':
-        case ']':
+        COMMON_DECODE (মান)
+        পক্ষ '[':
+        পক্ষ ']':
           aver (false);
-          break;
+          ভঙ্গ;
       }
-  } while (*value++);
-  char const *value_decoded = obstack_finish (&muscle_obstack);
-  char *res = xstrdup (value_decoded);
-  obstack_free (&muscle_obstack, value_decoded);
-  return res;
+  } যাবত্ (*মান++);
+  বর্ণ ধ্রুব *মান_decoded = obstack_finish (&muscle_obstack);
+  বর্ণ *res = xstrdup (মান_decoded);
+  obstack_free (&muscle_obstack, মান_decoded);
+  প্রত্যাগম res;
 }
 
 /* Reverse of muscle_location_grow.  */
-static location
-location_decode (char const *value)
+স্থির location
+location_decode (বর্ণ ধ্রুব *মান)
 {
-  aver (value);
-  aver (*value == '[');
-  ++value; aver (*value == '[');
+  aver (মান);
+  aver (*মান == '[');
+  ++মান; aver (*মান == '[');
   location loc;
-  while (*++value)
-    switch (*value)
+  যাবত্ (*++মান)
+    বিকল্প (*মান)
       {
-        COMMON_DECODE (value)
-        case '[':
+        COMMON_DECODE (মান)
+        পক্ষ '[':
           aver (false);
-          break;
-        case ']':
-          ++value; aver (*value == ']');
-          char *boundary_str = obstack_finish0 (&muscle_obstack);
-          switch (*++value)
+          ভঙ্গ;
+        পক্ষ ']':
+          ++মান; aver (*মান == ']');
+          বর্ণ *boundary_str = obstack_finish0 (&muscle_obstack);
+          বিকল্প (*++মান)
             {
-            case ',':
+            পক্ষ ',':
               boundary_set_from_string (&loc.start, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              ++value; aver (*value == ' ');
-              ++value; aver (*value == '[');
-              ++value; aver (*value == '[');
-              break;
-            case '\0':
+              ++মান; aver (*মান == ' ');
+              ++মান; aver (*মান == '[');
+              ++মান; aver (*মান == '[');
+              ভঙ্গ;
+            পক্ষ '\0':
               boundary_set_from_string (&loc.end, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              return loc;
-              break;
-            default:
+              প্রত্যাগম loc;
+              ভঙ্গ;
+            স্বভাব:
               aver (false);
-              break;
+              ভঙ্গ;
             }
-          break;
+          ভঙ্গ;
       }
   aver (false);
-  return loc;
+  প্রত্যাগম loc;
 }
 
-void
-muscle_user_name_list_grow (char const *key, char const *user_name,
+শূন্য
+muscle_user_name_list_grow (বর্ণ ধ্রুব *চাবি, বর্ণ ধ্রুব *user_name,
                             location loc)
 {
-  muscle_grow (key, "[[[[", ",", "");
-  muscle_grow (key, user_name, "", "");
-  muscle_grow (key, "]], ", "", "");
-  muscle_location_grow (key, loc);
-  muscle_grow (key, "]]", "", "");
+  muscle_grow (চাবি, "[[[[", ",", "");
+  muscle_grow (চাবি, user_name, "", "");
+  muscle_grow (চাবি, "]], ", "", "");
+  muscle_location_grow (চাবি, loc);
+  muscle_grow (চাবি, "]]", "", "");
 }
 
 
@@ -400,25 +400,25 @@ muscle_user_name_list_grow (char const *key, char const *user_name,
     "foo=", "baz"    => "%define foo"
  */
 
-static
-char *
-define_directive (char const *assignment,
+স্থির
+বর্ণ *
+define_directive (বর্ণ ধ্রুব *assignment,
                   muscle_kind kind,
-                  char const *value)
+                  বর্ণ ধ্রুব *মান)
 {
-  char *eq = strchr (assignment, '=');
-  char const *fmt
-    = eq || !value || !*value ? "%%define %s"
+  বর্ণ *eq = strchr (assignment, '=');
+  বর্ণ ধ্রুব *fmt
+    = eq || !মান || !*মান ? "%%define %s"
     : kind == muscle_code     ? "%%define %s {%s}"
     : kind == muscle_string   ? "%%define %s \"%s\""
     :                           "%%define %s %s";
-  char *res = xmalloc (strlen (fmt) + strlen (assignment)
-                       + (value ? strlen (value) : 0));
-  sprintf (res, fmt, assignment, value);
+  বর্ণ *res = xmalloc (strlen (fmt) + strlen (assignment)
+                       + (মান ? strlen (মান) : 0));
+  sprintf (res, fmt, assignment, মান);
   eq = strchr (res, '=');
-  if (eq)
+  যদি (eq)
     *eq = eq[1] ? ' ' : '\0';
-  return res;
+  প্রত্যাগম res;
 }
 
 /** If the \a variable name is obsolete, return the name to use,
@@ -426,20 +426,20 @@ define_directive (char const *assignment,
  *
  * Allocates the returned value if needed, otherwise the returned
  * value is exactly \a variable.  */
-static
-char const *
-muscle_percent_variable_update (char const *variable,
+স্থির
+বর্ণ ধ্রুব *
+muscle_percent_variable_update (বর্ণ ধ্রুব *variable,
                                 muscle_kind kind,
-                                char const **value,
-                                char **old, char **upd)
+                                বর্ণ ধ্রুব **মান,
+                                বর্ণ **old, বর্ণ **upd)
 {
-  typedef struct
+  প্রকারনির্দেশ সংরচনা
   {
-    const char *obsolete;
-    const char *updated;
+    ধ্রুব বর্ণ *obsolete;
+    ধ্রুব বর্ণ *updated;
     muscle_kind kind;
   } conversion_type;
-  const conversion_type conversion[] =
+  ধ্রুব conversion_type conversion[] =
   {
     { "%error-verbose",             "parse.error=verbose",       muscle_keyword },
     { "%error_verbose",             "parse.error=verbose",       muscle_keyword },
@@ -464,51 +464,51 @@ muscle_percent_variable_update (char const *variable,
     { "stype",                      "api.value.type",            -1 },
     { "variant=",                   "api.value.type=variant",    -1 },
     { "variant=true",               "api.value.type=variant",    -1 },
-    { NULL, NULL, -1, }
+    { রিক্ত, রিক্ত, -1, }
   };
 
-  for (conversion_type const *c = conversion; c->obsolete; ++c)
+  প্রতি (conversion_type ধ্রুব *c = conversion; c->obsolete; ++c)
     {
-      char const *eq = strchr (c->obsolete, '=');
-      if (eq
+      বর্ণ ধ্রুব *eq = strchr (c->obsolete, '=');
+      যদি (eq
           ? (!strncmp (c->obsolete, variable, eq - c->obsolete)
-             && STREQ (eq + 1, *value))
+             && STREQ (eq + 1, *মান))
           : STREQ (c->obsolete, variable))
         {
           /* Generate the deprecation warning. */
           *old = c->obsolete[0] == '%'
             ? xstrdup (c->obsolete)
-            : define_directive (c->obsolete, kind, *value);
-          *upd = define_directive (c->updated, c->kind, *value);
+            : define_directive (c->obsolete, kind, *মান);
+          *upd = define_directive (c->updated, c->kind, *মান);
           /* Update the variable and its value.  */
           {
-            char *res = xstrdup (c->updated);
-            char *eq2 = strchr (res, '=');
-            if (eq2)
+            বর্ণ *res = xstrdup (c->updated);
+            বর্ণ *eq2 = strchr (res, '=');
+            যদি (eq2)
               {
                 *eq2 = '\0';
-                *value = eq2 + 1;
+                *মান = eq2 + 1;
               }
-            return res;
+            প্রত্যাগম res;
           }
         }
     }
-  return variable;
+  প্রত্যাগম variable;
 }
 
-void
-muscle_percent_define_insert (char const *var, location variable_loc,
+শূন্য
+muscle_percent_define_ঢোকাও (বর্ণ ধ্রুব *var, location variable_loc,
                               muscle_kind kind,
-                              char const *value,
+                              বর্ণ ধ্রুব *মান,
                               muscle_percent_define_how how)
 {
   /* Backward compatibility.  */
-  char *old = NULL;
-  char *upd = NULL;
-  char const *variable
+  বর্ণ *old = রিক্ত;
+  বর্ণ *upd = রিক্ত;
+  বর্ণ ধ্রুব *variable
     = muscle_percent_variable_update (var, kind,
-                                      &value, &old, &upd);
-  uniqstr name = muscle_name (variable, NULL);
+                                      &মান, &old, &upd);
+  uniqstr name = muscle_name (variable, রিক্ত);
   uniqstr loc_name = muscle_name (variable, "loc");
   uniqstr syncline_name = muscle_name (variable, "syncline");
   uniqstr how_name = muscle_name (variable, "how");
@@ -516,18 +516,18 @@ muscle_percent_define_insert (char const *var, location variable_loc,
 
   /* Command-line options are processed before the grammar file.  */
   bool warned = false;
-  if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
+  যদি (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
     {
-      char const *current_value = muscle_find_const (name);
-      if (current_value)
+      বর্ণ ধ্রুব *current_মান = muscle_find_const (name);
+      যদি (current_মান)
         {
-          long l = strtol (muscle_find_const (how_name), NULL, 10);
+          long l = strtol (muscle_find_const (how_name), রিক্ত, 10);
           muscle_percent_define_how how_old
             = 0 <= l && l <= INT_MAX ? l : INT_MAX;
-          if (how_old == MUSCLE_PERCENT_DEFINE_F)
-            goto end;
+          যদি (how_old == MUSCLE_PERCENT_DEFINE_F)
+            গচ্ছ end;
           /* If assigning the same value, make it a warning.  */
-          warnings warn = STREQ (value, current_value) ? Wother : complaint;
+          warnings warn = STREQ (মান, current_মান) ? Wother : complaint;
           complain (&variable_loc, warn,
                     _("%%define variable %s redefined"),
                     quote (variable));
@@ -538,229 +538,229 @@ muscle_percent_define_insert (char const *var, location variable_loc,
         }
     }
 
-  if (!warned && old && upd)
+  যদি (!warned && old && upd)
     deprecated_directive (&variable_loc, old, upd);
 
-  MUSCLE_INSERT_STRING (name, value);
-  muscle_insert (loc_name, "");
+  MUSCLE_ঢোকাও_STRING (name, মান);
+  muscle_ঢোকাও (loc_name, "");
   muscle_location_grow (loc_name, variable_loc);
-  muscle_insert (syncline_name, "");
+  muscle_ঢোকাও (syncline_name, "");
   muscle_syncline_grow (syncline_name, variable_loc);
   muscle_user_name_list_grow ("percent_define_user_variables", variable,
                               variable_loc);
-  MUSCLE_INSERT_INT (how_name, how);
-  MUSCLE_INSERT_STRING (kind_name, muscle_kind_string (kind));
+  MUSCLE_ঢোকাও_INT (how_name, how);
+  MUSCLE_ঢোকাও_STRING (kind_name, muscle_kind_string (kind));
  end:
-  free (old);
-  free (upd);
-  if (variable != var)
-    free ((char *) variable);
+  মুক্ত (old);
+  মুক্ত (upd);
+  যদি (variable != var)
+    মুক্ত ((বর্ণ *) variable);
 }
 
 /* This is used for backward compatibility, e.g., "%define api.pure"
    supersedes "%pure-parser".  */
-void
-muscle_percent_define_ensure (char const *variable, location loc,
-                              bool value)
+শূন্য
+muscle_percent_define_ensure (বর্ণ ধ্রুব *variable, location loc,
+                              bool মান)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char const *val = value ? "" : "false";
+  uniqstr name = muscle_name (variable, রিক্ত);
+  বর্ণ ধ্রুব *val = মান ? "" : "false";
 
   /* Don't complain is VARIABLE is already defined, but be sure to set
      its value to VAL.  */
-  if (!muscle_find_const (name)
-      || muscle_percent_define_flag_if (variable) != value)
-    muscle_percent_define_insert (variable, loc, muscle_keyword, val,
+  যদি (!muscle_find_const (name)
+      || muscle_percent_define_flag_if (variable) != মান)
+    muscle_percent_define_ঢোকাও (variable, loc, muscle_keyword, val,
                                   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 /* Mark %define VARIABLE as used.  */
-static void
-muscle_percent_define_use (char const *variable)
+স্থির শূন্য
+muscle_percent_define_use (বর্ণ ধ্রুব *variable)
 {
-  muscle_insert (muscle_name (variable, "bison_variables"), "");
+  muscle_ঢোকাও (muscle_name (variable, "bison_variables"), "");
 }
 
 /* The value of %define variable VARIABLE (corresponding to FIELD, if
    defined).  Do not register as used, but diagnose unset variables.  */
 
-static
-char const *
-muscle_percent_define_get_raw (char const *variable, char const *field)
+স্থির
+বর্ণ ধ্রুব *
+muscle_percent_define_get_raw (বর্ণ ধ্রুব *variable, বর্ণ ধ্রুব *field)
 {
   uniqstr name = muscle_name (variable, field);
-  char const *res = muscle_find_const (name);
-  if (!res)
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  বর্ণ ধ্রুব *res = muscle_find_const (name);
+  যদি (!res)
+    complain (রিক্ত, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_get_raw", quote (variable));
-  return res;
+  প্রত্যাগম res;
 }
 
-char *
-muscle_percent_define_get (char const *variable)
+বর্ণ *
+muscle_percent_define_get (বর্ণ ধ্রুব *variable)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char *value = string_decode (name);
-  if (!value)
-    value = xstrdup ("");
+  uniqstr name = muscle_name (variable, রিক্ত);
+  বর্ণ *মান = string_decode (name);
+  যদি (!মান)
+    মান = xstrdup ("");
   muscle_percent_define_use (variable);
-  return value;
+  প্রত্যাগম মান;
 }
 
 /* The kind of VARIABLE.  An error if undefined.  */
-static muscle_kind
-muscle_percent_define_get_kind (char const *variable)
+স্থির muscle_kind
+muscle_percent_define_get_kind (বর্ণ ধ্রুব *variable)
 {
-  return muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
+  প্রত্যাগম muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
 }
 
 /* Check the kind of VARIABLE.  An error if undefined.  */
-static void
-muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
+স্থির শূন্য
+muscle_percent_define_check_kind (বর্ণ ধ্রুব *variable, muscle_kind kind)
 {
-  if (muscle_percent_define_get_kind (variable) != kind)
+  যদি (muscle_percent_define_get_kind (variable) != kind)
     {
       location loc = muscle_percent_define_get_loc (variable);
-      switch (kind)
+      বিকল্প (kind)
         {
-        case muscle_code:
+        পক্ষ muscle_code:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '{...}' values"),
                     variable);
-          break;
-        case muscle_keyword:
+          ভঙ্গ;
+        পক্ষ muscle_keyword:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires keyword values"),
                     variable);
-          break;
-        case muscle_string:
+          ভঙ্গ;
+        পক্ষ muscle_string:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '\"...\"' values"),
                     variable);
-          break;
+          ভঙ্গ;
         }
     }
 }
 
 
 location
-muscle_percent_define_get_loc (char const *variable)
+muscle_percent_define_get_loc (বর্ণ ধ্রুব *variable)
 {
-  return location_decode (muscle_percent_define_get_raw (variable, "loc"));
+  প্রত্যাগম location_decode (muscle_percent_define_get_raw (variable, "loc"));
 }
 
-char const *
-muscle_percent_define_get_syncline (char const *variable)
+বর্ণ ধ্রুব *
+muscle_percent_define_get_syncline (বর্ণ ধ্রুব *variable)
 {
-  return muscle_percent_define_get_raw (variable, "syncline");
+  প্রত্যাগম muscle_percent_define_get_raw (variable, "syncline");
 }
 
 bool
-muscle_percent_define_ifdef (char const *variable)
+muscle_percent_define_ifdef (বর্ণ ধ্রুব *variable)
 {
-  if (muscle_find_const (muscle_name (variable, NULL)))
+  যদি (muscle_find_const (muscle_name (variable, রিক্ত)))
     {
       muscle_percent_define_use (variable);
-      return true;
+      প্রত্যাগম true;
     }
-  else
-    return false;
+  অন্যথা
+    প্রত্যাগম false;
 }
 
 bool
-muscle_percent_define_flag_if (char const *variable)
+muscle_percent_define_flag_if (বর্ণ ধ্রুব *variable)
 {
   uniqstr invalid_boolean_name = muscle_name (variable, "invalid_boolean");
   bool res = false;
 
-  if (muscle_percent_define_ifdef (variable))
+  যদি (muscle_percent_define_ifdef (variable))
     {
-      char *value = muscle_percent_define_get (variable);
+      বর্ণ *মান = muscle_percent_define_get (variable);
       muscle_percent_define_check_kind (variable, muscle_keyword);
-      if (value[0] == '\0' || STREQ (value, "true"))
+      যদি (মান[0] == '\0' || STREQ (মান, "true"))
         res = true;
-      else if (STREQ (value, "false"))
+      অন্যথা যদি (STREQ (মান, "false"))
         res = false;
-      else if (!muscle_find_const (invalid_boolean_name))
+      অন্যথা যদি (!muscle_find_const (invalid_boolean_name))
         {
-          muscle_insert (invalid_boolean_name, "");
+          muscle_ঢোকাও (invalid_boolean_name, "");
           location loc = muscle_percent_define_get_loc (variable);
           complain (&loc, complaint,
                     _("invalid value for %%define Boolean variable %s"),
                     quote (variable));
         }
-      free (value);
+      মুক্ত (মান);
     }
-  else
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  অন্যথা
+    complain (রিক্ত, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_flag", quote (variable));
 
-  return res;
+  প্রত্যাগম res;
 }
 
-void
-muscle_percent_define_default (char const *variable, char const *value)
+শূন্য
+muscle_percent_define_default (বর্ণ ধ্রুব *variable, বর্ণ ধ্রুব *মান)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  if (!muscle_find_const (name))
+  uniqstr name = muscle_name (variable, রিক্ত);
+  যদি (!muscle_find_const (name))
     {
-      MUSCLE_INSERT_STRING (name, value);
-      MUSCLE_INSERT_STRING (muscle_name (variable, "kind"), "keyword");
+      MUSCLE_ঢোকাও_STRING (name, মান);
+      MUSCLE_ঢোকাও_STRING (muscle_name (variable, "kind"), "keyword");
       {
         uniqstr loc_name = muscle_name (variable, "loc");
         location loc;
         loc.start.file = "<default value>";
-        loc.start.line = -1;
+        loc.start.সারি = -1;
         loc.start.column = -1;
         loc.start.byte = -1;
         loc.end = loc.start;
-        muscle_insert (loc_name, "");
+        muscle_ঢোকাও (loc_name, "");
         muscle_location_grow (loc_name, loc);
       }
-      muscle_insert (muscle_name (variable, "syncline"), "");
+      muscle_ঢোকাও (muscle_name (variable, "syncline"), "");
     }
 }
 
-void
-muscle_percent_define_check_values (char const * const *values)
+শূন্য
+muscle_percent_define_check_মানসমূহ (বর্ণ ধ্রুব * ধ্রুব *মানসমূহ)
 {
-  for (; *values; ++values)
+  প্রতি (; *মানসমূহ; ++মানসমূহ)
     {
-      char const * const *variablep = values;
-      uniqstr name = muscle_name (*variablep, NULL);
-      char *value = string_decode (name);
+      বর্ণ ধ্রুব * ধ্রুব *variablep = মানসমূহ;
+      uniqstr name = muscle_name (*variablep, রিক্ত);
+      বর্ণ *মান = string_decode (name);
       muscle_percent_define_check_kind (*variablep, muscle_keyword);
-      if (value)
+      যদি (মান)
         {
-          for (++values; *values; ++values)
-            if (STREQ (value, *values))
-              break;
-          if (!*values)
+          প্রতি (++মানসমূহ; *মানসমূহ; ++মানসমূহ)
+            যদি (STREQ (মান, *মানসমূহ))
+              ভঙ্গ;
+          যদি (!*মানসমূহ)
             {
               location loc = muscle_percent_define_get_loc (*variablep);
               complain (&loc, complaint,
                         _("invalid value for %%define variable %s: %s"),
-                        quote (*variablep), quote_n (1, value));
-              for (values = variablep + 1; *values; ++values)
+                        quote (*variablep), quote_n (1, মান));
+              প্রতি (মানসমূহ = variablep + 1; *মানসমূহ; ++মানসমূহ)
                 subcomplain (&loc, complaint | no_caret | silent,
-                             _("accepted value: %s"), quote (*values));
+                             _("accepted value: %s"), quote (*মানসমূহ));
             }
-          else
-            while (*values)
-              ++values;
-          free (value);
+          অন্যথা
+            যাবত্ (*মানসমূহ)
+              ++মানসমূহ;
+          মুক্ত (মান);
         }
-      else
-        complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+      অন্যথা
+        complain (রিক্ত, fatal, _("%s: undefined %%define variable %s"),
                   "muscle_percent_define_check_values", quote (*variablep));
     }
 }
 
-void
-muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
-                          char const *code, location code_loc)
+শূন্য
+muscle_percent_code_grow (বর্ণ ধ্রুব *qualifier, location qualifier_loc,
+                          বর্ণ ধ্রুব *code, location code_loc)
 {
-  char const *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
+  বর্ণ ধ্রুব *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
   muscle_code_grow (name, code, code_loc);
   muscle_user_name_list_grow ("percent_code_user_qualifiers", qualifier,
                                qualifier_loc);
@@ -771,23 +771,23 @@ muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
 | Output the definition of ENTRY as a m4_define.  |
 `------------------------------------------------*/
 
-static inline bool
+স্থির অন্তঃস্থ bool
 muscle_m4_output (muscle_entry *entry, FILE *out)
 {
   fprintf (out,
            "m4_define([b4_%s],\n"
-           "[[%s]])\n\n\n", entry->key, entry->value);
-  return true;
+           "[[%s]])\n\n\n", entry->চাবি, entry->মান);
+  প্রত্যাগম true;
 }
 
-static bool
-muscle_m4_output_processor (void *entry, void *out)
+স্থির bool
+muscle_m4_output_processor (শূন্য *entry, শূন্য *out)
 {
-  return muscle_m4_output (entry, out);
+  প্রত্যাগম muscle_m4_output (entry, out);
 }
 
 
-void
+শূন্য
 muscles_m4_output (FILE *out)
 {
   hash_do_for_each (muscle_table, muscle_m4_output_processor, out);
