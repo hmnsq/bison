@@ -18,41 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <bitsetv.h>
+#ضمن <bitsetv.h>
 
-#include "getargs.h"
-#include "relation.h"
+#ضمن "getargs.h"
+#ضمن "relation.h"
 
-void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+فراغ
+اړیکه_print (ثابت حرف *title,
+                اړیکه r, اړیکه_غوټه اندازه,
+                اړیکه_غوټه_print print, FILE *بهر)
 {
-  if (title)
-    fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  إذا (title)
+    fprintf (بهر, "%s:\n", title);
+  لكل (اړیکه_غوټه i = 0; i < اندازه; ++i)
+    إذا (r[i])
       {
-        fputs ("    ", out);
-        if (print)
-          print (i, out);
-        else
-          fprintf (out, "%3ld", (long) i);
-        fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        fputs ("    ", بهر);
+        إذا (print)
+          print (i, بهر);
+        وإلا
+          fprintf (بهر, "%3ld", (اوږد) i);
+        fputc (':', بهر);
+        لكل (اړیکه_غوټه j = 0; r[i][j] != پای_ټکی_غوټه; ++j)
           {
-            fputc (' ', out);
-            if (print)
-              print (r[i][j], out);
-            else
-              fprintf (out, "%3ld", (long) r[i][j]);
+            fputc (' ', بهر);
+            إذا (print)
+              print (r[i][j], بهر);
+            وإلا
+              fprintf (بهر, "%3ld", (اوږد) r[i][j]);
           }
-        fputc ('\n', out);
+        fputc ('\n', بهر);
       }
-  fputc ('\n', out);
+  fputc ('\n', بهر);
 }
 
 
@@ -63,62 +63,62 @@ relation_print (const char *title,
 | two.                                                           |
 `---------------------------------------------------------------*/
 
-static relation R;
-static relation_nodes indexes;
-static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
-static bitsetv F;
+ساكن اړیکه R;
+ساكن اړیکه_nodes indexes;
+ساكن اړیکه_nodes vertices;
+ساكن اړیکه_غوټه سر_2;
+ساكن اړیکه_غوټه infinity;
+ساكن bitsetv F;
 
-static void
-traverse (relation_node i)
+ساكن فراغ
+traverse (اړیکه_غوټه i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++سر_2] = i;
+  اړیکه_غوټه لوړوالی = indexes[i] = سر_2;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  إذا (R[i])
+    لكل (اړیکه_غوټه j = 0; R[i][j] != پای_ټکی_غوټه; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        إذا (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        إذا (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  إذا (indexes[i] == لوړوالی)
+    لكل (;;)
       {
-        relation_node j = vertices[top--];
+        اړیکه_غوټه j = vertices[سر_2--];
         indexes[j] = infinity;
 
-        if (i == j)
-          break;
+        إذا (i == j)
+          اكسر;
 
         bitset_copy (F[j], F[i]);
       }
 }
 
 
-void
-relation_digraph (relation r, relation_node size, bitsetv function)
+فراغ
+اړیکه_digraph (اړیکه r, اړیکه_غوټه اندازه, bitsetv function)
 {
-  infinity = size + 2;
-  indexes = xcalloc (size + 1, sizeof *indexes);
-  vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  infinity = اندازه + 2;
+  indexes = xcalloc (اندازه + 1, حجم *indexes);
+  vertices = xnmalloc (اندازه + 1, حجم *vertices);
+  سر_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  لكل (اړیکه_غوټه i = 0; i < اندازه; i++)
+    إذا (indexes[i] == 0 && R[i])
       traverse (i);
 
-  free (indexes);
-  free (vertices);
+  حرر (indexes);
+  حرر (vertices);
 
   function = F;
 }
@@ -128,55 +128,55 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 | Destructively transpose R_ARG, of size N.  |
 `-------------------------------------------*/
 
-void
-relation_transpose (relation *R_arg, relation_node size)
+فراغ
+اړیکه_transpose (اړیکه *R_arg, اړیکه_غوټه اندازه)
 {
-  relation r = *R_arg;
+  اړیکه r = *R_arg;
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+  إذا (trace_flag & trace_sets)
+    اړیکه_print ("relation_transpose", r, اندازه, عدم, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
-  size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  size_t *nedges = xcalloc (اندازه, حجم *nedges);
+  لكل (اړیکه_غوټه i = 0; i < اندازه; i++)
+    إذا (r[i])
+      لكل (اړیکه_غوټه j = 0; r[i][j] != پای_ټکی_غوټه; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
   /* The result. */
-  relation new_R = xnmalloc (size, sizeof *new_R);
+  اړیکه new_R = xnmalloc (اندازه, حجم *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
-  relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  اړیکه پای_ټکی_R = xnmalloc (اندازه, حجم *پای_ټکی_R);
+  لكل (اړیکه_غوټه i = 0; i < اندازه; i++)
     {
-      relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      اړیکه_غوټه *sp = عدم;
+      إذا (nedges[i] > 0)
         {
-          sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp = xnmalloc (nedges[i] + 1, حجم *sp);
+          sp[nedges[i]] = پای_ټکی_غوټه;
         }
       new_R[i] = sp;
-      end_R[i] = sp;
+      پای_ټکی_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
-        *end_R[r[i][j]]++ = i;
+  لكل (اړیکه_غوټه i = 0; i < اندازه; i++)
+    إذا (r[i])
+      لكل (اړیکه_غوټه j = 0; r[i][j] != پای_ټکی_غوټه; ++j)
+        *پای_ټکی_R[r[i][j]]++ = i;
 
-  free (nedges);
-  free (end_R);
+  حرر (nedges);
+  حرر (پای_ټکی_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
-    free (r[i]);
-  free (r);
+  لكل (اړیکه_غوټه i = 0; i < اندازه; i++)
+    حرر (r[i]);
+  حرر (r);
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+  إذا (trace_flag & trace_sets)
+    اړیکه_print ("relation_transpose: output", new_R, اندازه, عدم, stderr);
 
   *R_arg = new_R;
 }

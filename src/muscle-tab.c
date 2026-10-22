@@ -17,38 +17,38 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <hash.h>
-#include <quote.h>
+#ضمن <hash.h>
+#ضمن <quote.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "muscle-tab.h"
+#ضمن "complain.h"
+#ضمن "files.h"
+#ضمن "fixits.h"
+#ضمن "getargs.h"
+#ضمن "muscle-tab.h"
 
-muscle_kind
-muscle_kind_new (char const *k)
+muscle_ډول
+muscle_ډول_new (حرف ثابت *k)
 {
-  if (STREQ (k, "code"))
-    return muscle_code;
-  else if (STREQ (k, "keyword"))
-    return muscle_keyword;
-  else if (STREQ (k, "string"))
-    return muscle_string;
+  إذا (STREQ (k, "code"))
+    أرجع muscle_کوډ;
+  وإلا إذا (STREQ (k, "keyword"))
+    أرجع muscle_keyword;
+  وإلا إذا (STREQ (k, "string"))
+    أرجع muscle_string;
   abort ();
 }
 
-char const *
-muscle_kind_string (muscle_kind k)
+حرف ثابت *
+muscle_ډول_string (muscle_ډول k)
 {
-  switch (k)
+  بدل (k)
     {
-    case muscle_code:    return "code";
-    case muscle_keyword: return "keyword";
-    case muscle_string:  return "string";
+    حالة muscle_کوډ:    أرجع "code";
+    حالة muscle_keyword: أرجع "keyword";
+    حالة muscle_string:  أرجع "string";
     }
   abort ();
 }
@@ -56,111 +56,111 @@ muscle_kind_string (muscle_kind k)
 
 /* A key-value pair, along with storage that can be reclaimed when
    this pair is no longer needed.  */
-typedef struct
+تعريفنوع بنية
 {
-  char const *key;
-  char const *value;
-  char *storage;
-  muscle_kind kind;
-} muscle_entry;
+  حرف ثابت *کلی;
+  حرف ثابت *ارزښت;
+  حرف *storage;
+  muscle_ډول ډول;
+} muscle_ثبت;
 
 
 /* The name of muscle for the %define variable VAR (corresponding to
    FIELD, if defined).  */
-static uniqstr
-muscle_name (char const *var, char const *field)
+ساكن uniqstr
+muscle_name (حرف ثابت *var, حرف ثابت *ډګر)
 {
-  if (field)
-    return UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
-  else
-    return UNIQSTR_CONCAT ("percent_define(", var, ")");
+  إذا (ډګر)
+    أرجع UNIQSTR_CONCAT ("percent_define_", ډګر, "(", var, ")");
+  وإلا
+    أرجع UNIQSTR_CONCAT ("percent_define(", var, ")");
 }
 
 /* An obstack used to create some entries.  */
-struct obstack muscle_obstack;
+بنية obstack muscle_obstack;
 
 /* Initial capacity of muscles hash table.  */
-#define HT_INITIAL_CAPACITY 257
+#تعریف_کړه HT_INITIAL_ظرفیت 257
 
-static struct hash_table *muscle_table = NULL;
+ساكن بنية hash_جدول *muscle_جدول = عدم;
 
-static bool
-hash_compare_muscles (void const *x, void const *y)
+ساكن bool
+hash_compare_muscles (فراغ ثابت *x, فراغ ثابت *y)
 {
-  muscle_entry const *m1 = x;
-  muscle_entry const *m2 = y;
-  return STREQ (m1->key, m2->key);
+  muscle_ثبت ثابت *m1 = x;
+  muscle_ثبت ثابت *m2 = y;
+  أرجع STREQ (m1->کلی, m2->کلی);
 }
 
-static size_t
-hash_muscle (const void *x, size_t tablesize)
+ساكن size_t
+hash_muscle (ثابت فراغ *x, size_t tablesize)
 {
-  muscle_entry const *m = x;
-  return hash_string (m->key, tablesize);
+  muscle_ثبت ثابت *m = x;
+  أرجع hash_string (m->کلی, tablesize);
 }
 
 /* Create a fresh muscle name KEY, and insert in the hash table.  */
-static void *
-muscle_entry_new (char const *key)
+ساكن فراغ *
+muscle_ثبت_new (حرف ثابت *کلی)
 {
-  muscle_entry *res = xmalloc (sizeof *res);
-  res->key = key;
-  res->value = NULL;
-  res->storage = NULL;
-  hash_xinsert (muscle_table, res);
-  return res;
+  muscle_ثبت *res = xmalloc (حجم *res);
+  res->کلی = کلی;
+  res->ارزښت = عدم;
+  res->storage = عدم;
+  hash_xinsert (muscle_جدول, res);
+  أرجع res;
 }
 
-static void
-muscle_entry_free (void *entry)
+ساكن فراغ
+muscle_ثبت_free (فراغ *ثبت)
 {
-  muscle_entry *mentry = entry;
-  free (mentry->storage);
-  free (mentry);
+  muscle_ثبت *mentry = ثبت;
+  حرر (mentry->storage);
+  حرر (mentry);
 }
 
-void
-muscle_init (void)
+فراغ
+muscle_init (فراغ)
 {
   /* Initialize the muscle obstack.  */
   obstack_init (&muscle_obstack);
 
-  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, NULL, hash_muscle,
-                                   hash_compare_muscles, muscle_entry_free);
+  muscle_جدول = hash_xinitialize (HT_INITIAL_ظرفیت, عدم, hash_muscle,
+                                   hash_compare_muscles, muscle_ثبت_free);
   /* Avoid warnings if the user defined this variable, but did not
      actually call -Wcex.  */
-  free (muscle_percent_define_get ("cex.timeout"));
+  حرر (muscle_percent_define_get ("cex.timeout"));
 }
 
 
-void
-muscle_free (void)
+فراغ
+muscle_free (فراغ)
 {
-  hash_free (muscle_table);
-  obstack_free (&muscle_obstack, NULL);
+  hash_free (muscle_جدول);
+  obstack_free (&muscle_obstack, عدم);
 }
 
 /* Look for the muscle named KEY.  Return NULL if does not exist.  */
-static muscle_entry *
-muscle_lookup (char const *key)
+ساكن muscle_ثبت *
+muscle_lookup (حرف ثابت *کلی)
 {
-  muscle_entry probe;
-  probe.key = key;
-  return hash_lookup (muscle_table, &probe);
+  muscle_ثبت probe;
+  probe.کلی = کلی;
+  أرجع hash_lookup (muscle_جدول, &probe);
 }
 
 
-void
-muscle_insert (char const *key, char const *value)
+فراغ
+muscle_ورننباسه (حرف ثابت *کلی, حرف ثابت *ارزښت)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
-    free (entry->storage);
-  else
+  muscle_ثبت *ثبت = muscle_lookup (کلی);
+  إذا (ثبت)
+    حرر (ثبت->storage);
+  وإلا
     /* First insertion in the hash. */
-    entry = muscle_entry_new (key);
-  entry->value = value;
-  entry->storage = NULL;
+    ثبت = muscle_ثبت_new (کلی);
+  ثبت->ارزښت = ارزښت;
+  ثبت->storage = عدم;
 }
 
 
@@ -169,31 +169,31 @@ muscle_insert (char const *key, char const *value)
    associated value.  Copy VALUE and SEPARATOR.  If VALUE does not end
    with TERMINATOR, append one.  */
 
-static void
-muscle_grow (const char *key, const char *val,
-             const char *separator, const char *terminator)
+ساكن فراغ
+muscle_grow (ثابت حرف *کلی, ثابت حرف *val,
+             ثابت حرف *separator, ثابت حرف *terminator)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_ثبت *ثبت = muscle_lookup (کلی);
+  إذا (ثبت)
     {
-      obstack_sgrow (&muscle_obstack, entry->value);
+      obstack_sgrow (&muscle_obstack, ثبت->ارزښت);
       obstack_sgrow (&muscle_obstack, separator);
-      free (entry->storage);
+      حرر (ثبت->storage);
     }
-  else
-    entry = muscle_entry_new (key);
+  وإلا
+    ثبت = muscle_ثبت_new (کلی);
 
   obstack_sgrow (&muscle_obstack, val);
 
-  size_t vals = strlen (val);
-  size_t terms = strlen (terminator);
-  if (terms <= vals
+  size_t vals = مزي_اوږدوالی (val);
+  size_t terms = مزي_اوږدوالی (terminator);
+  إذا (terms <= vals
       && STRNEQ (val + vals - terms, terminator))
     obstack_sgrow (&muscle_obstack, terminator);
 
   {
-    char const *new_val = obstack_finish0 (&muscle_obstack);
-    entry->value = entry->storage = xstrdup (new_val);
+    حرف ثابت *new_val = obstack_finish0 (&muscle_obstack);
+    ثبت->ارزښت = ثبت->storage = xstrdup (new_val);
     obstack_free (&muscle_obstack, new_val);
   }
 }
@@ -203,15 +203,15 @@ muscle_grow (const char *key, const char *val,
 | LOC to the current value of KEY.                                  |
 `------------------------------------------------------------------*/
 
-static void
-muscle_syncline_grow (char const *key, location loc)
+ساكن فراغ
+muscle_syncline_grow (حرف ثابت *کلی, location loc)
 {
-  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.line);
+  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.پیل.کرښه);
   obstack_quote (&muscle_obstack,
-                 quotearg_style (c_quoting_style, map_file_name (loc.start.file)));
+                 quotearg_style (c_quoting_style, map_file_name (loc.پیل.file)));
   obstack_sgrow (&muscle_obstack, ")dnl\n[");
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  حرف ثابت *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (کلی, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
@@ -221,167 +221,167 @@ muscle_syncline_grow (char const *key, location loc)
 | using muscle_syncline_grow.                                       |
 `------------------------------------------------------------------*/
 
-void
-muscle_code_grow (const char *key, const char *val, location loc)
+فراغ
+muscle_کوډ_grow (ثابت حرف *کلی, ثابت حرف *val, location loc)
 {
-  muscle_syncline_grow (key, loc);
-  muscle_grow (key, val, "", "\n");
+  muscle_syncline_grow (کلی, loc);
+  muscle_grow (کلی, val, "", "\n");
 }
 
 
-void
-muscle_pair_list_grow (const char *muscle,
-                       const char *a1, const char *a2)
+فراغ
+muscle_pair_list_grow (ثابت حرف *muscle,
+                       ثابت حرف *a1, ثابت حرف *a2)
 {
   obstack_sgrow (&muscle_obstack, "[");
   obstack_quote (&muscle_obstack, a1);
   obstack_sgrow (&muscle_obstack, ", ");
   obstack_quote (&muscle_obstack, a2);
   obstack_sgrow (&muscle_obstack, "]");
-  char const *pair = obstack_finish0 (&muscle_obstack);
+  حرف ثابت *pair = obstack_finish0 (&muscle_obstack);
   muscle_grow (muscle, pair, ",\n", "");
   obstack_free (&muscle_obstack, pair);
 }
 
 
-char const *
-muscle_find_const (char const *key)
+حرف ثابت *
+muscle_پیدا_کړه_const (حرف ثابت *کلی)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  return entry ? entry->value : NULL;
+  muscle_ثبت *ثبت = muscle_lookup (کلی);
+  أرجع ثبت ? ثبت->ارزښت : عدم;
 }
 
 
-char *
-muscle_find (char const *key)
+حرف *
+muscle_پیدا_کړه (حرف ثابت *کلی)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_ثبت *ثبت = muscle_lookup (کلی);
+  إذا (ثبت)
     {
-      aver (entry->value == entry->storage);
-      return entry->storage;
+      aver (ثبت->ارزښت == ثبت->storage);
+      أرجع ثبت->storage;
     }
-  return NULL;
+  أرجع عدم;
 }
 
 
 /* In the format 'file_name:line.column', append BOUND to MUSCLE.  Use
    digraphs for special characters in the file name.  */
 
-static void
-muscle_boundary_grow (char const *key, boundary bound)
+ساكن فراغ
+muscle_boundary_grow (حرف ثابت *کلی, boundary bound)
 {
   obstack_sgrow  (&muscle_obstack, "[[");
   obstack_escape (&muscle_obstack, bound.file);
-  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.line, bound.column, bound.byte);
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.کرښه, bound.ستنه, bound.byte);
+  حرف ثابت *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (کلی, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
 
-void
-muscle_location_grow (char const *key, location loc)
+فراغ
+muscle_location_grow (حرف ثابت *کلی, location loc)
 {
-  muscle_boundary_grow (key, loc.start);
-  muscle_grow (key, "", ", ", "");
-  muscle_boundary_grow (key, loc.end);
+  muscle_boundary_grow (کلی, loc.پیل);
+  muscle_grow (کلی, "", ", ", "");
+  muscle_boundary_grow (کلی, loc.پای_ټکی);
 }
 
-#define COMMON_DECODE(Value)                                    \
-  case '$':                                                     \
-    ++(Value); aver (*(Value) == ']');                          \
-    ++(Value); aver (*(Value) == '[');                          \
+#تعریف_کړه COMMON_DECODE(ارزښت_4)                                    \
+  حالة '$':                                                     \
+    ++(ارزښت_4); aver (*(ارزښت_4) == ']');                          \
+    ++(ارزښت_4); aver (*(ارزښت_4) == '[');                          \
     obstack_sgrow (&muscle_obstack, "$");                       \
-    break;                                                      \
-  case '@':                                                     \
-    switch (*++(Value))                                         \
+    اكسر;                                                      \
+  حالة '@':                                                     \
+    بدل (*++(ارزښت_4))                                         \
       {                                                         \
-      case '\'': /* Ignore "@'" */ break;                       \
-      case '@': obstack_sgrow (&muscle_obstack, "@" ); break;   \
-      case '{': obstack_sgrow (&muscle_obstack, "[" ); break;   \
-      case '}': obstack_sgrow (&muscle_obstack, "]" ); break;   \
-      default: aver (false); break;                             \
+      حالة '\'': /* Ignore "@'" */ اكسر;                       \
+      حالة '@': obstack_sgrow (&muscle_obstack, "@" ); اكسر;   \
+      حالة '{': obstack_sgrow (&muscle_obstack, "[" ); اكسر;   \
+      حالة '}': obstack_sgrow (&muscle_obstack, "]" ); اكسر;   \
+      افتراضي: aver (false); اكسر;                             \
       }                                                         \
-    break;                                                      \
-  default:                                                      \
-    obstack_1grow (&muscle_obstack, *(Value));                  \
-    break;
+    اكسر;                                                      \
+  افتراضي:                                                      \
+    obstack_1grow (&muscle_obstack, *(ارزښت_4));                  \
+    اكسر;
 
 /* Reverse of obstack_escape.  */
-static char *
-string_decode (char const *key)
+ساكن حرف *
+string_decode (حرف ثابت *کلی)
 {
-  char const *value = muscle_find_const (key);
-  if (!value)
-    return NULL;
-  do {
-    switch (*value)
+  حرف ثابت *ارزښت = muscle_پیدا_کړه_const (کلی);
+  إذا (!ارزښت)
+    أرجع عدم;
+  افعل {
+    بدل (*ارزښت)
       {
-        COMMON_DECODE (value)
-        case '[':
-        case ']':
+        COMMON_DECODE (ارزښت)
+        حالة '[':
+        حالة ']':
           aver (false);
-          break;
+          اكسر;
       }
-  } while (*value++);
-  char const *value_decoded = obstack_finish (&muscle_obstack);
-  char *res = xstrdup (value_decoded);
-  obstack_free (&muscle_obstack, value_decoded);
-  return res;
+  } طالما (*ارزښت++);
+  حرف ثابت *ارزښت_decoded = obstack_پای (&muscle_obstack);
+  حرف *res = xstrdup (ارزښت_decoded);
+  obstack_free (&muscle_obstack, ارزښت_decoded);
+  أرجع res;
 }
 
 /* Reverse of muscle_location_grow.  */
-static location
-location_decode (char const *value)
+ساكن location
+location_decode (حرف ثابت *ارزښت)
 {
-  aver (value);
-  aver (*value == '[');
-  ++value; aver (*value == '[');
+  aver (ارزښت);
+  aver (*ارزښت == '[');
+  ++ارزښت; aver (*ارزښت == '[');
   location loc;
-  while (*++value)
-    switch (*value)
+  طالما (*++ارزښت)
+    بدل (*ارزښت)
       {
-        COMMON_DECODE (value)
-        case '[':
+        COMMON_DECODE (ارزښت)
+        حالة '[':
           aver (false);
-          break;
-        case ']':
-          ++value; aver (*value == ']');
-          char *boundary_str = obstack_finish0 (&muscle_obstack);
-          switch (*++value)
+          اكسر;
+        حالة ']':
+          ++ارزښت; aver (*ارزښت == ']');
+          حرف *boundary_str = obstack_finish0 (&muscle_obstack);
+          بدل (*++ارزښت)
             {
-            case ',':
-              boundary_set_from_string (&loc.start, boundary_str);
+            حالة ',':
+              boundary_سېټ_from_string (&loc.پیل, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              ++value; aver (*value == ' ');
-              ++value; aver (*value == '[');
-              ++value; aver (*value == '[');
-              break;
-            case '\0':
-              boundary_set_from_string (&loc.end, boundary_str);
+              ++ارزښت; aver (*ارزښت == ' ');
+              ++ارزښت; aver (*ارزښت == '[');
+              ++ارزښت; aver (*ارزښت == '[');
+              اكسر;
+            حالة '\0':
+              boundary_سېټ_from_string (&loc.پای_ټکی, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              return loc;
-              break;
-            default:
+              أرجع loc;
+              اكسر;
+            افتراضي:
               aver (false);
-              break;
+              اكسر;
             }
-          break;
+          اكسر;
       }
   aver (false);
-  return loc;
+  أرجع loc;
 }
 
-void
-muscle_user_name_list_grow (char const *key, char const *user_name,
+فراغ
+muscle_user_name_list_grow (حرف ثابت *کلی, حرف ثابت *user_name,
                             location loc)
 {
-  muscle_grow (key, "[[[[", ",", "");
-  muscle_grow (key, user_name, "", "");
-  muscle_grow (key, "]], ", "", "");
-  muscle_location_grow (key, loc);
-  muscle_grow (key, "]]", "", "");
+  muscle_grow (کلی, "[[[[", ",", "");
+  muscle_grow (کلی, user_name, "", "");
+  muscle_grow (کلی, "]], ", "", "");
+  muscle_location_grow (کلی, loc);
+  muscle_grow (کلی, "]]", "", "");
 }
 
 
@@ -400,25 +400,25 @@ muscle_user_name_list_grow (char const *key, char const *user_name,
     "foo=", "baz"    => "%define foo"
  */
 
-static
-char *
-define_directive (char const *assignment,
-                  muscle_kind kind,
-                  char const *value)
+ساكن
+حرف *
+define_directive (حرف ثابت *assignment,
+                  muscle_ډول ډول,
+                  حرف ثابت *ارزښت)
 {
-  char *eq = strchr (assignment, '=');
-  char const *fmt
-    = eq || !value || !*value ? "%%define %s"
-    : kind == muscle_code     ? "%%define %s {%s}"
-    : kind == muscle_string   ? "%%define %s \"%s\""
+  حرف *eq = strchr (assignment, '=');
+  حرف ثابت *fmt
+    = eq || !ارزښت || !*ارزښت ? "%%define %s"
+    : ډول == muscle_کوډ     ? "%%define %s {%s}"
+    : ډول == muscle_string   ? "%%define %s \"%s\""
     :                           "%%define %s %s";
-  char *res = xmalloc (strlen (fmt) + strlen (assignment)
-                       + (value ? strlen (value) : 0));
-  sprintf (res, fmt, assignment, value);
+  حرف *res = xmalloc (مزي_اوږدوالی (fmt) + مزي_اوږدوالی (assignment)
+                       + (ارزښت ? مزي_اوږدوالی (ارزښت) : 0));
+  sprintf (res, fmt, assignment, ارزښت);
   eq = strchr (res, '=');
-  if (eq)
+  إذا (eq)
     *eq = eq[1] ? ' ' : '\0';
-  return res;
+  أرجع res;
 }
 
 /** If the \a variable name is obsolete, return the name to use,
@@ -426,342 +426,342 @@ define_directive (char const *assignment,
  *
  * Allocates the returned value if needed, otherwise the returned
  * value is exactly \a variable.  */
-static
-char const *
-muscle_percent_variable_update (char const *variable,
-                                muscle_kind kind,
-                                char const **value,
-                                char **old, char **upd)
+ساكن
+حرف ثابت *
+muscle_percent_variable_update (حرف ثابت *variable,
+                                muscle_ډول ډول,
+                                حرف ثابت **ارزښت,
+                                حرف **old, حرف **upd)
 {
-  typedef struct
+  تعريفنوع بنية
   {
-    const char *obsolete;
-    const char *updated;
-    muscle_kind kind;
+    ثابت حرف *obsolete;
+    ثابت حرف *updated;
+    muscle_ډول ډول;
   } conversion_type;
-  const conversion_type conversion[] =
+  ثابت conversion_type conversion[] =
   {
     { "%error-verbose",             "parse.error=verbose",       muscle_keyword },
     { "%error_verbose",             "parse.error=verbose",       muscle_keyword },
     { "abstract",                   "api.parser.abstract",       muscle_keyword },
-    { "annotations",                "api.parser.annotations",    muscle_code },
+    { "annotations",                "api.parser.annotations",    muscle_کوډ },
     { "api.push_pull",              "api.push-pull",             muscle_keyword },
-    { "api.tokens.prefix",          "api.token.prefix",          muscle_code },
+    { "api.tokens.prefix",          "api.token.prefix",          muscle_کوډ },
     { "extends",                    "api.parser.extends",        muscle_keyword },
-    { "filename_type",              "api.filename.type",         muscle_code },
+    { "filename_type",              "api.filename.type",         muscle_کوډ },
     { "final",                      "api.parser.final",          muscle_keyword },
     { "implements",                 "api.parser.implements",     muscle_keyword },
     { "lex_symbol",                 "api.token.constructor",     -1 },
-    { "location_type",              "api.location.type",         muscle_code },
+    { "location_type",              "api.location.type",         muscle_کوډ },
     { "lr.default-reductions",      "lr.default-reduction",      muscle_keyword },
     { "lr.keep-unreachable-states", "lr.keep-unreachable-state", muscle_keyword },
     { "lr.keep_unreachable_states", "lr.keep-unreachable-state", muscle_keyword },
-    { "namespace",                  "api.namespace",             muscle_code },
-    { "package",                    "api.package",               muscle_code },
-    { "parser_class_name",          "api.parser.class",          muscle_code },
+    { "namespace",                  "api.namespace",             muscle_کوډ },
+    { "package",                    "api.package",               muscle_کوډ },
+    { "parser_class_name",          "api.parser.class",          muscle_کوډ },
     { "public",                     "api.parser.public",         muscle_keyword },
     { "strictfp",                   "api.parser.strictfp",       muscle_keyword },
     { "stype",                      "api.value.type",            -1 },
     { "variant=",                   "api.value.type=variant",    -1 },
     { "variant=true",               "api.value.type=variant",    -1 },
-    { NULL, NULL, -1, }
+    { عدم, عدم, -1, }
   };
 
-  for (conversion_type const *c = conversion; c->obsolete; ++c)
+  لكل (conversion_type ثابت *c = conversion; c->obsolete; ++c)
     {
-      char const *eq = strchr (c->obsolete, '=');
-      if (eq
-          ? (!strncmp (c->obsolete, variable, eq - c->obsolete)
-             && STREQ (eq + 1, *value))
+      حرف ثابت *eq = strchr (c->obsolete, '=');
+      إذا (eq
+          ? (!مزي_پرتله (c->obsolete, variable, eq - c->obsolete)
+             && STREQ (eq + 1, *ارزښت))
           : STREQ (c->obsolete, variable))
         {
           /* Generate the deprecation warning. */
           *old = c->obsolete[0] == '%'
             ? xstrdup (c->obsolete)
-            : define_directive (c->obsolete, kind, *value);
-          *upd = define_directive (c->updated, c->kind, *value);
+            : define_directive (c->obsolete, ډول, *ارزښت);
+          *upd = define_directive (c->updated, c->ډول, *ارزښت);
           /* Update the variable and its value.  */
           {
-            char *res = xstrdup (c->updated);
-            char *eq2 = strchr (res, '=');
-            if (eq2)
+            حرف *res = xstrdup (c->updated);
+            حرف *eq2 = strchr (res, '=');
+            إذا (eq2)
               {
                 *eq2 = '\0';
-                *value = eq2 + 1;
+                *ارزښت = eq2 + 1;
               }
-            return res;
+            أرجع res;
           }
         }
     }
-  return variable;
+  أرجع variable;
 }
 
-void
-muscle_percent_define_insert (char const *var, location variable_loc,
-                              muscle_kind kind,
-                              char const *value,
+فراغ
+muscle_percent_define_ورننباسه (حرف ثابت *var, location variable_loc,
+                              muscle_ډول ډول,
+                              حرف ثابت *ارزښت,
                               muscle_percent_define_how how)
 {
   /* Backward compatibility.  */
-  char *old = NULL;
-  char *upd = NULL;
-  char const *variable
-    = muscle_percent_variable_update (var, kind,
-                                      &value, &old, &upd);
-  uniqstr name = muscle_name (variable, NULL);
+  حرف *old = عدم;
+  حرف *upd = عدم;
+  حرف ثابت *variable
+    = muscle_percent_variable_update (var, ډول,
+                                      &ارزښت, &old, &upd);
+  uniqstr name = muscle_name (variable, عدم);
   uniqstr loc_name = muscle_name (variable, "loc");
   uniqstr syncline_name = muscle_name (variable, "syncline");
   uniqstr how_name = muscle_name (variable, "how");
-  uniqstr kind_name = muscle_name (variable, "kind");
+  uniqstr ډول_name = muscle_name (variable, "kind");
 
   /* Command-line options are processed before the grammar file.  */
   bool warned = false;
-  if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
+  إذا (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
     {
-      char const *current_value = muscle_find_const (name);
-      if (current_value)
+      حرف ثابت *current_ارزښت = muscle_پیدا_کړه_const (name);
+      إذا (current_ارزښت)
         {
-          long l = strtol (muscle_find_const (how_name), NULL, 10);
+          اوږد l = strtol (muscle_پیدا_کړه_const (how_name), عدم, 10);
           muscle_percent_define_how how_old
-            = 0 <= l && l <= INT_MAX ? l : INT_MAX;
-          if (how_old == MUSCLE_PERCENT_DEFINE_F)
-            goto end;
+            = 0 <= l && l <= لوی_عدد ? l : لوی_عدد;
+          إذا (how_old == MUSCLE_PERCENT_DEFINE_F)
+            اذهب پای_ټکی;
           /* If assigning the same value, make it a warning.  */
-          warnings warn = STREQ (value, current_value) ? Wother : complaint;
+          warnings warn = STREQ (ارزښت, current_ارزښت) ? Wother : complaint;
           complain (&variable_loc, warn,
                     _("%%define variable %s redefined"),
                     quote (variable));
           location loc = muscle_percent_define_get_loc (variable);
           subcomplain (&loc, warn, _("previous definition"));
-          fixits_register (&variable_loc, "");
+          fixits_ثبتوونکی (&variable_loc, "");
           warned = true;
         }
     }
 
-  if (!warned && old && upd)
+  إذا (!warned && old && upd)
     deprecated_directive (&variable_loc, old, upd);
 
-  MUSCLE_INSERT_STRING (name, value);
-  muscle_insert (loc_name, "");
+  MUSCLE_ورننباسه_STRING (name, ارزښت);
+  muscle_ورننباسه (loc_name, "");
   muscle_location_grow (loc_name, variable_loc);
-  muscle_insert (syncline_name, "");
+  muscle_ورننباسه (syncline_name, "");
   muscle_syncline_grow (syncline_name, variable_loc);
   muscle_user_name_list_grow ("percent_define_user_variables", variable,
                               variable_loc);
-  MUSCLE_INSERT_INT (how_name, how);
-  MUSCLE_INSERT_STRING (kind_name, muscle_kind_string (kind));
- end:
-  free (old);
-  free (upd);
-  if (variable != var)
-    free ((char *) variable);
+  MUSCLE_ورننباسه_INT (how_name, how);
+  MUSCLE_ورننباسه_STRING (ډول_name, muscle_ډول_string (ډول));
+ پای_ټکی:
+  حرر (old);
+  حرر (upd);
+  إذا (variable != var)
+    حرر ((حرف *) variable);
 }
 
 /* This is used for backward compatibility, e.g., "%define api.pure"
    supersedes "%pure-parser".  */
-void
-muscle_percent_define_ensure (char const *variable, location loc,
-                              bool value)
+فراغ
+muscle_percent_define_ensure (حرف ثابت *variable, location loc,
+                              bool ارزښت)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char const *val = value ? "" : "false";
+  uniqstr name = muscle_name (variable, عدم);
+  حرف ثابت *val = ارزښت ? "" : "false";
 
   /* Don't complain is VARIABLE is already defined, but be sure to set
      its value to VAL.  */
-  if (!muscle_find_const (name)
-      || muscle_percent_define_flag_if (variable) != value)
-    muscle_percent_define_insert (variable, loc, muscle_keyword, val,
+  إذا (!muscle_پیدا_کړه_const (name)
+      || muscle_percent_define_flag_if (variable) != ارزښت)
+    muscle_percent_define_ورننباسه (variable, loc, muscle_keyword, val,
                                   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 /* Mark %define VARIABLE as used.  */
-static void
-muscle_percent_define_use (char const *variable)
+ساكن فراغ
+muscle_percent_define_use (حرف ثابت *variable)
 {
-  muscle_insert (muscle_name (variable, "bison_variables"), "");
+  muscle_ورننباسه (muscle_name (variable, "bison_variables"), "");
 }
 
 /* The value of %define variable VARIABLE (corresponding to FIELD, if
    defined).  Do not register as used, but diagnose unset variables.  */
 
-static
-char const *
-muscle_percent_define_get_raw (char const *variable, char const *field)
+ساكن
+حرف ثابت *
+muscle_percent_define_get_raw (حرف ثابت *variable, حرف ثابت *ډګر)
 {
-  uniqstr name = muscle_name (variable, field);
-  char const *res = muscle_find_const (name);
-  if (!res)
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  uniqstr name = muscle_name (variable, ډګر);
+  حرف ثابت *res = muscle_پیدا_کړه_const (name);
+  إذا (!res)
+    complain (عدم, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_get_raw", quote (variable));
-  return res;
+  أرجع res;
 }
 
-char *
-muscle_percent_define_get (char const *variable)
+حرف *
+muscle_percent_define_get (حرف ثابت *variable)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char *value = string_decode (name);
-  if (!value)
-    value = xstrdup ("");
+  uniqstr name = muscle_name (variable, عدم);
+  حرف *ارزښت = string_decode (name);
+  إذا (!ارزښت)
+    ارزښت = xstrdup ("");
   muscle_percent_define_use (variable);
-  return value;
+  أرجع ارزښت;
 }
 
 /* The kind of VARIABLE.  An error if undefined.  */
-static muscle_kind
-muscle_percent_define_get_kind (char const *variable)
+ساكن muscle_ډول
+muscle_percent_define_get_ډول (حرف ثابت *variable)
 {
-  return muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
+  أرجع muscle_ډول_new (muscle_percent_define_get_raw (variable, "kind"));
 }
 
 /* Check the kind of VARIABLE.  An error if undefined.  */
-static void
-muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
+ساكن فراغ
+muscle_percent_define_check_ډول (حرف ثابت *variable, muscle_ډول ډول)
 {
-  if (muscle_percent_define_get_kind (variable) != kind)
+  إذا (muscle_percent_define_get_ډول (variable) != ډول)
     {
       location loc = muscle_percent_define_get_loc (variable);
-      switch (kind)
+      بدل (ډول)
         {
-        case muscle_code:
+        حالة muscle_کوډ:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '{...}' values"),
                     variable);
-          break;
-        case muscle_keyword:
+          اكسر;
+        حالة muscle_keyword:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires keyword values"),
                     variable);
-          break;
-        case muscle_string:
+          اكسر;
+        حالة muscle_string:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '\"...\"' values"),
                     variable);
-          break;
+          اكسر;
         }
     }
 }
 
 
 location
-muscle_percent_define_get_loc (char const *variable)
+muscle_percent_define_get_loc (حرف ثابت *variable)
 {
-  return location_decode (muscle_percent_define_get_raw (variable, "loc"));
+  أرجع location_decode (muscle_percent_define_get_raw (variable, "loc"));
 }
 
-char const *
-muscle_percent_define_get_syncline (char const *variable)
+حرف ثابت *
+muscle_percent_define_get_syncline (حرف ثابت *variable)
 {
-  return muscle_percent_define_get_raw (variable, "syncline");
+  أرجع muscle_percent_define_get_raw (variable, "syncline");
 }
 
 bool
-muscle_percent_define_ifdef (char const *variable)
+muscle_percent_define_ifdef (حرف ثابت *variable)
 {
-  if (muscle_find_const (muscle_name (variable, NULL)))
+  إذا (muscle_پیدا_کړه_const (muscle_name (variable, عدم)))
     {
       muscle_percent_define_use (variable);
-      return true;
+      أرجع true;
     }
-  else
-    return false;
+  وإلا
+    أرجع false;
 }
 
 bool
-muscle_percent_define_flag_if (char const *variable)
+muscle_percent_define_flag_if (حرف ثابت *variable)
 {
   uniqstr invalid_boolean_name = muscle_name (variable, "invalid_boolean");
   bool res = false;
 
-  if (muscle_percent_define_ifdef (variable))
+  إذا (muscle_percent_define_ifdef (variable))
     {
-      char *value = muscle_percent_define_get (variable);
-      muscle_percent_define_check_kind (variable, muscle_keyword);
-      if (value[0] == '\0' || STREQ (value, "true"))
+      حرف *ارزښت = muscle_percent_define_get (variable);
+      muscle_percent_define_check_ډول (variable, muscle_keyword);
+      إذا (ارزښت[0] == '\0' || STREQ (ارزښت, "true"))
         res = true;
-      else if (STREQ (value, "false"))
+      وإلا إذا (STREQ (ارزښت, "false"))
         res = false;
-      else if (!muscle_find_const (invalid_boolean_name))
+      وإلا إذا (!muscle_پیدا_کړه_const (invalid_boolean_name))
         {
-          muscle_insert (invalid_boolean_name, "");
+          muscle_ورننباسه (invalid_boolean_name, "");
           location loc = muscle_percent_define_get_loc (variable);
           complain (&loc, complaint,
                     _("invalid value for %%define Boolean variable %s"),
                     quote (variable));
         }
-      free (value);
+      حرر (ارزښت);
     }
-  else
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  وإلا
+    complain (عدم, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_flag", quote (variable));
 
-  return res;
+  أرجع res;
 }
 
-void
-muscle_percent_define_default (char const *variable, char const *value)
+فراغ
+muscle_percent_define_default (حرف ثابت *variable, حرف ثابت *ارزښت)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  if (!muscle_find_const (name))
+  uniqstr name = muscle_name (variable, عدم);
+  إذا (!muscle_پیدا_کړه_const (name))
     {
-      MUSCLE_INSERT_STRING (name, value);
-      MUSCLE_INSERT_STRING (muscle_name (variable, "kind"), "keyword");
+      MUSCLE_ورننباسه_STRING (name, ارزښت);
+      MUSCLE_ورننباسه_STRING (muscle_name (variable, "kind"), "keyword");
       {
         uniqstr loc_name = muscle_name (variable, "loc");
         location loc;
-        loc.start.file = "<default value>";
-        loc.start.line = -1;
-        loc.start.column = -1;
-        loc.start.byte = -1;
-        loc.end = loc.start;
-        muscle_insert (loc_name, "");
+        loc.پیل.file = "<default value>";
+        loc.پیل.کرښه = -1;
+        loc.پیل.ستنه = -1;
+        loc.پیل.byte = -1;
+        loc.پای_ټکی = loc.پیل;
+        muscle_ورننباسه (loc_name, "");
         muscle_location_grow (loc_name, loc);
       }
-      muscle_insert (muscle_name (variable, "syncline"), "");
+      muscle_ورننباسه (muscle_name (variable, "syncline"), "");
     }
 }
 
-void
-muscle_percent_define_check_values (char const * const *values)
+فراغ
+muscle_percent_define_check_ارزښتونه (حرف ثابت * ثابت *ارزښتونه)
 {
-  for (; *values; ++values)
+  لكل (; *ارزښتونه; ++ارزښتونه)
     {
-      char const * const *variablep = values;
-      uniqstr name = muscle_name (*variablep, NULL);
-      char *value = string_decode (name);
-      muscle_percent_define_check_kind (*variablep, muscle_keyword);
-      if (value)
+      حرف ثابت * ثابت *variablep = ارزښتونه;
+      uniqstr name = muscle_name (*variablep, عدم);
+      حرف *ارزښت = string_decode (name);
+      muscle_percent_define_check_ډول (*variablep, muscle_keyword);
+      إذا (ارزښت)
         {
-          for (++values; *values; ++values)
-            if (STREQ (value, *values))
-              break;
-          if (!*values)
+          لكل (++ارزښتونه; *ارزښتونه; ++ارزښتونه)
+            إذا (STREQ (ارزښت, *ارزښتونه))
+              اكسر;
+          إذا (!*ارزښتونه)
             {
               location loc = muscle_percent_define_get_loc (*variablep);
               complain (&loc, complaint,
                         _("invalid value for %%define variable %s: %s"),
-                        quote (*variablep), quote_n (1, value));
-              for (values = variablep + 1; *values; ++values)
+                        quote (*variablep), quote_n (1, ارزښت));
+              لكل (ارزښتونه = variablep + 1; *ارزښتونه; ++ارزښتونه)
                 subcomplain (&loc, complaint | no_caret | silent,
-                             _("accepted value: %s"), quote (*values));
+                             _("accepted value: %s"), quote (*ارزښتونه));
             }
-          else
-            while (*values)
-              ++values;
-          free (value);
+          وإلا
+            طالما (*ارزښتونه)
+              ++ارزښتونه;
+          حرر (ارزښت);
         }
-      else
-        complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+      وإلا
+        complain (عدم, fatal, _("%s: undefined %%define variable %s"),
                   "muscle_percent_define_check_values", quote (*variablep));
     }
 }
 
-void
-muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
-                          char const *code, location code_loc)
+فراغ
+muscle_percent_کوډ_grow (حرف ثابت *qualifier, location qualifier_loc,
+                          حرف ثابت *کوډ, location کوډ_loc)
 {
-  char const *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
-  muscle_code_grow (name, code, code_loc);
+  حرف ثابت *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
+  muscle_کوډ_grow (name, کوډ, کوډ_loc);
   muscle_user_name_list_grow ("percent_code_user_qualifiers", qualifier,
                                qualifier_loc);
 }
@@ -771,24 +771,24 @@ muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
 | Output the definition of ENTRY as a m4_define.  |
 `------------------------------------------------*/
 
-static inline bool
-muscle_m4_output (muscle_entry *entry, FILE *out)
+ساكن مضمن bool
+muscle_m4_output (muscle_ثبت *ثبت, FILE *بهر)
 {
-  fprintf (out,
+  fprintf (بهر,
            "m4_define([b4_%s],\n"
-           "[[%s]])\n\n\n", entry->key, entry->value);
-  return true;
+           "[[%s]])\n\n\n", ثبت->کلی, ثبت->ارزښت);
+  أرجع true;
 }
 
-static bool
-muscle_m4_output_processor (void *entry, void *out)
+ساكن bool
+muscle_m4_output_processor (فراغ *ثبت, فراغ *بهر)
 {
-  return muscle_m4_output (entry, out);
+  أرجع muscle_m4_output (ثبت, بهر);
 }
 
 
-void
-muscles_m4_output (FILE *out)
+فراغ
+muscles_m4_output (FILE *بهر)
 {
-  hash_do_for_each (muscle_table, muscle_m4_output_processor, out);
+  hash_do_for_each (muscle_جدول, muscle_m4_output_processor, بهر);
 }

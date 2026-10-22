@@ -17,78 +17,78 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef SBITSET_H_
+#که_نه_تعریف_شوی SBITSET_H_
 # define SBITSET_H_
 
-typedef unsigned char *Sbitset;
-typedef size_t Sbitset__Index;
-# define SBITSET__INDEX__CONVERSION_SPEC "zu"
+تعريفنوع بینښه حرف *Sbitset;
+تعريفنوع size_t Sbitset_شاخص;
+# define SBITSET_شاخص_CONVERSION_SPEC "zu"
 
 # define Sbitset__nbytes(NBITS) \
-  (((NBITS) + CHAR_BIT - 1) / CHAR_BIT)
-# define Sbitset__byteAddress(SELF, INDEX) \
-  (((SELF) + (INDEX) / CHAR_BIT))
-# define Sbitset__bit_mask(INDEX) \
-  (1 << (CHAR_BIT - 1 - (INDEX) % CHAR_BIT))
-# define Sbitset__last_byte_mask(NBITS) \
-  (UCHAR_MAX << (CHAR_BIT - 1 - ((NBITS) - 1) % CHAR_BIT))
+  (((NBITS) + CHAR_بټ - 1) / CHAR_بټ)
+# define Sbitset_byte_پته(SELF, شاخص) \
+  (((SELF) + (شاخص) / CHAR_بټ))
+# define Sbitset_بټ_ماسک(شاخص) \
+  (1 << (CHAR_بټ - 1 - (شاخص) % CHAR_بټ))
+# define Sbitset_وروستی_byte_ماسک(NBITS) \
+  (UCHAR_MAX << (CHAR_بټ - 1 - ((NBITS) - 1) % CHAR_بټ))
 
 /* nbits must not be 0.  */
-Sbitset Sbitset__new (Sbitset__Index nbits);
-Sbitset Sbitset__new_on_obstack (Sbitset__Index nbits,
-                                 struct obstack *obstackp);
-void Sbitset__delete (Sbitset self);
+Sbitset Sbitset__new (Sbitset_شاخص nbits);
+Sbitset Sbitset__new_on_obstack (Sbitset_شاخص nbits,
+                                 بنية obstack *obstackp);
+فراغ Sbitset__delete (Sbitset self);
 
-# define Sbitset__test(SELF, INDEX)                                     \
-  ((*Sbitset__byteAddress ((SELF), (INDEX)) & Sbitset__bit_mask (INDEX)) != 0)
+# define Sbitset__test(SELF, شاخص)                                     \
+  ((*Sbitset_byte_پته ((SELF), (شاخص)) & Sbitset_بټ_ماسک (شاخص)) != 0)
 
-bool Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits);
+bool Sbitset_is_تشه (Sbitset self, Sbitset_شاخص nbits);
 
-void Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
+فراغ Sbitset__fprint (Sbitset self, Sbitset_شاخص nbits, FILE *file);
 
-# define Sbitset__set(SELF, INDEX)                                      \
-  do {                                                                  \
-    *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
-      *Sbitset__byteAddress ((SELF), (INDEX)) | Sbitset__bit_mask (INDEX); \
-  } while (0)
+# define Sbitset_سېټ(SELF, شاخص)                                      \
+  افعل {                                                                  \
+    *Sbitset_byte_پته ((SELF), (شاخص)) =                           \
+      *Sbitset_byte_پته ((SELF), (شاخص)) | Sbitset_بټ_ماسک (شاخص); \
+  } طالما (0)
 
-# define Sbitset__reset(SELF, INDEX)                                    \
-  do {                                                                  \
-    *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
-      *Sbitset__byteAddress ((SELF), (INDEX)) & ~Sbitset__bit_mask (INDEX); \
-  } while (0)
+# define Sbitset__reset(SELF, شاخص)                                    \
+  افعل {                                                                  \
+    *Sbitset_byte_پته ((SELF), (شاخص)) =                           \
+      *Sbitset_byte_پته ((SELF), (شاخص)) & ~Sbitset_بټ_ماسک (شاخص); \
+  } طالما (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be reset.  */
 # define Sbitset__zero(SELF, NBITS)             \
-  do {                                          \
+  افعل {                                          \
     memset (SELF, 0, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } طالما (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be set.  */
 # define Sbitset__ones(SELF, NBITS)                     \
-  do {                                                  \
+  افعل {                                                  \
     memset (SELF, UCHAR_MAX, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } طالما (0)
 
 /* NBITS is the size of every bitset.  More than NBITS bits might be set.  */
 # define Sbitset__or(SELF, OTHER1, OTHER2, NBITS)                       \
-  do {                                                                  \
+  افعل {                                                                  \
     Sbitset ptr_self = (SELF);                                          \
     Sbitset ptr_other1 = (OTHER1);                                      \
     Sbitset ptr_other2 = (OTHER2);                                      \
-    Sbitset end_self = ptr_self + Sbitset__nbytes (NBITS);              \
-    for (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
+    Sbitset پای_ټکی_self = ptr_self + Sbitset__nbytes (NBITS);              \
+    لكل (; ptr_self < پای_ټکی_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
       *ptr_self = *ptr_other1 | *ptr_other2;                            \
-  } while (0)
+  } طالما (0)
 
 /* ATTENTION: there are *two* loops here, "break" and "continue" will
    not apply to the whole loop, just the inner one.  */
-# define SBITSET__FOR_EACH(SELF, NBITS, ITER, INDEX)                    \
-  for ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
-    if (*(ITER) != 0)                                                   \
-      for ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
-           (INDEX) < (NBITS) && (SELF)+(INDEX)/CHAR_BIT < (ITER)+1;     \
-           ++(INDEX))                                                   \
-        if (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
+# define SBITSET__FOR_EACH(SELF, NBITS, ITER, شاخص)                    \
+  لكل ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
+    إذا (*(ITER) != 0)                                                   \
+      لكل ((شاخص) = ((ITER)-(SELF))*CHAR_بټ;                          \
+           (شاخص) < (NBITS) && (SELF)+(شاخص)/CHAR_بټ < (ITER)+1;     \
+           ++(شاخص))                                                   \
+        إذا (((*ITER) & Sbitset_بټ_ماسک (شاخص)) != 0)
 
-#endif /* !SBITSET_H_ */
+#د_که_پای /* !SBITSET_H_ */

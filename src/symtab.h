@@ -23,7 +23,7 @@
  * \brief Manipulating ::symbol.
  */
 
-#ifndef SYMTAB_H_
+#که_نه_تعریف_شوی SYMTAB_H_
 # define SYMTAB_H_
 
 # include "assoc.h"
@@ -36,7 +36,7 @@
 `----------*/
 
 /** Symbol classes.  */
-typedef enum
+تعريفنوع تعداد
 {
   /** Undefined.  */
   unknown_sym,
@@ -47,16 +47,16 @@ typedef enum
   token_sym,
   /** Nonterminal. */
   nterm_sym
-} symbol_class;
+} نښه_class;
 
 
 /** Internal token numbers. */
-typedef int symbol_number;
-# define SYMBOL_NUMBER_MAXIMUM INT_MAX
+تعريفنوع صحيح نښه_شمېره;
+# define نښه_شمېره_اعظمي لوی_عدد
 
 
-typedef struct symbol symbol;
-typedef struct sym_content sym_content;
+تعريفنوع بنية نښه نښه;
+تعريفنوع بنية sym_content sym_content;
 
 /* Declaration status of a symbol.
 
@@ -68,31 +68,31 @@ typedef struct sym_content sym_content;
    When status are checked at the end, "declared" symbols are fine,
    "used" symbols trigger warnings, otherwise it's an error.  */
 
-typedef enum
+تعريفنوع تعداد
   {
     /** Used in the input file for an unknown reason (error).  */
     undeclared,
     /** Used by %destructor/%printer but not defined (warning).  */
-    used,
+    کارول_شوی,
     /** Used in the grammar (rules) but not defined (error).  */
     needed,
     /** Defined with %type or %token (good).  */
     declared,
-  } declaration_status;
+  } declaration_حالت;
 
-enum code_props_type
+تعداد کوډ_props_type
   {
     destructor = 0,
     printer = 1,
   };
-typedef enum code_props_type code_props_type;
+تعريفنوع تعداد کوډ_props_type کوډ_props_type;
 
-enum { CODE_PROPS_SIZE = 2 };
+تعداد { کوډ_PROPS_اندازه = 2 };
 
-struct symbol
+بنية نښه
 {
   /** The key, name of the symbol.  */
-  uniqstr tag;
+  uniqstr نښان;
 
   /** The "defining" location.  */
   location location;
@@ -106,10 +106,10 @@ struct symbol
       location is more natural in error messages.  This Boolean helps
       moving from location of the first occurrence to first use as
       lhs. */
-  bool location_of_lhs;
+  bool location_د_lhs;
 
   /** Points to the other in the symbol-string pair for an alias. */
-  symbol *alias;
+  نښه *alias;
 
   /** Whether this symbol is the alias of another or not. */
   bool is_alias;
@@ -118,11 +118,11 @@ struct symbol
   sym_content *content;
 };
 
-struct sym_content
+بنية sym_content
 {
   /** The main symbol that denotes this content (it contains the
       possible alias). */
-  symbol *symbol;
+  نښه *نښه;
 
   /** Its \c \%type.
 
@@ -142,30 +142,30 @@ struct sym_content
       example, if <tt>symbol::destructor = NULL</tt> (resp. <tt>symbol::printer
       = NULL</tt>), a default \c \%destructor (resp. \%printer) or a per-type
       \c symbol_destructor_printer_get will compute the correct one. */
-  code_props props[CODE_PROPS_SIZE];
+  کوډ_props props[کوډ_PROPS_اندازه];
 
-  symbol_number number;
+  نښه_شمېره شمېره;
   location prec_loc;
-  int prec;
+  صحيح prec;
   assoc assoc;
 
   /** Token code, possibly specified by the user (%token FOO 42).  */
-  int code;
+  صحيح کوډ;
 
-  symbol_class class;
-  declaration_status status;
+  نښه_class class;
+  declaration_حالت حالت;
 };
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_from_uniqstr (const uniqstr key, location loc);
+نښه *نښه_from_uniqstr (ثابت uniqstr کلی, location loc);
 
 /** Fetch (or create) the symbol associated to KEY.  */
-symbol *symbol_get (const char *key, location loc);
+نښه *نښه_get (ثابت حرف *کلی, location loc);
 
 /** Generate a dummy nonterminal.
 
    Its name cannot conflict with the user's names.  */
-symbol *dummy_symbol_get (location loc);
+نښه *dummy_نښه_get (location loc);
 
 
 /*--------------------.
@@ -173,62 +173,62 @@ symbol *dummy_symbol_get (location loc);
 `--------------------*/
 
 /** Print a symbol (for debugging). */
-void symbol_print (symbol const *s, FILE *f);
+فراغ نښه_print (نښه ثابت *s, FILE *f);
 
 /** Is this a dummy nonterminal?  */
-bool symbol_is_dummy (symbol const *sym);
+bool نښه_is_dummy (نښه ثابت *sym);
 
 /** The name of the code_props type: "\%destructor" or "\%printer".  */
-char const *code_props_type_string (code_props_type kind);
+حرف ثابت *کوډ_props_type_string (کوډ_props_type ډول);
 
 /** The name of the symbol that can be used as an identifier.
  ** Consider the alias if needed.
  ** Return 0 if there is none (e.g., the symbol is only defined as
  ** a string). */
-uniqstr symbol_id_get (symbol const *sym);
+uniqstr نښه_id_get (نښه ثابت *sym);
 
 /**
  * Make \c str the literal string alias of \c sym.  Copy token number,
  * symbol number, and type from \c sym to \c str.
  */
-void symbol_make_alias (symbol *sym, symbol *str, location loc);
+فراغ نښه_make_alias (نښه *sym, نښه *str, location loc);
 
 /**
  * This symbol is used as the lhs of a rule.  Record this location
  * as definition point, if not already done.
  */
-void symbol_location_as_lhs_set (symbol *sym, location loc);
+فراغ نښه_location_as_lhs_سېټ (نښه *sym, location loc);
 
 /** Set the \c type_name associated with \c sym.
 
     Do nothing if passed 0 as \c type_name.  */
-void symbol_type_set (symbol *sym, uniqstr type_name, location loc);
+فراغ نښه_type_سېټ (نښه *sym, uniqstr type_name, location loc);
 
 /** Set the \c \%destructor or \c \%printer associated with \c sym.  */
-void symbol_code_props_set (symbol *sym, code_props_type kind,
-                            code_props const *destructor);
+فراغ نښه_کوډ_props_سېټ (نښه *sym, کوډ_props_type ډول,
+                            کوډ_props ثابت *destructor);
 
 /** Get the computed \c \%destructor or \c %printer for \c sym, which was
     initialized with \c code_props_none_init if there's no \c \%destructor or
     \c %printer.  */
-code_props *symbol_code_props_get (symbol *sym, code_props_type kind);
+کوډ_props *نښه_کوډ_props_get (نښه *sym, کوډ_props_type ډول);
 
 /** Set the \c precedence associated with \c sym.
 
     Ensure that \a symbol is a terminal.
     Do nothing if invoked with \c undef_assoc as \c assoc.  */
-void symbol_precedence_set (symbol *sym, int prec, assoc a, location loc);
+فراغ نښه_precedence_سېټ (نښه *sym, صحيح prec, assoc a, location loc);
 
 /** Set the \c class associated with \c sym.
 
     Whether \c declaring means whether this class definition comes
     from %nterm or %token (but not %type, prec/assoc, etc.).  A symbol
     can have "declaring" set only at most once.  */
-void symbol_class_set (symbol *sym, symbol_class class, location loc,
+فراغ نښه_class_سېټ (نښه *sym, نښه_class class, location loc,
                        bool declaring);
 
 /** Set the token \c code of \c sym, specified by the user at \c loc.  */
-void symbol_code_set (symbol *sym, int code, location loc);
+فراغ نښه_کوډ_سېټ (نښه *sym, صحيح کوډ, location loc);
 
 
 
@@ -237,18 +237,18 @@ void symbol_code_set (symbol *sym, int code, location loc);
 `------------------*/
 
 /** The error token. */
-extern symbol *errtoken;
+خارجي نښه *errtoken;
 /** The token for unknown tokens.  */
-extern symbol *undeftoken;
+خارجي نښه *undeftoken;
 /** The end of input token.  */
-extern symbol *eoftoken;
+خارجي نښه *eoftoken;
 /** The genuine start symbol.
 
    $accept: start-symbol $end */
-extern symbol *acceptsymbol;
+خارجي نښه *acceptsymbol;
 
 /** Whether a symbol declared with a type tag.  */
-extern bool tag_seen;
+خارجي bool نښان_کتل_شوی;
 
 
 /*-------------------.
@@ -258,25 +258,25 @@ extern bool tag_seen;
 /* The symbol relations are represented by a directed graph. */
 
 /* The id of a node */
-typedef int graphid;
+تعريفنوع صحيح graphid;
 
-typedef struct symgraphlink symgraphlink;
+تعريفنوع بنية symgraphlink symgraphlink;
 
-struct symgraphlink
+بنية symgraphlink
 {
   /** The second \c symbol or group of a precedence relation.
    * See \c symgraph. */
   graphid id;
 
-  symgraphlink *next;
+  symgraphlink *بل;
 };
 
 /* Symbol precedence graph, to store the used precedence relations between
  * symbols. */
 
-typedef struct symgraph symgraph;
+تعريفنوع بنية symgraph symgraph;
 
-struct symgraph
+بنية symgraph
 {
   /** Identifier for the node: equal to the number of the symbol. */
   graphid id;
@@ -290,18 +290,18 @@ struct symgraph
 
 /** Register a new precedence relation as used. */
 
-void register_precedence (graphid first, graphid snd);
+فراغ ثبتوونکی_precedence (graphid لومړی, graphid snd);
 
 /** Print a warning for each symbol whose precedence and/or associativity
  * is useless. */
 
-void print_precedence_warnings (void);
+فراغ print_precedence_warnings (فراغ);
 
 /*----------------------.
 | Symbol associativity  |
 `----------------------*/
 
-void register_assoc (graphid i, graphid j);
+فراغ ثبتوونکی_assoc (graphid i, graphid j);
 
 /*-----------------.
 | Semantic types.  |
@@ -311,34 +311,34 @@ void register_assoc (graphid i, graphid j);
 
    Access the fields of this struct only through the interface functions in
    this file.  \sa symbol::destructor  */
-typedef struct {
+تعريفنوع بنية {
   /** The key, name of the semantic type.  */
-  uniqstr tag;
+  uniqstr نښان;
 
   /** The location of its first occurrence.  */
   location location;
 
   /** Its status : "undeclared", "used" or "declared".
       It cannot be "needed".  */
-  declaration_status status;
+  declaration_حالت حالت;
 
   /** Any \c %destructor and %printer declared for this
       semantic type.  */
-  code_props props[CODE_PROPS_SIZE];
+  کوډ_props props[کوډ_PROPS_اندازه];
 
 } semantic_type;
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_from_uniqstr (const uniqstr key,
-                                           const location *loc);
+semantic_type *semantic_type_from_uniqstr (ثابت uniqstr کلی,
+                                           ثابت location *loc);
 
 /** Fetch (or create) the semantic type associated to KEY.  */
-semantic_type *semantic_type_get (const char *key, const location *loc);
+semantic_type *semantic_type_get (ثابت حرف *کلی, ثابت location *loc);
 
 /** Set the \c destructor or \c printer associated with \c type.  */
-void semantic_type_code_props_set (semantic_type *type,
-                                   code_props_type kind,
-                                   code_props const *code);
+فراغ semantic_type_کوډ_props_سېټ (semantic_type *type,
+                                   کوډ_props_type ډول,
+                                   کوډ_props ثابت *کوډ);
 
 /*----------------------------------.
 | Symbol and semantic type tables.  |
@@ -346,20 +346,20 @@ void semantic_type_code_props_set (semantic_type *type,
 
 /** Create the symbol and semantic type tables, and the built-in
     symbols.  */
-void symbols_new (void);
+فراغ symbols_new (فراغ);
 
 /** Free all the memory allocated for symbols and semantic types.  */
-void symbols_free (void);
+فراغ symbols_free (فراغ);
 
 /** Check that all the symbols are defined.
 
     Report any undefined symbols and consider them nonterminals.  */
-void symbols_check_defined (void);
+فراغ symbols_check_defined (فراغ);
 
 /** Sanity checks and #token_translations construction.
 
    Perform various sanity checks, assign symbol numbers, and set up
    #token_translations.  */
-void symbols_pack (void);
+فراغ symbols_pack (فراغ);
 
-#endif /* !SYMTAB_H_ */
+#د_که_پای /* !SYMTAB_H_ */

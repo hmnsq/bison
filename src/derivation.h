@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef DERIVATION_H
+#که_نه_تعریف_شوی DERIVATION_H
 # define DERIVATION_H
 
 # include <gl_linked_list.h>
@@ -30,48 +30,48 @@
    relevant to the counterexample.  The leaves of a derivation form a
    counterexample when printed.  */
 
-typedef gl_list_t derivation_list;
-typedef struct derivation derivation;
+تعريفنوع gl_list_t derivation_list;
+تعريفنوع بنية derivation derivation;
 
-static inline derivation_list derivation_list_new (void)
+ساكن مضمن derivation_list derivation_list_new (فراغ)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
+  أرجع gl_list_create_تشه (GL_LINKED_LIST, عدم, عدم, عدم, true);
 }
 
-static inline bool
-derivation_list_next (gl_list_iterator_t *it, derivation **d)
+ساكن مضمن bool
+derivation_list_بل (gl_list_iterator_t *it, derivation **d)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  ثابت فراغ *p = عدم;
+  bool res = gl_list_iterator_بل (it, &p, عدم);
+  إذا (res)
     *d = (derivation *) p;
-  else
+  وإلا
     gl_list_iterator_free (it);
-  return res;
+  أرجع res;
 }
 
-void derivation_list_append (derivation_list dl, derivation *d);
-void derivation_list_prepend (derivation_list dl, derivation *d);
-void derivation_list_free (derivation_list dl);
+فراغ derivation_list_append (derivation_list dl, derivation *d);
+فراغ derivation_list_prepend (derivation_list dl, derivation *d);
+فراغ derivation_list_free (derivation_list dl);
 
 // rule_num is the number of the rule SYM -> CHILDREN.
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r);
+derivation_new (نښه_شمېره sym, derivation_list children,
+                ثابت قاعده *r);
 
-static inline derivation *derivation_new_leaf (symbol_number sym)
+ساكن مضمن derivation *derivation_new_ونې_پاڼه (نښه_شمېره sym)
 {
-  return derivation_new (sym, NULL, NULL);
+  أرجع derivation_new (sym, عدم, عدم);
 }
 
 // Number of symbols.
-size_t derivation_size (const derivation *deriv);
-void derivation_print (const derivation *deriv, FILE *out, const char *prefix);
-void derivation_print_leaves (const derivation *deriv, FILE *out);
-void derivation_free (derivation *deriv);
-void derivation_retain (derivation *deriv);
+size_t derivation_اندازه (ثابت derivation *deriv);
+فراغ derivation_print (ثابت derivation *deriv, FILE *بهر, ثابت حرف *مختاړی);
+فراغ derivation_print_leaves (ثابت derivation *deriv, FILE *بهر);
+فراغ derivation_free (derivation *deriv);
+فراغ derivation_retain (derivation *deriv);
 
 // A derivation denoting the position of the dot.
-derivation *derivation_dot (void);
+derivation *derivation_dot (فراغ);
 
-#endif /* DERIVATION_H */
+#د_که_پای /* DERIVATION_H */

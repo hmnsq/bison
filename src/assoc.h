@@ -18,19 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef ASSOC_H_
+#که_نه_تعریف_شوی ASSOC_H_
 # define ASSOC_H_
 
 /* Associativity values for tokens and rules.  */
-typedef enum
+تعريفنوع تعداد
 {
   undef_assoc,     /** Not defined. */
-  right_assoc,     /** %right */
-  left_assoc,      /** %left */
+  ښی_assoc,     /** %right */
+  کیڼ_assoc,      /** %left */
   non_assoc,       /** %nonassoc */
   precedence_assoc /** %precedence */
 } assoc;
 
-char const *assoc_to_string (assoc a);
+حرف ثابت *assoc_منزل_string (assoc a);
 
-#endif /* !ASSOC_H_ */
+#د_که_پای /* !ASSOC_H_ */

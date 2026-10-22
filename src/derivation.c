@@ -17,155 +17,155 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "derivation.h"
-#include "glyphs.h"
+#ضمن "derivation.h"
+#ضمن "glyphs.h"
 
-#include <c-ctype.h>
-#include <gl_linked_list.h>
-#include <mbswidth.h>
-#include <vasnprintf.h>
+#ضمن <c-ctype.h>
+#ضمن <gl_linked_list.h>
+#ضمن <mbswidth.h>
+#ضمن <vasnprintf.h>
 
-#include "system.h"
-#include "complain.h"
+#ضمن "system.h"
+#ضمن "complain.h"
 
-struct derivation
+بنية derivation
 {
-  symbol_number sym;
+  نښه_شمېره sym;
   derivation_list children;
-  int reference_count;
+  صحيح reference_شمېر;
   // The rule SYM -> CHILDREN.
-  const rule *rule;
+  ثابت قاعده *قاعده;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  صحيح color;
 };
 
-static derivation d_dot = { -1, NULL, -1, NULL, -1 };
+ساكن derivation d_dot = { -1, عدم, -1, عدم, -1 };
 
 derivation *
-derivation_dot (void)
+derivation_dot (فراغ)
 {
-  return &d_dot;
+  أرجع &d_dot;
 }
 
-void
+فراغ
 derivation_list_append (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
-  gl_list_add_last (dl, d);
+  gl_list_جمع_کړه_وروستی (dl, d);
 }
 
-void
+فراغ
 derivation_list_prepend (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
-  gl_list_add_first (dl, d);
+  gl_list_جمع_کړه_لومړی (dl, d);
 }
 
-void derivation_list_free (derivation_list dl)
+فراغ derivation_list_free (derivation_list dl)
 {
-  derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
-       derivation_list_next (&it, &d);
+  derivation *d = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (dl);
+       derivation_list_بل (&it, &d);
        )
-    if (d != &d_dot)
+    إذا (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r)
+derivation_new (نښه_شمېره sym, derivation_list children,
+                ثابت قاعده *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (حجم *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
-  res->rule = r;
+  res->reference_شمېر = 0;
+  res->قاعده = r;
   res->color = -1;
-  return res;
+  أرجع res;
 }
 
-void
+فراغ
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_شمېر;
 }
 
-void
+فراغ
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
-  derivation_list free_queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
-                    1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+  إذا (!d)
+    أرجع;
+  derivation_list free_کتار =
+    gl_list_create (GL_LINKED_LIST, عدم, عدم, عدم, true,
+                    1, (ثابت فراغ **)&d);
+  طالما (gl_list_اندازه (free_کتار) > 0)
     {
-      derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      derivation *deriv = (derivation *) gl_list_get_at (free_کتار, 0);
+      إذا (--deriv->reference_شمېر == 0)
         {
-          if (deriv->children)
+          إذا (deriv->children)
             {
-              derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              derivation *ماشوم = عدم;
+              لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_بل (&it, &ماشوم);
                    )
-                if (child != &d_dot)
-                  gl_list_add_last (free_queue, child);
+                إذا (ماشوم != &d_dot)
+                  gl_list_جمع_کړه_وروستی (free_کتار, ماشوم);
               gl_list_free (deriv->children);
             }
-          free (deriv);
+          حرر (deriv);
         }
-      gl_list_remove_at (free_queue, 0);
+      gl_list_remove_at (free_کتار, 0);
     }
-  gl_list_free (free_queue);
+  gl_list_free (free_کتار);
 }
 
 size_t
-derivation_size (const derivation *deriv)
+derivation_اندازه (ثابت derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
-  derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-       derivation_list_next (&it, &child);
+  إذا (!deriv->children)
+    أرجع 1;
+  صحيح اندازه = 1;
+  derivation *ماشوم = عدم;
+  لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+       derivation_list_بل (&it, &ماشوم);
        )
-    size += derivation_size (child);
-  return size;
+    اندازه += derivation_اندازه (ماشوم);
+  أرجع اندازه;
 }
 
 
 // Longest distance from root to leaf.
-static int
-derivation_depth (const derivation *deriv)
+ساكن صحيح
+derivation_ژوروالی (ثابت derivation *deriv)
 {
-  if (deriv->children)
+  إذا (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
-      derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      صحيح res = 1;
+      derivation *ماشوم;
+      لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_بل (&it, &ماشوم);
            )
-        res = max_int (res, derivation_depth (child));
-      return res + 1;
+        res = max_int (res, derivation_ژوروالی (ماشوم));
+      أرجع res + 1;
     }
-  else
-    return 1;
+  وإلا
+    أرجع 1;
 }
 
-static bool
-all_spaces (const char *s)
+ساكن bool
+all_spaces (ثابت حرف *s)
 {
-  while (c_isspace (*s))
+  طالما (c_isspace (*s))
     s++;
-  return *s == '\0';
+  أرجع *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,83 +194,83 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+ساكن صحيح
+fputs_if (bool cond, FILE *بهر, صحيح *padding, ثابت حرف *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  صحيح res = mbswidth (s, 0);
+  إذا (cond && !all_spaces (s))
     {
-      fprintf (out, "%*s%s", *padding, "", s);
+      fprintf (بهر, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  وإلا
     {
       *padding += res;
     }
-  return res;
+  أرجع res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+ساكن صحيح
+fprintf_if (bool cond, FILE *بهر, صحيح *padding, ثابت حرف *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
-  va_list args;
-  va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
-  va_end (args);
-  if (!cp)
+  حرف buf[256];
+  size_t len = حجم (buf);
+  va_list دلیلونه;
+  va_پیل (دلیلونه, fmt);
+  حرف *cp = vasnprintf (buf, &len, fmt, دلیلونه);
+  va_پای_ټکی (دلیلونه);
+  إذا (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
-    free (cp);
-  return res;
+  صحيح res = fputs_if (cond, بهر, padding, cp);
+  إذا (cp != buf)
+    حرر (cp);
+  أرجع res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
-derivation_width (const derivation *deriv)
+ساكن صحيح
+derivation_پلنوالی (ثابت derivation *deriv)
 {
-  if (deriv->children)
+  إذا (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      ثابت نښه *sym = symbols[deriv->sym];
+      صحيح self_پلنوالی = mbswidth (sym->نښان, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      صحيح children_پلنوالی = ښکته_arrow_پلنوالی;
+      children_پلنوالی += snprintf (عدم, 0, "%d: ", deriv->قاعده->شمېره);
+      إذا (gl_list_اندازه (deriv->children) == 0)
         // Empty rhs.
-        children_width += empty_width;
-      else
+        children_پلنوالی += تشه_پلنوالی;
+      وإلا
         {
-          if (gl_list_size (deriv->children) == 1
-              && gl_list_get_first (deriv->children) == &d_dot)
+          إذا (gl_list_اندازه (deriv->children) == 1
+              && gl_list_get_لومړی (deriv->children) == &d_dot)
             {
-              children_width += empty_width;
-              children_width += derivation_separator_width;
+              children_پلنوالی += تشه_پلنوالی;
+              children_پلنوالی += derivation_separator_پلنوالی;
             }
 
-          derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-               derivation_list_next (&it, &child);
+          derivation *ماشوم;
+          لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+               derivation_list_بل (&it, &ماشوم);
                )
-            children_width
-              += derivation_separator_width + derivation_width (child);
+            children_پلنوالی
+              += derivation_separator_پلنوالی + derivation_پلنوالی (ماشوم);
           // No separator at the beginning.
-          children_width -= derivation_separator_width;
+          children_پلنوالی -= derivation_separator_پلنوالی;
         }
-      return max_int (self_width, children_width);
+      أرجع max_int (self_پلنوالی, children_پلنوالی);
     }
-  else if (deriv == &d_dot)
+  وإلا إذا (deriv == &d_dot)
     {
-      return dot_width;
+      أرجع dot_پلنوالی;
     }
-  else // leaf.
+  وإلا // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      ثابت نښه *sym = symbols[deriv->sym];
+      أرجع mbswidth (sym->نښان, 0);
     }
 }
 
@@ -286,191 +286,191 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+ساكن صحيح
+derivation_print_ونه_impl (ثابت derivation *deriv, FILE *بهر,
+                            صحيح ژوروالی, صحيح *padding)
 {
-  const int width = derivation_width (deriv);
+  ثابت صحيح پلنوالی = derivation_پلنوالی (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  صحيح res = 0;
+  إذا (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      ثابت نښه *sym = symbols[deriv->sym];
+      حرف style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      إذا (ژوروالی == 0 || ژوروالی == 1)
         {
-          begin_use_class (style, out);
-          begin_use_class ("cex-step", out);
+          begin_use_class (style, بهر);
+          begin_use_class ("cex-step", بهر);
         }
-      if (depth == 0)
+      إذا (ژوروالی == 0)
         {
-          res += fputs_if (true, out, padding, sym->tag);
+          res += fputs_if (true, بهر, padding, sym->نښان);
         }
-      else
+      وإلا
         {
-          res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          res += fputs_if (ژوروالی == 1, بهر, padding, ښکته_arrow);
+          res += fprintf_if (ژوروالی == 1, بهر, padding, "%d: ", deriv->قاعده->شمېره);
+          إذا (gl_list_اندازه (deriv->children) == 0)
             // Empty rhs.
-            res += fputs_if (depth == 1, out, padding, empty);
-          else
+            res += fputs_if (ژوروالی == 1, بهر, padding, تشه);
+          وإلا
             {
-              if (gl_list_size (deriv->children) == 1
-                  && gl_list_get_first (deriv->children) == &d_dot)
+              إذا (gl_list_اندازه (deriv->children) == 1
+                  && gl_list_get_لومړی (deriv->children) == &d_dot)
                 {
-                  res += fputs_if (depth == 1, out, padding, empty);
-                  res += fputs_if (depth == 1, out, padding, derivation_separator);
+                  res += fputs_if (ژوروالی == 1, بهر, padding, تشه);
+                  res += fputs_if (ژوروالی == 1, بهر, padding, derivation_separator);
                 }
 
-              bool first = true;
-              derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-                   derivation_list_next (&it, &child);
+              bool لومړی = true;
+              derivation *ماشوم;
+              لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+                   derivation_list_بل (&it, &ماشوم);
                    )
                 {
-                  if (!first)
-                    res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
-                  first = false;
+                  إذا (!لومړی)
+                    res += fputs_if (ژوروالی == 1, بهر, padding, derivation_separator);
+                  res += derivation_print_ونه_impl (ماشوم, بهر, ژوروالی - 1, padding);
+                  لومړی = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      إذا (ژوروالی == 0 || ژوروالی == 1)
         {
-          end_use_class ("cex-step", out);
-          end_use_class (style, out);
+          پای_ټکی_use_class ("cex-step", بهر);
+          پای_ټکی_use_class (style, بهر);
         }
-      *padding += width - res;
-      res = width;
+      *padding += پلنوالی - res;
+      res = پلنوالی;
     }
-  else if (deriv == &d_dot)
+  وإلا إذا (deriv == &d_dot)
     {
-      if (depth == 0)
-        begin_use_class ("cex-dot", out);
-      res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
-        end_use_class ("cex-dot", out);
+      إذا (ژوروالی == 0)
+        begin_use_class ("cex-dot", بهر);
+      res += fputs_if (ژوروالی == 0, بهر, padding, dot);
+      إذا (ژوروالی == 0)
+        پای_ټکی_use_class ("cex-dot", بهر);
     }
-  else // leaf.
+  وإلا // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
-        begin_use_class ("cex-leaf", out);
-      res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
-        end_use_class ("cex-leaf", out);
+      ثابت نښه *sym = symbols[deriv->sym];
+      إذا (ژوروالی == 0)
+        begin_use_class ("cex-leaf", بهر);
+      res += fputs_if (ژوروالی == 0, بهر, padding, sym->نښان);
+      إذا (ژوروالی == 0)
+        پای_ټکی_use_class ("cex-leaf", بهر);
     }
-  return res;
+  أرجع res;
 }
 
-static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+ساكن فراغ
+derivation_print_ونه (ثابت derivation *deriv, FILE *بهر, ثابت حرف *مختاړی)
 {
-  fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
-       depth < max_depth; ++depth)
+  fputc ('\n', بهر);
+  لكل (صحيح ژوروالی = 0, max_ژوروالی = derivation_ژوروالی (deriv);
+       ژوروالی < max_ژوروالی; ++ژوروالی)
     {
-      int padding = 0;
-      fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
-      fputc ('\n', out);
+      صحيح padding = 0;
+      fprintf (بهر, "    %s", مختاړی);
+      derivation_print_ونه_impl (deriv, بهر, ژوروالی, &padding);
+      fputc ('\n', بهر);
     }
 }
 
 
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
-static bool
-derivation_print_flat_impl (derivation *deriv, FILE *out,
+ساكن bool
+derivation_print_flat_impl (derivation *deriv, FILE *بهر,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            صحيح *counter, ثابت حرف *مختاړی)
 {
-  if (deriv->children)
+  إذا (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      ثابت نښه *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      حرف style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
-      begin_use_class (style, out);
+      begin_use_class (style, بهر);
 
-      if (!leaves_only)
+      إذا (!leaves_only)
         {
-          fputs (prefix, out);
-          begin_use_class ("cex-step", out);
-          fprintf (out, "%s %s [ ", sym->tag, arrow);
-          end_use_class ("cex-step", out);
-          prefix = "";
+          fputs (مختاړی, بهر);
+          begin_use_class ("cex-step", بهر);
+          fprintf (بهر, "%s %s [ ", sym->نښان, arrow);
+          پای_ټکی_use_class ("cex-step", بهر);
+          مختاړی = "";
         }
       bool res = false;
-      derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
-           derivation_list_next (&it, &child);
+      derivation *ماشوم;
+      لكل (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+           derivation_list_بل (&it, &ماشوم);
            )
         {
-          if (derivation_print_flat_impl (child, out,
-                                          leaves_only, counter, prefix))
+          إذا (derivation_print_flat_impl (ماشوم, بهر,
+                                          leaves_only, counter, مختاړی))
             {
-              prefix = " ";
+              مختاړی = " ";
               res = true;
             }
-          else if (!leaves_only)
-            prefix = " ";
+          وإلا إذا (!leaves_only)
+            مختاړی = " ";
         }
-      if (!leaves_only)
+      إذا (!leaves_only)
         {
-          begin_use_class ("cex-step", out);
-          if (res)
-            fputs (" ]", out);
-          else
-            fputs ("]", out);
-          end_use_class ("cex-step", out);
+          begin_use_class ("cex-step", بهر);
+          إذا (res)
+            fputs (" ]", بهر);
+          وإلا
+            fputs ("]", بهر);
+          پای_ټکی_use_class ("cex-step", بهر);
         }
-      end_use_class (style, out);
-      return res;
+      پای_ټکی_use_class (style, بهر);
+      أرجع res;
     }
-  else if (deriv == &d_dot)
+  وإلا إذا (deriv == &d_dot)
     {
-      fputs (prefix, out);
-      begin_use_class ("cex-dot", out);
-      fputs (dot, out);
-      end_use_class ("cex-dot", out);
+      fputs (مختاړی, بهر);
+      begin_use_class ("cex-dot", بهر);
+      fputs (dot, بهر);
+      پای_ټکی_use_class ("cex-dot", بهر);
     }
-  else // leaf.
+  وإلا // leaf.
     {
-      fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
-      begin_use_class ("cex-leaf", out);
-      fprintf (out, "%s", sym->tag);
-      end_use_class ("cex-leaf", out);
+      fputs (مختاړی, بهر);
+      ثابت نښه *sym = symbols[deriv->sym];
+      begin_use_class ("cex-leaf", بهر);
+      fprintf (بهر, "%s", sym->نښان);
+      پای_ټکی_use_class ("cex-leaf", بهر);
     }
-  return true;
+  أرجع true;
 }
 
-static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+ساكن فراغ
+derivation_print_flat (ثابت derivation *deriv, FILE *بهر, ثابت حرف *مختاړی)
 {
-  int counter = 0;
-  fputs (prefix, out);
-  derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
-  fputc ('\n', out);
+  صحيح counter = 0;
+  fputs (مختاړی, بهر);
+  derivation_print_flat_impl ((derivation *)deriv, بهر, false, &counter, "");
+  fputc ('\n', بهر);
 }
 
-void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+فراغ
+derivation_print_leaves (ثابت derivation *deriv, FILE *بهر)
 {
-  int counter = 0;
-  derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
-  fputc ('\n', out);
+  صحيح counter = 0;
+  derivation_print_flat_impl ((derivation *)deriv, بهر, true, &counter, "");
+  fputc ('\n', بهر);
 }
 
-void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+فراغ
+derivation_print (ثابت derivation *deriv, FILE *بهر, ثابت حرف *مختاړی)
 {
-  if (getenv ("YYFLAT"))
-    derivation_print_flat (deriv, out, prefix);
-  else
-    derivation_print_tree (deriv, out, prefix);
+  إذا (getenv ("YYFLAT"))
+    derivation_print_flat (deriv, بهر, مختاړی);
+  وإلا
+    derivation_print_ونه (deriv, بهر, مختاړی);
 }

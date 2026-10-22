@@ -17,34 +17,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef GLYPHS_H
+#که_نه_تعریف_شوی GLYPHS_H
 # define GLYPHS_H
 
 /* Initialize the following variables.  */
-void glyphs_init (void);
+فراغ glyphs_init (فراغ);
 
 /* In gnulib/lib/unicodeio.h unicode_to_mb uses a buffer of 25 bytes.
    In down_arrow, we append one space.  */
-typedef char glyph_buffer_t[26];
+تعريفنوع حرف glyph_بفر_t[26];
 
 /* "→", separates the lhs of a rule from its rhs.  */
-extern glyph_buffer_t arrow;
-extern int arrow_width;
+خارجي glyph_بفر_t arrow;
+خارجي صحيح arrow_پلنوالی;
 
 /* "•", a point in an item (aka, a dotted rule).  */
-extern glyph_buffer_t dot;
-extern int dot_width;
+خارجي glyph_بفر_t dot;
+خارجي صحيح dot_پلنوالی;
 
 /* "↳ ", below an lhs to announce the rhs.  */
-extern glyph_buffer_t down_arrow;
-extern int down_arrow_width;
+خارجي glyph_بفر_t ښکته_arrow;
+خارجي صحيح ښکته_arrow_پلنوالی;
 
 /* "ε", an empty rhs.  */
-extern glyph_buffer_t empty;
-extern int empty_width;
+خارجي glyph_بفر_t تشه;
+خارجي صحيح تشه_پلنوالی;
 
 /* " ", separate symbols in the rhs of a derivation.  */
-extern const char *derivation_separator;
-extern int derivation_separator_width;
+خارجي ثابت حرف *derivation_separator;
+خارجي صحيح derivation_separator_پلنوالی;
 
-#endif /* GLYPHS_H */
+#د_که_پای /* GLYPHS_H */

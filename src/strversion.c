@@ -17,51 +17,51 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "strversion.h"
+#ضمن "strversion.h"
 
-#include <errno.h>
-#include <intprops.h>
+#ضمن <errno.h>
+#ضمن <intprops.h>
 
-int
-strversion_to_int (char const *version)
+صحيح
+strversion_منزل_int (حرف ثابت *نسخه)
 {
   IGNORE_TYPE_LIMITS_BEGIN
-  int res = 0;
+  صحيح res = 0;
   errno = 0;
-  char *cp = NULL;
+  حرف *cp = عدم;
 
   {
-    long major = strtol (version, &cp, 10);
-    if (errno || cp == version || *cp != '.' || major < 0
+    اوږد major = strtol (نسخه, &cp, 10);
+    إذا (errno || cp == نسخه || *cp != '.' || major < 0
         || INT_MULTIPLY_WRAPV (major, 10000, &res))
-      return -1;
+      أرجع -1;
   }
 
   {
     ++cp;
-    char *prev = cp;
-    long minor = strtol (cp, &cp, 10);
-    if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+    حرف *prev = cp;
+    اوږد minor = strtol (cp, &cp, 10);
+    إذا (errno || cp == prev || (*cp != '\0' && *cp != '.')
         || ! (0 <= minor && minor < 100)
         || INT_MULTIPLY_WRAPV (minor, 100, &minor)
-        || INT_ADD_WRAPV (minor, res, &res))
-      return -1;
+        || INT_جمع_کړه_WRAPV (minor, res, &res))
+      أرجع -1;
   }
 
-  if (*cp == '.')
+  إذا (*cp == '.')
     {
       ++cp;
-      char *prev = cp;
-      long micro = strtol (cp, &cp, 10);
-      if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+      حرف *prev = cp;
+      اوږد micro = strtol (cp, &cp, 10);
+      إذا (errno || cp == prev || (*cp != '\0' && *cp != '.')
           || ! (0 <= micro && micro < 100)
-          || INT_ADD_WRAPV (micro, res, &res))
-        return -1;
+          || INT_جمع_کړه_WRAPV (micro, res, &res))
+        أرجع -1;
     }
 
-  IGNORE_TYPE_LIMITS_END
-  return res;
+  IGNORE_TYPE_LIMITS_پای_ټکی
+  أرجع res;
 }

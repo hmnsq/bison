@@ -18,44 +18,44 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "symlist.h"
+#ضمن "symlist.h"
 
 /*--------------------------------------.
 | Create a list containing SYM at LOC.  |
 `--------------------------------------*/
 
-symbol_list *
-symbol_list_sym_new (symbol *sym, location loc)
+نښه_list *
+نښه_list_sym_new (نښه *sym, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  نښه_list *res = xmalloc (حجم *res);
 
-  res->content_type = SYMLIST_SYMBOL;
+  res->content_type = SYMLIST_نښه;
   res->content.sym = sym;
   res->sym_loc = loc;
-  res->named_ref = NULL;
+  res->named_ref = عدم;
 
-  res->midrule = NULL;
-  res->midrule_parent_rule = NULL;
-  res->midrule_parent_rhs_index = 0;
+  res->midrule = عدم;
+  res->midrule_پلار_قاعده = عدم;
+  res->midrule_پلار_rhs_شاخص = 0;
 
   /* Members used for LHS only.  */
-  res->rhs_loc = empty_loc;
-  res->ruleprec = NULL;
-  res->percent_empty_loc = empty_loc;
-  code_props_none_init (&res->action_props);
+  res->rhs_loc = تشه_loc;
+  res->ruleprec = عدم;
+  res->percent_تشه_loc = تشه_loc;
+  کوډ_props_none_init (&res->action_props);
   res->dprec = 0;
-  res->dprec_loc = empty_loc;
+  res->dprec_loc = تشه_loc;
   res->merger = 0;
-  res->merger_declaration_loc = empty_loc;
+  res->merger_declaration_loc = تشه_loc;
   res->expected_sr_conflicts = -1;
   res->expected_rr_conflicts = -1;
 
-  res->next = NULL;
+  res->بل = عدم;
 
-  return res;
+  أرجع res;
 }
 
 
@@ -63,41 +63,41 @@ symbol_list_sym_new (symbol *sym, location loc)
 | Create a list containing TYPE_NAME at LOC.  |
 `--------------------------------------------*/
 
-symbol_list *
-symbol_list_type_new (uniqstr type_name, location loc)
+نښه_list *
+نښه_list_type_new (uniqstr type_name, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  نښه_list *res = xmalloc (حجم *res);
 
   res->content_type = SYMLIST_TYPE;
-  res->content.sem_type = xmalloc (sizeof (semantic_type));
-  res->content.sem_type->tag = type_name;
+  res->content.sem_type = xmalloc (حجم (semantic_type));
+  res->content.sem_type->نښان = type_name;
   res->content.sem_type->location = loc;
-  res->content.sem_type->status = undeclared;
+  res->content.sem_type->حالت = undeclared;
 
   res->sym_loc = loc;
-  res->named_ref = NULL;
-  res->next = NULL;
+  res->named_ref = عدم;
+  res->بل = عدم;
 
-  return res;
+  أرجع res;
 }
 
 
-symbol_list *
-symbol_list_type_set (symbol_list *syms, uniqstr type_name)
+نښه_list *
+نښه_list_type_سېټ (نښه_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
-    symbol_type_set (l->content.sym, type_name, l->sym_loc);
-  return syms;
+  لكل (نښه_list *l = syms; l; l = l->بل)
+    نښه_type_سېټ (l->content.sym, type_name, l->sym_loc);
+  أرجع syms;
 }
 
 
-symbol_list *
-symbol_list_find_symbol (symbol_list *l, const symbol *sym)
+نښه_list *
+نښه_list_پیدا_کړه_نښه (نښه_list *l, ثابت نښه *sym)
 {
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
-    if (l->content.sym == sym)
-      return l;
-  return NULL;
+  لكل (/* Nothing. */; l && l->content.sym; l = l->بل)
+    إذا (l->content.sym == sym)
+      أرجع l;
+  أرجع عدم;
 }
 
 
@@ -105,25 +105,25 @@ symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 | Print this list, for which every content_type must be SYMLIST_SYMBOL.  |
 `-----------------------------------------------------------------------*/
 
-void
-symbol_list_syms_print (const symbol_list *l, FILE *out)
+فراغ
+نښه_list_syms_print (ثابت نښه_list *l, FILE *بهر)
 {
-  fputc ('[', out);
-  char const *sep = "";
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
+  fputc ('[', بهر);
+  حرف ثابت *sep = "";
+  لكل (/* Nothing. */; l && l->content.sym; l = l->بل)
     {
-      fputs (sep, out);
-      fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
+      fputs (sep, بهر);
+      fputs (l->content_type == SYMLIST_نښه ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
-             out);
-      if (l->content_type == SYMLIST_SYMBOL)
-        symbol_print (l->content.sym, out);
-      fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
-      putc ('}', out);
+             بهر);
+      إذا (l->content_type == SYMLIST_نښه)
+        نښه_print (l->content.sym, بهر);
+      fputs (l->action_props.is_ارزښت_کارول_شوی ? " (used)" : " (unused)", بهر);
+      putc ('}', بهر);
       sep = ", ";
     }
-  fputc (']', out);
+  fputc (']', بهر);
 }
 
 
@@ -131,33 +131,33 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 | Prepend NODE to the LIST.  |
 `---------------------------*/
 
-symbol_list *
-symbol_list_prepend (symbol_list *list, symbol_list *node)
+نښه_list *
+نښه_list_prepend (نښه_list *list, نښه_list *غوټه)
 {
-  node->next = list;
-  return node;
+  غوټه->بل = list;
+  أرجع غوټه;
 }
 
 
-symbol_list *
-symbol_list_last (symbol_list *list)
+نښه_list *
+نښه_list_وروستی (نښه_list *list)
 {
-  if (!list)
-    return NULL;
-  symbol_list *next = list;
-  while (next->next)
-    next = next->next;
-  return next;
+  إذا (!list)
+    أرجع عدم;
+  نښه_list *بل = list;
+  طالما (بل->بل)
+    بل = بل->بل;
+  أرجع بل;
 }
 
-symbol_list *
-symbol_list_append (symbol_list *list, symbol_list *node)
+نښه_list *
+نښه_list_append (نښه_list *list, نښه_list *غوټه)
 {
-  if (list)
-    symbol_list_last (list)->next = node;
-  else
-    list = node;
-  return list;
+  إذا (list)
+    نښه_list_وروستی (list)->بل = غوټه;
+  وإلا
+    list = غوټه;
+  أرجع list;
 }
 
 
@@ -166,16 +166,16 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 | Free the LIST, but not the items it contains.  |
 `-----------------------------------------------*/
 
-void
-symbol_list_free (symbol_list *list)
+فراغ
+نښه_list_free (نښه_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  لكل (نښه_list *بل; list; list = بل)
     {
-      next = list->next;
+      بل = list->بل;
       named_ref_free (list->named_ref);
-      if (list->content_type == SYMLIST_TYPE)
-        free (list->content.sem_type);
-      free (list);
+      إذا (list->content_type == SYMLIST_TYPE)
+        حرر (list->content.sem_type);
+      حرر (list);
     }
 }
 
@@ -184,15 +184,15 @@ symbol_list_free (symbol_list *list)
 | Return its length.  |
 `--------------------*/
 
-int
-symbol_list_length (symbol_list const *l)
+صحيح
+نښه_list_اوږدتیا (نښه_list ثابت *l)
 {
-  int res = 0;
-  for (/* Nothing. */;
-       l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
-       l = l->next)
+  صحيح res = 0;
+  لكل (/* Nothing. */;
+       l && !(l->content_type == SYMLIST_نښه && l->content.sym == عدم);
+       l = l->بل)
     ++res;
-  return res;
+  أرجع res;
 }
 
 
@@ -200,18 +200,18 @@ symbol_list_length (symbol_list const *l)
 | Get item N in symbol list L.  |
 `------------------------------*/
 
-symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+نښه_list *
+نښه_list_n_get (نښه_list *l, صحيح n)
 {
   aver (0 <= n);
-  for (int i = 0; i < n; ++i)
+  لكل (صحيح i = 0; i < n; ++i)
     {
-      l = l->next;
+      l = l->بل;
       aver (l);
     }
-  aver (l->content_type == SYMLIST_SYMBOL);
+  aver (l->content_type == SYMLIST_نښه);
   aver (l->content.sym);
-  return l;
+  أرجع l;
 }
 
 /*--------------------------------------------------------------.
@@ -220,36 +220,36 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+نښه_list_n_type_name_get (نښه_list *l, صحيح n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  أرجع نښه_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
-symbol_list_null (symbol_list *node)
+نښه_list_null (نښه_list *غوټه)
 {
-  return (!node
-          || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
+  أرجع (!غوټه
+          || (غوټه->content_type == SYMLIST_نښه && !غوټه->content.sym));
 }
 
-void
-symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                            code_props const *cprops)
+فراغ
+نښه_list_کوډ_props_سېټ (نښه_list *غوټه, کوډ_props_type ډول,
+                            کوډ_props ثابت *cprops)
 {
-  switch (node->content_type)
+  بدل (غوټه->content_type)
     {
-    case SYMLIST_SYMBOL:
-      symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
-        node->content.sym->content->status = used;
-      break;
-    case SYMLIST_TYPE:
-      semantic_type_code_props_set
-        (semantic_type_get (node->content.sem_type->tag,
-                            &node->content.sem_type->location),
-         kind, cprops);
-      if (node->content.sem_type->status == undeclared)
-        node->content.sem_type->status = used;
-      break;
+    حالة SYMLIST_نښه:
+      نښه_کوډ_props_سېټ (غوټه->content.sym, ډول, cprops);
+      إذا (غوټه->content.sym->content->حالت == undeclared)
+        غوټه->content.sym->content->حالت = کارول_شوی;
+      اكسر;
+    حالة SYMLIST_TYPE:
+      semantic_type_کوډ_props_سېټ
+        (semantic_type_get (غوټه->content.sem_type->نښان,
+                            &غوټه->content.sem_type->location),
+         ډول, cprops);
+      إذا (غوټه->content.sem_type->حالت == undeclared)
+        غوټه->content.sem_type->حالت = کارول_شوی;
+      اكسر;
     }
 }

@@ -22,39 +22,39 @@
 /* See comments in state.h for the data structures that represent it.
    The entry point is generate_states.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <bitset.h>
+#ضمن <bitset.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
+#ضمن "closure.h"
+#ضمن "complain.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "lalr.h"
+#ضمن "lr0.h"
+#ضمن "reader.h"
+#ضمن "reduce.h"
+#ضمن "state.h"
+#ضمن "symtab.h"
 
-typedef struct state_list
+تعريفنوع بنية state_list
 {
-  struct state_list *next;
+  بنية state_list *بل;
   state *state;
 } state_list;
 
-static state_list *first_state = NULL;
-static state_list *last_state = NULL;
+ساكن state_list *لومړی_state = عدم;
+ساكن state_list *وروستی_state = عدم;
 
 /* Print CORE for debugging. */
-static void
-core_print (size_t core_size, item_index *core, FILE *out)
+ساكن فراغ
+core_print (size_t core_اندازه, توکی_شاخص *core, FILE *بهر)
 {
-  for (int i = 0; i < core_size; ++i)
+  لكل (صحيح i = 0; i < core_اندازه; ++i)
     {
-      item_print (ritem + core[i], NULL, out);
-      fputc ('\n', out);
+      توکی_print (ritem + core[i], عدم, بهر);
+      fputc ('\n', بهر);
     }
 }
 
@@ -64,67 +64,67 @@ core_print (size_t core_size, item_index *core, FILE *out)
 | its outgoing transitions.  Return it.                            |
 `-----------------------------------------------------------------*/
 
-static state *
-state_list_append (symbol_number sym, size_t core_size, item_index *core)
+ساكن state *
+state_list_append (نښه_شمېره sym, size_t core_اندازه, توکی_شاخص *core)
 {
-  state_list *node = xmalloc (sizeof *node);
-  state *res = state_new (sym, core_size, core);
+  state_list *غوټه = xmalloc (حجم *غوټه);
+  state *res = state_new (sym, core_اندازه, core);
 
-  if (trace_flag & trace_automaton)
+  إذا (trace_flag & trace_automaton)
     fprintf (stderr, "state_list_append (state = %d, symbol = %d (%s))\n",
-             nstates, sym, symbols[sym]->tag);
+             nstates, sym, symbols[sym]->نښان);
 
-  node->next = NULL;
-  node->state = res;
+  غوټه->بل = عدم;
+  غوټه->state = res;
 
-  if (!first_state)
-    first_state = node;
-  if (last_state)
-    last_state->next = node;
-  last_state = node;
+  إذا (!لومړی_state)
+    لومړی_state = غوټه;
+  إذا (وروستی_state)
+    وروستی_state->بل = غوټه;
+  وروستی_state = غوټه;
 
-  return res;
+  أرجع res;
 }
 
 /* Symbols that can be "shifted" (including nonterminals) from the
    current state.  */
-bitset shift_symbol;
+bitset ښويدنه_نښه;
 
-static rule **redset;
+ساكن قاعده **redset;
 /* For the current state, the list of pointers to states that can be
    reached via a shift/goto.  Could be indexed by the reaching symbol,
    but labels of incoming transitions can be recovered by the state
    itself.  */
-static state **shiftset;
+ساكن state **shiftset;
 
 
 /* KERNEL_BASE[symbol-number] -> list of item indices (offsets inside
    RITEM) of length KERNEL_SIZE[symbol-number]. */
-static item_index **kernel_base;
-static int *kernel_size;
+ساكن توکی_شاخص **kernel_بنسټ;
+ساكن صحيح *kernel_اندازه;
 
 /* A single dimension array that serves as storage for
    KERNEL_BASE.  */
-static item_index *kernel_items;
+ساكن توکی_شاخص *kernel_توکي;
 
 
-static void
-allocate_itemsets (void)
+ساكن فراغ
+allocate_itemsets (فراغ)
 {
   /* Count the number of occurrences of all the symbols in RITEMS.
      Note that useless productions (hence useless nonterminals) are
      browsed too, hence we need to allocate room for _all_ the
      symbols.  */
-  size_t count = 0;
-  size_t *symbol_count = xcalloc (nsyms + nuseless_nonterminals,
-                                  sizeof *symbol_count);
+  size_t شمېر = 0;
+  size_t *نښه_شمېر = xcalloc (nsyms + nuseless_nonterminals,
+                                  حجم *نښه_شمېر);
 
-  for (rule_number r = 0; r < nrules; ++r)
-    for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  لكل (قاعده_شمېره r = 0; r < nrules; ++r)
+    لكل (توکی_شمېره *rhsp = قواعد[r].rhs; 0 <= *rhsp; ++rhsp)
       {
-        symbol_number sym = item_number_as_symbol_number (*rhsp);
-        count += 1;
-        symbol_count[sym] += 1;
+        نښه_شمېره sym = توکی_شمېره_as_نښه_شمېره (*rhsp);
+        شمېر += 1;
+        نښه_شمېر[sym] += 1;
       }
 
   /* See comments before new_itemsets.  All the vectors of items
@@ -133,61 +133,61 @@ allocate_itemsets (void)
      appears as an item, which is SYMBOL_COUNT[S].
      We allocate that much space for each symbol.  */
 
-  kernel_base = xnmalloc (nsyms, sizeof *kernel_base);
-  kernel_items = xnmalloc (count, sizeof *kernel_items);
+  kernel_بنسټ = xnmalloc (nsyms, حجم *kernel_بنسټ);
+  kernel_توکي = xnmalloc (شمېر, حجم *kernel_توکي);
 
-  count = 0;
-  for (symbol_number i = 0; i < nsyms; i++)
+  شمېر = 0;
+  لكل (نښه_شمېره i = 0; i < nsyms; i++)
     {
-      kernel_base[i] = kernel_items + count;
-      count += symbol_count[i];
+      kernel_بنسټ[i] = kernel_توکي + شمېر;
+      شمېر += نښه_شمېر[i];
     }
 
-  free (symbol_count);
-  kernel_size = xnmalloc (nsyms, sizeof *kernel_size);
+  حرر (نښه_شمېر);
+  kernel_اندازه = xnmalloc (nsyms, حجم *kernel_اندازه);
 }
 
 /* Print the current kernel (in KERNEL_BASE). */
-static void
-kernel_print (FILE *out)
+ساكن فراغ
+kernel_print (FILE *بهر)
 {
-  for (symbol_number i = 0; i < nsyms; ++i)
-    if (kernel_size[i])
+  لكل (نښه_شمېره i = 0; i < nsyms; ++i)
+    إذا (kernel_اندازه[i])
       {
-        fprintf (out, "kernel[%s] =\n", symbols[i]->tag);
-        core_print (kernel_size[i], kernel_base[i], out);
+        fprintf (بهر, "kernel[%s] =\n", symbols[i]->نښان);
+        core_print (kernel_اندازه[i], kernel_بنسټ[i], بهر);
       }
 }
 
 /* Make sure the kernel is in sane state. */
-static void
-kernel_check (void)
+ساكن فراغ
+kernel_check (فراغ)
 {
-  for (symbol_number i = 0; i < nsyms - 1; ++i)
-    assert (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
+  لكل (نښه_شمېره i = 0; i < nsyms - 1; ++i)
+    أكد (kernel_بنسټ[i] + kernel_اندازه[i] <= kernel_بنسټ[i + 1]);
 }
 
-static void
-allocate_storage (void)
+ساكن فراغ
+allocate_storage (فراغ)
 {
   allocate_itemsets ();
 
-  shiftset = xnmalloc (nsyms, sizeof *shiftset);
-  redset = xnmalloc (nrules, sizeof *redset);
+  shiftset = xnmalloc (nsyms, حجم *shiftset);
+  redset = xnmalloc (nrules, حجم *redset);
   state_hash_new ();
-  shift_symbol = bitset_create (nsyms, BITSET_FIXED);
+  ښويدنه_نښه = bitset_create (nsyms, BITSET_FIXED);
 }
 
 
-static void
-free_storage (void)
+ساكن فراغ
+free_storage (فراغ)
 {
-  bitset_free (shift_symbol);
-  free (redset);
-  free (shiftset);
-  free (kernel_base);
-  free (kernel_size);
-  free (kernel_items);
+  bitset_free (ښويدنه_نښه);
+  حرر (redset);
+  حرر (shiftset);
+  حرر (kernel_بنسټ);
+  حرر (kernel_اندازه);
+  حرر (kernel_توکي);
   state_hash_free ();
 }
 
@@ -208,42 +208,42 @@ free_storage (void)
 | number.  Compute each kernel_base[symbol] with the same sort.     |
 `------------------------------------------------------------------*/
 
-static void
+ساكن فراغ
 new_itemsets (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->number);
+  إذا (trace_flag & trace_automaton)
+    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->شمېره);
 
-  memset (kernel_size, 0, nsyms * sizeof *kernel_size);
+  memset (kernel_اندازه, 0, nsyms * حجم *kernel_اندازه);
 
-  bitset_zero (shift_symbol);
+  bitset_zero (ښويدنه_نښه);
 
-  if (trace_flag & trace_automaton)
+  إذا (trace_flag & trace_automaton)
     {
       fprintf (stderr, "initial kernel:\n");
       kernel_print (stderr);
     }
 
-  for (size_t i = 0; i < nitemset; ++i)
-    if (item_number_is_symbol_number (ritem[itemset[i]]))
+  لكل (size_t i = 0; i < nitemset; ++i)
+    إذا (توکی_شمېره_is_نښه_شمېره (ritem[itemset[i]]))
       {
-        if (trace_flag & trace_automaton)
+        إذا (trace_flag & trace_automaton)
           {
             fputs ("working on: ", stderr);
-            item_print (ritem + itemset[i], NULL, stderr);
+            توکی_print (ritem + itemset[i], عدم, stderr);
             fputc ('\n', stderr);
           }
-        symbol_number sym = item_number_as_symbol_number (ritem[itemset[i]]);
-        bitset_set (shift_symbol, sym);
-        kernel_base[sym][kernel_size[sym]] = itemset[i] + 1;
-        kernel_size[sym]++;
+        نښه_شمېره sym = توکی_شمېره_as_نښه_شمېره (ritem[itemset[i]]);
+        bitset_سېټ (ښويدنه_نښه, sym);
+        kernel_بنسټ[sym][kernel_اندازه[sym]] = itemset[i] + 1;
+        kernel_اندازه[sym]++;
       }
 
-  if (trace_flag & trace_automaton)
+  إذا (trace_flag & trace_automaton)
     {
       fprintf (stderr, "final kernel:\n");
       kernel_print (stderr);
-      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->number);
+      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->شمېره);
     }
   kernel_check ();
 }
@@ -256,25 +256,25 @@ new_itemsets (state *s)
 | already.  Used by append_states.                              |
 `--------------------------------------------------------------*/
 
-static state *
-get_state (symbol_number sym, size_t core_size, item_index *core)
+ساكن state *
+get_state (نښه_شمېره sym, size_t core_اندازه, توکی_شاخص *core)
 {
-  if (trace_flag & trace_automaton)
+  إذا (trace_flag & trace_automaton)
     {
       fprintf (stderr, "Entering get_state, symbol = %d (%s), core:\n",
-               sym, symbols[sym]->tag);
-      core_print (core_size, core, stderr);
+               sym, symbols[sym]->نښان);
+      core_print (core_اندازه, core, stderr);
       fputc ('\n', stderr);
     }
 
-  state *s = state_hash_lookup (core_size, core);
-  if (!s)
-    s = state_list_append (sym, core_size, core);
+  state *s = state_hash_lookup (core_اندازه, core);
+  إذا (!s)
+    s = state_list_append (sym, core_اندازه, core);
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "Exiting get_state => %d\n", s->number);
+  إذا (trace_flag & trace_automaton)
+    fprintf (stderr, "Exiting get_state => %d\n", s->شمېره);
 
-  return s;
+  أرجع s;
 }
 
 /*---------------------------------------------------------------.
@@ -284,23 +284,23 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
 | SHIFTSET is set up as a vector of those states.                |
 `---------------------------------------------------------------*/
 
-static void
-append_states (state *s)
+ساكن فراغ
+append_حالتونه (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: begin: state = %d\n", s->number);
+  إذا (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: begin: state = %d\n", s->شمېره);
 
   bitset_iterator iter;
-  symbol_number sym;
-  int i = 0;
-  BITSET_FOR_EACH (iter, shift_symbol, sym, 0)
+  نښه_شمېره sym;
+  صحيح i = 0;
+  BITSET_FOR_EACH (iter, ښويدنه_نښه, sym, 0)
     {
-      shiftset[i] = get_state (sym, kernel_size[sym], kernel_base[sym]);
+      shiftset[i] = get_state (sym, kernel_اندازه[sym], kernel_بنسټ[sym]);
       ++i;
     }
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: end: state = %d\n", s->number);
+  إذا (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: end: state = %d\n", s->شمېره);
 }
 
 
@@ -310,20 +310,20 @@ append_states (state *s)
 | record their rule numbers.                                      |
 `----------------------------------------------------------------*/
 
-static void
+ساكن فراغ
 save_reductions (state *s)
 {
-  int count = 0;
+  صحيح شمېر = 0;
 
   /* Find and count the active items that represent ends of rules. */
-  for (size_t i = 0; i < nitemset; ++i)
+  لكل (size_t i = 0; i < nitemset; ++i)
     {
-      item_number item = ritem[itemset[i]];
-      if (item_number_is_rule_number (item))
+      توکی_شمېره توکی = ritem[itemset[i]];
+      إذا (توکی_شمېره_is_قاعده_شمېره (توکی))
         {
-          rule_number r = item_number_as_rule_number (item);
-          redset[count++] = &rules[r];
-          if (r == 0)
+          قاعده_شمېره r = توکی_شمېره_as_قاعده_شمېره (توکی);
+          redset[شمېر++] = &قواعد[r];
+          إذا (r == 0)
             {
               /* This is "reduce 0", i.e., accept. */
               aver (!final_state);
@@ -332,19 +332,19 @@ save_reductions (state *s)
         }
     }
 
-  if (trace_flag & trace_automaton)
+  إذا (trace_flag & trace_automaton)
     {
-      fprintf (stderr, "reduction[%d] = {\n", s->number);
-      for (int i = 0; i < count; ++i)
+      fprintf (stderr, "reduction[%d] = {\n", s->شمېره);
+      لكل (صحيح i = 0; i < شمېر; ++i)
         {
-          rule_print (redset[i], NULL, stderr);
+          قاعده_print (redset[i], عدم, stderr);
           fputc ('\n', stderr);
         }
       fputs ("}\n", stderr);
     }
 
   /* Make a reductions structure and copy the data into it.  */
-  state_reductions_set (s, count, redset);
+  state_reductions_سېټ (s, شمېر, redset);
 }
 
 
@@ -352,32 +352,32 @@ save_reductions (state *s)
 | Build STATES.  |
 `---------------*/
 
-static void
-set_states (void)
+ساكن فراغ
+سېټ_حالتونه (فراغ)
 {
-  states = xcalloc (nstates, sizeof *states);
+  حالتونه = xcalloc (nstates, حجم *حالتونه);
 
-  while (first_state)
+  طالما (لومړی_state)
     {
-      state_list *this = first_state;
+      state_list *this = لومړی_state;
 
       /* Pessimization, but simplification of the code: make sure all
          the states have valid transitions and reductions members,
          even if reduced to 0.  It is too soon for errs, which are
          computed later, but set_conflicts.  */
       state *s = this->state;
-      if (!s->transitions)
-        state_transitions_set (s, 0, 0);
-      if (!s->reductions)
-        state_reductions_set (s, 0, 0);
+      إذا (!s->transitions)
+        state_transitions_سېټ (s, 0, 0);
+      إذا (!s->reductions)
+        state_reductions_سېټ (s, 0, 0);
 
-      states[s->number] = s;
+      حالتونه[s->شمېره] = s;
 
-      first_state = this->next;
-      free (this);
+      لومړی_state = this->بل;
+      حرر (this);
     }
-  first_state = NULL;
-  last_state = NULL;
+  لومړی_state = عدم;
+  وروستی_state = عدم;
 }
 
 
@@ -386,48 +386,48 @@ set_states (void)
 | grammar.                                                           |
 `-------------------------------------------------------------------*/
 
-void
-generate_states (void)
+فراغ
+generate_حالتونه (فراغ)
 {
   allocate_storage ();
-  closure_new (nritems);
+  تړون_new (nritems);
 
   /* Create the initial state, whose accessing symbol (by convention)
      is 0, aka $end.  */
   {
     /* The items of its core: beginning of all the rules of $accept.  */
-    kernel_size[0] = 0;
-    for (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
-      kernel_base[0][kernel_size[0]++] = rules[r].rhs - ritem;
-    state_list_append (0, kernel_size[0], kernel_base[0]);
+    kernel_اندازه[0] = 0;
+    لكل (قاعده_شمېره r = 0; r < nrules && قواعد[r].lhs->نښه == acceptsymbol; ++r)
+      kernel_بنسټ[0][kernel_اندازه[0]++] = قواعد[r].rhs - ritem;
+    state_list_append (0, kernel_اندازه[0], kernel_بنسټ[0]);
   }
 
   /* States are queued when they are created; process them all.  */
-  for (state_list *list = first_state; list; list = list->next)
+  لكل (state_list *list = لومړی_state; list; list = list->بل)
     {
       state *s = list->state;
-      if (trace_flag & trace_automaton)
+      إذا (trace_flag & trace_automaton)
         fprintf (stderr, "Processing state %d (reached by %s)\n",
-                 s->number,
-                 symbols[s->accessing_symbol]->tag);
+                 s->شمېره,
+                 symbols[s->accessing_نښه]->نښان);
       /* Set up itemset for the transitions out of this state.  itemset gets a
          vector of all the items that could be accepted next.  */
-      closure (s->items, s->nitems);
+      تړون (s->توکي, s->nitems);
       /* Record the reductions allowed out of this state.  */
       save_reductions (s);
       /* Find the itemsets of the states that shifts/gotos can reach.  */
       new_itemsets (s);
       /* Find or create the core structures for those states.  */
-      append_states (s);
+      append_حالتونه (s);
 
       /* Create the shifts structures for the shifts to those states,
          now that the state numbers transitioning to are known.  */
-      state_transitions_set (s, bitset_count (shift_symbol), shiftset);
+      state_transitions_سېټ (s, bitset_شمېر (ښويدنه_نښه), shiftset);
     }
 
   /* discard various storage */
   free_storage ();
 
   /* Set up STATES. */
-  set_states ();
+  سېټ_حالتونه ();
 }

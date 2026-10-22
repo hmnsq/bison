@@ -17,549 +17,549 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "state-item.h"
+#ضمن "state-item.h"
 
-#include <assert.h>
-#include <gethrxtime.h>
-#include <gl_linked_list.h>
-#include <gl_xlist.h>
-#include <stdlib.h>
-#include <time.h>
+#ضمن <assert.h>
+#ضمن <gethrxtime.h>
+#ضمن <gl_linked_list.h>
+#ضمن <gl_xlist.h>
+#ضمن <stdlib.h>
+#ضمن <time.h>
 
-#include "closure.h"
-#include "getargs.h"
-#include "nullable.h"
+#ضمن "closure.h"
+#ضمن "getargs.h"
+#ضمن "nullable.h"
 
-size_t nstate_items;
-state_item_number *state_item_map;
-state_item *state_items;
+size_t nstate_توکي;
+state_توکی_شمېره *state_توکی_map;
+state_توکی *state_توکي;
 
 // Hash functions for index -> bitset hash maps.
-typedef struct
+تعريفنوع بنية
 {
-  int key;
+  صحيح کلی;
   bitset l;
 } hash_pair;
 
-static size_t
-hash_pair_hasher (const hash_pair *sl, size_t max)
+ساكن size_t
+hash_pair_hasher (ثابت hash_pair *sl, size_t max)
 {
-  return sl->key % max;
+  أرجع sl->کلی % max;
 }
 
-static bool
-hash_pair_comparator (const hash_pair *l, const hash_pair *r)
+ساكن bool
+hash_pair_comparator (ثابت hash_pair *l, ثابت hash_pair *r)
 {
-  return l->key == r->key;
+  أرجع l->کلی == r->کلی;
 }
 
-static void
+ساكن فراغ
 hash_pair_free (hash_pair *hp)
 {
   bitset_free (hp->l);
-  free (hp);
+  حرر (hp);
 }
 
-static Hash_table *
-hash_pair_table_create (int size)
+ساكن Hash_جدول *
+hash_pair_جدول_create (صحيح اندازه)
 {
-  return hash_xinitialize (size,
-                           NULL,
+  أرجع hash_xinitialize (اندازه,
+                           عدم,
                            (Hash_hasher) hash_pair_hasher,
                            (Hash_comparator) hash_pair_comparator,
-                           (Hash_data_freer) hash_pair_free);
+                           (Hash_معلومات_freer) hash_pair_free);
 }
 
-static bitset
-hash_pair_lookup (Hash_table *tab, int key)
+ساكن bitset
+hash_pair_lookup (Hash_جدول *tab, صحيح کلی)
 {
   hash_pair probe;
-  probe.key = key;
+  probe.کلی = کلی;
   hash_pair *hp = hash_lookup (tab, &probe);
-  return hp ? hp->l : NULL;
+  أرجع hp ? hp->l : عدم;
 }
 
-static void
-hash_pair_insert (Hash_table *tab, int key, bitset val)
+ساكن فراغ
+hash_pair_ورننباسه (Hash_جدول *tab, صحيح کلی, bitset val)
 {
-  hash_pair *hp = xmalloc (sizeof *hp);
-  hp->key = key;
+  hash_pair *hp = xmalloc (حجم *hp);
+  hp->کلی = کلی;
   hp->l = val;
   hash_pair *res = hash_xinsert (tab, hp);
   // This must be the first insertion.
-  (void) res;
-  assert (res == hp);
+  (فراغ) res;
+  أكد (res == hp);
 }
 
 /* A state_item from a state's id and the offset of the item within
    the state. */
-state_item *
-state_item_lookup (state_number s, state_item_number off)
+state_توکی *
+state_توکی_lookup (state_شمېره s, state_توکی_شمېره off)
 {
-  return &state_items[state_item_index_lookup (s, off)];
+  أرجع &state_توکي[state_توکی_شاخص_lookup (s, off)];
 }
 
-static inline void
-state_item_set (state_item_number sidx, const state *s, item_number off)
+ساكن مضمن فراغ
+state_توکی_سېټ (state_توکی_شمېره sidx, ثابت state *s, توکی_شمېره off)
 {
-  state_items[sidx].state = s;
-  state_items[sidx].item = &ritem[off];
-  state_items[sidx].lookahead = NULL;
-  state_items[sidx].trans = -1;
-  state_items[sidx].prods = NULL;
-  state_items[sidx].revs = bitset_create (nstate_items, BITSET_SPARSE);
+  state_توکي[sidx].state = s;
+  state_توکي[sidx].توکی = &ritem[off];
+  state_توکي[sidx].lookahead = عدم;
+  state_توکي[sidx].trans = -1;
+  state_توکي[sidx].prods = عدم;
+  state_توکي[sidx].revs = bitset_create (nstate_توکي, BITSET_SPARSE);
 }
 
 /**
  * Initialize state_items set
  */
-static void
-init_state_items (void)
+ساكن فراغ
+init_state_توکي (فراغ)
 {
-  nstate_items = 0;
-  bitsetv production_items = bitsetv_create (nstates, nritems, BITSET_SPARSE);
-  for (int i = 0; i < nstates; ++i)
+  nstate_توکي = 0;
+  bitsetv production_توکي = bitsetv_create (nstates, nritems, BITSET_SPARSE);
+  لكل (صحيح i = 0; i < nstates; ++i)
     {
-      const state *s = states[i];
-      nstate_items += s->nitems;
-      closure (s->items, s->nitems);
-      for (size_t j = 0; j < nitemset; ++j)
-        if (0 < itemset[j]
-            && item_number_is_rule_number (ritem[itemset[j] - 1]))
+      ثابت state *s = حالتونه[i];
+      nstate_توکي += s->nitems;
+      تړون (s->توکي, s->nitems);
+      لكل (size_t j = 0; j < nitemset; ++j)
+        إذا (0 < itemset[j]
+            && توکی_شمېره_is_قاعده_شمېره (ritem[itemset[j] - 1]))
           {
-            bitset_set (production_items[i], itemset[j]);
-            ++nstate_items;
+            bitset_سېټ (production_توکي[i], itemset[j]);
+            ++nstate_توکي;
           }
     }
-  state_item_map = xnmalloc (nstates + 1, sizeof (state_item_number));
-  state_items = xnmalloc (nstate_items, sizeof (state_item));
-  state_item_number sidx = 0;
-  for (int i = 0; i < nstates; ++i)
+  state_توکی_map = xnmalloc (nstates + 1, حجم (state_توکی_شمېره));
+  state_توکي = xnmalloc (nstate_توکي, حجم (state_توکی));
+  state_توکی_شمېره sidx = 0;
+  لكل (صحيح i = 0; i < nstates; ++i)
     {
-      state_item_map[i] = sidx;
-      int rule_search_idx = 0;
-      const state *s = states[i];
-      const reductions *red = s->reductions;
-      for (int j = 0; j < s->nitems; ++j)
+      state_توکی_map[i] = sidx;
+      صحيح قاعده_پلټنه_idx = 0;
+      ثابت state *s = حالتونه[i];
+      ثابت reductions *red = s->reductions;
+      لكل (صحيح j = 0; j < s->nitems; ++j)
         {
-          state_item_set (sidx, s, s->items[j]);
-          state_item *si = &state_items[sidx];
-          const rule *r = item_rule (si->item);
-          if (rule_search_idx < red->num && red->rules[rule_search_idx] < r)
-            ++rule_search_idx;
-          if (rule_search_idx < red->num && r == red->rules[rule_search_idx])
+          state_توکی_سېټ (sidx, s, s->توکي[j]);
+          state_توکی *si = &state_توکي[sidx];
+          ثابت قاعده *r = توکی_قاعده (si->توکی);
+          إذا (قاعده_پلټنه_idx < red->عدد && red->قواعد[قاعده_پلټنه_idx] < r)
+            ++قاعده_پلټنه_idx;
+          إذا (قاعده_پلټنه_idx < red->عدد && r == red->قواعد[قاعده_پلټنه_idx])
             {
               bitsetv lookahead = red->lookaheads;
-              if (lookahead)
-                si->lookahead = lookahead[rule_search_idx];
+              إذا (lookahead)
+                si->lookahead = lookahead[قاعده_پلټنه_idx];
             }
           ++sidx;
         }
       bitset_iterator biter;
-      item_number off;
-      BITSET_FOR_EACH (biter, production_items[i], off, 0)
+      توکی_شمېره off;
+      BITSET_FOR_EACH (biter, production_توکي[i], off, 0)
         {
-          state_item_set (sidx, s, off);
-          if (item_number_is_rule_number (ritem[off]))
+          state_توکی_سېټ (sidx, s, off);
+          إذا (توکی_شمېره_is_قاعده_شمېره (ritem[off]))
             {
               bitsetv lookahead = red->lookaheads;
-              if (lookahead)
-                state_items[sidx].lookahead = lookahead[rule_search_idx];
-              ++rule_search_idx;
+              إذا (lookahead)
+                state_توکي[sidx].lookahead = lookahead[قاعده_پلټنه_idx];
+              ++قاعده_پلټنه_idx;
             }
           ++sidx;
         }
 
     }
-  state_item_map[nstates] = nstate_items;
-  bitsetv_free (production_items);
+  state_توکی_map[nstates] = nstate_توکي;
+  bitsetv_free (production_توکي);
 }
 
-static size_t
-state_sym_hasher (const void *st, size_t max)
+ساكن size_t
+state_sym_hasher (ثابت فراغ *st, size_t max)
 {
-  return ((state *) st)->accessing_symbol % max;
+  أرجع ((state *) st)->accessing_نښه % max;
 }
 
-static bool
-state_sym_comparator (const void *s1, const void *s2)
+ساكن bool
+state_sym_comparator (ثابت فراغ *s1, ثابت فراغ *s2)
 {
-  return ((state *) s1)->accessing_symbol == ((state *) s2)->accessing_symbol;
+  أرجع ((state *) s1)->accessing_نښه == ((state *) s2)->accessing_نښه;
 }
 
-static state *
-state_sym_lookup (symbol_number sym, Hash_table *h)
+ساكن state *
+state_sym_lookup (نښه_شمېره sym, Hash_جدول *h)
 {
   state probe;
-  probe.accessing_symbol = sym;
-  return hash_lookup (h, &probe);
+  probe.accessing_نښه = sym;
+  أرجع hash_lookup (h, &probe);
 }
 
-static void
-init_trans (void)
+ساكن فراغ
+init_trans (فراغ)
 {
-  for (state_number i = 0; i < nstates; ++i)
+  لكل (state_شمېره i = 0; i < nstates; ++i)
     {
       // Generate a hash set that maps from accepting symbols to the states
       // this state transitions to.
-      state *s = states[i];
+      state *s = حالتونه[i];
       transitions *t = s->transitions;
-      Hash_table *transition_set
-        = hash_xinitialize (t->num, NULL, (Hash_hasher) state_sym_hasher,
-                            (Hash_comparator) state_sym_comparator, NULL);
-      for (int j = 0; j < t->num; ++j)
-        if (!TRANSITION_IS_DISABLED (t, j))
-          hash_xinsert (transition_set, t->states[j]);
-      for (state_item_number j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
+      Hash_جدول *transition_سېټ
+        = hash_xinitialize (t->عدد, عدم, (Hash_hasher) state_sym_hasher,
+                            (Hash_comparator) state_sym_comparator, عدم);
+      لكل (صحيح j = 0; j < t->عدد; ++j)
+        إذا (!TRANSITION_IS_DISABLED (t, j))
+          hash_xinsert (transition_سېټ, t->حالتونه[j]);
+      لكل (state_توکی_شمېره j = state_توکی_map[i]; j < state_توکی_map[i + 1]; ++j)
         {
-          item_number *item = state_items[j].item;
-          if (item_number_is_rule_number (*item))
-            continue;
-          state *dst = state_sym_lookup (*item, transition_set);
-          if (!dst)
-            continue;
+          توکی_شمېره *توکی = state_توکي[j].توکی;
+          إذا (توکی_شمېره_is_قاعده_شمېره (*توکی))
+            استمر;
+          state *dst = state_sym_lookup (*توکی, transition_سېټ);
+          إذا (!dst)
+            استمر;
           // find the item in the destination state that corresponds
           // to the transition of item
-          for (int k = 0; k < dst->nitems; ++k)
-            if (item + 1 == ritem + dst->items[k])
+          لكل (صحيح k = 0; k < dst->nitems; ++k)
+            إذا (توکی + 1 == ritem + dst->توکي[k])
               {
-                state_item_number dstSI =
-                  state_item_index_lookup (dst->number, k);
+                state_توکی_شمېره dstSI =
+                  state_توکی_شاخص_lookup (dst->شمېره, k);
 
-                state_items[j].trans = dstSI;
-                bitset_set (state_items[dstSI].revs, j);
-                break;
+                state_توکي[j].trans = dstSI;
+                bitset_سېټ (state_توکي[dstSI].revs, j);
+                اكسر;
             }
         }
-      hash_free (transition_set);
+      hash_free (transition_سېټ);
     }
 }
 
-static void
-init_prods (void)
+ساكن فراغ
+init_prods (فراغ)
 {
-  for (int i = 0; i < nstates; ++i)
+  لكل (صحيح i = 0; i < nstates; ++i)
     {
-      state *s = states[i];
+      state *s = حالتونه[i];
       // closure_map is a hash map from nonterminals to a set
       // of the items that produce those nonterminals
-      Hash_table *closure_map = hash_pair_table_create (nsyms - ntokens);
+      Hash_جدول *تړون_map = hash_pair_جدول_create (nsyms - ntokens);
 
       // Add the nitems of state to skip to the production portion
       // of that state's state_items
-      for (state_item_number j = state_item_map[i] + s->nitems;
-           j < state_item_map[i + 1]; ++j)
+      لكل (state_توکی_شمېره j = state_توکی_map[i] + s->nitems;
+           j < state_توکی_map[i + 1]; ++j)
         {
-          state_item *src = &state_items[j];
-          item_number *item = src->item;
-          symbol_number lhs = item_rule (item)->lhs->number;
-          bitset itms = hash_pair_lookup (closure_map, lhs);
-          if (!itms)
+          state_توکی *src = &state_توکي[j];
+          توکی_شمېره *توکی = src->توکی;
+          نښه_شمېره lhs = توکی_قاعده (توکی)->lhs->شمېره;
+          bitset itms = hash_pair_lookup (تړون_map, lhs);
+          إذا (!itms)
             {
-              itms = bitset_create (nstate_items, BITSET_SPARSE);
-              hash_pair_insert (closure_map, lhs, itms);
+              itms = bitset_create (nstate_توکي, BITSET_SPARSE);
+              hash_pair_ورننباسه (تړون_map, lhs, itms);
             }
-          bitset_set (itms, j);
+          bitset_سېټ (itms, j);
         }
       // For each item with a dot followed by a nonterminal,
       // try to create a production edge.
-      for (state_item_number j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
+      لكل (state_توکی_شمېره j = state_توکی_map[i]; j < state_توکی_map[i + 1]; ++j)
         {
-          state_item *src = &state_items[j];
-          item_number item = *(src->item);
+          state_توکی *src = &state_توکي[j];
+          توکی_شمېره توکی = *(src->توکی);
           // Skip reduce items and items with terminals after the dot
-          if (item_number_is_rule_number (item) || ISTOKEN (item))
-            continue;
-          symbol_number sym = item_number_as_symbol_number (item);
-          bitset lb = hash_pair_lookup (closure_map, sym);
-          if (lb)
+          إذا (توکی_شمېره_is_قاعده_شمېره (توکی) || ISTOKEN (توکی))
+            استمر;
+          نښه_شمېره sym = توکی_شمېره_as_نښه_شمېره (توکی);
+          bitset lb = hash_pair_lookup (تړون_map, sym);
+          إذا (lb)
             {
-              bitset copy = bitset_create (nstate_items, BITSET_SPARSE);
+              bitset copy = bitset_create (nstate_توکي, BITSET_SPARSE);
               bitset_copy (copy, lb);
               // update prods.
-              state_items[j].prods = copy;
+              state_توکي[j].prods = copy;
 
               // update revs.
               bitset_iterator biter;
-              state_item_number prod;
+              state_توکی_شمېره prod;
               BITSET_FOR_EACH (biter, copy, prod, 0)
-                bitset_set (state_items[prod].revs, j);
+                bitset_سېټ (state_توکي[prod].revs, j);
             }
         }
-      hash_free (closure_map);
+      hash_free (تړون_map);
     }
 }
 
 /* Since lookaheads are only generated for reductions, we need to
    propagate lookahead sets backwards as the searches require each
    state_item to have a lookahead. */
-static inline void
-gen_lookaheads (void)
+ساكن مضمن فراغ
+gen_lookaheads (فراغ)
 {
-  for (state_item_number i = 0; i < nstate_items; ++i)
+  لكل (state_توکی_شمېره i = 0; i < nstate_توکي; ++i)
     {
-      state_item *si = &state_items[i];
-      if (item_number_is_symbol_number (*(si->item)) || !si->lookahead)
-        continue;
+      state_توکی *si = &state_توکي[i];
+      إذا (توکی_شمېره_is_نښه_شمېره (*(si->توکی)) || !si->lookahead)
+        استمر;
 
       bitset lookahead = si->lookahead;
-      state_item_list queue =
-        gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true, 1,
-                        (const void **) &si);
+      state_توکی_list کتار =
+        gl_list_create (GL_LINKED_LIST, عدم, عدم, عدم, true, 1,
+                        (ثابت فراغ **) &si);
 
       // For each reduction item, traverse through all state_items
       // accessible through reverse transition steps, and set their
       // lookaheads to the reduction items lookahead
-      while (gl_list_size (queue) > 0)
+      طالما (gl_list_اندازه (کتار) > 0)
         {
-          state_item *prev = (state_item *) gl_list_get_at (queue, 0);
-          gl_list_remove_at (queue, 0);
+          state_توکی *prev = (state_توکی *) gl_list_get_at (کتار, 0);
+          gl_list_remove_at (کتار, 0);
           prev->lookahead = lookahead;
-          if (SI_TRANSITION (prev))
+          إذا (SI_TRANSITION (prev))
             {
-              bitset rsi = state_items[prev - state_items].revs;
+              bitset rsi = state_توکي[prev - state_توکي].revs;
               bitset_iterator biter;
-              state_item_number sin;
-              BITSET_FOR_EACH (biter, rsi, sin, 0)
-                gl_list_add_first (queue, &state_items[sin]);
+              state_توکی_شمېره ساین;
+              BITSET_FOR_EACH (biter, rsi, ساین, 0)
+                gl_list_جمع_کړه_لومړی (کتار, &state_توکي[ساین]);
             }
         }
-      gl_list_free (queue);
+      gl_list_free (کتار);
     }
 }
 
-bitsetv firsts = NULL;
+bitsetv firsts = عدم;
 
-static void
-init_firsts (void)
+ساكن فراغ
+init_firsts (فراغ)
 {
   firsts = bitsetv_create (nnterms, nsyms, BITSET_FIXED);
-  for (rule_number i = 0; i < nrules; ++i)
+  لكل (قاعده_شمېره i = 0; i < nrules; ++i)
     {
-      rule *r = &rules[i];
-      item_number *n = r->rhs;
+      قاعده *r = &قواعد[i];
+      توکی_شمېره *n = r->rhs;
       // Iterate through nullable nonterminals to try to find a terminal.
-      while (item_number_is_symbol_number (*n) && ISVAR (*n)
+      طالما (توکی_شمېره_is_نښه_شمېره (*n) && ISVAR (*n)
              && nullable[*n - ntokens])
         ++n;
-      if (item_number_is_rule_number (*n) || ISVAR (*n))
-        continue;
+      إذا (توکی_شمېره_is_قاعده_شمېره (*n) || ISVAR (*n))
+        استمر;
 
-      symbol_number lhs = r->lhs->number;
-      bitset_set (FIRSTS (lhs), *n);
+      نښه_شمېره lhs = r->lhs->شمېره;
+      bitset_سېټ (FIRSTS (lhs), *n);
     }
   bool change = true;
-  while (change)
+  طالما (change)
     {
       change = false;
-      for (rule_number i = 0; i < nrules; ++i)
+      لكل (قاعده_شمېره i = 0; i < nrules; ++i)
         {
-          rule *r = &rules[i];
-          symbol_number lhs = r->lhs->number;
+          قاعده *r = &قواعد[i];
+          نښه_شمېره lhs = r->lhs->شمېره;
           bitset f_lhs = FIRSTS (lhs);
-          for (item_number *n = r->rhs;
-               item_number_is_symbol_number (*n) && ISVAR (*n);
+          لكل (توکی_شمېره *n = r->rhs;
+               توکی_شمېره_is_نښه_شمېره (*n) && ISVAR (*n);
                ++n)
             {
               bitset f = FIRSTS (*n);
-              if (!bitset_subset_p (f_lhs, f))
+              إذا (!bitset_subset_p (f_lhs, f))
                 {
                   change = true;
                   bitset_union (f_lhs, f_lhs, f);
                 }
-              if (!nullable[*n - ntokens])
-                break;
+              إذا (!nullable[*n - ntokens])
+                اكسر;
             }
         }
     }
 }
 
-static inline void
-disable_state_item (state_item *si)
+ساكن مضمن فراغ
+disable_state_توکی (state_توکی *si)
 {
   si->trans = -2;
   bitset_free (si->revs);
-  if (si->prods)
+  إذا (si->prods)
     bitset_free (si->prods);
 }
 
 /* Disable all state_item paths that lead to/from SI and nowhere
    else.  */
-static void
-prune_state_item (const state_item *si)
+ساكن فراغ
+prune_state_توکی (ثابت state_توکی *si)
 {
-  state_item_list queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true, 1,
-                    (const void **) &si);
+  state_توکی_list کتار =
+    gl_list_create (GL_LINKED_LIST, عدم, عدم, عدم, true, 1,
+                    (ثابت فراغ **) &si);
 
-  while (gl_list_size (queue) > 0)
+  طالما (gl_list_اندازه (کتار) > 0)
     {
-      state_item *dsi = (state_item *) gl_list_get_at (queue, 0);
-      gl_list_remove_at (queue, 0);
-      if (SI_DISABLED (dsi - state_items))
-        continue;
+      state_توکی *dsi = (state_توکی *) gl_list_get_at (کتار, 0);
+      gl_list_remove_at (کتار, 0);
+      إذا (SI_DISABLED (dsi - state_توکي))
+        استمر;
 
-      if (dsi->trans >= 0 && !SI_DISABLED (dsi->trans))
+      إذا (dsi->trans >= 0 && !SI_DISABLED (dsi->trans))
       {
-        const state_item *trans = &state_items[dsi->trans];
-        bitset_reset (trans->revs, dsi - state_items);
-        if (bitset_empty_p (trans->revs))
-          gl_list_add_last (queue, trans);
+        ثابت state_توکی *trans = &state_توکي[dsi->trans];
+        bitset_reset (trans->revs, dsi - state_توکي);
+        إذا (bitset_تشه_p (trans->revs))
+          gl_list_جمع_کړه_وروستی (کتار, trans);
       }
 
-      if (dsi->prods)
+      إذا (dsi->prods)
         {
           bitset_iterator biter;
-          state_item_number sin;
-          BITSET_FOR_EACH (biter, dsi->prods, sin, 0)
+          state_توکی_شمېره ساین;
+          BITSET_FOR_EACH (biter, dsi->prods, ساین, 0)
             {
-              if (SI_DISABLED (sin))
-                continue;
-              const state_item *prod = &state_items[sin];
-              bitset_reset (prod->revs, dsi - state_items);
-              if (bitset_empty_p (prod->revs))
-                gl_list_add_last (queue, prod);
+              إذا (SI_DISABLED (ساین))
+                استمر;
+              ثابت state_توکی *prod = &state_توکي[ساین];
+              bitset_reset (prod->revs, dsi - state_توکي);
+              إذا (bitset_تشه_p (prod->revs))
+                gl_list_جمع_کړه_وروستی (کتار, prod);
             }
         }
 
       bitset_iterator biter;
-      state_item_number sin;
-      BITSET_FOR_EACH (biter, dsi->revs, sin, 0)
+      state_توکی_شمېره ساین;
+      BITSET_FOR_EACH (biter, dsi->revs, ساین, 0)
         {
-          if (SI_DISABLED (sin))
-            continue;
-          state_item *rev = &state_items[sin];
-          if (&state_items[rev->trans] == dsi)
-            gl_list_add_last (queue, rev);
-          else if (rev->prods)
+          إذا (SI_DISABLED (ساین))
+            استمر;
+          state_توکی *rev = &state_توکي[ساین];
+          إذا (&state_توکي[rev->trans] == dsi)
+            gl_list_جمع_کړه_وروستی (کتار, rev);
+          وإلا إذا (rev->prods)
             {
-              bitset_reset (rev->prods, dsi - state_items);
-              if (bitset_empty_p (rev->prods))
-                gl_list_add_last (queue, rev);
+              bitset_reset (rev->prods, dsi - state_توکي);
+              إذا (bitset_تشه_p (rev->prods))
+                gl_list_جمع_کړه_وروستی (کتار, rev);
             }
-          else
-            gl_list_add_last (queue, rev);
+          وإلا
+            gl_list_جمع_کړه_وروستی (کتار, rev);
         }
-      disable_state_item (dsi);
+      disable_state_توکی (dsi);
     }
-  gl_list_free (queue);
+  gl_list_free (کتار);
 }
 
 /* To make searches more efficient, prune away paths that are caused
    by disabled transitions.  */
-static void
-prune_disabled_paths (void)
+ساكن فراغ
+prune_disabled_paths (فراغ)
 {
-  for (int i = nstate_items - 1; i >= 0; --i)
+  لكل (صحيح i = nstate_توکي - 1; i >= 0; --i)
     {
-      state_item *si = &state_items[i];
-      if (si->trans == -1 && item_number_is_symbol_number (*si->item))
-        prune_state_item (si);
+      state_توکی *si = &state_توکي[i];
+      إذا (si->trans == -1 && توکی_شمېره_is_نښه_شمېره (*si->توکی))
+        prune_state_توکی (si);
     }
 }
 
-void
-state_item_print (const state_item *si, FILE *out, const char *prefix)
+فراغ
+state_توکی_print (ثابت state_توکی *si, FILE *بهر, ثابت حرف *مختاړی)
 {
-  fputs (prefix, out);
-  item_print (si->item, NULL, out);
-  putc ('\n', out);
+  fputs (مختاړی, بهر);
+  توکی_print (si->توکی, عدم, بهر);
+  putc ('\n', بهر);
 }
 
-const rule*
-state_item_rule (const state_item *si)
+ثابت قاعده*
+state_توکی_قاعده (ثابت state_توکی *si)
 {
-  return item_rule (si->item);
+  أرجع توکی_قاعده (si->توکی);
 }
 
 /**
  * Report the state_item graph
  */
-static void
-state_items_report (FILE *out)
+ساكن فراغ
+state_توکي_report (FILE *بهر)
 {
-  fprintf (out, "# state items: %zu\n", nstate_items);
-  for (state_number i = 0; i < nstates; ++i)
+  fprintf (بهر, "# state items: %zu\n", nstate_توکي);
+  لكل (state_شمېره i = 0; i < nstates; ++i)
     {
-      fprintf (out, "State %d:\n", i);
-      for (state_item_number j = state_item_map[i]; j < state_item_map[i + 1]; ++j)
+      fprintf (بهر, "State %d:\n", i);
+      لكل (state_توکی_شمېره j = state_توکی_map[i]; j < state_توکی_map[i + 1]; ++j)
         {
-          const state_item *si = &state_items[j];
-          item_print (si->item, NULL, out);
-          if (SI_DISABLED (j))
-            fputs ("  DISABLED\n", out);
-          else
+          ثابت state_توکی *si = &state_توکي[j];
+          توکی_print (si->توکی, عدم, بهر);
+          إذا (SI_DISABLED (j))
+            fputs ("  DISABLED\n", بهر);
+          وإلا
             {
-              putc ('\n', out);
-              if (si->trans >= 0)
+              putc ('\n', بهر);
+              إذا (si->trans >= 0)
                 {
-                  fputs ("    -> ", out);
-                  state_item_print (&state_items[si->trans], out, "");
+                  fputs ("    -> ", بهر);
+                  state_توکی_print (&state_توکي[si->trans], بهر, "");
                 }
 
               bitset sets[2] = { si->prods, si->revs };
-              const char *txt[2] = { "    => ", "    <- " };
-              for (int seti = 0; seti < 2; ++seti)
+              ثابت حرف *txt[2] = { "    => ", "    <- " };
+              لكل (صحيح seti = 0; seti < 2; ++seti)
                 {
                   bitset b = sets[seti];
-                  if (b)
+                  إذا (b)
                     {
                       bitset_iterator biter;
-                      state_item_number sin;
-                      BITSET_FOR_EACH (biter, b, sin, 0)
+                      state_توکی_شمېره ساین;
+                      BITSET_FOR_EACH (biter, b, ساین, 0)
                         {
-                          fputs (txt[seti], out);
-                          state_item_print (&state_items[sin], out, "");
+                          fputs (txt[seti], بهر);
+                          state_توکی_print (&state_توکي[ساین], بهر, "");
                         }
                     }
                 }
             }
-          putc ('\n', out);
+          putc ('\n', بهر);
         }
     }
-  fprintf (out, "FIRSTS\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  fprintf (بهر, "FIRSTS\n");
+  لكل (نښه_شمېره i = ntokens; i < nsyms; ++i)
     {
-      fprintf (out, "  %s firsts\n", symbols[i]->tag);
+      fprintf (بهر, "  %s firsts\n", symbols[i]->نښان);
       bitset_iterator iter;
-      symbol_number j;
+      نښه_شمېره j;
       BITSET_FOR_EACH (iter, FIRSTS (i), j, 0)
-        fprintf (out, "    %s\n", symbols[j]->tag);
+        fprintf (بهر, "    %s\n", symbols[j]->نښان);
     }
-  fputs ("\n\n", out);
+  fputs ("\n\n", بهر);
 }
 
-void
-state_items_init (void)
+فراغ
+state_توکي_init (فراغ)
 {
-  xtime_t start = gethrxtime ();
-  init_state_items ();
+  xtime_t پیل = gethrxtime ();
+  init_state_توکي ();
   init_trans ();
   init_prods ();
   gen_lookaheads ();
   init_firsts ();
   prune_disabled_paths ();
-  if (trace_flag & trace_cex)
+  إذا (trace_flag & trace_cex)
     {
-      fprintf (stderr, "state_items_init: %.3fs\n", (gethrxtime () - start) / 1e9);
-      state_items_report (stderr);
+      fprintf (stderr, "state_items_init: %.3fs\n", (gethrxtime () - پیل) / 1e9);
+      state_توکي_report (stderr);
     }
 }
 
-void
-state_items_free (void)
+فراغ
+state_توکي_free (فراغ)
 {
-  for (state_item_number i = 0; i < nstate_items; ++i)
-    if (!SI_DISABLED (i))
+  لكل (state_توکی_شمېره i = 0; i < nstate_توکي; ++i)
+    إذا (!SI_DISABLED (i))
       {
-        state_item *si = &state_items[i];
-        if (si->prods)
+        state_توکی *si = &state_توکي[i];
+        إذا (si->prods)
           bitset_free (si->prods);
         bitset_free (si->revs);
       }
-  free (state_items);
+  حرر (state_توکي);
   bitsetv_free (firsts);
 }
 
@@ -568,20 +568,20 @@ state_items_free (void)
  * production is allowed from the current production.
  */
 bool
-production_allowed (const state_item *si, const state_item *next)
+production_allowed (ثابت state_توکی *si, ثابت state_توکی *بل)
 {
-  sym_content *s1 = item_rule (si->item)->lhs;
-  sym_content *s2 = item_rule (next->item)->lhs;
-  int prec1 = s1->prec;
-  int prec2 = s2->prec;
-  if (prec1 >= 0 && prec2 >= 0)
+  sym_content *s1 = توکی_قاعده (si->توکی)->lhs;
+  sym_content *s2 = توکی_قاعده (بل->توکی)->lhs;
+  صحيح prec1 = s1->prec;
+  صحيح prec2 = s2->prec;
+  إذا (prec1 >= 0 && prec2 >= 0)
     {
       // Do not expand if lower precedence.
-      if (prec1 > prec2)
-        return false;
+      إذا (prec1 > prec2)
+        أرجع false;
       // Do not expand if same precedence, but left-associative.
-      if (prec1 == prec2 && s1->assoc == left_assoc)
-        return false;
+      إذا (prec1 == prec2 && s1->assoc == کیڼ_assoc)
+        أرجع false;
     }
-  return true;
+  أرجع true;
 }

@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "print.h"
+#ضمن "print.h"
 
-#include "system.h"
+#ضمن "system.h"
 
-#include <bitset.h>
-#include <mbswidth.h>
+#ضمن <bitset.h>
+#ضمن <mbswidth.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#ضمن "closure.h"
+#ضمن "complain.h"
+#ضمن "conflicts.h"
+#ضمن "counterexample.h"
+#ضمن "files.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "lalr.h"
+#ضمن "lr0.h"
+#ضمن "muscle-tab.h"
+#ضمن "reader.h"
+#ضمن "reduce.h"
+#ضمن "state.h"
+#ضمن "symtab.h"
+#ضمن "tables.h"
 
 /* For a given state, the symbol numbers of the lookahead tokens for
    shifts and errors (i.e. not reduce).  */
-static bitset no_reduce_set;
+ساكن bitset no_reduce_سېټ;
 
 
 
@@ -53,49 +53,49 @@ static bitset no_reduce_set;
 | *WIDTH := max (*WIDTH, strlen (STR)).  |
 `---------------------------------------*/
 
-static void
-max_length (size_t *width, const char *str)
+ساكن فراغ
+max_اوږدتیا (size_t *پلنوالی, ثابت حرف *str)
 {
   size_t len = mbswidth (str, 0);
-  if (len > *width)
-    *width = len;
+  إذا (len > *پلنوالی)
+    *پلنوالی = len;
 }
 
 /*--------------------------------.
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, const state *s)
+ساكن فراغ
+print_core (FILE *بهر, ثابت state *s)
 {
-  const item_index *sitems = s->items;
+  ثابت توکی_شاخص *sitems = s->توکي;
   size_t snritems = s->nitems;
   /* Output all the items of a state, not only its kernel.  */
-  if (report_flag & report_itemsets)
+  إذا (report_flag & report_itemsets)
     {
-      closure (sitems, snritems);
+      تړون (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  if (!snritems)
-    return;
+  إذا (!snritems)
+    أرجع;
 
-  fputc ('\n', out);
+  fputc ('\n', بهر);
 
-  rule const *previous_rule = NULL;
-  for (size_t i = 0; i < snritems; i++)
+  قاعده ثابت *پخوانی_قاعده = عدم;
+  لكل (size_t i = 0; i < snritems; i++)
     {
-      item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
-      item_print (sp1, previous_rule, out);
-      previous_rule = r;
+      توکی_شمېره *sp1 = ritem + sitems[i];
+      قاعده ثابت *r = توکی_قاعده (sp1);
+      توکی_print (sp1, پخوانی_قاعده, بهر);
+      پخوانی_قاعده = r;
 
       /* Display the lookahead tokens?  */
-      if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
-        state_rule_lookaheads_print (s, r, out);
-      fputc ('\n', out);
+      إذا (report_flag & report_lookaheads
+          && توکی_شمېره_is_قاعده_شمېره (*sp1))
+        state_قاعده_lookaheads_print (s, r, بهر);
+      fputc ('\n', بهر);
     }
 }
 
@@ -105,44 +105,44 @@ print_core (FILE *out, const state *s)
 | OUT.                                                        |
 `------------------------------------------------------------*/
 
-static void
-print_transitions (const state *s, FILE *out, bool display_transitions_p)
+ساكن فراغ
+print_transitions (ثابت state *s, FILE *بهر, bool display_transitions_p)
 {
   transitions *trans = s->transitions;
-  size_t width = 0;
+  size_t پلنوالی = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
-        && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
+  لكل (صحيح i = 0; i < trans->عدد; i++)
+    إذا (!TRANSITION_IS_DISABLED (trans, i)
+        && TRANSITION_IS_ښويدنه (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        max_length (&width, sym->tag);
+        نښه *sym = symbols[TRANSITION_نښه (trans, i)];
+        max_اوږدتیا (&پلنوالی, sym->نښان);
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  إذا (!پلنوالی)
+    أرجع;
 
-  fputc ('\n', out);
-  width += 2;
+  fputc ('\n', بهر);
+  پلنوالی += 2;
 
   /* Report lookahead tokens and shifts.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
-        && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
+  لكل (صحيح i = 0; i < trans->عدد; i++)
+    إذا (!TRANSITION_IS_DISABLED (trans, i)
+        && TRANSITION_IS_ښويدنه (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        const char *tag = sym->tag;
-        const state *s1 = trans->states[i];
+        نښه *sym = symbols[TRANSITION_نښه (trans, i)];
+        ثابت حرف *نښان = sym->نښان;
+        ثابت state *s1 = trans->حالتونه[i];
 
-        fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
-          fputc (' ', out);
-        if (display_transitions_p)
-          fprintf (out, _("shift, and go to state %d\n"), s1->number);
-        else
-          fprintf (out, _("go to state %d\n"), s1->number);
+        fprintf (بهر, "    %s", نښان);
+        لكل (صحيح j = پلنوالی - mbswidth (نښان, 0); j > 0; --j)
+          fputc (' ', بهر);
+        إذا (display_transitions_p)
+          fprintf (بهر, _("shift, and go to state %d\n"), s1->شمېره);
+        وإلا
+          fprintf (بهر, _("go to state %d\n"), s1->شمېره);
       }
 }
 
@@ -151,33 +151,33 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, const state *s)
+ساكن فراغ
+print_errs (FILE *بهر, ثابت state *s)
 {
   errs *errp = s->errs;
-  size_t width = 0;
+  size_t پلنوالی = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
-      max_length (&width, errp->symbols[i]->tag);
+  لكل (صحيح i = 0; i < errp->عدد; ++i)
+    إذا (errp->symbols[i])
+      max_اوږدتیا (&پلنوالی, errp->symbols[i]->نښان);
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  إذا (!پلنوالی)
+    أرجع;
 
-  fputc ('\n', out);
-  width += 2;
+  fputc ('\n', بهر);
+  پلنوالی += 2;
 
   /* Report lookahead tokens and errors.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  لكل (صحيح i = 0; i < errp->عدد; ++i)
+    إذا (errp->symbols[i])
       {
-        const char *tag = errp->symbols[i]->tag;
-        fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
-          fputc (' ', out);
-        fputs (_("error (nonassociative)\n"), out);
+        ثابت حرف *نښان = errp->symbols[i]->نښان;
+        fprintf (بهر, "    %s", نښان);
+        لكل (صحيح j = پلنوالی - mbswidth (نښان, 0); j > 0; --j)
+          fputc (' ', بهر);
+        fputs (_("error (nonassociative)\n"), بهر);
       }
 }
 
@@ -188,24 +188,24 @@ print_errs (FILE *out, const state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
-print_reduction (FILE *out, size_t width,
-                 const char *lookahead,
-                 rule *r, bool enabled)
+ساكن فراغ
+print_reduction (FILE *بهر, size_t پلنوالی,
+                 ثابت حرف *lookahead,
+                 قاعده *r, bool enabled)
 {
-  fprintf (out, "    %s", lookahead);
-  for (int j = width - mbswidth (lookahead, 0); j > 0; --j)
-    fputc (' ', out);
-  if (!enabled)
-    fputc ('[', out);
-  if (rule_is_initial (r))
-    fprintf (out, _("accept"));
-  else
-    fprintf (out, _("reduce using rule %d (%s)"), r->number,
-             r->lhs->symbol->tag);
-  if (!enabled)
-    fputc (']', out);
-  fputc ('\n', out);
+  fprintf (بهر, "    %s", lookahead);
+  لكل (صحيح j = پلنوالی - mbswidth (lookahead, 0); j > 0; --j)
+    fputc (' ', بهر);
+  إذا (!enabled)
+    fputc ('[', بهر);
+  إذا (قاعده_is_initial (r))
+    fprintf (بهر, _("accept"));
+  وإلا
+    fprintf (بهر, _("reduce using rule %d (%s)"), r->شمېره,
+             r->lhs->نښه->نښان);
+  إذا (!enabled)
+    fputc (']', بهر);
+  fputc ('\n', بهر);
 }
 
 
@@ -213,113 +213,113 @@ print_reduction (FILE *out, size_t width,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, const state *s)
+ساكن فراغ
+print_reductions (FILE *بهر, ثابت state *s)
 {
   reductions *reds = s->reductions;
-  if (reds->num == 0)
-    return;
+  إذا (reds->عدد == 0)
+    أرجع;
 
-  rule *default_reduction = NULL;
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  قاعده *default_reduction = عدم;
+  إذا (yydefact[s->شمېره] != 0)
+    default_reduction = &قواعد[yydefact[s->شمېره] - 1];
 
   transitions *trans = s->transitions;
 
-  bitset_zero (no_reduce_set);
+  bitset_zero (no_reduce_سېټ);
   {
-    int i;
-    FOR_EACH_SHIFT (trans, i)
-      bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
+    صحيح i;
+    FOR_EACH_ښويدنه (trans, i)
+      bitset_سېټ (no_reduce_سېټ, TRANSITION_نښه (trans, i));
   }
-  for (int i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+  لكل (صحيح i = 0; i < s->errs->عدد; ++i)
+    إذا (s->errs->symbols[i])
+      bitset_سېټ (no_reduce_سېټ, s->errs->symbols[i]->content->شمېره);
 
   /* Compute the width of the lookahead token column.  */
-  size_t width = 0;
-  if (default_reduction)
-    width = mbswidth (_("$default"), 0);
+  size_t پلنوالی = 0;
+  إذا (default_reduction)
+    پلنوالی = mbswidth (_("$default"), 0);
 
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  إذا (reds->lookaheads)
+    لكل (صحيح i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool شمېر = bitset_test (no_reduce_سېټ, i);
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        لكل (صحيح j = 0; j < reds->عدد; ++j)
+          إذا (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              إذا (! شمېر)
                 {
-                  if (reds->rules[j] != default_reduction)
-                    max_length (&width, symbols[i]->tag);
-                  count = true;
+                  إذا (reds->قواعد[j] != default_reduction)
+                    max_اوږدتیا (&پلنوالی, symbols[i]->نښان);
+                  شمېر = true;
                 }
-              else
-                max_length (&width, symbols[i]->tag);
+              وإلا
+                max_اوږدتیا (&پلنوالی, symbols[i]->نښان);
             }
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  إذا (!پلنوالی)
+    أرجع;
 
-  fputc ('\n', out);
-  width += 2;
+  fputc ('\n', بهر);
+  پلنوالی += 2;
 
   bool default_reduction_only = true;
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  إذا (reds->lookaheads)
+    لكل (صحيح i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
-        if (count)
+        bool شمېر = bitset_test (no_reduce_سېټ, i);
+        إذا (شمېر)
           default_reduction_only = false;
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        لكل (صحيح j = 0; j < reds->عدد; ++j)
+          إذا (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              إذا (! شمېر)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  إذا (reds->قواعد[j] != default_reduction)
                     {
                       default_reduction_only = false;
-                      print_reduction (out, width,
-                                       symbols[i]->tag,
-                                       reds->rules[j], true);
+                      print_reduction (بهر, پلنوالی,
+                                       symbols[i]->نښان,
+                                       reds->قواعد[j], true);
                     }
-                  else
+                  وإلا
                     defaulted = true;
-                  count = true;
+                  شمېر = true;
                 }
-              else
+              وإلا
                 {
                   default_reduction_only = false;
-                  if (defaulted)
-                    print_reduction (out, width,
-                                     symbols[i]->tag,
+                  إذا (defaulted)
+                    print_reduction (بهر, پلنوالی,
+                                     symbols[i]->نښان,
                                      default_reduction, true);
                   defaulted = false;
-                  print_reduction (out, width,
-                                   symbols[i]->tag,
-                                   reds->rules[j], false);
+                  print_reduction (بهر, پلنوالی,
+                                   symbols[i]->نښان,
+                                   reds->قواعد[j], false);
                 }
             }
       }
 
-  if (default_reduction)
+  إذا (default_reduction)
     {
-      char *default_reductions =
+      حرف *default_reductions =
         muscle_percent_define_get ("lr.default-reduction");
-      print_reduction (out, width, _("$default"), default_reduction, true);
+      print_reduction (بهر, پلنوالی, _("$default"), default_reduction, true);
       aver (STREQ (default_reductions, "most")
             || (STREQ (default_reductions, "consistent")
                 && default_reduction_only)
-            || (reds->num == 1 && rule_is_initial (reds->rules[0])));
-      (void) default_reduction_only;
-      free (default_reductions);
+            || (reds->عدد == 1 && قاعده_is_initial (reds->قواعد[0])));
+      (فراغ) default_reduction_only;
+      حرر (default_reductions);
     }
 }
 
@@ -329,15 +329,15 @@ print_reductions (FILE *out, const state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, const state *s)
+ساكن فراغ
+print_actions (FILE *بهر, ثابت state *s)
 {
   /* Print shifts.  */
-  print_transitions (s, out, true);
-  print_errs (out, s);
-  print_reductions (out, s);
+  print_transitions (s, بهر, true);
+  print_errs (بهر, s);
+  print_reductions (بهر, s);
   /* Print gotos.  */
-  print_transitions (s, out, false);
+  print_transitions (s, بهر, false);
 }
 
 
@@ -345,25 +345,25 @@ print_actions (FILE *out, const state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, const state *s)
+ساكن فراغ
+print_state (FILE *بهر, ثابت state *s)
 {
-  fputs ("\n\n", out);
-  fprintf (out, _("State %d"), s->number);
-  fputc ('\n', out);
-  print_core (out, s);
-  print_actions (out, s);
-  if ((report_flag & report_solved_conflicts) && s->solved_conflicts)
+  fputs ("\n\n", بهر);
+  fprintf (بهر, _("State %d"), s->شمېره);
+  fputc ('\n', بهر);
+  print_core (بهر, s);
+  print_actions (بهر, s);
+  إذا ((report_flag & report_solved_conflicts) && s->solved_conflicts)
     {
-      fputc ('\n', out);
-      fputs (s->solved_conflicts, out);
+      fputc ('\n', بهر);
+      fputs (s->solved_conflicts, بهر);
     }
-  if (has_conflicts (s)
+  إذا (has_conflicts (s)
       && (report_flag & report_cex
           || warning_is_enabled (Wcounterexamples)))
     {
-      fputc ('\n', out);
-      counterexample_report_state (s, out, "    ");
+      fputc ('\n', بهر);
+      counterexample_report_state (s, بهر, "    ");
     }
 }
 
@@ -371,105 +371,105 @@ print_state (FILE *out, const state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
-print_terminal_symbols (FILE *out)
+ساكن فراغ
+print_terminal_symbols (FILE *بهر)
 {
   /* TERMINAL (type #) : rule #s terminal is on RHS */
-  fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
-  for (int i = 0; i < max_code + 1; ++i)
-    if (token_translations[i] != undeftoken->content->number)
+  fprintf (بهر, "%s\n\n", _("Terminals, with rules where they appear"));
+  لكل (صحيح i = 0; i < max_کوډ + 1; ++i)
+    إذا (token_translations[i] != undeftoken->content->شمېره)
       {
-        const symbol *sym = symbols[token_translations[i]];
-        const char *tag = sym->tag;
-        fprintf (out, "%4s%s", "", tag);
-        if (sym->content->type_name)
-          fprintf (out, " <%s>", sym->content->type_name);
-        fprintf (out, " (%d)", i);
+        ثابت نښه *sym = symbols[token_translations[i]];
+        ثابت حرف *نښان = sym->نښان;
+        fprintf (بهر, "%4s%s", "", نښان);
+        إذا (sym->content->type_name)
+          fprintf (بهر, " <%s>", sym->content->type_name);
+        fprintf (بهر, " (%d)", i);
 
-        for (rule_number r = 0; r < nrules; r++)
-          for (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
-            if (item_number_as_symbol_number (*rhsp) == token_translations[i])
+        لكل (قاعده_شمېره r = 0; r < nrules; r++)
+          لكل (توکی_شمېره *rhsp = قواعد[r].rhs; *rhsp >= 0; rhsp++)
+            إذا (توکی_شمېره_as_نښه_شمېره (*rhsp) == token_translations[i])
               {
-                fprintf (out, " %d", r);
-                break;
+                fprintf (بهر, " %d", r);
+                اكسر;
               }
-        fputc ('\n', out);
+        fputc ('\n', بهر);
       }
-  fputs ("\n\n", out);
+  fputs ("\n\n", بهر);
 }
 
 
-static void
-print_nonterminal_symbols (FILE *out)
+ساكن فراغ
+print_nonterminal_symbols (FILE *بهر)
 {
-  fprintf (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
-  for (symbol_number i = ntokens; i < nsyms; i++)
+  fprintf (بهر, "%s\n\n", _("Nonterminals, with rules where they appear"));
+  لكل (نښه_شمېره i = ntokens; i < nsyms; i++)
     {
-      const symbol *sym = symbols[i];
-      const char *tag = sym->tag;
-      bool on_left = false;
-      bool on_right = false;
+      ثابت نښه *sym = symbols[i];
+      ثابت حرف *نښان = sym->نښان;
+      bool on_کیڼ = false;
+      bool on_ښی = false;
 
-      for (rule_number r = 0; r < nrules; r++)
+      لكل (قاعده_شمېره r = 0; r < nrules; r++)
         {
-          on_left |= rules[r].lhs->number == i;
-          for (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
-            on_right |= item_number_as_symbol_number (*rhsp) == i;
-          if (on_left && on_right)
-            break;
+          on_کیڼ |= قواعد[r].lhs->شمېره == i;
+          لكل (توکی_شمېره *rhsp = قواعد[r].rhs; !on_ښی && 0 <= *rhsp; ++rhsp)
+            on_ښی |= توکی_شمېره_as_نښه_شمېره (*rhsp) == i;
+          إذا (on_کیڼ && on_ښی)
+            اكسر;
         }
 
-      fprintf (out, "%4s%s", "", tag);
-      if (sym->content->type_name)
-        fprintf (out, " <%s>", sym->content->type_name);
-      fprintf (out, " (%d)\n", i);
+      fprintf (بهر, "%4s%s", "", نښان);
+      إذا (sym->content->type_name)
+        fprintf (بهر, " <%s>", sym->content->type_name);
+      fprintf (بهر, " (%d)\n", i);
 
-      if (on_left)
+      إذا (on_کیڼ)
         {
-          fprintf (out, "%8s%s", "", _("on left:"));
-          for (rule_number r = 0; r < nrules; r++)
-            if (rules[r].lhs->number == i)
-              fprintf (out, " %d", r);
-          fputc ('\n', out);
+          fprintf (بهر, "%8s%s", "", _("on left:"));
+          لكل (قاعده_شمېره r = 0; r < nrules; r++)
+            إذا (قواعد[r].lhs->شمېره == i)
+              fprintf (بهر, " %d", r);
+          fputc ('\n', بهر);
         }
 
-      if (on_right)
+      إذا (on_ښی)
         {
-          fprintf (out, "%8s%s", "", _("on right:"));
-          for (rule_number r = 0; r < nrules; r++)
-            for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-              if (item_number_as_symbol_number (*rhsp) == i)
+          fprintf (بهر, "%8s%s", "", _("on right:"));
+          لكل (قاعده_شمېره r = 0; r < nrules; r++)
+            لكل (توکی_شمېره *rhsp = قواعد[r].rhs; 0 <= *rhsp; ++rhsp)
+              إذا (توکی_شمېره_as_نښه_شمېره (*rhsp) == i)
                 {
-                  fprintf (out, " %d", r);
-                  break;
+                  fprintf (بهر, " %d", r);
+                  اكسر;
                 }
-          fputc ('\n', out);
+          fputc ('\n', بهر);
         }
     }
 }
 
-void
-print_results (void)
+فراغ
+print_results (فراغ)
 {
   /* We used to use just .out if SPEC_NAME_PREFIX (-p) was used, but
      that conflicts with Posix.  */
-  FILE *out = xfopen (spec_verbose_file, "w");
+  FILE *بهر = xfopen (spec_verbose_file, "w");
 
-  reduce_output (out);
-  grammar_rules_partial_print (out,
+  reduce_output (بهر);
+  grammar_قواعد_partial_print (بهر,
                                _("Rules useless in parser due to conflicts"),
-                               rule_useless_in_parser_p);
-  conflicts_output (out);
+                               قاعده_useless_دننه_parser_p);
+  conflicts_output (بهر);
 
-  grammar_rules_print (out);
-  print_terminal_symbols (out);
-  print_nonterminal_symbols (out);
+  grammar_قواعد_print (بهر);
+  print_terminal_symbols (بهر);
+  print_nonterminal_symbols (بهر);
 
   /* Storage for print_reductions.  */
-  no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
-  for (state_number i = 0; i < nstates; i++)
-    print_state (out, states[i]);
-  bitset_free (no_reduce_set);
+  no_reduce_سېټ = bitset_create (ntokens, BITSET_FIXED);
+  لكل (state_شمېره i = 0; i < nstates; i++)
+    print_state (بهر, حالتونه[i]);
+  bitset_free (no_reduce_سېټ);
 
-  xfclose (out);
+  xfclose (بهر);
 }
