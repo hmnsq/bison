@@ -17,64 +17,64 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include "Sbitset.h"
+#অন্তর্ভাব "Sbitset.h"
 
 Sbitset
-Sbitset__new (Sbitset__Index nbits)
+Sbitset__new (Sbitset_সূচক nbits)
 {
   /* Some functions, like Sbitset__last_byte_mask, will fail if nbits = 0.  */
   aver (nbits);
-  return xcalloc (1, Sbitset__nbytes (nbits));
+  ফেরত xcalloc (1, Sbitset__nbytes (nbits));
 }
 
 Sbitset
-Sbitset__new_on_obstack (Sbitset__Index nbits, struct obstack *obstackp)
+Sbitset__new_on_obstack (Sbitset_সূচক nbits, কাঠামো obstack *obstackp)
 {
-  Sbitset result;
+  Sbitset ফলাফল;
   Sbitset ptr;
   Sbitset end;
   aver (nbits);
-  result = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
-  for (ptr = result, end = result + Sbitset__nbytes (nbits); ptr < end; ++ptr)
+  ফলাফল = obstack_alloc (obstackp, Sbitset__nbytes (nbits));
+  জন্য (ptr = ফলাফল, end = ফলাফল + Sbitset__nbytes (nbits); ptr < end; ++ptr)
     *ptr = 0;
-  return result;
+  ফেরত ফলাফল;
 }
 
-void
+শূন্য
 Sbitset__delete (Sbitset self)
 {
-  free (self);
+  মুক্ত (self);
 }
 
 bool
-Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits)
+Sbitset__isEmpty (Sbitset self, Sbitset_সূচক nbits)
 {
   Sbitset last = self + Sbitset__nbytes (nbits) - 1;
-  for (; self < last; ++self)
-    if (*self != 0)
-      return false;
-  return ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
+  জন্য (; self < last; ++self)
+    যদি (*self != 0)
+      ফেরত false;
+  ফেরত ((*last) & Sbitset__last_byte_mask (nbits)) == 0;
 }
 
-void
-Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file)
+শূন্য
+Sbitset__fprint (Sbitset self, Sbitset_সূচক nbits, FILE *file)
 {
-  Sbitset__Index i;
+  Sbitset_সূচক i;
   Sbitset itr;
   bool first = true;
   fprintf (file,
-           "nbits = %" SBITSET__INDEX__CONVERSION_SPEC ", set = {",
+           "nbits = %" SBITSET_সূচক_CONVERSION_SPEC ", set = {",
            nbits);
   SBITSET__FOR_EACH (self, nbits, itr, i)
     {
-      if (first)
+      যদি (first)
         first = false;
-      else
+      অন্যথা
         fprintf (file, ",");
-      fprintf (file, " %" SBITSET__INDEX__CONVERSION_SPEC, i);
+      fprintf (file, " %" SBITSET_সূচক_CONVERSION_SPEC, i);
     }
   fprintf (file, " }");
 }

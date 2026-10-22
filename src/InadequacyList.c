@@ -17,68 +17,68 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include "InadequacyList.h"
+#অন্তর্ভাব "InadequacyList.h"
 
-#include <intprops.h>
+#অন্তর্ভাব <intprops.h>
 
-ContributionIndex const ContributionIndex__none = -1;
-ContributionIndex const ContributionIndex__error_action = -2;
+Contribution_সূচক ধ্রুবক Contribution_সূচক_none = -1;
+Contribution_সূচক ধ্রুবক Contribution_সূচক_error_action = -2;
 
 InadequacyList *
-InadequacyList__new_conflict (state *manifesting_state, symbol *token,
+InadequacyList__new_conflict (state *manifesting_state, প্রতীক *token,
                               bitset actions,
-                              InadequacyListNodeCount *node_count)
+                              Inadequacy_List_গ্রন্থি_গুনতি *গ্রন্থি_গুনতি)
 {
-  InadequacyList *result = xmalloc (sizeof *result);
-  result->id = *node_count;
+  InadequacyList *ফলাফল = xmalloc (আকার *ফলাফল);
+  ফলাফল->id = *গ্রন্থি_গুনতি;
   IGNORE_TYPE_LIMITS_BEGIN
-  if (INT_ADD_WRAPV (*node_count, 1, node_count))
+  যদি (INT_ADD_WRAPV (*গ্রন্থি_গুনতি, 1, গ্রন্থি_গুনতি))
     aver (false);
   IGNORE_TYPE_LIMITS_END
-  result->next = NULL;
-  result->manifestingState = manifesting_state;
-  result->contributionCount = bitset_count (actions);
-  result->inadequacy.conflict.token = token;
-  result->inadequacy.conflict.actions = actions;
-  return result;
+  ফলাফল->পরবর্তী = ফাঁকা;
+  ফলাফল->manifestingState = manifesting_state;
+  ফলাফল->contribution_গুনতি_2 = bitset_গুনতি (actions);
+  ফলাফল->inadequacy.conflict.token = token;
+  ফলাফল->inadequacy.conflict.actions = actions;
+  ফেরত ফলাফল;
 }
 
-void
+শূন্য
 InadequacyList__delete (InadequacyList *self)
 {
-  while (self)
+  যখন (self)
     {
-      InadequacyList *node = self;
-      self = self->next;
-      bitset_free (node->inadequacy.conflict.actions);
-      free (node);
+      InadequacyList *গ্রন্থি = self;
+      self = self->পরবর্তী;
+      bitset_free (গ্রন্থি->inadequacy.conflict.actions);
+      মুক্ত (গ্রন্থি);
     }
 }
 
-ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self)
+Contribution_সূচক
+Inadequacy_List_get_Shift_Contribution_সূচক (InadequacyList ধ্রুবক *self)
 {
-  if (!bitset_test (self->inadequacy.conflict.actions,
-                    self->manifestingState->reductions->num))
-    return ContributionIndex__none;
-  return self->contributionCount - 1;
+  যদি (!bitset_test (self->inadequacy.conflict.actions,
+                    self->manifestingState->reductions->অঙ্ক))
+    ফেরত Contribution_সূচক_none;
+  ফেরত self->contribution_গুনতি_2 - 1;
 }
 
-symbol *
-InadequacyList__getContributionToken (InadequacyList const *self,
-                                      ContributionIndex i)
+প্রতীক *
+InadequacyList__getContributionToken (InadequacyList ধ্রুবক *self,
+                                      Contribution_সূচক i)
 {
-  aver (0 <= i && i < self->contributionCount); (void) i;
-  return self->inadequacy.conflict.token;
+  aver (0 <= i && i < self->contribution_গুনতি_2); (শূন্য) i;
+  ফেরত self->inadequacy.conflict.token;
 }
 
-void
+শূন্য
 InadequacyList__prependTo (InadequacyList *self, InadequacyList **list)
 {
-  InadequacyList *head_old = *list;
+  InadequacyList *শীর্ষ_old = *list;
   *list = self;
-  self->next = head_old;
+  self->পরবর্তী = শীর্ষ_old;
 }

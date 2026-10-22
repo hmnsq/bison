@@ -29,22 +29,22 @@
 /* A list of symbols, used during the parsing for many different
    purposes: rules, symbol declarations or properties (such as
    %destructor, etc.)...  */
-typedef struct symbol_list
+প্রকারলেখ কাঠামো প্রতীক_list
 {
   /**
    * Whether this node contains a symbol, a semantic type, a \c <*>, or a
    * \c <>.
    */
-  enum {
-    SYMLIST_SYMBOL,
+  গণনা {
+    SYMLIST_প্রতীক,
     SYMLIST_TYPE
   } content_type;
-  union {
+  সংঘ {
     /**
      * The symbol or \c NULL iff
      * <tt>symbol_list::content_type = SYMLIST_SYMBOL</tt>.
      */
-    symbol *sym;
+    প্রতীক *sym;
     /**
      * The semantic type iff <tt>symbol_list::content_type = SYMLIST_TYPE</tt>.
      */
@@ -59,14 +59,14 @@ typedef struct symbol_list
 
   /* If this symbol is the generated lhs for a midrule but this is the rule in
      whose rhs it appears, MIDRULE = a pointer to that midrule.  */
-  struct symbol_list *midrule;
+  কাঠামো প্রতীক_list *midrule;
 
   /* If this symbol is the generated lhs for a midrule and this is that
      midrule, MIDRULE_PARENT_RULE = a pointer to the rule in whose rhs it
      appears, and MIDRULE_PARENT_RHS_INDEX = its rhs index (1-origin) in the
      parent rule.  */
-  struct symbol_list *midrule_parent_rule;
-  int midrule_parent_rhs_index;
+  কাঠামো প্রতীক_list *midrule_parent_rule;
+  পূর্ণসংখ্যা midrule_parent_rhs_সূচক;
 
   /*--------------------------------------------------------------.
   | Used for rules only (attached to the "LHS", one per rule even |
@@ -77,7 +77,7 @@ typedef struct symbol_list
   location rhs_loc;
 
   /* Precedence/associativity.  */
-  symbol *ruleprec;
+  প্রতীক *ruleprec;
 
   /* The action is attached to the LHS of a rule, but action properties for
    * each RHS are also stored here.  */
@@ -87,70 +87,70 @@ typedef struct symbol_list
      empty_loc.  */
   location percent_empty_loc;
 
-  int dprec;
+  পূর্ণসংখ্যা dprec;
   location dprec_loc;
-  int merger;
+  পূর্ণসংখ্যা merger;
   location merger_declaration_loc;
 
   /* Counts of the number of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  পূর্ণসংখ্যা expected_sr_conflicts;
+  পূর্ণসংখ্যা expected_rr_conflicts;
 
   /* The list.  */
-  struct symbol_list *next;
-} symbol_list;
+  কাঠামো প্রতীক_list *পরবর্তী;
+} প্রতীক_list;
 
 
 /** Create a list containing \c sym at \c loc.  */
-symbol_list *symbol_list_sym_new (symbol *sym, location loc);
+প্রতীক_list *প্রতীক_list_sym_new (প্রতীক *sym, location loc);
 
 /** Create a list containing \c type_name at \c loc.  */
-symbol_list *symbol_list_type_new (uniqstr type_name, location loc);
+প্রতীক_list *প্রতীক_list_type_new (uniqstr type_name, location loc);
 
 /** Assign the type \c type_name to all the members of \c syms.
  ** \returns \c syms */
-symbol_list *symbol_list_type_set (symbol_list *syms, uniqstr type_name);
+প্রতীক_list *প্রতীক_list_type_set (প্রতীক_list *syms, uniqstr type_name);
 
 /** Find a symbol with the same content as \c sym within \c syms.  */
-symbol_list *symbol_list_find_symbol (symbol_list *syms, const symbol *sym);
+প্রতীক_list *প্রতীক_list_find_প্রতীক (প্রতীক_list *syms, ধ্রুবক প্রতীক *sym);
 
 /** Print this list.
 
   \pre For every node \c n in the list, <tt>n->content_type =
   SYMLIST_SYMBOL</tt>.  */
-void symbol_list_syms_print (const symbol_list *l, FILE *f);
+শূন্য প্রতীক_list_syms_print (ধ্রুবক প্রতীক_list *l, FILE *f);
 
 /** Prepend \c node to \c list.  */
-symbol_list *symbol_list_prepend (symbol_list *list, symbol_list *node);
+প্রতীক_list *প্রতীক_list_prepend (প্রতীক_list *list, প্রতীক_list *গ্রন্থি);
 
 /** The last node of this list. */
-symbol_list *symbol_list_last (symbol_list *list);
+প্রতীক_list *প্রতীক_list_last (প্রতীক_list *list);
 
 /** Append \c node to \c list.  */
-symbol_list *symbol_list_append (symbol_list *list, symbol_list *node);
+প্রতীক_list *প্রতীক_list_append (প্রতীক_list *list, প্রতীক_list *গ্রন্থি);
 
 /** Free \c list, but not the items it contains.  */
-void symbol_list_free (symbol_list *list);
+শূন্য প্রতীক_list_free (প্রতীক_list *list);
 
 /** Return the length of \c l. */
-int symbol_list_length (symbol_list const *l);
+পূর্ণসংখ্যা প্রতীক_list_দৈর্ঘ্য (প্রতীক_list ধ্রুবক *l);
 
 /** Get item \c n in symbol list \c l.
  ** \pre  0 <= n
  ** \post res != NULL
  **/
-symbol_list *symbol_list_n_get (symbol_list *l, int n);
+প্রতীক_list *প্রতীক_list_n_get (প্রতীক_list *l, পূর্ণসংখ্যা n);
 
 /** Get the data type (alternative in the union) of the value for
     symbol N in rule RULE.  */
-uniqstr symbol_list_n_type_name_get (symbol_list *l, int n);
+uniqstr প্রতীক_list_n_type_name_get (প্রতীক_list *l, পূর্ণসংখ্যা n);
 
 /** Check whether the node is a border element of a rule. */
-bool symbol_list_null (symbol_list *node);
+bool প্রতীক_list_null (প্রতীক_list *গ্রন্থি);
 
 /** Set the \c \%destructor or \c \%printer for \c node as \c cprops.  */
-void symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                                 code_props const *cprops);
+শূন্য প্রতীক_list_code_props_set (প্রতীক_list *গ্রন্থি, code_props_type kind,
+                                 code_props ধ্রুবক *cprops);
 
 #endif /* !SYMLIST_H_ */

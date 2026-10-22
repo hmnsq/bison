@@ -18,11 +18,11 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-void scan_skel (FILE *);
+শূন্য scan_skel (FILE *);
 
 /* Pacify "make syntax-check".  */
-extern FILE *skel_in;
-extern FILE *skel_out;
-extern int skel__flex_debug;
-extern int skel_lineno;
-void skel_scanner_free (void);
+বাহ্যিক FILE *skel_in;
+বাহ্যিক FILE *skel_out;
+বাহ্যিক পূর্ণসংখ্যা skel__flex_debug;
+বাহ্যিক পূর্ণসংখ্যা skel_lineno;
+শূন্য skel_scanner_free (শূন্য);

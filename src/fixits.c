@@ -17,127 +17,127 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#অন্তর্ভাব <config.h>
 
-#include "fixits.h"
+#অন্তর্ভাব "fixits.h"
 
-#include <error.h>
-#include <get-errno.h>
-#include <gl_array_list.h>
-#include <gl_xlist.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <vasnprintf.h>
+#অন্তর্ভাব <error.h>
+#অন্তর্ভাব <get-errno.h>
+#অন্তর্ভাব <gl_array_list.h>
+#অন্তর্ভাব <gl_xlist.h>
+#অন্তর্ভাব <progname.h>
+#অন্তর্ভাব <quote.h>
+#অন্তর্ভাব <quotearg.h>
+#অন্তর্ভাব <vasnprintf.h>
 
-#include "system.h"
+#অন্তর্ভাব "system.h"
 
-#include "files.h"
-#include "getargs.h"
+#অন্তর্ভাব "files.h"
+#অন্তর্ভাব "getargs.h"
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
   location location;
-  char *fix;
+  অক্ষর *fix;
 } fixit;
 
-gl_list_t fixits = NULL;
+gl_list_t fixits = ফাঁকা;
 
-static fixit *
-fixit_new (location const *loc, char const* fix)
+স্থির fixit *
+fixit_new (location ধ্রুবক *loc, অক্ষর ধ্রুবক* fix)
 {
-  fixit *res = xmalloc (sizeof *res);
+  fixit *res = xmalloc (আকার *res);
   res->location = *loc;
   res->fix = xstrdup (fix);
-  return res;
+  ফেরত res;
 }
 
-static int
-fixit_cmp (const  fixit *a, const fixit *b)
+স্থির পূর্ণসংখ্যা
+fixit_cmp (ধ্রুবক  fixit *a, ধ্রুবক fixit *b)
 {
-  return location_cmp (a->location, b->location);
+  ফেরত location_cmp (a->location, b->location);
 }
 
-static void
+স্থির শূন্য
 fixit_free (fixit *f)
 {
-  free (f->fix);
-  free (f);
+  মুক্ত (f->fix);
+  মুক্ত (f);
 }
 
 
 /* GCC and Clang follow the same pattern.
    https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html
    https://clang.llvm.org/docs/UsersManual.html#cmdoption-fdiagnostics-parseable-fixits */
-static void
-fixit_print (fixit const *f, FILE *out)
+স্থির শূন্য
+fixit_print (fixit ধ্রুবক *f, FILE *out)
 {
   fprintf (out, "fix-it:%s:{%d:%d-%d:%d}:%s\n",
            quotearg_n_style (1, c_quoting_style, f->location.start.file),
-           f->location.start.line, f->location.start.byte,
-           f->location.end.line, f->location.end.byte,
+           f->location.start.সারি, f->location.start.byte,
+           f->location.end.সারি, f->location.end.byte,
            quotearg_n_style (2, c_quoting_style, f->fix));
 }
 
 
-void
-fixits_register (location const *loc, char const* fix)
+শূন্য
+fixits_register (location ধ্রুবক *loc, অক্ষর ধ্রুবক* fix)
 {
-  if (!fixits)
+  যদি (!fixits)
     fixits = gl_list_create_empty (GL_ARRAY_LIST,
-                                   /* equals */ NULL,
-                                   /* hashcode */ NULL,
+                                   /* equals */ ফাঁকা,
+                                   /* hashcode */ ফাঁকা,
                                    (gl_listelement_dispose_fn) fixit_free,
                                    true);
   fixit *f = fixit_new (loc, fix);
   gl_sortedlist_add (fixits, (gl_listelement_compar_fn) fixit_cmp, f);
-  if (feature_flag & feature_fixit)
+  যদি (feature_flag & feature_fixit)
     fixit_print (f, stderr);
 }
 
 
 bool
-fixits_empty (void)
+fixits_empty (শূন্য)
 {
-  return !fixits;
+  ফেরত !fixits;
 }
 
 
-void
-fixits_run (void)
+শূন্য
+fixits_run (শূন্য)
 {
-  if (!fixits)
-    return;
+  যদি (!fixits)
+    ফেরত;
 
   /* This is not unlike what is done in location_caret.  */
-  uniqstr input = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
+  uniqstr প্রবেশ = ((fixit *) gl_list_get_at (fixits, 0))->location.start.file;
   /* Backup the file. */
-  char buf[256];
-  size_t len = sizeof (buf);
-  char *backup = asnprintf (buf, &len, "%s~", input);
-  if (!backup)
+  অক্ষর buf[256];
+  size_t len = আকার (buf);
+  অক্ষর *backup = asnprintf (buf, &len, "%s~", প্রবেশ);
+  যদি (!backup)
     xalloc_die ();
-  if (rename (input, backup))
+  যদি (rename (প্রবেশ, backup))
     error (EXIT_FAILURE, get_errno (),
-           _("%s: cannot backup"), quotearg_colon (input));
+           _("%s: cannot backup"), quotearg_colon (প্রবেশ));
   FILE *in = xfopen (backup, "r");
-  FILE *out = xfopen (input, "w");
-  size_t line = 1;
+  FILE *out = xfopen (প্রবেশ, "w");
+  size_t সারি = 1;
   size_t offset = 1;
-  void const *p = NULL;
+  শূন্য ধ্রুবক *p = ফাঁকা;
   gl_list_iterator_t iter = gl_list_iterator (fixits);
-  while (gl_list_iterator_next (&iter, &p, NULL))
+  যখন (gl_list_iterator_পরবর্তী (&iter, &p, ফাঁকা))
     {
-      fixit const *f = p;
+      fixit ধ্রুবক *f = p;
       /* Look for the correct line. */
-      while (line < f->location.start.line)
+      যখন (সারি < f->location.start.সারি)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          পূর্ণসংখ্যা c = getc (in);
+          যদি (c == EOF)
+            বিরতি;
+          যদি (c == '\n')
             {
-              ++line;
+              ++সারি;
               offset = 1;
             }
           putc (c, out);
@@ -145,13 +145,13 @@ fixits_run (void)
 
       /* Look for the right offset. */
       bool need_eol = false;
-      while (offset < f->location.start.byte)
+      যখন (offset < f->location.start.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          পূর্ণসংখ্যা c = getc (in);
+          যদি (c == EOF)
+            বিরতি;
           ++offset;
-          if (c == '\n')
+          যদি (c == '\n')
             /* The position we are asked for is beyond the actual
                line: pad with spaces, and remember we need a \n.  */
             need_eol = true;
@@ -162,49 +162,49 @@ fixits_run (void)
       fputs (f->fix, out);
 
       /* Maybe install the eol afterwards.  */
-      if (need_eol)
+      যদি (need_eol)
         putc ('\n', out);
 
       /* Skip the bad input. */
-      while (line < f->location.end.line)
+      যখন (সারি < f->location.end.সারি)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          if (c == '\n')
+          পূর্ণসংখ্যা c = getc (in);
+          যদি (c == EOF)
+            বিরতি;
+          যদি (c == '\n')
             {
-              ++line;
+              ++সারি;
               offset = 1;
             }
         }
-      while (offset < f->location.end.byte)
+      যখন (offset < f->location.end.byte)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
+          পূর্ণসংখ্যা c = getc (in);
+          যদি (c == EOF)
+            বিরতি;
           ++offset;
         }
 
       /* If erasing the content of a full line, also remove the
          end-of-line. */
-      if (f->fix[0] == 0 && f->location.start.byte == 1)
+      যদি (f->fix[0] == 0 && f->location.start.byte == 1)
         {
-          int c = getc (in);
-          if (c == EOF)
-            break;
-          else if (c == '\n')
+          পূর্ণসংখ্যা c = getc (in);
+          যদি (c == EOF)
+            বিরতি;
+          অন্যথা যদি (c == '\n')
             {
-              ++line;
+              ++সারি;
               offset = 1;
             }
-          else
+          অন্যথা
             ungetc (c, in);
         }
     }
   /* Paste the rest of the file.  */
   {
-    int c;
-    while ((c = getc (in)) != EOF)
+    পূর্ণসংখ্যা c;
+    যখন ((c = getc (in)) != EOF)
       putc (c, out);
   }
 
@@ -212,18 +212,18 @@ fixits_run (void)
   xfclose (out);
   xfclose (in);
   fprintf (stderr, "%s: file %s was updated (backup: %s)\n",
-           program_name, quote_n (0, input), quote_n (1, backup));
-  if (backup != buf)
-    free (backup);
+           program_name, quote_n (0, প্রবেশ), quote_n (1, backup));
+  যদি (backup != buf)
+    মুক্ত (backup);
 }
 
 
 /* Free the registered fixits.  */
-void fixits_free (void)
+শূন্য fixits_free (শূন্য)
 {
-  if (fixits)
+  যদি (fixits)
     {
       gl_list_free (fixits);
-      fixits = NULL;
+      fixits = ফাঁকা;
     }
 }

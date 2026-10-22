@@ -39,25 +39,25 @@
 # define YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
 /* Debug traces.  */
 #ifndef GRAM_DEBUG
-# if defined YYDEBUG
-#if YYDEBUG
+# যদি defined YYDEBUG
+#যদি YYDEBUG
 #   define GRAM_DEBUG 1
-#  else
+#  অন্যথা
 #   define GRAM_DEBUG 0
 #  endif
-# else /* ! defined YYDEBUG */
+# অন্যথা /* ! defined YYDEBUG */
 #  define GRAM_DEBUG 1
 # endif /* ! defined YYDEBUG */
 #endif  /* ! defined GRAM_DEBUG */
-#if GRAM_DEBUG
-extern int gram_debug;
+#যদি GRAM_DEBUG
+বাহ্যিক পূর্ণসংখ্যা gram_debug;
 #endif
 /* "%code requires" blocks.  */
 
-  #include "symlist.h"
-  #include "symtab.h"
+  #অন্তর্ভাব "symlist.h"
+  #অন্তর্ভাব "symtab.h"
 
-  typedef enum
+  প্রকারলেখ গণনা
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -65,18 +65,18 @@ extern int gram_debug;
     param_both   = param_lex | param_parse
   } param_type;
 
-  #include "muscle-tab.h"
-  typedef struct
+  #অন্তর্ভাব "muscle-tab.h"
+  প্রকারলেখ কাঠামো
   {
-    char const *chars;
+    অক্ষর ধ্রুবক *chars;
     muscle_kind kind;
-  } value_type;
+  } মান_type;
 
 
 /* Token kinds.  */
 #ifndef GRAM_TOKENTYPE
 # define GRAM_TOKENTYPE
-  enum gram_tokentype
+  গণনা gram_tokentype
   {
     GRAM_EMPTY = -2,
     GRAM_EOF = 0,                  /* "end of file"  */
@@ -89,8 +89,8 @@ extern int gram_debug;
     PERCENT_TYPE = 7,              /* "%type"  */
     PERCENT_DESTRUCTOR = 8,        /* "%destructor"  */
     PERCENT_PRINTER = 9,           /* "%printer"  */
-    PERCENT_LEFT = 10,             /* "%left"  */
-    PERCENT_RIGHT = 11,            /* "%right"  */
+    PERCENT_বাম = 10,             /* "%left"  */
+    PERCENT_ডান = 11,            /* "%right"  */
     PERCENT_NONASSOC = 12,         /* "%nonassoc"  */
     PERCENT_PRECEDENCE = 13,       /* "%precedence"  */
     PERCENT_PREC = 14,             /* "%prec"  */
@@ -110,7 +110,7 @@ extern int gram_debug;
     PERCENT_LANGUAGE = 28,         /* "%language"  */
     PERCENT_NAME_PREFIX = 29,      /* "%name-prefix"  */
     PERCENT_NO_DEFAULT_PREC = 30,  /* "%no-default-prec"  */
-    PERCENT_NO_LINES = 31,         /* "%no-lines"  */
+    PERCENT_NO_সারিগুলি = 31,         /* "%no-lines"  */
     PERCENT_NONDETERMINISTIC_PARSER = 32, /* "%nondeterministic-parser"  */
     PERCENT_OUTPUT = 33,           /* "%output"  */
     PERCENT_PURE_PARSER = 34,      /* "%pure-parser"  */
@@ -141,42 +141,42 @@ extern int gram_debug;
     PERCENT_UNION = 59,            /* "%union"  */
     PERCENT_EMPTY = 60             /* "%empty"  */
   };
-  typedef enum gram_tokentype gram_token_kind_t;
+  প্রকারলেখ গণনা gram_tokentype gram_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
-union GRAM_STYPE
+#যদি ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
+সংঘ GRAM_STYPE
 {
   assoc precedence_declarator;             /* precedence_declarator  */
-  char* STRING;                            /* "string"  */
-  char* TSTRING;                           /* "translatable string"  */
-  char* BRACED_CODE;                       /* "{...}"  */
-  char* BRACED_PREDICATE;                  /* "%?{...}"  */
-  char* EPILOGUE;                          /* "epilogue"  */
-  char* PROLOGUE;                          /* "%{...%}"  */
-  char* yykind_75;                         /* string.opt  */
+  অক্ষর* STRING;                            /* "string"  */
+  অক্ষর* TSTRING;                           /* "translatable string"  */
+  অক্ষর* BRACED_CODE;                       /* "{...}"  */
+  অক্ষর* BRACED_PREDICATE;                  /* "%?{...}"  */
+  অক্ষর* EPILOGUE;                          /* "epilogue"  */
+  অক্ষর* PROLOGUE;                          /* "%{...%}"  */
+  অক্ষর* yykind_75;                         /* string.opt  */
   code_props_type code_props_type;         /* code_props_type  */
-  int INT_LITERAL;                         /* "integer literal"  */
-  int yykind_84;                           /* int.opt  */
+  পূর্ণসংখ্যা INT_LITERAL;                         /* "integer literal"  */
+  পূর্ণসংখ্যা yykind_84;                           /* int.opt  */
   named_ref* yykind_97;                    /* named_ref.opt  */
   param_type PERCENT_PARAM;                /* "%param"  */
-  symbol* token_decl;                      /* token_decl  */
-  symbol* alias;                           /* alias  */
-  symbol* token_decl_for_prec;             /* token_decl_for_prec  */
-  symbol* id;                              /* id  */
-  symbol* id_colon;                        /* id_colon  */
-  symbol* symbol;                          /* symbol  */
-  symbol* string_as_id;                    /* string_as_id  */
-  symbol_list* generic_symlist;            /* generic_symlist  */
-  symbol_list* generic_symlist_item;       /* generic_symlist_item  */
-  symbol_list* nterm_decls;                /* nterm_decls  */
-  symbol_list* token_decls;                /* token_decls  */
-  symbol_list* yykind_82;                  /* token_decl.1  */
-  symbol_list* token_decls_for_prec;       /* token_decls_for_prec  */
-  symbol_list* yykind_87;                  /* token_decl_for_prec.1  */
-  symbol_list* symbol_decls;               /* symbol_decls  */
-  symbol_list* yykind_90;                  /* symbols.1  */
+  প্রতীক* token_decl;                      /* token_decl  */
+  প্রতীক* alias;                           /* alias  */
+  প্রতীক* token_decl_for_prec;             /* token_decl_for_prec  */
+  প্রতীক* id;                              /* id  */
+  প্রতীক* id_colon;                        /* id_colon  */
+  প্রতীক* প্রতীক;                          /*প্রতীক*/
+  প্রতীক* string_as_id;                    /* string_as_id  */
+  প্রতীক_list* generic_symlist;            /* generic_symlist  */
+  প্রতীক_list* generic_symlist_item;       /* generic_symlist_item  */
+  প্রতীক_list* nterm_decls;                /* nterm_decls  */
+  প্রতীক_list* token_decls;                /* token_decls  */
+  প্রতীক_list* yykind_82;                  /* token_decl.1  */
+  প্রতীক_list* token_decls_for_prec;       /* token_decls_for_prec  */
+  প্রতীক_list* yykind_87;                  /* token_decl_for_prec.1  */
+  প্রতীক_list* প্রতীক_decls;               /* symbol_decls  */
+  প্রতীক_list* yykind_90;                  /* symbols.1  */
   uniqstr PERCENT_ERROR_VERBOSE;           /* "%error-verbose"  */
   uniqstr PERCENT_FILE_PREFIX;             /* "%file-prefix"  */
   uniqstr PERCENT_FLAG;                    /* "%<flag>"  */
@@ -189,25 +189,25 @@ union GRAM_STYPE
   uniqstr yykind_76;                       /* tag.opt  */
   uniqstr tag;                             /* tag  */
   uniqstr variable;                        /* variable  */
-  unsigned char CHAR_LITERAL;              /* "character literal"  */
-  value_type value;                        /* value  */
+  unsigned অক্ষর CHAR_LITERAL;              /* "character literal"  */
+  মান_type মান;                        /*মান*/
 
 
 };
-typedef union GRAM_STYPE GRAM_STYPE;
+প্রকারলেখ সংঘ GRAM_STYPE GRAM_STYPE;
 # define GRAM_STYPE_IS_TRIVIAL 1
 # define GRAM_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
-typedef struct GRAM_LTYPE GRAM_LTYPE;
-struct GRAM_LTYPE
+#যদি ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
+প্রকারলেখ কাঠামো GRAM_LTYPE GRAM_LTYPE;
+কাঠামো GRAM_LTYPE
 {
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
+  পূর্ণসংখ্যা first_সারি;
+  পূর্ণসংখ্যা first_column;
+  পূর্ণসংখ্যা last_সারি;
+  পূর্ণসংখ্যা last_column;
 };
 # define GRAM_LTYPE_IS_DECLARED 1
 # define GRAM_LTYPE_IS_TRIVIAL 1
@@ -216,14 +216,14 @@ struct GRAM_LTYPE
 
 
 
-int gram_parse (void);
+পূর্ণসংখ্যা gram_parse (শূন্য);
 
 /* "%code provides" blocks.  */
 
   /* Initialize unquote.  */
-  void parser_init (void);
+  শূন্য parser_init (শূন্য);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  শূন্য parser_free (শূন্য);
 
 
 #endif /* !YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED  */

@@ -22,15 +22,15 @@
 # define ASSOC_H_
 
 /* Associativity values for tokens and rules.  */
-typedef enum
+প্রকারলেখ গণনা
 {
   undef_assoc,     /** Not defined. */
-  right_assoc,     /** %right */
-  left_assoc,      /** %left */
+  ডান_assoc,     /** %right */
+  বাম_assoc,      /** %left */
   non_assoc,       /** %nonassoc */
   precedence_assoc /** %precedence */
 } assoc;
 
-char const *assoc_to_string (assoc a);
+অক্ষর ধ্রুবক *assoc_to_string (assoc a);
 
 #endif /* !ASSOC_H_ */

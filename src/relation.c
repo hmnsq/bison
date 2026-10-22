@@ -18,36 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include <bitsetv.h>
+#অন্তর্ভাব <bitsetv.h>
 
-#include "getargs.h"
-#include "relation.h"
+#অন্তর্ভাব "getargs.h"
+#অন্তর্ভাব "relation.h"
 
-void
-relation_print (const char *title,
-                relation r, relation_node size,
-                relation_node_print print, FILE *out)
+শূন্য
+relation_print (ধ্রুবক অক্ষর *title,
+                relation r, relation_গ্রন্থি আকার_2,
+                relation_গ্রন্থি_print print, FILE *out)
 {
-  if (title)
+  যদি (title)
     fprintf (out, "%s:\n", title);
-  for (relation_node i = 0; i < size; ++i)
-    if (r[i])
+  জন্য (relation_গ্রন্থি i = 0; i < আকার_2; ++i)
+    যদি (r[i])
       {
         fputs ("    ", out);
-        if (print)
+        যদি (print)
           print (i, out);
-        else
+        অন্যথা
           fprintf (out, "%3ld", (long) i);
         fputc (':', out);
-        for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+        জন্য (relation_গ্রন্থি j = 0; r[i][j] != END_গ্রন্থি; ++j)
           {
             fputc (' ', out);
-            if (print)
+            যদি (print)
               print (r[i][j], out);
-            else
+            অন্যথা
               fprintf (out, "%3ld", (long) r[i][j]);
           }
         fputc ('\n', out);
@@ -63,62 +63,62 @@ relation_print (const char *title,
 | two.                                                           |
 `---------------------------------------------------------------*/
 
-static relation R;
-static relation_nodes indexes;
-static relation_nodes vertices;
-static relation_node top;
-static relation_node infinity;
-static bitsetv F;
+স্থির relation R;
+স্থির relation_nodes indexes;
+স্থির relation_nodes vertices;
+স্থির relation_গ্রন্থি শীর্ষ_2;
+স্থির relation_গ্রন্থি infinity;
+স্থির bitsetv F;
 
-static void
-traverse (relation_node i)
+স্থির শূন্য
+traverse (relation_গ্রন্থি i)
 {
-  vertices[++top] = i;
-  relation_node height = indexes[i] = top;
+  vertices[++শীর্ষ_2] = i;
+  relation_গ্রন্থি height = indexes[i] = শীর্ষ_2;
 
-  if (R[i])
-    for (relation_node j = 0; R[i][j] != END_NODE; ++j)
+  যদি (R[i])
+    জন্য (relation_গ্রন্থি j = 0; R[i][j] != END_গ্রন্থি; ++j)
       {
-        if (indexes[R[i][j]] == 0)
+        যদি (indexes[R[i][j]] == 0)
           traverse (R[i][j]);
 
-        if (indexes[i] > indexes[R[i][j]])
+        যদি (indexes[i] > indexes[R[i][j]])
           indexes[i] = indexes[R[i][j]];
 
         bitset_or (F[i], F[i], F[R[i][j]]);
       }
 
-  if (indexes[i] == height)
-    for (;;)
+  যদি (indexes[i] == height)
+    জন্য (;;)
       {
-        relation_node j = vertices[top--];
+        relation_গ্রন্থি j = vertices[শীর্ষ_2--];
         indexes[j] = infinity;
 
-        if (i == j)
-          break;
+        যদি (i == j)
+          বিরতি;
 
         bitset_copy (F[j], F[i]);
       }
 }
 
 
-void
-relation_digraph (relation r, relation_node size, bitsetv function)
+শূন্য
+relation_digraph (relation r, relation_গ্রন্থি আকার_2, bitsetv function)
 {
-  infinity = size + 2;
-  indexes = xcalloc (size + 1, sizeof *indexes);
-  vertices = xnmalloc (size + 1, sizeof *vertices);
-  top = 0;
+  infinity = আকার_2 + 2;
+  indexes = xcalloc (আকার_2 + 1, আকার *indexes);
+  vertices = xnmalloc (আকার_2 + 1, আকার *vertices);
+  শীর্ষ_2 = 0;
 
   R = r;
   F = function;
 
-  for (relation_node i = 0; i < size; i++)
-    if (indexes[i] == 0 && R[i])
+  জন্য (relation_গ্রন্থি i = 0; i < আকার_2; i++)
+    যদি (indexes[i] == 0 && R[i])
       traverse (i);
 
-  free (indexes);
-  free (vertices);
+  মুক্ত (indexes);
+  মুক্ত (vertices);
 
   function = F;
 }
@@ -128,55 +128,55 @@ relation_digraph (relation r, relation_node size, bitsetv function)
 | Destructively transpose R_ARG, of size N.  |
 `-------------------------------------------*/
 
-void
-relation_transpose (relation *R_arg, relation_node size)
+শূন্য
+relation_transpose (relation *R_arg, relation_গ্রন্থি আকার_2)
 {
   relation r = *R_arg;
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose", r, size, NULL, stderr);
+  যদি (trace_flag & trace_sets)
+    relation_print ("relation_transpose", r, আকার_2, ফাঁকা, stderr);
 
   /* Count. */
   /* NEDGES[I] -- total size of NEW_R[I]. */
-  size_t *nedges = xcalloc (size, sizeof *nedges);
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  size_t *nedges = xcalloc (আকার_2, আকার *nedges);
+  জন্য (relation_গ্রন্থি i = 0; i < আকার_2; i++)
+    যদি (r[i])
+      জন্য (relation_গ্রন্থি j = 0; r[i][j] != END_গ্রন্থি; ++j)
         ++nedges[r[i][j]];
 
   /* Allocate. */
   /* The result. */
-  relation new_R = xnmalloc (size, sizeof *new_R);
+  relation new_R = xnmalloc (আকার_2, আকার *new_R);
   /* END_R[I] -- next entry of NEW_R[I]. */
-  relation end_R = xnmalloc (size, sizeof *end_R);
-  for (relation_node i = 0; i < size; i++)
+  relation end_R = xnmalloc (আকার_2, আকার *end_R);
+  জন্য (relation_গ্রন্থি i = 0; i < আকার_2; i++)
     {
-      relation_node *sp = NULL;
-      if (nedges[i] > 0)
+      relation_গ্রন্থি *sp = ফাঁকা;
+      যদি (nedges[i] > 0)
         {
-          sp = xnmalloc (nedges[i] + 1, sizeof *sp);
-          sp[nedges[i]] = END_NODE;
+          sp = xnmalloc (nedges[i] + 1, আকার *sp);
+          sp[nedges[i]] = END_গ্রন্থি;
         }
       new_R[i] = sp;
       end_R[i] = sp;
     }
 
   /* Store. */
-  for (relation_node i = 0; i < size; i++)
-    if (r[i])
-      for (relation_node j = 0; r[i][j] != END_NODE; ++j)
+  জন্য (relation_গ্রন্থি i = 0; i < আকার_2; i++)
+    যদি (r[i])
+      জন্য (relation_গ্রন্থি j = 0; r[i][j] != END_গ্রন্থি; ++j)
         *end_R[r[i][j]]++ = i;
 
-  free (nedges);
-  free (end_R);
+  মুক্ত (nedges);
+  মুক্ত (end_R);
 
   /* Free the input: it is replaced with the result. */
-  for (relation_node i = 0; i < size; i++)
-    free (r[i]);
-  free (r);
+  জন্য (relation_গ্রন্থি i = 0; i < আকার_2; i++)
+    মুক্ত (r[i]);
+  মুক্ত (r);
 
-  if (trace_flag & trace_sets)
-    relation_print ("relation_transpose: output", new_R, size, NULL, stderr);
+  যদি (trace_flag & trace_sets)
+    relation_print ("relation_transpose: output", new_R, আকার_2, ফাঁকা, stderr);
 
   *R_arg = new_R;
 }

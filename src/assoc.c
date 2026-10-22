@@ -18,31 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include "assoc.h"
+#অন্তর্ভাব "assoc.h"
 
 
-const char *
+ধ্রুবক অক্ষর *
 assoc_to_string (assoc a)
 {
-  switch (a)
+  নির্বাচন (a)
     {
-    case undef_assoc:
-      return "undefined associativity";
+    ক্ষেত্র undef_assoc:
+      ফেরত "undefined associativity";
 
-    case right_assoc:
-      return "%right";
+    ক্ষেত্র ডান_assoc:
+      ফেরত "%right";
 
-    case left_assoc:
-      return "%left";
+    ক্ষেত্র বাম_assoc:
+      ফেরত "%left";
 
-    case non_assoc:
-      return "%nonassoc";
+    ক্ষেত্র non_assoc:
+      ফেরত "%nonassoc";
 
-    case precedence_assoc:
-      return "%precedence";
+    ক্ষেত্র precedence_assoc:
+      ফেরত "%precedence";
     }
   abort ();
 }

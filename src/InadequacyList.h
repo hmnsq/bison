@@ -28,7 +28,7 @@
 /**
  * A unique ID assigned to every \c InadequacyList node.
  */
-typedef long long InadequacyListNodeCount;
+প্রকারলেখ long long Inadequacy_List_গ্রন্থি_গুনতি;
 
 /**
  * For a conflict, each rule in the grammar can have at most one contributing
@@ -41,25 +41,25 @@ typedef long long InadequacyListNodeCount;
  * sync with this type.  Whatever the type, it must support negatives for sake
  * of the special values below.
  */
-typedef rule_number ContributionIndex;
+প্রকারলেখ rule_সংখ্যা Contribution_সূচক;
 
 /* Special \c ContributionIndex used to indicate null result when looking for a
    contribution.  */
-extern ContributionIndex const ContributionIndex__none;
+বাহ্যিক Contribution_সূচক ধ্রুবক Contribution_সূচক_none;
 
 /* Special \c ContributionIndex used by
    \c AnnotationList__computeDominantContribution to signal when the action
    chosen in a conflict is a syntax error because of a %nonassoc.  */
-extern ContributionIndex const ContributionIndex__error_action;
+বাহ্যিক Contribution_সূচক ধ্রুবক Contribution_সূচক_error_action;
 
 /**
  * The description of a conflict.  Don't break encapsulation by modifying the
  * fields directly.  Use the provided interface functions for
  * \c InadequacyList.
  */
-typedef struct {
+প্রকারলেখ কাঠামো {
   /** The \c token passed to \c InadequacyList__new_conflict.  */
-  symbol *token;
+  প্রতীক *token;
   /** The \c actions passed to \c InadequacyList__new_conflict.  */
   bitset actions;
 } Conflict;
@@ -69,12 +69,12 @@ typedef struct {
  * particular state.  Don't break encapsulation by modifying the fields
  * directly.  Use the provided interface functions.
  */
-typedef struct InadequacyList {
-  struct InadequacyList *next;
-  InadequacyListNodeCount id;
+প্রকারলেখ কাঠামো InadequacyList {
+  কাঠামো InadequacyList *পরবর্তী;
+  Inadequacy_List_গ্রন্থি_গুনতি id;
   state *manifestingState;
-  ContributionIndex contributionCount;
-  union {
+  Contribution_সূচক contribution_গুনতি_2;
+  সংঘ {
     Conflict conflict;
   } inadequacy;
 } InadequacyList;
@@ -108,14 +108,14 @@ typedef struct InadequacyList {
  *   - \c result assumes responsibility for the memory of \c actions.
  */
 InadequacyList *InadequacyList__new_conflict (
-  state *manifesting_state, symbol *token, bitset actions,
-  InadequacyListNodeCount *node_count);
+  state *manifesting_state, প্রতীক *token, bitset actions,
+  Inadequacy_List_গ্রন্থি_গুনতি *গ্রন্থি_গুনতি);
 
 /**
  * \post
  *   - All memory associated with all nodes in the list \c self was freed.
  */
-void InadequacyList__delete (InadequacyList *self);
+শূন্য InadequacyList__delete (InadequacyList *self);
 
 /**
  * \pre
@@ -126,8 +126,8 @@ void InadequacyList__delete (InadequacyList *self);
  *       \c self (perhaps because \c self isn't a conflict).
  *     - The index of the shift contribution, otherwise.
  */
-ContributionIndex
-InadequacyList__getShiftContributionIndex (InadequacyList const *self);
+Contribution_সূচক
+Inadequacy_List_get_Shift_Contribution_সূচক (InadequacyList ধ্রুবক *self);
 
 /**
  * \pre
@@ -137,8 +137,8 @@ InadequacyList__getShiftContributionIndex (InadequacyList const *self);
  *   - \c result = the token associated with contribution \c i in the
  *     inadequacy described by the node \c self.
  */
-symbol *InadequacyList__getContributionToken (InadequacyList const *self,
-                                              ContributionIndex i);
+প্রতীক *InadequacyList__getContributionToken (InadequacyList ধ্রুবক *self,
+                                              Contribution_সূচক i);
 
 /**
  * \pre
@@ -148,6 +148,6 @@ symbol *InadequacyList__getContributionToken (InadequacyList const *self,
  *   - \c list now contains \c self as its first node.
  *   - \c list assumes responsibility for the memory of \c self.
  */
-void InadequacyList__prependTo (InadequacyList *self, InadequacyList **list);
+শূন্য InadequacyList__prependTo (InadequacyList *self, InadequacyList **list);
 
 #endif /* !INADEQUACY_LIST_H_ */

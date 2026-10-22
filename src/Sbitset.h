@@ -20,75 +20,75 @@
 #ifndef SBITSET_H_
 # define SBITSET_H_
 
-typedef unsigned char *Sbitset;
-typedef size_t Sbitset__Index;
-# define SBITSET__INDEX__CONVERSION_SPEC "zu"
+প্রকারলেখ unsigned অক্ষর *Sbitset;
+প্রকারলেখ size_t Sbitset_সূচক;
+# define SBITSET_সূচক_CONVERSION_SPEC "zu"
 
 # define Sbitset__nbytes(NBITS) \
   (((NBITS) + CHAR_BIT - 1) / CHAR_BIT)
-# define Sbitset__byteAddress(SELF, INDEX) \
-  (((SELF) + (INDEX) / CHAR_BIT))
-# define Sbitset__bit_mask(INDEX) \
-  (1 << (CHAR_BIT - 1 - (INDEX) % CHAR_BIT))
+# define Sbitset__byteAddress(SELF, সূচক) \
+  (((SELF) + (সূচক) / CHAR_BIT))
+# define Sbitset__bit_mask(সূচক) \
+  (1 << (CHAR_BIT - 1 - (সূচক) % CHAR_BIT))
 # define Sbitset__last_byte_mask(NBITS) \
   (UCHAR_MAX << (CHAR_BIT - 1 - ((NBITS) - 1) % CHAR_BIT))
 
 /* nbits must not be 0.  */
-Sbitset Sbitset__new (Sbitset__Index nbits);
-Sbitset Sbitset__new_on_obstack (Sbitset__Index nbits,
-                                 struct obstack *obstackp);
-void Sbitset__delete (Sbitset self);
+Sbitset Sbitset__new (Sbitset_সূচক nbits);
+Sbitset Sbitset__new_on_obstack (Sbitset_সূচক nbits,
+                                 কাঠামো obstack *obstackp);
+শূন্য Sbitset__delete (Sbitset self);
 
-# define Sbitset__test(SELF, INDEX)                                     \
-  ((*Sbitset__byteAddress ((SELF), (INDEX)) & Sbitset__bit_mask (INDEX)) != 0)
+# define Sbitset__test(SELF, সূচক)                                     \
+  ((*Sbitset__byteAddress ((SELF), (সূচক)) & Sbitset__bit_mask (সূচক)) != 0)
 
-bool Sbitset__isEmpty (Sbitset self, Sbitset__Index nbits);
+bool Sbitset__isEmpty (Sbitset self, Sbitset_সূচক nbits);
 
-void Sbitset__fprint (Sbitset self, Sbitset__Index nbits, FILE *file);
+শূন্য Sbitset__fprint (Sbitset self, Sbitset_সূচক nbits, FILE *file);
 
-# define Sbitset__set(SELF, INDEX)                                      \
-  do {                                                                  \
-    *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
-      *Sbitset__byteAddress ((SELF), (INDEX)) | Sbitset__bit_mask (INDEX); \
-  } while (0)
+# define Sbitset__set(SELF, সূচক)                                      \
+  করো {                                                                  \
+    *Sbitset__byteAddress ((SELF), (সূচক)) =                           \
+      *Sbitset__byteAddress ((SELF), (সূচক)) | Sbitset__bit_mask (সূচক); \
+  } যখন (0)
 
-# define Sbitset__reset(SELF, INDEX)                                    \
-  do {                                                                  \
-    *Sbitset__byteAddress ((SELF), (INDEX)) =                           \
-      *Sbitset__byteAddress ((SELF), (INDEX)) & ~Sbitset__bit_mask (INDEX); \
-  } while (0)
+# define Sbitset__reset(SELF, সূচক)                                    \
+  করো {                                                                  \
+    *Sbitset__byteAddress ((SELF), (সূচক)) =                           \
+      *Sbitset__byteAddress ((SELF), (সূচক)) & ~Sbitset__bit_mask (সূচক); \
+  } যখন (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be reset.  */
 # define Sbitset__zero(SELF, NBITS)             \
-  do {                                          \
+  করো {                                          \
     memset (SELF, 0, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } যখন (0)
 
 /* NBITS is the size of the bitset.  More than NBITS bits might be set.  */
 # define Sbitset__ones(SELF, NBITS)                     \
-  do {                                                  \
+  করো {                                                  \
     memset (SELF, UCHAR_MAX, Sbitset__nbytes (NBITS));  \
-  } while (0)
+  } যখন (0)
 
 /* NBITS is the size of every bitset.  More than NBITS bits might be set.  */
 # define Sbitset__or(SELF, OTHER1, OTHER2, NBITS)                       \
-  do {                                                                  \
+  করো {                                                                  \
     Sbitset ptr_self = (SELF);                                          \
     Sbitset ptr_other1 = (OTHER1);                                      \
     Sbitset ptr_other2 = (OTHER2);                                      \
     Sbitset end_self = ptr_self + Sbitset__nbytes (NBITS);              \
-    for (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
+    জন্য (; ptr_self < end_self; ++ptr_self, ++ptr_other1, ++ptr_other2) \
       *ptr_self = *ptr_other1 | *ptr_other2;                            \
-  } while (0)
+  } যখন (0)
 
 /* ATTENTION: there are *two* loops here, "break" and "continue" will
    not apply to the whole loop, just the inner one.  */
-# define SBITSET__FOR_EACH(SELF, NBITS, ITER, INDEX)                    \
-  for ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
-    if (*(ITER) != 0)                                                   \
-      for ((INDEX) = ((ITER)-(SELF))*CHAR_BIT;                          \
-           (INDEX) < (NBITS) && (SELF)+(INDEX)/CHAR_BIT < (ITER)+1;     \
-           ++(INDEX))                                                   \
-        if (((*ITER) & Sbitset__bit_mask (INDEX)) != 0)
+# define SBITSET__FOR_EACH(SELF, NBITS, ITER, সূচক)                    \
+  জন্য ((ITER) = (SELF); (ITER) < (SELF) + Sbitset__nbytes (NBITS); ++(ITER)) \
+    যদি (*(ITER) != 0)                                                   \
+      জন্য ((সূচক) = ((ITER)-(SELF))*CHAR_BIT;                          \
+           (সূচক) < (NBITS) && (SELF)+(সূচক)/CHAR_BIT < (ITER)+1;     \
+           ++(সূচক))                                                   \
+        যদি (((*ITER) & Sbitset__bit_mask (সূচক)) != 0)
 
 #endif /* !SBITSET_H_ */

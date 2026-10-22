@@ -22,38 +22,38 @@
 /* See comments in state.h for the data structures that represent it.
    The entry point is generate_states.  */
 
-#include <config.h>
-#include "system.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "system.h"
 
-#include <bitset.h>
+#অন্তর্ভাব <bitset.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
+#অন্তর্ভাব "closure.h"
+#অন্তর্ভাব "complain.h"
+#অন্তর্ভাব "getargs.h"
+#অন্তর্ভাব "gram.h"
+#অন্তর্ভাব "lalr.h"
+#অন্তর্ভাব "lr0.h"
+#অন্তর্ভাব "reader.h"
+#অন্তর্ভাব "reduce.h"
+#অন্তর্ভাব "state.h"
+#অন্তর্ভাব "symtab.h"
 
-typedef struct state_list
+প্রকারলেখ কাঠামো state_list
 {
-  struct state_list *next;
+  কাঠামো state_list *পরবর্তী;
   state *state;
 } state_list;
 
-static state_list *first_state = NULL;
-static state_list *last_state = NULL;
+স্থির state_list *first_state = ফাঁকা;
+স্থির state_list *last_state = ফাঁকা;
 
 /* Print CORE for debugging. */
-static void
-core_print (size_t core_size, item_index *core, FILE *out)
+স্থির শূন্য
+core_print (size_t core_আকার, item_সূচক *core, FILE *out)
 {
-  for (int i = 0; i < core_size; ++i)
+  জন্য (পূর্ণসংখ্যা i = 0; i < core_আকার; ++i)
     {
-      item_print (ritem + core[i], NULL, out);
+      item_print (ritem + core[i], ফাঁকা, out);
       fputc ('\n', out);
     }
 }
@@ -64,67 +64,67 @@ core_print (size_t core_size, item_index *core, FILE *out)
 | its outgoing transitions.  Return it.                            |
 `-----------------------------------------------------------------*/
 
-static state *
-state_list_append (symbol_number sym, size_t core_size, item_index *core)
+স্থির state *
+state_list_append (প্রতীক_সংখ্যা sym, size_t core_আকার, item_সূচক *core)
 {
-  state_list *node = xmalloc (sizeof *node);
-  state *res = state_new (sym, core_size, core);
+  state_list *গ্রন্থি = xmalloc (আকার *গ্রন্থি);
+  state *res = state_new (sym, core_আকার, core);
 
-  if (trace_flag & trace_automaton)
+  যদি (trace_flag & trace_automaton)
     fprintf (stderr, "state_list_append (state = %d, symbol = %d (%s))\n",
              nstates, sym, symbols[sym]->tag);
 
-  node->next = NULL;
-  node->state = res;
+  গ্রন্থি->পরবর্তী = ফাঁকা;
+  গ্রন্থি->state = res;
 
-  if (!first_state)
-    first_state = node;
-  if (last_state)
-    last_state->next = node;
-  last_state = node;
+  যদি (!first_state)
+    first_state = গ্রন্থি;
+  যদি (last_state)
+    last_state->পরবর্তী = গ্রন্থি;
+  last_state = গ্রন্থি;
 
-  return res;
+  ফেরত res;
 }
 
 /* Symbols that can be "shifted" (including nonterminals) from the
    current state.  */
-bitset shift_symbol;
+bitset shift_প্রতীক;
 
-static rule **redset;
+স্থির rule **redset;
 /* For the current state, the list of pointers to states that can be
    reached via a shift/goto.  Could be indexed by the reaching symbol,
    but labels of incoming transitions can be recovered by the state
    itself.  */
-static state **shiftset;
+স্থির state **shiftset;
 
 
 /* KERNEL_BASE[symbol-number] -> list of item indices (offsets inside
    RITEM) of length KERNEL_SIZE[symbol-number]. */
-static item_index **kernel_base;
-static int *kernel_size;
+স্থির item_সূচক **kernel_base;
+স্থির পূর্ণসংখ্যা *kernel_আকার;
 
 /* A single dimension array that serves as storage for
    KERNEL_BASE.  */
-static item_index *kernel_items;
+স্থির item_সূচক *kernel_বস্তুসমূহ;
 
 
-static void
-allocate_itemsets (void)
+স্থির শূন্য
+allocate_itemsets (শূন্য)
 {
   /* Count the number of occurrences of all the symbols in RITEMS.
      Note that useless productions (hence useless nonterminals) are
      browsed too, hence we need to allocate room for _all_ the
      symbols.  */
-  size_t count = 0;
-  size_t *symbol_count = xcalloc (nsyms + nuseless_nonterminals,
-                                  sizeof *symbol_count);
+  size_t গুনতি = 0;
+  size_t *প্রতীক_গুনতি = xcalloc (nsyms + nuseless_nonterminals,
+                                  আকার *প্রতীক_গুনতি);
 
-  for (rule_number r = 0; r < nrules; ++r)
-    for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+  জন্য (rule_সংখ্যা r = 0; r < nrules; ++r)
+    জন্য (item_সংখ্যা *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
       {
-        symbol_number sym = item_number_as_symbol_number (*rhsp);
-        count += 1;
-        symbol_count[sym] += 1;
+        প্রতীক_সংখ্যা sym = item_সংখ্যা_as_প্রতীক_সংখ্যা (*rhsp);
+        গুনতি += 1;
+        প্রতীক_গুনতি[sym] += 1;
       }
 
   /* See comments before new_itemsets.  All the vectors of items
@@ -133,61 +133,61 @@ allocate_itemsets (void)
      appears as an item, which is SYMBOL_COUNT[S].
      We allocate that much space for each symbol.  */
 
-  kernel_base = xnmalloc (nsyms, sizeof *kernel_base);
-  kernel_items = xnmalloc (count, sizeof *kernel_items);
+  kernel_base = xnmalloc (nsyms, আকার *kernel_base);
+  kernel_বস্তুসমূহ = xnmalloc (গুনতি, আকার *kernel_বস্তুসমূহ);
 
-  count = 0;
-  for (symbol_number i = 0; i < nsyms; i++)
+  গুনতি = 0;
+  জন্য (প্রতীক_সংখ্যা i = 0; i < nsyms; i++)
     {
-      kernel_base[i] = kernel_items + count;
-      count += symbol_count[i];
+      kernel_base[i] = kernel_বস্তুসমূহ + গুনতি;
+      গুনতি += প্রতীক_গুনতি[i];
     }
 
-  free (symbol_count);
-  kernel_size = xnmalloc (nsyms, sizeof *kernel_size);
+  মুক্ত (প্রতীক_গুনতি);
+  kernel_আকার = xnmalloc (nsyms, আকার *kernel_আকার);
 }
 
 /* Print the current kernel (in KERNEL_BASE). */
-static void
+স্থির শূন্য
 kernel_print (FILE *out)
 {
-  for (symbol_number i = 0; i < nsyms; ++i)
-    if (kernel_size[i])
+  জন্য (প্রতীক_সংখ্যা i = 0; i < nsyms; ++i)
+    যদি (kernel_আকার[i])
       {
         fprintf (out, "kernel[%s] =\n", symbols[i]->tag);
-        core_print (kernel_size[i], kernel_base[i], out);
+        core_print (kernel_আকার[i], kernel_base[i], out);
       }
 }
 
 /* Make sure the kernel is in sane state. */
-static void
-kernel_check (void)
+স্থির শূন্য
+kernel_check (শূন্য)
 {
-  for (symbol_number i = 0; i < nsyms - 1; ++i)
-    assert (kernel_base[i] + kernel_size[i] <= kernel_base[i + 1]);
+  জন্য (প্রতীক_সংখ্যা i = 0; i < nsyms - 1; ++i)
+    প্রতিজ্ঞা (kernel_base[i] + kernel_আকার[i] <= kernel_base[i + 1]);
 }
 
-static void
-allocate_storage (void)
+স্থির শূন্য
+allocate_storage (শূন্য)
 {
   allocate_itemsets ();
 
-  shiftset = xnmalloc (nsyms, sizeof *shiftset);
-  redset = xnmalloc (nrules, sizeof *redset);
+  shiftset = xnmalloc (nsyms, আকার *shiftset);
+  redset = xnmalloc (nrules, আকার *redset);
   state_hash_new ();
-  shift_symbol = bitset_create (nsyms, BITSET_FIXED);
+  shift_প্রতীক = bitset_create (nsyms, BITSET_FIXED);
 }
 
 
-static void
-free_storage (void)
+স্থির শূন্য
+free_storage (শূন্য)
 {
-  bitset_free (shift_symbol);
-  free (redset);
-  free (shiftset);
-  free (kernel_base);
-  free (kernel_size);
-  free (kernel_items);
+  bitset_free (shift_প্রতীক);
+  মুক্ত (redset);
+  মুক্ত (shiftset);
+  মুক্ত (kernel_base);
+  মুক্ত (kernel_আকার);
+  মুক্ত (kernel_বস্তুসমূহ);
   state_hash_free ();
 }
 
@@ -208,42 +208,42 @@ free_storage (void)
 | number.  Compute each kernel_base[symbol] with the same sort.     |
 `------------------------------------------------------------------*/
 
-static void
+স্থির শূন্য
 new_itemsets (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->number);
+  যদি (trace_flag & trace_automaton)
+    fprintf (stderr, "new_itemsets: begin: state = %d\n", s->সংখ্যা);
 
-  memset (kernel_size, 0, nsyms * sizeof *kernel_size);
+  memset (kernel_আকার, 0, nsyms * আকার *kernel_আকার);
 
-  bitset_zero (shift_symbol);
+  bitset_zero (shift_প্রতীক);
 
-  if (trace_flag & trace_automaton)
+  যদি (trace_flag & trace_automaton)
     {
       fprintf (stderr, "initial kernel:\n");
       kernel_print (stderr);
     }
 
-  for (size_t i = 0; i < nitemset; ++i)
-    if (item_number_is_symbol_number (ritem[itemset[i]]))
+  জন্য (size_t i = 0; i < nitemset; ++i)
+    যদি (item_সংখ্যা_is_প্রতীক_সংখ্যা (ritem[itemset[i]]))
       {
-        if (trace_flag & trace_automaton)
+        যদি (trace_flag & trace_automaton)
           {
             fputs ("working on: ", stderr);
-            item_print (ritem + itemset[i], NULL, stderr);
+            item_print (ritem + itemset[i], ফাঁকা, stderr);
             fputc ('\n', stderr);
           }
-        symbol_number sym = item_number_as_symbol_number (ritem[itemset[i]]);
-        bitset_set (shift_symbol, sym);
-        kernel_base[sym][kernel_size[sym]] = itemset[i] + 1;
-        kernel_size[sym]++;
+        প্রতীক_সংখ্যা sym = item_সংখ্যা_as_প্রতীক_সংখ্যা (ritem[itemset[i]]);
+        bitset_set (shift_প্রতীক, sym);
+        kernel_base[sym][kernel_আকার[sym]] = itemset[i] + 1;
+        kernel_আকার[sym]++;
       }
 
-  if (trace_flag & trace_automaton)
+  যদি (trace_flag & trace_automaton)
     {
       fprintf (stderr, "final kernel:\n");
       kernel_print (stderr);
-      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->number);
+      fprintf (stderr, "new_itemsets: end: state = %d\n\n", s->সংখ্যা);
     }
   kernel_check ();
 }
@@ -256,25 +256,25 @@ new_itemsets (state *s)
 | already.  Used by append_states.                              |
 `--------------------------------------------------------------*/
 
-static state *
-get_state (symbol_number sym, size_t core_size, item_index *core)
+স্থির state *
+get_state (প্রতীক_সংখ্যা sym, size_t core_আকার, item_সূচক *core)
 {
-  if (trace_flag & trace_automaton)
+  যদি (trace_flag & trace_automaton)
     {
       fprintf (stderr, "Entering get_state, symbol = %d (%s), core:\n",
                sym, symbols[sym]->tag);
-      core_print (core_size, core, stderr);
+      core_print (core_আকার, core, stderr);
       fputc ('\n', stderr);
     }
 
-  state *s = state_hash_lookup (core_size, core);
-  if (!s)
-    s = state_list_append (sym, core_size, core);
+  state *s = state_hash_lookup (core_আকার, core);
+  যদি (!s)
+    s = state_list_append (sym, core_আকার, core);
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "Exiting get_state => %d\n", s->number);
+  যদি (trace_flag & trace_automaton)
+    fprintf (stderr, "Exiting get_state => %d\n", s->সংখ্যা);
 
-  return s;
+  ফেরত s;
 }
 
 /*---------------------------------------------------------------.
@@ -284,23 +284,23 @@ get_state (symbol_number sym, size_t core_size, item_index *core)
 | SHIFTSET is set up as a vector of those states.                |
 `---------------------------------------------------------------*/
 
-static void
+স্থির শূন্য
 append_states (state *s)
 {
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: begin: state = %d\n", s->number);
+  যদি (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: begin: state = %d\n", s->সংখ্যা);
 
   bitset_iterator iter;
-  symbol_number sym;
-  int i = 0;
-  BITSET_FOR_EACH (iter, shift_symbol, sym, 0)
+  প্রতীক_সংখ্যা sym;
+  পূর্ণসংখ্যা i = 0;
+  BITSET_FOR_EACH (iter, shift_প্রতীক, sym, 0)
     {
-      shiftset[i] = get_state (sym, kernel_size[sym], kernel_base[sym]);
+      shiftset[i] = get_state (sym, kernel_আকার[sym], kernel_base[sym]);
       ++i;
     }
 
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "append_states: end: state = %d\n", s->number);
+  যদি (trace_flag & trace_automaton)
+    fprintf (stderr, "append_states: end: state = %d\n", s->সংখ্যা);
 }
 
 
@@ -310,20 +310,20 @@ append_states (state *s)
 | record their rule numbers.                                      |
 `----------------------------------------------------------------*/
 
-static void
+স্থির শূন্য
 save_reductions (state *s)
 {
-  int count = 0;
+  পূর্ণসংখ্যা গুনতি = 0;
 
   /* Find and count the active items that represent ends of rules. */
-  for (size_t i = 0; i < nitemset; ++i)
+  জন্য (size_t i = 0; i < nitemset; ++i)
     {
-      item_number item = ritem[itemset[i]];
-      if (item_number_is_rule_number (item))
+      item_সংখ্যা item = ritem[itemset[i]];
+      যদি (item_সংখ্যা_is_rule_সংখ্যা (item))
         {
-          rule_number r = item_number_as_rule_number (item);
-          redset[count++] = &rules[r];
-          if (r == 0)
+          rule_সংখ্যা r = item_সংখ্যা_as_rule_সংখ্যা (item);
+          redset[গুনতি++] = &rules[r];
+          যদি (r == 0)
             {
               /* This is "reduce 0", i.e., accept. */
               aver (!final_state);
@@ -332,19 +332,19 @@ save_reductions (state *s)
         }
     }
 
-  if (trace_flag & trace_automaton)
+  যদি (trace_flag & trace_automaton)
     {
-      fprintf (stderr, "reduction[%d] = {\n", s->number);
-      for (int i = 0; i < count; ++i)
+      fprintf (stderr, "reduction[%d] = {\n", s->সংখ্যা);
+      জন্য (পূর্ণসংখ্যা i = 0; i < গুনতি; ++i)
         {
-          rule_print (redset[i], NULL, stderr);
+          rule_print (redset[i], ফাঁকা, stderr);
           fputc ('\n', stderr);
         }
       fputs ("}\n", stderr);
     }
 
   /* Make a reductions structure and copy the data into it.  */
-  state_reductions_set (s, count, redset);
+  state_reductions_set (s, গুনতি, redset);
 }
 
 
@@ -352,12 +352,12 @@ save_reductions (state *s)
 | Build STATES.  |
 `---------------*/
 
-static void
-set_states (void)
+স্থির শূন্য
+set_states (শূন্য)
 {
-  states = xcalloc (nstates, sizeof *states);
+  states = xcalloc (nstates, আকার *states);
 
-  while (first_state)
+  যখন (first_state)
     {
       state_list *this = first_state;
 
@@ -366,18 +366,18 @@ set_states (void)
          even if reduced to 0.  It is too soon for errs, which are
          computed later, but set_conflicts.  */
       state *s = this->state;
-      if (!s->transitions)
+      যদি (!s->transitions)
         state_transitions_set (s, 0, 0);
-      if (!s->reductions)
+      যদি (!s->reductions)
         state_reductions_set (s, 0, 0);
 
-      states[s->number] = s;
+      states[s->সংখ্যা] = s;
 
-      first_state = this->next;
-      free (this);
+      first_state = this->পরবর্তী;
+      মুক্ত (this);
     }
-  first_state = NULL;
-  last_state = NULL;
+  first_state = ফাঁকা;
+  last_state = ফাঁকা;
 }
 
 
@@ -386,8 +386,8 @@ set_states (void)
 | grammar.                                                           |
 `-------------------------------------------------------------------*/
 
-void
-generate_states (void)
+শূন্য
+generate_states (শূন্য)
 {
   allocate_storage ();
   closure_new (nritems);
@@ -396,23 +396,23 @@ generate_states (void)
      is 0, aka $end.  */
   {
     /* The items of its core: beginning of all the rules of $accept.  */
-    kernel_size[0] = 0;
-    for (rule_number r = 0; r < nrules && rules[r].lhs->symbol == acceptsymbol; ++r)
-      kernel_base[0][kernel_size[0]++] = rules[r].rhs - ritem;
-    state_list_append (0, kernel_size[0], kernel_base[0]);
+    kernel_আকার[0] = 0;
+    জন্য (rule_সংখ্যা r = 0; r < nrules && rules[r].lhs->প্রতীক == acceptsymbol; ++r)
+      kernel_base[0][kernel_আকার[0]++] = rules[r].rhs - ritem;
+    state_list_append (0, kernel_আকার[0], kernel_base[0]);
   }
 
   /* States are queued when they are created; process them all.  */
-  for (state_list *list = first_state; list; list = list->next)
+  জন্য (state_list *list = first_state; list; list = list->পরবর্তী)
     {
       state *s = list->state;
-      if (trace_flag & trace_automaton)
+      যদি (trace_flag & trace_automaton)
         fprintf (stderr, "Processing state %d (reached by %s)\n",
-                 s->number,
-                 symbols[s->accessing_symbol]->tag);
+                 s->সংখ্যা,
+                 symbols[s->accessing_প্রতীক]->tag);
       /* Set up itemset for the transitions out of this state.  itemset gets a
          vector of all the items that could be accepted next.  */
-      closure (s->items, s->nitems);
+      closure (s->বস্তুসমূহ, s->nitems);
       /* Record the reductions allowed out of this state.  */
       save_reductions (s);
       /* Find the itemsets of the states that shifts/gotos can reach.  */
@@ -422,7 +422,7 @@ generate_states (void)
 
       /* Create the shifts structures for the shifts to those states,
          now that the state numbers transitioning to are known.  */
-      state_transitions_set (s, bitset_count (shift_symbol), shiftset);
+      state_transitions_set (s, bitset_গুনতি (shift_প্রতীক), shiftset);
     }
 
   /* discard various storage */

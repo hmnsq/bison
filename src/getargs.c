@@ -18,31 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "getargs.h"
+#অন্তর্ভাব <config.h>
+#অন্তর্ভাব "getargs.h"
 
-#include "system.h"
+#অন্তর্ভাব "system.h"
 
-#include <argmatch.h>
-#include <c-strcase.h>
-#include <configmake.h>
-#include <error.h>
-#include <getopt.h>
-#include <progname.h>
-#include <quote.h>
-#include <textstyle.h>
+#অন্তর্ভাব <argmatch.h>
+#অন্তর্ভাব <c-strcase.h>
+#অন্তর্ভাব <configmake.h>
+#অন্তর্ভাব <error.h>
+#অন্তর্ভাব <getopt.h>
+#অন্তর্ভাব <progname.h>
+#অন্তর্ভাব <quote.h>
+#অন্তর্ভাব <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "muscle-tab.h"
-#include "output.h"
-#include "uniqstr.h"
+#অন্তর্ভাব "complain.h"
+#অন্তর্ভাব "files.h"
+#অন্তর্ভাব "muscle-tab.h"
+#অন্তর্ভাব "output.h"
+#অন্তর্ভাব "uniqstr.h"
 
 bool header_flag = false;
 bool graph_flag = false;
 bool html_flag = false;
 bool xml_flag = false;
-bool no_lines_flag = false;
+bool no_সারিগুলি_flag = false;
 bool token_table_flag = false;
 location yacc_loc = EMPTY_LOCATION_INIT;
 bool update_flag = false; /* for -u */
@@ -51,11 +51,11 @@ bool color_debug = false;
 bool nondeterministic_parser = false;
 bool glr_parser = false;
 
-int feature_flag = feature_caret;
-int report_flag = report_none;
-int trace_flag = trace_none;
+পূর্ণসংখ্যা feature_flag = feature_caret;
+পূর্ণসংখ্যা report_flag = report_none;
+পূর্ণসংখ্যা trace_flag = trace_none;
 
-static struct bison_language const valid_languages[] = {
+স্থির কাঠামো bison_language ধ্রুবক valid_languages[] = {
   /* lang,  skeleton,       ext,     hdr,     add_tab */
   { "c",    "c-skel.m4",    ".c",    ".h",    true },
   { "c++",  "c++-skel.m4",  ".cc",   ".hh",   true },
@@ -64,19 +64,19 @@ static struct bison_language const valid_languages[] = {
   { "", "", "", "", false }
 };
 
-int skeleton_prio = default_prio;
-const char *skeleton = NULL;
-int language_prio = default_prio;
-struct bison_language const *language = &valid_languages[0];
+পূর্ণসংখ্যা skeleton_prio = default_prio;
+ধ্রুবক অক্ষর *skeleton = ফাঁকা;
+পূর্ণসংখ্যা language_prio = default_prio;
+কাঠামো bison_language ধ্রুবক *language = &valid_languages[0];
 
-typedef int* (xargmatch_fn) (const char *context, const char *arg);
+প্রকারলেখ পূর্ণসংখ্যা* (xargmatch_fn) (ধ্রুবক অক্ষর *context, ধ্রুবক অক্ষর *arg);
 
-void
+শূন্য
 set_yacc (location loc)
 {
   yacc_loc = loc;
-  if (getenv ("POSIXLY_CORRECT"))
-    muscle_percent_define_insert ("posix",
+  যদি (getenv ("POSIXLY_CORRECT"))
+    muscle_percent_define_ঢোকাও ("posix",
                                   loc,
                                   muscle_keyword, "",
                                   MUSCLE_PERCENT_DEFINE_D);
@@ -98,26 +98,26 @@ set_yacc (location loc)
  *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
-static void
-flag_argmatch (const char *opt, xargmatch_fn xargmatch,
-               int all, int *flags, char *arg, size_t no)
+স্থির শূন্য
+flag_argmatch (ধ্রুবক অক্ষর *opt, xargmatch_fn xargmatch,
+               পূর্ণসংখ্যা all, পূর্ণসংখ্যা *flags, অক্ষর *arg, size_t no)
 {
-  int value = *xargmatch (opt, arg + no);
+  পূর্ণসংখ্যা মান = *xargmatch (opt, arg + no);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
-  if (!value)
+  যদি (!মান)
     {
-      value = all;
+      মান = all;
       no = !no;
     }
 
-  if (no)
-    *flags &= ~value;
-  else
-    *flags |= value;
+  যদি (no)
+    *flags &= ~মান;
+  অন্যথা
+    *flags |= মান;
 }
 
-typedef void (usage_fn) (FILE *out);
+প্রকারলেখ শূন্য (usage_fn) (FILE *out);
 
 /** Decode an option's set of keys.
  *
@@ -129,21 +129,21 @@ typedef void (usage_fn) (FILE *out);
  *  \param args       comma separated list of effective subarguments to decode.
  *                    If 0, then activate all the flags.
  */
-static void
-flags_argmatch (const char *opt,
+স্থির শূন্য
+flags_argmatch (ধ্রুবক অক্ষর *opt,
                 xargmatch_fn xargmatch,
                 usage_fn usage,
-                int all, int *flags, char *args)
+                পূর্ণসংখ্যা all, পূর্ণসংখ্যা *flags, অক্ষর *args)
 {
-  if (!args)
+  যদি (!args)
     *flags |= all;
-  else if (STREQ (args, "help"))
+  অন্যথা যদি (STREQ (args, "help"))
     {
       usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
+  অন্যথা
+    জন্য (args = strtok (args, ","); args; args = strtok (ফাঁকা, ","))
       {
         size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
         flag_argmatch (opt, xargmatch,
@@ -164,7 +164,7 @@ flags_argmatch (const char *opt,
  */
 #define FLAGS_ARGMATCH(FlagName, Args, All)                             \
   flags_argmatch ("--" #FlagName,                                       \
-                  (xargmatch_fn*) argmatch_## FlagName ## _value,       \
+                  (xargmatch_fn*) argmatch_## FlagName ## মান_2,       \
                   argmatch_ ## FlagName ## _usage,                      \
                   All, &FlagName ## _flag, Args)
 
@@ -172,24 +172,24 @@ flags_argmatch (const char *opt,
 | --color's handling.  |
 `---------------------*/
 
-enum color
+গণনা color
   {
     color_always,
     color_never,
     color_auto
   };
 
-ARGMATCH_DEFINE_GROUP (color, enum color)
+ARGMATCH_DEFINE_GROUP (color, গণনা color)
 
-static const argmatch_color_doc argmatch_color_docs[] =
+স্থির ধ্রুবক argmatch_color_doc argmatch_color_docs[] =
 {
   { "always",     N_("colorize the output") },
   { "never",      N_("don't colorize the output") },
   { "auto",       N_("colorize if the output device is a tty") },
-  { NULL, NULL },
+  { ফাঁকা, ফাঁকা },
 };
 
-static const argmatch_color_arg argmatch_color_args[] =
+স্থির ধ্রুবক argmatch_color_arg argmatch_color_args[] =
 {
   { "always",   color_always },
   { "yes",      color_always },
@@ -197,17 +197,17 @@ static const argmatch_color_arg argmatch_color_args[] =
   { "no",       color_never },
   { "auto",     color_auto },
   { "tty",      color_auto },
-  { NULL, color_always },
+  { ফাঁকা, color_always },
 };
 
-const argmatch_color_group_type argmatch_color_group =
+ধ্রুবক argmatch_color_group_type argmatch_color_group =
 {
   argmatch_color_args,
   argmatch_color_docs,
   /* TRANSLATORS: Use the same translation for WHEN as in the
      --color=WHEN help message.  */
   N_("WHEN can be one of the following:"),
-  NULL
+  ফাঁকা
 };
 
 
@@ -215,9 +215,9 @@ const argmatch_color_group_type argmatch_color_group =
 | --report's handling.  |
 `----------------------*/
 
-ARGMATCH_DEFINE_GROUP (report, enum report)
+ARGMATCH_DEFINE_GROUP (report, গণনা report)
 
-static const argmatch_report_doc argmatch_report_docs[] =
+স্থির ধ্রুবক argmatch_report_doc argmatch_report_docs[] =
 {
   { "states",          N_("describe the states") },
   { "itemsets",        N_("complete the core item sets with their closure") },
@@ -226,10 +226,10 @@ static const argmatch_report_doc argmatch_report_docs[] =
   { "counterexamples", N_("generate conflict counterexamples") },
   { "all",             N_("include all the above information") },
   { "none",            N_("disable the report") },
-  { NULL, NULL },
+  { ফাঁকা, ফাঁকা },
 };
 
-static const argmatch_report_arg argmatch_report_args[] =
+স্থির ধ্রুবক argmatch_report_arg argmatch_report_args[] =
 {
   { "none",            report_none },
   { "states",          report_states },
@@ -239,26 +239,26 @@ static const argmatch_report_arg argmatch_report_args[] =
   { "counterexamples", report_cex },
   { "cex",             report_cex },
   { "all",             report_all },
-  { NULL, report_none },
+  { ফাঁকা, report_none },
 };
 
-const argmatch_report_group_type argmatch_report_group =
+ধ্রুবক argmatch_report_group_type argmatch_report_group =
 {
   argmatch_report_args,
   argmatch_report_docs,
   /* TRANSLATORS: Use the same translation for THINGS as in the
      --report=THINGS help message.  */
   N_("THINGS is a list of comma separated words that can include:"),
-  NULL
+  ফাঁকা
 };
 
 /*---------------------.
 | --trace's handling.  |
 `---------------------*/
 
-ARGMATCH_DEFINE_GROUP (trace, enum trace)
+ARGMATCH_DEFINE_GROUP (trace, গণনা trace)
 
-static const argmatch_trace_doc argmatch_trace_docs[] =
+স্থির ধ্রুবক argmatch_trace_doc argmatch_trace_docs[] =
 {
   /* Meant for developers only, don't translate them.  */
   { "none",       "no traces" },
@@ -280,10 +280,10 @@ static const argmatch_trace_doc argmatch_trace_docs[] =
   { "ielr",       "IELR conversion" },
   { "cex",        "counterexample generation"},
   { "all",        "all of the above" },
-  { NULL, NULL},
+  { ফাঁকা, ফাঁকা},
 };
 
-static const argmatch_trace_arg argmatch_trace_args[] =
+স্থির ধ্রুবক argmatch_trace_arg argmatch_trace_args[] =
 {
   { "none",      trace_none },
   { "locations", trace_locations },
@@ -304,34 +304,34 @@ static const argmatch_trace_arg argmatch_trace_args[] =
   { "ielr",      trace_ielr },
   { "cex",       trace_cex },
   { "all",       trace_all },
-  { NULL,        trace_none},
+  { ফাঁকা,        trace_none},
 };
 
-const argmatch_trace_group_type argmatch_trace_group =
+ধ্রুবক argmatch_trace_group_type argmatch_trace_group =
 {
   argmatch_trace_args,
   argmatch_trace_docs,
   N_("TRACES is a list of comma separated words that can include:"),
-  NULL
+  ফাঁকা
 };
 
 /*-----------------------.
 | --feature's handling.  |
 `-----------------------*/
 
-ARGMATCH_DEFINE_GROUP (feature, enum feature)
+ARGMATCH_DEFINE_GROUP (feature, গণনা feature)
 
-static const argmatch_feature_doc argmatch_feature_docs[] =
+স্থির ধ্রুবক argmatch_feature_doc argmatch_feature_docs[] =
 {
   { "caret",       N_("show errors with carets") },
   { "fixit",       N_("show machine-readable fixes") },
   { "syntax-only", N_("do not generate any file") },
   { "all",         N_("all of the above") },
   { "none",        N_("disable all of the above") },
-  { NULL, NULL }
+  { ফাঁকা, ফাঁকা }
 };
 
-static const argmatch_feature_arg argmatch_feature_args[] =
+স্থির ধ্রুবক argmatch_feature_arg argmatch_feature_args[] =
 {
   { "none",                          feature_none },
   { "caret",                         feature_caret },
@@ -340,17 +340,17 @@ static const argmatch_feature_arg argmatch_feature_args[] =
   { "diagnostics-parseable-fixits",  feature_fixit },
   { "syntax-only",                   feature_syntax_only },
   { "all",                           feature_all },
-  { NULL, feature_none}
+  { ফাঁকা, feature_none}
 };
 
-const argmatch_feature_group_type argmatch_feature_group =
+ধ্রুবক argmatch_feature_group_type argmatch_feature_group =
 {
   argmatch_feature_args,
   argmatch_feature_docs,
   /* TRANSLATORS: Use the same translation for FEATURES as in the
      --feature=FEATURES help message.  */
   N_("FEATURES is a list of comma separated words that can include:"),
-  NULL
+  ফাঁকা
 };
 
 /*-------------------------------------------.
@@ -358,15 +358,15 @@ const argmatch_feature_group_type argmatch_feature_group =
 `-------------------------------------------*/
 
  _Noreturn
-static void usage (int);
+স্থির শূন্য usage (পূর্ণসংখ্যা);
 
-static void
-usage (int status)
+স্থির শূন্য
+usage (পূর্ণসংখ্যা status)
 {
-  if (status != 0)
+  যদি (status != 0)
     fprintf (stderr, _("Try '%s --help' for more information.\n"),
              program_name);
-  else
+  অন্যথা
     {
       /* For ../build-aux/cross-options.pl to work, use the format:
                 ^  -S, --long[=ARGS] (whitespace)
@@ -381,10 +381,10 @@ LALR(1), IELR(1), or canonical LR(1) parser tables.\n\
 "), stdout);
 
       fputs (_("\
-Mandatory arguments to long options are mandatory for short options too.\n\
+Mandatory arguments to long options are mandatory জন্য short options too.\n\
 "), stdout);
       fputs (_("\
-The same is true for optional arguments.\n\
+The same is true জন্য optional arguments.\n\
 "), stdout);
       putc ('\n', stdout);
 
@@ -392,7 +392,7 @@ The same is true for optional arguments.\n\
 Operation Modes:\n\
   -h, --help                 display this help and exit\n\
   -V, --version              output version information and exit\n\
-      --print-localedir      output directory containing locale-dependent data\n\
+      --print-localedir      output directory containing locale-dependent তথ্য\n\
                              and exit\n\
       --print-datadir        output directory containing skeletons and XSLT\n\
                              and exit\n\
@@ -408,7 +408,7 @@ Operation Modes:\n\
 Diagnostics:\n\
   -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n\
       --color[=WHEN]         whether to colorize the diagnostics\n\
-      --style=FILE           specify the CSS FILE for colorizer diagnostics\n\
+      --style=FILE           specify the CSS FILE জন্য colorizer diagnostics\n\
 \n\
 "), stdout);
 
@@ -422,14 +422,14 @@ Diagnostics:\n\
 Tuning the Parser:\n\
   -L, --language=LANGUAGE          specify the output programming language\n\
   -S, --skeleton=FILE              specify the skeleton to use\n\
-  -t, --debug                      instrument the parser for tracing\n\
+  -t, --debug                      instrument the parser জন্য tracing\n\
                                    same as '-Dparse.trace'\n\
       --locations                  enable location support\n\
-  -D, --define=NAME[=VALUE]        similar to '%define NAME VALUE'\n\
-  -F, --force-define=NAME[=VALUE]  override '%define NAME VALUE'\n\
+  -D, --define=NAME[=মান_3]        similar to '%define NAME VALUE'\n\
+  -F, --force-define=NAME[=মান_3]  override '%define NAME VALUE'\n\
   -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n\
                                    deprecated by '-Dapi.prefix={PREFIX}'\n\
-  -l, --no-lines                   don't generate '#line' directives\n\
+  -l, --no-সারিগুলি                   don't generate '#line' directives\n\
   -k, --token-table                include a table of token names\n\
   -y, --yacc                       emulate POSIX Yacc\n\
 "), stdout);
@@ -438,11 +438,11 @@ Tuning the Parser:\n\
       fputs (_("\
 Output Files:\n\
   -H, --header=[FILE]           also produce a header file\n\
-  -d                            likewise but cannot specify FILE (for POSIX Yacc)\n\
+  -d                            likewise but cannot specify FILE (জন্য POSIX Yacc)\n\
   -r, --report=THINGS           also produce details on the automaton\n\
-      --report-file=FILE        write report to FILE\n\
+      --report-file=FILE        লিখ report to FILE\n\
   -v, --verbose                 same as '--report=state'\n\
-  -b, --file-prefix=PREFIX      specify a PREFIX for output files\n\
+  -b, --file-prefix=PREFIX      specify a PREFIX জন্য output files\n\
   -o, --output=FILE             leave output to FILE\n\
   -g, --graph[=FILE]            also output a graph of the automaton\n\
       --html[=FILE]             also output an HTML report of the automaton\n\
@@ -461,12 +461,12 @@ Output Files:\n\
                "<https://www.gnu.org/gethelp/>.\n"),
              stdout);
 
-#if (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
+#যদি (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
       /* Don't output this redundant message for English locales.
          Note we still output for 'C' so that it gets included in the
          man page.  */
-      const char *lc_messages = setlocale (LC_MESSAGES, NULL);
-      if (lc_messages && !STREQ (lc_messages, "en_"))
+      ধ্রুবক অক্ষর *lc_messages = setlocale (LC_MESSAGES, ফাঁকা);
+      যদি (lc_messages && !STREQ (lc_messages, "en_"))
         /* TRANSLATORS: Replace LANG_CODE in this URL with your language code to
            form one of the URLs at https://translationproject.org/team/.
            Otherwise, replace the entire URL with your translation team's
@@ -485,8 +485,8 @@ Output Files:\n\
 | Display the version message.  |
 `------------------------------*/
 
-static void
-version (void)
+স্থির শূন্য
+version (শূন্য)
 {
   /* Some efforts were made to ease the translators' task, please
      continue.  */
@@ -500,8 +500,8 @@ version (void)
            PACKAGE_COPYRIGHT_YEAR);
 
   fputs (_("\
-This is free software; see the source for copying conditions.  There is NO\n\
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
+This is মুক্ত software; see the source জন্য copying conditions.  There is NO\n\
+warranty; not even জন্য MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 "),
          stdout);
 }
@@ -511,40 +511,40 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 | --skeleton and --language handling.  |
 `--------------------------------------*/
 
-void
-skeleton_arg (char const *arg, int prio, location loc)
+শূন্য
+skeleton_arg (অক্ষর ধ্রুবক *arg, পূর্ণসংখ্যা prio, location loc)
 {
-  if (prio < skeleton_prio)
+  যদি (prio < skeleton_prio)
     {
       skeleton_prio = prio;
       skeleton = arg;
     }
-  else if (prio == skeleton_prio)
+  অন্যথা যদি (prio == skeleton_prio)
     complain (&loc, complaint,
               _("multiple skeleton declarations are invalid"));
 }
 
-void
-language_argmatch (char const *arg, int prio, location loc)
+শূন্য
+language_argmatch (অক্ষর ধ্রুবক *arg, পূর্ণসংখ্যা prio, location loc)
 {
-  char const *msg = NULL;
+  অক্ষর ধ্রুবক *বার্তা = ফাঁকা;
 
-  if (prio < language_prio)
+  যদি (prio < language_prio)
     {
-      for (int i = 0; valid_languages[i].language[0]; ++i)
-        if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+      জন্য (পূর্ণসংখ্যা i = 0; valid_languages[i].language[0]; ++i)
+        যদি (c_strcasecmp (arg, valid_languages[i].language) == 0)
           {
             language_prio = prio;
             language = &valid_languages[i];
-            return;
+            ফেরত;
           }
-      msg = _("%s: invalid language");
+      বার্তা = _("%s: invalid language");
     }
-  else if (language_prio == prio)
-    msg = _("multiple language declarations are invalid");
+  অন্যথা যদি (language_prio == prio)
+    বার্তা = _("multiple language declarations are invalid");
 
-  if (msg)
-    complain (&loc, complaint, msg, quotearg_colon (arg));
+  যদি (বার্তা)
+    complain (&loc, complaint, বার্তা, quotearg_colon (arg));
 }
 
 /*----------------------.
@@ -553,7 +553,7 @@ language_argmatch (char const *arg, int prio, location loc)
 
 /* Shorts options.
    Should be computed from long_options.  */
-static char const short_options[] =
+স্থির অক্ষর ধ্রুবক short_options[] =
   "D:"
   "F:"
   "H::"
@@ -581,7 +581,7 @@ static char const short_options[] =
   ;
 
 /* Values for long options that do not have single-letter equivalents.  */
-enum
+গণনা
 {
   COLOR_OPTION = CHAR_MAX + 1,
   FIXED_OUTPUT_FILES_OPTION,
@@ -594,7 +594,7 @@ enum
 };
 
 /* In the same order as in usage(), and in the documentation.  */
-static struct option const long_options[] =
+স্থির কাঠামো option ধ্রুবক long_options[] =
 {
   /* Operation modes. */
   { "help",            no_argument,       0,   'h' },
@@ -643,14 +643,14 @@ static struct option const long_options[] =
 };
 
 /* Build a location for the current command line argument. */
-static location
-command_line_location (void)
+স্থির location
+command_সারি_location (শূন্য)
 {
   location res;
   /* "<command line>" is used in GCC's messages about -D. */
   boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1, -1);
   res.end = res.start;
-  return res;
+  ফেরত res;
 }
 
 
@@ -658,25 +658,25 @@ command_line_location (void)
    that error messages from getargs be also colored as per the user's
    request.  This is consistent with the way GCC and Clang behave.  */
 
-static void
-getargs_colors (int argc, char *argv[])
+স্থির শূন্য
+getargs_colors (পূর্ণসংখ্যা argc, অক্ষর *argv[])
 {
-  for (int i = 1; i < argc; i++)
+  জন্য (পূর্ণসংখ্যা i = 1; i < argc; i++)
     {
-      const char *arg = argv[i];
-      if (STRPREFIX_LIT ("--color=", arg))
+      ধ্রুবক অক্ষর *arg = argv[i];
+      যদি (STRPREFIX_LIT ("--color=", arg))
         {
-          const char *color = arg + strlen ("--color=");
-          if (STREQ (color, "debug"))
+          ধ্রুবক অক্ষর *color = arg + strlen ("--color=");
+          যদি (STREQ (color, "debug"))
             color_debug = true;
-          else
+          অন্যথা
             handle_color_option (color);
         }
-      else if (STREQ ("--color", arg))
-        handle_color_option (NULL);
-      else if (STRPREFIX_LIT ("--style=", arg))
+      অন্যথা যদি (STREQ ("--color", arg))
+        handle_color_option (ফাঁকা);
+      অন্যথা যদি (STRPREFIX_LIT ("--style=", arg))
         {
-          const char *style = arg + strlen ("--style=");
+          ধ্রুবক অক্ষর *style = arg + strlen ("--style=");
           handle_style_option (style);
         }
     }
@@ -684,235 +684,235 @@ getargs_colors (int argc, char *argv[])
 }
 
 
-void
-getargs (int argc, char *argv[])
+শূন্য
+getargs (পূর্ণসংখ্যা argc, অক্ষর *argv[])
 {
   getargs_colors (argc, argv);
 
-  int c;
-  while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
+  পূর্ণসংখ্যা c;
+  যখন ((c = getopt_long (argc, argv, short_options, long_options, ফাঁকা))
          != -1)
   {
-    location loc = command_line_location ();
-    switch (c)
+    location loc = command_সারি_location ();
+    নির্বাচন (c)
       {
         /* ASCII Sorting for short options (i.e., upper case then
            lower case), and then long-only options.  */
 
-      case 0:
+      ক্ষেত্র 0:
         /* Certain long options cause getopt_long to return 0.  */
-        break;
+        বিরতি;
 
-      case 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
-      case 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      ক্ষেত্র 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      ক্ষেত্র 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
         {
-          char *name = optarg;
-          char *value = strchr (optarg, '=');
+          অক্ষর *name = optarg;
+          অক্ষর *মান = strchr (optarg, '=');
           muscle_kind kind = muscle_keyword;
-          if (value)
+          যদি (মান)
             {
-              char *end = value + strlen (value) - 1;
-              *value++ = 0;
-              if (*value == '{' && *end == '}')
+              অক্ষর *end = মান + strlen (মান) - 1;
+              *মান++ = 0;
+              যদি (*মান == '{' && *end == '}')
                 {
                   kind = muscle_code;
-                  ++value;
+                  ++মান;
                   *end = 0;
                 }
-              else if (*value == '"' && *end == '"')
+              অন্যথা যদি (*মান == '"' && *end == '"')
                 {
                   kind = muscle_string;
-                  ++value;
+                  ++মান;
                   *end = 0;
                 }
             }
-          muscle_percent_define_insert (name, loc,
-                                        kind, value ? value : "",
+          muscle_percent_define_ঢোকাও (name, loc,
+                                        kind, মান ? মান : "",
                                         c == 'D' ? MUSCLE_PERCENT_DEFINE_D
                                                  : MUSCLE_PERCENT_DEFINE_F);
         }
-        break;
+        বিরতি;
 
-      case 'H':
-      case 'd':
+      ক্ষেত্র 'H':
+      ক্ষেত্র 'd':
         header_flag = true;
-        if (optarg)
+        যদি (optarg)
           {
-            free (spec_header_file);
+            মুক্ত (spec_header_file);
             spec_header_file = xstrdup (optarg);
           }
-        break;
+        বিরতি;
 
-      case 'L':
-        language_argmatch (optarg, command_line_prio, loc);
-        break;
+      ক্ষেত্র 'L':
+        language_argmatch (optarg, command_সারি_prio, loc);
+        বিরতি;
 
-      case 'M': // -MOLDPREFIX=NEWPREFIX
+      ক্ষেত্র 'M': // -MOLDPREFIX=NEWPREFIX
         {
-          char *newprefix = strchr (optarg, '=');
-          if (newprefix)
+          অক্ষর *newprefix = strchr (optarg, '=');
+          যদি (newprefix)
             {
               *newprefix = '\0';
               add_prefix_map (optarg, newprefix + 1);
             }
-          else
+          অন্যথা
             {
               complain (&loc, complaint, _("invalid argument for %s: %s"),
                         quote ("--file-prefix-map"), quotearg_n (1, optarg));
             }
         }
-        break;
+        বিরতি;
 
-      case 'S':
-        skeleton_arg (optarg, command_line_prio, loc);
-        break;
+      ক্ষেত্র 'S':
+        skeleton_arg (optarg, command_সারি_prio, loc);
+        বিরতি;
 
-      case 'T':
+      ক্ষেত্র 'T':
         FLAGS_ARGMATCH (trace, optarg, trace_all);
-        break;
+        বিরতি;
 
-      case 'V':
+      ক্ষেত্র 'V':
         version ();
         exit (EXIT_SUCCESS);
 
-      case 'f':
+      ক্ষেত্র 'f':
         FLAGS_ARGMATCH (feature, optarg, feature_all);
-        break;
+        বিরতি;
 
-      case 'W':
+      ক্ষেত্র 'W':
         warnings_argmatch (optarg);
-        break;
+        বিরতি;
 
-      case 'b':
+      ক্ষেত্র 'b':
         spec_file_prefix = optarg;
-        break;
+        বিরতি;
 
-      case 'g':
+      ক্ষেত্র 'g':
         graph_flag = true;
-        if (optarg)
+        যদি (optarg)
           {
-            free (spec_graph_file);
+            মুক্ত (spec_graph_file);
             spec_graph_file = xstrdup (optarg);
           }
-        break;
+        বিরতি;
 
-      case 'h':
+      ক্ষেত্র 'h':
         usage (EXIT_SUCCESS);
 
-      case 'k':
+      ক্ষেত্র 'k':
         token_table_flag = true;
-        break;
+        বিরতি;
 
-      case 'l':
-        no_lines_flag = true;
-        break;
+      ক্ষেত্র 'l':
+        no_সারিগুলি_flag = true;
+        বিরতি;
 
-      case 'o':
+      ক্ষেত্র 'o':
         spec_outfile = optarg;
-        break;
+        বিরতি;
 
-      case 'p':
+      ক্ষেত্র 'p':
         spec_name_prefix = optarg;
-        break;
+        বিরতি;
 
-      case 'r':
+      ক্ষেত্র 'r':
         FLAGS_ARGMATCH (report, optarg, report_all);
-        break;
+        বিরতি;
 
-      case 't':
-        muscle_percent_define_insert ("parse.trace",
+      ক্ষেত্র 't':
+        muscle_percent_define_ঢোকাও ("parse.trace",
                                       loc,
                                       muscle_keyword, "",
                                       MUSCLE_PERCENT_DEFINE_D);
-        break;
+        বিরতি;
 
-      case 'u':
+      ক্ষেত্র 'u':
         update_flag = true;
         feature_flag |= feature_syntax_only;
-        break;
+        বিরতি;
 
-      case 'v':
+      ক্ষেত্র 'v':
         report_flag |= report_states;
-        break;
+        বিরতি;
 
-      case 'x':
+      ক্ষেত্র 'x':
         xml_flag = true;
-        if (optarg)
+        যদি (optarg)
           {
-            free (spec_xml_file);
+            মুক্ত (spec_xml_file);
             spec_xml_file = xstrdup (optarg);
           }
-        break;
+        বিরতি;
 
-      case 'y':
+      ক্ষেত্র 'y':
         warning_argmatch ("yacc", 0, 0);
         set_yacc (loc);
-        break;
+        বিরতি;
 
-      case COLOR_OPTION:
+      ক্ষেত্র COLOR_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        বিরতি;
 
-      case HTML_OPTION:
+      ক্ষেত্র HTML_OPTION:
         html_flag = true;
         xml_flag = true;
-        if (optarg)
+        যদি (optarg)
           {
-            free (spec_html_file);
+            মুক্ত (spec_html_file);
             spec_html_file = xstrdup (optarg);
           }
-        break;
+        বিরতি;
 
-      case FIXED_OUTPUT_FILES_OPTION:
+      ক্ষেত্র FIXED_OUTPUT_FILES_OPTION:
         complain (&loc, Wdeprecated,
                   _("deprecated option: %s, use %s"),
                   quote ("--fixed-output-files"), quote_n (1, "-o y.tab.c"));
         spec_outfile = "y.tab.c";
-        break;
+        বিরতি;
 
-      case LOCATIONS_OPTION:
+      ক্ষেত্র LOCATIONS_OPTION:
         muscle_percent_define_ensure ("locations", loc, true);
-        break;
+        বিরতি;
 
-      case PRINT_LOCALEDIR_OPTION:
+      ক্ষেত্র PRINT_LOCALEDIR_OPTION:
         printf ("%s\n", LOCALEDIR);
         exit (EXIT_SUCCESS);
 
-      case PRINT_DATADIR_OPTION:
+      ক্ষেত্র PRINT_DATADIR_OPTION:
         printf ("%s\n", pkgdatadir ());
         exit (EXIT_SUCCESS);
 
-      case REPORT_FILE_OPTION:
-        free (spec_verbose_file);
+      ক্ষেত্র REPORT_FILE_OPTION:
+        মুক্ত (spec_verbose_file);
         spec_verbose_file = xstrdup (optarg);
-        break;
+        বিরতি;
 
-      case STYLE_OPTION:
+      ক্ষেত্র STYLE_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        বিরতি;
 
-      default:
+      পূর্বনির্ধারিত:
         usage (EXIT_FAILURE);
       }
   }
 
-  if (argc - optind != 1)
+  যদি (argc - optind != 1)
     {
-      if (argc - optind < 1)
+      যদি (argc - optind < 1)
         error (0, 0, _("missing operand"));
-      else
+      অন্যথা
         error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
     }
 
   grammar_file = uniqstr_new (argv[optind]);
-  MUSCLE_INSERT_C_STRING ("file_name", grammar_file);
+  MUSCLE_ঢোকাও_C_STRING ("file_name", grammar_file);
 }
 
-void
-tr (char *s, char from, char to)
+শূন্য
+tr (অক্ষর *s, অক্ষর from, অক্ষর to)
 {
-  for (; *s; ++s)
-    if (*s == from)
+  জন্য (; *s; ++s)
+    যদি (*s == from)
       *s = to;
 }
