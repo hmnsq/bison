@@ -25,53 +25,53 @@
 # include "uniqstr.h"
 
 /* File name specified with -o for the output file, or 0 if no -o.  */
-extern char const *spec_outfile;
+வெளி எழுத்து மாறிலி *spec_outfile;
 
 /* File name for the parser (i.e., the one above, or its default.) */
-extern char *parser_file_name;
+வெளி எழுத்து *parser_file_name;
 
 /* Symbol prefix specified with -p, or 0 if no -p.  */
-extern const char *spec_name_prefix;
-extern location spec_name_prefix_loc;
+வெளி மாறிலி எழுத்து *spec_name_prefix;
+வெளி location spec_name_prefix_loc;
 
 /* File name prefix specified with -b, or 0 if no -b.  */
-extern char const *spec_file_prefix;
-extern location spec_file_prefix_loc;
+வெளி எழுத்து மாறிலி *spec_file_prefix;
+வெளி location spec_file_prefix_loc;
 
 /* --verbose. */
-extern char *spec_verbose_file;
+வெளி எழுத்து *spec_verbose_file;
 
 /* File name specified for the output graph.  */
-extern char *spec_graph_file;
+வெளி எழுத்து *spec_graph_file;
 
 /* File name specified for the HTML output.  */
-extern char *spec_html_file;
+வெளி எழுத்து *spec_html_file;
 
 /* File name specified for the XML output.  */
-extern char *spec_xml_file;
+வெளி எழுத்து *spec_xml_file;
 
 /* File name specified with --header.  */
-extern char *spec_header_file;
+வெளி எழுத்து *spec_header_file;
 
 /* Directory prefix of output file names.  */
-extern char *dir_prefix;
+வெளி எழுத்து *dir_prefix;
 
 /* The file name as given on the command line.
    Not named "input_file" because Flex uses this name for an argument,
    and therefore GCC warns about a name clash. */
-extern uniqstr grammar_file;
+வெளி uniqstr grammar_file;
 
 /* The computed base for output file names.  */
-extern char *all_but_ext;
+வெளி எழுத்து *all_but_ext;
 
 /* Where our data files are installed.  */
-char const *pkgdatadir (void);
+எழுத்து மாறிலி *pkgdatadir (வெறுமை);
 
 /* Where the m4 program is installed.  */
-char const *m4path (void);
+எழுத்து மாறிலி *m4path (வெறுமை);
 
-void compute_output_file_names (void);
-void output_file_names_free (void);
+வெறுமை compute_output_file_names (வெறுமை);
+வெறுமை output_file_names_free (வெறுமை);
 
 /** Record that we generate a file.
  *
@@ -79,22 +79,22 @@ void output_file_names_free (void);
  *  \param source whether this is a source file (*c, *.java...)
  *                as opposed to a report (*.output, *.dot...).
  */
-void output_file_name_check (char **file_name, bool source);
+வெறுமை output_file_name_check (எழுத்து **file_name, bool source);
 
 /** Remove all the generated source files. */
-void unlink_generated_sources (void);
+வெறுமை unlink_generated_sources (வெறுமை);
 
-FILE *xfopen (const char *name, char const *mode);
-void xfclose (FILE *ptr);
-FILE *xfdopen (int fd, char const *mode);
+FILE *xfopen (மாறிலி எழுத்து *name, எழுத்து மாறிலி *mode);
+வெறுமை xfclose (FILE *ptr);
+FILE *xfdopen (முழு fd, எழுத்து மாறிலி *mode);
 
 /* Given an input file path, return a string that contains the path
    with the file prefix mapping rules applied, or NULL if the input
    was NULL.  Do not free the return value.  */
-const char *map_file_name (char const *filename);
+மாறிலி எழுத்து *map_file_name (எழுத்து மாறிலி *filename);
 
 /* Add a new file prefix mapping. If a file path starts with
    oldprefix, it will be replaced with newprefix.  */
-void add_prefix_map (char const *oldprefix, char const *newprefix);
+வெறுமை add_prefix_map (எழுத்து மாறிலி *oldprefix, எழுத்து மாறிலி *newprefix);
 
 #endif /* !FILES_H_ */

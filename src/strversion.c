@@ -17,51 +17,51 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include "strversion.h"
+#அந்தர்பாவ "strversion.h"
 
-#include <errno.h>
-#include <intprops.h>
+#அந்தர்பாவ <errno.h>
+#அந்தர்பாவ <intprops.h>
 
-int
-strversion_to_int (char const *version)
+முழு
+strversion_to_int (எழுத்து மாறிலி *version)
 {
   IGNORE_TYPE_LIMITS_BEGIN
-  int res = 0;
+  முழு res = 0;
   errno = 0;
-  char *cp = NULL;
+  எழுத்து *cp = வெற்று;
 
   {
     long major = strtol (version, &cp, 10);
-    if (errno || cp == version || *cp != '.' || major < 0
+    எனில் (errno || cp == version || *cp != '.' || major < 0
         || INT_MULTIPLY_WRAPV (major, 10000, &res))
-      return -1;
+      திரும்பு -1;
   }
 
   {
     ++cp;
-    char *prev = cp;
+    எழுத்து *prev = cp;
     long minor = strtol (cp, &cp, 10);
-    if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+    எனில் (errno || cp == prev || (*cp != '\0' && *cp != '.')
         || ! (0 <= minor && minor < 100)
         || INT_MULTIPLY_WRAPV (minor, 100, &minor)
         || INT_ADD_WRAPV (minor, res, &res))
-      return -1;
+      திரும்பு -1;
   }
 
-  if (*cp == '.')
+  எனில் (*cp == '.')
     {
       ++cp;
-      char *prev = cp;
+      எழுத்து *prev = cp;
       long micro = strtol (cp, &cp, 10);
-      if (errno || cp == prev || (*cp != '\0' && *cp != '.')
+      எனில் (errno || cp == prev || (*cp != '\0' && *cp != '.')
           || ! (0 <= micro && micro < 100)
           || INT_ADD_WRAPV (micro, res, &res))
-        return -1;
+        திரும்பு -1;
     }
 
   IGNORE_TYPE_LIMITS_END
-  return res;
+  திரும்பு res;
 }

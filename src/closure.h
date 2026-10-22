@@ -27,7 +27,7 @@
    data so that closure can be called.  n is the number of elements to
    allocate for itemset.  */
 
-void closure_new (int n);
+வெறுமை closure_new (முழு n);
 
 
 /* Given the kernel (aka core) of a state (a sorted vector of item indices
@@ -35,12 +35,12 @@ void closure_new (int n);
    rules could be run and which items could be accepted when those
    items are the active ones.  */
 
-void closure (item_index const *items, size_t n);
+வெறுமை closure (item_index மாறிலி *பொருட்கள், size_t n);
 
 
 /* Free ITEMSET, RULESET and internal data.  */
 
-void closure_free (void);
+வெறுமை closure_free (வெறுமை);
 
 
 /* ITEMSET is a sorted vector of item indices; NITEMSET is its size
@@ -48,7 +48,7 @@ void closure_free (void);
    significant).  CLOSURE places there the indices of all items which
    represent units of input that could arrive next.  */
 
-extern item_index *itemset;
-extern size_t nitemset;
+வெளி item_index *itemset;
+வெளி size_t nitemset;
 
 #endif /* !CLOSURE_H_ */

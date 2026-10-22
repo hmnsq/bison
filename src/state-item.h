@@ -53,61 +53,61 @@
    production edges, and all others will have reverse transition
    edges. */
 
-# define SI_DISABLED(Sin) (state_items[Sin].trans == -2)
-# define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
-# define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
+# define SI_DISABLED(Sin) (state_பொருட்கள்[Sin].trans == -2)
+# define SI_PRODUCTION(Si) ((Si) == state_பொருட்கள் || *((Si)->item - 1) < 0)
+# define SI_TRANSITION(Si) ((Si) != state_பொருட்கள் && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+வகைவரை முழு state_item_எண்;
 
-typedef struct
+வகைவரை கட்டமைப்பு
 {
-  const state *state;
-  item_number *item;
-  state_item_number trans;
+  மாறிலி state *state;
+  item_எண் *item;
+  state_item_எண் trans;
   bitset prods;
   bitset revs;
   bitset lookahead;
 } state_item;
 
 // A path of state-items.
-typedef gl_list_t state_item_list;
+வகைவரை gl_list_t state_item_list;
 
-extern bitsetv firsts;
+வெளி bitsetv firsts;
 # define FIRSTS(sym) firsts[(sym) - ntokens]
 
-extern size_t nstate_items;
-extern state_item_number *state_item_map;
+வெளி size_t nstate_பொருட்கள்;
+வெளி state_item_எண் *state_item_map;
 
 /** Array mapping state_item_numbers to state_items */
-extern state_item *state_items;
+வெளி state_item *state_பொருட்கள்;
 
-state_item *state_item_lookup (state_number s, state_item_number off);
+state_item *state_item_lookup (state_எண் s, state_item_எண் off);
 
-static inline state_item_number
-state_item_index_lookup (state_number s, state_item_number off)
+நிலையான உள்வரி state_item_எண்
+state_item_index_lookup (state_எண் s, state_item_எண் off)
 {
-  return state_item_map[s] + off;
+  திரும்பு state_item_map[s] + off;
 }
 
-void state_items_init (void);
-void state_items_free (void);
+வெறுமை state_பொருட்கள்_init (வெறுமை);
+வெறுமை state_பொருட்கள்_free (வெறுமை);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
-const rule *state_item_rule (const state_item *si);
+வெறுமை state_item_print (மாறிலி state_item *si, FILE *out, மாறிலி எழுத்து *prefix);
+மாறிலி rule *state_item_rule (மாறிலி state_item *si);
 
-bool production_allowed (const state_item *si, const state_item *next);
+bool production_allowed (மாறிலி state_item *si, மாறிலி state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+நிலையான உள்வரி bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
-  const void *p = NULL;
-  bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  மாறிலி வெறுமை *p = வெற்று;
+  bool res = gl_list_iterator_next (it, &p, வெற்று);
+  எனில் (res)
     *si = (state_item *) p;
-  else
+  இல்லையெனில்
     gl_list_iterator_free (it);
-  return res;
+  திரும்பு res;
 }
 
 

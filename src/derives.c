@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include "getargs.h"
+#அந்தர்பாவ "getargs.h"
 
-#include "derives.h"
-#include "gram.h"
-#include "reader.h"
-#include "symtab.h"
+#அந்தர்பாவ "derives.h"
+#அந்தர்பாவ "gram.h"
+#அந்தர்பாவ "reader.h"
+#அந்தர்பாவ "symtab.h"
 
 /* Linked list of rule numbers.  */
-typedef struct rule_list
+வகைவரை கட்டமைப்பு rule_list
 {
-  struct rule_list *next;
-  rule *value;
+  கட்டமைப்பு rule_list *next;
+  rule *மதிப்பு;
 } rule_list;
 
 rule ***derives;
 
-static void
-print_derives (void)
+நிலையான வெறுமை
+print_derives (வெறுமை)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  க்கு (குறியீடு_எண் i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
-      for (rule **rp = derives[i - ntokens]; *rp; ++rp)
+      க்கு (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
           rule_rhs_print (*rp, stderr);
@@ -57,61 +57,61 @@ print_derives (void)
 }
 
 
-void
-derives_compute (void)
+வெறுமை
+derives_compute (வெறுமை)
 {
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = xcalloc (nnterms, sizeof *dset);
+  rule_list **dset = xcalloc (nnterms, அளவு *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = xnmalloc (nrules, sizeof *delts);
+  rule_list *delts = xnmalloc (nrules, அளவு *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  க்கு (rule_எண் r = nrules - 1; r >= 0; --r)
     {
-      symbol_number lhs = rules[r].lhs->number;
+      குறியீடு_எண் lhs = rules[r].lhs->எண்;
       rule_list *p = &delts[r];
       /* A new LHS is found.  */
       p->next = dset[lhs - ntokens];
-      p->value = &rules[r];
+      p->மதிப்பு = &rules[r];
       dset[lhs - ntokens] = p;
     }
 
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  derives = xnmalloc (nnterms, sizeof *derives);
+  derives = xnmalloc (nnterms, அளவு *derives);
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
-  rule **q = xnmalloc (nnterms + nrules, sizeof *q);
+  rule **q = xnmalloc (nnterms + nrules, அளவு *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  க்கு (குறியீடு_எண் i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      போது (p)
         {
-          *q++ = p->value;
+          *q++ = p->மதிப்பு;
           p = p->next;
         }
-      *q++ = NULL;
+      *q++ = வெற்று;
     }
 
-  if (trace_flag & trace_sets)
+  எனில் (trace_flag & trace_sets)
     print_derives ();
 
-  free (dset);
-  free (delts);
+  விடுவி (dset);
+  விடுவி (delts);
 }
 
 
-void
-derives_free (void)
+வெறுமை
+derives_free (வெறுமை)
 {
-  if (derives)
+  எனில் (derives)
     {
-      free (derives[0]);
-      free (derives);
+      விடுவி (derives[0]);
+      விடுவி (derives);
     }
 }

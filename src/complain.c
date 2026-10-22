@@ -19,26 +19,26 @@
 /* Based on error.c and error.h,
    written by David MacKenzie <djm@gnu.ai.mit.edu>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include <argmatch.h>
-#include <c-ctype.h>
-#include <progname.h>
-#include <stdarg.h>
-#include <sys/stat.h>
-#include <textstyle.h>
+#அந்தர்பாவ <argmatch.h>
+#அந்தர்பாவ <c-ctype.h>
+#அந்தர்பாவ <progname.h>
+#அந்தர்பாவ <stdarg.h>
+#அந்தர்பாவ <sys/stat.h>
+#அந்தர்பாவ <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "quote.h"
+#அந்தர்பாவ "complain.h"
+#அந்தர்பாவ "files.h"
+#அந்தர்பாவ "fixits.h"
+#அந்தர்பாவ "getargs.h"
+#அந்தர்பாவ "quote.h"
 
 // The URL of the manual page about diagnostics.  Use the per-node
 // manual, to avoid downloading repeatedly the whole manual over the
 // Internet.
-static const char *diagnostics_url
+நிலையான மாறிலி எழுத்து *diagnostics_url
   = "https://www.gnu.org/software/bison/manual/html_node/Diagnostics.html";
 
 
@@ -47,7 +47,7 @@ err_status complaint_status = status_none;
 bool warnings_are_errors = false;
 
 /** Whether -Werror/-Wno-error was applied to a warning.  */
-typedef enum
+வகைவரை எண்ணிக்கை
   {
     errority_unset = 0,     /** No explicit status.  */
     errority_disabled = 1,  /** Explicitly disabled with -Wno-error=foo.  */
@@ -55,10 +55,10 @@ typedef enum
   } errority;
 
 /** For each warning type, its errority.  */
-static errority errority_flag[warnings_size];
+நிலையான errority errority_flag[warnings_size];
 
 /** Diagnostics severity.  */
-typedef enum
+வகைவரை எண்ணிக்கை
   {
     severity_disabled = 0, /**< Explicitly disabled via -Wno-foo.  */
     severity_unset = 1,    /**< Unspecified status.  */
@@ -69,18 +69,18 @@ typedef enum
 
 
 /** For each warning type, its severity.  */
-static severity warnings_flag[warnings_size];
+நிலையான severity warnings_flag[warnings_size];
 
-styled_ostream_t errstream = NULL;
+styled_ostream_t errstream = வெற்று;
 
-void
-begin_use_class (const char *s, FILE *out)
+வெறுமை
+begin_use_class (மாறிலி எழுத்து *s, FILE *out)
 {
-  if (out == stderr)
+  எனில் (out == stderr)
     {
-      if (color_debug)
+      எனில் (color_debug)
         fprintf (out, "<%s>", s);
-      else
+      இல்லையெனில்
         {
           styled_ostream_begin_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -88,14 +88,14 @@ begin_use_class (const char *s, FILE *out)
     }
 }
 
-void
-end_use_class (const char *s, FILE *out)
+வெறுமை
+end_use_class (மாறிலி எழுத்து *s, FILE *out)
 {
-  if (out == stderr)
+  எனில் (out == stderr)
     {
-      if (color_debug)
+      எனில் (color_debug)
         fprintf (out, "</%s>", s);
-      else
+      இல்லையெனில்
         {
           styled_ostream_end_use_class (errstream, s);
           styled_ostream_flush_to_current_style (errstream);
@@ -103,24 +103,24 @@ end_use_class (const char *s, FILE *out)
     }
 }
 
-static void
-begin_hyperlink (FILE *out, const char *ref)
+நிலையான வெறுமை
+begin_hyperlink (FILE *out, மாறிலி எழுத்து *ref)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, ref, NULL);
+  எனில் (out == stderr)
+    styled_ostream_set_hyperlink (errstream, ref, வெற்று);
 }
 
-static void
+நிலையான வெறுமை
 end_hyperlink (FILE *out)
 {
-  if (out == stderr)
-    styled_ostream_set_hyperlink (errstream, NULL, NULL);
+  எனில் (out == stderr)
+    styled_ostream_set_hyperlink (errstream, வெற்று, வெற்று);
 }
 
-void
+வெறுமை
 flush (FILE *out)
 {
-  if (out == stderr)
+  எனில் (out == stderr)
     ostream_flush (errstream, FLUSH_THIS_STREAM);
   fflush (out);
 }
@@ -128,16 +128,16 @@ flush (FILE *out)
 bool
 is_styled (FILE *out)
 {
-  if (out != stderr)
-    return false;
-  if (color_debug)
-    return true;
-#if HAVE_LIBTEXTSTYLE
-  return (color_mode == color_yes
+  எனில் (out != stderr)
+    திரும்பு false;
+  எனில் (color_debug)
+    திரும்பு true;
+#எனில் HAVE_LIBTEXTSTYLE
+  திரும்பு (color_mode == color_yes
           || color_mode == color_html
           || (color_mode == color_tty && isatty (STDERR_FILENO)));
-#else
-  return false;
+#இல்லையெனில்
+  திரும்பு false;
 #endif
 }
 
@@ -148,7 +148,7 @@ is_styled (FILE *out)
 
 ARGMATCH_DEFINE_GROUP (warning, warnings)
 
-static const argmatch_warning_doc argmatch_warning_docs[] =
+நிலையான மாறிலி argmatch_warning_doc argmatch_warning_docs[] =
 {
   { "conflicts-sr",     N_("S/R conflicts (enabled by default)") },
   { "conflicts-rr",     N_("R/R conflicts (enabled by default)") },
@@ -164,10 +164,10 @@ static const argmatch_warning_doc argmatch_warning_docs[] =
   { "no-CATEGORY",      N_("turn off warnings in CATEGORY") },
   { "none",             N_("turn off all the warnings") },
   { "error[=CATEGORY]", N_("treat warnings as errors") },
-  { NULL, NULL }
+  { வெற்று, வெற்று }
 };
 
-static const argmatch_warning_arg argmatch_warning_args[] =
+நிலையான மாறிலி argmatch_warning_arg argmatch_warning_args[] =
 {
   { "all",             Wall },
   { "conflicts-rr",    Wconflicts_rr },
@@ -177,56 +177,56 @@ static const argmatch_warning_arg argmatch_warning_args[] =
   { "deprecated",      Wdeprecated },
   { "empty-rule",      Wempty_rule },
   { "everything",      Weverything },
-  { "midrule-values",  Wmidrule_values },
+  { "midrule-values",  Wmidrule_மதிப்புகள் },
   { "none",            Wnone },
   { "other",           Wother },
   { "precedence",      Wprecedence },
   { "yacc",            Wyacc },
-  { NULL, Wnone }
+  { வெற்று, Wnone }
 };
 
-const argmatch_warning_group_type argmatch_warning_group =
+மாறிலி argmatch_warning_group_type argmatch_warning_group =
 {
   argmatch_warning_args,
   argmatch_warning_docs,
   N_("Warning categories include:"),
-  NULL
+  வெற்று
 };
 
-void
+வெறுமை
 warning_usage (FILE *out)
 {
   argmatch_warning_usage (out);
 }
 
-void
-warning_argmatch (char const *arg, size_t no, size_t err)
+வெறுமை
+warning_argmatch (எழுத்து மாறிலி *arg, size_t no, size_t err)
 {
-  int value = *argmatch_warning_value ("--warning", arg + no + err);
+  முழு மதிப்பு = *argmatch_warning_மதிப்பு ("--warning", arg + no + err);
 
   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
-  if (!value)
+  எனில் (!மதிப்பு)
     {
-      value = Weverything;
+      மதிப்பு = Weverything;
       no = !no;
     }
 
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (value & 1 << b)
+  க்கு (size_t b = 0; b < warnings_size; ++b)
+    எனில் (மதிப்பு & 1 << b)
       {
-        if (err && no)
+        எனில் (err && no)
           /* -Wno-error=foo.  */
           errority_flag[b] = errority_disabled;
-        else if (err && !no)
+        இல்லையெனில் எனில் (err && !no)
           {
             /* -Werror=foo: enables -Wfoo. */
             errority_flag[b] = errority_enabled;
             warnings_flag[b] = severity_warning;
           }
-        else if (no)
+        இல்லையெனில் எனில் (no)
           /* -Wno-foo.  */
           warnings_flag[b] = severity_disabled;
-        else
+        இல்லையெனில்
           /* -Wfoo. */
           warnings_flag[b] = severity_warning;
       }
@@ -238,23 +238,23 @@ warning_argmatch (char const *arg, size_t no, size_t err)
  *                  If 0, then activate all the flags.
  */
 
-void
-warnings_argmatch (char *args)
+வெறுமை
+warnings_argmatch (எழுத்து *args)
 {
-  if (!args)
+  எனில் (!args)
     warning_argmatch ("all", 0, 0);
-  else if (STREQ (args, "help"))
+  இல்லையெனில் எனில் (STREQ (args, "help"))
     {
       warning_usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
-      if (STREQ (args, "error"))
+  இல்லையெனில்
+    க்கு (args = strtok (args, ","); args; args = strtok (வெற்று, ","))
+      எனில் (STREQ (args, "error"))
         warnings_are_errors = true;
-      else if (STREQ (args, "no-error"))
+      இல்லையெனில் எனில் (STREQ (args, "no-error"))
         warnings_are_errors = false;
-      else
+      இல்லையெனில்
         {
           /* The length of the possible 'no-' prefix: 3, or 0.  */
           size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
@@ -267,49 +267,49 @@ warnings_argmatch (char *args)
 }
 
 /* Color style for this type of message.  */
-static const char*
+நிலையான மாறிலி எழுத்து*
 severity_style (severity s)
 {
-  switch (s)
+  தேர்வு (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "note";
-    case severity_warning:
-      return "warning";
-    case severity_error:
-    case severity_fatal:
-      return "error";
+    நிலை severity_disabled:
+    நிலை severity_unset:
+      திரும்பு "note";
+    நிலை severity_warning:
+      திரும்பு "warning";
+    நிலை severity_error:
+    நிலை severity_fatal:
+      திரும்பு "error";
     }
   abort ();
 }
 
 /* Prefix for this type of message.  */
-static const char*
+நிலையான மாறிலி எழுத்து*
 severity_prefix (severity s)
 {
-  switch (s)
+  தேர்வு (s)
     {
-    case severity_disabled:
-    case severity_unset:
-      return "";
-    case severity_warning:
-      return _("warning");
-    case severity_error:
-      return  _("error");
-    case severity_fatal:
-      return _("fatal error");
+    நிலை severity_disabled:
+    நிலை severity_unset:
+      திரும்பு "";
+    நிலை severity_warning:
+      திரும்பு _("warning");
+    நிலை severity_error:
+      திரும்பு  _("error");
+    நிலை severity_fatal:
+      திரும்பு _("fatal error");
     }
   abort ();
 }
 
 
-static void
+நிலையான வெறுமை
 severity_print (severity s, FILE *out)
 {
-  if (s != severity_disabled)
+  எனில் (s != severity_disabled)
     {
-      const char* style = severity_style (s);
+      மாறிலி எழுத்து* style = severity_style (s);
       begin_use_class (style, out);
       fprintf (out, "%s:", severity_prefix (s));
       end_use_class (style, out);
@@ -322,23 +322,23 @@ severity_print (severity s, FILE *out)
 | complain.  |
 `-----------*/
 
-void
-complain_init_color (void)
+வெறுமை
+complain_init_color (வெறுமை)
 {
-#if HAVE_LIBTEXTSTYLE
-  if (is_styled (stderr))
+#எனில் HAVE_LIBTEXTSTYLE
+  எனில் (is_styled (stderr))
     {
       style_file_prepare ("BISON_STYLE", "BISON_STYLEDIR", pkgdatadir (),
                           "bison-default.css");
       /* As a fallback, use the default in the current directory.  */
-      struct stat statbuf;
-      if ((style_file_name == NULL || stat (style_file_name, &statbuf) < 0)
+      கட்டமைப்பு stat statbuf;
+      எனில் ((style_file_name == வெற்று || stat (style_file_name, &statbuf) < 0)
           && stat ("bison-default.css", &statbuf) == 0)
         style_file_name = "bison-default.css";
     }
-  else
+  இல்லையெனில்
     /* No styling.  */
-    style_file_name = NULL;
+    style_file_name = வெற்று;
 #endif
 
   /* Workaround clang's warning (starting at Clang 3.5) about the stub
@@ -347,8 +347,8 @@ complain_init_color (void)
      | src/complain.c:274:7: error: code will never be executed [-Werror,-Wunreachable-code]
      |     ? html_styled_ostream_create (file_ostream_create (stderr),
      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#if defined __clang__
-# pragma clang diagnostic push
+#எனில் defined __clang__
+# pragma clang diagnostic தள்ளு
 # pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
   errstream =
@@ -357,20 +357,20 @@ complain_init_color (void)
                                   style_file_name)
     : styled_ostream_create (STDERR_FILENO, "(stderr)", TTYCTL_AUTO,
                              style_file_name);
-#if defined __clang__
-# pragma clang diagnostic pop
+#எனில் defined __clang__
+# pragma clang diagnostic எடு
 #endif
 }
 
-void
-complain_init (void)
+வெறுமை
+complain_init (வெறுமை)
 {
   caret_init ();
 
   warnings warnings_default =
     Wconflicts_sr | Wconflicts_rr | Wdeprecated | Wother;
 
-  for (size_t b = 0; b < warnings_size; ++b)
+  க்கு (size_t b = 0; b < warnings_size; ++b)
     {
       warnings_flag[b] = (1 << b & warnings_default
                           ? severity_warning
@@ -379,8 +379,8 @@ complain_init (void)
     }
 }
 
-void
-complain_free (void)
+வெறுமை
+complain_free (வெறுமை)
 {
   caret_free ();
   styled_ostream_free (errstream);
@@ -390,68 +390,68 @@ complain_free (void)
    (severity_fatal, severity_error, severity_disabled, or
    severity_warning.) */
 
-static severity
+நிலையான severity
 warning_severity (warnings flags)
 {
-  if (flags & fatal)
+  எனில் (flags & fatal)
     /* Diagnostics about fatal errors.  */
-    return severity_fatal;
-  else if (flags & complaint)
+    திரும்பு severity_fatal;
+  இல்லையெனில் எனில் (flags & complaint)
     /* Diagnostics about errors.  */
-    return severity_error;
-  else
+    திரும்பு severity_error;
+  இல்லையெனில்
     {
       /* Diagnostics about warnings.  */
       severity res = severity_disabled;
-      for (size_t b = 0; b < warnings_size; ++b)
-        if (flags & 1 << b)
+      க்கு (size_t b = 0; b < warnings_size; ++b)
+        எனில் (flags & 1 << b)
           {
             res = res < warnings_flag[b] ? warnings_flag[b] : res;
             /* If the diagnostic is enabled, and -Werror is enabled,
                and -Wno-error=foo was not explicitly requested, this
                is an error. */
-            if (res == severity_warning
+            எனில் (res == severity_warning
                 && (errority_flag[b] == errority_enabled
                     || (warnings_are_errors
                         && errority_flag[b] != errority_disabled)))
               res = severity_error;
           }
-      return res;
+      திரும்பு res;
     }
 }
 
 bool
 warning_is_unset (warnings flags)
 {
-  for (size_t b = 0; b < warnings_size; ++b)
-    if (flags & 1 << b && warnings_flag[b] != severity_unset)
-      return false;
-  return true;
+  க்கு (size_t b = 0; b < warnings_size; ++b)
+    எனில் (flags & 1 << b && warnings_flag[b] != severity_unset)
+      திரும்பு false;
+  திரும்பு true;
 }
 
 bool
 warning_is_enabled (warnings flags)
 {
-  return severity_warning <= warning_severity (flags);
+  திரும்பு severity_warning <= warning_severity (flags);
 }
 
 /** Display a "[-Wyacc]" like message on \a out.  */
 
-static void
+நிலையான வெறுமை
 warnings_print_categories (warnings warn_flags, FILE *out)
 {
-  for (int wbit = 0; wbit < warnings_size; ++wbit)
-    if (warn_flags & (1 << wbit))
+  க்கு (முழு wbit = 0; wbit < warnings_size; ++wbit)
+    எனில் (warn_flags & (1 << wbit))
       {
         warnings w = 1 << wbit;
         severity s = warning_severity (w);
-        const char* style = severity_style (s);
+        மாறிலி எழுத்து* style = severity_style (s);
         fputs (" [", out);
         begin_use_class (style, out);
         // E.g., "counterexamples".
-        const char *warning = argmatch_warning_argument (&w);
-        char ref[200];
-        snprintf (ref, sizeof ref,
+        மாறிலி எழுத்து *warning = argmatch_warning_argument (&w);
+        எழுத்து ref[200];
+        snprintf (ref, அளவு ref,
                   "%s#W%s", diagnostics_url, warning);
         begin_hyperlink (out, ref);
         ostream_printf (errstream,
@@ -465,7 +465,7 @@ warnings_print_categories (warnings warn_flags, FILE *out)
         end_use_class (style, out);
         fputc (']', out);
         /* Display only the first match, the second is "-Wall".  */
-        return;
+        திரும்பு;
       }
 }
 
@@ -482,20 +482,20 @@ warnings_print_categories (warnings warn_flags, FILE *out)
  *                newline-terminated message to stderr.
  * \param args    the arguments of the format string.
  */
-static
-void
-error_message (const location *loc, warnings flags,
-               severity sever, const char *message, va_list args)
+நிலையான
+வெறுமை
+error_message (மாறிலி location *loc, warnings flags,
+               severity sever, மாறிலி எழுத்து *message, va_list args)
 {
-  const char* style = flags & note ? "note" : severity_style (sever);
+  மாறிலி எழுத்து* style = flags & note ? "note" : severity_style (sever);
 
-  if (loc)
+  எனில் (loc)
     location_print (*loc, stderr);
-  else
+  இல்லையெனில்
     fprintf (stderr, "%s", grammar_file ? grammar_file : program_name);
   fprintf (stderr, ": ");
 
-  if (sever != severity_disabled)
+  எனில் (sever != severity_disabled)
     {
       begin_use_class (style, stderr);
       fprintf (stderr, "%s:", flags & note ? _("note") : severity_prefix (sever));
@@ -506,15 +506,15 @@ error_message (const location *loc, warnings flags,
   vfprintf (stderr, message, args);
   /* Print the type of warning, only if this is not a sub message
      (in which case the prefix is null).  */
-  if (! (flags & silent) && sever != severity_disabled)
+  எனில் (! (flags & silent) && sever != severity_disabled)
     warnings_print_categories (flags, stderr);
 
   size_t l = strlen (message);
-  if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+  எனில் (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
     {
       putc ('\n', stderr);
       flush (stderr);
-      if (loc && !(flags & no_caret))
+      எனில் (loc && !(flags & no_caret))
         location_caret (*loc, style, stderr);
     }
   flush (stderr);
@@ -522,27 +522,27 @@ error_message (const location *loc, warnings flags,
 
 /** Raise a complaint (fatal error, error or just warning).  */
 
-static void
-complains (const location *loc, warnings flags,
-           const char *message, va_list args)
+நிலையான வெறுமை
+complains (மாறிலி location *loc, warnings flags,
+           மாறிலி எழுத்து *message, va_list args)
 {
-  if ((flags & complaint) && complaint_status < status_complaint)
+  எனில் ((flags & complaint) && complaint_status < status_complaint)
     complaint_status = status_complaint;
 
   severity s = warning_severity (flags);
-  if (severity_warning <= s)
+  எனில் (severity_warning <= s)
     {
-      if (severity_error <= s && ! complaint_status)
+      எனில் (severity_error <= s && ! complaint_status)
         complaint_status = status_warning_as_error;
       error_message (loc, flags, s, message, args);
     }
 
-  if (flags & fatal)
+  எனில் (flags & fatal)
     exit (EXIT_FAILURE);
 }
 
-void
-complain (location const *loc, warnings flags, const char *message, ...)
+வெறுமை
+complain (location மாறிலி *loc, warnings flags, மாறிலி எழுத்து *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -550,8 +550,8 @@ complain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-subcomplain (location const *loc, warnings flags, const char *message, ...)
+வெறுமை
+subcomplain (location மாறிலி *loc, warnings flags, மாறிலி எழுத்து *message, ...)
 {
   va_list args;
   va_start (args, message);
@@ -559,45 +559,45 @@ subcomplain (location const *loc, warnings flags, const char *message, ...)
   va_end (args);
 }
 
-void
-complain_args (location const *loc, warnings w,
-               int argc, char *argv[])
+வெறுமை
+complain_args (location மாறிலி *loc, warnings w,
+               முழு argc, எழுத்து *argv[])
 {
-  switch (argc)
+  தேர்வு (argc)
   {
-  case 1:
+  நிலை 1:
     complain (loc, w, "%s", _(argv[0]));
-    break;
-  case 2:
+    நிறுத்து;
+  நிலை 2:
     complain (loc, w, _(argv[0]), argv[1]);
-    break;
-  case 3:
+    நிறுத்து;
+  நிலை 3:
     complain (loc, w, _(argv[0]), argv[1], argv[2]);
-    break;
-  case 4:
+    நிறுத்து;
+  நிலை 4:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3]);
-    break;
-  case 5:
+    நிறுத்து;
+  நிலை 5:
     complain (loc, w, _(argv[0]), argv[1], argv[2], argv[3], argv[4]);
-    break;
-  default:
+    நிறுத்து;
+  இயல்பு:
     complain (loc, fatal, "too many arguments for complains");
-    break;
+    நிறுத்து;
   }
 }
 
 
-void
-bison_directive (location const *loc, char const *directive)
+வெறுமை
+bison_directive (location மாறிலி *loc, எழுத்து மாறிலி *directive)
 {
   complain (loc, Wyacc,
             _("POSIX Yacc does not support %s"), directive);
 }
 
-void
-deprecated_directive (location const *loc, char const *old, char const *upd)
+வெறுமை
+deprecated_directive (location மாறிலி *loc, எழுத்து மாறிலி *old, எழுத்து மாறிலி *upd)
 {
-  if (warning_is_enabled (Wdeprecated))
+  எனில் (warning_is_enabled (Wdeprecated))
     {
       complain (loc, Wdeprecated,
                 _("deprecated directive: %s, use %s"),
@@ -608,20 +608,20 @@ deprecated_directive (location const *loc, char const *old, char const *upd)
     }
 }
 
-void
-duplicate_directive (char const *directive,
+வெறுமை
+duplicate_directive (எழுத்து மாறிலி *directive,
                      location first, location second)
 {
-  if (feature_flag & feature_caret)
+  எனில் (feature_flag & feature_caret)
     complain (&second, Wother, _("duplicate directive"));
-  else
+  இல்லையெனில்
     complain (&second, Wother, _("duplicate directive: %s"), quote (directive));
   subcomplain (&first, Wother, _("previous declaration"));
   fixits_register (&second, "");
 }
 
-void
-duplicate_rule_directive (char const *directive,
+வெறுமை
+duplicate_rule_directive (எழுத்து மாறிலி *directive,
                           location first, location second)
 {
   complain (&second, complaint, _("only one %s allowed per rule"), directive);
@@ -629,21 +629,21 @@ duplicate_rule_directive (char const *directive,
   fixits_register (&second, "");
 }
 
-void
+வெறுமை
 syntax_error (location loc,
-              int argc, const char* argv[])
+              முழு argc, மாறிலி எழுத்து* argv[])
 {
-  if (complaint_status < status_complaint)
+  எனில் (complaint_status < status_complaint)
     complaint_status = status_complaint;
-  assert (argc <= 5);
-  const char *format = NULL;
-  switch (argc)
+  ப்ரதிஜ்ஞா (argc <= 5);
+  மாறிலி எழுத்து *format = வெற்று;
+  தேர்வு (argc)
     {
 #define CASE(N, S)                          \
-      case N:                               \
+      நிலை N:                               \
         format = S;                         \
-        break
-    default: /* Avoid compiler warnings. */
+        நிறுத்து
+    இயல்பு: /* Avoid compiler warnings. */
       CASE (0, _("syntax error"));
       CASE (1, _("unexpected %0$s"));
       CASE (2, _("expected %1$s before %0$s"));
@@ -656,21 +656,21 @@ syntax_error (location loc,
   fputs (": ", stderr);
   severity_print (severity_error, stderr);
 
-  while (*format)
-    if (format[0] == '%'
+  போது (*format)
+    எனில் (format[0] == '%'
         && c_isdigit (format[1])
         && format[2] == '$'
         && format[3] == 's'
         && (format[1] - '0') < argc)
       {
-        int i = format[1] - '0';
-        const char *style = i == 0 ? "unexpected" : "expected";
+        முழு i = format[1] - '0';
+        மாறிலி எழுத்து *style = i == 0 ? "unexpected" : "expected";
         begin_use_class (style, stderr);
         fputs (argv[i], stderr);
         end_use_class (style, stderr);
         format += 4;
       }
-    else
+    இல்லையெனில்
       {
         fputc (*format, stderr);
         ++format;

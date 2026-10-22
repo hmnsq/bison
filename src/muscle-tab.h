@@ -28,7 +28,7 @@
 /* The kind of value associated to this muscle, depending on the
    syntax of the value: keyword (no delimiter, e.g., true), string
    (double quotes, e.g., "foo.h"), or code (braces, e.g., {int}).  */
-typedef enum
+வகைவரை எண்ணிக்கை
 {
   muscle_code,
   muscle_keyword,
@@ -36,97 +36,97 @@ typedef enum
 } muscle_kind;
 
 /* Conversion from string.  */
-muscle_kind muscle_kind_new (char const *k);
+muscle_kind muscle_kind_new (எழுத்து மாறிலி *k);
 
 /* Conversion to string.  */
-char const *muscle_kind_string (muscle_kind k);
+எழுத்து மாறிலி *muscle_kind_string (muscle_kind k);
 
 
 /* Create the MUSCLE_TABLE, and initialize it with default values.
    Also set up the MUSCLE_OBSTACK.  */
-void muscle_init (void);
+வெறுமை muscle_init (வெறுமை);
 
 /* Insert (KEY, VALUE).  If KEY already existed, overwrite the
    previous value.  Otherwise create as a muscle_string type.  */
-void muscle_insert (char const *key, char const *value);
+வெறுமை muscle_செருகு (எழுத்து மாறிலி *சாவி, எழுத்து மாறிலி *மதிப்பு);
 
 /* Find the value of muscle KEY.  Unlike MUSCLE_FIND, this is always
    reliable to determine whether KEY has a value.  */
-char const *muscle_find_const (char const *key);
+எழுத்து மாறிலி *muscle_find_const (எழுத்து மாறிலி *சாவி);
 
 /* Find the value of muscle KEY.  Abort if muscle_insert was invoked
    more recently than muscle_grow for KEY since muscle_find can't
    return a char const *.  */
-char *muscle_find (char const *key);
+எழுத்து *muscle_find (எழுத்து மாறிலி *சாவி);
 
 /* Free all the memory consumed by the muscle machinery only.  */
-void muscle_free (void);
+வெறுமை muscle_free (வெறுமை);
 
 
 /* An obstack dedicated to receive muscle keys and values.  */
-extern struct obstack muscle_obstack;
+வெளி கட்டமைப்பு obstack muscle_obstack;
 
-# define MUSCLE_INSERT_BOOL(Key, Value)         \
-  do {                                          \
-    int v__ = Value;                            \
-    MUSCLE_INSERT_INT (Key, v__);               \
-  } while (0)
+# define MUSCLE_செருகு_BOOL(சாவி_2, மதிப்பு_4)         \
+  செய் {                                          \
+    முழு v__ = மதிப்பு_4;                            \
+    MUSCLE_செருகு_INT (சாவி_2, v__);               \
+  } போது (0)
 
-# define MUSCLE_INSERTF(Key, Format, Value)                     \
-  do {                                                          \
-    obstack_printf (&muscle_obstack, Format, Value);            \
-    muscle_insert (Key, obstack_finish0 (&muscle_obstack));     \
-  } while (0)
+# define MUSCLE_INSERTF(சாவி_2, Format, மதிப்பு_4)                     \
+  செய் {                                                          \
+    obstack_printf (&muscle_obstack, Format, மதிப்பு_4);            \
+    muscle_செருகு (சாவி_2, obstack_finish0 (&muscle_obstack));     \
+  } போது (0)
 
-# define MUSCLE_INSERT_INT(Key, Value)          \
-  MUSCLE_INSERTF (Key, "%d", Value)
+# define MUSCLE_செருகு_INT(சாவி_2, மதிப்பு_4)          \
+  MUSCLE_INSERTF (சாவி_2, "%d", மதிப்பு_4)
 
-# define MUSCLE_INSERT_LONG_INT(Key, Value)     \
-  MUSCLE_INSERTF (Key, "%ld", Value)
+# define MUSCLE_செருகு_LONG_INT(சாவி_2, மதிப்பு_4)     \
+  MUSCLE_INSERTF (சாவி_2, "%ld", மதிப்பு_4)
 
 /* Key -> Value, but don't apply escaping to Value. */
-# define MUSCLE_INSERT_STRING_RAW(Key, Value)   \
-  MUSCLE_INSERTF (Key, "%s", Value)
+# define MUSCLE_செருகு_STRING_RAW(சாவி_2, மதிப்பு_4)   \
+  MUSCLE_INSERTF (சாவி_2, "%s", மதிப்பு_4)
 
 /* Key -> Value, applying M4 escaping to Value. */
-# define MUSCLE_INSERT_STRING(Key, Value)                       \
-  do {                                                          \
-    obstack_escape (&muscle_obstack, Value);                    \
-    muscle_insert (Key, obstack_finish0 (&muscle_obstack));     \
-  } while (0)
+# define MUSCLE_செருகு_STRING(சாவி_2, மதிப்பு_4)                       \
+  செய் {                                                          \
+    obstack_escape (&muscle_obstack, மதிப்பு_4);                    \
+    muscle_செருகு (சாவி_2, obstack_finish0 (&muscle_obstack));     \
+  } போது (0)
 
 /* Key -> Value, applying C escaping to Value (and then M4). */
-# define MUSCLE_INSERT_C_STRING(Key, Value)                     \
-  MUSCLE_INSERT_STRING (Key, quotearg_style (c_quoting_style, Value))
+# define MUSCLE_செருகு_C_STRING(சாவி_2, மதிப்பு_4)                     \
+  MUSCLE_செருகு_STRING (சாவி_2, quotearg_style (c_quoting_style, மதிப்பு_4))
 
 
 /* Append VALUE to the current value of KEY, using muscle_grow.  But
    in addition, issue a synchronization line for the location LOC.
    Be sure to append on a new line.  */
-void muscle_code_grow (const char *key, const char *value, location loc);
+வெறுமை muscle_code_grow (மாறிலி எழுத்து *சாவி, மாறிலி எழுத்து *மதிப்பு, location loc);
 
 
 /* MUSCLE is an M4 list of pairs.  Create or extend it with the pair
    (A1, A2) after escaping both values with digraphs.  Note that because the
    muscle values are output *double* quoted, one needs to strip the first level
    of quotes to reach the list itself.  */
-void muscle_pair_list_grow (const char *muscle,
-                            const char *a1, const char *a2);
+வெறுமை muscle_pair_list_grow (மாறிலி எழுத்து *muscle,
+                            மாறிலி எழுத்து *a1, மாறிலி எழுத்து *a2);
 
 /* Grow KEY for the occurrence of the name USER_NAME at LOC appropriately for
    use with b4_check_user_names in ../data/bison.m4.  USER_NAME is not escaped
    with digraphs, so it must not contain '[' or ']'.  */
-void muscle_user_name_list_grow (char const *key, char const *user_name,
+வெறுமை muscle_user_name_list_grow (எழுத்து மாறிலி *சாவி, எழுத்து மாறிலி *user_name,
                                  location loc);
 
 /* In the format '[[file_name:line.column]], [[file_name:line.column]]',
    append LOC to MUSCLE.  Use digraphs for special characters in each
    file name.  */
-void muscle_location_grow (char const *key, location loc);
+வெறுமை muscle_location_grow (எழுத்து மாறிலி *சாவி, location loc);
 
 /* Indicates whether a variable's value was specified with -D/--define, with
    -F/--force-define, or in the grammar file.  */
-typedef enum {
+வகைவரை எண்ணிக்கை {
   MUSCLE_PERCENT_DEFINE_D = 0,
   MUSCLE_PERCENT_DEFINE_F,
   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE
@@ -141,24 +141,24 @@ typedef enum {
    definitions are processed before grammar file definitions.)  Record
    this as a user occurrence of VARIABLE by invoking
    muscle_user_name_list_grow.  */
-void muscle_percent_define_insert (char const *variable, location variable_loc,
+வெறுமை muscle_percent_define_செருகு (எழுத்து மாறிலி *variable, location variable_loc,
                                    muscle_kind kind,
-                                   char const *value,
+                                   எழுத்து மாறிலி *மதிப்பு,
                                    muscle_percent_define_how how);
 
 /* Make sure that VARIABLE is set to the boolean VALUE.  Warn on mismatches
    only, but accept repeated declaration.  Used for backward compatibility
    between old directives such as %pure-parser, and the recommended use of
    variables (%define api.pure).   */
-void muscle_percent_define_ensure (char const *variable, location variable_loc,
-                                   bool value);
+வெறுமை muscle_percent_define_ensure (எழுத்து மாறிலி *variable, location variable_loc,
+                                   bool மதிப்பு);
 
 /* Mimic b4_percent_define_get in ../data/bison.m4 exactly.  That is, if the
    %define variable VARIABLE is defined, return its value.  Otherwise, return
    the empty string.  Also, record Bison's usage of VARIABLE by defining
    b4_percent_define_bison_variables(VARIABLE).  The caller is responsible for
    freeing the memory of the returned string.  */
-char *muscle_percent_define_get (char const *variable);
+எழுத்து *muscle_percent_define_get (எழுத்து மாறிலி *variable);
 
 /* Mimic muscle_percent_define_get_loc in ../data/bison.m4 exactly.  That is,
    if the %define variable VARIABLE is undefined, complain fatally since that's
@@ -166,7 +166,7 @@ char *muscle_percent_define_get (char const *variable);
    appropriate for the first argument of warn_at, complain_at, or fatal_at.
    Don't record this as a Bison usage of VARIABLE as there's no reason to
    suspect that the user-supplied value has yet influenced the output.  */
-location muscle_percent_define_get_loc (char const *variable);
+location muscle_percent_define_get_loc (எழுத்து மாறிலி *variable);
 
 /* Mimic muscle_percent_define_get_syncline in ../data/bison.m4 exactly.  That
    is, if the %define variable VARIABLE is undefined, complain fatally since
@@ -174,13 +174,13 @@ location muscle_percent_define_get_loc (char const *variable);
    b4_syncline invocation.  Don't record this as a Bison usage of VARIABLE as
    there's no reason to suspect that the user-supplied value has yet influenced
    the output.  */
-char const *muscle_percent_define_get_syncline (char const *variable);
+எழுத்து மாறிலி *muscle_percent_define_get_syncline (எழுத்து மாறிலி *variable);
 
 /* Mimic b4_percent_define_ifdef in ../data/bison.m4 exactly.  That is, if the
    %define variable VARIABLE is defined, return true.  Otherwise, return false.
    Also, record Bison's usage of VARIABLE by defining
    b4_percent_define_bison_variables(VARIABLE).  */
-bool muscle_percent_define_ifdef (char const *variable);
+bool muscle_percent_define_ifdef (எழுத்து மாறிலி *variable);
 
 /* Mimic b4_percent_define_flag_if in ../data/bison.m4 exactly.  That is, if
    the %define variable VARIABLE is defined to "" or "true", return true.  If
@@ -188,13 +188,13 @@ bool muscle_percent_define_ifdef (char const *variable);
    Bison error since the default value should have been set already) or defined
    to any other value (possibly a user error).  Also, record Bison's usage of
    VARIABLE by defining b4_percent_define_bison_variables(VARIABLE).  */
-bool muscle_percent_define_flag_if (char const *variable);
+bool muscle_percent_define_flag_if (எழுத்து மாறிலி *variable);
 
 /* Mimic b4_percent_define_default in ../data/bison.m4 exactly.  That is, if
    the %define variable VARIABLE is undefined, set its value to VALUE.
    Don't record this as a Bison usage of VARIABLE as there's no reason to
    suspect that the value has yet influenced the output.  */
-void muscle_percent_define_default (char const *variable, char const *value);
+வெறுமை muscle_percent_define_default (எழுத்து மாறிலி *variable, எழுத்து மாறிலி *மதிப்பு);
 
 /* Mimic b4_percent_define_check_values in ../data/bison.m4 exactly except that
    the VALUES structure is more appropriate for C.  That is, VALUES points to a
@@ -207,17 +207,17 @@ void muscle_percent_define_default (char const *variable, char const *value);
    a user error).  Don't record this as a Bison usage of the variable as
    there's no reason to suspect that the value has yet influenced the
    output.  */
-void muscle_percent_define_check_values (char const * const *values);
+வெறுமை muscle_percent_define_check_மதிப்புகள் (எழுத்து மாறிலி * மாறிலி *மதிப்புகள்);
 
 /* Grow the muscle for the %code qualifier QUALIFIER appearing at
    QUALIFIER_LOC with code CODE appearing at CODE_LOC.  Record this as a
    user occurrence of QUALIFIER by invoking
    muscle_user_name_list_grow.  */
-void muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
-                               char const *code, location code_loc);
+வெறுமை muscle_percent_code_grow (எழுத்து மாறிலி *qualifier, location qualifier_loc,
+                               எழுத்து மாறிலி *code, location code_loc);
 
 /* Output the definition of all the current muscles into a list of
    m4_defines.  */
-void muscles_m4_output (FILE *out);
+வெறுமை muscles_m4_output (FILE *out);
 
 #endif /* not MUSCLE_TAB_H_ */

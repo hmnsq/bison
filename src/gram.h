@@ -110,18 +110,18 @@
 # define ISTOKEN(i)     ((i) < ntokens)
 # define ISVAR(i)       ((i) >= ntokens)
 
-extern int nsyms;
-extern int ntokens;
-extern int nnterms;
+வெளி முழு nsyms;
+வெளி முழு ntokens;
+வெளி முழு nnterms;
 
 /* Elements of ritem. */
-typedef int item_number;
-# define ITEM_NUMBER_MAX INT_MAX
-extern item_number *ritem;
-extern int nritems;
+வகைவரை முழு item_எண்;
+# define ITEM_எண்_MAX INT_MAX
+வெளி item_எண் *ritem;
+வெளி முழு nritems;
 
 /* Indices into ritem. */
-typedef unsigned int item_index;
+வகைவரை unsigned முழு item_index;
 
 /* There is weird relationship between OT1H item_number and OTOH
    symbol_number and rule_number: we store the latter in
@@ -131,44 +131,44 @@ typedef unsigned int item_index;
    Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
 
-static inline item_number
-symbol_number_as_item_number (symbol_number sym)
+நிலையான உள்வரி item_எண்
+குறியீடு_எண்_as_item_எண் (குறியீடு_எண் sym)
 {
-  return sym;
+  திரும்பு sym;
 }
 
-static inline symbol_number
-item_number_as_symbol_number (item_number i)
+நிலையான உள்வரி குறியீடு_எண்
+item_எண்_as_குறியீடு_எண் (item_எண் i)
 {
-  return i;
+  திரும்பு i;
 }
 
-static inline bool
-item_number_is_symbol_number (item_number i)
+நிலையான உள்வரி bool
+item_எண்_is_குறியீடு_எண் (item_எண் i)
 {
-  return i >= 0;
+  திரும்பு i >= 0;
 }
 
 /* Rule numbers.  */
-typedef int rule_number;
-# define RULE_NUMBER_MAX INT_MAX
+வகைவரை முழு rule_எண்;
+# define RULE_எண்_MAX INT_MAX
 
-static inline item_number
-rule_number_as_item_number (rule_number r)
+நிலையான உள்வரி item_எண்
+rule_எண்_as_item_எண் (rule_எண் r)
 {
-  return -1 - r;
+  திரும்பு -1 - r;
 }
 
-static inline rule_number
-item_number_as_rule_number (item_number i)
+நிலையான உள்வரி rule_எண்
+item_எண்_as_rule_எண் (item_எண் i)
 {
-  return -1 - i;
+  திரும்பு -1 - i;
 }
 
-static inline bool
-item_number_is_rule_number (item_number i)
+நிலையான உள்வரி bool
+item_எண்_is_rule_எண் (item_எண் i)
 {
-  return i < 0;
+  திரும்பு i < 0;
 }
 
 
@@ -176,24 +176,24 @@ item_number_is_rule_number (item_number i)
 | Rules.  |
 `--------*/
 
-typedef struct
+வகைவரை கட்டமைப்பு
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number code;
+  rule_எண் code;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number number;
+  rule_எண் எண்;
 
   sym_content *lhs;
-  item_number *rhs;
+  item_எண் *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
   sym_content *prec;
 
-  int dprec;
-  int merger;
+  முழு dprec;
+  முழு merger;
 
   /* This symbol was attached to the rule via %prec. */
   sym_content *precsym;
@@ -205,32 +205,32 @@ typedef struct
 
   /* Counts of the numbers of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  முழு expected_sr_conflicts;
+  முழு expected_rr_conflicts;
 
-  const char *action;
+  மாறிலி எழுத்து *action;
   location action_loc;
 } rule;
 
 /* The used rules (size NRULES).  */
-extern rule *rules;
-extern rule_number nrules;
+வெளி rule *rules;
+வெளி rule_எண் nrules;
 
 /* Get the rule associated to this item.  ITEM points inside RITEM.  */
-static inline rule const *
-item_rule (item_number const *item)
+நிலையான உள்வரி rule மாறிலி *
+item_rule (item_எண் மாறிலி *item)
 {
-  item_number const *sp = item;
-  while (!item_number_is_rule_number (*sp))
+  item_எண் மாறிலி *sp = item;
+  போது (!item_எண்_is_rule_எண் (*sp))
     ++sp;
-  rule_number r = item_number_as_rule_number (*sp);
-  return &rules[r];
+  rule_எண் r = item_எண்_as_rule_எண் (*sp);
+  திரும்பு &rules[r];
 }
 
 /* Pretty-print this ITEM (as in the report).  ITEM points inside
    RITEM.  PREVIOUS_RULE is used to see if the lhs is common, in which
    case LHS is factored.  Passing NULL is fine.  */
-void item_print (item_number *item, rule const *previous_rule,
+வெறுமை item_print (item_எண் *item, rule மாறிலி *previous_rule,
                  FILE *out);
 
 /*--------.
@@ -238,93 +238,93 @@ void item_print (item_number *item, rule const *previous_rule,
 `--------*/
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter) (rule const *);
+வகைவரை bool (*rule_filter) (rule மாறிலி *);
 
 /* Whether is an accepting rule (i.e., its reduction terminates
    parsing with success). */
-static inline bool
-rule_is_initial (rule const *r)
+நிலையான உள்வரி bool
+rule_is_initial (rule மாறிலி *r)
 {
   /* In the case of multistart, we need to check whether the LHS is
      $accept.  In the case of "unistart", it would suffice to
      check whether this is rule number 0.  */
-  return r->lhs == acceptsymbol->content;
+  திரும்பு r->lhs == acceptsymbol->content;
 }
 
 /* Whether the rule has a 'number' smaller than NRULES.  That is, it
    is useful in the grammar.  */
-bool rule_useful_in_grammar_p (rule const *r);
+bool rule_useful_in_grammar_p (rule மாறிலி *r);
 
 /* Whether the rule has a 'number' higher than NRULES.  That is, it is
    useless in the grammar.  */
-bool rule_useless_in_grammar_p (rule const *r);
+bool rule_useless_in_grammar_p (rule மாறிலி *r);
 
 /* Whether the rule is not flagged as useful but is useful in the
    grammar.  In other words, it was discarded because of conflicts.  */
-bool rule_useless_in_parser_p (rule const *r);
+bool rule_useless_in_parser_p (rule மாறிலி *r);
 
 /* Whether the rule has a single RHS, and no user action. */
-bool rule_useless_chain_p (rule const *r);
+bool rule_useless_chain_p (rule மாறிலி *r);
 
 /* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print (rule const *r, sym_content const *previous_lhs,
+வெறுமை rule_lhs_print (rule மாறிலி *r, sym_content மாறிலி *previous_lhs,
                      FILE *out);
-void rule_lhs_print_xml (rule const *r, FILE *out, int level);
+வெறுமை rule_lhs_print_xml (rule மாறிலி *r, FILE *out, முழு level);
 
 /* The length of the RHS.  */
-size_t rule_rhs_length (rule const *r);
+size_t rule_rhs_length (rule மாறிலி *r);
 
 /* Print this rule's RHS on OUT.  */
-void rule_rhs_print (rule const *r, FILE *out);
+வெறுமை rule_rhs_print (rule மாறிலி *r, FILE *out);
 
 /* Print this rule on OUT.  If a PREVIOUS_RULE was already displayed,
    avoid useless repetitions of their LHS. */
-void rule_print (rule const *r, rule const *prev_rule, FILE *out);
+வெறுமை rule_print (rule மாறிலி *r, rule மாறிலி *prev_rule, FILE *out);
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol **symbols;
+வெளி குறியீடு **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number *token_translations;
-extern int max_code;
+வெளி குறியீடு_எண் *token_translations;
+வெளி முழு max_code;
 
 
 
 /* Dump RITEM for traces. */
-void ritem_print (FILE *out);
+வெறுமை ritem_print (FILE *out);
 
 /* The size of the longest rule RHS.  */
-size_t ritem_longest_rhs (void);
+size_t ritem_longest_rhs (வெறுமை);
 
 /* Print the grammar's rules that match FILTER on OUT under TITLE.  */
-void grammar_rules_partial_print (FILE *out, const char *title,
+வெறுமை grammar_rules_partial_print (FILE *out, மாறிலி எழுத்து *title,
                                   rule_filter filter);
 
 /* Print the grammar's useful rules on OUT.  */
-void grammar_rules_print (FILE *out);
+வெறுமை grammar_rules_print (FILE *out);
 /* Print all of the grammar's rules with a "usefulness" attribute.  */
-void grammar_rules_print_xml (FILE *out, int level);
+வெறுமை grammar_rules_print_xml (FILE *out, முழு level);
 
 /* Dump the grammar. */
-void grammar_dump (FILE *out, const char *title);
+வெறுமை grammar_dump (FILE *out, மாறிலி எழுத்து *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be 'rule useless in grammar' when invoked after grammar
    reduction, or 'rule useless in parser due to conflicts' after conflicts
    were taken into account).  */
-void grammar_rules_useless_report (const char *message);
+வெறுமை grammar_rules_useless_report (மாறிலி எழுத்து *message);
 
 /* Free the packed grammar. */
-void grammar_free (void);
+வெறுமை grammar_free (வெறுமை);
 
 /* The version %required by the grammar file, as an int (100 * major +
    minor).  0 if unspecified.  */
-extern int required_version;
+வெளி முழு required_version;
 
 #endif /* !GRAM_H_ */

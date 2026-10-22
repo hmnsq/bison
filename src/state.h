@@ -96,26 +96,26 @@
 | Numbering states.  |
 `-------------------*/
 
-typedef int state_number;
-# define STATE_NUMBER_MAXIMUM INT_MAX
+வகைவரை முழு state_எண்;
+# define STATE_எண்_MAXIMUM INT_MAX
 
 /* Be ready to map a state_number to an int.  */
-static inline int
-state_number_as_int (state_number s)
+நிலையான உள்வரி முழு
+state_எண்_as_int (state_எண் s)
 {
-  return s;
+  திரும்பு s;
 }
 
 
-typedef struct state state;
+வகைவரை கட்டமைப்பு state state;
 
 /*--------------.
 | Transitions.  |
 `--------------*/
 
-typedef struct
+வகைவரை கட்டமைப்பு
 {
-  int num;            /** Size of destination STATES.  */
+  முழு இலக்கம்;            /** Size of destination STATES.  */
   state *states[1];
 } transitions;
 
@@ -124,69 +124,69 @@ typedef struct
    TRANSITIONS->states[Num]?  Can be a token (amongst which the error
    token), or nonterminals in case of gotos.  */
 
-# define TRANSITION_SYMBOL(Transitions, Num) \
-  (Transitions->states[Num]->accessing_symbol)
+# define TRANSITION_குறியீடு(Transitions, இலக்கம்_2) \
+  (Transitions->states[இலக்கம்_2]->accessing_குறியீடு)
 
 /* Is the TRANSITIONS->states[Num] a shift? (as opposed to gotos).  */
 
-# define TRANSITION_IS_SHIFT(Transitions, Num) \
-  (ISTOKEN (TRANSITION_SYMBOL (Transitions, Num)))
+# define TRANSITION_IS_SHIFT(Transitions, இலக்கம்_2) \
+  (ISTOKEN (TRANSITION_குறியீடு (Transitions, இலக்கம்_2)))
 
 /* Is the TRANSITIONS->states[Num] a goto?. */
 
-# define TRANSITION_IS_GOTO(Transitions, Num) \
-  (!TRANSITION_IS_SHIFT (Transitions, Num))
+# define TRANSITION_IS_GOTO(Transitions, இலக்கம்_2) \
+  (!TRANSITION_IS_SHIFT (Transitions, இலக்கம்_2))
 
 /* Is the TRANSITIONS->states[Num] labelled by the error token?  */
 
-# define TRANSITION_IS_ERROR(Transitions, Num) \
-  (TRANSITION_SYMBOL (Transitions, Num) == errtoken->content->number)
+# define TRANSITION_IS_ERROR(Transitions, இலக்கம்_2) \
+  (TRANSITION_குறியீடு (Transitions, இலக்கம்_2) == errtoken->content->எண்)
 
 /* When resolving a SR conflicts, if the reduction wins, the shift is
    disabled.  */
 
-# define TRANSITION_DISABLE(Transitions, Num) \
-  (Transitions->states[Num] = NULL)
+# define TRANSITION_DISABLE(Transitions, இலக்கம்_2) \
+  (Transitions->states[இலக்கம்_2] = வெற்று)
 
-# define TRANSITION_IS_DISABLED(Transitions, Num) \
-  (Transitions->states[Num] == NULL)
+# define TRANSITION_IS_DISABLED(Transitions, இலக்கம்_2) \
+  (Transitions->states[இலக்கம்_2] == வெற்று)
 
 
 /* Iterate over each transition over a token (shifts).  */
 # define FOR_EACH_SHIFT(Transitions, Iter)                      \
-  for (Iter = 0;                                                \
-       Iter < Transitions->num                                  \
+  க்கு (Iter = 0;                                                \
+       Iter < Transitions->இலக்கம்                                  \
          && (TRANSITION_IS_DISABLED (Transitions, Iter)         \
              || TRANSITION_IS_SHIFT (Transitions, Iter));       \
        ++Iter)                                                  \
-    if (!TRANSITION_IS_DISABLED (Transitions, Iter))
+    எனில் (!TRANSITION_IS_DISABLED (Transitions, Iter))
 
 
 /* The destination of the transition (shift/goto) from state S on
    label SYM (term or nterm).  Abort if none found.  */
-struct state *transitions_to (state *s, symbol_number sym);
+கட்டமைப்பு state *transitions_to (state *s, குறியீடு_எண் sym);
 
 
 /*-------.
 | Errs.  |
 `-------*/
 
-typedef struct
+வகைவரை கட்டமைப்பு
 {
-  int num;
-  symbol *symbols[1];
+  முழு இலக்கம்;
+  குறியீடு *symbols[1];
 } errs;
 
-errs *errs_new (int num, symbol **tokens);
+errs *errs_new (முழு இலக்கம், குறியீடு **tokens);
 
 
 /*-------------.
 | Reductions.  |
 `-------------*/
 
-typedef struct
+வகைவரை கட்டமைப்பு
 {
-  int num;
+  முழு இலக்கம்;
   bitset *lookaheads;
   /* Sorted ascendingly on rule number.  */
   rule *rules[1];
@@ -198,12 +198,12 @@ typedef struct
 | states.  |
 `---------*/
 
-struct state_list;
+கட்டமைப்பு state_list;
 
-struct state
+கட்டமைப்பு state
 {
-  state_number number;
-  symbol_number accessing_symbol;
+  state_எண் எண்;
+  குறியீடு_எண் accessing_குறியீடு;
   transitions *transitions;
   reductions *reductions;
   errs *errs;
@@ -211,7 +211,7 @@ struct state
   /* When an includer (such as ielr.c) needs to store states in a list, the
      includer can define struct state_list as the list node structure and can
      store in this member a reference to the node containing each state.  */
-  struct state_list *state_list;
+  கட்டமைப்பு state_list *state_list;
 
   /* Whether no lookahead sets on reduce actions are needed to decide
      what to do in state S.  */
@@ -219,68 +219,68 @@ struct state
 
   /* If some conflicts were solved thanks to precedence/associativity,
      a human readable description of the resolution.  */
-  const char *solved_conflicts;
-  const char *solved_conflicts_xml;
+  மாறிலி எழுத்து *solved_conflicts;
+  மாறிலி எழுத்து *solved_conflicts_xml;
 
   /* Its items.  Must be last, since ITEMS can be arbitrarily large.  Sorted
      ascendingly on item index in RITEM, which is sorted on rule number.  */
   size_t nitems;
-  item_index items[1];
+  item_index பொருட்கள்[1];
 };
 
-extern state_number nstates;
-extern state *final_state;
+வெளி state_எண் nstates;
+வெளி state *final_state;
 
 /* Create a new state with ACCESSING_SYMBOL for those items.  */
-state *state_new (symbol_number accessing_symbol,
+state *state_new (குறியீடு_எண் accessing_குறியீடு,
                   size_t core_size, item_index *core);
 /* Create a new state with the same kernel as S (same accessing
    symbol, transitions, reductions, consistency and items).  */
-state *state_new_isocore (state const *s);
+state *state_new_isocore (state மாறிலி *s);
 
 /* Record that from S we can reach all the DST states (NUM of them).  */
-void state_transitions_set (state *s, int num, state **dst);
+வெறுமை state_transitions_set (state *s, முழு இலக்கம், state **dst);
 
 /* Print the transitions of state s for debug.  */
-void state_transitions_print (const state *s, FILE *out);
+வெறுமை state_transitions_print (மாறிலி state *s, FILE *out);
 
 /* Set the reductions of STATE.  */
-void state_reductions_set (state *s, int num, rule **reds);
+வெறுமை state_reductions_set (state *s, முழு இலக்கம், rule **reds);
 
 /* The index of the reduction of state S that corresponds to rule R.
    Aborts if there is no reduction of R in S.  */
-int state_reduction_find (state const *s, rule const *r);
+முழு state_reduction_find (state மாறிலி *s, rule மாறிலி *r);
 
 /* Set the errs of STATE.  */
-void state_errs_set (state *s, int num, symbol **errors);
+வெறுமை state_errs_set (state *s, முழு இலக்கம், குறியீடு **errors);
 
 /* Print on OUT all the lookahead tokens such that this STATE wants to
    reduce R.  */
-void state_rule_lookaheads_print (state const *s, rule const *r, FILE *out);
-void state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                      FILE *out, int level);
+வெறுமை state_rule_lookaheads_print (state மாறிலி *s, rule மாறிலி *r, FILE *out);
+வெறுமை state_rule_lookaheads_print_xml (state மாறிலி *s, rule மாறிலி *r,
+                                      FILE *out, முழு level);
 
 /* Create/destroy the states hash table.  */
-void state_hash_new (void);
-void state_hash_free (void);
+வெறுமை state_hash_new (வெறுமை);
+வெறுமை state_hash_free (வெறுமை);
 
 /* Find the state associated to the CORE, and return it.  If it does
    not exist yet, return NULL.  */
-state *state_hash_lookup (size_t core_size, const item_index *core);
+state *state_hash_lookup (size_t core_size, மாறிலி item_index *core);
 
 /* Insert STATE in the state hash table.  */
-void state_hash_insert (state *s);
+வெறுமை state_hash_செருகு (state *s);
 
 /* Remove unreachable states, renumber remaining states, update NSTATES, and
    write to OLD_TO_NEW a mapping of old state numbers to new state numbers such
    that the old value of NSTATES is written as the new state number for removed
    states.  The size of OLD_TO_NEW must be the old value of NSTATES.  */
-void state_remove_unreachable_states (state_number old_to_new[]);
+வெறுமை state_remove_unreachable_states (state_எண் old_to_new[]);
 
 /* All the states, indexed by the state number.  */
-extern state **states;
+வெளி state **states;
 
 /* Free all the states.  */
-void states_free (void);
+வெறுமை states_free (வெறுமை);
 
 #endif /* !STATE_H_ */

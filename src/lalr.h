@@ -42,13 +42,13 @@
      - #to_state
      - #goto_follows
 */
-void lalr (void);
+வெறுமை lalr (வெறுமை);
 
 /**
  * Set #nLA and allocate all reduction lookahead sets.  Normally invoked by
  * #lalr.
  */
-void initialize_LA (void);
+வெறுமை initialize_LA (வெறுமை);
 
 /**
  * Build only:
@@ -57,7 +57,7 @@ void initialize_LA (void);
  *   - #to_state
  * Normally invoked by #lalr.
  */
-void set_goto_map (void);
+வெறுமை set_goto_map (வெறுமை);
 
 /**
  * Update state numbers recorded in #goto_map, #from_state, and #to_state such
@@ -68,38 +68,38 @@ void set_goto_map (void);
  *       Thus, remove all goto entries involving this state.
  *     - The new state number.
  */
-void lalr_update_state_numbers (state_number old_to_new[],
-                                state_number nstates_old);
+வெறுமை lalr_update_state_numbers (state_எண் old_to_new[],
+                                state_எண் nstates_old);
 
 
 /** Release the information related to lookahead tokens.
 
    Can be performed once the action tables are computed.  */
-void lalr_free (void);
+வெறுமை lalr_free (வெறுமை);
 
-typedef size_t goto_number;
-# define GOTO_NUMBER_MAXIMUM ((goto_number) -1)
+வகைவரை size_t goto_எண்;
+# define GOTO_எண்_MAXIMUM ((goto_எண்) -1)
 
 /** Index into #from_state and #to_state.
 
    All the transitions that accept a particular variable are grouped
    together in FROM_STATE and TO_STATE, with indexes from GOTO_MAP[I -
    NTOKENS] to GOTO_MAP[I - NTOKENS + 1] - 1 (including both).  */
-extern goto_number *goto_map;
+வெளி goto_எண் *goto_map;
 
 /** The size of #from_state and #to_state.  */
-extern goto_number ngotos;
+வெளி goto_எண் ngotos;
 
 /** State number which a transition leads from.  */
-extern state_number *from_state;
+வெளி state_எண் *from_state;
 
 /** State number it leads to.  */
-extern state_number *to_state;
+வெளி state_எண் *to_state;
 
 /** The number of the goto from state SRC labeled with nterm SYM.  */
-goto_number map_goto (state_number src, symbol_number sym);
+goto_எண் map_goto (state_எண் src, குறியீடு_எண் sym);
 
 /* goto_follows[i] is the set of tokens following goto i.  */
-extern bitsetv goto_follows;
+வெளி bitsetv goto_follows;
 
 #endif /* !LALR_H_ */

@@ -18,32 +18,32 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include "symlist.h"
+#அந்தர்பாவ "symlist.h"
 
 /*--------------------------------------.
 | Create a list containing SYM at LOC.  |
 `--------------------------------------*/
 
-symbol_list *
-symbol_list_sym_new (symbol *sym, location loc)
+குறியீடு_list *
+குறியீடு_list_sym_new (குறியீடு *sym, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  குறியீடு_list *res = xmalloc (அளவு *res);
 
-  res->content_type = SYMLIST_SYMBOL;
+  res->content_type = SYMLIST_குறியீடு;
   res->content.sym = sym;
   res->sym_loc = loc;
-  res->named_ref = NULL;
+  res->named_ref = வெற்று;
 
-  res->midrule = NULL;
-  res->midrule_parent_rule = NULL;
+  res->midrule = வெற்று;
+  res->midrule_parent_rule = வெற்று;
   res->midrule_parent_rhs_index = 0;
 
   /* Members used for LHS only.  */
   res->rhs_loc = empty_loc;
-  res->ruleprec = NULL;
+  res->ruleprec = வெற்று;
   res->percent_empty_loc = empty_loc;
   code_props_none_init (&res->action_props);
   res->dprec = 0;
@@ -53,9 +53,9 @@ symbol_list_sym_new (symbol *sym, location loc)
   res->expected_sr_conflicts = -1;
   res->expected_rr_conflicts = -1;
 
-  res->next = NULL;
+  res->next = வெற்று;
 
-  return res;
+  திரும்பு res;
 }
 
 
@@ -63,41 +63,41 @@ symbol_list_sym_new (symbol *sym, location loc)
 | Create a list containing TYPE_NAME at LOC.  |
 `--------------------------------------------*/
 
-symbol_list *
-symbol_list_type_new (uniqstr type_name, location loc)
+குறியீடு_list *
+குறியீடு_list_type_new (uniqstr type_name, location loc)
 {
-  symbol_list *res = xmalloc (sizeof *res);
+  குறியீடு_list *res = xmalloc (அளவு *res);
 
   res->content_type = SYMLIST_TYPE;
-  res->content.sem_type = xmalloc (sizeof (semantic_type));
+  res->content.sem_type = xmalloc (அளவு (semantic_type));
   res->content.sem_type->tag = type_name;
   res->content.sem_type->location = loc;
   res->content.sem_type->status = undeclared;
 
   res->sym_loc = loc;
-  res->named_ref = NULL;
-  res->next = NULL;
+  res->named_ref = வெற்று;
+  res->next = வெற்று;
 
-  return res;
+  திரும்பு res;
 }
 
 
-symbol_list *
-symbol_list_type_set (symbol_list *syms, uniqstr type_name)
+குறியீடு_list *
+குறியீடு_list_type_set (குறியீடு_list *syms, uniqstr type_name)
 {
-  for (symbol_list *l = syms; l; l = l->next)
-    symbol_type_set (l->content.sym, type_name, l->sym_loc);
-  return syms;
+  க்கு (குறியீடு_list *l = syms; l; l = l->next)
+    குறியீடு_type_set (l->content.sym, type_name, l->sym_loc);
+  திரும்பு syms;
 }
 
 
-symbol_list *
-symbol_list_find_symbol (symbol_list *l, const symbol *sym)
+குறியீடு_list *
+குறியீடு_list_find_குறியீடு (குறியீடு_list *l, மாறிலி குறியீடு *sym)
 {
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
-    if (l->content.sym == sym)
-      return l;
-  return NULL;
+  க்கு (/* Nothing. */; l && l->content.sym; l = l->next)
+    எனில் (l->content.sym == sym)
+      திரும்பு l;
+  திரும்பு வெற்று;
 }
 
 
@@ -105,21 +105,21 @@ symbol_list_find_symbol (symbol_list *l, const symbol *sym)
 | Print this list, for which every content_type must be SYMLIST_SYMBOL.  |
 `-----------------------------------------------------------------------*/
 
-void
-symbol_list_syms_print (const symbol_list *l, FILE *out)
+வெறுமை
+குறியீடு_list_syms_print (மாறிலி குறியீடு_list *l, FILE *out)
 {
   fputc ('[', out);
-  char const *sep = "";
-  for (/* Nothing. */; l && l->content.sym; l = l->next)
+  எழுத்து மாறிலி *sep = "";
+  க்கு (/* Nothing. */; l && l->content.sym; l = l->next)
     {
       fputs (sep, out);
-      fputs (l->content_type == SYMLIST_SYMBOL ? "symbol{"
+      fputs (l->content_type == SYMLIST_குறியீடு ? "symbol{"
              : l->content_type == SYMLIST_TYPE ? "type{"
              : "invalid content_type{",
              out);
-      if (l->content_type == SYMLIST_SYMBOL)
-        symbol_print (l->content.sym, out);
-      fputs (l->action_props.is_value_used ? " (used)" : " (unused)", out);
+      எனில் (l->content_type == SYMLIST_குறியீடு)
+        குறியீடு_print (l->content.sym, out);
+      fputs (l->action_props.is_மதிப்பு_used ? " (used)" : " (unused)", out);
       putc ('}', out);
       sep = ", ";
     }
@@ -131,33 +131,33 @@ symbol_list_syms_print (const symbol_list *l, FILE *out)
 | Prepend NODE to the LIST.  |
 `---------------------------*/
 
-symbol_list *
-symbol_list_prepend (symbol_list *list, symbol_list *node)
+குறியீடு_list *
+குறியீடு_list_prepend (குறியீடு_list *list, குறியீடு_list *முனை)
 {
-  node->next = list;
-  return node;
+  முனை->next = list;
+  திரும்பு முனை;
 }
 
 
-symbol_list *
-symbol_list_last (symbol_list *list)
+குறியீடு_list *
+குறியீடு_list_last (குறியீடு_list *list)
 {
-  if (!list)
-    return NULL;
-  symbol_list *next = list;
-  while (next->next)
+  எனில் (!list)
+    திரும்பு வெற்று;
+  குறியீடு_list *next = list;
+  போது (next->next)
     next = next->next;
-  return next;
+  திரும்பு next;
 }
 
-symbol_list *
-symbol_list_append (symbol_list *list, symbol_list *node)
+குறியீடு_list *
+குறியீடு_list_append (குறியீடு_list *list, குறியீடு_list *முனை)
 {
-  if (list)
-    symbol_list_last (list)->next = node;
-  else
-    list = node;
-  return list;
+  எனில் (list)
+    குறியீடு_list_last (list)->next = முனை;
+  இல்லையெனில்
+    list = முனை;
+  திரும்பு list;
 }
 
 
@@ -166,16 +166,16 @@ symbol_list_append (symbol_list *list, symbol_list *node)
 | Free the LIST, but not the items it contains.  |
 `-----------------------------------------------*/
 
-void
-symbol_list_free (symbol_list *list)
+வெறுமை
+குறியீடு_list_free (குறியீடு_list *list)
 {
-  for (symbol_list *next; list; list = next)
+  க்கு (குறியீடு_list *next; list; list = next)
     {
       next = list->next;
       named_ref_free (list->named_ref);
-      if (list->content_type == SYMLIST_TYPE)
-        free (list->content.sem_type);
-      free (list);
+      எனில் (list->content_type == SYMLIST_TYPE)
+        விடுவி (list->content.sem_type);
+      விடுவி (list);
     }
 }
 
@@ -184,15 +184,15 @@ symbol_list_free (symbol_list *list)
 | Return its length.  |
 `--------------------*/
 
-int
-symbol_list_length (symbol_list const *l)
+முழு
+குறியீடு_list_length (குறியீடு_list மாறிலி *l)
 {
-  int res = 0;
-  for (/* Nothing. */;
-       l && !(l->content_type == SYMLIST_SYMBOL && l->content.sym == NULL);
+  முழு res = 0;
+  க்கு (/* Nothing. */;
+       l && !(l->content_type == SYMLIST_குறியீடு && l->content.sym == வெற்று);
        l = l->next)
     ++res;
-  return res;
+  திரும்பு res;
 }
 
 
@@ -200,18 +200,18 @@ symbol_list_length (symbol_list const *l)
 | Get item N in symbol list L.  |
 `------------------------------*/
 
-symbol_list *
-symbol_list_n_get (symbol_list *l, int n)
+குறியீடு_list *
+குறியீடு_list_n_get (குறியீடு_list *l, முழு n)
 {
   aver (0 <= n);
-  for (int i = 0; i < n; ++i)
+  க்கு (முழு i = 0; i < n; ++i)
     {
       l = l->next;
       aver (l);
     }
-  aver (l->content_type == SYMLIST_SYMBOL);
+  aver (l->content_type == SYMLIST_குறியீடு);
   aver (l->content.sym);
-  return l;
+  திரும்பு l;
 }
 
 /*--------------------------------------------------------------.
@@ -220,36 +220,36 @@ symbol_list_n_get (symbol_list *l, int n)
 `--------------------------------------------------------------*/
 
 uniqstr
-symbol_list_n_type_name_get (symbol_list *l, int n)
+குறியீடு_list_n_type_name_get (குறியீடு_list *l, முழு n)
 {
-  return symbol_list_n_get (l, n)->content.sym->content->type_name;
+  திரும்பு குறியீடு_list_n_get (l, n)->content.sym->content->type_name;
 }
 
 bool
-symbol_list_null (symbol_list *node)
+குறியீடு_list_null (குறியீடு_list *முனை)
 {
-  return (!node
-          || (node->content_type == SYMLIST_SYMBOL && !node->content.sym));
+  திரும்பு (!முனை
+          || (முனை->content_type == SYMLIST_குறியீடு && !முனை->content.sym));
 }
 
-void
-symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                            code_props const *cprops)
+வெறுமை
+குறியீடு_list_code_props_set (குறியீடு_list *முனை, code_props_type kind,
+                            code_props மாறிலி *cprops)
 {
-  switch (node->content_type)
+  தேர்வு (முனை->content_type)
     {
-    case SYMLIST_SYMBOL:
-      symbol_code_props_set (node->content.sym, kind, cprops);
-      if (node->content.sym->content->status == undeclared)
-        node->content.sym->content->status = used;
-      break;
-    case SYMLIST_TYPE:
+    நிலை SYMLIST_குறியீடு:
+      குறியீடு_code_props_set (முனை->content.sym, kind, cprops);
+      எனில் (முனை->content.sym->content->status == undeclared)
+        முனை->content.sym->content->status = used;
+      நிறுத்து;
+    நிலை SYMLIST_TYPE:
       semantic_type_code_props_set
-        (semantic_type_get (node->content.sem_type->tag,
-                            &node->content.sem_type->location),
+        (semantic_type_get (முனை->content.sem_type->tag,
+                            &முனை->content.sem_type->location),
          kind, cprops);
-      if (node->content.sem_type->status == undeclared)
-        node->content.sem_type->status = used;
-      break;
+      எனில் (முனை->content.sem_type->status == undeclared)
+        முனை->content.sem_type->status = used;
+      நிறுத்து;
     }
 }

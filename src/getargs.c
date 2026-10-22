@@ -18,31 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "getargs.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "getargs.h"
 
-#include "system.h"
+#அந்தர்பாவ "system.h"
 
-#include <argmatch.h>
-#include <c-strcase.h>
-#include <configmake.h>
-#include <error.h>
-#include <getopt.h>
-#include <progname.h>
-#include <quote.h>
-#include <textstyle.h>
+#அந்தர்பாவ <argmatch.h>
+#அந்தர்பாவ <c-strcase.h>
+#அந்தர்பாவ <configmake.h>
+#அந்தர்பாவ <error.h>
+#அந்தர்பாவ <getopt.h>
+#அந்தர்பாவ <progname.h>
+#அந்தர்பாவ <quote.h>
+#அந்தர்பாவ <textstyle.h>
 
-#include "complain.h"
-#include "files.h"
-#include "muscle-tab.h"
-#include "output.h"
-#include "uniqstr.h"
+#அந்தர்பாவ "complain.h"
+#அந்தர்பாவ "files.h"
+#அந்தர்பாவ "muscle-tab.h"
+#அந்தர்பாவ "output.h"
+#அந்தர்பாவ "uniqstr.h"
 
 bool header_flag = false;
 bool graph_flag = false;
 bool html_flag = false;
 bool xml_flag = false;
-bool no_lines_flag = false;
+bool no_வரிகள்_flag = false;
 bool token_table_flag = false;
 location yacc_loc = EMPTY_LOCATION_INIT;
 bool update_flag = false; /* for -u */
@@ -51,11 +51,11 @@ bool color_debug = false;
 bool nondeterministic_parser = false;
 bool glr_parser = false;
 
-int feature_flag = feature_caret;
-int report_flag = report_none;
-int trace_flag = trace_none;
+முழு feature_flag = feature_caret;
+முழு report_flag = report_none;
+முழு trace_flag = trace_none;
 
-static struct bison_language const valid_languages[] = {
+நிலையான கட்டமைப்பு bison_language மாறிலி valid_languages[] = {
   /* lang,  skeleton,       ext,     hdr,     add_tab */
   { "c",    "c-skel.m4",    ".c",    ".h",    true },
   { "c++",  "c++-skel.m4",  ".cc",   ".hh",   true },
@@ -64,19 +64,19 @@ static struct bison_language const valid_languages[] = {
   { "", "", "", "", false }
 };
 
-int skeleton_prio = default_prio;
-const char *skeleton = NULL;
-int language_prio = default_prio;
-struct bison_language const *language = &valid_languages[0];
+முழு skeleton_prio = default_prio;
+மாறிலி எழுத்து *skeleton = வெற்று;
+முழு language_prio = default_prio;
+கட்டமைப்பு bison_language மாறிலி *language = &valid_languages[0];
 
-typedef int* (xargmatch_fn) (const char *context, const char *arg);
+வகைவரை முழு* (xargmatch_fn) (மாறிலி எழுத்து *context, மாறிலி எழுத்து *arg);
 
-void
+வெறுமை
 set_yacc (location loc)
 {
   yacc_loc = loc;
-  if (getenv ("POSIXLY_CORRECT"))
-    muscle_percent_define_insert ("posix",
+  எனில் (getenv ("POSIXLY_CORRECT"))
+    muscle_percent_define_செருகு ("posix",
                                   loc,
                                   muscle_keyword, "",
                                   MUSCLE_PERCENT_DEFINE_D);
@@ -98,26 +98,26 @@ set_yacc (location loc)
  *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
-static void
-flag_argmatch (const char *opt, xargmatch_fn xargmatch,
-               int all, int *flags, char *arg, size_t no)
+நிலையான வெறுமை
+flag_argmatch (மாறிலி எழுத்து *opt, xargmatch_fn xargmatch,
+               முழு all, முழு *flags, எழுத்து *arg, size_t no)
 {
-  int value = *xargmatch (opt, arg + no);
+  முழு மதிப்பு = *xargmatch (opt, arg + no);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
-  if (!value)
+  எனில் (!மதிப்பு)
     {
-      value = all;
+      மதிப்பு = all;
       no = !no;
     }
 
-  if (no)
-    *flags &= ~value;
-  else
-    *flags |= value;
+  எனில் (no)
+    *flags &= ~மதிப்பு;
+  இல்லையெனில்
+    *flags |= மதிப்பு;
 }
 
-typedef void (usage_fn) (FILE *out);
+வகைவரை வெறுமை (usage_fn) (FILE *out);
 
 /** Decode an option's set of keys.
  *
@@ -129,21 +129,21 @@ typedef void (usage_fn) (FILE *out);
  *  \param args       comma separated list of effective subarguments to decode.
  *                    If 0, then activate all the flags.
  */
-static void
-flags_argmatch (const char *opt,
+நிலையான வெறுமை
+flags_argmatch (மாறிலி எழுத்து *opt,
                 xargmatch_fn xargmatch,
                 usage_fn usage,
-                int all, int *flags, char *args)
+                முழு all, முழு *flags, எழுத்து *args)
 {
-  if (!args)
+  எனில் (!args)
     *flags |= all;
-  else if (STREQ (args, "help"))
+  இல்லையெனில் எனில் (STREQ (args, "help"))
     {
       usage (stdout);
       exit (EXIT_SUCCESS);
     }
-  else
-    for (args = strtok (args, ","); args; args = strtok (NULL, ","))
+  இல்லையெனில்
+    க்கு (args = strtok (args, ","); args; args = strtok (வெற்று, ","))
       {
         size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
         flag_argmatch (opt, xargmatch,
@@ -164,7 +164,7 @@ flags_argmatch (const char *opt,
  */
 #define FLAGS_ARGMATCH(FlagName, Args, All)                             \
   flags_argmatch ("--" #FlagName,                                       \
-                  (xargmatch_fn*) argmatch_## FlagName ## _value,       \
+                  (xargmatch_fn*) argmatch_## FlagName ## மதிப்பு_2,       \
                   argmatch_ ## FlagName ## _usage,                      \
                   All, &FlagName ## _flag, Args)
 
@@ -172,24 +172,24 @@ flags_argmatch (const char *opt,
 | --color's handling.  |
 `---------------------*/
 
-enum color
+எண்ணிக்கை color
   {
     color_always,
     color_never,
     color_auto
   };
 
-ARGMATCH_DEFINE_GROUP (color, enum color)
+ARGMATCH_DEFINE_GROUP (color, எண்ணிக்கை color)
 
-static const argmatch_color_doc argmatch_color_docs[] =
+நிலையான மாறிலி argmatch_color_doc argmatch_color_docs[] =
 {
   { "always",     N_("colorize the output") },
   { "never",      N_("don't colorize the output") },
   { "auto",       N_("colorize if the output device is a tty") },
-  { NULL, NULL },
+  { வெற்று, வெற்று },
 };
 
-static const argmatch_color_arg argmatch_color_args[] =
+நிலையான மாறிலி argmatch_color_arg argmatch_color_args[] =
 {
   { "always",   color_always },
   { "yes",      color_always },
@@ -197,17 +197,17 @@ static const argmatch_color_arg argmatch_color_args[] =
   { "no",       color_never },
   { "auto",     color_auto },
   { "tty",      color_auto },
-  { NULL, color_always },
+  { வெற்று, color_always },
 };
 
-const argmatch_color_group_type argmatch_color_group =
+மாறிலி argmatch_color_group_type argmatch_color_group =
 {
   argmatch_color_args,
   argmatch_color_docs,
   /* TRANSLATORS: Use the same translation for WHEN as in the
      --color=WHEN help message.  */
   N_("WHEN can be one of the following:"),
-  NULL
+  வெற்று
 };
 
 
@@ -215,9 +215,9 @@ const argmatch_color_group_type argmatch_color_group =
 | --report's handling.  |
 `----------------------*/
 
-ARGMATCH_DEFINE_GROUP (report, enum report)
+ARGMATCH_DEFINE_GROUP (report, எண்ணிக்கை report)
 
-static const argmatch_report_doc argmatch_report_docs[] =
+நிலையான மாறிலி argmatch_report_doc argmatch_report_docs[] =
 {
   { "states",          N_("describe the states") },
   { "itemsets",        N_("complete the core item sets with their closure") },
@@ -226,10 +226,10 @@ static const argmatch_report_doc argmatch_report_docs[] =
   { "counterexamples", N_("generate conflict counterexamples") },
   { "all",             N_("include all the above information") },
   { "none",            N_("disable the report") },
-  { NULL, NULL },
+  { வெற்று, வெற்று },
 };
 
-static const argmatch_report_arg argmatch_report_args[] =
+நிலையான மாறிலி argmatch_report_arg argmatch_report_args[] =
 {
   { "none",            report_none },
   { "states",          report_states },
@@ -239,26 +239,26 @@ static const argmatch_report_arg argmatch_report_args[] =
   { "counterexamples", report_cex },
   { "cex",             report_cex },
   { "all",             report_all },
-  { NULL, report_none },
+  { வெற்று, report_none },
 };
 
-const argmatch_report_group_type argmatch_report_group =
+மாறிலி argmatch_report_group_type argmatch_report_group =
 {
   argmatch_report_args,
   argmatch_report_docs,
   /* TRANSLATORS: Use the same translation for THINGS as in the
      --report=THINGS help message.  */
   N_("THINGS is a list of comma separated words that can include:"),
-  NULL
+  வெற்று
 };
 
 /*---------------------.
 | --trace's handling.  |
 `---------------------*/
 
-ARGMATCH_DEFINE_GROUP (trace, enum trace)
+ARGMATCH_DEFINE_GROUP (trace, எண்ணிக்கை trace)
 
-static const argmatch_trace_doc argmatch_trace_docs[] =
+நிலையான மாறிலி argmatch_trace_doc argmatch_trace_docs[] =
 {
   /* Meant for developers only, don't translate them.  */
   { "none",       "no traces" },
@@ -280,10 +280,10 @@ static const argmatch_trace_doc argmatch_trace_docs[] =
   { "ielr",       "IELR conversion" },
   { "cex",        "counterexample generation"},
   { "all",        "all of the above" },
-  { NULL, NULL},
+  { வெற்று, வெற்று},
 };
 
-static const argmatch_trace_arg argmatch_trace_args[] =
+நிலையான மாறிலி argmatch_trace_arg argmatch_trace_args[] =
 {
   { "none",      trace_none },
   { "locations", trace_locations },
@@ -304,34 +304,34 @@ static const argmatch_trace_arg argmatch_trace_args[] =
   { "ielr",      trace_ielr },
   { "cex",       trace_cex },
   { "all",       trace_all },
-  { NULL,        trace_none},
+  { வெற்று,        trace_none},
 };
 
-const argmatch_trace_group_type argmatch_trace_group =
+மாறிலி argmatch_trace_group_type argmatch_trace_group =
 {
   argmatch_trace_args,
   argmatch_trace_docs,
   N_("TRACES is a list of comma separated words that can include:"),
-  NULL
+  வெற்று
 };
 
 /*-----------------------.
 | --feature's handling.  |
 `-----------------------*/
 
-ARGMATCH_DEFINE_GROUP (feature, enum feature)
+ARGMATCH_DEFINE_GROUP (feature, எண்ணிக்கை feature)
 
-static const argmatch_feature_doc argmatch_feature_docs[] =
+நிலையான மாறிலி argmatch_feature_doc argmatch_feature_docs[] =
 {
   { "caret",       N_("show errors with carets") },
   { "fixit",       N_("show machine-readable fixes") },
   { "syntax-only", N_("do not generate any file") },
   { "all",         N_("all of the above") },
   { "none",        N_("disable all of the above") },
-  { NULL, NULL }
+  { வெற்று, வெற்று }
 };
 
-static const argmatch_feature_arg argmatch_feature_args[] =
+நிலையான மாறிலி argmatch_feature_arg argmatch_feature_args[] =
 {
   { "none",                          feature_none },
   { "caret",                         feature_caret },
@@ -340,17 +340,17 @@ static const argmatch_feature_arg argmatch_feature_args[] =
   { "diagnostics-parseable-fixits",  feature_fixit },
   { "syntax-only",                   feature_syntax_only },
   { "all",                           feature_all },
-  { NULL, feature_none}
+  { வெற்று, feature_none}
 };
 
-const argmatch_feature_group_type argmatch_feature_group =
+மாறிலி argmatch_feature_group_type argmatch_feature_group =
 {
   argmatch_feature_args,
   argmatch_feature_docs,
   /* TRANSLATORS: Use the same translation for FEATURES as in the
      --feature=FEATURES help message.  */
   N_("FEATURES is a list of comma separated words that can include:"),
-  NULL
+  வெற்று
 };
 
 /*-------------------------------------------.
@@ -358,15 +358,15 @@ const argmatch_feature_group_type argmatch_feature_group =
 `-------------------------------------------*/
 
  _Noreturn
-static void usage (int);
+நிலையான வெறுமை usage (முழு);
 
-static void
-usage (int status)
+நிலையான வெறுமை
+usage (முழு status)
 {
-  if (status != 0)
+  எனில் (status != 0)
     fprintf (stderr, _("Try '%s --help' for more information.\n"),
              program_name);
-  else
+  இல்லையெனில்
     {
       /* For ../build-aux/cross-options.pl to work, use the format:
                 ^  -S, --long[=ARGS] (whitespace)
@@ -381,10 +381,10 @@ LALR(1), IELR(1), or canonical LR(1) parser tables.\n\
 "), stdout);
 
       fputs (_("\
-Mandatory arguments to long options are mandatory for short options too.\n\
+Mandatory arguments to long options are mandatory க்கு short options too.\n\
 "), stdout);
       fputs (_("\
-The same is true for optional arguments.\n\
+The same is true க்கு optional arguments.\n\
 "), stdout);
       putc ('\n', stdout);
 
@@ -408,7 +408,7 @@ Operation Modes:\n\
 Diagnostics:\n\
   -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n\
       --color[=WHEN]         whether to colorize the diagnostics\n\
-      --style=FILE           specify the CSS FILE for colorizer diagnostics\n\
+      --style=FILE           specify the CSS FILE க்கு colorizer diagnostics\n\
 \n\
 "), stdout);
 
@@ -422,14 +422,14 @@ Diagnostics:\n\
 Tuning the Parser:\n\
   -L, --language=LANGUAGE          specify the output programming language\n\
   -S, --skeleton=FILE              specify the skeleton to use\n\
-  -t, --debug                      instrument the parser for tracing\n\
+  -t, --debug                      instrument the parser க்கு tracing\n\
                                    same as '-Dparse.trace'\n\
       --locations                  enable location support\n\
-  -D, --define=NAME[=VALUE]        similar to '%define NAME VALUE'\n\
-  -F, --force-define=NAME[=VALUE]  override '%define NAME VALUE'\n\
+  -D, --define=NAME[=மதிப்பு_3]        similar to '%define NAME VALUE'\n\
+  -F, --force-define=NAME[=மதிப்பு_3]  override '%define NAME VALUE'\n\
   -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n\
                                    deprecated by '-Dapi.prefix={PREFIX}'\n\
-  -l, --no-lines                   don't generate '#line' directives\n\
+  -l, --no-வரிகள்                   don't generate '#line' directives\n\
   -k, --token-table                include a table of token names\n\
   -y, --yacc                       emulate POSIX Yacc\n\
 "), stdout);
@@ -438,11 +438,11 @@ Tuning the Parser:\n\
       fputs (_("\
 Output Files:\n\
   -H, --header=[FILE]           also produce a header file\n\
-  -d                            likewise but cannot specify FILE (for POSIX Yacc)\n\
+  -d                            likewise but cannot specify FILE (க்கு POSIX Yacc)\n\
   -r, --report=THINGS           also produce details on the automaton\n\
-      --report-file=FILE        write report to FILE\n\
+      --report-file=FILE        லிக report to FILE\n\
   -v, --verbose                 same as '--report=state'\n\
-  -b, --file-prefix=PREFIX      specify a PREFIX for output files\n\
+  -b, --file-prefix=PREFIX      specify a PREFIX க்கு output files\n\
   -o, --output=FILE             leave output to FILE\n\
   -g, --graph[=FILE]            also output a graph of the automaton\n\
       --html[=FILE]             also output an HTML report of the automaton\n\
@@ -461,12 +461,12 @@ Output Files:\n\
                "<https://www.gnu.org/gethelp/>.\n"),
              stdout);
 
-#if (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
+#எனில் (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
       /* Don't output this redundant message for English locales.
          Note we still output for 'C' so that it gets included in the
          man page.  */
-      const char *lc_messages = setlocale (LC_MESSAGES, NULL);
-      if (lc_messages && !STREQ (lc_messages, "en_"))
+      மாறிலி எழுத்து *lc_messages = setlocale (LC_MESSAGES, வெற்று);
+      எனில் (lc_messages && !STREQ (lc_messages, "en_"))
         /* TRANSLATORS: Replace LANG_CODE in this URL with your language code to
            form one of the URLs at https://translationproject.org/team/.
            Otherwise, replace the entire URL with your translation team's
@@ -485,8 +485,8 @@ Output Files:\n\
 | Display the version message.  |
 `------------------------------*/
 
-static void
-version (void)
+நிலையான வெறுமை
+version (வெறுமை)
 {
   /* Some efforts were made to ease the translators' task, please
      continue.  */
@@ -500,8 +500,8 @@ version (void)
            PACKAGE_COPYRIGHT_YEAR);
 
   fputs (_("\
-This is free software; see the source for copying conditions.  There is NO\n\
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
+This is விடுவி software; see the source க்கு copying conditions.  There is NO\n\
+warranty; not even க்கு MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 "),
          stdout);
 }
@@ -511,40 +511,40 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 | --skeleton and --language handling.  |
 `--------------------------------------*/
 
-void
-skeleton_arg (char const *arg, int prio, location loc)
+வெறுமை
+skeleton_arg (எழுத்து மாறிலி *arg, முழு prio, location loc)
 {
-  if (prio < skeleton_prio)
+  எனில் (prio < skeleton_prio)
     {
       skeleton_prio = prio;
       skeleton = arg;
     }
-  else if (prio == skeleton_prio)
+  இல்லையெனில் எனில் (prio == skeleton_prio)
     complain (&loc, complaint,
               _("multiple skeleton declarations are invalid"));
 }
 
-void
-language_argmatch (char const *arg, int prio, location loc)
+வெறுமை
+language_argmatch (எழுத்து மாறிலி *arg, முழு prio, location loc)
 {
-  char const *msg = NULL;
+  எழுத்து மாறிலி *செய்தி = வெற்று;
 
-  if (prio < language_prio)
+  எனில் (prio < language_prio)
     {
-      for (int i = 0; valid_languages[i].language[0]; ++i)
-        if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+      க்கு (முழு i = 0; valid_languages[i].language[0]; ++i)
+        எனில் (c_strcasecmp (arg, valid_languages[i].language) == 0)
           {
             language_prio = prio;
             language = &valid_languages[i];
-            return;
+            திரும்பு;
           }
-      msg = _("%s: invalid language");
+      செய்தி = _("%s: invalid language");
     }
-  else if (language_prio == prio)
-    msg = _("multiple language declarations are invalid");
+  இல்லையெனில் எனில் (language_prio == prio)
+    செய்தி = _("multiple language declarations are invalid");
 
-  if (msg)
-    complain (&loc, complaint, msg, quotearg_colon (arg));
+  எனில் (செய்தி)
+    complain (&loc, complaint, செய்தி, quotearg_colon (arg));
 }
 
 /*----------------------.
@@ -553,7 +553,7 @@ language_argmatch (char const *arg, int prio, location loc)
 
 /* Shorts options.
    Should be computed from long_options.  */
-static char const short_options[] =
+நிலையான எழுத்து மாறிலி short_options[] =
   "D:"
   "F:"
   "H::"
@@ -581,7 +581,7 @@ static char const short_options[] =
   ;
 
 /* Values for long options that do not have single-letter equivalents.  */
-enum
+எண்ணிக்கை
 {
   COLOR_OPTION = CHAR_MAX + 1,
   FIXED_OUTPUT_FILES_OPTION,
@@ -594,7 +594,7 @@ enum
 };
 
 /* In the same order as in usage(), and in the documentation.  */
-static struct option const long_options[] =
+நிலையான கட்டமைப்பு option மாறிலி long_options[] =
 {
   /* Operation modes. */
   { "help",            no_argument,       0,   'h' },
@@ -643,14 +643,14 @@ static struct option const long_options[] =
 };
 
 /* Build a location for the current command line argument. */
-static location
-command_line_location (void)
+நிலையான location
+command_வரி_location (வெறுமை)
 {
   location res;
   /* "<command line>" is used in GCC's messages about -D. */
   boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1, -1);
   res.end = res.start;
-  return res;
+  திரும்பு res;
 }
 
 
@@ -658,25 +658,25 @@ command_line_location (void)
    that error messages from getargs be also colored as per the user's
    request.  This is consistent with the way GCC and Clang behave.  */
 
-static void
-getargs_colors (int argc, char *argv[])
+நிலையான வெறுமை
+getargs_colors (முழு argc, எழுத்து *argv[])
 {
-  for (int i = 1; i < argc; i++)
+  க்கு (முழு i = 1; i < argc; i++)
     {
-      const char *arg = argv[i];
-      if (STRPREFIX_LIT ("--color=", arg))
+      மாறிலி எழுத்து *arg = argv[i];
+      எனில் (STRPREFIX_LIT ("--color=", arg))
         {
-          const char *color = arg + strlen ("--color=");
-          if (STREQ (color, "debug"))
+          மாறிலி எழுத்து *color = arg + strlen ("--color=");
+          எனில் (STREQ (color, "debug"))
             color_debug = true;
-          else
+          இல்லையெனில்
             handle_color_option (color);
         }
-      else if (STREQ ("--color", arg))
-        handle_color_option (NULL);
-      else if (STRPREFIX_LIT ("--style=", arg))
+      இல்லையெனில் எனில் (STREQ ("--color", arg))
+        handle_color_option (வெற்று);
+      இல்லையெனில் எனில் (STRPREFIX_LIT ("--style=", arg))
         {
-          const char *style = arg + strlen ("--style=");
+          மாறிலி எழுத்து *style = arg + strlen ("--style=");
           handle_style_option (style);
         }
     }
@@ -684,235 +684,235 @@ getargs_colors (int argc, char *argv[])
 }
 
 
-void
-getargs (int argc, char *argv[])
+வெறுமை
+getargs (முழு argc, எழுத்து *argv[])
 {
   getargs_colors (argc, argv);
 
-  int c;
-  while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
+  முழு c;
+  போது ((c = getopt_long (argc, argv, short_options, long_options, வெற்று))
          != -1)
   {
-    location loc = command_line_location ();
-    switch (c)
+    location loc = command_வரி_location ();
+    தேர்வு (c)
       {
         /* ASCII Sorting for short options (i.e., upper case then
            lower case), and then long-only options.  */
 
-      case 0:
+      நிலை 0:
         /* Certain long options cause getopt_long to return 0.  */
-        break;
+        நிறுத்து;
 
-      case 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
-      case 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      நிலை 'D': /* -DNAME[=(VALUE|"VALUE"|{VALUE})]. */
+      நிலை 'F': /* -FNAME[=(VALUE|"VALUE"|{VALUE})]. */
         {
-          char *name = optarg;
-          char *value = strchr (optarg, '=');
+          எழுத்து *name = optarg;
+          எழுத்து *மதிப்பு = strchr (optarg, '=');
           muscle_kind kind = muscle_keyword;
-          if (value)
+          எனில் (மதிப்பு)
             {
-              char *end = value + strlen (value) - 1;
-              *value++ = 0;
-              if (*value == '{' && *end == '}')
+              எழுத்து *end = மதிப்பு + strlen (மதிப்பு) - 1;
+              *மதிப்பு++ = 0;
+              எனில் (*மதிப்பு == '{' && *end == '}')
                 {
                   kind = muscle_code;
-                  ++value;
+                  ++மதிப்பு;
                   *end = 0;
                 }
-              else if (*value == '"' && *end == '"')
+              இல்லையெனில் எனில் (*மதிப்பு == '"' && *end == '"')
                 {
                   kind = muscle_string;
-                  ++value;
+                  ++மதிப்பு;
                   *end = 0;
                 }
             }
-          muscle_percent_define_insert (name, loc,
-                                        kind, value ? value : "",
+          muscle_percent_define_செருகு (name, loc,
+                                        kind, மதிப்பு ? மதிப்பு : "",
                                         c == 'D' ? MUSCLE_PERCENT_DEFINE_D
                                                  : MUSCLE_PERCENT_DEFINE_F);
         }
-        break;
+        நிறுத்து;
 
-      case 'H':
-      case 'd':
+      நிலை 'H':
+      நிலை 'd':
         header_flag = true;
-        if (optarg)
+        எனில் (optarg)
           {
-            free (spec_header_file);
+            விடுவி (spec_header_file);
             spec_header_file = xstrdup (optarg);
           }
-        break;
+        நிறுத்து;
 
-      case 'L':
-        language_argmatch (optarg, command_line_prio, loc);
-        break;
+      நிலை 'L':
+        language_argmatch (optarg, command_வரி_prio, loc);
+        நிறுத்து;
 
-      case 'M': // -MOLDPREFIX=NEWPREFIX
+      நிலை 'M': // -MOLDPREFIX=NEWPREFIX
         {
-          char *newprefix = strchr (optarg, '=');
-          if (newprefix)
+          எழுத்து *newprefix = strchr (optarg, '=');
+          எனில் (newprefix)
             {
               *newprefix = '\0';
               add_prefix_map (optarg, newprefix + 1);
             }
-          else
+          இல்லையெனில்
             {
               complain (&loc, complaint, _("invalid argument for %s: %s"),
                         quote ("--file-prefix-map"), quotearg_n (1, optarg));
             }
         }
-        break;
+        நிறுத்து;
 
-      case 'S':
-        skeleton_arg (optarg, command_line_prio, loc);
-        break;
+      நிலை 'S':
+        skeleton_arg (optarg, command_வரி_prio, loc);
+        நிறுத்து;
 
-      case 'T':
+      நிலை 'T':
         FLAGS_ARGMATCH (trace, optarg, trace_all);
-        break;
+        நிறுத்து;
 
-      case 'V':
+      நிலை 'V':
         version ();
         exit (EXIT_SUCCESS);
 
-      case 'f':
+      நிலை 'f':
         FLAGS_ARGMATCH (feature, optarg, feature_all);
-        break;
+        நிறுத்து;
 
-      case 'W':
+      நிலை 'W':
         warnings_argmatch (optarg);
-        break;
+        நிறுத்து;
 
-      case 'b':
+      நிலை 'b':
         spec_file_prefix = optarg;
-        break;
+        நிறுத்து;
 
-      case 'g':
+      நிலை 'g':
         graph_flag = true;
-        if (optarg)
+        எனில் (optarg)
           {
-            free (spec_graph_file);
+            விடுவி (spec_graph_file);
             spec_graph_file = xstrdup (optarg);
           }
-        break;
+        நிறுத்து;
 
-      case 'h':
+      நிலை 'h':
         usage (EXIT_SUCCESS);
 
-      case 'k':
+      நிலை 'k':
         token_table_flag = true;
-        break;
+        நிறுத்து;
 
-      case 'l':
-        no_lines_flag = true;
-        break;
+      நிலை 'l':
+        no_வரிகள்_flag = true;
+        நிறுத்து;
 
-      case 'o':
+      நிலை 'o':
         spec_outfile = optarg;
-        break;
+        நிறுத்து;
 
-      case 'p':
+      நிலை 'p':
         spec_name_prefix = optarg;
-        break;
+        நிறுத்து;
 
-      case 'r':
+      நிலை 'r':
         FLAGS_ARGMATCH (report, optarg, report_all);
-        break;
+        நிறுத்து;
 
-      case 't':
-        muscle_percent_define_insert ("parse.trace",
+      நிலை 't':
+        muscle_percent_define_செருகு ("parse.trace",
                                       loc,
                                       muscle_keyword, "",
                                       MUSCLE_PERCENT_DEFINE_D);
-        break;
+        நிறுத்து;
 
-      case 'u':
+      நிலை 'u':
         update_flag = true;
         feature_flag |= feature_syntax_only;
-        break;
+        நிறுத்து;
 
-      case 'v':
+      நிலை 'v':
         report_flag |= report_states;
-        break;
+        நிறுத்து;
 
-      case 'x':
+      நிலை 'x':
         xml_flag = true;
-        if (optarg)
+        எனில் (optarg)
           {
-            free (spec_xml_file);
+            விடுவி (spec_xml_file);
             spec_xml_file = xstrdup (optarg);
           }
-        break;
+        நிறுத்து;
 
-      case 'y':
+      நிலை 'y':
         warning_argmatch ("yacc", 0, 0);
         set_yacc (loc);
-        break;
+        நிறுத்து;
 
-      case COLOR_OPTION:
+      நிலை COLOR_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        நிறுத்து;
 
-      case HTML_OPTION:
+      நிலை HTML_OPTION:
         html_flag = true;
         xml_flag = true;
-        if (optarg)
+        எனில் (optarg)
           {
-            free (spec_html_file);
+            விடுவி (spec_html_file);
             spec_html_file = xstrdup (optarg);
           }
-        break;
+        நிறுத்து;
 
-      case FIXED_OUTPUT_FILES_OPTION:
+      நிலை FIXED_OUTPUT_FILES_OPTION:
         complain (&loc, Wdeprecated,
                   _("deprecated option: %s, use %s"),
                   quote ("--fixed-output-files"), quote_n (1, "-o y.tab.c"));
         spec_outfile = "y.tab.c";
-        break;
+        நிறுத்து;
 
-      case LOCATIONS_OPTION:
+      நிலை LOCATIONS_OPTION:
         muscle_percent_define_ensure ("locations", loc, true);
-        break;
+        நிறுத்து;
 
-      case PRINT_LOCALEDIR_OPTION:
+      நிலை PRINT_LOCALEDIR_OPTION:
         printf ("%s\n", LOCALEDIR);
         exit (EXIT_SUCCESS);
 
-      case PRINT_DATADIR_OPTION:
+      நிலை PRINT_DATADIR_OPTION:
         printf ("%s\n", pkgdatadir ());
         exit (EXIT_SUCCESS);
 
-      case REPORT_FILE_OPTION:
-        free (spec_verbose_file);
+      நிலை REPORT_FILE_OPTION:
+        விடுவி (spec_verbose_file);
         spec_verbose_file = xstrdup (optarg);
-        break;
+        நிறுத்து;
 
-      case STYLE_OPTION:
+      நிலை STYLE_OPTION:
         /* Handled in getargs_colors. */
-        break;
+        நிறுத்து;
 
-      default:
+      இயல்பு:
         usage (EXIT_FAILURE);
       }
   }
 
-  if (argc - optind != 1)
+  எனில் (argc - optind != 1)
     {
-      if (argc - optind < 1)
+      எனில் (argc - optind < 1)
         error (0, 0, _("missing operand"));
-      else
+      இல்லையெனில்
         error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
     }
 
   grammar_file = uniqstr_new (argv[optind]);
-  MUSCLE_INSERT_C_STRING ("file_name", grammar_file);
+  MUSCLE_செருகு_C_STRING ("file_name", grammar_file);
 }
 
-void
-tr (char *s, char from, char to)
+வெறுமை
+tr (எழுத்து *s, எழுத்து from, எழுத்து to)
 {
-  for (; *s; ++s)
-    if (*s == from)
+  க்கு (; *s; ++s)
+    எனில் (*s == from)
       *s = to;
 }

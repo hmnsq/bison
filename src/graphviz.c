@@ -20,26 +20,26 @@
 
 /* Written by Paul Eggert and Satya Kiran Popuri.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include <quotearg.h>
+#அந்தர்பாவ <quotearg.h>
 
-#include "files.h"
-#include "gram.h"
-#include "graphviz.h"
-#include "tables.h"
+#அந்தர்பாவ "files.h"
+#அந்தர்பாவ "gram.h"
+#அந்தர்பாவ "graphviz.h"
+#அந்தர்பாவ "tables.h"
 
 /* Return an unambiguous printable representation for NAME, suitable
    for C strings.  Use slot 2 since the user may use slots 0 and 1.  */
 
-static char *
-quote (char const *name)
+நிலையான எழுத்து *
+quote (எழுத்து மாறிலி *name)
 {
-  return quotearg_n_style (2, c_quoting_style, name);
+  திரும்பு quotearg_n_style (2, c_quoting_style, name);
 }
 
-void
+வெறுமை
 start_graph (FILE *fout)
 {
   fprintf (fout,
@@ -60,59 +60,59 @@ start_graph (FILE *fout)
            "\n");
 }
 
-void
-output_node (int id, char const *label, FILE *fout)
+வெறுமை
+output_முனை (முழு id, எழுத்து மாறிலி *label, FILE *fout)
 {
   fprintf (fout, "  %d [label=\"%s\"]\n", id, label);
 }
 
-void
-output_edge (int source, int destination, char const *label,
-             char const *style, FILE *fout)
+வெறுமை
+output_edge (முழு source, முழு destination, எழுத்து மாறிலி *label,
+             எழுத்து மாறிலி *style, FILE *fout)
 {
   fprintf (fout, "  %d -> %d [style=%s", source, destination, style);
-  if (label)
+  எனில் (label)
     {
       fputs (" label=\"", fout);
-      for (const char *cp = label; *cp; ++cp)
-        switch (*cp)
+      க்கு (மாறிலி எழுத்து *cp = label; *cp; ++cp)
+        தேர்வு (*cp)
         {
-        case '"':  fputs ("\\\"", fout); break;
-        case '\\': fputs ("\\\\", fout); break;
-        default:   fputc (*cp,    fout); break;
+        நிலை '"':  fputs ("\\\"", fout); நிறுத்து;
+        நிலை '\\': fputs ("\\\\", fout); நிறுத்து;
+        இயல்பு:   fputc (*cp,    fout); நிறுத்து;
         }
       fputc ('"', fout);
     }
   fputs ("]\n", fout);
 }
 
-static void
-no_reduce_bitset_init (state const *s, bitset *no_reduce_set)
+நிலையான வெறுமை
+no_reduce_bitset_init (state மாறிலி *s, bitset *no_reduce_set)
 {
   *no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
   bitset_zero (*no_reduce_set);
   {
-    int n;
+    முழு n;
     FOR_EACH_SHIFT (s->transitions, n)
-      bitset_set (*no_reduce_set, TRANSITION_SYMBOL (s->transitions, n));
+      bitset_set (*no_reduce_set, TRANSITION_குறியீடு (s->transitions, n));
   }
-  for (int n = 0; n < s->errs->num; ++n)
-    if (s->errs->symbols[n])
-      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->number);
+  க்கு (முழு n = 0; n < s->errs->இலக்கம்; ++n)
+    எனில் (s->errs->symbols[n])
+      bitset_set (*no_reduce_set, s->errs->symbols[n]->content->எண்);
 }
 
 /* Show the reductions from state SOURCE on rule RULENO. */
-static void
-conclude_red (struct obstack *out, int source, rule_number ruleno,
+நிலையான வெறுமை
+conclude_red (கட்டமைப்பு obstack *out, முழு source, rule_எண் ruleno,
               bool enabled, bool first, FILE *fout)
 {
   /* If no lookahead tokens were valid transitions, this reduction is
      actually hidden, so cancel everything. */
-  if (first)
-    (void) obstack_finish0 (out);
-  else
+  எனில் (first)
+    (வெறுமை) obstack_finish0 (out);
+  இல்லையெனில்
     {
-      char const *ed = enabled ? "" : "d";
+      எழுத்து மாறிலி *ed = enabled ? "" : "d";
       /* First, build the edge's head. The name of reduction nodes is "nRm",
          with n the source state and m the rule number. This is because we
          don't want all the reductions bearing a same rule number to point to
@@ -122,9 +122,9 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
 
       /* (The lookahead tokens have been added to the beginning of the
          obstack, in the caller function.) */
-      if (! obstack_empty_p (out))
+      எனில் (! obstack_empty_p (out))
         {
-          char *label = obstack_finish0 (out);
+          எழுத்து *label = obstack_finish0 (out);
           fprintf (fout, "label=\"[%s]\", ", label);
           obstack_free (out, label);
         }
@@ -135,13 +135,13 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
       /* Build the associated diamond representation of the target rule. */
       fprintf (fout, " \"%dR%d%s\" [label=\"",
                source, ruleno, ed);
-      bool const final = rule_is_initial (&rules[ruleno]);
-      if (final)
+      bool மாறிலி final = rule_is_initial (&rules[ruleno]);
+      எனில் (final)
         fprintf (fout, "Acc");
-      else
+      இல்லையெனில்
         fprintf (fout, "R%d", ruleno);
 
-      char const *color
+      எழுத்து மாறிலி *color
         = !enabled ? "5"
         : final    ? "1"
         :            "3";
@@ -150,35 +150,35 @@ conclude_red (struct obstack *out, int source, rule_number ruleno,
     }
 }
 
-static bool
-print_token (struct obstack *out, bool first, char const *tok)
+நிலையான bool
+print_token (கட்டமைப்பு obstack *out, bool first, எழுத்து மாறிலி *tok)
 {
-  if (! first)
+  எனில் (! first)
     obstack_sgrow (out, ", ");
   obstack_backslash (out, tok);
-  return false;
+  திரும்பு false;
 }
 
-void
-output_red (state const *s, reductions const *reds, FILE *fout)
+வெறுமை
+output_red (state மாறிலி *s, reductions மாறிலி *reds, FILE *fout)
 {
   bitset no_reduce_set;
   no_reduce_bitset_init (s, &no_reduce_set);
 
   rule *default_reduction
-    = yydefact[s->number] ? &rules[yydefact[s->number] - 1] : NULL;
+    = yydefact[s->எண்] ? &rules[yydefact[s->எண்] - 1] : வெற்று;
 
   /* Two obstacks are needed: one for the enabled reductions, and one
      for the disabled reductions, because in the end we want two
      separate edges, even though in most cases only one will actually
      be printed. */
-  struct obstack dout;
-  struct obstack eout;
+  கட்டமைப்பு obstack dout;
+  கட்டமைப்பு obstack eout;
   obstack_init (&dout);
   obstack_init (&eout);
 
-  const int source = s->number;
-  for (int j = 0; j < reds->num; ++j)
+  மாறிலி முழு source = s->எண்;
+  க்கு (முழு j = 0; j < reds->இலக்கம்; ++j)
     {
       bool defaulted = default_reduction && default_reduction == reds->rules[j];
 
@@ -186,17 +186,17 @@ output_red (state const *s, reductions const *reds, FILE *fout)
          and one for disabled transitions. */
       bool firstd = true;
       bool firste = true;
-      rule_number ruleno = reds->rules[j]->number;
+      rule_எண் ruleno = reds->rules[j]->எண்;
 
-      if (reds->lookaheads)
-        for (int i = 0; i < ntokens; i++)
-          if (bitset_test (reds->lookaheads[j], i))
+      எனில் (reds->lookaheads)
+        க்கு (முழு i = 0; i < ntokens; i++)
+          எனில் (bitset_test (reds->lookaheads[j], i))
             {
-              if (bitset_test (no_reduce_set, i))
+              எனில் (bitset_test (no_reduce_set, i))
                 firstd = print_token (&dout, firstd, symbols[i]->tag);
-              else
+              இல்லையெனில்
                 {
-                  if (! defaulted)
+                  எனில் (! defaulted)
                     firste = print_token (&eout, firste, symbols[i]->tag);
                   bitset_set (no_reduce_set, i);
                 }
@@ -211,7 +211,7 @@ output_red (state const *s, reductions const *reds, FILE *fout)
   bitset_free (no_reduce_set);
 }
 
-void
+வெறுமை
 finish_graph (FILE *fout)
 {
   fputs ("}\n", fout);

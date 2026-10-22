@@ -27,22 +27,22 @@
 
 # include "parse-gram.h"
 
-typedef struct merger_list
+வகைவரை கட்டமைப்பு merger_list
 {
-  struct merger_list* next;
+  கட்டமைப்பு merger_list* next;
   uniqstr name;
   /* One symbol whose type is the one used by all the symbols on which
      this merging function is used.  */
-  symbol *sym;
+  குறியீடு *sym;
   /* Where SYM was bound to this merging function.  */
   location type_declaration_loc;
 } merger_list;
 
-void free_merger_functions (void);
-extern merger_list *merge_functions;
+வெறுமை free_merger_functions (வெறுமை);
+வெளி merger_list *merge_functions;
 
 /* List of the start symbols.  */
-extern symbol_list *start_symbols;
+வெளி குறியீடு_list *start_symbols;
 
 /* Fetch (or create) a token "YY_PARSE_foo" for start symbol "foo".
 
@@ -50,36 +50,36 @@ extern symbol_list *start_symbols;
    with some of our symbols (e.g., cast => YY_CAST), and (ii) upcasing
    introduces possible clashes between terminal FOO and nonterminal
    foo.  */
-symbol *switching_token (const symbol *start);
+குறியீடு *switching_token (மாறிலி குறியீடு *start);
 
-void grammar_start_symbols_add (symbol_list *syms);
+வெறுமை grammar_start_symbols_add (குறியீடு_list *syms);
 
-void grammar_current_rule_begin (symbol *lhs, location loc,
+வெறுமை grammar_current_rule_begin (குறியீடு *lhs, location loc,
                                  named_ref *lhs_named_ref);
-void grammar_current_rule_end (location loc);
-void grammar_midrule_action (void);
+வெறுமை grammar_current_rule_end (location loc);
+வெறுமை grammar_midrule_action (வெறுமை);
 /* Apply %empty to the current rule.  */
-void grammar_current_rule_empty_set (location loc);
-void grammar_current_rule_prec_set (symbol *precsym, location loc);
-void grammar_current_rule_dprec_set (int dprec, location loc);
-void grammar_current_rule_merge_set (uniqstr name, location loc);
-void grammar_current_rule_expect_sr (int count, location loc);
-void grammar_current_rule_expect_rr (int count, location loc);
-void grammar_current_rule_symbol_append (symbol *sym, location loc,
+வெறுமை grammar_current_rule_empty_set (location loc);
+வெறுமை grammar_current_rule_prec_set (குறியீடு *precsym, location loc);
+வெறுமை grammar_current_rule_dprec_set (முழு dprec, location loc);
+வெறுமை grammar_current_rule_merge_set (uniqstr name, location loc);
+வெறுமை grammar_current_rule_expect_sr (முழு மொத்தம், location loc);
+வெறுமை grammar_current_rule_expect_rr (முழு மொத்தம், location loc);
+வெறுமை grammar_current_rule_குறியீடு_append (குறியீடு *sym, location loc,
                                          named_ref *nref);
 /* Attach an ACTION to the current rule.  */
-void grammar_current_rule_action_append (const char *action, location loc,
+வெறுமை grammar_current_rule_action_append (மாறிலி எழுத்து *action, location loc,
                                          named_ref *nref, uniqstr tag);
 /* Attach a PREDICATE to the current rule.  */
-void grammar_current_rule_predicate_append (const char *predicate, location loc);
+வெறுமை grammar_current_rule_predicate_append (மாறிலி எழுத்து *predicate, location loc);
 
 /* Read in the grammar specification.  */
-void reader (const char *gram);
+வெறுமை reader (மாறிலி எழுத்து *gram);
 
 /* Was %union seen?  */
-extern bool union_seen;
+வெளி bool union_seen;
 
 /* Should rules have a default precedence?  */
-extern bool default_prec;
+வெளி bool default_prec;
 
 #endif /* !READER_H_ */

@@ -17,108 +17,108 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#அந்தர்பாவ <config.h>
 
-#include "derivation.h"
-#include "glyphs.h"
+#அந்தர்பாவ "derivation.h"
+#அந்தர்பாவ "glyphs.h"
 
-#include <c-ctype.h>
-#include <gl_linked_list.h>
-#include <mbswidth.h>
-#include <vasnprintf.h>
+#அந்தர்பாவ <c-ctype.h>
+#அந்தர்பாவ <gl_linked_list.h>
+#அந்தர்பாவ <mbswidth.h>
+#அந்தர்பாவ <vasnprintf.h>
 
-#include "system.h"
-#include "complain.h"
+#அந்தர்பாவ "system.h"
+#அந்தர்பாவ "complain.h"
 
-struct derivation
+கட்டமைப்பு derivation
 {
-  symbol_number sym;
+  குறியீடு_எண் sym;
   derivation_list children;
-  int reference_count;
+  முழு reference_மொத்தம்;
   // The rule SYM -> CHILDREN.
-  const rule *rule;
+  மாறிலி rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  முழு color;
 };
 
-static derivation d_dot = { -1, NULL, -1, NULL, -1 };
+நிலையான derivation d_dot = { -1, வெற்று, -1, வெற்று, -1 };
 
 derivation *
-derivation_dot (void)
+derivation_dot (வெறுமை)
 {
-  return &d_dot;
+  திரும்பு &d_dot;
 }
 
-void
+வெறுமை
 derivation_list_append (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
   gl_list_add_last (dl, d);
 }
 
-void
+வெறுமை
 derivation_list_prepend (derivation_list dl, derivation *d)
 {
   derivation_retain (d);
   gl_list_add_first (dl, d);
 }
 
-void derivation_list_free (derivation_list dl)
+வெறுமை derivation_list_free (derivation_list dl)
 {
-  derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
+  derivation *d = வெற்று;
+  க்கு (gl_list_iterator_t it = gl_list_iterator (dl);
        derivation_list_next (&it, &d);
        )
-    if (d != &d_dot)
+    எனில் (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
 
 derivation *
-derivation_new (symbol_number sym, derivation_list children,
-                const rule *r)
+derivation_new (குறியீடு_எண் sym, derivation_list children,
+                மாறிலி rule *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (அளவு *res);
   res->sym = sym;
   res->children = children;
-  res->reference_count = 0;
+  res->reference_மொத்தம் = 0;
   res->rule = r;
   res->color = -1;
-  return res;
+  திரும்பு res;
 }
 
-void
+வெறுமை
 derivation_retain (derivation *d)
 {
-  ++d->reference_count;
+  ++d->reference_மொத்தம்;
 }
 
-void
+வெறுமை
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
+  எனில் (!d)
+    திரும்பு;
   derivation_list free_queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
-                    1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+    gl_list_create (GL_LINKED_LIST, வெற்று, வெற்று, வெற்று, true,
+                    1, (மாறிலி வெறுமை **)&d);
+  போது (gl_list_size (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      எனில் (--deriv->reference_மொத்தம் == 0)
         {
-          if (deriv->children)
+          எனில் (deriv->children)
             {
-              derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              derivation *child = வெற்று;
+              க்கு (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
-                if (child != &d_dot)
+                எனில் (child != &d_dot)
                   gl_list_add_last (free_queue, child);
               gl_list_free (deriv->children);
             }
-          free (deriv);
+          விடுவி (deriv);
         }
       gl_list_remove_at (free_queue, 0);
     }
@@ -126,46 +126,46 @@ derivation_free (derivation *d)
 }
 
 size_t
-derivation_size (const derivation *deriv)
+derivation_size (மாறிலி derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
-  derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+  எனில் (!deriv->children)
+    திரும்பு 1;
+  முழு size = 1;
+  derivation *child = வெற்று;
+  க்கு (gl_list_iterator_t it = gl_list_iterator (deriv->children);
        derivation_list_next (&it, &child);
        )
     size += derivation_size (child);
-  return size;
+  திரும்பு size;
 }
 
 
 // Longest distance from root to leaf.
-static int
-derivation_depth (const derivation *deriv)
+நிலையான முழு
+derivation_depth (மாறிலி derivation *deriv)
 {
-  if (deriv->children)
+  எனில் (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
+      முழு res = 1;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      க்கு (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         res = max_int (res, derivation_depth (child));
-      return res + 1;
+      திரும்பு res + 1;
     }
-  else
-    return 1;
+  இல்லையெனில்
+    திரும்பு 1;
 }
 
-static bool
-all_spaces (const char *s)
+நிலையான bool
+all_spaces (மாறிலி எழுத்து *s)
 {
-  while (c_isspace (*s))
+  போது (c_isspace (*s))
     s++;
-  return *s == '\0';
+  திரும்பு *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,58 +194,58 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+நிலையான முழு
+fputs_if (bool cond, FILE *out, முழு *padding, மாறிலி எழுத்து *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  முழு res = mbswidth (s, 0);
+  எனில் (cond && !all_spaces (s))
     {
       fprintf (out, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  இல்லையெனில்
     {
       *padding += res;
     }
-  return res;
+  திரும்பு res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+நிலையான முழு
+fprintf_if (bool cond, FILE *out, முழு *padding, மாறிலி எழுத்து *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
+  எழுத்து buf[256];
+  size_t len = அளவு (buf);
   va_list args;
   va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
+  எழுத்து *cp = vasnprintf (buf, &len, fmt, args);
   va_end (args);
-  if (!cp)
+  எனில் (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
-    free (cp);
-  return res;
+  முழு res = fputs_if (cond, out, padding, cp);
+  எனில் (cp != buf)
+    விடுவி (cp);
+  திரும்பு res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
-derivation_width (const derivation *deriv)
+நிலையான முழு
+derivation_width (மாறிலி derivation *deriv)
 {
-  if (deriv->children)
+  எனில் (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      மாறிலி குறியீடு *sym = symbols[deriv->sym];
+      முழு self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
-      children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      முழு children_width = down_arrow_width;
+      children_width += snprintf (வெற்று, 0, "%d: ", deriv->rule->எண்);
+      எனில் (gl_list_size (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
-      else
+      இல்லையெனில்
         {
-          if (gl_list_size (deriv->children) == 1
+          எனில் (gl_list_size (deriv->children) == 1
               && gl_list_get_first (deriv->children) == &d_dot)
             {
               children_width += empty_width;
@@ -253,7 +253,7 @@ derivation_width (const derivation *deriv)
             }
 
           derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+          க்கு (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                derivation_list_next (&it, &child);
                )
             children_width
@@ -261,16 +261,16 @@ derivation_width (const derivation *deriv)
           // No separator at the beginning.
           children_width -= derivation_separator_width;
         }
-      return max_int (self_width, children_width);
+      திரும்பு max_int (self_width, children_width);
     }
-  else if (deriv == &d_dot)
+  இல்லையெனில் எனில் (deriv == &d_dot)
     {
-      return dot_width;
+      திரும்பு dot_width;
     }
-  else // leaf.
+  இல்லையெனில் // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      மாறிலி குறியீடு *sym = symbols[deriv->sym];
+      திரும்பு mbswidth (sym->tag, 0);
     }
 }
 
@@ -286,38 +286,38 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
-derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+நிலையான முழு
+derivation_print_மரம்_impl (மாறிலி derivation *deriv, FILE *out,
+                            முழு depth, முழு *padding)
 {
-  const int width = derivation_width (deriv);
+  மாறிலி முழு width = derivation_width (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  முழு res = 0;
+  எனில் (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      மாறிலி குறியீடு *sym = symbols[deriv->sym];
+      எழுத்து style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      எனில் (depth == 0 || depth == 1)
         {
           begin_use_class (style, out);
           begin_use_class ("cex-step", out);
         }
-      if (depth == 0)
+      எனில் (depth == 0)
         {
           res += fputs_if (true, out, padding, sym->tag);
         }
-      else
+      இல்லையெனில்
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
-          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->எண்);
+          எனில் (gl_list_size (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
-          else
+          இல்லையெனில்
             {
-              if (gl_list_size (deriv->children) == 1
+              எனில் (gl_list_size (deriv->children) == 1
                   && gl_list_get_first (deriv->children) == &d_dot)
                 {
                   res += fputs_if (depth == 1, out, padding, empty);
@@ -326,18 +326,18 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
 
               bool first = true;
               derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              க்கு (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
                 {
-                  if (!first)
+                  எனில் (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
-                  res += derivation_print_tree_impl (child, out, depth - 1, padding);
+                  res += derivation_print_மரம்_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      எனில் (depth == 0 || depth == 1)
         {
           end_use_class ("cex-step", out);
           end_use_class (style, out);
@@ -345,36 +345,36 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       *padding += width - res;
       res = width;
     }
-  else if (deriv == &d_dot)
+  இல்லையெனில் எனில் (deriv == &d_dot)
     {
-      if (depth == 0)
+      எனில் (depth == 0)
         begin_use_class ("cex-dot", out);
       res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
+      எனில் (depth == 0)
         end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  இல்லையெனில் // leaf.
     {
-      const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
+      மாறிலி குறியீடு *sym = symbols[deriv->sym];
+      எனில் (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
+      எனில் (depth == 0)
         end_use_class ("cex-leaf", out);
     }
-  return res;
+  திரும்பு res;
 }
 
-static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+நிலையான வெறுமை
+derivation_print_மரம் (மாறிலி derivation *deriv, FILE *out, மாறிலி எழுத்து *prefix)
 {
   fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
+  க்கு (முழு depth = 0, max_depth = derivation_depth (deriv);
        depth < max_depth; ++depth)
     {
-      int padding = 0;
+      முழு padding = 0;
       fprintf (out, "    %s", prefix);
-      derivation_print_tree_impl (deriv, out, depth, &padding);
+      derivation_print_மரம்_impl (deriv, out, depth, &padding);
       fputc ('\n', out);
     }
 }
@@ -382,21 +382,21 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 
 /* Print DERIV, colored according to COUNTER.
    Return false if nothing is printed.  */
-static bool
+நிலையான bool
 derivation_print_flat_impl (derivation *deriv, FILE *out,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            முழு *counter, மாறிலி எழுத்து *prefix)
 {
-  if (deriv->children)
+  எனில் (deriv->children)
     {
-      const symbol *sym = symbols[deriv->sym];
+      மாறிலி குறியீடு *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      எழுத்து style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
       begin_use_class (style, out);
 
-      if (!leaves_only)
+      எனில் (!leaves_only)
         {
           fputs (prefix, out);
           begin_use_class ("cex-step", out);
@@ -406,71 +406,71 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
         }
       bool res = false;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      க்கு (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
+          எனில் (derivation_print_flat_impl (child, out,
                                           leaves_only, counter, prefix))
             {
               prefix = " ";
               res = true;
             }
-          else if (!leaves_only)
+          இல்லையெனில் எனில் (!leaves_only)
             prefix = " ";
         }
-      if (!leaves_only)
+      எனில் (!leaves_only)
         {
           begin_use_class ("cex-step", out);
-          if (res)
+          எனில் (res)
             fputs (" ]", out);
-          else
+          இல்லையெனில்
             fputs ("]", out);
           end_use_class ("cex-step", out);
         }
       end_use_class (style, out);
-      return res;
+      திரும்பு res;
     }
-  else if (deriv == &d_dot)
+  இல்லையெனில் எனில் (deriv == &d_dot)
     {
       fputs (prefix, out);
       begin_use_class ("cex-dot", out);
       fputs (dot, out);
       end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  இல்லையெனில் // leaf.
     {
       fputs (prefix, out);
-      const symbol *sym = symbols[deriv->sym];
+      மாறிலி குறியீடு *sym = symbols[deriv->sym];
       begin_use_class ("cex-leaf", out);
       fprintf (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
     }
-  return true;
+  திரும்பு true;
 }
 
-static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+நிலையான வெறுமை
+derivation_print_flat (மாறிலி derivation *deriv, FILE *out, மாறிலி எழுத்து *prefix)
 {
-  int counter = 0;
+  முழு counter = 0;
   fputs (prefix, out);
   derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
   fputc ('\n', out);
 }
 
-void
-derivation_print_leaves (const derivation *deriv, FILE *out)
+வெறுமை
+derivation_print_leaves (மாறிலி derivation *deriv, FILE *out)
 {
-  int counter = 0;
+  முழு counter = 0;
   derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
   fputc ('\n', out);
 }
 
-void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+வெறுமை
+derivation_print (மாறிலி derivation *deriv, FILE *out, மாறிலி எழுத்து *prefix)
 {
-  if (getenv ("YYFLAT"))
+  எனில் (getenv ("YYFLAT"))
     derivation_print_flat (deriv, out, prefix);
-  else
-    derivation_print_tree (deriv, out, prefix);
+  இல்லையெனில்
+    derivation_print_மரம் (deriv, out, prefix);
 }

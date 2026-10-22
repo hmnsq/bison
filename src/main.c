@@ -18,54 +18,54 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include <bitset.h>
-#include <bitset/stats.h>
-#include <closeout.h>
-#include <configmake.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <relocatable.h> /* relocate2 */
-#include <timevar.h>
+#அந்தர்பாவ <bitset.h>
+#அந்தர்பாவ <bitset/stats.h>
+#அந்தர்பாவ <closeout.h>
+#அந்தர்பாவ <configmake.h>
+#அந்தர்பாவ <progname.h>
+#அந்தர்பாவ <quote.h>
+#அந்தர்பாவ <quotearg.h>
+#அந்தர்பாவ <relocatable.h> /* relocate2 */
+#அந்தர்பாவ <timevar.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "derives.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "ielr.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "output.h"
-#include "parse-gram.h"
-#include "print-graph.h"
-#include "print-xml.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"
-#include "scan-gram.h"
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "uniqstr.h"
+#அந்தர்பாவ "complain.h"
+#அந்தர்பாவ "conflicts.h"
+#அந்தர்பாவ "counterexample.h"
+#அந்தர்பாவ "derives.h"
+#அந்தர்பாவ "files.h"
+#அந்தர்பாவ "fixits.h"
+#அந்தர்பாவ "getargs.h"
+#அந்தர்பாவ "glyphs.h"
+#அந்தர்பாவ "gram.h"
+#அந்தர்பாவ "ielr.h"
+#அந்தர்பாவ "lalr.h"
+#அந்தர்பாவ "lr0.h"
+#அந்தர்பாவ "muscle-tab.h"
+#அந்தர்பாவ "nullable.h"
+#அந்தர்பாவ "output.h"
+#அந்தர்பாவ "parse-gram.h"
+#அந்தர்பாவ "print-graph.h"
+#அந்தர்பாவ "print-xml.h"
+#அந்தர்பாவ "print.h"
+#அந்தர்பாவ "reader.h"
+#அந்தர்பாவ "reduce.h"
+#அந்தர்பாவ "scan-code.h"
+#அந்தர்பாவ "scan-gram.h"
+#அந்தர்பாவ "scan-skel.h"
+#அந்தர்பாவ "symtab.h"
+#அந்தர்பாவ "tables.h"
+#அந்தர்பாவ "uniqstr.h"
 
 
-int
-main (int argc, char *argv[])
+முழு
+முதன்மை (முழு argc, எழுத்து *argv[])
 {
   {
-    char *cp = getenv ("BISON_PROGRAM_NAME");
-    if (cp)
+    எழுத்து *cp = getenv ("BISON_PROGRAM_NAME");
+    எனில் (cp)
       argv[0] = cp;
   }
 
@@ -73,20 +73,20 @@ main (int argc, char *argv[])
   set_program_name (argv[0]);
   setlocale (LC_ALL, "");
   {
-    char *cp = NULL;
-    char const *localedir = relocate2 (LOCALEDIR, &cp);
+    எழுத்து *cp = வெற்று;
+    எழுத்து மாறிலி *localedir = relocate2 (LOCALEDIR, &cp);
     bindtextdomain ("bison", localedir);
     bindtextdomain ("bison-gnulib", localedir);
     bindtextdomain ("bison-runtime", localedir);
-    free (cp);
+    விடுவி (cp);
   }
   textdomain ("bison");
 
   {
-    char const *cp = getenv ("LC_CTYPE");
-    if (cp && STREQ (cp, "C"))
+    எழுத்து மாறிலி *cp = getenv ("LC_CTYPE");
+    எனில் (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
-    else
+    இல்லையெனில்
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
   }
 
@@ -100,43 +100,43 @@ main (int argc, char *argv[])
 
   getargs (argc, argv);
 
-  if (trace_flag)
+  எனில் (trace_flag)
     fprintf (stderr, "bison (GNU Bison) %s\n", VERSION);
 
   timevar_enabled = trace_flag & trace_time;
   timevar_init ();
   timevar_start (tv_total);
 
-  if (trace_flag & trace_bitsets)
+  எனில் (trace_flag & trace_bitsets)
     bitset_stats_enable ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
      and FATTRS.  In file reader.c.  The other parts are recorded in
      the grammar; see gram.h.  */
 
-  timevar_push (tv_reader);
+  timevar_தள்ளு (tv_reader);
   reader (grammar_file);
-  timevar_pop (tv_reader);
+  timevar_எடு (tv_reader);
 
-  if (complaint_status == status_complaint)
-    goto finish;
+  எனில் (complaint_status == status_complaint)
+    செல் finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
-  timevar_push (tv_reduce);
+  timevar_தள்ளு (tv_reduce);
   reduce_grammar ();
-  timevar_pop (tv_reduce);
+  timevar_எடு (tv_reduce);
 
   /* Record other info about the grammar.  In files derives and
      nullable.  */
-  timevar_push (tv_sets);
+  timevar_தள்ளு (tv_sets);
   derives_compute ();
   nullable_compute ();
-  timevar_pop (tv_sets);
+  timevar_எடு (tv_sets);
 
   /* Compute LR(0) parser states.  See state.h for more info.  */
-  timevar_push (tv_lr0);
+  timevar_தள்ளு (tv_lr0);
   generate_states ();
-  timevar_pop (tv_lr0);
+  timevar_எடு (tv_lr0);
 
   /* Add lookahead sets to parser states.  Except when LALR(1) is
      requested, split states to eliminate LR(1)-relative
@@ -147,27 +147,27 @@ main (int argc, char *argv[])
      lookahead is not enough to disambiguate the parsing.  In file
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
-  timevar_push (tv_conflicts);
+  timevar_தள்ளு (tv_conflicts);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
+  எனில் (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
-      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
-      state_number nstates_old = nstates;
+      state_எண் *old_to_new = xnmalloc (nstates, அளவு *old_to_new);
+      state_எண் nstates_old = nstates;
       state_remove_unreachable_states (old_to_new);
       lalr_update_state_numbers (old_to_new, nstates_old);
       conflicts_update_state_numbers (old_to_new, nstates_old);
-      free (old_to_new);
+      விடுவி (old_to_new);
     }
-  if (report_flag & report_cex
+  எனில் (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
   conflicts_print ();
-  timevar_pop (tv_conflicts);
+  timevar_எடு (tv_conflicts);
 
   /* Compute the parser tables.  */
-  timevar_push (tv_actions);
+  timevar_தள்ளு (tv_actions);
   tables_generate ();
-  timevar_pop (tv_actions);
+  timevar_எடு (tv_actions);
 
   grammar_rules_useless_report (_("rule useless in parser due to conflicts"));
 
@@ -176,65 +176,65 @@ main (int argc, char *argv[])
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
 
-  if (generate)
+  எனில் (generate)
     {
       /* Output file names. */
       compute_output_file_names ();
 
       /* Output the detailed report on the grammar.  */
-      if (report_flag)
+      எனில் (report_flag)
         {
-          timevar_push (tv_report);
+          timevar_தள்ளு (tv_report);
           print_results ();
-          timevar_pop (tv_report);
+          timevar_எடு (tv_report);
         }
 
       /* Output the graph.  */
-      if (graph_flag)
+      எனில் (graph_flag)
         {
-          timevar_push (tv_graph);
+          timevar_தள்ளு (tv_graph);
           print_graph ();
-          timevar_pop (tv_graph);
+          timevar_எடு (tv_graph);
         }
 
       /* Output xml.  */
-      if (html_flag || xml_flag)
+      எனில் (html_flag || xml_flag)
         {
-          timevar_push (tv_xml);
+          timevar_தள்ளு (tv_xml);
           print_xml ();
-          timevar_pop (tv_xml);
+          timevar_எடு (tv_xml);
         }
 
       /* Output html.  */
-      if (html_flag)
+      எனில் (html_flag)
         {
-          timevar_push (tv_html);
+          timevar_தள்ளு (tv_html);
           print_html ();
-          timevar_pop (tv_html);
+          timevar_எடு (tv_html);
         }
     }
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_status == status_complaint)
-    goto finish;
+  எனில் (complaint_status == status_complaint)
+    செல் finish;
 
   /* Lookahead tokens are no longer needed. */
-  timevar_push (tv_free);
+  timevar_தள்ளு (tv_free);
   lalr_free ();
-  timevar_pop (tv_free);
+  timevar_எடு (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
-  if (generate)
+  எனில் (generate)
     {
-      timevar_push (tv_parser);
+      timevar_தள்ளு (tv_parser);
       output ();
-      timevar_pop (tv_parser);
+      timevar_எடு (tv_parser);
     }
 
  finish:
 
-  timevar_push (tv_free);
+  timevar_தள்ளு (tv_free);
   nullable_free ();
   derives_free ();
   tables_free ();
@@ -254,9 +254,9 @@ main (int argc, char *argv[])
   muscle_free ();
   code_scanner_free ();
   skel_scanner_free ();
-  timevar_pop (tv_free);
+  timevar_எடு (tv_free);
 
-  if (trace_flag & trace_bitsets)
+  எனில் (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
   /* Stop timing and print the times.  */
@@ -265,12 +265,12 @@ main (int argc, char *argv[])
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */
-  if (!fixits_empty ())
+  எனில் (!fixits_empty ())
     {
-      if (update_flag)
+      எனில் (update_flag)
         fixits_run ();
-      else
-        complain (NULL, Wother,
+      இல்லையெனில்
+        complain (வெற்று, Wother,
                   _("fix-its can be applied.  Rerun with option '--update'."));
       fixits_free ();
     }
@@ -279,5 +279,5 @@ main (int argc, char *argv[])
   complain_free ();
   quotearg_free ();
 
-  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
+  திரும்பு complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
 }

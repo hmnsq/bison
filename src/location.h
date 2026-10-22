@@ -28,7 +28,7 @@
 # include "uniqstr.h"
 
 /* A boundary between two characters.  */
-typedef struct
+வகைவரை கட்டமைப்பு
 {
   /* The name of the file that contains the boundary.  */
   uniqstr file;
@@ -38,7 +38,7 @@ typedef struct
 
      Meaningless and not displayed if nonpositive.
   */
-  int line;
+  முழு வரி;
 
   /* If positive, the column (starting at 1) just after the boundary.
      This is neither a byte count, nor a character count; it is a
@@ -46,53 +46,53 @@ typedef struct
      overflowed.
 
      Meaningless and not displayed if nonpositive.  */
-  int column;
+  முழு column;
 
   /* If nonnegative, the byte number (starting at 0) in the current
      line.  Not displayed (unless --trace=location).  */
-  int byte;
+  முழு byte;
 
 } boundary;
 
 /* Set the position of \a p. */
-static inline void
-boundary_set (boundary *p, const char *f, int l, int c, int b)
+நிலையான உள்வரி வெறுமை
+boundary_set (boundary *p, மாறிலி எழுத்து *f, முழு l, முழு c, முழு b)
 {
   p->file = f;
-  p->line = l;
+  p->வரி = l;
   p->column = c;
   p->byte = b;
 }
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+நிலையான உள்வரி முழு
 boundary_cmp (boundary a, boundary b)
 {
   /* Locations with no file first.  */
-  int res =
+  முழு res =
     a.file && b.file ? strcmp (a.file, b.file)
     : a.file ? 1
     : b.file ? -1
     : 0;
-  if (!res)
-    res = a.line - b.line;
-  if (!res)
+  எனில் (!res)
+    res = a.வரி - b.வரி;
+  எனில் (!res)
     res = a.column - b.column;
-  return res;
+  திரும்பு res;
 }
 
 /* Return nonzero if A and B are equal boundaries.  */
-static inline bool
+நிலையான உள்வரி bool
 equal_boundaries (boundary a, boundary b)
 {
-  return (a.column == b.column
-          && a.line == b.line
+  திரும்பு (a.column == b.column
+          && a.வரி == b.வரி
           && UNIQSTR_EQ (a.file, b.file));
 }
 
 /* A location, that is, a region of source code.  */
-typedef struct
+வகைவரை கட்டமைப்பு
 {
   /* Boundary just before the location starts.  */
   boundary start;
@@ -104,43 +104,43 @@ typedef struct
 
 # define GRAM_LTYPE location
 
-# define EMPTY_LOCATION_INIT {{NULL, 0, 0, 0}, {NULL, 0, 0, 0}}
-extern location const empty_loc;
+# define EMPTY_LOCATION_INIT {{வெற்று, 0, 0, 0}, {வெற்று, 0, 0, 0}}
+வெளி location மாறிலி empty_loc;
 
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
-void location_compute (location *loc,
-                       boundary *cur, char const *token, size_t size);
+வெறுமை location_compute (location *loc,
+                       boundary *cur, எழுத்து மாறிலி *token, size_t size);
 
 /* Print location to file.
    Return number of actually printed characters.
    Warning: uses quotearg's slot 3. */
-int location_print (location loc, FILE *out);
+முழு location_print (location loc, FILE *out);
 
 /* Prepare the use of location_caret.  */
-void caret_init (void);
+வெறுமை caret_init (வெறுமை);
 
 /* Free any allocated resources and close any open file handles that are
    left-over by the usage of location_caret.  */
-void caret_free (void);
+வெறுமை caret_free (வெறுமை);
 
 /* If -fcaret is enabled, quote the line containing LOC onto OUT.
    Highlight the part of LOC with the color STYLE.  */
-void location_caret (location loc, const char* style, FILE *out);
+வெறுமை location_caret (location loc, மாறிலி எழுத்து* style, FILE *out);
 
 /* If -fcaret is enabled, display a suggestion of replacement for LOC
    with S.  To call after location_caret.  */
-void location_caret_suggestion (location loc, const char *s, FILE *out);
+வெறுமை location_caret_suggestion (location loc, மாறிலி எழுத்து *s, FILE *out);
 
 /* Return -1, 0, 1, depending whether a is before, equal, or
    after b.  */
-static inline int
+நிலையான உள்வரி முழு
 location_cmp (location a, location b)
 {
-  int res = boundary_cmp (a.start, b.start);
-  if (!res)
+  முழு res = boundary_cmp (a.start, b.start);
+  எனில் (!res)
     res = boundary_cmp (a.end, b.end);
-  return res;
+  திரும்பு res;
 }
 
 /* Whether this is the empty location.  */
@@ -149,6 +149,6 @@ bool location_empty (location loc);
 /* STR must be formatted as 'file:line.column@byte' or 'file:line.column'.
    It may be '<command line>:3.-1@-1', with -1 to denote no-column/no-byte.
    STR will be modified.  */
-void boundary_set_from_string (boundary *bound, char *str);
+வெறுமை boundary_set_from_string (boundary *bound, எழுத்து *str);
 
 #endif /* ! defined LOCATION_H_ */

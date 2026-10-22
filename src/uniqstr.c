@@ -18,16 +18,16 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include <attribute.h>
-#include <error.h>
-#include <hash.h>
-#include <quotearg.h>
-#include <stdarg.h>
+#அந்தர்பாவ <attribute.h>
+#அந்தர்பாவ <error.h>
+#அந்தர்பாவ <hash.h>
+#அந்தர்பாவ <quotearg.h>
+#அந்தர்பாவ <stdarg.h>
 
-#include "uniqstr.h"
+#அந்தர்பாவ "uniqstr.h"
 
 /*-----------------------.
 | A uniqstr hash table.  |
@@ -36,43 +36,43 @@
 /* Initial capacity of uniqstr hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *uniqstrs_table = NULL;
+நிலையான கட்டமைப்பு hash_table *uniqstrs_table = வெற்று;
 
 /*-------------------------------------.
 | Create the uniqstr for S if needed.  |
 `-------------------------------------*/
 
 uniqstr
-uniqstr_new (char const *str)
+uniqstr_new (எழுத்து மாறிலி *str)
 {
   uniqstr res = hash_lookup (uniqstrs_table, str);
-  if (!res)
+  எனில் (!res)
     {
       /* First insertion in the hash. */
       res = xstrdup (str);
       hash_xinsert (uniqstrs_table, res);
     }
-  return res;
+  திரும்பு res;
 }
 
 uniqstr
-uniqstr_concat (int nargs, ...)
+uniqstr_concat (முழு nargs, ...)
 {
   va_list args;
 
   va_start (args, nargs);
   size_t reslen = 0;
-  for (int i = 0; i < nargs; i++)
-    reslen += strlen (va_arg (args, char const *));
+  க்கு (முழு i = 0; i < nargs; i++)
+    reslen += strlen (va_arg (args, எழுத்து மாறிலி *));
   va_end (args);
 
-  char *str = xmalloc (reslen + 1);
-  char *p = str;
+  எழுத்து *str = xmalloc (reslen + 1);
+  எழுத்து *p = str;
 
   va_start (args, nargs);
-  for (int i = 0; i < nargs; i++)
+  க்கு (முழு i = 0; i < nargs; i++)
     {
-      char const *arg = va_arg (args, char const *);
+      எழுத்து மாறிலி *arg = va_arg (args, எழுத்து மாறிலி *);
       size_t arglen = strlen (arg);
       memcpy (p, arg, arglen);
       p += arglen;
@@ -81,20 +81,20 @@ uniqstr_concat (int nargs, ...)
 
   *p = '\0';
   uniqstr res = hash_xinsert (uniqstrs_table, str);
-  if (res != str)
-    free (str);
-  return res;
+  எனில் (res != str)
+    விடுவி (str);
+  திரும்பு res;
 }
 
 /*------------------------------.
 | Abort if S is not a uniqstr.  |
 `------------------------------*/
 
-void
-uniqstr_assert (char const *str)
+வெறுமை
+uniqstr_assert (எழுத்து மாறிலி *str)
 {
   uniqstr s = hash_lookup (uniqstrs_table, str);
-  if (!s || s != str)
+  எனில் (!s || s != str)
     {
       error (0, 0,
              "not a uniqstr: %s", quotearg (str));
@@ -107,23 +107,23 @@ uniqstr_assert (char const *str)
 | Print the uniqstr.  |
 `--------------------*/
 
-static inline bool
+நிலையான உள்வரி bool
 uniqstr_print (uniqstr ustr)
 {
   fprintf (stderr, "%s\n", ustr);
-  return true;
+  திரும்பு true;
 }
 
-static bool
-uniqstr_print_processor (void *ustr, void *null MAYBE_UNUSED)
+நிலையான bool
+uniqstr_print_processor (வெறுமை *ustr, வெறுமை *null MAYBE_UNUSED)
 {
-  return uniqstr_print (ustr);
+  திரும்பு uniqstr_print (ustr);
 }
 
-int
+முழு
 uniqstr_cmp (uniqstr l, uniqstr r)
 {
-  return (l == r ? 0
+  திரும்பு (l == r ? 0
           : !l ? -1
           : !r ? +1
           : strcmp (l, r));
@@ -134,16 +134,16 @@ uniqstr_cmp (uniqstr l, uniqstr r)
 | A uniqstr hash table.  |
 `-----------------------*/
 
-static bool
-hash_compare_uniqstr (void const *m1, void const *m2)
+நிலையான bool
+hash_compare_uniqstr (வெறுமை மாறிலி *m1, வெறுமை மாறிலி *m2)
 {
-  return STREQ (m1, m2);
+  திரும்பு STREQ (m1, m2);
 }
 
-static size_t
-hash_uniqstr (void const *m, size_t tablesize)
+நிலையான size_t
+hash_uniqstr (வெறுமை மாறிலி *m, size_t tablesize)
 {
-  return hash_string (m, tablesize);
+  திரும்பு hash_string (m, tablesize);
 }
 
 
@@ -151,14 +151,14 @@ hash_uniqstr (void const *m, size_t tablesize)
 | Create the uniqstrs table.  |
 `----------------------------*/
 
-void
-uniqstrs_new (void)
+வெறுமை
+uniqstrs_new (வெறுமை)
 {
   uniqstrs_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                     NULL,
+                                     வெற்று,
                                      hash_uniqstr,
                                      hash_compare_uniqstr,
-                                     free);
+                                     விடுவி);
 }
 
 
@@ -166,8 +166,8 @@ uniqstrs_new (void)
 | Perform a task on all the uniqstrs.  |
 `-------------------------------------*/
 
-static void
-uniqstrs_do (Hash_processor processor, void *processor_data)
+நிலையான வெறுமை
+uniqstrs_do (Hash_processor processor, வெறுமை *processor_data)
 {
   hash_do_for_each (uniqstrs_table, processor, processor_data);
 }
@@ -177,10 +177,10 @@ uniqstrs_do (Hash_processor processor, void *processor_data)
 | Print them all.  |
 `-----------------*/
 
-void
-uniqstrs_print (void)
+வெறுமை
+uniqstrs_print (வெறுமை)
 {
-  uniqstrs_do (uniqstr_print_processor, NULL);
+  uniqstrs_do (uniqstr_print_processor, வெற்று);
 }
 
 
@@ -188,8 +188,8 @@ uniqstrs_print (void)
 | Free the uniqstrs.  |
 `--------------------*/
 
-void
-uniqstrs_free (void)
+வெறுமை
+uniqstrs_free (வெறுமை)
 {
   hash_free (uniqstrs_table);
 }

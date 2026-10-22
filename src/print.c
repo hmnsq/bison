@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#அந்தர்பாவ <config.h>
 
-#include "print.h"
+#அந்தர்பாவ "print.h"
 
-#include "system.h"
+#அந்தர்பாவ "system.h"
 
-#include <bitset.h>
-#include <mbswidth.h>
+#அந்தர்பாவ <bitset.h>
+#அந்தர்பாவ <mbswidth.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "files.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "reader.h"
-#include "reduce.h"
-#include "state.h"
-#include "symtab.h"
-#include "tables.h"
+#அந்தர்பாவ "closure.h"
+#அந்தர்பாவ "complain.h"
+#அந்தர்பாவ "conflicts.h"
+#அந்தர்பாவ "counterexample.h"
+#அந்தர்பாவ "files.h"
+#அந்தர்பாவ "getargs.h"
+#அந்தர்பாவ "gram.h"
+#அந்தர்பாவ "lalr.h"
+#அந்தர்பாவ "lr0.h"
+#அந்தர்பாவ "muscle-tab.h"
+#அந்தர்பாவ "reader.h"
+#அந்தர்பாவ "reduce.h"
+#அந்தர்பாவ "state.h"
+#அந்தர்பாவ "symtab.h"
+#அந்தர்பாவ "tables.h"
 
 /* For a given state, the symbol numbers of the lookahead tokens for
    shifts and errors (i.e. not reduce).  */
-static bitset no_reduce_set;
+நிலையான bitset no_reduce_set;
 
 
 
@@ -53,11 +53,11 @@ static bitset no_reduce_set;
 | *WIDTH := max (*WIDTH, strlen (STR)).  |
 `---------------------------------------*/
 
-static void
-max_length (size_t *width, const char *str)
+நிலையான வெறுமை
+max_length (size_t *width, மாறிலி எழுத்து *str)
 {
   size_t len = mbswidth (str, 0);
-  if (len > *width)
+  எனில் (len > *width)
     *width = len;
 }
 
@@ -65,35 +65,35 @@ max_length (size_t *width, const char *str)
 | Report information on a state.  |
 `--------------------------------*/
 
-static void
-print_core (FILE *out, const state *s)
+நிலையான வெறுமை
+print_core (FILE *out, மாறிலி state *s)
 {
-  const item_index *sitems = s->items;
+  மாறிலி item_index *sitems = s->பொருட்கள்;
   size_t snritems = s->nitems;
   /* Output all the items of a state, not only its kernel.  */
-  if (report_flag & report_itemsets)
+  எனில் (report_flag & report_itemsets)
     {
       closure (sitems, snritems);
       sitems = itemset;
       snritems = nitemset;
     }
 
-  if (!snritems)
-    return;
+  எனில் (!snritems)
+    திரும்பு;
 
   fputc ('\n', out);
 
-  rule const *previous_rule = NULL;
-  for (size_t i = 0; i < snritems; i++)
+  rule மாறிலி *previous_rule = வெற்று;
+  க்கு (size_t i = 0; i < snritems; i++)
     {
-      item_number *sp1 = ritem + sitems[i];
-      rule const *r = item_rule (sp1);
+      item_எண் *sp1 = ritem + sitems[i];
+      rule மாறிலி *r = item_rule (sp1);
       item_print (sp1, previous_rule, out);
       previous_rule = r;
 
       /* Display the lookahead tokens?  */
-      if (report_flag & report_lookaheads
-          && item_number_is_rule_number (*sp1))
+      எனில் (report_flag & report_lookaheads
+          && item_எண்_is_rule_எண் (*sp1))
         state_rule_lookaheads_print (s, r, out);
       fputc ('\n', out);
     }
@@ -105,44 +105,44 @@ print_core (FILE *out, const state *s)
 | OUT.                                                        |
 `------------------------------------------------------------*/
 
-static void
-print_transitions (const state *s, FILE *out, bool display_transitions_p)
+நிலையான வெறுமை
+print_transitions (மாறிலி state *s, FILE *out, bool display_transitions_p)
 {
   transitions *trans = s->transitions;
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  க்கு (முழு i = 0; i < trans->இலக்கம்; i++)
+    எனில் (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
+        குறியீடு *sym = symbols[TRANSITION_குறியீடு (trans, i)];
         max_length (&width, sym->tag);
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  எனில் (!width)
+    திரும்பு;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and shifts.  */
-  for (int i = 0; i < trans->num; i++)
-    if (!TRANSITION_IS_DISABLED (trans, i)
+  க்கு (முழு i = 0; i < trans->இலக்கம்; i++)
+    எனில் (!TRANSITION_IS_DISABLED (trans, i)
         && TRANSITION_IS_SHIFT (trans, i) == display_transitions_p)
       {
-        symbol *sym = symbols[TRANSITION_SYMBOL (trans, i)];
-        const char *tag = sym->tag;
-        const state *s1 = trans->states[i];
+        குறியீடு *sym = symbols[TRANSITION_குறியீடு (trans, i)];
+        மாறிலி எழுத்து *tag = sym->tag;
+        மாறிலி state *s1 = trans->states[i];
 
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        க்கு (முழு j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
-        if (display_transitions_p)
-          fprintf (out, _("shift, and go to state %d\n"), s1->number);
-        else
-          fprintf (out, _("go to state %d\n"), s1->number);
+        எனில் (display_transitions_p)
+          fprintf (out, _("shift, and go to state %d\n"), s1->எண்);
+        இல்லையெனில்
+          fprintf (out, _("go to state %d\n"), s1->எண்);
       }
 }
 
@@ -151,31 +151,31 @@ print_transitions (const state *s, FILE *out, bool display_transitions_p)
 | Report the explicit errors of S raised from %nonassoc.  |
 `--------------------------------------------------------*/
 
-static void
-print_errs (FILE *out, const state *s)
+நிலையான வெறுமை
+print_errs (FILE *out, மாறிலி state *s)
 {
   errs *errp = s->errs;
   size_t width = 0;
 
   /* Compute the width of the lookahead token column.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  க்கு (முழு i = 0; i < errp->இலக்கம்; ++i)
+    எனில் (errp->symbols[i])
       max_length (&width, errp->symbols[i]->tag);
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  எனில் (!width)
+    திரும்பு;
 
   fputc ('\n', out);
   width += 2;
 
   /* Report lookahead tokens and errors.  */
-  for (int i = 0; i < errp->num; ++i)
-    if (errp->symbols[i])
+  க்கு (முழு i = 0; i < errp->இலக்கம்; ++i)
+    எனில் (errp->symbols[i])
       {
-        const char *tag = errp->symbols[i]->tag;
+        மாறிலி எழுத்து *tag = errp->symbols[i]->tag;
         fprintf (out, "    %s", tag);
-        for (int j = width - mbswidth (tag, 0); j > 0; --j)
+        க்கு (முழு j = width - mbswidth (tag, 0); j > 0; --j)
           fputc (' ', out);
         fputs (_("error (nonassociative)\n"), out);
       }
@@ -188,22 +188,22 @@ print_errs (FILE *out, const state *s)
 | R/R conflicts).                                                    |
 `-------------------------------------------------------------------*/
 
-static void
+நிலையான வெறுமை
 print_reduction (FILE *out, size_t width,
-                 const char *lookahead,
+                 மாறிலி எழுத்து *lookahead,
                  rule *r, bool enabled)
 {
   fprintf (out, "    %s", lookahead);
-  for (int j = width - mbswidth (lookahead, 0); j > 0; --j)
+  க்கு (முழு j = width - mbswidth (lookahead, 0); j > 0; --j)
     fputc (' ', out);
-  if (!enabled)
+  எனில் (!enabled)
     fputc ('[', out);
-  if (rule_is_initial (r))
+  எனில் (rule_is_initial (r))
     fprintf (out, _("accept"));
-  else
-    fprintf (out, _("reduce using rule %d (%s)"), r->number,
-             r->lhs->symbol->tag);
-  if (!enabled)
+  இல்லையெனில்
+    fprintf (out, _("reduce using rule %d (%s)"), r->எண்,
+             r->lhs->குறியீடு->tag);
+  எனில் (!enabled)
     fputc (']', out);
   fputc ('\n', out);
 }
@@ -213,56 +213,56 @@ print_reduction (FILE *out, size_t width,
 | Report on OUT the reduction actions of S.  |
 `-------------------------------------------*/
 
-static void
-print_reductions (FILE *out, const state *s)
+நிலையான வெறுமை
+print_reductions (FILE *out, மாறிலி state *s)
 {
   reductions *reds = s->reductions;
-  if (reds->num == 0)
-    return;
+  எனில் (reds->இலக்கம் == 0)
+    திரும்பு;
 
-  rule *default_reduction = NULL;
-  if (yydefact[s->number] != 0)
-    default_reduction = &rules[yydefact[s->number] - 1];
+  rule *default_reduction = வெற்று;
+  எனில் (yydefact[s->எண்] != 0)
+    default_reduction = &rules[yydefact[s->எண்] - 1];
 
   transitions *trans = s->transitions;
 
   bitset_zero (no_reduce_set);
   {
-    int i;
+    முழு i;
     FOR_EACH_SHIFT (trans, i)
-      bitset_set (no_reduce_set, TRANSITION_SYMBOL (trans, i));
+      bitset_set (no_reduce_set, TRANSITION_குறியீடு (trans, i));
   }
-  for (int i = 0; i < s->errs->num; ++i)
-    if (s->errs->symbols[i])
-      bitset_set (no_reduce_set, s->errs->symbols[i]->content->number);
+  க்கு (முழு i = 0; i < s->errs->இலக்கம்; ++i)
+    எனில் (s->errs->symbols[i])
+      bitset_set (no_reduce_set, s->errs->symbols[i]->content->எண்);
 
   /* Compute the width of the lookahead token column.  */
   size_t width = 0;
-  if (default_reduction)
+  எனில் (default_reduction)
     width = mbswidth (_("$default"), 0);
 
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  எனில் (reds->lookaheads)
+    க்கு (முழு i = 0; i < ntokens; i++)
       {
-        bool count = bitset_test (no_reduce_set, i);
+        bool மொத்தம் = bitset_test (no_reduce_set, i);
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        க்கு (முழு j = 0; j < reds->இலக்கம்; ++j)
+          எனில் (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              எனில் (! மொத்தம்)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  எனில் (reds->rules[j] != default_reduction)
                     max_length (&width, symbols[i]->tag);
-                  count = true;
+                  மொத்தம் = true;
                 }
-              else
+              இல்லையெனில்
                 max_length (&width, symbols[i]->tag);
             }
       }
 
   /* Nothing to report. */
-  if (!width)
-    return;
+  எனில் (!width)
+    திரும்பு;
 
   fputc ('\n', out);
   width += 2;
@@ -270,34 +270,34 @@ print_reductions (FILE *out, const state *s)
   bool default_reduction_only = true;
 
   /* Report lookahead tokens (or $default) and reductions.  */
-  if (reds->lookaheads)
-    for (int i = 0; i < ntokens; i++)
+  எனில் (reds->lookaheads)
+    க்கு (முழு i = 0; i < ntokens; i++)
       {
         bool defaulted = false;
-        bool count = bitset_test (no_reduce_set, i);
-        if (count)
+        bool மொத்தம் = bitset_test (no_reduce_set, i);
+        எனில் (மொத்தம்)
           default_reduction_only = false;
 
-        for (int j = 0; j < reds->num; ++j)
-          if (bitset_test (reds->lookaheads[j], i))
+        க்கு (முழு j = 0; j < reds->இலக்கம்; ++j)
+          எனில் (bitset_test (reds->lookaheads[j], i))
             {
-              if (! count)
+              எனில் (! மொத்தம்)
                 {
-                  if (reds->rules[j] != default_reduction)
+                  எனில் (reds->rules[j] != default_reduction)
                     {
                       default_reduction_only = false;
                       print_reduction (out, width,
                                        symbols[i]->tag,
                                        reds->rules[j], true);
                     }
-                  else
+                  இல்லையெனில்
                     defaulted = true;
-                  count = true;
+                  மொத்தம் = true;
                 }
-              else
+              இல்லையெனில்
                 {
                   default_reduction_only = false;
-                  if (defaulted)
+                  எனில் (defaulted)
                     print_reduction (out, width,
                                      symbols[i]->tag,
                                      default_reduction, true);
@@ -309,17 +309,17 @@ print_reductions (FILE *out, const state *s)
             }
       }
 
-  if (default_reduction)
+  எனில் (default_reduction)
     {
-      char *default_reductions =
+      எழுத்து *default_reductions =
         muscle_percent_define_get ("lr.default-reduction");
       print_reduction (out, width, _("$default"), default_reduction, true);
       aver (STREQ (default_reductions, "most")
             || (STREQ (default_reductions, "consistent")
                 && default_reduction_only)
-            || (reds->num == 1 && rule_is_initial (reds->rules[0])));
-      (void) default_reduction_only;
-      free (default_reductions);
+            || (reds->இலக்கம் == 1 && rule_is_initial (reds->rules[0])));
+      (வெறுமை) default_reduction_only;
+      விடுவி (default_reductions);
     }
 }
 
@@ -329,8 +329,8 @@ print_reductions (FILE *out, const state *s)
 | explicit errors from %nonassoc) of S.                         |
 `--------------------------------------------------------------*/
 
-static void
-print_actions (FILE *out, const state *s)
+நிலையான வெறுமை
+print_actions (FILE *out, மாறிலி state *s)
 {
   /* Print shifts.  */
   print_transitions (s, out, true);
@@ -345,20 +345,20 @@ print_actions (FILE *out, const state *s)
 | Report all the data on S on OUT.  |
 `----------------------------------*/
 
-static void
-print_state (FILE *out, const state *s)
+நிலையான வெறுமை
+print_state (FILE *out, மாறிலி state *s)
 {
   fputs ("\n\n", out);
-  fprintf (out, _("State %d"), s->number);
+  fprintf (out, _("State %d"), s->எண்);
   fputc ('\n', out);
   print_core (out, s);
   print_actions (out, s);
-  if ((report_flag & report_solved_conflicts) && s->solved_conflicts)
+  எனில் ((report_flag & report_solved_conflicts) && s->solved_conflicts)
     {
       fputc ('\n', out);
       fputs (s->solved_conflicts, out);
     }
-  if (has_conflicts (s)
+  எனில் (has_conflicts (s)
       && (report_flag & report_cex
           || warning_is_enabled (Wcounterexamples)))
     {
@@ -371,27 +371,27 @@ print_state (FILE *out, const state *s)
 | Print information on the whole grammar.  |
 `-----------------------------------------*/
 
-static void
+நிலையான வெறுமை
 print_terminal_symbols (FILE *out)
 {
   /* TERMINAL (type #) : rule #s terminal is on RHS */
   fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
-  for (int i = 0; i < max_code + 1; ++i)
-    if (token_translations[i] != undeftoken->content->number)
+  க்கு (முழு i = 0; i < max_code + 1; ++i)
+    எனில் (token_translations[i] != undeftoken->content->எண்)
       {
-        const symbol *sym = symbols[token_translations[i]];
-        const char *tag = sym->tag;
+        மாறிலி குறியீடு *sym = symbols[token_translations[i]];
+        மாறிலி எழுத்து *tag = sym->tag;
         fprintf (out, "%4s%s", "", tag);
-        if (sym->content->type_name)
+        எனில் (sym->content->type_name)
           fprintf (out, " <%s>", sym->content->type_name);
         fprintf (out, " (%d)", i);
 
-        for (rule_number r = 0; r < nrules; r++)
-          for (item_number *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
-            if (item_number_as_symbol_number (*rhsp) == token_translations[i])
+        க்கு (rule_எண் r = 0; r < nrules; r++)
+          க்கு (item_எண் *rhsp = rules[r].rhs; *rhsp >= 0; rhsp++)
+            எனில் (item_எண்_as_குறியீடு_எண் (*rhsp) == token_translations[i])
               {
                 fprintf (out, " %d", r);
-                break;
+                நிறுத்து;
               }
         fputc ('\n', out);
       }
@@ -399,57 +399,57 @@ print_terminal_symbols (FILE *out)
 }
 
 
-static void
+நிலையான வெறுமை
 print_nonterminal_symbols (FILE *out)
 {
   fprintf (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
-  for (symbol_number i = ntokens; i < nsyms; i++)
+  க்கு (குறியீடு_எண் i = ntokens; i < nsyms; i++)
     {
-      const symbol *sym = symbols[i];
-      const char *tag = sym->tag;
-      bool on_left = false;
-      bool on_right = false;
+      மாறிலி குறியீடு *sym = symbols[i];
+      மாறிலி எழுத்து *tag = sym->tag;
+      bool on_இடது = false;
+      bool on_வலது = false;
 
-      for (rule_number r = 0; r < nrules; r++)
+      க்கு (rule_எண் r = 0; r < nrules; r++)
         {
-          on_left |= rules[r].lhs->number == i;
-          for (item_number *rhsp = rules[r].rhs; !on_right && 0 <= *rhsp; ++rhsp)
-            on_right |= item_number_as_symbol_number (*rhsp) == i;
-          if (on_left && on_right)
-            break;
+          on_இடது |= rules[r].lhs->எண் == i;
+          க்கு (item_எண் *rhsp = rules[r].rhs; !on_வலது && 0 <= *rhsp; ++rhsp)
+            on_வலது |= item_எண்_as_குறியீடு_எண் (*rhsp) == i;
+          எனில் (on_இடது && on_வலது)
+            நிறுத்து;
         }
 
       fprintf (out, "%4s%s", "", tag);
-      if (sym->content->type_name)
+      எனில் (sym->content->type_name)
         fprintf (out, " <%s>", sym->content->type_name);
       fprintf (out, " (%d)\n", i);
 
-      if (on_left)
+      எனில் (on_இடது)
         {
           fprintf (out, "%8s%s", "", _("on left:"));
-          for (rule_number r = 0; r < nrules; r++)
-            if (rules[r].lhs->number == i)
+          க்கு (rule_எண் r = 0; r < nrules; r++)
+            எனில் (rules[r].lhs->எண் == i)
               fprintf (out, " %d", r);
           fputc ('\n', out);
         }
 
-      if (on_right)
+      எனில் (on_வலது)
         {
           fprintf (out, "%8s%s", "", _("on right:"));
-          for (rule_number r = 0; r < nrules; r++)
-            for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-              if (item_number_as_symbol_number (*rhsp) == i)
+          க்கு (rule_எண் r = 0; r < nrules; r++)
+            க்கு (item_எண் *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
+              எனில் (item_எண்_as_குறியீடு_எண் (*rhsp) == i)
                 {
                   fprintf (out, " %d", r);
-                  break;
+                  நிறுத்து;
                 }
           fputc ('\n', out);
         }
     }
 }
 
-void
-print_results (void)
+வெறுமை
+print_results (வெறுமை)
 {
   /* We used to use just .out if SPEC_NAME_PREFIX (-p) was used, but
      that conflicts with Posix.  */
@@ -467,7 +467,7 @@ print_results (void)
 
   /* Storage for print_reductions.  */
   no_reduce_set = bitset_create (ntokens, BITSET_FIXED);
-  for (state_number i = 0; i < nstates; i++)
+  க்கு (state_எண் i = 0; i < nstates; i++)
     print_state (out, states[i]);
   bitset_free (no_reduce_set);
 

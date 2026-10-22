@@ -17,38 +17,38 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "system.h"
 
-#include <hash.h>
-#include <quote.h>
+#அந்தர்பாவ <hash.h>
+#அந்தர்பாவ <quote.h>
 
-#include "complain.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "muscle-tab.h"
+#அந்தர்பாவ "complain.h"
+#அந்தர்பாவ "files.h"
+#அந்தர்பாவ "fixits.h"
+#அந்தர்பாவ "getargs.h"
+#அந்தர்பாவ "muscle-tab.h"
 
 muscle_kind
-muscle_kind_new (char const *k)
+muscle_kind_new (எழுத்து மாறிலி *k)
 {
-  if (STREQ (k, "code"))
-    return muscle_code;
-  else if (STREQ (k, "keyword"))
-    return muscle_keyword;
-  else if (STREQ (k, "string"))
-    return muscle_string;
+  எனில் (STREQ (k, "code"))
+    திரும்பு muscle_code;
+  இல்லையெனில் எனில் (STREQ (k, "keyword"))
+    திரும்பு muscle_keyword;
+  இல்லையெனில் எனில் (STREQ (k, "string"))
+    திரும்பு muscle_string;
   abort ();
 }
 
-char const *
+எழுத்து மாறிலி *
 muscle_kind_string (muscle_kind k)
 {
-  switch (k)
+  தேர்வு (k)
     {
-    case muscle_code:    return "code";
-    case muscle_keyword: return "keyword";
-    case muscle_string:  return "string";
+    நிலை muscle_code:    திரும்பு "code";
+    நிலை muscle_keyword: திரும்பு "keyword";
+    நிலை muscle_string:  திரும்பு "string";
     }
   abort ();
 }
@@ -56,111 +56,111 @@ muscle_kind_string (muscle_kind k)
 
 /* A key-value pair, along with storage that can be reclaimed when
    this pair is no longer needed.  */
-typedef struct
+வகைவரை கட்டமைப்பு
 {
-  char const *key;
-  char const *value;
-  char *storage;
+  எழுத்து மாறிலி *சாவி;
+  எழுத்து மாறிலி *மதிப்பு;
+  எழுத்து *storage;
   muscle_kind kind;
 } muscle_entry;
 
 
 /* The name of muscle for the %define variable VAR (corresponding to
    FIELD, if defined).  */
-static uniqstr
-muscle_name (char const *var, char const *field)
+நிலையான uniqstr
+muscle_name (எழுத்து மாறிலி *var, எழுத்து மாறிலி *field)
 {
-  if (field)
-    return UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
-  else
-    return UNIQSTR_CONCAT ("percent_define(", var, ")");
+  எனில் (field)
+    திரும்பு UNIQSTR_CONCAT ("percent_define_", field, "(", var, ")");
+  இல்லையெனில்
+    திரும்பு UNIQSTR_CONCAT ("percent_define(", var, ")");
 }
 
 /* An obstack used to create some entries.  */
-struct obstack muscle_obstack;
+கட்டமைப்பு obstack muscle_obstack;
 
 /* Initial capacity of muscles hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *muscle_table = NULL;
+நிலையான கட்டமைப்பு hash_table *muscle_table = வெற்று;
 
-static bool
-hash_compare_muscles (void const *x, void const *y)
+நிலையான bool
+hash_compare_muscles (வெறுமை மாறிலி *x, வெறுமை மாறிலி *y)
 {
-  muscle_entry const *m1 = x;
-  muscle_entry const *m2 = y;
-  return STREQ (m1->key, m2->key);
+  muscle_entry மாறிலி *m1 = x;
+  muscle_entry மாறிலி *m2 = y;
+  திரும்பு STREQ (m1->சாவி, m2->சாவி);
 }
 
-static size_t
-hash_muscle (const void *x, size_t tablesize)
+நிலையான size_t
+hash_muscle (மாறிலி வெறுமை *x, size_t tablesize)
 {
-  muscle_entry const *m = x;
-  return hash_string (m->key, tablesize);
+  muscle_entry மாறிலி *m = x;
+  திரும்பு hash_string (m->சாவி, tablesize);
 }
 
 /* Create a fresh muscle name KEY, and insert in the hash table.  */
-static void *
-muscle_entry_new (char const *key)
+நிலையான வெறுமை *
+muscle_entry_new (எழுத்து மாறிலி *சாவி)
 {
-  muscle_entry *res = xmalloc (sizeof *res);
-  res->key = key;
-  res->value = NULL;
-  res->storage = NULL;
+  muscle_entry *res = xmalloc (அளவு *res);
+  res->சாவி = சாவி;
+  res->மதிப்பு = வெற்று;
+  res->storage = வெற்று;
   hash_xinsert (muscle_table, res);
-  return res;
+  திரும்பு res;
 }
 
-static void
-muscle_entry_free (void *entry)
+நிலையான வெறுமை
+muscle_entry_free (வெறுமை *entry)
 {
   muscle_entry *mentry = entry;
-  free (mentry->storage);
-  free (mentry);
+  விடுவி (mentry->storage);
+  விடுவி (mentry);
 }
 
-void
-muscle_init (void)
+வெறுமை
+muscle_init (வெறுமை)
 {
   /* Initialize the muscle obstack.  */
   obstack_init (&muscle_obstack);
 
-  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, NULL, hash_muscle,
+  muscle_table = hash_xinitialize (HT_INITIAL_CAPACITY, வெற்று, hash_muscle,
                                    hash_compare_muscles, muscle_entry_free);
   /* Avoid warnings if the user defined this variable, but did not
      actually call -Wcex.  */
-  free (muscle_percent_define_get ("cex.timeout"));
+  விடுவி (muscle_percent_define_get ("cex.timeout"));
 }
 
 
-void
-muscle_free (void)
+வெறுமை
+muscle_free (வெறுமை)
 {
   hash_free (muscle_table);
-  obstack_free (&muscle_obstack, NULL);
+  obstack_free (&muscle_obstack, வெற்று);
 }
 
 /* Look for the muscle named KEY.  Return NULL if does not exist.  */
-static muscle_entry *
-muscle_lookup (char const *key)
+நிலையான muscle_entry *
+muscle_lookup (எழுத்து மாறிலி *சாவி)
 {
   muscle_entry probe;
-  probe.key = key;
-  return hash_lookup (muscle_table, &probe);
+  probe.சாவி = சாவி;
+  திரும்பு hash_lookup (muscle_table, &probe);
 }
 
 
-void
-muscle_insert (char const *key, char const *value)
+வெறுமை
+muscle_செருகு (எழுத்து மாறிலி *சாவி, எழுத்து மாறிலி *மதிப்பு)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
-    free (entry->storage);
-  else
+  muscle_entry *entry = muscle_lookup (சாவி);
+  எனில் (entry)
+    விடுவி (entry->storage);
+  இல்லையெனில்
     /* First insertion in the hash. */
-    entry = muscle_entry_new (key);
-  entry->value = value;
-  entry->storage = NULL;
+    entry = muscle_entry_new (சாவி);
+  entry->மதிப்பு = மதிப்பு;
+  entry->storage = வெற்று;
 }
 
 
@@ -169,31 +169,31 @@ muscle_insert (char const *key, char const *value)
    associated value.  Copy VALUE and SEPARATOR.  If VALUE does not end
    with TERMINATOR, append one.  */
 
-static void
-muscle_grow (const char *key, const char *val,
-             const char *separator, const char *terminator)
+நிலையான வெறுமை
+muscle_grow (மாறிலி எழுத்து *சாவி, மாறிலி எழுத்து *val,
+             மாறிலி எழுத்து *separator, மாறிலி எழுத்து *terminator)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (சாவி);
+  எனில் (entry)
     {
-      obstack_sgrow (&muscle_obstack, entry->value);
+      obstack_sgrow (&muscle_obstack, entry->மதிப்பு);
       obstack_sgrow (&muscle_obstack, separator);
-      free (entry->storage);
+      விடுவி (entry->storage);
     }
-  else
-    entry = muscle_entry_new (key);
+  இல்லையெனில்
+    entry = muscle_entry_new (சாவி);
 
   obstack_sgrow (&muscle_obstack, val);
 
   size_t vals = strlen (val);
   size_t terms = strlen (terminator);
-  if (terms <= vals
+  எனில் (terms <= vals
       && STRNEQ (val + vals - terms, terminator))
     obstack_sgrow (&muscle_obstack, terminator);
 
   {
-    char const *new_val = obstack_finish0 (&muscle_obstack);
-    entry->value = entry->storage = xstrdup (new_val);
+    எழுத்து மாறிலி *new_val = obstack_finish0 (&muscle_obstack);
+    entry->மதிப்பு = entry->storage = xstrdup (new_val);
     obstack_free (&muscle_obstack, new_val);
   }
 }
@@ -203,15 +203,15 @@ muscle_grow (const char *key, const char *val,
 | LOC to the current value of KEY.                                  |
 `------------------------------------------------------------------*/
 
-static void
-muscle_syncline_grow (char const *key, location loc)
+நிலையான வெறுமை
+muscle_syncline_grow (எழுத்து மாறிலி *சாவி, location loc)
 {
-  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.line);
+  obstack_printf (&muscle_obstack, "]b4_syncline(%d, ", loc.start.வரி);
   obstack_quote (&muscle_obstack,
                  quotearg_style (c_quoting_style, map_file_name (loc.start.file)));
   obstack_sgrow (&muscle_obstack, ")dnl\n[");
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  எழுத்து மாறிலி *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (சாவி, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
@@ -221,167 +221,167 @@ muscle_syncline_grow (char const *key, location loc)
 | using muscle_syncline_grow.                                       |
 `------------------------------------------------------------------*/
 
-void
-muscle_code_grow (const char *key, const char *val, location loc)
+வெறுமை
+muscle_code_grow (மாறிலி எழுத்து *சாவி, மாறிலி எழுத்து *val, location loc)
 {
-  muscle_syncline_grow (key, loc);
-  muscle_grow (key, val, "", "\n");
+  muscle_syncline_grow (சாவி, loc);
+  muscle_grow (சாவி, val, "", "\n");
 }
 
 
-void
-muscle_pair_list_grow (const char *muscle,
-                       const char *a1, const char *a2)
+வெறுமை
+muscle_pair_list_grow (மாறிலி எழுத்து *muscle,
+                       மாறிலி எழுத்து *a1, மாறிலி எழுத்து *a2)
 {
   obstack_sgrow (&muscle_obstack, "[");
   obstack_quote (&muscle_obstack, a1);
   obstack_sgrow (&muscle_obstack, ", ");
   obstack_quote (&muscle_obstack, a2);
   obstack_sgrow (&muscle_obstack, "]");
-  char const *pair = obstack_finish0 (&muscle_obstack);
+  எழுத்து மாறிலி *pair = obstack_finish0 (&muscle_obstack);
   muscle_grow (muscle, pair, ",\n", "");
   obstack_free (&muscle_obstack, pair);
 }
 
 
-char const *
-muscle_find_const (char const *key)
+எழுத்து மாறிலி *
+muscle_find_const (எழுத்து மாறிலி *சாவி)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  return entry ? entry->value : NULL;
+  muscle_entry *entry = muscle_lookup (சாவி);
+  திரும்பு entry ? entry->மதிப்பு : வெற்று;
 }
 
 
-char *
-muscle_find (char const *key)
+எழுத்து *
+muscle_find (எழுத்து மாறிலி *சாவி)
 {
-  muscle_entry *entry = muscle_lookup (key);
-  if (entry)
+  muscle_entry *entry = muscle_lookup (சாவி);
+  எனில் (entry)
     {
-      aver (entry->value == entry->storage);
-      return entry->storage;
+      aver (entry->மதிப்பு == entry->storage);
+      திரும்பு entry->storage;
     }
-  return NULL;
+  திரும்பு வெற்று;
 }
 
 
 /* In the format 'file_name:line.column', append BOUND to MUSCLE.  Use
    digraphs for special characters in the file name.  */
 
-static void
-muscle_boundary_grow (char const *key, boundary bound)
+நிலையான வெறுமை
+muscle_boundary_grow (எழுத்து மாறிலி *சாவி, boundary bound)
 {
   obstack_sgrow  (&muscle_obstack, "[[");
   obstack_escape (&muscle_obstack, bound.file);
-  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.line, bound.column, bound.byte);
-  char const *extension = obstack_finish0 (&muscle_obstack);
-  muscle_grow (key, extension, "", "");
+  obstack_printf (&muscle_obstack, ":%d.%d@@%d]]", bound.வரி, bound.column, bound.byte);
+  எழுத்து மாறிலி *extension = obstack_finish0 (&muscle_obstack);
+  muscle_grow (சாவி, extension, "", "");
   obstack_free (&muscle_obstack, extension);
 }
 
 
-void
-muscle_location_grow (char const *key, location loc)
+வெறுமை
+muscle_location_grow (எழுத்து மாறிலி *சாவி, location loc)
 {
-  muscle_boundary_grow (key, loc.start);
-  muscle_grow (key, "", ", ", "");
-  muscle_boundary_grow (key, loc.end);
+  muscle_boundary_grow (சாவி, loc.start);
+  muscle_grow (சாவி, "", ", ", "");
+  muscle_boundary_grow (சாவி, loc.end);
 }
 
-#define COMMON_DECODE(Value)                                    \
-  case '$':                                                     \
-    ++(Value); aver (*(Value) == ']');                          \
-    ++(Value); aver (*(Value) == '[');                          \
+#define COMMON_DECODE(மதிப்பு_4)                                    \
+  நிலை '$':                                                     \
+    ++(மதிப்பு_4); aver (*(மதிப்பு_4) == ']');                          \
+    ++(மதிப்பு_4); aver (*(மதிப்பு_4) == '[');                          \
     obstack_sgrow (&muscle_obstack, "$");                       \
-    break;                                                      \
-  case '@':                                                     \
-    switch (*++(Value))                                         \
+    நிறுத்து;                                                      \
+  நிலை '@':                                                     \
+    தேர்வு (*++(மதிப்பு_4))                                         \
       {                                                         \
-      case '\'': /* Ignore "@'" */ break;                       \
-      case '@': obstack_sgrow (&muscle_obstack, "@" ); break;   \
-      case '{': obstack_sgrow (&muscle_obstack, "[" ); break;   \
-      case '}': obstack_sgrow (&muscle_obstack, "]" ); break;   \
-      default: aver (false); break;                             \
+      நிலை '\'': /* Ignore "@'" */ நிறுத்து;                       \
+      நிலை '@': obstack_sgrow (&muscle_obstack, "@" ); நிறுத்து;   \
+      நிலை '{': obstack_sgrow (&muscle_obstack, "[" ); நிறுத்து;   \
+      நிலை '}': obstack_sgrow (&muscle_obstack, "]" ); நிறுத்து;   \
+      இயல்பு: aver (false); நிறுத்து;                             \
       }                                                         \
-    break;                                                      \
-  default:                                                      \
-    obstack_1grow (&muscle_obstack, *(Value));                  \
-    break;
+    நிறுத்து;                                                      \
+  இயல்பு:                                                      \
+    obstack_1grow (&muscle_obstack, *(மதிப்பு_4));                  \
+    நிறுத்து;
 
 /* Reverse of obstack_escape.  */
-static char *
-string_decode (char const *key)
+நிலையான எழுத்து *
+string_decode (எழுத்து மாறிலி *சாவி)
 {
-  char const *value = muscle_find_const (key);
-  if (!value)
-    return NULL;
-  do {
-    switch (*value)
+  எழுத்து மாறிலி *மதிப்பு = muscle_find_const (சாவி);
+  எனில் (!மதிப்பு)
+    திரும்பு வெற்று;
+  செய் {
+    தேர்வு (*மதிப்பு)
       {
-        COMMON_DECODE (value)
-        case '[':
-        case ']':
+        COMMON_DECODE (மதிப்பு)
+        நிலை '[':
+        நிலை ']':
           aver (false);
-          break;
+          நிறுத்து;
       }
-  } while (*value++);
-  char const *value_decoded = obstack_finish (&muscle_obstack);
-  char *res = xstrdup (value_decoded);
-  obstack_free (&muscle_obstack, value_decoded);
-  return res;
+  } போது (*மதிப்பு++);
+  எழுத்து மாறிலி *மதிப்பு_decoded = obstack_finish (&muscle_obstack);
+  எழுத்து *res = xstrdup (மதிப்பு_decoded);
+  obstack_free (&muscle_obstack, மதிப்பு_decoded);
+  திரும்பு res;
 }
 
 /* Reverse of muscle_location_grow.  */
-static location
-location_decode (char const *value)
+நிலையான location
+location_decode (எழுத்து மாறிலி *மதிப்பு)
 {
-  aver (value);
-  aver (*value == '[');
-  ++value; aver (*value == '[');
+  aver (மதிப்பு);
+  aver (*மதிப்பு == '[');
+  ++மதிப்பு; aver (*மதிப்பு == '[');
   location loc;
-  while (*++value)
-    switch (*value)
+  போது (*++மதிப்பு)
+    தேர்வு (*மதிப்பு)
       {
-        COMMON_DECODE (value)
-        case '[':
+        COMMON_DECODE (மதிப்பு)
+        நிலை '[':
           aver (false);
-          break;
-        case ']':
-          ++value; aver (*value == ']');
-          char *boundary_str = obstack_finish0 (&muscle_obstack);
-          switch (*++value)
+          நிறுத்து;
+        நிலை ']':
+          ++மதிப்பு; aver (*மதிப்பு == ']');
+          எழுத்து *boundary_str = obstack_finish0 (&muscle_obstack);
+          தேர்வு (*++மதிப்பு)
             {
-            case ',':
+            நிலை ',':
               boundary_set_from_string (&loc.start, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              ++value; aver (*value == ' ');
-              ++value; aver (*value == '[');
-              ++value; aver (*value == '[');
-              break;
-            case '\0':
+              ++மதிப்பு; aver (*மதிப்பு == ' ');
+              ++மதிப்பு; aver (*மதிப்பு == '[');
+              ++மதிப்பு; aver (*மதிப்பு == '[');
+              நிறுத்து;
+            நிலை '\0':
               boundary_set_from_string (&loc.end, boundary_str);
               obstack_free (&muscle_obstack, boundary_str);
-              return loc;
-              break;
-            default:
+              திரும்பு loc;
+              நிறுத்து;
+            இயல்பு:
               aver (false);
-              break;
+              நிறுத்து;
             }
-          break;
+          நிறுத்து;
       }
   aver (false);
-  return loc;
+  திரும்பு loc;
 }
 
-void
-muscle_user_name_list_grow (char const *key, char const *user_name,
+வெறுமை
+muscle_user_name_list_grow (எழுத்து மாறிலி *சாவி, எழுத்து மாறிலி *user_name,
                             location loc)
 {
-  muscle_grow (key, "[[[[", ",", "");
-  muscle_grow (key, user_name, "", "");
-  muscle_grow (key, "]], ", "", "");
-  muscle_location_grow (key, loc);
-  muscle_grow (key, "]]", "", "");
+  muscle_grow (சாவி, "[[[[", ",", "");
+  muscle_grow (சாவி, user_name, "", "");
+  muscle_grow (சாவி, "]], ", "", "");
+  muscle_location_grow (சாவி, loc);
+  muscle_grow (சாவி, "]]", "", "");
 }
 
 
@@ -400,25 +400,25 @@ muscle_user_name_list_grow (char const *key, char const *user_name,
     "foo=", "baz"    => "%define foo"
  */
 
-static
-char *
-define_directive (char const *assignment,
+நிலையான
+எழுத்து *
+define_directive (எழுத்து மாறிலி *assignment,
                   muscle_kind kind,
-                  char const *value)
+                  எழுத்து மாறிலி *மதிப்பு)
 {
-  char *eq = strchr (assignment, '=');
-  char const *fmt
-    = eq || !value || !*value ? "%%define %s"
+  எழுத்து *eq = strchr (assignment, '=');
+  எழுத்து மாறிலி *fmt
+    = eq || !மதிப்பு || !*மதிப்பு ? "%%define %s"
     : kind == muscle_code     ? "%%define %s {%s}"
     : kind == muscle_string   ? "%%define %s \"%s\""
     :                           "%%define %s %s";
-  char *res = xmalloc (strlen (fmt) + strlen (assignment)
-                       + (value ? strlen (value) : 0));
-  sprintf (res, fmt, assignment, value);
+  எழுத்து *res = xmalloc (strlen (fmt) + strlen (assignment)
+                       + (மதிப்பு ? strlen (மதிப்பு) : 0));
+  sprintf (res, fmt, assignment, மதிப்பு);
   eq = strchr (res, '=');
-  if (eq)
+  எனில் (eq)
     *eq = eq[1] ? ' ' : '\0';
-  return res;
+  திரும்பு res;
 }
 
 /** If the \a variable name is obsolete, return the name to use,
@@ -426,20 +426,20 @@ define_directive (char const *assignment,
  *
  * Allocates the returned value if needed, otherwise the returned
  * value is exactly \a variable.  */
-static
-char const *
-muscle_percent_variable_update (char const *variable,
+நிலையான
+எழுத்து மாறிலி *
+muscle_percent_variable_update (எழுத்து மாறிலி *variable,
                                 muscle_kind kind,
-                                char const **value,
-                                char **old, char **upd)
+                                எழுத்து மாறிலி **மதிப்பு,
+                                எழுத்து **old, எழுத்து **upd)
 {
-  typedef struct
+  வகைவரை கட்டமைப்பு
   {
-    const char *obsolete;
-    const char *updated;
+    மாறிலி எழுத்து *obsolete;
+    மாறிலி எழுத்து *updated;
     muscle_kind kind;
   } conversion_type;
-  const conversion_type conversion[] =
+  மாறிலி conversion_type conversion[] =
   {
     { "%error-verbose",             "parse.error=verbose",       muscle_keyword },
     { "%error_verbose",             "parse.error=verbose",       muscle_keyword },
@@ -464,51 +464,51 @@ muscle_percent_variable_update (char const *variable,
     { "stype",                      "api.value.type",            -1 },
     { "variant=",                   "api.value.type=variant",    -1 },
     { "variant=true",               "api.value.type=variant",    -1 },
-    { NULL, NULL, -1, }
+    { வெற்று, வெற்று, -1, }
   };
 
-  for (conversion_type const *c = conversion; c->obsolete; ++c)
+  க்கு (conversion_type மாறிலி *c = conversion; c->obsolete; ++c)
     {
-      char const *eq = strchr (c->obsolete, '=');
-      if (eq
+      எழுத்து மாறிலி *eq = strchr (c->obsolete, '=');
+      எனில் (eq
           ? (!strncmp (c->obsolete, variable, eq - c->obsolete)
-             && STREQ (eq + 1, *value))
+             && STREQ (eq + 1, *மதிப்பு))
           : STREQ (c->obsolete, variable))
         {
           /* Generate the deprecation warning. */
           *old = c->obsolete[0] == '%'
             ? xstrdup (c->obsolete)
-            : define_directive (c->obsolete, kind, *value);
-          *upd = define_directive (c->updated, c->kind, *value);
+            : define_directive (c->obsolete, kind, *மதிப்பு);
+          *upd = define_directive (c->updated, c->kind, *மதிப்பு);
           /* Update the variable and its value.  */
           {
-            char *res = xstrdup (c->updated);
-            char *eq2 = strchr (res, '=');
-            if (eq2)
+            எழுத்து *res = xstrdup (c->updated);
+            எழுத்து *eq2 = strchr (res, '=');
+            எனில் (eq2)
               {
                 *eq2 = '\0';
-                *value = eq2 + 1;
+                *மதிப்பு = eq2 + 1;
               }
-            return res;
+            திரும்பு res;
           }
         }
     }
-  return variable;
+  திரும்பு variable;
 }
 
-void
-muscle_percent_define_insert (char const *var, location variable_loc,
+வெறுமை
+muscle_percent_define_செருகு (எழுத்து மாறிலி *var, location variable_loc,
                               muscle_kind kind,
-                              char const *value,
+                              எழுத்து மாறிலி *மதிப்பு,
                               muscle_percent_define_how how)
 {
   /* Backward compatibility.  */
-  char *old = NULL;
-  char *upd = NULL;
-  char const *variable
+  எழுத்து *old = வெற்று;
+  எழுத்து *upd = வெற்று;
+  எழுத்து மாறிலி *variable
     = muscle_percent_variable_update (var, kind,
-                                      &value, &old, &upd);
-  uniqstr name = muscle_name (variable, NULL);
+                                      &மதிப்பு, &old, &upd);
+  uniqstr name = muscle_name (variable, வெற்று);
   uniqstr loc_name = muscle_name (variable, "loc");
   uniqstr syncline_name = muscle_name (variable, "syncline");
   uniqstr how_name = muscle_name (variable, "how");
@@ -516,18 +516,18 @@ muscle_percent_define_insert (char const *var, location variable_loc,
 
   /* Command-line options are processed before the grammar file.  */
   bool warned = false;
-  if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
+  எனில் (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE)
     {
-      char const *current_value = muscle_find_const (name);
-      if (current_value)
+      எழுத்து மாறிலி *current_மதிப்பு = muscle_find_const (name);
+      எனில் (current_மதிப்பு)
         {
-          long l = strtol (muscle_find_const (how_name), NULL, 10);
+          long l = strtol (muscle_find_const (how_name), வெற்று, 10);
           muscle_percent_define_how how_old
             = 0 <= l && l <= INT_MAX ? l : INT_MAX;
-          if (how_old == MUSCLE_PERCENT_DEFINE_F)
-            goto end;
+          எனில் (how_old == MUSCLE_PERCENT_DEFINE_F)
+            செல் end;
           /* If assigning the same value, make it a warning.  */
-          warnings warn = STREQ (value, current_value) ? Wother : complaint;
+          warnings warn = STREQ (மதிப்பு, current_மதிப்பு) ? Wother : complaint;
           complain (&variable_loc, warn,
                     _("%%define variable %s redefined"),
                     quote (variable));
@@ -538,229 +538,229 @@ muscle_percent_define_insert (char const *var, location variable_loc,
         }
     }
 
-  if (!warned && old && upd)
+  எனில் (!warned && old && upd)
     deprecated_directive (&variable_loc, old, upd);
 
-  MUSCLE_INSERT_STRING (name, value);
-  muscle_insert (loc_name, "");
+  MUSCLE_செருகு_STRING (name, மதிப்பு);
+  muscle_செருகு (loc_name, "");
   muscle_location_grow (loc_name, variable_loc);
-  muscle_insert (syncline_name, "");
+  muscle_செருகு (syncline_name, "");
   muscle_syncline_grow (syncline_name, variable_loc);
   muscle_user_name_list_grow ("percent_define_user_variables", variable,
                               variable_loc);
-  MUSCLE_INSERT_INT (how_name, how);
-  MUSCLE_INSERT_STRING (kind_name, muscle_kind_string (kind));
+  MUSCLE_செருகு_INT (how_name, how);
+  MUSCLE_செருகு_STRING (kind_name, muscle_kind_string (kind));
  end:
-  free (old);
-  free (upd);
-  if (variable != var)
-    free ((char *) variable);
+  விடுவி (old);
+  விடுவி (upd);
+  எனில் (variable != var)
+    விடுவி ((எழுத்து *) variable);
 }
 
 /* This is used for backward compatibility, e.g., "%define api.pure"
    supersedes "%pure-parser".  */
-void
-muscle_percent_define_ensure (char const *variable, location loc,
-                              bool value)
+வெறுமை
+muscle_percent_define_ensure (எழுத்து மாறிலி *variable, location loc,
+                              bool மதிப்பு)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char const *val = value ? "" : "false";
+  uniqstr name = muscle_name (variable, வெற்று);
+  எழுத்து மாறிலி *val = மதிப்பு ? "" : "false";
 
   /* Don't complain is VARIABLE is already defined, but be sure to set
      its value to VAL.  */
-  if (!muscle_find_const (name)
-      || muscle_percent_define_flag_if (variable) != value)
-    muscle_percent_define_insert (variable, loc, muscle_keyword, val,
+  எனில் (!muscle_find_const (name)
+      || muscle_percent_define_flag_if (variable) != மதிப்பு)
+    muscle_percent_define_செருகு (variable, loc, muscle_keyword, val,
                                   MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
 }
 
 /* Mark %define VARIABLE as used.  */
-static void
-muscle_percent_define_use (char const *variable)
+நிலையான வெறுமை
+muscle_percent_define_use (எழுத்து மாறிலி *variable)
 {
-  muscle_insert (muscle_name (variable, "bison_variables"), "");
+  muscle_செருகு (muscle_name (variable, "bison_variables"), "");
 }
 
 /* The value of %define variable VARIABLE (corresponding to FIELD, if
    defined).  Do not register as used, but diagnose unset variables.  */
 
-static
-char const *
-muscle_percent_define_get_raw (char const *variable, char const *field)
+நிலையான
+எழுத்து மாறிலி *
+muscle_percent_define_get_raw (எழுத்து மாறிலி *variable, எழுத்து மாறிலி *field)
 {
   uniqstr name = muscle_name (variable, field);
-  char const *res = muscle_find_const (name);
-  if (!res)
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  எழுத்து மாறிலி *res = muscle_find_const (name);
+  எனில் (!res)
+    complain (வெற்று, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_get_raw", quote (variable));
-  return res;
+  திரும்பு res;
 }
 
-char *
-muscle_percent_define_get (char const *variable)
+எழுத்து *
+muscle_percent_define_get (எழுத்து மாறிலி *variable)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  char *value = string_decode (name);
-  if (!value)
-    value = xstrdup ("");
+  uniqstr name = muscle_name (variable, வெற்று);
+  எழுத்து *மதிப்பு = string_decode (name);
+  எனில் (!மதிப்பு)
+    மதிப்பு = xstrdup ("");
   muscle_percent_define_use (variable);
-  return value;
+  திரும்பு மதிப்பு;
 }
 
 /* The kind of VARIABLE.  An error if undefined.  */
-static muscle_kind
-muscle_percent_define_get_kind (char const *variable)
+நிலையான muscle_kind
+muscle_percent_define_get_kind (எழுத்து மாறிலி *variable)
 {
-  return muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
+  திரும்பு muscle_kind_new (muscle_percent_define_get_raw (variable, "kind"));
 }
 
 /* Check the kind of VARIABLE.  An error if undefined.  */
-static void
-muscle_percent_define_check_kind (char const *variable, muscle_kind kind)
+நிலையான வெறுமை
+muscle_percent_define_check_kind (எழுத்து மாறிலி *variable, muscle_kind kind)
 {
-  if (muscle_percent_define_get_kind (variable) != kind)
+  எனில் (muscle_percent_define_get_kind (variable) != kind)
     {
       location loc = muscle_percent_define_get_loc (variable);
-      switch (kind)
+      தேர்வு (kind)
         {
-        case muscle_code:
+        நிலை muscle_code:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '{...}' values"),
                     variable);
-          break;
-        case muscle_keyword:
+          நிறுத்து;
+        நிலை muscle_keyword:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires keyword values"),
                     variable);
-          break;
-        case muscle_string:
+          நிறுத்து;
+        நிலை muscle_string:
           complain (&loc, Wdeprecated,
                     _("%%define variable '%s' requires '\"...\"' values"),
                     variable);
-          break;
+          நிறுத்து;
         }
     }
 }
 
 
 location
-muscle_percent_define_get_loc (char const *variable)
+muscle_percent_define_get_loc (எழுத்து மாறிலி *variable)
 {
-  return location_decode (muscle_percent_define_get_raw (variable, "loc"));
+  திரும்பு location_decode (muscle_percent_define_get_raw (variable, "loc"));
 }
 
-char const *
-muscle_percent_define_get_syncline (char const *variable)
+எழுத்து மாறிலி *
+muscle_percent_define_get_syncline (எழுத்து மாறிலி *variable)
 {
-  return muscle_percent_define_get_raw (variable, "syncline");
+  திரும்பு muscle_percent_define_get_raw (variable, "syncline");
 }
 
 bool
-muscle_percent_define_ifdef (char const *variable)
+muscle_percent_define_ifdef (எழுத்து மாறிலி *variable)
 {
-  if (muscle_find_const (muscle_name (variable, NULL)))
+  எனில் (muscle_find_const (muscle_name (variable, வெற்று)))
     {
       muscle_percent_define_use (variable);
-      return true;
+      திரும்பு true;
     }
-  else
-    return false;
+  இல்லையெனில்
+    திரும்பு false;
 }
 
 bool
-muscle_percent_define_flag_if (char const *variable)
+muscle_percent_define_flag_if (எழுத்து மாறிலி *variable)
 {
   uniqstr invalid_boolean_name = muscle_name (variable, "invalid_boolean");
   bool res = false;
 
-  if (muscle_percent_define_ifdef (variable))
+  எனில் (muscle_percent_define_ifdef (variable))
     {
-      char *value = muscle_percent_define_get (variable);
+      எழுத்து *மதிப்பு = muscle_percent_define_get (variable);
       muscle_percent_define_check_kind (variable, muscle_keyword);
-      if (value[0] == '\0' || STREQ (value, "true"))
+      எனில் (மதிப்பு[0] == '\0' || STREQ (மதிப்பு, "true"))
         res = true;
-      else if (STREQ (value, "false"))
+      இல்லையெனில் எனில் (STREQ (மதிப்பு, "false"))
         res = false;
-      else if (!muscle_find_const (invalid_boolean_name))
+      இல்லையெனில் எனில் (!muscle_find_const (invalid_boolean_name))
         {
-          muscle_insert (invalid_boolean_name, "");
+          muscle_செருகு (invalid_boolean_name, "");
           location loc = muscle_percent_define_get_loc (variable);
           complain (&loc, complaint,
                     _("invalid value for %%define Boolean variable %s"),
                     quote (variable));
         }
-      free (value);
+      விடுவி (மதிப்பு);
     }
-  else
-    complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+  இல்லையெனில்
+    complain (வெற்று, fatal, _("%s: undefined %%define variable %s"),
               "muscle_percent_define_flag", quote (variable));
 
-  return res;
+  திரும்பு res;
 }
 
-void
-muscle_percent_define_default (char const *variable, char const *value)
+வெறுமை
+muscle_percent_define_default (எழுத்து மாறிலி *variable, எழுத்து மாறிலி *மதிப்பு)
 {
-  uniqstr name = muscle_name (variable, NULL);
-  if (!muscle_find_const (name))
+  uniqstr name = muscle_name (variable, வெற்று);
+  எனில் (!muscle_find_const (name))
     {
-      MUSCLE_INSERT_STRING (name, value);
-      MUSCLE_INSERT_STRING (muscle_name (variable, "kind"), "keyword");
+      MUSCLE_செருகு_STRING (name, மதிப்பு);
+      MUSCLE_செருகு_STRING (muscle_name (variable, "kind"), "keyword");
       {
         uniqstr loc_name = muscle_name (variable, "loc");
         location loc;
         loc.start.file = "<default value>";
-        loc.start.line = -1;
+        loc.start.வரி = -1;
         loc.start.column = -1;
         loc.start.byte = -1;
         loc.end = loc.start;
-        muscle_insert (loc_name, "");
+        muscle_செருகு (loc_name, "");
         muscle_location_grow (loc_name, loc);
       }
-      muscle_insert (muscle_name (variable, "syncline"), "");
+      muscle_செருகு (muscle_name (variable, "syncline"), "");
     }
 }
 
-void
-muscle_percent_define_check_values (char const * const *values)
+வெறுமை
+muscle_percent_define_check_மதிப்புகள் (எழுத்து மாறிலி * மாறிலி *மதிப்புகள்)
 {
-  for (; *values; ++values)
+  க்கு (; *மதிப்புகள்; ++மதிப்புகள்)
     {
-      char const * const *variablep = values;
-      uniqstr name = muscle_name (*variablep, NULL);
-      char *value = string_decode (name);
+      எழுத்து மாறிலி * மாறிலி *variablep = மதிப்புகள்;
+      uniqstr name = muscle_name (*variablep, வெற்று);
+      எழுத்து *மதிப்பு = string_decode (name);
       muscle_percent_define_check_kind (*variablep, muscle_keyword);
-      if (value)
+      எனில் (மதிப்பு)
         {
-          for (++values; *values; ++values)
-            if (STREQ (value, *values))
-              break;
-          if (!*values)
+          க்கு (++மதிப்புகள்; *மதிப்புகள்; ++மதிப்புகள்)
+            எனில் (STREQ (மதிப்பு, *மதிப்புகள்))
+              நிறுத்து;
+          எனில் (!*மதிப்புகள்)
             {
               location loc = muscle_percent_define_get_loc (*variablep);
               complain (&loc, complaint,
                         _("invalid value for %%define variable %s: %s"),
-                        quote (*variablep), quote_n (1, value));
-              for (values = variablep + 1; *values; ++values)
+                        quote (*variablep), quote_n (1, மதிப்பு));
+              க்கு (மதிப்புகள் = variablep + 1; *மதிப்புகள்; ++மதிப்புகள்)
                 subcomplain (&loc, complaint | no_caret | silent,
-                             _("accepted value: %s"), quote (*values));
+                             _("accepted value: %s"), quote (*மதிப்புகள்));
             }
-          else
-            while (*values)
-              ++values;
-          free (value);
+          இல்லையெனில்
+            போது (*மதிப்புகள்)
+              ++மதிப்புகள்;
+          விடுவி (மதிப்பு);
         }
-      else
-        complain (NULL, fatal, _("%s: undefined %%define variable %s"),
+      இல்லையெனில்
+        complain (வெற்று, fatal, _("%s: undefined %%define variable %s"),
                   "muscle_percent_define_check_values", quote (*variablep));
     }
 }
 
-void
-muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
-                          char const *code, location code_loc)
+வெறுமை
+muscle_percent_code_grow (எழுத்து மாறிலி *qualifier, location qualifier_loc,
+                          எழுத்து மாறிலி *code, location code_loc)
 {
-  char const *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
+  எழுத்து மாறிலி *name = UNIQSTR_CONCAT ("percent_code(", qualifier, ")");
   muscle_code_grow (name, code, code_loc);
   muscle_user_name_list_grow ("percent_code_user_qualifiers", qualifier,
                                qualifier_loc);
@@ -771,23 +771,23 @@ muscle_percent_code_grow (char const *qualifier, location qualifier_loc,
 | Output the definition of ENTRY as a m4_define.  |
 `------------------------------------------------*/
 
-static inline bool
+நிலையான உள்வரி bool
 muscle_m4_output (muscle_entry *entry, FILE *out)
 {
   fprintf (out,
            "m4_define([b4_%s],\n"
-           "[[%s]])\n\n\n", entry->key, entry->value);
-  return true;
+           "[[%s]])\n\n\n", entry->சாவி, entry->மதிப்பு);
+  திரும்பு true;
 }
 
-static bool
-muscle_m4_output_processor (void *entry, void *out)
+நிலையான bool
+muscle_m4_output_processor (வெறுமை *entry, வெறுமை *out)
 {
-  return muscle_m4_output (entry, out);
+  திரும்பு muscle_m4_output (entry, out);
 }
 
 
-void
+வெறுமை
 muscles_m4_output (FILE *out)
 {
   hash_do_for_each (muscle_table, muscle_m4_output_processor, out);

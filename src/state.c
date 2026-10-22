@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "state.h"
+#அந்தர்பாவ <config.h>
+#அந்தர்பாவ "state.h"
 
-#include "system.h"
+#அந்தர்பாவ "system.h"
 
-#include <hash.h>
+#அந்தர்பாவ <hash.h>
 
-#include "closure.h"
-#include "complain.h"
-#include "getargs.h"
-#include "gram.h"
-#include "print-xml.h"
+#அந்தர்பாவ "closure.h"
+#அந்தர்பாவ "complain.h"
+#அந்தர்பாவ "getargs.h"
+#அந்தர்பாவ "gram.h"
+#அந்தர்பாவ "print-xml.h"
 
 
                         /*-------------------.
@@ -41,24 +41,24 @@
 | Create a new array of NUM shifts/gotos.  |
 `-----------------------------------------*/
 
-static transitions *
-transitions_new (int num, state **dst)
+நிலையான transitions *
+transitions_new (முழு இலக்கம், state **dst)
 {
-  size_t states_size = num * sizeof *dst;
+  size_t states_size = இலக்கம் * அளவு *dst;
   transitions *res = xmalloc (offsetof (transitions, states) + states_size);
-  res->num = num;
+  res->இலக்கம் = இலக்கம்;
   memcpy (res->states, dst, states_size);
-  return res;
+  திரும்பு res;
 }
 
 
 state *
-transitions_to (state *s, symbol_number sym)
+transitions_to (state *s, குறியீடு_எண் sym)
 {
   transitions *trans = s->transitions;
-  for (int i = 0; i < trans->num; ++i)
-    if (TRANSITION_SYMBOL (trans, i) == sym)
-      return trans->states[i];
+  க்கு (முழு i = 0; i < trans->இலக்கம்; ++i)
+    எனில் (TRANSITION_குறியீடு (trans, i) == sym)
+      திரும்பு trans->states[i];
   abort ();
 }
 
@@ -73,14 +73,14 @@ transitions_to (state *s, symbol_number sym)
 `---------------------------------*/
 
 errs *
-errs_new (int num, symbol **tokens)
+errs_new (முழு இலக்கம், குறியீடு **tokens)
 {
-  size_t symbols_size = num * sizeof *tokens;
+  size_t symbols_size = இலக்கம் * அளவு *tokens;
   errs *res = xmalloc (offsetof (errs, symbols) + symbols_size);
-  res->num = num;
-  if (tokens)
+  res->இலக்கம் = இலக்கம்;
+  எனில் (tokens)
     memcpy (res->symbols, tokens, symbols_size);
-  return res;
+  திரும்பு res;
 }
 
 
@@ -95,15 +95,15 @@ errs_new (int num, symbol **tokens)
 | Create a new array of NUM reductions.  |
 `---------------------------------------*/
 
-static reductions *
-reductions_new (int num, rule **reds)
+நிலையான reductions *
+reductions_new (முழு இலக்கம், rule **reds)
 {
-  size_t rules_size = num * sizeof *reds;
+  size_t rules_size = இலக்கம் * அளவு *reds;
   reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
-  res->num = num;
-  res->lookaheads = NULL;
+  res->இலக்கம் = இலக்கம்;
+  res->lookaheads = வெற்று;
   memcpy (res->rules, reds, rules_size);
-  return res;
+  திரும்பு res;
 }
 
 
@@ -113,10 +113,10 @@ reductions_new (int num, rule **reds)
                         `---------*/
 
 
-state_number nstates = 0;
+state_எண் nstates = 0;
 /* FINAL_STATE is properly set by new_state when it recognizes its
    accessing symbol: $end.  */
-state *final_state = NULL;
+state *final_state = வெற்று;
 
 
 /*------------------------------------------------------------------.
@@ -125,53 +125,53 @@ state *final_state = NULL;
 `------------------------------------------------------------------*/
 
 state *
-state_new (symbol_number accessing_symbol,
+state_new (குறியீடு_எண் accessing_குறியீடு,
            size_t nitems, item_index *core)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_எண்_MAXIMUM);
 
-  size_t items_size = nitems * sizeof *core;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = accessing_symbol;
-  res->transitions = NULL;
-  res->reductions = NULL;
-  res->errs = NULL;
-  res->state_list = NULL;
+  size_t பொருட்கள்_size = nitems * அளவு *core;
+  state *res = xmalloc (offsetof (state, பொருட்கள்) + பொருட்கள்_size);
+  res->எண் = nstates++;
+  res->accessing_குறியீடு = accessing_குறியீடு;
+  res->transitions = வெற்று;
+  res->reductions = வெற்று;
+  res->errs = வெற்று;
+  res->state_list = வெற்று;
   res->consistent = false;
-  res->solved_conflicts = NULL;
-  res->solved_conflicts_xml = NULL;
+  res->solved_conflicts = வெற்று;
+  res->solved_conflicts_xml = வெற்று;
 
   res->nitems = nitems;
-  memcpy (res->items, core, items_size);
+  memcpy (res->பொருட்கள், core, பொருட்கள்_size);
 
-  state_hash_insert (res);
+  state_hash_செருகு (res);
 
-  return res;
+  திரும்பு res;
 }
 
 state *
-state_new_isocore (state const *s)
+state_new_isocore (state மாறிலி *s)
 {
-  aver (nstates < STATE_NUMBER_MAXIMUM);
+  aver (nstates < STATE_எண்_MAXIMUM);
 
-  size_t items_size = s->nitems * sizeof *s->items;
-  state *res = xmalloc (offsetof (state, items) + items_size);
-  res->number = nstates++;
-  res->accessing_symbol = s->accessing_symbol;
+  size_t பொருட்கள்_size = s->nitems * அளவு *s->பொருட்கள்;
+  state *res = xmalloc (offsetof (state, பொருட்கள்) + பொருட்கள்_size);
+  res->எண் = nstates++;
+  res->accessing_குறியீடு = s->accessing_குறியீடு;
   res->transitions =
-    transitions_new (s->transitions->num, s->transitions->states);
-  res->reductions = reductions_new (s->reductions->num, s->reductions->rules);
-  res->errs = NULL;
-  res->state_list = NULL;
+    transitions_new (s->transitions->இலக்கம், s->transitions->states);
+  res->reductions = reductions_new (s->reductions->இலக்கம், s->reductions->rules);
+  res->errs = வெற்று;
+  res->state_list = வெற்று;
   res->consistent = s->consistent;
-  res->solved_conflicts = NULL;
-  res->solved_conflicts_xml = NULL;
+  res->solved_conflicts = வெற்று;
+  res->solved_conflicts_xml = வெற்று;
 
   res->nitems = s->nitems;
-  memcpy (res->items, s->items, items_size);
+  memcpy (res->பொருட்கள், s->பொருட்கள், பொருட்கள்_size);
 
-  return res;
+  திரும்பு res;
 }
 
 
@@ -179,28 +179,28 @@ state_new_isocore (state const *s)
 | Free S.  |
 `---------*/
 
-static void
+நிலையான வெறுமை
 state_free (state *s)
 {
-  free (s->transitions);
-  free (s->reductions);
-  free (s->errs);
-  free (s);
+  விடுவி (s->transitions);
+  விடுவி (s->reductions);
+  விடுவி (s->errs);
+  விடுவி (s);
 }
 
 
-void
-state_transitions_print (const state *s, FILE *out)
+வெறுமை
+state_transitions_print (மாறிலி state *s, FILE *out)
 {
-  const transitions *trans = s->transitions;
+  மாறிலி transitions *trans = s->transitions;
   fprintf (out, "transitions of %d (%d):\n",
-           s->number, trans->num);
-  for (int i = 0; i < trans->num; ++i)
+           s->எண், trans->இலக்கம்);
+  க்கு (முழு i = 0; i < trans->இலக்கம்; ++i)
     fprintf (out, "  %d: (%d, %s, %d)\n",
              i,
-             s->number,
-             symbols[s->transitions->states[i]->accessing_symbol]->tag,
-             s->transitions->states[i]->number);
+             s->எண்,
+             symbols[s->transitions->states[i]->accessing_குறியீடு]->tag,
+             s->transitions->states[i]->எண்);
 }
 
 
@@ -208,12 +208,12 @@ state_transitions_print (const state *s, FILE *out)
 | Set the transitions of S.  |
 `---------------------------*/
 
-void
-state_transitions_set (state *s, int num, state **dst)
+வெறுமை
+state_transitions_set (state *s, முழு இலக்கம், state **dst)
 {
   aver (!s->transitions);
-  s->transitions = transitions_new (num, dst);
-  if (trace_flag & trace_automaton)
+  s->transitions = transitions_new (இலக்கம், dst);
+  எனில் (trace_flag & trace_automaton)
     state_transitions_print (s, stderr);
 }
 
@@ -222,21 +222,21 @@ state_transitions_set (state *s, int num, state **dst)
 | Set the reductions of S.  |
 `--------------------------*/
 
-void
-state_reductions_set (state *s, int num, rule **reds)
+வெறுமை
+state_reductions_set (state *s, முழு இலக்கம், rule **reds)
 {
   aver (!s->reductions);
-  s->reductions = reductions_new (num, reds);
+  s->reductions = reductions_new (இலக்கம், reds);
 }
 
 
-int
-state_reduction_find (state const *s, rule const *r)
+முழு
+state_reduction_find (state மாறிலி *s, rule மாறிலி *r)
 {
   reductions *reds = s->reductions;
-  for (int i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == r)
-      return i;
+  க்கு (முழு i = 0; i < reds->இலக்கம்; ++i)
+    எனில் (reds->rules[i] == r)
+      திரும்பு i;
   abort ();
 }
 
@@ -245,11 +245,11 @@ state_reduction_find (state const *s, rule const *r)
 | Set the errs of S.  |
 `--------------------*/
 
-void
-state_errs_set (state *s, int num, symbol **tokens)
+வெறுமை
+state_errs_set (state *s, முழு இலக்கம், குறியீடு **tokens)
 {
   aver (!s->errs);
-  s->errs = errs_new (num, tokens);
+  s->errs = errs_new (இலக்கம், tokens);
 }
 
 
@@ -259,19 +259,19 @@ state_errs_set (state *s, int num, symbol **tokens)
 | wants to reduce R.                                |
 `--------------------------------------------------*/
 
-void
-state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
+வெறுமை
+state_rule_lookaheads_print (state மாறிலி *s, rule மாறிலி *r, FILE *out)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  முழு red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  எனில் (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
-      char const *sep = "";
+      முழு k;
+      எழுத்து மாறிலி *sep = "";
       fprintf (out, "  [");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
@@ -282,19 +282,19 @@ state_rule_lookaheads_print (state const *s, rule const *r, FILE *out)
     }
 }
 
-void
-state_rule_lookaheads_print_xml (state const *s, rule const *r,
-                                       FILE *out, int level)
+வெறுமை
+state_rule_lookaheads_print_xml (state மாறிலி *s, rule மாறிலி *r,
+                                       FILE *out, முழு level)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
-  int red = state_reduction_find (s, r);
+  முழு red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  எனில் (reds->lookaheads && red != -1)
     {
       bitset_iterator biter;
-      int k;
+      முழு k;
       xml_puts (out, level, "<lookaheads>");
       BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
         {
@@ -313,42 +313,42 @@ state_rule_lookaheads_print_xml (state const *s, rule const *r,
 /* Initial capacity of states hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static struct hash_table *state_table = NULL;
+நிலையான கட்டமைப்பு hash_table *state_table = வெற்று;
 
 /* Two states are equal if they have the same core items.  */
-static inline bool
-state_compare (state const *s1, state const *s2)
+நிலையான உள்வரி bool
+state_compare (state மாறிலி *s1, state மாறிலி *s2)
 {
-  if (s1->nitems != s2->nitems)
-    return false;
+  எனில் (s1->nitems != s2->nitems)
+    திரும்பு false;
 
-  for (size_t i = 0; i < s1->nitems; ++i)
-    if (s1->items[i] != s2->items[i])
-      return false;
+  க்கு (size_t i = 0; i < s1->nitems; ++i)
+    எனில் (s1->பொருட்கள்[i] != s2->பொருட்கள்[i])
+      திரும்பு false;
 
-  return true;
+  திரும்பு true;
 }
 
-static bool
-state_comparator (void const *s1, void const *s2)
+நிலையான bool
+state_comparator (வெறுமை மாறிலி *s1, வெறுமை மாறிலி *s2)
 {
-  return state_compare (s1, s2);
+  திரும்பு state_compare (s1, s2);
 }
 
-static inline size_t
-state_hash (state const *s, size_t tablesize)
+நிலையான உள்வரி size_t
+state_hash (state மாறிலி *s, size_t tablesize)
 {
   /* Add up the state's item numbers to get a hash key.  */
-  size_t key = 0;
-  for (size_t i = 0; i < s->nitems; ++i)
-    key += s->items[i];
-  return key % tablesize;
+  size_t சாவி = 0;
+  க்கு (size_t i = 0; i < s->nitems; ++i)
+    சாவி += s->பொருட்கள்[i];
+  திரும்பு சாவி % tablesize;
 }
 
-static size_t
-state_hasher (void const *s, size_t tablesize)
+நிலையான size_t
+state_hasher (வெறுமை மாறிலி *s, size_t tablesize)
 {
-  return state_hash (s, tablesize);
+  திரும்பு state_hash (s, tablesize);
 }
 
 
@@ -356,14 +356,14 @@ state_hasher (void const *s, size_t tablesize)
 | Create the states hash table.  |
 `-------------------------------*/
 
-void
-state_hash_new (void)
+வெறுமை
+state_hash_new (வெறுமை)
 {
   state_table = hash_xinitialize (HT_INITIAL_CAPACITY,
-                                  NULL,
+                                  வெற்று,
                                   state_hasher,
                                   state_comparator,
-                                  NULL);
+                                  வெற்று);
 }
 
 
@@ -371,8 +371,8 @@ state_hash_new (void)
 | Free the states hash table, not the states.  |
 `---------------------------------------------*/
 
-void
-state_hash_free (void)
+வெறுமை
+state_hash_free (வெறுமை)
 {
   hash_free (state_table);
 }
@@ -382,8 +382,8 @@ state_hash_free (void)
 | Insert S in the state hash table.  |
 `-----------------------------------*/
 
-void
-state_hash_insert (state *s)
+வெறுமை
+state_hash_செருகு (state *s)
 {
   hash_xinsert (state_table, s);
 }
@@ -395,15 +395,15 @@ state_hash_insert (state *s)
 `------------------------------------------------------------------*/
 
 state *
-state_hash_lookup (size_t nitems, const item_index *core)
+state_hash_lookup (size_t nitems, மாறிலி item_index *core)
 {
-  size_t items_size = nitems * sizeof *core;
-  state *probe = xmalloc (offsetof (state, items) + items_size);
+  size_t பொருட்கள்_size = nitems * அளவு *core;
+  state *probe = xmalloc (offsetof (state, பொருட்கள்) + பொருட்கள்_size);
   probe->nitems = nitems;
-  memcpy (probe->items, core, items_size);
+  memcpy (probe->பொருட்கள், core, பொருட்கள்_size);
   state *entry = hash_lookup (state_table, probe);
-  free (probe);
-  return entry;
+  விடுவி (probe);
+  திரும்பு entry;
 }
 
 
@@ -411,32 +411,32 @@ state_hash_lookup (size_t nitems, const item_index *core)
 | Record S and all states reachable from S in REACHABLE.  |
 `--------------------------------------------------------*/
 
-static void
+நிலையான வெறுமை
 state_record_reachable_states (state *s, bitset reachable)
 {
-  if (bitset_test (reachable, s->number))
-    return;
-  bitset_set (reachable, s->number);
-  for (int i = 0; i < s->transitions->num; ++i)
-    if (!TRANSITION_IS_DISABLED (s->transitions, i))
+  எனில் (bitset_test (reachable, s->எண்))
+    திரும்பு;
+  bitset_set (reachable, s->எண்);
+  க்கு (முழு i = 0; i < s->transitions->இலக்கம்; ++i)
+    எனில் (!TRANSITION_IS_DISABLED (s->transitions, i))
       state_record_reachable_states (s->transitions->states[i], reachable);
 }
 
-void
-state_remove_unreachable_states (state_number old_to_new[])
+வெறுமை
+state_remove_unreachable_states (state_எண் old_to_new[])
 {
-  state_number nstates_reachable = 0;
+  state_எண் nstates_reachable = 0;
   bitset reachable = bitset_create (nstates, BITSET_FIXED);
   state_record_reachable_states (states[0], reachable);
-  for (state_number i = 0; i < nstates; ++i)
+  க்கு (state_எண் i = 0; i < nstates; ++i)
     {
-      if (bitset_test (reachable, states[i]->number))
+      எனில் (bitset_test (reachable, states[i]->எண்))
         {
           states[nstates_reachable] = states[i];
-          states[nstates_reachable]->number = nstates_reachable;
+          states[nstates_reachable]->எண் = nstates_reachable;
           old_to_new[i] = nstates_reachable++;
         }
-      else
+      இல்லையெனில்
         {
           state_free (states[i]);
           old_to_new[i] = nstates;
@@ -447,18 +447,18 @@ state_remove_unreachable_states (state_number old_to_new[])
 }
 
 /* All the decorated states, indexed by the state number.  */
-state **states = NULL;
+state **states = வெற்று;
 
 
 /*----------------------.
 | Free all the states.  |
 `----------------------*/
 
-void
-states_free (void)
+வெறுமை
+states_free (வெறுமை)
 {
   closure_free ();
-  for (state_number i = 0; i < nstates; ++i)
+  க்கு (state_எண் i = 0; i < nstates; ++i)
     state_free (states[i]);
-  free (states);
+  விடுவி (states);
 }
