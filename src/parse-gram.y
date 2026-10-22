@@ -19,135 +19,135 @@
 
 %code requires
 {
-  #include "symlist.h"
-  #include "symtab.h"
+  #ضمن "symlist.h"
+  #ضمن "symtab.h"
 }
 
 %code provides
 {
   /* Initialize unquote.  */
-  void parser_init (void);
+  فراغ parser_init (فراغ);
   /* Deallocate storage for unquote.  */
-  void parser_free (void);
+  فراغ parser_free (فراغ);
 }
 
 %code top
 {
   /* On column 0 to please syntax-check.  */
-#include <config.h>
+#ضمن <config.h>
 }
 
 %code
 {
-  #include "system.h"
+  #ضمن "system.h"
 
-  #include <c-ctype.h>
-  #include <quotearg.h>
-  #include <vasnprintf.h>
-  #include <xmemdup0.h>
+  #ضمن <c-ctype.h>
+  #ضمن <quotearg.h>
+  #ضمن <vasnprintf.h>
+  #ضمن <xmemdup0.h>
 
-  #include "complain.h"
-  #include "conflicts.h"
-  #include "files.h"
-  #include "getargs.h"
-  #include "gram.h"
-  #include "named-ref.h"
-  #include "reader.h"
-  #include "scan-code.h"
-  #include "scan-gram.h"
-  #include "strversion.h"
+  #ضمن "complain.h"
+  #ضمن "conflicts.h"
+  #ضمن "files.h"
+  #ضمن "getargs.h"
+  #ضمن "gram.h"
+  #ضمن "named-ref.h"
+  #ضمن "reader.h"
+  #ضمن "scan-code.h"
+  #ضمن "scan-gram.h"
+  #ضمن "strversion.h"
 
   /* Pretend to be at least that version, to check features published
      in that version while developping it.  */
-  static const char* api_version = "3.8";
+  ساكن ثابت حرف* api_version = "3.8";
 
-  static int current_prec = 0;
-  static location current_lhs_loc;
-  static named_ref *current_lhs_named_ref;
-  static symbol *current_lhs_symbol;
-  static symbol_class current_class = unknown_sym;
+  ساكن صحيح current_prec = 0;
+  ساكن location current_lhs_loc;
+  ساكن named_ref *current_lhs_named_ref;
+  ساكن symbol *current_lhs_symbol;
+  ساكن symbol_class current_class = unknown_sym;
 
   /** Set the new current left-hand side symbol, possibly common
    * to several right-hand side parts of rule.
    */
-  static void current_lhs (symbol *sym, location loc, named_ref *ref);
+  ساكن فراغ current_lhs (symbol *sym, location loc, named_ref *ref);
 
   #define YYLLOC_DEFAULT(Current, Rhs, N)         \
     (Current) = lloc_default (Rhs, N)
-  static YYLTYPE lloc_default (YYLTYPE const *, int);
+  ساكن YYLTYPE lloc_default (YYLTYPE ثابت *, صحيح);
 
   #define YY_LOCATION_PRINT(File, Loc)            \
     location_print (Loc, File)
 
   /* Strip initial '{' and final '}' (must be first and last characters).
      Return the result.  */
-  static char *strip_braces (char *code);
+  ساكن حرف *strip_braces (حرف *code);
 
   /* Convert CODE by calling code_props_plain_init if PLAIN, otherwise
      code_props_symbol_action_init.  Calls
      gram_scanner_last_string_free to release the latest string from
      the scanner (should be CODE). */
-  static char const *translate_code (char *code, location loc, bool plain);
+  ساكن حرف ثابت *translate_code (حرف *code, location loc, bool plain);
 
   /* Convert CODE by calling code_props_plain_init after having
      stripped the first and last characters (expected to be '{', and
      '}').  Calls gram_scanner_last_string_free to release the latest
      string from the scanner (should be CODE). */
-  static char const *translate_code_braceless (char *code, location loc);
+  ساكن حرف ثابت *translate_code_braceless (حرف *code, location loc);
 
   /* Handle a %header directive.  */
-  static void handle_header (char const *value);
+  ساكن فراغ handle_header (حرف ثابت *value);
 
   /* Handle a %error-verbose directive.  */
-  static void handle_error_verbose (location const *loc, char const *directive);
+  ساكن فراغ handle_error_verbose (location ثابت *loc, حرف ثابت *directive);
 
   /* Handle a %file-prefix directive.  */
-  static void handle_file_prefix (location const *loc,
-                                  location const *dir_loc,
-                                  char const *directive, char const *value);
+  ساكن فراغ handle_file_prefix (location ثابت *loc,
+                                  location ثابت *dir_loc,
+                                  حرف ثابت *directive, حرف ثابت *value);
 
   /* Handle a %language directive.  */
-  static void handle_language (location const *loc, char const *lang);
+  ساكن فراغ handle_language (location ثابت *loc, حرف ثابت *lang);
 
   /* Handle a %name-prefix directive.  */
-  static void handle_name_prefix (location const *loc,
-                                  char const *directive, char const *value);
+  ساكن فراغ handle_name_prefix (location ثابت *loc,
+                                  حرف ثابت *directive, حرف ثابت *value);
 
   /* Handle a %pure-parser directive.  */
-  static void handle_pure_parser (location const *loc, char const *directive);
+  ساكن فراغ handle_pure_parser (location ثابت *loc, حرف ثابت *directive);
 
   /* Handle a %require directive.  */
-  static void handle_require (location const *loc, char const *version);
+  ساكن فراغ handle_require (location ثابت *loc, حرف ثابت *version);
 
   /* Handle a %skeleton directive.  */
-  static void handle_skeleton (location const *loc, char const *skel);
+  ساكن فراغ handle_skeleton (location ثابت *loc, حرف ثابت *skel);
 
   /* Handle a %yacc directive.  */
-  static void handle_yacc (location const *loc);
+  ساكن فراغ handle_yacc (location ثابت *loc);
 
   /* Implementation of yyerror.  */
-  static void gram_error (location const *, char const *);
+  ساكن فراغ gram_error (location ثابت *, حرف ثابت *);
 
   /* A string that describes a char (e.g., 'a' -> "'a'").  */
-  static char const *char_name (char);
+  ساكن حرف ثابت *char_name (حرف);
 
   /* Add style to semantic values in traces.  */
-  static void tron (FILE *yyo);
-  static void troff (FILE *yyo);
+  ساكن فراغ tron (FILE *yyo);
+  ساكن فراغ troff (FILE *yyo);
 
   /* Interpret a quoted string (such as `"Hello, \"World\"\n\""`).
      Manages the memory of the result.  */
-  static char *unquote (const char *str);
+  ساكن حرف *unquote (ثابت حرف *str);
 
   /* Discard the latest unquoted string.  */
-  static void unquote_free (char *last_string);
+  ساكن فراغ unquote_free (حرف *last_string);
 }
 
 %define api.header.include {"parse-gram.h"}
 %define api.prefix {gram_}
 %define api.pure full
 %define api.token.raw
-%define api.value.type union
+%define api.value.نوع اتحاد
 %define locations
 %define parse.error custom
 %define parse.lac full
@@ -230,13 +230,13 @@
 %code pre-printer  {tron (yyo);}
 %code post-printer {troff (yyo);}
 
-%type <unsigned char> CHAR_LITERAL
-%printer { fputs (char_name ($$), yyo); } <unsigned char>
+%نوع <unsigned حرف> CHAR_LITERAL
+%printer { fputs (char_name ($$), yyo); } <unsigned حرف>
 
-%type <char*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
-%printer { fputs ($$, yyo); } <char*>
+%نوع <حرف*> "{...}" "%?{...}" "%{...%}" EPILOGUE STRING TSTRING
+%printer { fputs ($$, yyo); } <حرف*>
 
-%type <uniqstr>
+%نوع <uniqstr>
   BRACKETED_ID ID ID_COLON
   PERCENT_ERROR_VERBOSE PERCENT_FILE_PREFIX PERCENT_FLAG PERCENT_NAME_PREFIX
   PERCENT_PURE_PARSER
@@ -247,26 +247,26 @@
 %printer { fprintf (yyo, "%%%s", $$); } PERCENT_FLAG
 %printer { fprintf (yyo, "<%s>", $$); } TAG tag
 
-%token <int> INT_LITERAL _("integer literal")
-%printer { fprintf (yyo, "%d", $$); } <int>
+%token <صحيح> INT_LITERAL _("integer literal")
+%printer { fprintf (yyo, "%d", $$); } <صحيح>
 
-%type <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
+%نوع <symbol*> id id_colon string_as_id symbol token_decl token_decl_for_prec
 %printer { fprintf (yyo, "%s", $$ ? $$->tag : "<NULL>"); } <symbol*>
 %printer { fprintf (yyo, "%s:", $$->tag); } id_colon
 
-%type <assoc> precedence_declarator
+%نوع <assoc> precedence_declarator
 
 %destructor { symbol_list_free ($$); } <symbol_list*>
 %printer { symbol_list_syms_print ($$, yyo); } <symbol_list*>
 
-%type <named_ref*> named_ref.opt
+%نوع <named_ref*> named_ref.opt
 
 /*---------.
 | %param.  |
 `---------*/
 %code requires
 {
-  typedef enum
+  تعريفنوع تعداد
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -282,21 +282,21 @@
    * \param decl  the formal argument.  Destroyed.
    * \param loc   the location in the source.
    */
-  static void add_param (param_type type, char *decl, location loc);
-  static param_type current_param = param_none;
+  ساكن فراغ add_param (param_type نوع, حرف *decl, location loc);
+  ساكن param_type current_param = param_none;
 };
 %token <param_type> PERCENT_PARAM "%param";
 %printer
 {
-  switch ($$)
+  بدل ($$)
     {
 #define CASE(In, Out)                                           \
-      case param_ ## In: fputs ("%" #Out, yyo); break
+      حالة param_ ## In: fputs ("%" #Out, yyo); اكسر
       CASE (lex,   lex-param);
       CASE (parse, parse-param);
       CASE (both,  param);
 #undef CASE
-      case param_none: aver (false); break;
+      حالة param_none: aver (false); اكسر;
     }
 } <param_type>;
 
@@ -390,7 +390,7 @@ grammar_declaration:
       code_props_symbol_action_init (&code, $2, @2);
       code_props_translate_code (&code);
       {
-        for (symbol_list *list = $3; list; list = list->next)
+        لكل (symbol_list *list = $3; list; list = list->next)
           symbol_list_code_props_set (list, $1, &code);
         symbol_list_free ($3);
       }
@@ -418,7 +418,7 @@ grammar_declaration:
     }
 ;
 
-%type <code_props_type> code_props_type;
+%نوع <code_props_type> code_props_type;
 %printer { fprintf (yyo, "%s", code_props_type_string ($$)); } <code_props_type>;
 code_props_type:
   "%destructor"  { $$ = destructor; }
@@ -448,7 +448,7 @@ grammar_declaration:
 ;
 
 
-%type <symbol_list*> nterm_decls symbol_decls symbols.1
+%نوع <symbol_list*> nterm_decls symbol_decls symbols.1
       token_decls token_decls_for_prec
       token_decl.1 token_decl_for_prec.1;
 symbol_declaration:
@@ -470,7 +470,7 @@ symbol_declaration:
 | precedence_declarator token_decls_for_prec[syms]
     {
       ++current_prec;
-      for (symbol_list *list = $syms; list; list = list->next)
+      لكل (symbol_list *list = $syms; list; list = list->next)
         symbol_precedence_set (list->content.sym, current_prec, $1, @1);
       symbol_list_free ($syms);
     }
@@ -483,18 +483,18 @@ precedence_declarator:
 | "%precedence" { $$ = precedence_assoc; }
 ;
 
-%type <char*> string.opt;
+%نوع <حرف*> string.opt;
 string.opt:
-  %empty  { $$ = NULL; }
+  %empty  { $$ = عدم; }
 | STRING  { $$ = $1; }
 ;
 
 tag.opt:
-  %empty { $$ = NULL; }
+  %empty { $$ = عدم; }
 | TAG    { $$ = $1; }
 ;
 
-%type <symbol_list*> generic_symlist generic_symlist_item;
+%نوع <symbol_list*> generic_symlist generic_symlist_item;
 generic_symlist:
   generic_symlist_item
 | generic_symlist generic_symlist_item   { $$ = symbol_list_append ($1, $2); }
@@ -551,26 +551,26 @@ token_decl.1:
 
 // One symbol declaration for %token or %nterm.
 token_decl:
-  id int.opt[num] alias
+  id صحيح.opt[num] alias
     {
       $$ = $id;
       symbol_class_set ($id, current_class, @id, true);
-      if (0 <= $num)
+      ܐܢ (0 <= $num)
         symbol_code_set ($id, $num, @num);
-      if ($alias)
+      ܐܢ ($alias)
         symbol_make_alias ($id, $alias, @alias);
     }
 ;
 
-%type <int> int.opt;
-int.opt:
+%نوع <صحيح> صحيح.opt;
+صحيح.opt:
   %empty  { $$ = -1; }
 | INT_LITERAL
 ;
 
-%type <symbol*> alias;
+%نوع <symbol*> alias;
 alias:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = عدم; }
 | string_as_id   { $$ = $1; }
 | TSTRING
     {
@@ -613,11 +613,11 @@ token_decl_for_prec.1:
 
 // One token declaration for precedence declaration.
 token_decl_for_prec:
-  id int.opt[num]
+  id صحيح.opt[num]
     {
       $$ = $id;
       symbol_class_set ($id, token_sym, @id, false);
-      if (0 <= $num)
+      ܐܢ (0 <= $num)
         symbol_code_set ($id, $num, @num);
     }
 | string_as_id
@@ -648,13 +648,13 @@ symbol_decls:
 symbols.1:
   symbol
     {
-      if (current_class != unknown_sym)
+      ܐܢ (current_class != unknown_sym)
         symbol_class_set ($symbol, current_class, @symbol, false);
       $$ = symbol_list_sym_new ($symbol, @symbol);
     }
   | symbols.1 symbol
     {
-      if (current_class != unknown_sym)
+      ܐܢ (current_class != unknown_sym)
         symbol_class_set ($symbol, current_class, @symbol, false);
       $$ = symbol_list_append ($1, symbol_list_sym_new ($symbol, @symbol));
     }
@@ -720,7 +720,7 @@ rhs:
 ;
 
 named_ref.opt:
-  %empty         { $$ = NULL; }
+  %empty         { $$ = عدم; }
 | BRACKETED_ID   { $$ = named_ref_new ($1, @1); }
 ;
 
@@ -735,21 +735,21 @@ variable:
 
 /* Some content or empty by default. */
 %code requires {
-  #include "muscle-tab.h"
-  typedef struct
+  #ضمن "muscle-tab.h"
+  تعريفنوع بنية
   {
-    char const *chars;
+    حرف ثابت *chars;
     muscle_kind kind;
   } value_type;
 };
-%type <value_type> value;
+%نوع <value_type> value;
 %printer
 {
-  switch ($$.kind)
+  بدل ($$.kind)
     {
-    case muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); break;
-    case muscle_keyword: fprintf (yyo,   "%s",   $$.chars); break;
-    case muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); break;
+    حالة muscle_code:    fprintf (yyo,  "{%s}",  $$.chars); اكسر;
+    حالة muscle_keyword: fprintf (yyo,   "%s",   $$.chars); اكسر;
+    حالة muscle_string:  fprintf (yyo, "\"%s\"", $$.chars); اكسر;
     }
 } <value_type>;
 
@@ -773,14 +773,14 @@ id:
     { $$ = symbol_from_uniqstr ($1, @1); }
 | CHAR_LITERAL
     {
-      const char *var = "api.token.raw";
-      if (current_class == nterm_sym)
+      ثابت حرف *var = "api.token.raw";
+      ܐܢ (current_class == nterm_sym)
         {
           complain (&@1, complaint,
                     _("character literals cannot be nonterminals"));
           YYERROR;
         }
-      if (muscle_percent_define_ifdef (var))
+      ܐܢ (muscle_percent_define_ifdef (var))
         {
           complain (&@1, complaint,
                     _("character literals cannot be used together"
@@ -824,29 +824,29 @@ epilogue.opt:
 
 %%
 
-int
-yyreport_syntax_error (const yypcontext_t *ctx)
+صحيح
+yyreport_syntax_error (ثابت yypcontext_t *ctx)
 {
-  int res = 0;
+  صحيح res = 0;
   /* Arguments of format: reported tokens (one for the "unexpected",
      one per "expected"). */
-  enum { ARGS_MAX = 5 };
-  const char *argv[ARGS_MAX];
-  int argc = 0;
+  تعداد { ARGS_MAX = 5 };
+  ثابت حرف *argv[ARGS_MAX];
+  صحيح argc = 0;
   yysymbol_kind_t unexpected = yypcontext_token (ctx);
-  if (unexpected != YYSYMBOL_YYEMPTY)
+  ܐܢ (unexpected != YYSYMBOL_YYEMPTY)
     {
       argv[argc++] = yysymbol_name (unexpected);
       yysymbol_kind_t expected[ARGS_MAX - 1];
-      int nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
-      if (nexpected < 0)
+      صحيح nexpected = yypcontext_expected_tokens (ctx, expected, ARGS_MAX - 1);
+      ܐܢ (nexpected < 0)
         res = nexpected;
-      else
-        for (int i = 0; i < nexpected; ++i)
+      ܐܚܪܢܐ
+        لكل (صحيح i = 0; i < nexpected; ++i)
           argv[argc++] = yysymbol_name (expected[i]);
     }
   syntax_error (*yypcontext_location (ctx), argc, argv);
-  return res;
+  ܦܢܐ res;
 }
 
 
@@ -855,8 +855,8 @@ yyreport_syntax_error (const yypcontext_t *ctx)
    the right-hand side, and return an empty location equal to the end
    boundary of RHS[0] if the right-hand side is empty.  */
 
-static YYLTYPE
-lloc_default (YYLTYPE const *rhs, int n)
+ساكن YYLTYPE
+lloc_default (YYLTYPE ثابت *rhs, صحيح n)
 {
   YYLTYPE loc;
 
@@ -868,97 +868,97 @@ lloc_default (YYLTYPE const *rhs, int n)
   /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
-  for (int i = 1; i <= n; i++)
-    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+  لكل (صحيح i = 1; i <= n; i++)
+    ܐܢ (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
         loc.start = rhs[i].start;
-        break;
+        اكسر;
       }
 
-  return loc;
+  ܦܢܐ loc;
 }
 
-static
-char *strip_braces (char *code)
+ساكن
+حرف *strip_braces (حرف *code)
 {
   code[strlen (code) - 1] = 0;
-  return code + 1;
+  ܦܢܐ code + 1;
 }
 
-static
-char const *
-translate_code (char *code, location loc, bool plain)
+ساكن
+حرف ثابت *
+translate_code (حرف *code, location loc, bool plain)
 {
   code_props plain_code;
-  if (plain)
+  ܐܢ (plain)
     code_props_plain_init (&plain_code, code, loc);
-  else
+  ܐܚܪܢܐ
     code_props_symbol_action_init (&plain_code, code, loc);
   code_props_translate_code (&plain_code);
   gram_scanner_last_string_free ();
-  return plain_code.code;
+  ܦܢܐ plain_code.code;
 }
 
-static
-char const *
-translate_code_braceless (char *code, location loc)
+ساكن
+حرف ثابت *
+translate_code_braceless (حرف *code, location loc)
 {
-  return translate_code (strip_braces (code), loc, true);
+  ܦܢܐ translate_code (strip_braces (code), loc, true);
 }
 
-static void
-add_param (param_type type, char *decl, location loc)
+ساكن فراغ
+add_param (param_type نوع, حرف *decl, location loc)
 {
-  static char const alphanum[26 + 26 + 1 + 10 + 1] =
+  ساكن حرف ثابت alphanum[26 + 26 + 1 + 10 + 1] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
 
-  char const *name_start = NULL;
+  حرف ثابت *name_start = عدم;
   {
-    char *p;
+    حرف *p;
     /* Stop on last actual character.  */
-    for (p = decl; p[1]; p++)
-      if ((p == decl
-           || ! memchr (alphanum, p[-1], sizeof alphanum - 1))
-          && memchr (alphanum, p[0], sizeof alphanum - 10 - 1))
+    لكل (p = decl; p[1]; p++)
+      ܐܢ ((p == decl
+           || ! memchr (alphanum, p[-1], حجم alphanum - 1))
+          && memchr (alphanum, p[0], حجم alphanum - 10 - 1))
         name_start = p;
 
     /* Strip the surrounding '{' and '}', and any blanks just inside
        the braces.  */
     --p;
-    while (c_isspace ((unsigned char) *p))
+    ܟܡܐ (c_isspace ((unsigned حرف) *p))
       --p;
     p[1] = '\0';
     ++decl;
-    while (c_isspace ((unsigned char) *decl))
+    ܟܡܐ (c_isspace ((unsigned حرف) *decl))
       ++decl;
   }
 
-  if (! name_start)
+  ܐܢ (! name_start)
     complain (&loc, complaint, _("missing identifier in parameter declaration"));
-  else
+  ܐܚܪܢܐ
     {
-      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
-      if (type & param_lex)
+      حرف *name = xmemdup0 (name_start, strspn (name_start, alphanum));
+      ܐܢ (نوع & param_lex)
         muscle_pair_list_grow ("lex_param", decl, name);
-      if (type & param_parse)
+      ܐܢ (نوع & param_parse)
         muscle_pair_list_grow ("parse_param", decl, name);
-      free (name);
+      حرر (name);
     }
 
   gram_scanner_last_string_free ();
 }
 
 
-static void
-handle_header (char const *value)
+ساكن فراغ
+handle_header (حرف ثابت *value)
 {
   header_flag = true;
-  if (value)
+  ܐܢ (value)
     {
-      char *file = unquote (value);
+      حرف *file = unquote (value);
       spec_header_file = xstrdup (file);
       gram_scanner_last_string_free ();
       unquote_free (file);
@@ -966,8 +966,8 @@ handle_header (char const *value)
 }
 
 
-static void
-handle_error_verbose (location const *loc, char const *directive)
+ساكن فراغ
+handle_error_verbose (location ثابت *loc, حرف ثابت *directive)
 {
   bison_directive (loc, directive);
   muscle_percent_define_insert (directive, *loc, muscle_keyword, "",
@@ -975,75 +975,75 @@ handle_error_verbose (location const *loc, char const *directive)
 }
 
 
-static void
-handle_file_prefix (location const *loc,
-                    location const *dir_loc,
-                    char const *directive, char const *value_quoted)
+ساكن فراغ
+handle_file_prefix (location ثابت *loc,
+                    location ثابت *dir_loc,
+                    حرف ثابت *directive, حرف ثابت *value_quoted)
 {
-  char *value = unquote (value_quoted);
+  حرف *value = unquote (value_quoted);
   bison_directive (loc, directive);
   bool warned = false;
 
-  if (location_empty (spec_file_prefix_loc))
+  ܐܢ (location_empty (spec_file_prefix_loc))
     {
       spec_file_prefix_loc = *loc;
       spec_file_prefix = value;
     }
-  else
+  ܐܚܪܢܐ
     {
       duplicate_directive (directive, spec_file_prefix_loc, *loc);
       warned = true;
     }
 
-  if (!warned
+  ܐܢ (!warned
       && STRNEQ (directive, "%file-prefix"))
     deprecated_directive (dir_loc, directive, "%file-prefix");
 }
 
-static void
-handle_language (location const *loc, char const *lang)
+ساكن فراغ
+handle_language (location ثابت *loc, حرف ثابت *lang)
 {
   language_argmatch (unquote (lang), grammar_prio, *loc);
 }
 
 
-static void
-handle_name_prefix (location const *loc,
-                    char const *directive, char const *value_quoted)
+ساكن فراغ
+handle_name_prefix (location ثابت *loc,
+                    حرف ثابت *directive, حرف ثابت *value_quoted)
 {
-  char *value = unquote (value_quoted);
+  حرف *value = unquote (value_quoted);
   bison_directive (loc, directive);
 
-  char buf1[1024];
-  size_t len1 = sizeof (buf1);
-  char *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
-  if (!old)
+  حرف buf1[1024];
+  size_t len1 = حجم (buf1);
+  حرف *old = asnprintf (buf1, &len1, "%s\"%s\"", directive, value);
+  ܐܢ (!old)
     xalloc_die ();
 
-  if (location_empty (spec_name_prefix_loc))
+  ܐܢ (location_empty (spec_name_prefix_loc))
     {
       spec_name_prefix = value;
       spec_name_prefix_loc = *loc;
 
-      char buf2[1024];
-      size_t len2 = sizeof (buf2);
-      char *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
-      if (!new)
+      حرف buf2[1024];
+      size_t len2 = حجم (buf2);
+      حرف *new = asnprintf (buf2, &len2, "%%define api.prefix {%s}", value);
+      ܐܢ (!new)
         xalloc_die ();
       deprecated_directive (loc, old, new);
-      if (new != buf2)
-        free (new);
+      ܐܢ (new != buf2)
+        حرر (new);
     }
-  else
+  ܐܚܪܢܐ
     duplicate_directive (old, spec_file_prefix_loc, *loc);
 
-  if (old != buf1)
-    free (old);
+  ܐܢ (old != buf1)
+    حرر (old);
 }
 
 
-static void
-handle_pure_parser (location const *loc, char const *directive)
+ساكن فراغ
+handle_pure_parser (location ثابت *loc, حرف ثابت *directive)
 {
   bison_directive (loc, directive);
   deprecated_directive (loc, directive, "%define api.pure");
@@ -1052,23 +1052,23 @@ handle_pure_parser (location const *loc, char const *directive)
 }
 
 
-static void
-handle_require (location const *loc, char const *version_quoted)
+ساكن فراغ
+handle_require (location ثابت *loc, حرف ثابت *version_quoted)
 {
-  char *version = unquote (version_quoted);
+  حرف *version = unquote (version_quoted);
   required_version = strversion_to_int (version);
-  if (required_version == -1)
+  ܐܢ (required_version == -1)
     {
       complain (loc, complaint, _("invalid version requirement: %s"),
                 version);
       required_version = 0;
     }
-  else
+  ܐܚܪܢܐ
     {
-      const char* package_version =
+      ثابت حرف* package_version =
         0 < strverscmp (api_version, PACKAGE_VERSION)
         ? api_version : PACKAGE_VERSION;
-      if (0 < strverscmp (version, package_version))
+      ܐܢ (0 < strverscmp (version, package_version))
         {
           complain (loc, complaint, _("require bison %s, but have %s"),
                     version, package_version);
@@ -1079,86 +1079,86 @@ handle_require (location const *loc, char const *version_quoted)
   gram_scanner_last_string_free ();
 }
 
-static void
-handle_skeleton (location const *loc, char const *skel_quoted)
+ساكن فراغ
+handle_skeleton (location ثابت *loc, حرف ثابت *skel_quoted)
 {
-  char *skel = unquote (skel_quoted);
-  char const *skeleton_user = skel;
-  if (strchr (skeleton_user, '/'))
+  حرف *skel = unquote (skel_quoted);
+  حرف ثابت *skeleton_user = skel;
+  ܐܢ (strchr (skeleton_user, '/'))
     {
       size_t dir_length = strlen (grammar_file);
-      while (dir_length && grammar_file[dir_length - 1] != '/')
+      ܟܡܐ (dir_length && grammar_file[dir_length - 1] != '/')
         --dir_length;
-      while (dir_length && grammar_file[dir_length - 1] == '/')
+      ܟܡܐ (dir_length && grammar_file[dir_length - 1] == '/')
         --dir_length;
-      char *skeleton_build =
+      حرف *skeleton_build =
         xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
-      if (dir_length > 0)
+      ܐܢ (dir_length > 0)
         {
           memcpy (skeleton_build, grammar_file, dir_length);
           skeleton_build[dir_length++] = '/';
         }
       strcpy (skeleton_build + dir_length, skeleton_user);
       skeleton_user = uniqstr_new (skeleton_build);
-      free (skeleton_build);
+      حرر (skeleton_build);
     }
   skeleton_arg (skeleton_user, grammar_prio, *loc);
 }
 
 
-static void
-handle_yacc (location const *loc)
+ساكن فراغ
+handle_yacc (location ثابت *loc)
 {
-  const char *directive = "%yacc";
+  ثابت حرف *directive = "%yacc";
   bison_directive (loc, directive);
-  if (location_empty (yacc_loc))
+  ܐܢ (location_empty (yacc_loc))
     set_yacc (*loc);
-  else
+  ܐܚܪܢܐ
     duplicate_directive (directive, yacc_loc, *loc);
 }
 
 
-static void
-gram_error (location const *loc, char const *msg)
+ساكن فراغ
+gram_error (location ثابت *loc, حرف ثابت *msg)
 {
   complain (loc, complaint, "%s", msg);
 }
 
-static char const *
-char_name (char c)
+ساكن حرف ثابت *
+char_name (حرف c)
 {
-  if (c == '\'')
-    return "'\\''";
-  else
+  ܐܢ (c == '\'')
+    ܦܢܐ "'\\''";
+  ܐܚܪܢܐ
     {
-      char buf[4];
+      حرف buf[4];
       buf[0] = '\''; buf[1] = c; buf[2] = '\''; buf[3] = '\0';
-      return quotearg_style (escape_quoting_style, buf);
+      ܦܢܐ quotearg_style (escape_quoting_style, buf);
     }
 }
 
-static void
+ساكن فراغ
 current_lhs (symbol *sym, location loc, named_ref *ref)
 {
   current_lhs_symbol = sym;
   current_lhs_loc = loc;
-  if (sym)
+  ܐܢ (sym)
     symbol_location_as_lhs_set (sym, loc);
   /* In order to simplify memory management, named references for lhs
      are always assigned by deep copy into the current symbol_list
      node.  This is because a single named-ref in the grammar may
      result in several uses when the user factors lhs between several
      rules using "|".  Therefore free the parser's original copy.  */
-  free (current_lhs_named_ref);
+  حرر (current_lhs_named_ref);
   current_lhs_named_ref = ref;
 }
 
-static void tron (FILE *yyo)
+ساكن فراغ tron (FILE *yyo)
 {
   begin_use_class ("value", yyo);
 }
 
-static void troff (FILE *yyo)
+ساكن فراغ troff (FILE *yyo)
 {
   end_use_class ("value", yyo);
 }
@@ -1168,70 +1168,70 @@ static void troff (FILE *yyo)
 | Unquote.  |
 `----------*/
 
-struct obstack obstack_for_unquote;
+بنية obstack obstack_for_unquote;
 
-void
-parser_init (void)
+فراغ
+parser_init (فراغ)
 {
   obstack_init (&obstack_for_unquote);
 }
 
-void
-parser_free (void)
+فراغ
+parser_free (فراغ)
 {
   obstack_free (&obstack_for_unquote, 0);
 }
 
-static void
-unquote_free (char *last_string)
+ساكن فراغ
+unquote_free (حرف *last_string)
 {
   obstack_free (&obstack_for_unquote, last_string);
 }
 
-static char *
-unquote (const char *cp)
+ساكن حرف *
+unquote (ثابت حرف *cp)
 {
 #define GROW(Char)                              \
   obstack_1grow (&obstack_for_unquote, Char);
-  for (++cp; *cp && *cp != '"'; ++cp)
-    switch (*cp)
+  لكل (++cp; *cp && *cp != '"'; ++cp)
+    بدل (*cp)
       {
-      case '"':
-        break;
-      case '\\':
+      حالة '"':
+        اكسر;
+      حالة '\\':
         ++cp;
-        switch (*cp)
+        بدل (*cp)
           {
-          case '0': case '1': case '2': case '3': case '4':
-          case '5': case '6': case '7': case '8': case '9':
+          حالة '0': حالة '1': حالة '2': حالة '3': حالة '4':
+          حالة '5': حالة '6': حالة '7': حالة '8': حالة '9':
             {
-              int c = cp[0] - '0';
-              if (c_isdigit (cp[1]))
+              صحيح c = cp[0] - '0';
+              ܐܢ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
-              if (c_isdigit (cp[1]))
+              ܐܢ (c_isdigit (cp[1]))
                 {
                   ++cp;
                   c = c * 8 + cp[0] - '0';
                 }
               GROW (c);
             }
-            break;
+            اكسر;
 
-          case 'a': GROW ('\a'); break;
-          case 'b': GROW ('\b'); break;
-          case 'f': GROW ('\f'); break;
-          case 'n': GROW ('\n'); break;
-          case 'r': GROW ('\r'); break;
-          case 't': GROW ('\t'); break;
-          case 'v': GROW ('\v'); break;
+          حالة 'a': GROW ('\a'); اكسر;
+          حالة 'b': GROW ('\b'); اكسر;
+          حالة 'f': GROW ('\f'); اكسر;
+          حالة 'n': GROW ('\n'); اكسر;
+          حالة 'r': GROW ('\r'); اكسر;
+          حالة 't': GROW ('\t'); اكسر;
+          حالة 'v': GROW ('\v'); اكسر;
 
-          case 'x':
+          حالة 'x':
             {
-              int c = 0;
-              while (c_isxdigit (cp[1]))
+              صحيح c = 0;
+              ܟܡܐ (c_isxdigit (cp[1]))
                 {
                   ++cp;
                   c = (c * 16 + (c_isdigit (cp[0]) ? cp[0] - '0'
@@ -1239,18 +1239,18 @@ unquote (const char *cp)
                                  : cp[0] - '0'));
                 }
               GROW (c);
-              break;
+              اكسر;
             }
           }
-        break;
+        اكسر;
 
-      default:
+      افتراضي:
         GROW (*cp);
-        break;
+        اكسر;
       }
-  assert (*cp == '"');
+  أكد (*cp == '"');
   ++cp;
-  assert (*cp == '\0');
+  أكد (*cp == '\0');
 #undef GROW
-  return obstack_finish0 (&obstack_for_unquote);
+  ܦܢܐ obstack_finish0 (&obstack_for_unquote);
 }

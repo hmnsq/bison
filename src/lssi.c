@@ -17,49 +17,49 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
+#ضمن <config.h>
 
-#include "lssi.h"
+#ضمن "lssi.h"
 
-#include <gl_linked_list.h>
-#include <gl_xlist.h>
-#include <stdlib.h>
+#ضمن <gl_linked_list.h>
+#ضمن <gl_xlist.h>
+#ضمن <stdlib.h>
 
-#include "getargs.h"
-#include "nullable.h"
+#ضمن "getargs.h"
+#ضمن "nullable.h"
 
 // Lookahead sensitive state item.
-typedef struct lssi
+تعريفنوع بنية lssi
 {
   state_item_number si;
-  struct lssi *parent;
+  بنية lssi *parent;
   // this is the precise lookahead set (follow_L from the CupEx paper)
   bitset lookahead;
   bool free_lookahead;
 } lssi;
 
-static lssi *
+ساكن lssi *
 new_lssi (state_item_number si, lssi *p, bitset l, bool free_l)
 {
-  lssi *res = xmalloc (sizeof *res);
+  lssi *res = xmalloc (حجم *res);
   res->si = si;
   res->parent = p;
   res->lookahead = l;
   res->free_lookahead = free_l;
-  return res;
+  ܦܢܐ res;
 }
 
-static void
+ساكن فراغ
 lssi_free (lssi *sn)
 {
-  if (sn == NULL)
-    return;
-  if (sn->free_lookahead)
+  ܐܢ (sn == عدم)
+    ܦܢܐ;
+  ܐܢ (sn->free_lookahead)
     bitset_free (sn->lookahead);
-  free (sn);
+  حرر (sn);
 }
 
-static size_t
+ساكن size_t
 lssi_hasher (lssi *sn, size_t max)
 {
   size_t hash = sn->si;
@@ -67,44 +67,44 @@ lssi_hasher (lssi *sn, size_t max)
   symbol_number syn;
   BITSET_FOR_EACH (biter, sn->lookahead, syn, 0)
     hash += syn;
-  return hash % max;
+  ܦܢܐ hash % max;
 }
 
-static bool
+ساكن bool
 lssi_comparator (lssi *s1, lssi *s2)
 {
-  if (s1->si == s2->si)
+  ܐܢ (s1->si == s2->si)
     {
-      if (s1->lookahead == s2->lookahead)
-        return true;
-      return bitset_equal_p (s1->lookahead, s2->lookahead);
+      ܐܢ (s1->lookahead == s2->lookahead)
+        ܦܢܐ true;
+      ܦܢܐ bitset_equal_p (s1->lookahead, s2->lookahead);
     }
-  return false;
+  ܦܢܐ false;
 }
 
-typedef gl_list_t lssi_list;
+تعريفنوع gl_list_t lssi_list;
 
-static inline bool
+ساكن مضمن bool
 append_lssi (lssi *sn, Hash_table *visited, lssi_list queue)
 {
-  if (hash_lookup (visited, sn))
+  ܐܢ (hash_lookup (visited, sn))
     {
       sn->free_lookahead = false;
       lssi_free (sn);
-      return false;
+      ܦܢܐ false;
     }
   hash_xinsert (visited, sn);
   gl_list_add_last (queue, sn);
-  return true;
+  ܦܢܐ true;
 }
 
-#if 0
-static void
+#ܐܢ 0
+ساكن فراغ
 lssi_print (lssi *l)
 {
   FILE *out = stderr;
   print_state_item (&state_items[l->si], out);
-  if (l->lookahead)
+  ܐܢ (l->lookahead)
     {
       fprintf (out, "FOLLOWL = { ");
       bitset_iterator biter;
@@ -120,19 +120,19 @@ lssi_print (lssi *l)
  * Compute the set of state-items that can reach the given conflict item via
  * a combination of transitions or production steps.
  */
-static bitset
+ساكن bitset
 eligible_state_items (state_item *target)
 {
   bitset result = bitset_create (nstate_items, BITSET_FIXED);
   state_item_list queue =
-    gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true, 1,
-                    (const void **) &target);
-  while (gl_list_size (queue) > 0)
+    gl_list_create (GL_LINKED_LIST, عدم, عدم, عدم, true, 1,
+                    (ثابت فراغ **) &target);
+  ܟܡܐ (gl_list_size (queue) > 0)
     {
       state_item *si = (state_item *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
-      if (bitset_test (result, si - state_items))
-        continue;
+      ܐܢ (bitset_test (result, si - state_items))
+        استمر;
       bitset_set (result, si - state_items);
       // search all reverse edges.
       bitset rsi = si->revs;
@@ -142,7 +142,7 @@ eligible_state_items (state_item *target)
         gl_list_add_last (queue, &state_items[sin]);
     }
   gl_list_free (queue);
-  return result;
+  ܦܢܐ result;
 }
 
 /**
@@ -155,34 +155,34 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
 {
   bitset eligible = eligible_state_items (&state_items[target]);
   Hash_table *visited = hash_initialize (32,
-                                         NULL,
+                                         عدم,
                                          (Hash_hasher) lssi_hasher,
                                          (Hash_comparator) lssi_comparator,
                                          (Hash_data_freer) lssi_free);
   bitset il = bitset_create (nsyms, BITSET_FIXED);
   bitset_set (il, 0);
-  lssi *init = new_lssi (0, NULL, il, true);
-  lssi_list queue = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
-                                          NULL, true);
+  lssi *init = new_lssi (0, عدم, il, true);
+  lssi_list queue = gl_list_create_empty (GL_LINKED_LIST, عدم, عدم,
+                                          عدم, true);
   append_lssi (init, visited, queue);
   // breadth-first search
   bool finished = false;
   lssi *n;
-  while (gl_list_size (queue) > 0)
+  ܟܡܐ (gl_list_size (queue) > 0)
     {
       n = (lssi *) gl_list_get_at (queue, 0);
       gl_list_remove_at (queue, 0);
       state_item_number last = n->si;
-      if (target == last && bitset_test (n->lookahead, next_sym))
+      ܐܢ (target == last && bitset_test (n->lookahead, next_sym))
         {
           finished = true;
-          break;
+          اكسر;
         }
       state_item *si = &state_items[last];
       // Transitions don't change follow_L
-      if (si->trans >= 0)
+      ܐܢ (si->trans >= 0)
         {
-          if (bitset_test (eligible, si->trans))
+          ܐܢ (bitset_test (eligible, si->trans))
             {
               lssi *next = new_lssi (si->trans, n, n->lookahead, false);
               append_lssi (next, visited, queue);
@@ -195,27 +195,27 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
       // if the symbol is not nullable, follow_L is its FIRSTS set
       // if the symbol is nullable, follow_L is its FIRSTS set unioned with
       // this logic applied to the next symbol in the rule
-      if (si->prods)
+      ܐܢ (si->prods)
         {
           // Compute follow_L as above
           bitset lookahead = bitset_create (nsyms, BITSET_FIXED);
           item_number *pos = si->item + 1;
-          for (; !item_number_is_rule_number (*pos); ++pos)
+          لكل (; !item_number_is_rule_number (*pos); ++pos)
             {
               item_number it = *pos;
-              if (ISTOKEN (it))
+              ܐܢ (ISTOKEN (it))
                 {
                   bitset_set (lookahead, it);
-                  break;
+                  اكسر;
                 }
-              else
+              ܐܚܪܢܐ
                 {
                   bitset_union (lookahead, lookahead, FIRSTS (it));
-                  if (!nullable[it - ntokens])
-                    break;
+                  ܐܢ (!nullable[it - ntokens])
+                    اكسر;
                 }
             }
-          if (item_number_is_rule_number (*pos))
+          ܐܢ (item_number_is_rule_number (*pos))
             bitset_union (lookahead, n->lookahead, lookahead);
 
           bool lookahead_used = false;
@@ -224,42 +224,42 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
           state_item_number nextSI;
           BITSET_FOR_EACH (biter, si->prods, nextSI, 0)
             {
-              if (!bitset_test (eligible, nextSI))
-                continue;
+              ܐܢ (!bitset_test (eligible, nextSI))
+                استمر;
               lssi *next = new_lssi (nextSI, n, lookahead,
                                      !lookahead_used);
               lookahead_used = append_lssi (next, visited, queue)
                                || lookahead_used;
             }
-          if (!lookahead_used)
+          ܐܢ (!lookahead_used)
             bitset_free (lookahead);
         }
     }
 
   bitset_free (eligible);
-  if (!finished)
+  ܐܢ (!finished)
     {
       gl_list_free (queue);
       fputs ("Cannot find shortest path to conflict state.", stderr);
       abort ();
     }
   state_item_list res =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  for (lssi *sn = n; sn != NULL; sn = sn->parent)
+    gl_list_create_empty (GL_LINKED_LIST, عدم, عدم, عدم, true);
+  لكل (lssi *sn = n; sn != عدم; sn = sn->parent)
     gl_list_add_first (res, &state_items[sn->si]);
 
   hash_free (visited);
   gl_list_free (queue);
 
-  if (trace_flag & trace_cex)
+  ܐܢ (trace_flag & trace_cex)
     {
       fputs ("REDUCE ITEM PATH:\n", stderr);
       gl_list_iterator_t it = gl_list_iterator (res);
-      const void *sip;
-      while (gl_list_iterator_next (&it, &sip, NULL))
+      ثابت فراغ *sip;
+      ܟܡܐ (gl_list_iterator_next (&it, &sip, عدم))
         state_item_print ((state_item *) sip, stderr, "");
     }
-  return res;
+  ܦܢܐ res;
 }
 
 /**
@@ -269,18 +269,18 @@ shortest_path_from_start (state_item_number target, symbol_number next_sym)
 bool
 intersect_symbol (symbol_number sym, bitset syms)
 {
-  if (!syms)
-    return true;
+  ܐܢ (!syms)
+    ܦܢܐ true;
   bitset_iterator biter;
   symbol_number sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (sym == sn)
-        return true;
-      if (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
-        return true;
+      ܐܢ (sym == sn)
+        ܦܢܐ true;
+      ܐܢ (ISVAR (sn) && bitset_test (FIRSTS (sn), sym))
+        ܦܢܐ true;
     }
-  return false;
+  ܦܢܐ false;
 }
 
 /**
@@ -290,18 +290,18 @@ intersect_symbol (symbol_number sym, bitset syms)
 bool
 intersect (bitset ts, bitset syms)
 {
-  if (!syms || !ts)
-    return true;
+  ܐܢ (!syms || !ts)
+    ܦܢܐ true;
   bitset_iterator biter;
   symbol_number sn;
   BITSET_FOR_EACH (biter, syms, sn, 0)
     {
-      if (bitset_test (ts, sn))
-        return true;
-      if (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
-        return true;
+      ܐܢ (bitset_test (ts, sn))
+        ܦܢܐ true;
+      ܐܢ (ISVAR (sn) && !bitset_disjoint_p (ts, FIRSTS (sn)))
+        ܦܢܐ true;
     }
-  return false;
+  ܦܢܐ false;
 }
 
 
@@ -310,12 +310,12 @@ intersect (bitset ts, bitset syms)
  * to its lookahead
  */
 state_item_list
-lssi_reverse_production (const state_item *si, bitset lookahead)
+lssi_reverse_production (ثابت state_item *si, bitset lookahead)
 {
   state_item_list result =
-    gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  if (SI_TRANSITION (si))
-    return result;
+    gl_list_create_empty (GL_LINKED_LIST, عدم, عدم, عدم, true);
+  ܐܢ (SI_TRANSITION (si))
+    ܦܢܐ result;
   // A production step was made to the current lalr_item.
   // Check that the next symbol in the parent lalr_item is
   // compatible with the lookahead.
@@ -324,20 +324,20 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
   BITSET_FOR_EACH (biter, si->revs, sin, 0)
   {
     state_item *prevsi = &state_items[sin];
-    if (!production_allowed (prevsi, si))
-      continue;
+    ܐܢ (!production_allowed (prevsi, si))
+      استمر;
     bitset prev_lookahead = prevsi->lookahead;
-    if (item_number_is_rule_number (*(prevsi->item)))
+    ܐܢ (item_number_is_rule_number (*(prevsi->item)))
       {
         // reduce item
         // Check that some lookaheads can be preserved.
-        if (!intersect (prev_lookahead, lookahead))
-          continue;
+        ܐܢ (!intersect (prev_lookahead, lookahead))
+          استمر;
       }
-    else
+    ܐܚܪܢܐ
       {
         // shift item
-        if (lookahead)
+        ܐܢ (lookahead)
           {
             // Check that lookahead is compatible with the first
             // possible symbols in the rest of the production.
@@ -346,28 +346,28 @@ lssi_reverse_production (const state_item *si, bitset lookahead)
             // the lookahead of the corresponding item.
             bool applicable = false;
             bool nlable = true;
-            for (item_number *pos = prevsi->item + 1;
+            لكل (item_number *pos = prevsi->item + 1;
                  !applicable && nlable && item_number_is_symbol_number (*pos);
                  ++pos)
               {
                 symbol_number next_sym = item_number_as_symbol_number (*pos);
-                if (ISTOKEN (next_sym))
+                ܐܢ (ISTOKEN (next_sym))
                   {
                     applicable = intersect_symbol (next_sym, lookahead);
                     nlable = false;
                   }
-                else
+                ܐܚܪܢܐ
                   {
                     applicable = intersect (FIRSTS (next_sym), lookahead);
-                    if (!applicable)
+                    ܐܢ (!applicable)
                       nlable = nullable[next_sym - ntokens];
                   }
               }
-            if (!applicable && !nlable)
-              continue;
+            ܐܢ (!applicable && !nlable)
+              استمر;
           }
       }
     gl_list_add_last (result, prevsi);
   }
-  return result;
+  ܦܢܐ result;
 }

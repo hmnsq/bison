@@ -18,34 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include "getargs.h"
+#ضمن "getargs.h"
 
-#include "derives.h"
-#include "gram.h"
-#include "reader.h"
-#include "symtab.h"
+#ضمن "derives.h"
+#ضمن "gram.h"
+#ضمن "reader.h"
+#ضمن "symtab.h"
 
 /* Linked list of rule numbers.  */
-typedef struct rule_list
+تعريفنوع بنية rule_list
 {
-  struct rule_list *next;
+  بنية rule_list *next;
   rule *value;
 } rule_list;
 
 rule ***derives;
 
-static void
-print_derives (void)
+ساكن فراغ
+print_derives (فراغ)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  لكل (symbol_number i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
-      for (rule **rp = derives[i - ntokens]; *rp; ++rp)
+      لكل (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
           rule_rhs_print (*rp, stderr);
@@ -57,19 +57,19 @@ print_derives (void)
 }
 
 
-void
-derives_compute (void)
+فراغ
+derives_compute (فراغ)
 {
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = xcalloc (nnterms, sizeof *dset);
+  rule_list **dset = xcalloc (nnterms, حجم *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = xnmalloc (nrules, sizeof *delts);
+  rule_list *delts = xnmalloc (nrules, حجم *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  لكل (rule_number r = nrules - 1; r >= 0; --r)
     {
       symbol_number lhs = rules[r].lhs->number;
       rule_list *p = &delts[r];
@@ -82,36 +82,36 @@ derives_compute (void)
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  derives = xnmalloc (nnterms, sizeof *derives);
+  derives = xnmalloc (nnterms, حجم *derives);
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
-  rule **q = xnmalloc (nnterms + nrules, sizeof *q);
+  rule **q = xnmalloc (nnterms + nrules, حجم *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  لكل (symbol_number i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      ܟܡܐ (p)
         {
           *q++ = p->value;
           p = p->next;
         }
-      *q++ = NULL;
+      *q++ = عدم;
     }
 
-  if (trace_flag & trace_sets)
+  ܐܢ (trace_flag & trace_sets)
     print_derives ();
 
-  free (dset);
-  free (delts);
+  حرر (dset);
+  حرر (delts);
 }
 
 
-void
-derives_free (void)
+فراغ
+derives_free (فراغ)
 {
-  if (derives)
+  ܐܢ (derives)
     {
-      free (derives[0]);
-      free (derives);
+      حرر (derives[0]);
+      حرر (derives);
     }
 }
