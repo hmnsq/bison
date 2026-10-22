@@ -23,6 +23,6 @@
 /* Convert VERSION into an int (MAJOR * 10000 + MINOR * 100 + MICRO).
    E.g., "3.7.4" => 30704, "3.8" => 30800.
    Return -1 on errors. */
-int strversion_to_int (char const *version);
+पूर्णाङ्क strversion_to_int (वर्ण ध्रुव *version);
 
 #endif
