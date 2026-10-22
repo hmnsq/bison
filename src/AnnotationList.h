@@ -26,7 +26,7 @@
 # include "InadequacyList.h"
 # include "state.h"
 
-typedef int AnnotationIndex;
+typedef ចំនួនគត់ AnnotationIndex;
 
 /**
  * A node in a list of annotations on a particular LR(0) state.  Each
@@ -35,10 +35,10 @@ typedef int AnnotationIndex;
  * break encapsulation by modifying the fields directly.  Use the provided
  * interface functions.
  */
-typedef struct AnnotationList
+typedef sa_nracanaa AnnotationList
 {
   /** The next node in the list or \c NULL if none.  */
-  struct AnnotationList *next;
+  sa_nracanaa AnnotationList *next;
   /** The \c InadequacyList node describing how this inadequacy manifests.  */
   InadequacyList *inadequacyNode;
   /**
@@ -113,7 +113,7 @@ AnnotationList__compute_from_inadequacies (
   InadequacyList **inadequacy_lists, AnnotationList **annotation_lists,
   AnnotationIndex *annotation_counts,
   ContributionIndex *max_contributionsp,
-  struct obstack *annotations_obstackp,
+  sa_nracanaa obstack *annotations_obstackp,
   InadequacyListNodeCount *inadequacy_list_node_count);
 
 /**
@@ -126,7 +126,7 @@ AnnotationList__compute_from_inadequacies (
  *     stderr.  \c spaces spaces were printed before each line of the text.
  */
 void AnnotationList__debug (AnnotationList const *self, size_t nitems,
-                            int spaces);
+                            ចំនួនគត់ spaces);
 
 /**
  * \pre

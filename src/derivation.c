@@ -30,17 +30,17 @@
 #include "system.h"
 #include "complain.h"
 
-struct derivation
+sa_nracanaa derivation
 {
   symbol_number sym;
   derivation_list children;
-  int reference_count;
+  ចំនួនគត់ reference_count;
   // The rule SYM -> CHILDREN.
   const rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  ចំនួនគត់ color;
 };
 
 static derivation d_dot = { -1, NULL, -1, NULL, -1 };
@@ -48,7 +48,7 @@ static derivation d_dot = { -1, NULL, -1, NULL, -1 };
 derivation *
 derivation_dot (void)
 {
-  return &d_dot;
+  ត្រឡប់ &d_dot;
 }
 
 void
@@ -68,10 +68,10 @@ derivation_list_prepend (derivation_list dl, derivation *d)
 void derivation_list_free (derivation_list dl)
 {
   derivation *d = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (dl);
+  សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (dl);
        derivation_list_next (&it, &d);
        )
-    if (d != &d_dot)
+    ប្រសិនបើ (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
@@ -80,13 +80,13 @@ derivation *
 derivation_new (symbol_number sym, derivation_list children,
                 const rule *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (parimaa_na *res);
   res->sym = sym;
   res->children = children;
   res->reference_count = 0;
   res->rule = r;
   res->color = -1;
-  return res;
+  ត្រឡប់ res;
 }
 
 void
@@ -98,23 +98,23 @@ derivation_retain (derivation *d)
 void
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
+  ប្រសិនបើ (!d)
+    ត្រឡប់;
   derivation_list free_queue =
     gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
                     1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+  ខណៈពេល (gl_list_size (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      ប្រសិនបើ (--deriv->reference_count == 0)
         {
-          if (deriv->children)
+          ប្រសិនបើ (deriv->children)
             {
               derivation *child = NULL;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
-                if (child != &d_dot)
+                ប្រសិនបើ (child != &d_dot)
                   gl_list_add_last (free_queue, child);
               gl_list_free (deriv->children);
             }
@@ -128,44 +128,44 @@ derivation_free (derivation *d)
 size_t
 derivation_size (const derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
+  ប្រសិនបើ (!deriv->children)
+    ត្រឡប់ 1;
+  ចំនួនគត់ size = 1;
   derivation *child = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+  សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
        derivation_list_next (&it, &child);
        )
     size += derivation_size (child);
-  return size;
+  ត្រឡប់ size;
 }
 
 
 // Longest distance from root to leaf.
-static int
+static ចំនួនគត់
 derivation_depth (const derivation *deriv)
 {
-  if (deriv->children)
+  ប្រសិនបើ (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
+      ចំនួនគត់ res = 1;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         res = max_int (res, derivation_depth (child));
-      return res + 1;
+      ត្រឡប់ res + 1;
     }
-  else
-    return 1;
+  បើមិនដូច្នេះ
+    ត្រឡប់ 1;
 }
 
 static bool
-all_spaces (const char *s)
+all_spaces (const var_na *s)
 {
-  while (c_isspace (*s))
+  ខណៈពេល (c_isspace (*s))
     s++;
-  return *s == '\0';
+  ត្រឡប់ *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,58 +194,58 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+static ចំនួនគត់
+fputs_if (bool cond, FILE *out, ចំនួនគត់ *padding, const var_na *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  ចំនួនគត់ res = mbswidth (s, 0);
+  ប្រសិនបើ (cond && !all_spaces (s))
     {
       fprintf (out, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  បើមិនដូច្នេះ
     {
       *padding += res;
     }
-  return res;
+  ត្រឡប់ res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+static ចំនួនគត់
+fprintf_if (bool cond, FILE *out, ចំនួនគត់ *padding, const var_na *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
+  var_na buf[256];
+  size_t len = parimaa_na (buf);
   va_list args;
   va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
+  var_na *cp = vasnprintf (buf, &len, fmt, args);
   va_end (args);
-  if (!cp)
+  ប្រសិនបើ (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
+  ចំនួនគត់ res = fputs_if (cond, out, padding, cp);
+  ប្រសិនបើ (cp != buf)
     free (cp);
-  return res;
+  ត្រឡប់ res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
+static ចំនួនគត់
 derivation_width (const derivation *deriv)
 {
-  if (deriv->children)
+  ប្រសិនបើ (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      ចំនួនគត់ self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
+      ចំនួនគត់ children_width = down_arrow_width;
       children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      ប្រសិនបើ (gl_list_size (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
-      else
+      បើមិនដូច្នេះ
         {
-          if (gl_list_size (deriv->children) == 1
+          ប្រសិនបើ (gl_list_size (deriv->children) == 1
               && gl_list_get_first (deriv->children) == &d_dot)
             {
               children_width += empty_width;
@@ -253,7 +253,7 @@ derivation_width (const derivation *deriv)
             }
 
           derivation *child;
-          for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+          សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                derivation_list_next (&it, &child);
                )
             children_width
@@ -261,16 +261,16 @@ derivation_width (const derivation *deriv)
           // No separator at the beginning.
           children_width -= derivation_separator_width;
         }
-      return max_int (self_width, children_width);
+      ត្រឡប់ max_int (self_width, children_width);
     }
-  else if (deriv == &d_dot)
+  បើមិនដូច្នេះ ប្រសិនបើ (deriv == &d_dot)
     {
-      return dot_width;
+      ត្រឡប់ dot_width;
     }
-  else // leaf.
+  បើមិនដូច្នេះ // leaf.
     {
       const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      ត្រឡប់ mbswidth (sym->tag, 0);
     }
 }
 
@@ -286,38 +286,38 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
+static ចំនួនគត់
 derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+                            ចំនួនគត់ depth, ចំនួនគត់ *padding)
 {
-  const int width = derivation_width (deriv);
+  const ចំនួនគត់ width = derivation_width (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  ចំនួនគត់ res = 0;
+  ប្រសិនបើ (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      var_na style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      ប្រសិនបើ (depth == 0 || depth == 1)
         {
           begin_use_class (style, out);
           begin_use_class ("cex-step", out);
         }
-      if (depth == 0)
+      ប្រសិនបើ (depth == 0)
         {
           res += fputs_if (true, out, padding, sym->tag);
         }
-      else
+      បើមិនដូច្នេះ
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
           res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          ប្រសិនបើ (gl_list_size (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
-          else
+          បើមិនដូច្នេះ
             {
-              if (gl_list_size (deriv->children) == 1
+              ប្រសិនបើ (gl_list_size (deriv->children) == 1
                   && gl_list_get_first (deriv->children) == &d_dot)
                 {
                   res += fputs_if (depth == 1, out, padding, empty);
@@ -326,18 +326,18 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
 
               bool first = true;
               derivation *child;
-              for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+              សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
                 {
-                  if (!first)
+                  ប្រសិនបើ (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
                   res += derivation_print_tree_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      ប្រសិនបើ (depth == 0 || depth == 1)
         {
           end_use_class ("cex-step", out);
           end_use_class (style, out);
@@ -345,34 +345,34 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       *padding += width - res;
       res = width;
     }
-  else if (deriv == &d_dot)
+  បើមិនដូច្នេះ ប្រសិនបើ (deriv == &d_dot)
     {
-      if (depth == 0)
+      ប្រសិនបើ (depth == 0)
         begin_use_class ("cex-dot", out);
       res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
+      ប្រសិនបើ (depth == 0)
         end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  បើមិនដូច្នេះ // leaf.
     {
       const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
+      ប្រសិនបើ (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
+      ប្រសិនបើ (depth == 0)
         end_use_class ("cex-leaf", out);
     }
-  return res;
+  ត្រឡប់ res;
 }
 
 static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+derivation_print_tree (const derivation *deriv, FILE *out, const var_na *prefix)
 {
   fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
+  សម្រាប់ (ចំនួនគត់ depth = 0, max_depth = derivation_depth (deriv);
        depth < max_depth; ++depth)
     {
-      int padding = 0;
+      ចំនួនគត់ padding = 0;
       fprintf (out, "    %s", prefix);
       derivation_print_tree_impl (deriv, out, depth, &padding);
       fputc ('\n', out);
@@ -385,18 +385,18 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 static bool
 derivation_print_flat_impl (derivation *deriv, FILE *out,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            ចំនួនគត់ *counter, const var_na *prefix)
 {
-  if (deriv->children)
+  ប្រសិនបើ (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      var_na style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
       begin_use_class (style, out);
 
-      if (!leaves_only)
+      ប្រសិនបើ (!leaves_only)
         {
           fputs (prefix, out);
           begin_use_class ("cex-step", out);
@@ -406,39 +406,39 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
         }
       bool res = false;
       derivation *child;
-      for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
+      សម្រាប់ (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
+          ប្រសិនបើ (derivation_print_flat_impl (child, out,
                                           leaves_only, counter, prefix))
             {
               prefix = " ";
               res = true;
             }
-          else if (!leaves_only)
+          បើមិនដូច្នេះ ប្រសិនបើ (!leaves_only)
             prefix = " ";
         }
-      if (!leaves_only)
+      ប្រសិនបើ (!leaves_only)
         {
           begin_use_class ("cex-step", out);
-          if (res)
+          ប្រសិនបើ (res)
             fputs (" ]", out);
-          else
+          បើមិនដូច្នេះ
             fputs ("]", out);
           end_use_class ("cex-step", out);
         }
       end_use_class (style, out);
-      return res;
+      ត្រឡប់ res;
     }
-  else if (deriv == &d_dot)
+  បើមិនដូច្នេះ ប្រសិនបើ (deriv == &d_dot)
     {
       fputs (prefix, out);
       begin_use_class ("cex-dot", out);
       fputs (dot, out);
       end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  បើមិនដូច្នេះ // leaf.
     {
       fputs (prefix, out);
       const symbol *sym = symbols[deriv->sym];
@@ -446,13 +446,13 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
       fprintf (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
     }
-  return true;
+  ត្រឡប់ true;
 }
 
 static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+derivation_print_flat (const derivation *deriv, FILE *out, const var_na *prefix)
 {
-  int counter = 0;
+  ចំនួនគត់ counter = 0;
   fputs (prefix, out);
   derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
   fputc ('\n', out);
@@ -461,16 +461,16 @@ derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
 void
 derivation_print_leaves (const derivation *deriv, FILE *out)
 {
-  int counter = 0;
+  ចំនួនគត់ counter = 0;
   derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
   fputc ('\n', out);
 }
 
 void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+derivation_print (const derivation *deriv, FILE *out, const var_na *prefix)
 {
-  if (getenv ("YYFLAT"))
+  ប្រសិនបើ (getenv ("YYFLAT"))
     derivation_print_flat (deriv, out, prefix);
-  else
+  បើមិនដូច្នេះ
     derivation_print_tree (deriv, out, prefix);
 }

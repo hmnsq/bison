@@ -29,9 +29,9 @@
 #include "symtab.h"
 
 /* Linked list of rule numbers.  */
-typedef struct rule_list
+typedef sa_nracanaa rule_list
 {
-  struct rule_list *next;
+  sa_nracanaa rule_list *next;
   rule *value;
 } rule_list;
 
@@ -42,10 +42,10 @@ print_derives (void)
 {
   fputs ("DERIVES\n", stderr);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  សម្រាប់ (symbol_number i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
-      for (rule **rp = derives[i - ntokens]; *rp; ++rp)
+      សម្រាប់ (rule **rp = derives[i - ntokens]; *rp; ++rp)
         {
           fprintf (stderr, "    %3d ", (*rp)->code);
           rule_rhs_print (*rp, stderr);
@@ -62,14 +62,14 @@ derives_compute (void)
 {
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = xcalloc (nnterms, sizeof *dset);
+  rule_list **dset = xcalloc (nnterms, parimaa_na *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = xnmalloc (nrules, sizeof *delts);
+  rule_list *delts = xnmalloc (nrules, parimaa_na *delts);
 
-  for (rule_number r = nrules - 1; r >= 0; --r)
+  សម្រាប់ (rule_number r = nrules - 1; r >= 0; --r)
     {
       symbol_number lhs = rules[r].lhs->number;
       rule_list *p = &delts[r];
@@ -82,15 +82,15 @@ derives_compute (void)
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  derives = xnmalloc (nnterms, sizeof *derives);
+  derives = xnmalloc (nnterms, parimaa_na *derives);
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
-  rule **q = xnmalloc (nnterms + nrules, sizeof *q);
+  rule **q = xnmalloc (nnterms + nrules, parimaa_na *q);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  សម្រាប់ (symbol_number i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      ខណៈពេល (p)
         {
           *q++ = p->value;
           p = p->next;
@@ -98,7 +98,7 @@ derives_compute (void)
       *q++ = NULL;
     }
 
-  if (trace_flag & trace_sets)
+  ប្រសិនបើ (trace_flag & trace_sets)
     print_derives ();
 
   free (dset);
@@ -109,7 +109,7 @@ derives_compute (void)
 void
 derives_free (void)
 {
-  if (derives)
+  ប្រសិនបើ (derives)
     {
       free (derives[0]);
       free (derives);

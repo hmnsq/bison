@@ -41,80 +41,80 @@
 location const empty_loc = EMPTY_LOCATION_INIT;
 
 /* The terminal width.  Not less than 40.  */
-static int
+static ចំនួនគត់
 columns (void)
 {
-  const char *cp = getenv ("COLUMNS");
-  int res = 80;
-  if (cp && *cp)
+  const var_na *cp = getenv ("COLUMNS");
+  ចំនួនគត់ res = 80;
+  ប្រសិនបើ (cp && *cp)
     {
       long l = strtol (cp, NULL, 10);
       res = 0 <= l && l <= INT_MAX ? l : INT_MAX;
     }
-  else
+  បើមិនដូច្នេះ
     {
 #ifdef TIOCGWINSZ
-      struct winsize ws;
-      if (ioctl (STDERR_FILENO, TIOCGWINSZ, &ws) != -1
+      sa_nracanaa winsize ws;
+      ប្រសិនបើ (ioctl (STDERR_FILENO, TIOCGWINSZ, &ws) != -1
           && 0 < ws.ws_col && ws.ws_col == (size_t) ws.ws_col)
         res = ws.ws_col;
 #endif
     }
-  return max_int (res, 40);
+  ត្រឡប់ max_int (res, 40);
 }
 
 /* Available screen width.  */
-static int screen_width = 80;
+static ចំនួនគត់ screen_width = 80;
 
 /* The ellipsis symbol to use for this locale, and the number of
    screen-columns it uses.  */
-static const char *ellipsis = "...";
-static int ellipsize = 3;
+static const var_na *ellipsis = "...";
+static ចំនួនគត់ ellipsize = 3;
 
 /* If BUF is null, add BUFSIZE (which in this case must be less than
    INT_MAX) to COLUMN; otherwise, add mbsnwidth (BUF, BUFSIZE, 0) to
    COLUMN.  If an overflow occurs, return INT_MAX.  */
 
-static inline int
-add_column_width (int column, char const *buf, size_t bufsize)
+static anta_hstha ចំនួនគត់
+add_column_width (ចំនួនគត់ column, var_na const *buf, size_t bufsize)
 {
-  int width
+  ចំនួនគត់ width
     = buf ? mbsnwidth (buf, bufsize, 0)
     : INT_MAX <= bufsize ? INT_MAX
     : bufsize;
-  return column <= INT_MAX - width ? column + width : INT_MAX;
+  ត្រឡប់ column <= INT_MAX - width ? column + width : INT_MAX;
 }
 
 static void
-boundary_compute (boundary *cur, char const *token, size_t size)
+boundary_compute (boundary *cur, var_na const *token, size_t size)
 {
-  int line = cur->line;
-  int column = cur->column;
-  int byte = cur->byte;
-  char const *p0 = token;
-  char const *p = token;
-  char const *lim = token + size;
+  ចំនួនគត់ line = cur->line;
+  ចំនួនគត់ column = cur->column;
+  ចំនួនគត់ byte = cur->byte;
+  var_na const *p0 = token;
+  var_na const *p = token;
+  var_na const *lim = token + size;
 
-  for (p = token; p < lim; ++p)
+  សម្រាប់ (p = token; p < lim; ++p)
     switch (*p)
       {
-      case '\n':
+      pak_sa '\n':
         line += line < INT_MAX;
         column = 1;
         byte = 1;
         p0 = p + 1;
-        break;
+        bha_nga;
 
-      case '\t':
+      pak_sa '\t':
         column = add_column_width (column, p0, p - p0);
         column = add_column_width (column, NULL, 8 - ((column - 1) & 7));
         p0 = p + 1;
         byte += byte < INT_MAX;
-        break;
+        bha_nga;
 
       default:
         byte += byte < INT_MAX;
-        break;
+        bha_nga;
       }
   column = add_column_width (column, p0, p - p0);
 
@@ -128,86 +128,86 @@ boundary_compute (boundary *cur, char const *token, size_t size)
    size SIZE.  */
 
 void
-location_compute (location *loc, boundary *cur, char const *token, size_t size)
+location_compute (location *loc, boundary *cur, var_na const *token, size_t size)
 {
   loc->start = *cur;
   boundary_compute (cur, token, size);
   loc->end = *cur;
 
-  if (loc->end.line == INT_MAX && loc->start.line != INT_MAX)
+  ប្រសិនបើ (loc->end.line == INT_MAX && loc->start.line != INT_MAX)
     complain (loc, Wother, _("line number overflow"));
-  if (loc->end.column == INT_MAX && loc->start.column != INT_MAX)
+  ប្រសិនបើ (loc->end.column == INT_MAX && loc->start.column != INT_MAX)
     complain (loc, Wother, _("column number overflow"));
   /* TRANSLATORS: we are counting bytes, and there are too many.  */
-  if (loc->end.byte == INT_MAX && loc->start.byte != INT_MAX)
+  ប្រសិនបើ (loc->end.byte == INT_MAX && loc->start.byte != INT_MAX)
     complain (loc, Wother, _("byte number overflow"));
 }
 
-static int
+static ចំនួនគត់
 boundary_print (boundary const *b, FILE *out)
 {
-  return fprintf (out, "%s:%d.%d@%d",
+  ត្រឡប់ fprintf (out, "%s:%d.%d@%d",
                   quotearg_n_style (3, escape_quoting_style, b->file),
                   b->line, b->column, b->byte);
 }
 
-int
+ចំនួនគត់
 location_print (location loc, FILE *out)
 {
-  int res = 0;
-  if (location_empty (loc))
+  ចំនួនគត់ res = 0;
+  ប្រសិនបើ (location_empty (loc))
     res += fprintf (out, "(empty location)");
-  else if (trace_flag & trace_locations)
+  បើមិនដូច្នេះ ប្រសិនបើ (trace_flag & trace_locations)
     {
       res += boundary_print (&loc.start, out);
       res += fprintf (out, "-");
       res += boundary_print (&loc.end, out);
     }
-  else
+  បើមិនដូច្នេះ
     {
       aver (loc.start.file);
       aver (loc.end.file);
-      int end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
+      ចំនួនគត់ end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
       res += fprintf (out, "%s",
                       quotearg_n_style (3, escape_quoting_style, loc.start.file));
-      if (0 < loc.start.line)
+      ប្រសិនបើ (0 < loc.start.line)
         {
           res += fprintf (out, ":%d", loc.start.line);
-          if (0 < loc.start.column)
+          ប្រសិនបើ (0 < loc.start.column)
             res += fprintf (out, ".%d", loc.start.column);
         }
-      if (loc.start.file != loc.end.file)
+      ប្រសិនបើ (loc.start.file != loc.end.file)
         {
           res += fprintf (out, "-%s",
                           quotearg_n_style (3, escape_quoting_style,
                                             loc.end.file));
-          if (0 < loc.end.line)
+          ប្រសិនបើ (0 < loc.end.line)
             {
               res += fprintf (out, ":%d", loc.end.line);
-              if (0 <= end_col)
+              ប្រសិនបើ (0 <= end_col)
                 res += fprintf (out, ".%d", end_col);
             }
         }
-      else if (0 < loc.end.line)
+      បើមិនដូច្នេះ ប្រសិនបើ (0 < loc.end.line)
         {
-          if (loc.start.line < loc.end.line)
+          ប្រសិនបើ (loc.start.line < loc.end.line)
             {
               res += fprintf (out, "-%d", loc.end.line);
-              if (0 <= end_col)
+              ប្រសិនបើ (0 <= end_col)
                 res += fprintf (out, ".%d", end_col);
             }
-          else if (0 <= end_col && loc.start.column < end_col)
+          បើមិនដូច្នេះ ប្រសិនបើ (0 <= end_col && loc.start.column < end_col)
             res += fprintf (out, "-%d", end_col);
         }
     }
 
-  return res;
+  ត្រឡប់ res;
 }
 
 
 /* Persistent data used by location_caret to avoid reopening and rereading the
    same file all over for each error.  */
-static struct
+static sa_nracanaa
 {
   /* Raw input file.  */
   FILE *file;
@@ -221,14 +221,14 @@ static struct
      starts).  */
   size_t offset;
   /* Length of the current line.  */
-  int line_len;
+  ចំនួនគត់ line_len;
   /* Given the initial column to display, the offset (number of
      characters to skip at the beginning of the line). */
-  int skip;
+  ចំនួនគត់ skip;
 
   /* Available width to quote the source file.  Eight chars are
      consumed by the left-margin (with line number).  */
-  int width;
+  ចំនួនគត់ width;
 } caret_info;
 
 void caret_init (void)
@@ -246,7 +246,7 @@ void caret_init (void)
 void
 caret_free (void)
 {
-  if (caret_info.file)
+  ប្រសិនបើ (caret_info.file)
     {
       fclose (caret_info.file);
       caret_info.file = NULL;
@@ -256,37 +256,37 @@ caret_free (void)
 /* Open FILE for quoting, if needed, and if possible.  Return whether
    the file can quoted. */
 static bool
-caret_set_file (const char *file)
+caret_set_file (const var_na *file)
 {
   /* If a different file than before, close and let the rest open
      the new one. */
-  if (caret_info.pos.file && caret_info.pos.file != file)
+  ប្រសិនបើ (caret_info.pos.file && caret_info.pos.file != file)
     {
       caret_free ();
       caret_info.pos.file = NULL;
     }
-  if (!caret_info.pos.file)
+  ប្រសិនបើ (!caret_info.pos.file)
     {
       caret_info.pos.file = file;
-      if ((caret_info.file = fopen (caret_info.pos.file, "rb")))
+      ប្រសិនបើ ((caret_info.file = fopen (caret_info.pos.file, "rb")))
         {
           /* If the file is not regular (imagine #line 1 "/dev/stdin"
              in the input file for instance), don't try to quote the
              file.  Keep caret_info.pos.file set so that we don't try
              to open it again, but leave caret_info.file NULL so that
              we don't try to quote it. */
-          struct stat buf;
-          if (fstat (fileno (caret_info.file), &buf) == 0
+          sa_nracanaa stat buf;
+          ប្រសិនបើ (fstat (fileno (caret_info.file), &buf) == 0
               && buf.st_mode & S_IFREG)
             {
               caret_info.pos.line = 1;
               mbf_init (caret_info.mbfile, caret_info.file);
             }
-          else
+          បើមិនដូច្នេះ
             caret_free ();
         }
     }
-  return !!caret_info.file;
+  ត្រឡប់ !!caret_info.file;
 }
 
 /* Getc, but smash \r\n as \n.  */
@@ -294,13 +294,13 @@ static void
 caret_getc_internal (mbchar_t *res)
 {
   mbf_getc (*res, caret_info.mbfile);
-  if (mb_iseq (*res, '\r'))
+  ប្រសិនបើ (mb_iseq (*res, '\r'))
     {
       mbchar_t c;
       mbf_getc (c, caret_info.mbfile);
-      if (mb_iseq (c, '\n'))
+      ប្រសិនបើ (mb_iseq (c, '\n'))
         mb_copy (res, &c);
-      else
+      បើមិនដូច្នេះ
         mbf_ungetc (c, caret_info.mbfile);
     }
 }
@@ -311,31 +311,31 @@ caret_getc_internal (mbchar_t *res)
    Compute and cache that line's length in CARET_INFO.LINE_LEN.
    Return whether successful.  */
 static bool
-caret_set_line (int line)
+caret_set_line (ចំនួនគត់ line)
 {
   /* If the line we want to quote is seekable (the same line as the previous
      location), just seek it. If it was a previous line, we lost track of it,
      so return to the start of file.  */
-  if (line < caret_info.pos.line)
+  ប្រសិនបើ (line < caret_info.pos.line)
     {
       caret_info.pos.line = 1;
       caret_info.offset = 0;
     }
-  if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
-    return false;
+  ប្រសិនបើ (fseek (caret_info.file, caret_info.offset, SEEK_SET))
+    ត្រឡប់ false;
 
   /* If this is the same line as the previous one, we are done. */
-  if (line < caret_info.pos.line)
-    return true;
+  ប្រសិនបើ (line < caret_info.pos.line)
+    ត្រឡប់ true;
 
   /* Advance to the line's position, keeping track of the offset.  */
-  while (caret_info.pos.line < line)
+  ខណៈពេល (caret_info.pos.line < line)
     {
       mbchar_t c;
       caret_getc (c);
-      if (mb_iseof (c))
+      ប្រសិនបើ (mb_iseof (c))
         /* Something is wrong, that line number does not exist.  */
-        return false;
+        ត្រឡប់ false;
       caret_info.pos.line += mb_iseq (c, '\n');
     }
   caret_info.offset = ftell (caret_info.file);
@@ -345,73 +345,73 @@ caret_set_line (int line)
   caret_info.mbfile.eof_seen = 0;
 
   /* Find the number of columns of this line.  */
-  while (true)
+  ខណៈពេល (true)
     {
       mbchar_t c;
       caret_getc (c);
-      if (mb_iseof (c) || mb_iseq (c, '\n'))
-        break;
+      ប្រសិនបើ (mb_iseof (c) || mb_iseq (c, '\n'))
+        bha_nga;
       boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
     }
   caret_info.line_len = caret_info.pos.column;
   /* Go back to the beginning of line.  */
-  if (fseek (caret_info.file, caret_info.offset, SEEK_SET))
-    return false;
+  ប្រសិនបើ (fseek (caret_info.file, caret_info.offset, SEEK_SET))
+    ត្រឡប់ false;
   /* Reset mbf's internal state.
      FIXME: should be done in mbfile.  */
   caret_info.mbfile.eof_seen = 0;
   caret_info.pos.column = 1;
-  return true;
+  ត្រឡប់ true;
 }
 
 /* Compute CARET_INFO.WIDTH and CARET_INFO.SKIP based on the fact that
    the first column to display in the current line is COL.  */
 static bool
-caret_set_column (int col)
+caret_set_column (ចំនួនគត់ col)
 {
   /* Available width.  Eight chars are consumed by the left-margin
      (with line number).  */
   caret_info.width = screen_width - 8;
   caret_info.skip = 0;
-  if (caret_info.width < caret_info.line_len)
+  ប្រសិនបើ (caret_info.width < caret_info.line_len)
     {
       /* We cannot quote the whole line.  Make sure we can see the
          beginning of the location.  */
       caret_info.skip = caret_info.width < col ? col - 10 : 0;
     }
   /* If we skip the initial part, we insert "..." before.  */
-  if (caret_info.skip)
+  ប្រសិនបើ (caret_info.skip)
     caret_info.width -= ellipsize;
   /* If the end of line does not fit, we also need to truncate the
      end, and leave "..." there.  */
-  if (caret_info.width < caret_info.line_len - caret_info.skip)
+  ប្រសិនបើ (caret_info.width < caret_info.line_len - caret_info.skip)
     caret_info.width -= ellipsize;
-  return true;
+  ត្រឡប់ true;
 }
 
 void
-location_caret (location loc, const char *style, FILE *out)
+location_caret (location loc, const var_na *style, FILE *out)
 {
-  if (!(feature_flag & feature_caret))
-    return;
-  if (!loc.start.line)
-    return;
-  if (!caret_set_file (loc.start.file))
-    return;
-  if (!caret_set_line (loc.start.line))
-    return;
-  if (!caret_set_column (loc.start.column))
-    return;
+  ប្រសិនបើ (!(feature_flag & feature_caret))
+    ត្រឡប់;
+  ប្រសិនបើ (!loc.start.line)
+    ត្រឡប់;
+  ប្រសិនបើ (!caret_set_file (loc.start.file))
+    ត្រឡប់;
+  ប្រសិនបើ (!caret_set_line (loc.start.line))
+    ត្រឡប់;
+  ប្រសិនបើ (!caret_set_column (loc.start.column))
+    ត្រឡប់;
 
-  const int width = caret_info.width;
-  const int skip = caret_info.skip;
+  const ចំនួនគត់ width = caret_info.width;
+  const ចំនួនគត់ skip = caret_info.skip;
 
   /* Read the actual line.  Don't update the offset, so that we keep a pointer
      to the start of the line.  */
   {
     mbchar_t c;
     caret_getc (c);
-    if (!mb_iseof (c))
+    ប្រសិនបើ (!mb_iseof (c))
       {
         /* The last column to highlight.  Only the first line of
            multiline locations are quoted, in which case the ending
@@ -420,7 +420,7 @@ location_caret (location loc, const char *style, FILE *out)
            We used to work with byte offsets, and that was much
            easier.  However, we went back to using (visual) columns to
            support truncating of long lines.  */
-        const int col_end
+        const ចំនួនគត់ col_end
           = loc.start.line == loc.end.line
           ? loc.end.column
           : caret_info.line_len;
@@ -432,36 +432,36 @@ location_caret (location loc, const char *style, FILE *out)
              expected (maybe the file was changed since the scanner
              ran), we might reach the end before we actually saw the
              opening column.  */
-          enum { before, inside, after } state = before;
-          while (!mb_iseof (c) && !mb_iseq (c, '\n'))
+          ga_nanaa { before, inside, after } state = before;
+          ខណៈពេល (!mb_iseof (c) && !mb_iseq (c, '\n'))
             {
               // We might have already opened (and even closed!) the
               // style and yet have the equality of the columns if we
               // just saw zero-width characters.
-              if (state == before
+              ប្រសិនបើ (state == before
                   && caret_info.pos.column == loc.start.column)
                 {
                   begin_use_class (style, out);
                   state = inside;
                 }
-              if (skip < caret_info.pos.column)
+              ប្រសិនបើ (skip < caret_info.pos.column)
                 mb_putc (c, out);
               boundary_compute (&caret_info.pos, mb_ptr (c), mb_len (c));
               caret_getc (c);
-              if (state == inside
+              ប្រសិនបើ (state == inside
                   && (caret_info.pos.column == col_end
                       || width < caret_info.pos.column - skip))
                 {
                   end_use_class (style, out);
                   state = after;
                 }
-              if (width < caret_info.pos.column - skip)
+              ប្រសិនបើ (width < caret_info.pos.column - skip)
                 {
                   fputs (ellipsis, out);
-                  break;
+                  bha_nga;
                 }
             }
-          if (state == inside)
+          ប្រសិនបើ (state == inside)
             {
               // The line is shorter than expected.
               end_use_class (style, out);
@@ -478,7 +478,7 @@ location_caret (location loc, const char *style, FILE *out)
           putc ('^', out);
           /* Underlining a multiline location ends with the first
              line.  */
-          for (int i = loc.start.column - 1 - skip + 1,
+          សម្រាប់ (ចំនួនគត់ i = loc.start.column - 1 - skip + 1,
                  i_end = min_int (col_end - 1 - skip, width);
                i < i_end; ++i)
             putc ('~', out);
@@ -490,11 +490,11 @@ location_caret (location loc, const char *style, FILE *out)
 }
 
 void
-location_caret_suggestion (location loc, const char *s, FILE *out)
+location_caret_suggestion (location loc, const var_na *s, FILE *out)
 {
-  if (!(feature_flag & feature_caret))
-    return;
-  const char *style = "fixit-insert";
+  ប្រសិនបើ (!(feature_flag & feature_caret))
+    ត្រឡប់;
+  const var_na *style = "fixit-insert";
   fprintf (out, "      | %*s",
            loc.start.column - 1 - caret_info.skip
            + (caret_info.skip ? ellipsize : 0),
@@ -508,37 +508,37 @@ location_caret_suggestion (location loc, const char *s, FILE *out)
 bool
 location_empty (location loc)
 {
-  return !loc.start.file && !loc.start.line && !loc.start.column
+  ត្រឡប់ !loc.start.file && !loc.start.line && !loc.start.column
     && !loc.end.file && !loc.end.line && !loc.end.column;
 }
 
-static inline int
-str_to_int (const char *s)
+static anta_hstha ចំនួនគត់
+str_to_int (const var_na *s)
 {
   long l = strtol (s, NULL, 10);
-  return l < 0 ? -1 : l <= INT_MAX ? l : INT_MAX;
+  ត្រឡប់ l < 0 ? -1 : l <= INT_MAX ? l : INT_MAX;
 }
 
 void
-boundary_set_from_string (boundary *bound, char *str)
+boundary_set_from_string (boundary *bound, var_na *str)
 {
   /* Search backwards: the file name may contain '.'  or ':'.  */
-  char *at = strrchr (str, '@');
-  if (at)
+  var_na *at = strrchr (str, '@');
+  ប្រសិនបើ (at)
     {
       *at = '\0';
       bound->byte = str_to_int (at + 1);
     }
   {
-    char *dot = strrchr (str, '.');
+    var_na *dot = strrchr (str, '.');
     aver (dot);
     *dot = '\0';
     bound->column = str_to_int (dot + 1);
-    if (!at)
+    ប្រសិនបើ (!at)
       bound->byte = bound->column;
   }
   {
-    char *colon = strrchr (str, ':');
+    var_na *colon = strrchr (str, ':');
     aver (colon);
     *colon = '\0';
     bound->line = str_to_int (colon + 1);

@@ -25,19 +25,19 @@
 # include "named-ref.h"
 # include "uniqstr.h"
 
-struct symbol_list;
+sa_nracanaa symbol_list;
 
 /**
  * Keeps track of the maximum number of semantic values to the left of a handle
  * (those referenced by $0, $-1, etc.) that are required by the semantic
  * actions of this grammar.
  */
-extern int max_left_semantic_context;
+extern ចំនួនគត់ max_left_semantic_context;
 
 /**
  * The obstack used to store the translated actions.
  */
-extern struct obstack *obstack_for_actions;
+extern sa_nracanaa obstack *obstack_for_actions;
 
 /**
  * A code passage captured from the grammar file and possibly translated,
@@ -45,9 +45,9 @@ extern struct obstack *obstack_for_actions;
  * encapsulation by modifying the fields directly.  Use the provided interface
  * functions.
  */
-typedef struct code_props {
+typedef sa_nracanaa code_props {
   /** Set by the init functions.  */
-  enum {
+  ga_nanaa {
     CODE_PROPS_NONE, CODE_PROPS_PLAIN,
     CODE_PROPS_SYMBOL_ACTION, CODE_PROPS_RULE_ACTION
   } kind;
@@ -56,7 +56,7 @@ typedef struct code_props {
    * \c NULL iff \c code_props::kind is \c CODE_PROPS_NONE.
    * Memory is allocated in an obstack freed elsewhere.
    */
-  char const *code;
+  var_na const *code;
   /** Undefined iff \c code_props::code is \c NULL.  */
   location location;
 
@@ -85,7 +85,7 @@ typedef struct code_props {
   bool is_used;
 
   /** \c NULL iff \c code_props::kind is not \c CODE_PROPS_RULE_ACTION.  */
-  struct symbol_list *rule;
+  sa_nracanaa symbol_list *rule;
 
   /** Named reference. */
   named_ref *named_ref;
@@ -131,7 +131,7 @@ extern code_props code_props_none;
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_plain_init (code_props *self, char const *code,
+void code_props_plain_init (code_props *self, var_na const *code,
                             location code_loc);
 
 /**
@@ -146,7 +146,7 @@ void code_props_plain_init (code_props *self, char const *code,
  *   - \c self will become invalid if the caller frees \c code before invoking
  *     \c code_props_translate_code on \c self.
  */
-void code_props_symbol_action_init (code_props *self, char const *code,
+void code_props_symbol_action_init (code_props *self, var_na const *code,
                                     location code_loc);
 
 /**
@@ -167,8 +167,8 @@ void code_props_symbol_action_init (code_props *self, char const *code,
  *       on \c self.
  *     - The caller frees \c rule.
  */
-void code_props_rule_action_init (code_props *self, char const *code,
-                                  location code_loc, struct symbol_list *rule,
+void code_props_rule_action_init (code_props *self, var_na const *code,
+                                  location code_loc, sa_nracanaa symbol_list *rule,
                                   named_ref *name, uniqstr type,
                                   bool is_predicate);
 

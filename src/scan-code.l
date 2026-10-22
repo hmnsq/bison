@@ -40,31 +40,31 @@
 #undef code_wrap
 #define code_wrap() 1
 
-struct obstack *obstack_for_actions = &obstack_for_string;
+sa_nracanaa obstack *obstack_for_actions = &obstack_for_string;
 
 /* The current calling start condition: SC_RULE_ACTION or
    SC_SYMBOL_ACTION. */
-# define YY_DECL static char *code_lex (code_props *self, int sc_context)
+# define YY_DECL static var_na *code_lex (code_props *self, ចំនួនគត់ sc_context)
 YY_DECL;
 
 #define YY_USER_ACTION  location_compute (loc, &loc->end, yytext, yyleng);
 
-static char *fetch_type_name (char *cp, char const **type_name,
+static var_na *fetch_type_name (var_na *cp, var_na const **type_name,
                               const location *dollar_loc);
 
-static void handle_action_dollar (symbol_list *rule, char *cp,
+static void handle_action_dollar (symbol_list *rule, var_na *cp,
                                   const location *dollar_loc);
-static void handle_action_at (symbol_list *rule, char *cp,
+static void handle_action_at (symbol_list *rule, var_na *cp,
                               const location *at_loc);
 
 /* A string to be pushed to obstack after dollar/at has been handled. */
-static char *ref_tail_fields;
+static var_na *ref_tail_fields;
 
 static location current_loc;
 static location *loc = &current_loc;
 
 /* A string representing the most recent translation.  */
-static char *last_string;
+static var_na *last_string;
 
 /* True if an untyped $$ or $n was seen.  */
 static bool untyped_var_seen;
@@ -167,13 +167,13 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   "$"("<"{tag}">")?{ref}  {
     ref_tail_fields = NULL;
     handle_action_dollar (self->rule, yytext, loc);
-    if (ref_tail_fields)
+    ប្រសិនបើ (ref_tail_fields)
       obstack_sgrow (&obstack_for_string, ref_tail_fields);
   }
   "@"{ref} {
     ref_tail_fields = NULL;
     handle_action_at (self->rule, yytext, loc);
-    if (ref_tail_fields)
+    ប្រសិនបើ (ref_tail_fields)
       obstack_sgrow (&obstack_for_string, ref_tail_fields);
   }
 }
@@ -181,7 +181,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
 <SC_SYMBOL_ACTION>
 {
   "$"("<"{tag}">")?"$" {
-    const char *type_name = NULL;
+    const var_na *type_name = NULL;
     fetch_type_name (yytext + 1, &type_name, loc)[-1] = 0;
     obstack_sgrow (&obstack_for_string, "]b4_dollar_dollar(");
     obstack_quote (&obstack_for_string, type_name);
@@ -207,28 +207,28 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   .|\n        STRING_GROW ();
 
   /* End of processing. */
-  <<EOF>>     STRING_FINISH (); return last_string;
+  <<EOF>>     STRING_FINISH (); ត្រឡប់ last_string;
 }
 
 %%
 
-static inline bool
-is_dot_or_dash (char ch)
+static anta_hstha bool
+is_dot_or_dash (var_na ch)
 {
-  return ch == '.' || ch == '-';
+  ត្រឡប់ ch == '.' || ch == '-';
 }
 
-static inline bool
-contains_dot_or_dash (const char* p)
+static anta_hstha bool
+contains_dot_or_dash (const var_na* p)
 {
-  return !!strpbrk (p, ".-");
+  ត្រឡប់ !!strpbrk (p, ".-");
 }
 
 /* Defines a variant of a symbolic name resolution. */
-typedef struct
+typedef sa_nracanaa
 {
   /* Index in symbol list. */
-  int symbol_index;
+  ចំនួនគត់ symbol_index;
 
   /* Matched symbol id and loc. */
   uniqstr id;
@@ -255,21 +255,21 @@ typedef struct
 #define VARIANT_NOT_VISIBLE_FROM_MIDRULE (1 << 2)
 
 static variant *variant_table = NULL;
-static int variant_table_size = 0;
-static int variant_count = 0;
+static ចំនួនគត់ variant_table_size = 0;
+static ចំនួនគត់ variant_count = 0;
 
 static variant *
 variant_table_grow (void)
 {
   ++variant_count;
-  if (variant_count > variant_table_size)
+  ប្រសិនបើ (variant_count > variant_table_size)
     {
-      while (variant_count > variant_table_size)
+      ខណៈពេល (variant_count > variant_table_size)
         variant_table_size = 2 * variant_table_size + 3;
       variant_table = xnrealloc (variant_table, variant_table_size,
-                                 sizeof *variant_table);
+                                 parimaa_na *variant_table);
     }
-  return &variant_table[variant_count - 1];
+  ត្រឡប់ &variant_table[variant_count - 1];
 }
 
 static void
@@ -280,22 +280,22 @@ variant_table_free (void)
   variant_table_size = variant_count = 0;
 }
 
-static char const *
-find_prefix_end (char const *prefix, char const *cp, char const *end)
+static var_na const *
+find_prefix_end (var_na const *prefix, var_na const *cp, var_na const *end)
 {
-  for (; *prefix && cp != end; ++prefix, ++cp)
-    if (*prefix != *cp)
-      return NULL;
+  សម្រាប់ (; *prefix && cp != end; ++prefix, ++cp)
+    ប្រសិនបើ (*prefix != *cp)
+      ត្រឡប់ NULL;
 
-  return *prefix ? NULL : cp;
+  ត្រឡប់ *prefix ? NULL : cp;
 }
 
 static variant *
-variant_add (uniqstr id, location id_loc, int symbol_index,
-             char const *cp, char const *cp_end, bool explicit_bracketing)
+variant_add (uniqstr id, location id_loc, ចំនួនគត់ symbol_index,
+             var_na const *cp, var_na const *cp_end, bool explicit_bracketing)
 {
-  char const *prefix_end = find_prefix_end (id, cp, cp_end);
-  if (prefix_end &&
+  var_na const *prefix_end = find_prefix_end (id, cp, cp_end);
+  ប្រសិនបើ (prefix_end &&
       (prefix_end == cp_end ||
        (!explicit_bracketing && is_dot_or_dash (*prefix_end))))
     {
@@ -305,77 +305,77 @@ variant_add (uniqstr id, location id_loc, int symbol_index,
       r->loc = id_loc;
       r->hidden_by = NULL;
       r->err = 0;
-      return r;
+      ត្រឡប់ r;
     }
-  else
-    return NULL;
+  បើមិនដូច្នេះ
+    ត្រឡប់ NULL;
 }
 
-static const char *
-get_at_spec(int symbol_index)
+static const var_na *
+get_at_spec(ចំនួនគត់ symbol_index)
 {
-  static char at_buf[20];
-  if (symbol_index == 0)
+  static var_na at_buf[20];
+  ប្រសិនបើ (symbol_index == 0)
     strcpy (at_buf, "$$");
-  else
-    snprintf (at_buf, sizeof at_buf, "$%u", symbol_index);
-  return at_buf;
+  បើមិនដូច្នេះ
+    snprintf (at_buf, parimaa_na at_buf, "$%u", symbol_index);
+  ត្រឡប់ at_buf;
 }
 
 static void
 show_sub_message (warnings warning,
-                  const char* cp, bool explicit_bracketing,
-                  int midrule_rhs_index, char dollar_or_at,
+                  const var_na* cp, bool explicit_bracketing,
+                  ចំនួនគត់ midrule_rhs_index, var_na dollar_or_at,
                   const variant *var)
 {
-  const char *at_spec = get_at_spec (var->symbol_index);
+  const var_na *at_spec = get_at_spec (var->symbol_index);
 
-  if (var->err == 0)
+  ប្រសិនបើ (var->err == 0)
     subcomplain (&var->loc, warning,
                  _("refers to: %c%s at %s"), dollar_or_at,
                  var->id, at_spec);
-  else
+  បើមិនដូច្នេះ
     {
-      const char *id;
+      const var_na *id;
       location id_loc;
 
-      if (var->hidden_by)
+      ប្រសិនបើ (var->hidden_by)
         {
           id = var->hidden_by->id;
           id_loc = var->hidden_by->loc;
         }
-      else
+      បើមិនដូច្នេះ
         {
           id = var->id;
           id_loc = var->loc;
         }
 
-      const char *tail = explicit_bracketing ? "" : cp + strlen (var->id);
+      const var_na *tail = explicit_bracketing ? "" : cp + strlen (var->id);
 
       /* Create the explanation message. */
-      static struct obstack msg_buf;
+      static sa_nracanaa obstack msg_buf;
       obstack_init (&msg_buf);
 
       obstack_printf (&msg_buf, _("possibly meant: %c"), dollar_or_at);
-      if (contains_dot_or_dash (id))
+      ប្រសិនបើ (contains_dot_or_dash (id))
         obstack_printf (&msg_buf, "[%s]", id);
-      else
+      បើមិនដូច្នេះ
         obstack_sgrow (&msg_buf, id);
       obstack_sgrow (&msg_buf, tail);
 
-      if (var->err & VARIANT_HIDDEN)
+      ប្រសិនបើ (var->err & VARIANT_HIDDEN)
         {
           obstack_printf (&msg_buf, _(", hiding %c"), dollar_or_at);
-          if (contains_dot_or_dash (var->id))
+          ប្រសិនបើ (contains_dot_or_dash (var->id))
             obstack_printf (&msg_buf, "[%s]", var->id);
-          else
+          បើមិនដូច្នេះ
             obstack_sgrow (&msg_buf, var->id);
           obstack_sgrow (&msg_buf, tail);
         }
 
       obstack_printf (&msg_buf, _(" at %s"), at_spec);
 
-      if (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
+      ប្រសិនបើ (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
         obstack_printf (&msg_buf,
                         _(", cannot be accessed from midrule action at $%d"),
                         midrule_rhs_index);
@@ -388,10 +388,10 @@ show_sub_message (warnings warning,
 
 static void
 show_sub_messages (warnings warning,
-                   const char* cp, bool explicit_bracketing,
-                   int midrule_rhs_index, char dollar_or_at)
+                   const var_na* cp, bool explicit_bracketing,
+                   ចំនួនគត់ midrule_rhs_index, var_na dollar_or_at)
 {
-  for (int i = 0; i < variant_count; ++i)
+  សម្រាប់ (ចំនួនគត់ i = 0; i < variant_count; ++i)
     show_sub_message (warning | silent,
                       cp, explicit_bracketing,
                       midrule_rhs_index, dollar_or_at,
@@ -408,17 +408,17 @@ show_sub_messages (warnings warning,
 
 /* Parse a positional reference in RULE.  */
 static long
-parse_positional_ref (char *cp, int rule_length,
-                      char *text, const location *text_loc)
+parse_positional_ref (var_na *cp, ចំនួនគត់ rule_length,
+                      var_na *text, const location *text_loc)
 {
   long num = strtol (cp, &cp, 10);
-  if (1 - INT_MAX + rule_length <= num && num <= rule_length)
-    return num;
-  else
+  ប្រសិនបើ (1 - INT_MAX + rule_length <= num && num <= rule_length)
+    ត្រឡប់ num;
+  បើមិនដូច្នេះ
     {
       complain (text_loc, complaint, _("integer out of range: %s"),
                 quote (text));
-      return INVALID_REF;
+      ត្រឡប់ INVALID_REF;
     }
 }
 
@@ -427,70 +427,70 @@ parse_positional_ref (char *cp, int rule_length,
    references, can return negative values for $-n "deep" stack
    accesses. */
 static long
-parse_ref (char *cp, symbol_list *rule, int rule_length,
-           int midrule_rhs_index, char *text, const location *text_loc,
-           char dollar_or_at)
+parse_ref (var_na *cp, symbol_list *rule, ចំនួនគត់ rule_length,
+           ចំនួនគត់ midrule_rhs_index, var_na *text, const location *text_loc,
+           var_na dollar_or_at)
 {
-  if ('$' == *cp)
-    return LHS_REF;
+  ប្រសិនបើ ('$' == *cp)
+    ត្រឡប់ LHS_REF;
 
-  if (c_isdigit (*cp) || (*cp == '-' && c_isdigit (cp[1])))
-    return parse_positional_ref (cp, rule_length, text, text_loc);
+  ប្រសិនបើ (c_isdigit (*cp) || (*cp == '-' && c_isdigit (cp[1])))
+    ត្រឡប់ parse_positional_ref (cp, rule_length, text, text_loc);
 
   bool const explicit_bracketing = *cp == '[';
 
-  if (explicit_bracketing)
+  ប្រសិនបើ (explicit_bracketing)
     ++cp;
-  else
+  បើមិនដូច្នេះ
     ref_tail_fields = strpbrk (cp, ".-");
 
-  char const *cp_end = strchr (cp, explicit_bracketing ? ']' : '\0');
+  var_na const *cp_end = strchr (cp, explicit_bracketing ? ']' : '\0');
 
   /* Add all relevant variants. */
   {
-    int symbol_index;
+    ចំនួនគត់ symbol_index;
     symbol_list *l;
     variant_count = 0;
-    for (symbol_index = 0, l = rule; !symbol_list_null (l);
+    សម្រាប់ (symbol_index = 0, l = rule; !symbol_list_null (l);
          ++symbol_index, l = l->next)
       {
-        if (l->content_type != SYMLIST_SYMBOL)
+        ប្រសិនបើ (l->content_type != SYMLIST_SYMBOL)
           continue;
 
         variant *var
           = variant_add (l->content.sym->tag, l->sym_loc,
                          symbol_index, cp, cp_end, explicit_bracketing);
-        if (var && l->named_ref)
+        ប្រសិនបើ (var && l->named_ref)
           var->hidden_by = l->named_ref;
 
-        if (l->named_ref)
+        ប្រសិនបើ (l->named_ref)
           variant_add (l->named_ref->id, l->named_ref->loc,
                        symbol_index, cp, cp_end, explicit_bracketing);
       }
   }
 
   /* Check errors. */
-  int valid_variants = 0;
-  int valid_variant_index = 0;
-  for (int i = 0; i < variant_count; ++i)
+  ចំនួនគត់ valid_variants = 0;
+  ចំនួនគត់ valid_variant_index = 0;
+  សម្រាប់ (ចំនួនគត់ i = 0; i < variant_count; ++i)
     {
       variant *var = &variant_table[i];
-      int symbol_index = var->symbol_index;
+      ចំនួនគត់ symbol_index = var->symbol_index;
 
       /* Check visibility from midrule actions. */
-      if (midrule_rhs_index != 0
+      ប្រសិនបើ (midrule_rhs_index != 0
           && (symbol_index == 0 || midrule_rhs_index < symbol_index))
         var->err |= VARIANT_NOT_VISIBLE_FROM_MIDRULE;
 
       /* Check correct bracketing. */
-      if (!explicit_bracketing && contains_dot_or_dash (var->id))
+      ប្រសិនបើ (!explicit_bracketing && contains_dot_or_dash (var->id))
         var->err |= VARIANT_BAD_BRACKETING;
 
       /* Check using of hidden symbols. */
-      if (var->hidden_by)
+      ប្រសិនបើ (var->hidden_by)
         var->err |= VARIANT_HIDDEN;
 
-      if (!var->err)
+      ប្រសិនបើ (!var->err)
         {
           valid_variant_index = i;
           ++valid_variants;
@@ -499,14 +499,14 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
 
   switch (valid_variants)
     {
-    case 0:
+    pak_sa 0:
       {
-        int len = (explicit_bracketing || !ref_tail_fields) ?
+        ចំនួនគត់ len = (explicit_bracketing || !ref_tail_fields) ?
           cp_end - cp : ref_tail_fields - cp;
 
         complain (text_loc, complaint,
                   _("invalid reference: %s"), quote (text));
-        if (len == 0)
+        ប្រសិនបើ (len == 0)
           {
             location sym_loc = *text_loc;
             sym_loc.start.column += 1;
@@ -516,25 +516,25 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                          "letter, '_', '[', or '$'"),
                          dollar_or_at);
           }
-        else if (midrule_rhs_index)
+        បើមិនដូច្នេះ ប្រសិនបើ (midrule_rhs_index)
           subcomplain (&rule->rhs_loc, complaint,
                        _("symbol not found in production before $%d: "
                        "%.*s"),
                        midrule_rhs_index, len, cp);
-        else
+        បើមិនដូច្នេះ
           subcomplain (&rule->rhs_loc, complaint,
                        _("symbol not found in production: %.*s"),
                        len, cp);
 
-        if (variant_count > 0)
+        ប្រសិនបើ (variant_count > 0)
           show_sub_messages (complaint,
                              cp, explicit_bracketing, midrule_rhs_index,
                              dollar_or_at);
-        return INVALID_REF;
+        ត្រឡប់ INVALID_REF;
       }
-    case 1:
+    pak_sa 1:
       {
-        if (variant_count > 1)
+        ប្រសិនបើ (variant_count > 1)
           {
             complain (text_loc, Wother,
                       _("misleading reference: %s"), quote (text));
@@ -543,12 +543,12 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                                dollar_or_at);
           }
         {
-          int symbol_index =
+          ចំនួនគត់ symbol_index =
             variant_table[valid_variant_index].symbol_index;
-          return (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
+          ត្រឡប់ (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
         }
       }
-    case 2:
+    pak_sa 2:
     default:
       {
         complain (text_loc, complaint,
@@ -556,7 +556,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
         show_sub_messages (complaint,
                            cp, explicit_bracketing, midrule_rhs_index,
                            dollar_or_at);
-        return INVALID_REF;
+        ត្រឡប់ INVALID_REF;
       }
     }
 }
@@ -564,7 +564,7 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
 /* Keeps track of the maximum number of semantic values to the left of
    a handle (those referenced by $0, $-1, etc.) are required by the
    semantic actions of this grammar. */
-int max_left_semantic_context = 0;
+ចំនួនគត់ max_left_semantic_context = 0;
 
 
 /* If CP points to a typename (i.e., <.*?>), set TYPE_NAME to its
@@ -572,26 +572,26 @@ int max_left_semantic_context = 0;
    immediately after it.  */
 
 static
-char *
-fetch_type_name (char *cp, char const **type_name,
+var_na *
+fetch_type_name (var_na *cp, var_na const **type_name,
                  const location *dollar_loc)
 {
-  if (*cp == '<')
+  ប្រសិនបើ (*cp == '<')
     {
       *type_name = ++cp;
       /* Series of non-'>' or "->".  */
-      while (*cp != '>' || cp[-1] == '-')
+      ខណៈពេល (*cp != '>' || cp[-1] == '-')
         ++cp;
 
       /* The '>' symbol will be later replaced by '\0'. Original
          'text' is needed for error messages. */
       ++cp;
-      if (untyped_var_seen)
+      ប្រសិនបើ (untyped_var_seen)
         complain (dollar_loc, complaint,
                   _("explicit type given in untyped grammar"));
       tag_seen = true;
     }
-  return cp;
+  ត្រឡប់ cp;
 }
 
 /*------------------------------------------------------------------.
@@ -603,56 +603,56 @@ fetch_type_name (char *cp, char const **type_name,
 `------------------------------------------------------------------*/
 
 static void
-handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
+handle_action_dollar (symbol_list *rule, var_na *text, const location *dollar_loc)
 {
   symbol_list *effective_rule;
-  int effective_rule_length;
+  ចំនួនគត់ effective_rule_length;
 
-  if (rule->midrule_parent_rule)
+  ប្រសិនបើ (rule->midrule_parent_rule)
     {
       effective_rule = rule->midrule_parent_rule;
       effective_rule_length = rule->midrule_parent_rhs_index - 1;
     }
-  else
+  បើមិនដូច្នេះ
     {
       effective_rule = rule;
       effective_rule_length = symbol_list_length (rule->next);
     }
 
   /* The type name if explicit, otherwise left null. */
-  char const *type_name = NULL;
-  char *cp = fetch_type_name (text + 1, &type_name, dollar_loc);
-  int n = parse_ref (cp, effective_rule, effective_rule_length,
+  var_na const *type_name = NULL;
+  var_na *cp = fetch_type_name (text + 1, &type_name, dollar_loc);
+  ចំនួនគត់ n = parse_ref (cp, effective_rule, effective_rule_length,
                      rule->midrule_parent_rhs_index, text, dollar_loc, '$');
   /* End type_name.  Don't do it earlier: parse_ref depends on TEXT.  */
-  if (type_name)
+  ប្រសិនបើ (type_name)
     cp[-1] = '\0';
 
   switch (n)
     {
-    case INVALID_REF:
-      break;
+    pak_sa INVALID_REF:
+      bha_nga;
 
-    case LHS_REF:
+    pak_sa LHS_REF:
       {
         symbol_list *sym = symbol_list_n_get (rule, 0);
-        if (!type_name
+        ប្រសិនបើ (!type_name
             && !sym->content.sym->content->type_name)
           {
-            if (union_seen || tag_seen)
+            ប្រសិនបើ (union_seen || tag_seen)
               {
-                if (rule->midrule_parent_rule)
+                ប្រសិនបើ (rule->midrule_parent_rule)
                   complain (dollar_loc, complaint,
                             _("$$ for the midrule at $%d of %s"
                               " has no declared type"),
                             rule->midrule_parent_rhs_index,
                             quote (effective_rule->content.sym->tag));
-                else
+                បើមិនដូច្នេះ
                   complain (dollar_loc, complaint,
                             _("$$ of %s has no declared type"),
                             quote (rule->content.sym->tag));
               }
-            else
+            បើមិនដូច្នេះ
               untyped_var_seen = true;
           }
 
@@ -662,40 +662,40 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
         obstack_sgrow (&obstack_for_string, ")[");
         rule->action_props.is_value_used = true;
       }
-      break;
+      bha_nga;
 
       /* Reference to a RHS symbol.  */
     default:
       {
-        if (max_left_semantic_context < 1 - n)
+        ប្រសិនបើ (max_left_semantic_context < 1 - n)
           max_left_semantic_context = 1 - n;
         symbol_list *sym = 0 < n ? symbol_list_n_get (effective_rule, n) : NULL;
-        if (!type_name
+        ប្រសិនបើ (!type_name
             && (!sym || !sym->content.sym->content->type_name))
           {
-            if (union_seen || tag_seen)
+            ប្រសិនបើ (union_seen || tag_seen)
               complain (dollar_loc, complaint,
                         _("$%s of %s has no declared type"), cp,
                         quote (effective_rule->content.sym->tag));
-            else
+            បើមិនដូច្នេះ
               untyped_var_seen = true;
           }
 
         obstack_printf (&obstack_for_string,
                         "]b4_rhs_value(%d, %d, ",
                         effective_rule_length, n);
-        if (sym)
+        ប្រសិនបើ (sym)
           obstack_printf (&obstack_for_string, "%s%d, ",
                           sym->content.sym->content->class == nterm_sym ? "orig " : "",
                           sym->content.sym->content->number);
-        else
+        បើមិនដូច្នេះ
           obstack_sgrow (&obstack_for_string, "[], ");
 
         obstack_quote (&obstack_for_string, type_name);
         obstack_sgrow (&obstack_for_string, ")[");
-        if (0 < n)
+        ប្រសិនបើ (0 < n)
           {
-            if (muscle_percent_define_ifdef ("api.value.automove")
+            ប្រសិនបើ (muscle_percent_define_ifdef ("api.value.automove")
                 && sym->action_props.is_value_used)
               complain (dollar_loc, Wother,
                         _("multiple occurrences of $%d with api.value.automove"),
@@ -703,7 +703,7 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
             sym->action_props.is_value_used = true;
           }
       }
-      break;
+      bha_nga;
     }
 }
 
@@ -714,17 +714,17 @@ handle_action_dollar (symbol_list *rule, char *text, const location *dollar_loc)
 `------------------------------------------------------*/
 
 static void
-handle_action_at (symbol_list *rule, char *text, const location *at_loc)
+handle_action_at (symbol_list *rule, var_na *text, const location *at_loc)
 {
   symbol_list *effective_rule;
-  int effective_rule_length;
+  ចំនួនគត់ effective_rule_length;
 
-  if (rule->midrule_parent_rule)
+  ប្រសិនបើ (rule->midrule_parent_rule)
     {
       effective_rule = rule->midrule_parent_rule;
       effective_rule_length = rule->midrule_parent_rhs_index - 1;
     }
-  else
+  បើមិនដូច្នេះ
     {
       effective_rule = rule;
       effective_rule_length = symbol_list_length (rule->next);
@@ -732,21 +732,21 @@ handle_action_at (symbol_list *rule, char *text, const location *at_loc)
 
   muscle_percent_define_ensure ("locations", *at_loc, true);
 
-  int n = parse_ref (text + 1, effective_rule, effective_rule_length,
+  ចំនួនគត់ n = parse_ref (text + 1, effective_rule, effective_rule_length,
                      rule->midrule_parent_rhs_index, text, at_loc, '@');
   switch (n)
     {
-    case INVALID_REF:
-      break;
+    pak_sa INVALID_REF:
+      bha_nga;
 
-    case LHS_REF:
+    pak_sa LHS_REF:
       obstack_sgrow (&obstack_for_string, "]b4_lhs_location[");
-      break;
+      bha_nga;
 
     default:
       obstack_printf (&obstack_for_string, "]b4_rhs_location(%d, %d)[",
                       effective_rule_length, n);
-      break;
+      bha_nga;
     }
 }
 
@@ -758,14 +758,14 @@ handle_action_at (symbol_list *rule, char *text, const location *at_loc)
 /* Translate the '$...' and '@...' in \a self, in the context \a
    sc_context (SC_RULE_ACTION, SC_SYMBOL_ACTION, INITIAL).  */
 
-static char const *
-translate_action (code_props *self, int sc_context)
+static var_na const *
+translate_action (code_props *self, ចំនួនគត់ sc_context)
 {
   loc->start = loc->end = self->location.start;
   yy_switch_to_buffer (yy_scan_string (self->code));
-  char *res = code_lex (self, sc_context);
+  var_na *res = code_lex (self, sc_context);
   yy_delete_buffer (YY_CURRENT_BUFFER);
-  return res;
+  ត្រឡប់ res;
 }
 
 /*------------------------------------------------------------------------.
@@ -781,7 +781,7 @@ code_props_none_init (code_props *self)
 code_props code_props_none = CODE_PROPS_NONE_INIT;
 
 void
-code_props_plain_init (code_props *self, char const *code,
+code_props_plain_init (code_props *self, var_na const *code,
                        location code_loc)
 {
   code_props_none_init (self);
@@ -791,7 +791,7 @@ code_props_plain_init (code_props *self, char const *code,
 }
 
 void
-code_props_symbol_action_init (code_props *self, char const *code,
+code_props_symbol_action_init (code_props *self, var_na const *code,
                                location code_loc)
 {
   code_props_none_init (self);
@@ -801,7 +801,7 @@ code_props_symbol_action_init (code_props *self, char const *code,
 }
 
 void
-code_props_rule_action_init (code_props *self, char const *code,
+code_props_rule_action_init (code_props *self, var_na const *code,
                              location code_loc, symbol_list *rule,
                              named_ref *name, uniqstr type,
                              bool is_predicate)
@@ -821,17 +821,17 @@ code_props_translate_code (code_props *self)
 {
   switch (self->kind)
     {
-    case CODE_PROPS_NONE:
-      break;
-    case CODE_PROPS_PLAIN:
+    pak_sa CODE_PROPS_NONE:
+      bha_nga;
+    pak_sa CODE_PROPS_PLAIN:
       self->code = translate_action (self, INITIAL);
-      break;
-    case CODE_PROPS_SYMBOL_ACTION:
+      bha_nga;
+    pak_sa CODE_PROPS_SYMBOL_ACTION:
       self->code = translate_action (self, SC_SYMBOL_ACTION);
-      break;
-    case CODE_PROPS_RULE_ACTION:
+      bha_nga;
+    pak_sa CODE_PROPS_RULE_ACTION:
       self->code = translate_action (self, SC_RULE_ACTION);
-      break;
+      bha_nga;
     }
 }
 
