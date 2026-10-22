@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#ضمن <config.h>
+#ضمن "system.h"
 
-#include <bitset.h>
-#include <bitsetv.h>
+#ضمن <bitset.h>
+#ضمن <bitsetv.h>
 
-#include "closure.h"
-#include "derives.h"
-#include "getargs.h"
-#include "gram.h"
-#include "reader.h"
-#include "symtab.h"
+#ضمن "closure.h"
+#ضمن "derives.h"
+#ضمن "getargs.h"
+#ضمن "gram.h"
+#ضمن "reader.h"
+#ضمن "symtab.h"
 
 /* NITEMSET is the size of the array ITEMSET.  */
 item_index *itemset;
@@ -38,11 +38,11 @@ size_t nitemset;
 /* RULESET contains a bit for each rule.  CLOSURE sets the bits for
    all rules which could potentially describe the next input to be
    read.  */
-static bitset ruleset;
+ساكن bitset ruleset;
 
 /* internal data.  See comments before set_fderives and set_firsts.  */
-static bitsetv fderives = NULL;
-static bitsetv firsts = NULL;
+ساكن bitsetv fderives = عدم;
+ساكن bitsetv firsts = عدم;
 
 /* Retrieve the FDERIVES/FIRSTS sets of the nonterminals numbered Var.  */
 #define FDERIVES(Var)   fderives[(Var) - ntokens]
@@ -53,31 +53,31 @@ static bitsetv firsts = NULL;
 | Debugging code.  |
 `-----------------*/
 
-static void
-closure_print (char const *title, item_index const *array, size_t size)
+ساكن فراغ
+closure_print (حرف ثابت *title, item_index ثابت *array, size_t size)
 {
   fprintf (stderr, "Closure: %s\n", title);
-  for (size_t i = 0; i < size; ++i)
+  لكل (size_t i = 0; i < size; ++i)
     {
       fprintf (stderr, "  %2d: .", array[i]);
-      item_number *rp;
-      for (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
+      item_سان *rp;
+      لكل (rp = &ritem[array[i]]; 0 <= *rp; ++rp)
         fprintf (stderr, " %s", symbols[*rp]->tag);
-      fprintf (stderr, "  (rule %d)\n", item_number_as_rule_number (*rp));
+      fprintf (stderr, "  (rule %d)\n", item_سان_as_rule_سان (*rp));
     }
   fputs ("\n\n", stderr);
 }
 
 
-static void
-print_firsts (void)
+ساكن فراغ
+print_firsts (فراغ)
 {
   fprintf (stderr, "FIRSTS\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  لكل (بەلگە_سان i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s firsts\n", symbols[i]->tag);
       bitset_iterator iter;
-      symbol_number j;
+      بەلگە_سان j;
       BITSET_FOR_EACH (iter, FIRSTS (i), j, 0)
         fprintf (stderr, "    %s\n", symbols[j + ntokens]->tag);
     }
@@ -85,15 +85,15 @@ print_firsts (void)
 }
 
 
-static void
-print_fderives (void)
+ساكن فراغ
+print_fderives (فراغ)
 {
   fprintf (stderr, "FDERIVES\n");
-  for (symbol_number i = ntokens; i < nsyms; ++i)
+  لكل (بەلگە_سان i = ntokens; i < nsyms; ++i)
     {
       fprintf (stderr, "  %s derives\n", symbols[i]->tag);
       bitset_iterator iter;
-      rule_number r;
+      rule_سان r;
       BITSET_FOR_EACH (iter, FDERIVES (i), r, 0)
         {
           fprintf (stderr, "    %3d ", r);
@@ -115,26 +115,26 @@ print_fderives (void)
 | (5)) is set.                                                       |
 `-------------------------------------------------------------------*/
 
-static void
-set_firsts (void)
+ساكن فراغ
+set_firsts (فراغ)
 {
   firsts = bitsetv_create (nnterms, nnterms, BITSET_FIXED);
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = 0; derives[i - ntokens][j]; ++j)
+  لكل (بەلگە_سان i = ntokens; i < nsyms; ++i)
+    لكل (بەلگە_سان j = 0; derives[i - ntokens][j]; ++j)
       {
-        item_number sym = derives[i - ntokens][j]->rhs[0];
-        if (ISVAR (sym))
+        item_سان sym = derives[i - ntokens][j]->rhs[0];
+        إذا (ISVAR (sym))
           bitset_set (FIRSTS (i), sym - ntokens);
       }
 
-  if (trace_flag & trace_sets)
+  إذا (trace_flag & trace_sets)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Input", firsts);
   bitsetv_reflexive_transitive_closure (firsts);
-  if (trace_flag & trace_sets)
+  إذا (trace_flag & trace_sets)
     bitsetv_matrix_dump (stderr, "RTC: Firsts Output", firsts);
 
-  if (trace_flag & trace_sets)
+  إذا (trace_flag & trace_sets)
     print_firsts ();
 }
 
@@ -148,20 +148,20 @@ set_firsts (void)
 | the [5 - NTOKENS, 4] bit in FDERIVES is set.                       |
 `-------------------------------------------------------------------*/
 
-static void
-set_fderives (void)
+ساكن فراغ
+set_fderives (فراغ)
 {
   fderives = bitsetv_create (nnterms, nrules, BITSET_FIXED);
 
   set_firsts ();
 
-  for (symbol_number i = ntokens; i < nsyms; ++i)
-    for (symbol_number j = ntokens; j < nsyms; ++j)
-      if (bitset_test (FIRSTS (i), j - ntokens))
-        for (rule_number k = 0; derives[j - ntokens][k]; ++k)
-          bitset_set (FDERIVES (i), derives[j - ntokens][k]->number);
+  لكل (بەلگە_سان i = ntokens; i < nsyms; ++i)
+    لكل (بەلگە_سان j = ntokens; j < nsyms; ++j)
+      إذا (bitset_test (FIRSTS (i), j - ntokens))
+        لكل (rule_سان k = 0; derives[j - ntokens][k]; ++k)
+          bitset_set (FDERIVES (i), derives[j - ntokens][k]->سان);
 
-  if (trace_flag & trace_sets)
+  إذا (trace_flag & trace_sets)
     print_fderives ();
 
   bitsetv_free (firsts);
@@ -169,10 +169,10 @@ set_fderives (void)
 
 
 
-void
-closure_new (int n)
+فراغ
+closure_new (صحيح n)
 {
-  itemset = xnmalloc (n, sizeof *itemset);
+  itemset = xnmalloc (n, حجم *itemset);
 
   ruleset = bitset_create (nrules, BITSET_FIXED);
 
@@ -181,16 +181,16 @@ closure_new (int n)
 
 
 
-void
-closure (item_index const *core, size_t n)
+فراغ
+closure (item_index ثابت *core, size_t n)
 {
-  if (trace_flag & trace_closure)
+  إذا (trace_flag & trace_closure)
     closure_print ("input", core, n);
 
   bitset_zero (ruleset);
 
-  for (size_t c = 0; c < n; ++c)
-    if (ISVAR (ritem[core[c]]))
+  لكل (size_t c = 0; c < n; ++c)
+    إذا (ISVAR (ritem[core[c]]))
       bitset_or (ruleset, ruleset, FDERIVES (ritem[core[c]]));
 
   /* core is sorted on item index in ritem, which is sorted on rule number.
@@ -199,12 +199,12 @@ closure (item_index const *core, size_t n)
   size_t c = 0;
 
   /* A bit index over RULESET. */
-  rule_number ruleno;
+  rule_سان ruleno;
   bitset_iterator iter;
   BITSET_FOR_EACH (iter, ruleset, ruleno, 0)
     {
       item_index itemno = rules[ruleno].rhs - ritem;
-      while (c < n && core[c] < itemno)
+      طالما (c < n && core[c] < itemno)
         {
           itemset[nitemset] = core[c];
           nitemset++;
@@ -214,22 +214,22 @@ closure (item_index const *core, size_t n)
       nitemset++;
     };
 
-  while (c < n)
+  طالما (c < n)
     {
       itemset[nitemset] = core[c];
       nitemset++;
       c++;
     }
 
-  if (trace_flag & trace_closure)
+  إذا (trace_flag & trace_closure)
     closure_print ("output", itemset, nitemset);
 }
 
 
-void
-closure_free (void)
+فراغ
+closure_free (فراغ)
 {
-  free (itemset);
+  حرر (itemset);
   bitset_free (ruleset);
   bitsetv_free (fderives);
 }

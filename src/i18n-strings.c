@@ -28,9 +28,9 @@
   */
 
 // Please syntax-check.
-#include <config.h>
+#ضمن <config.h>
 
-static const char *const msgid[] =
+ساكن ثابت حرف *ثابت msgid[] =
   {
     N_("end of file"),
     N_("invalid token")

@@ -29,22 +29,22 @@
 /* A list of symbols, used during the parsing for many different
    purposes: rules, symbol declarations or properties (such as
    %destructor, etc.)...  */
-typedef struct symbol_list
+تعريفنوع بنية بەلگە_list
 {
   /**
    * Whether this node contains a symbol, a semantic type, a \c <*>, or a
    * \c <>.
    */
-  enum {
-    SYMLIST_SYMBOL,
+  تعداد {
+    SYMLIST_بەلگە,
     SYMLIST_TYPE
   } content_type;
-  union {
+  اتحاد {
     /**
      * The symbol or \c NULL iff
      * <tt>symbol_list::content_type = SYMLIST_SYMBOL</tt>.
      */
-    symbol *sym;
+    بەلگە *sym;
     /**
      * The semantic type iff <tt>symbol_list::content_type = SYMLIST_TYPE</tt>.
      */
@@ -59,14 +59,14 @@ typedef struct symbol_list
 
   /* If this symbol is the generated lhs for a midrule but this is the rule in
      whose rhs it appears, MIDRULE = a pointer to that midrule.  */
-  struct symbol_list *midrule;
+  بنية بەلگە_list *midrule;
 
   /* If this symbol is the generated lhs for a midrule and this is that
      midrule, MIDRULE_PARENT_RULE = a pointer to the rule in whose rhs it
      appears, and MIDRULE_PARENT_RHS_INDEX = its rhs index (1-origin) in the
      parent rule.  */
-  struct symbol_list *midrule_parent_rule;
-  int midrule_parent_rhs_index;
+  بنية بەلگە_list *midrule_parent_rule;
+  صحيح midrule_parent_rhs_index;
 
   /*--------------------------------------------------------------.
   | Used for rules only (attached to the "LHS", one per rule even |
@@ -77,7 +77,7 @@ typedef struct symbol_list
   location rhs_loc;
 
   /* Precedence/associativity.  */
-  symbol *ruleprec;
+  بەلگە *ruleprec;
 
   /* The action is attached to the LHS of a rule, but action properties for
    * each RHS are also stored here.  */
@@ -87,70 +87,70 @@ typedef struct symbol_list
      empty_loc.  */
   location percent_empty_loc;
 
-  int dprec;
+  صحيح dprec;
   location dprec_loc;
-  int merger;
+  صحيح merger;
   location merger_declaration_loc;
 
   /* Counts of the number of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  صحيح expected_sr_conflicts;
+  صحيح expected_rr_conflicts;
 
   /* The list.  */
-  struct symbol_list *next;
-} symbol_list;
+  بنية بەلگە_list *next;
+} بەلگە_list;
 
 
 /** Create a list containing \c sym at \c loc.  */
-symbol_list *symbol_list_sym_new (symbol *sym, location loc);
+بەلگە_list *بەلگە_list_sym_new (بەلگە *sym, location loc);
 
 /** Create a list containing \c type_name at \c loc.  */
-symbol_list *symbol_list_type_new (uniqstr type_name, location loc);
+بەلگە_list *بەلگە_list_type_new (uniqstr type_name, location loc);
 
 /** Assign the type \c type_name to all the members of \c syms.
  ** \returns \c syms */
-symbol_list *symbol_list_type_set (symbol_list *syms, uniqstr type_name);
+بەلگە_list *بەلگە_list_type_set (بەلگە_list *syms, uniqstr type_name);
 
 /** Find a symbol with the same content as \c sym within \c syms.  */
-symbol_list *symbol_list_find_symbol (symbol_list *syms, const symbol *sym);
+بەلگە_list *بەلگە_list_find_بەلگە (بەلگە_list *syms, ثابت بەلگە *sym);
 
 /** Print this list.
 
   \pre For every node \c n in the list, <tt>n->content_type =
   SYMLIST_SYMBOL</tt>.  */
-void symbol_list_syms_print (const symbol_list *l, FILE *f);
+فراغ بەلگە_list_syms_print (ثابت بەلگە_list *l, FILE *f);
 
 /** Prepend \c node to \c list.  */
-symbol_list *symbol_list_prepend (symbol_list *list, symbol_list *node);
+بەلگە_list *بەلگە_list_prepend (بەلگە_list *list, بەلگە_list *تۈگۈن);
 
 /** The last node of this list. */
-symbol_list *symbol_list_last (symbol_list *list);
+بەلگە_list *بەلگە_list_last (بەلگە_list *list);
 
 /** Append \c node to \c list.  */
-symbol_list *symbol_list_append (symbol_list *list, symbol_list *node);
+بەلگە_list *بەلگە_list_append (بەلگە_list *list, بەلگە_list *تۈگۈن);
 
 /** Free \c list, but not the items it contains.  */
-void symbol_list_free (symbol_list *list);
+فراغ بەلگە_list_free (بەلگە_list *list);
 
 /** Return the length of \c l. */
-int symbol_list_length (symbol_list const *l);
+صحيح بەلگە_list_length (بەلگە_list ثابت *l);
 
 /** Get item \c n in symbol list \c l.
  ** \pre  0 <= n
  ** \post res != NULL
  **/
-symbol_list *symbol_list_n_get (symbol_list *l, int n);
+بەلگە_list *بەلگە_list_n_get (بەلگە_list *l, صحيح n);
 
 /** Get the data type (alternative in the union) of the value for
     symbol N in rule RULE.  */
-uniqstr symbol_list_n_type_name_get (symbol_list *l, int n);
+uniqstr بەلگە_list_n_type_name_get (بەلگە_list *l, صحيح n);
 
 /** Check whether the node is a border element of a rule. */
-bool symbol_list_null (symbol_list *node);
+bool بەلگە_list_null (بەلگە_list *تۈگۈن);
 
 /** Set the \c \%destructor or \c \%printer for \c node as \c cprops.  */
-void symbol_list_code_props_set (symbol_list *node, code_props_type kind,
-                                 code_props const *cprops);
+فراغ بەلگە_list_code_props_set (بەلگە_list *تۈگۈن, code_props_type kind,
+                                 code_props ثابت *cprops);
 
 #endif /* !SYMLIST_H_ */
