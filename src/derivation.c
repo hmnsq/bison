@@ -30,17 +30,17 @@
 #include "system.h"
 #include "complain.h"
 
-struct derivation
+sa_nracanaa derivation
 {
   symbol_number sym;
   derivation_list children;
-  int reference_count;
+  puur_naa_nka reference_count;
   // The rule SYM -> CHILDREN.
   const rule *rule;
   // Color assigned for styling.  Guarantees that the derivation is
   // always displayed with the same color, independently of the order
   // in which the derivations are traversed.
-  int color;
+  puur_naa_nka color;
 };
 
 static derivation d_dot = { -1, NULL, -1, NULL, -1 };
@@ -48,7 +48,7 @@ static derivation d_dot = { -1, NULL, -1, NULL, -1 };
 derivation *
 derivation_dot (void)
 {
-  return &d_dot;
+  ᮝᮜᮤ &d_dot;
 }
 
 void
@@ -71,7 +71,7 @@ void derivation_list_free (derivation_list dl)
   for (gl_list_iterator_t it = gl_list_iterator (dl);
        derivation_list_next (&it, &d);
        )
-    if (d != &d_dot)
+    ᮚᮦᮔ᮪ (d != &d_dot)
       derivation_free (d);
   gl_list_free (dl);
 }
@@ -80,13 +80,13 @@ derivation *
 derivation_new (symbol_number sym, derivation_list children,
                 const rule *r)
 {
-  derivation *res = xmalloc (sizeof *res);
+  derivation *res = xmalloc (parimaa_na *res);
   res->sym = sym;
   res->children = children;
   res->reference_count = 0;
   res->rule = r;
   res->color = -1;
-  return res;
+  ᮝᮜᮤ res;
 }
 
 void
@@ -98,23 +98,23 @@ derivation_retain (derivation *d)
 void
 derivation_free (derivation *d)
 {
-  if (!d)
-    return;
+  ᮚᮦᮔ᮪ (!d)
+    ᮝᮜᮤ;
   derivation_list free_queue =
     gl_list_create (GL_LINKED_LIST, NULL, NULL, NULL, true,
                     1, (const void **)&d);
-  while (gl_list_size (free_queue) > 0)
+  ᮞᮨᮓᮨᮜ (gl_list_size (free_queue) > 0)
     {
       derivation *deriv = (derivation *) gl_list_get_at (free_queue, 0);
-      if (--deriv->reference_count == 0)
+      ᮚᮦᮔ᮪ (--deriv->reference_count == 0)
         {
-          if (deriv->children)
+          ᮚᮦᮔ᮪ (deriv->children)
             {
               derivation *child = NULL;
               for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
                    derivation_list_next (&it, &child);
                    )
-                if (child != &d_dot)
+                ᮚᮦᮔ᮪ (child != &d_dot)
                   gl_list_add_last (free_queue, child);
               gl_list_free (deriv->children);
             }
@@ -128,44 +128,44 @@ derivation_free (derivation *d)
 size_t
 derivation_size (const derivation *deriv)
 {
-  if (!deriv->children)
-    return 1;
-  int size = 1;
+  ᮚᮦᮔ᮪ (!deriv->children)
+    ᮝᮜᮤ 1;
+  puur_naa_nka size = 1;
   derivation *child = NULL;
   for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
        derivation_list_next (&it, &child);
        )
     size += derivation_size (child);
-  return size;
+  ᮝᮜᮤ size;
 }
 
 
 // Longest distance from root to leaf.
-static int
+static puur_naa_nka
 derivation_depth (const derivation *deriv)
 {
-  if (deriv->children)
+  ᮚᮦᮔ᮪ (deriv->children)
     {
       // Children's depth cannot be 0, even if there are no children
       // (the case of a derivation with an empty RHS).
-      int res = 1;
+      puur_naa_nka res = 1;
       derivation *child;
       for (gl_list_iterator_t it = gl_list_iterator (deriv->children);
            derivation_list_next (&it, &child);
            )
         res = max_int (res, derivation_depth (child));
-      return res + 1;
+      ᮝᮜᮤ res + 1;
     }
-  else
-    return 1;
+  ᮜᮤᮚ
+    ᮝᮜᮤ 1;
 }
 
 static bool
-all_spaces (const char *s)
+all_spaces (const var_na *s)
 {
-  while (c_isspace (*s))
+  ᮞᮨᮓᮨᮜ (c_isspace (*s))
     s++;
-  return *s == '\0';
+  ᮝᮜᮤ *s == '\0';
 }
 
 // Printing the derivation as trees without trailing spaces is
@@ -194,58 +194,58 @@ all_spaces (const char *s)
 //
 // When COND is true, put S on OUT, preceded by *PADDING white spaces.
 // Otherwise add the width to *PADDING.  Return the width of S.
-static int
-fputs_if (bool cond, FILE *out, int *padding, const char *s)
+static puur_naa_nka
+fputs_if (bool cond, FILE *out, puur_naa_nka *padding, const var_na *s)
 {
-  int res = mbswidth (s, 0);
-  if (cond && !all_spaces (s))
+  puur_naa_nka res = mbswidth (s, 0);
+  ᮚᮦᮔ᮪ (cond && !all_spaces (s))
     {
       fprintf (out, "%*s%s", *padding, "", s);
       *padding = 0;
     }
-  else
+  ᮜᮤᮚ
     {
       *padding += res;
     }
-  return res;
+  ᮝᮜᮤ res;
 }
 
-static int
-fprintf_if (bool cond, FILE *out, int *padding, const char *fmt, ...)
+static puur_naa_nka
+fprintf_if (bool cond, FILE *out, puur_naa_nka *padding, const var_na *fmt, ...)
 {
-  char buf[256];
-  size_t len = sizeof (buf);
+  var_na buf[256];
+  size_t len = parimaa_na (buf);
   va_list args;
   va_start (args, fmt);
-  char *cp = vasnprintf (buf, &len, fmt, args);
+  var_na *cp = vasnprintf (buf, &len, fmt, args);
   va_end (args);
-  if (!cp)
+  ᮚᮦᮔ᮪ (!cp)
     xalloc_die ();
-  int res = fputs_if (cond, out, padding, cp);
-  if (cp != buf)
+  puur_naa_nka res = fputs_if (cond, out, padding, cp);
+  ᮚᮦᮔ᮪ (cp != buf)
     free (cp);
-  return res;
+  ᮝᮜᮤ res;
 }
 
 // The width taken to report this derivation recursively down to its
 // leaves.
-static int
+static puur_naa_nka
 derivation_width (const derivation *deriv)
 {
-  if (deriv->children)
+  ᮚᮦᮔ᮪ (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
-      int self_width = mbswidth (sym->tag, 0);
+      puur_naa_nka self_width = mbswidth (sym->tag, 0);
 
       // Arrow and space.
-      int children_width = down_arrow_width;
+      puur_naa_nka children_width = down_arrow_width;
       children_width += snprintf (NULL, 0, "%d: ", deriv->rule->number);
-      if (gl_list_size (deriv->children) == 0)
+      ᮚᮦᮔ᮪ (gl_list_size (deriv->children) == 0)
         // Empty rhs.
         children_width += empty_width;
-      else
+      ᮜᮤᮚ
         {
-          if (gl_list_size (deriv->children) == 1
+          ᮚᮦᮔ᮪ (gl_list_size (deriv->children) == 1
               && gl_list_get_first (deriv->children) == &d_dot)
             {
               children_width += empty_width;
@@ -261,16 +261,16 @@ derivation_width (const derivation *deriv)
           // No separator at the beginning.
           children_width -= derivation_separator_width;
         }
-      return max_int (self_width, children_width);
+      ᮝᮜᮤ max_int (self_width, children_width);
     }
-  else if (deriv == &d_dot)
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (deriv == &d_dot)
     {
-      return dot_width;
+      ᮝᮜᮤ dot_width;
     }
-  else // leaf.
+  ᮜᮤᮚ // leaf.
     {
       const symbol *sym = symbols[deriv->sym];
-      return mbswidth (sym->tag, 0);
+      ᮝᮜᮤ mbswidth (sym->tag, 0);
     }
 }
 
@@ -286,38 +286,38 @@ derivation_width (const derivation *deriv)
 //
 // Return the "logical printed" width.  We might have not have reached
 // that width, in which case the missing spaces are in *PADDING.
-static int
+static puur_naa_nka
 derivation_print_tree_impl (const derivation *deriv, FILE *out,
-                            int depth, int *padding)
+                            puur_naa_nka depth, puur_naa_nka *padding)
 {
-  const int width = derivation_width (deriv);
+  const puur_naa_nka width = derivation_width (deriv);
 
-  int res = 0;
-  if (deriv->children)
+  puur_naa_nka res = 0;
+  ᮚᮦᮔ᮪ (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
-      char style[20];
+      var_na style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
 
-      if (depth == 0 || depth == 1)
+      ᮚᮦᮔ᮪ (depth == 0 || depth == 1)
         {
           begin_use_class (style, out);
           begin_use_class ("cex-step", out);
         }
-      if (depth == 0)
+      ᮚᮦᮔ᮪ (depth == 0)
         {
           res += fputs_if (true, out, padding, sym->tag);
         }
-      else
+      ᮜᮤᮚ
         {
           res += fputs_if (depth == 1, out, padding, down_arrow);
           res += fprintf_if (depth == 1, out, padding, "%d: ", deriv->rule->number);
-          if (gl_list_size (deriv->children) == 0)
+          ᮚᮦᮔ᮪ (gl_list_size (deriv->children) == 0)
             // Empty rhs.
             res += fputs_if (depth == 1, out, padding, empty);
-          else
+          ᮜᮤᮚ
             {
-              if (gl_list_size (deriv->children) == 1
+              ᮚᮦᮔ᮪ (gl_list_size (deriv->children) == 1
                   && gl_list_get_first (deriv->children) == &d_dot)
                 {
                   res += fputs_if (depth == 1, out, padding, empty);
@@ -330,14 +330,14 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
                    derivation_list_next (&it, &child);
                    )
                 {
-                  if (!first)
+                  ᮚᮦᮔ᮪ (!first)
                     res += fputs_if (depth == 1, out, padding, derivation_separator);
                   res += derivation_print_tree_impl (child, out, depth - 1, padding);
                   first = false;
                 }
             }
         }
-      if (depth == 0 || depth == 1)
+      ᮚᮦᮔ᮪ (depth == 0 || depth == 1)
         {
           end_use_class ("cex-step", out);
           end_use_class (style, out);
@@ -345,34 +345,34 @@ derivation_print_tree_impl (const derivation *deriv, FILE *out,
       *padding += width - res;
       res = width;
     }
-  else if (deriv == &d_dot)
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (deriv == &d_dot)
     {
-      if (depth == 0)
+      ᮚᮦᮔ᮪ (depth == 0)
         begin_use_class ("cex-dot", out);
       res += fputs_if (depth == 0, out, padding, dot);
-      if (depth == 0)
+      ᮚᮦᮔ᮪ (depth == 0)
         end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  ᮜᮤᮚ // leaf.
     {
       const symbol *sym = symbols[deriv->sym];
-      if (depth == 0)
+      ᮚᮦᮔ᮪ (depth == 0)
         begin_use_class ("cex-leaf", out);
       res += fputs_if (depth == 0, out, padding, sym->tag);
-      if (depth == 0)
+      ᮚᮦᮔ᮪ (depth == 0)
         end_use_class ("cex-leaf", out);
     }
-  return res;
+  ᮝᮜᮤ res;
 }
 
 static void
-derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
+derivation_print_tree (const derivation *deriv, FILE *out, const var_na *prefix)
 {
   fputc ('\n', out);
-  for (int depth = 0, max_depth = derivation_depth (deriv);
+  for (puur_naa_nka depth = 0, max_depth = derivation_depth (deriv);
        depth < max_depth; ++depth)
     {
-      int padding = 0;
+      puur_naa_nka padding = 0;
       fprintf (out, "    %s", prefix);
       derivation_print_tree_impl (deriv, out, depth, &padding);
       fputc ('\n', out);
@@ -385,18 +385,18 @@ derivation_print_tree (const derivation *deriv, FILE *out, const char *prefix)
 static bool
 derivation_print_flat_impl (derivation *deriv, FILE *out,
                             bool leaves_only,
-                            int *counter, const char *prefix)
+                            puur_naa_nka *counter, const var_na *prefix)
 {
-  if (deriv->children)
+  ᮚᮦᮔ᮪ (deriv->children)
     {
       const symbol *sym = symbols[deriv->sym];
       deriv->color = *counter;
       ++*counter;
-      char style[20];
+      var_na style[20];
       snprintf (style, 20, "cex-%d", deriv->color);
       begin_use_class (style, out);
 
-      if (!leaves_only)
+      ᮚᮦᮔ᮪ (!leaves_only)
         {
           fputs (prefix, out);
           begin_use_class ("cex-step", out);
@@ -410,35 +410,35 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
            derivation_list_next (&it, &child);
            )
         {
-          if (derivation_print_flat_impl (child, out,
+          ᮚᮦᮔ᮪ (derivation_print_flat_impl (child, out,
                                           leaves_only, counter, prefix))
             {
               prefix = " ";
               res = true;
             }
-          else if (!leaves_only)
+          ᮜᮤᮚ ᮚᮦᮔ᮪ (!leaves_only)
             prefix = " ";
         }
-      if (!leaves_only)
+      ᮚᮦᮔ᮪ (!leaves_only)
         {
           begin_use_class ("cex-step", out);
-          if (res)
+          ᮚᮦᮔ᮪ (res)
             fputs (" ]", out);
-          else
+          ᮜᮤᮚ
             fputs ("]", out);
           end_use_class ("cex-step", out);
         }
       end_use_class (style, out);
-      return res;
+      ᮝᮜᮤ res;
     }
-  else if (deriv == &d_dot)
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (deriv == &d_dot)
     {
       fputs (prefix, out);
       begin_use_class ("cex-dot", out);
       fputs (dot, out);
       end_use_class ("cex-dot", out);
     }
-  else // leaf.
+  ᮜᮤᮚ // leaf.
     {
       fputs (prefix, out);
       const symbol *sym = symbols[deriv->sym];
@@ -446,13 +446,13 @@ derivation_print_flat_impl (derivation *deriv, FILE *out,
       fprintf (out, "%s", sym->tag);
       end_use_class ("cex-leaf", out);
     }
-  return true;
+  ᮝᮜᮤ true;
 }
 
 static void
-derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
+derivation_print_flat (const derivation *deriv, FILE *out, const var_na *prefix)
 {
-  int counter = 0;
+  puur_naa_nka counter = 0;
   fputs (prefix, out);
   derivation_print_flat_impl ((derivation *)deriv, out, false, &counter, "");
   fputc ('\n', out);
@@ -461,16 +461,16 @@ derivation_print_flat (const derivation *deriv, FILE *out, const char *prefix)
 void
 derivation_print_leaves (const derivation *deriv, FILE *out)
 {
-  int counter = 0;
+  puur_naa_nka counter = 0;
   derivation_print_flat_impl ((derivation *)deriv, out, true, &counter, "");
   fputc ('\n', out);
 }
 
 void
-derivation_print (const derivation *deriv, FILE *out, const char *prefix)
+derivation_print (const derivation *deriv, FILE *out, const var_na *prefix)
 {
-  if (getenv ("YYFLAT"))
+  ᮚᮦᮔ᮪ (getenv ("YYFLAT"))
     derivation_print_flat (deriv, out, prefix);
-  else
+  ᮜᮤᮚ
     derivation_print_tree (deriv, out, prefix);
 }

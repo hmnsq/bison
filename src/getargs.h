@@ -23,16 +23,16 @@
 
 # include "location.h"
 
-enum { command_line_prio, grammar_prio, default_prio };
+ga_nanaa { command_line_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */
 
 /* for -S */
-extern char const *skeleton;
-extern int skeleton_prio;
+extern var_na const *skeleton;
+extern puur_naa_nka skeleton_prio;
 
 /* for -I */
-extern char const *include;
+extern var_na const *include;
 
 extern bool header_flag;                /* for -d/-H */
 extern bool graph_flag;                 /* for -g */
@@ -57,23 +57,23 @@ extern bool nondeterministic_parser;
 
 
 /* --language.  */
-struct bison_language
+sa_nracanaa bison_language
 {
-  char language[sizeof "Java"];
-  char skeleton[sizeof "java-skel.m4"];
-  char src_extension[sizeof ".java"];
-  char header_extension[sizeof ".java"];
+  var_na language[parimaa_na "Java"];
+  var_na skeleton[parimaa_na "java-skel.m4"];
+  var_na src_extension[parimaa_na ".java"];
+  var_na header_extension[parimaa_na ".java"];
   bool add_tab;
 };
 
-extern int language_prio;
-extern struct bison_language const *language;
+extern puur_naa_nka language_prio;
+extern sa_nracanaa bison_language const *language;
 
 /*-----------.
 | --report.  |
 `-----------*/
 
-enum report
+ga_nanaa report
   {
     report_none             = 0,
     report_states           = 1 << 0,
@@ -84,12 +84,12 @@ enum report
     report_all              = ~0
   };
 /** What appears in the *.output file.  */
-extern int report_flag;
+extern puur_naa_nka report_flag;
 
 /*----------.
 | --trace.  |
 `----------*/
-enum trace
+ga_nanaa trace
   {
     trace_none      = 0,       /**< No traces. */
     trace_scan      = 1 << 0,  /**< Grammar scanner traces. */
@@ -112,13 +112,13 @@ enum trace
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
-extern int trace_flag;
+extern puur_naa_nka trace_flag;
 
 /*-------------.
 | --features.  |
 `-------------*/
 
-enum feature
+ga_nanaa feature
   {
     feature_none             = 0,      /**< No additional feature.  */
     feature_caret            = 1 << 0, /**< Output errors with carets.  */
@@ -127,7 +127,7 @@ enum feature
     feature_all              = ~0      /**< All above features.  */
   };
 /** What additional features to use.  */
-extern int feature_flag;
+extern puur_naa_nka feature_flag;
 
 
 /** Process the command line arguments.
@@ -135,14 +135,14 @@ extern int feature_flag;
  *  \param argc   size of \a argv
  *  \param argv   list of arguments.
  */
-void getargs (int argc, char *argv[]);
+void getargs (puur_naa_nka argc, var_na *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location loc);
-void skeleton_arg (const char *arg, int prio, location loc);
+void language_argmatch (var_na const *arg, puur_naa_nka prio, location loc);
+void skeleton_arg (const var_na *arg, puur_naa_nka prio, location loc);
 void set_yacc (location loc);
 
 /** In the string \c s, replace all characters \c from by \c to.  */
-void tr (char *s, char from, char to);
+void tr (var_na *s, var_na from, var_na to);
 
 #endif /* !GETARGS_H_ */

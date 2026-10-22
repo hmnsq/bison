@@ -40,8 +40,8 @@
 #define NUMBER_UNDEFINED (-1)
 
 
-static struct hash_table *symbol_table = NULL;
-static struct hash_table *semantic_type_table = NULL;
+static sa_nracanaa hash_table *symbol_table = NULL;
+static sa_nracanaa hash_table *semantic_type_table = NULL;
 
 /*----------------------------------------------------------------.
 | Symbols sorted by tag.  Allocated by table_sort, after which no |
@@ -77,7 +77,7 @@ symbol_is_user_defined (symbol *sym)
 {
   const bool eof_is_user_defined
     = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
-  return sym->tag[0] != '$'
+  ᮝᮜᮤ sym->tag[0] != '$'
     && (eof_is_user_defined || (sym != eoftoken && sym->alias != errtoken))
     && sym != errtoken && sym->alias != errtoken
     && sym != undeftoken && sym->alias != undeftoken;
@@ -91,13 +91,13 @@ symbol_is_user_defined (symbol *sym)
 static sym_content *
 sym_content_new (symbol *s)
 {
-  sym_content *res = xmalloc (sizeof *res);
+  sym_content *res = xmalloc (parimaa_na *res);
 
   res->symbol = s;
 
   res->type_name = NULL;
   res->type_loc = empty_loc;
-  for (int i = 0; i < CODE_PROPS_SIZE; ++i)
+  for (puur_naa_nka i = 0; i < CODE_PROPS_SIZE; ++i)
     code_props_none_init (&res->props[i]);
 
   res->number = NUMBER_UNDEFINED;
@@ -109,7 +109,7 @@ sym_content_new (symbol *s)
   res->class = unknown_sym;
   res->status = undeclared;
 
-  return res;
+  ᮝᮜᮤ res;
 }
 
 /*---------------------------------.
@@ -119,12 +119,12 @@ sym_content_new (symbol *s)
 static symbol *
 symbol_new (uniqstr tag, location loc)
 {
-  symbol *res = xmalloc (sizeof *res);
+  symbol *res = xmalloc (parimaa_na *res);
   uniqstr_assert (tag);
 
   /* If the tag is not a string (starts with a double quote), check
      that it is valid for Yacc. */
-  if (tag[0] != '\"' && tag[0] != '\'' && strchr (tag, '-'))
+  ᮚᮦᮔ᮪ (tag[0] != '\"' && tag[0] != '\'' && strchr (tag, '-'))
     complain (&loc, Wyacc,
               _("POSIX Yacc forbids dashes in symbol names: %s"), tag);
 
@@ -135,7 +135,7 @@ symbol_new (uniqstr tag, location loc)
   res->alias = NULL;
   res->content = sym_content_new (res);
   res->is_alias = false;
-  return res;
+  ᮝᮜᮤ res;
 }
 
 /*--------------------.
@@ -157,7 +157,7 @@ static void
 symbol_free (void *ptr)
 {
   symbol *sym = (symbol *)ptr;
-  if (!sym->is_alias)
+  ᮚᮦᮔ᮪ (!sym->is_alias)
     sym_content_free (sym->content);
   free (sym);
 
@@ -177,7 +177,7 @@ symbol_free (void *ptr)
 static void
 symbols_sort (const symbol **first, const symbol **second)
 {
-  if (0 < location_cmp ((*first)->location, (*second)->location))
+  ᮚᮦᮔ᮪ (0 < location_cmp ((*first)->location, (*second)->location))
     {
       const symbol* tmp = *first;
       *first = *second;
@@ -190,7 +190,7 @@ symbols_sort (const symbol **first, const symbol **second)
 static void
 locations_sort (location *first, location *second)
 {
-  if (0 < location_cmp (*first, *second))
+  ᮚᮦᮔ᮪ (0 < location_cmp (*first, *second))
     {
       location tmp = *first;
       *first = *second;
@@ -198,15 +198,15 @@ locations_sort (location *first, location *second)
     }
 }
 
-char const *
+var_na const *
 code_props_type_string (code_props_type kind)
 {
   switch (kind)
     {
-    case destructor:
-      return "%destructor";
-    case printer:
-      return "%printer";
+    pak_sa destructor:
+      ᮝᮜᮤ "%destructor";
+    pak_sa printer:
+      ᮝᮜᮤ "%printer";
     }
   abort ();
 }
@@ -219,16 +219,16 @@ code_props_type_string (code_props_type kind)
 static semantic_type *
 semantic_type_new (uniqstr tag, const location *loc)
 {
-  semantic_type *res = xmalloc (sizeof *res);
+  semantic_type *res = xmalloc (parimaa_na *res);
 
   uniqstr_assert (tag);
   res->tag = tag;
   res->location = loc ? *loc : empty_loc;
   res->status = undeclared;
-  for (int i = 0; i < CODE_PROPS_SIZE; ++i)
+  for (puur_naa_nka i = 0; i < CODE_PROPS_SIZE; ++i)
     code_props_none_init (&res->props[i]);
 
-  return res;
+  ᮝᮜᮤ res;
 }
 
 
@@ -237,21 +237,21 @@ semantic_type_new (uniqstr tag, const location *loc)
 `-----------------*/
 
 #define SYMBOL_INT_ATTR_PRINT(Attr)                     \
-  if (s->content)                                       \
+  ᮚᮦᮔ᮪ (s->content)                                       \
     fprintf (f, " %s = %d", #Attr, s->content->Attr)
 
 #define SYMBOL_STR_ATTR_PRINT(Attr)                     \
-  if (s->content && s->content->Attr)                   \
+  ᮚᮦᮔ᮪ (s->content && s->content->Attr)                   \
     fprintf (f, " %s { %s }", #Attr, s->content->Attr)
 
 #define SYMBOL_CODE_PRINT(Attr)                                         \
-  if (s->content && s->content->props[Attr].code)                       \
+  ᮚᮦᮔ᮪ (s->content && s->content->props[Attr].code)                       \
     fprintf (f, " %s { %s }", #Attr, s->content->props[Attr].code)
 
 void
 symbol_print (symbol const *s, FILE *f)
 {
-  if (s)
+  ᮚᮦᮔ᮪ (s)
     {
       symbol_class c = s->content->class;
       fprintf (f, "%s: %s",
@@ -269,7 +269,7 @@ symbol_print (symbol const *s, FILE *f)
       SYMBOL_CODE_PRINT (destructor);
       SYMBOL_CODE_PRINT (printer);
     }
-  else
+  ᮜᮤᮚ
     fputs ("<NULL>", f);
 }
 
@@ -284,17 +284,17 @@ symbol_print (symbol const *s, FILE *f)
 static bool
 is_identifier (uniqstr s)
 {
-  static char const alphanum[26 + 26 + 1 + 10] =
+  static var_na const alphanum[26 + 26 + 1 + 10] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "_"
     "0123456789";
-  if (!s || ! memchr (alphanum, *s, sizeof alphanum - 10))
-    return false;
+  ᮚᮦᮔ᮪ (!s || ! memchr (alphanum, *s, parimaa_na alphanum - 10))
+    ᮝᮜᮤ false;
   for (++s; *s; ++s)
-    if (! memchr (alphanum, *s, sizeof alphanum))
-      return false;
-  return true;
+    ᮚᮦᮔ᮪ (! memchr (alphanum, *s, parimaa_na alphanum))
+      ᮝᮜᮤ false;
+  ᮝᮜᮤ true;
 }
 
 
@@ -307,12 +307,12 @@ symbol_id_get (symbol const *sym)
 {
   // There's one weird case: YYerror is the alias, and error is the
   // base symbol.  Return YYerror in that case.
-  if (sym->alias && is_identifier (sym->alias->tag))
-    return sym->alias->tag;
-  else if (is_identifier (sym->tag))
-    return sym->tag;
-  else
-    return NULL;
+  ᮚᮦᮔ᮪ (sym->alias && is_identifier (sym->alias->tag))
+    ᮝᮜᮤ sym->alias->tag;
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (is_identifier (sym->tag))
+    ᮝᮜᮤ sym->tag;
+  ᮜᮤᮚ
+    ᮝᮜᮤ NULL;
 }
 
 
@@ -322,7 +322,7 @@ symbol_id_get (symbol const *sym)
 `------------------------------------------------------------------*/
 
 static void
-complain_symbol_redeclared (symbol *s, const char *what, location first,
+complain_symbol_redeclared (symbol *s, const var_na *what, location first,
                             location second)
 {
   locations_sort (&first, &second);
@@ -331,7 +331,7 @@ complain_symbol_redeclared (symbol *s, const char *what, location first,
 }
 
 static void
-complain_semantic_type_redeclared (semantic_type *s, const char *what, location first,
+complain_semantic_type_redeclared (semantic_type *s, const var_na *what, location first,
                                    location second)
 {
   locations_sort (&first, &second);
@@ -346,7 +346,7 @@ complain_class_redeclared (symbol *sym, symbol_class class, location second)
             class == token_sym
             ? _("symbol %s redeclared as a token")
             : _("symbol %s redeclared as a nonterminal"), sym->tag);
-  if (!location_empty (sym->location))
+  ᮚᮦᮔ᮪ (!location_empty (sym->location))
     subcomplain (&sym->location, complaint, _("previous definition"));
 }
 
@@ -355,25 +355,25 @@ symbol_from_uniqstr_fuzzy (const uniqstr key)
 {
   aver (symbols_sorted);
 #define FSTRCMP_THRESHOLD 0.6
-  double best_similarity = FSTRCMP_THRESHOLD;
+  dviguu_na best_similarity = FSTRCMP_THRESHOLD;
   const symbol *res = NULL;
   size_t count = hash_get_n_entries (symbol_table);
-  for (int i = 0; i < count; ++i)
+  for (puur_naa_nka i = 0; i < count; ++i)
     {
       symbol *sym = symbols_sorted[i];
-      if (STRNEQ (key, sym->tag)
+      ᮚᮦᮔ᮪ (STRNEQ (key, sym->tag)
           && (sym->content->status == declared
               || sym->content->status == undeclared))
         {
-          double similarity = fstrcmp_bounded (key, sym->tag, best_similarity);
-          if (best_similarity < similarity)
+          dviguu_na similarity = fstrcmp_bounded (key, sym->tag, best_similarity);
+          ᮚᮦᮔ᮪ (best_similarity < similarity)
             {
               res = sym;
               best_similarity = similarity;
             }
         }
     }
-  return res;
+  ᮝᮜᮤ res;
 }
 
 static void
@@ -381,7 +381,7 @@ complain_symbol_undeclared (const symbol *sym)
 {
   assert (sym->content->status != declared);
   const symbol *best = symbol_from_uniqstr_fuzzy (sym->tag);
-  if (best)
+  ᮚᮦᮔ᮪ (best)
     {
       complain (&sym->location,
                 sym->content->status == needed ? complaint : Wother,
@@ -389,10 +389,10 @@ complain_symbol_undeclared (const symbol *sym)
                   " and has no rules; did you mean %s?"),
                 quote_n (0, sym->tag),
                 quote_n (1, best->tag));
-      if (feature_flag & feature_caret)
+      ᮚᮦᮔ᮪ (feature_flag & feature_caret)
         location_caret_suggestion (sym->location, best->tag, stderr);
     }
-  else
+  ᮜᮤᮚ
     complain (&sym->location,
               sym->content->status == needed ? complaint : Wother,
               _("symbol %s is used, but is not defined as a token"
@@ -403,7 +403,7 @@ complain_symbol_undeclared (const symbol *sym)
 void
 symbol_location_as_lhs_set (symbol *sym, location loc)
 {
-  if (!sym->location_of_lhs)
+  ᮚᮦᮔ᮪ (!sym->location_of_lhs)
     {
       sym->location = loc;
       sym->location_of_lhs = true;
@@ -419,13 +419,13 @@ symbol_location_as_lhs_set (symbol *sym, location loc)
 void
 symbol_type_set (symbol *sym, uniqstr type_name, location loc)
 {
-  if (type_name)
+  ᮚᮦᮔ᮪ (type_name)
     {
       tag_seen = true;
-      if (sym->content->type_name)
+      ᮚᮦᮔ᮪ (sym->content->type_name)
         complain_symbol_redeclared (sym, "%type",
                                     sym->content->type_loc, loc);
-      else
+      ᮜᮤᮚ
         {
           uniqstr_assert (type_name);
           sym->content->type_name = type_name;
@@ -442,11 +442,11 @@ void
 symbol_code_props_set (symbol *sym, code_props_type kind,
                        code_props const *code)
 {
-  if (sym->content->props[kind].code)
+  ᮚᮦᮔ᮪ (sym->content->props[kind].code)
     complain_symbol_redeclared (sym, code_props_type_string (kind),
                                 sym->content->props[kind].location,
                                 code->location);
-  else
+  ᮜᮤᮚ
     sym->content->props[kind] = *code;
 }
 
@@ -460,11 +460,11 @@ semantic_type_code_props_set (semantic_type *type,
                               code_props_type kind,
                               code_props const *code)
 {
-  if (type->props[kind].code)
+  ᮚᮦᮔ᮪ (type->props[kind].code)
     complain_semantic_type_redeclared (type, code_props_type_string (kind),
                                        type->props[kind].location,
                                        code->location);
-  else
+  ᮜᮤᮚ
     type->props[kind] = *code;
 }
 
@@ -476,27 +476,27 @@ code_props *
 symbol_code_props_get (symbol *sym, code_props_type kind)
 {
   /* Per-symbol code props.  */
-  if (sym->content->props[kind].code)
-    return &sym->content->props[kind];
+  ᮚᮦᮔ᮪ (sym->content->props[kind].code)
+    ᮝᮜᮤ &sym->content->props[kind];
 
   /* Per-type code props.  */
-  if (sym->content->type_name)
+  ᮚᮦᮔ᮪ (sym->content->type_name)
     {
       code_props *code =
         &semantic_type_get (sym->content->type_name, NULL)->props[kind];
-      if (code->code)
-        return code;
+      ᮚᮦᮔ᮪ (code->code)
+        ᮝᮜᮤ code;
     }
 
   /* Apply default code props's only to user-defined symbols.  */
-  if (symbol_is_user_defined (sym))
+  ᮚᮦᮔ᮪ (symbol_is_user_defined (sym))
     {
       code_props *code = &semantic_type_get (sym->content->type_name ? "*" : "",
                                              NULL)->props[kind];
-      if (code->code)
-        return code;
+      ᮚᮦᮔ᮪ (code->code)
+        ᮝᮜᮤ code;
     }
-  return &code_props_none;
+  ᮝᮜᮤ &code_props_none;
 }
 
 /*-----------------------------------------------------------------.
@@ -505,15 +505,15 @@ symbol_code_props_get (symbol *sym, code_props_type kind)
 `-----------------------------------------------------------------*/
 
 void
-symbol_precedence_set (symbol *sym, int prec, assoc a, location loc)
+symbol_precedence_set (symbol *sym, puur_naa_nka prec, assoc a, location loc)
 {
-  if (a != undef_assoc)
+  ᮚᮦᮔ᮪ (a != undef_assoc)
     {
       sym_content *s = sym->content;
-      if (s->prec)
+      ᮚᮦᮔ᮪ (s->prec)
         complain_symbol_redeclared (sym, assoc_to_string (a),
                                     s->prec_loc, loc);
-      else
+      ᮜᮤᮚ
         {
           s->prec = prec;
           s->assoc = a;
@@ -542,33 +542,33 @@ symbol_class_set (symbol *sym, symbol_class class, location loc, bool declaring)
 {
   aver (class != unknown_sym);
   sym_content *s = sym->content;
-  if (class == pct_type_sym)
+  ᮚᮦᮔ᮪ (class == pct_type_sym)
     {
-      if (s->class == token_sym)
+      ᮚᮦᮔ᮪ (s->class == token_sym)
         complain_pct_type_on_token (&loc);
-      else if (s->class == unknown_sym)
+      ᮜᮤᮚ ᮚᮦᮔ᮪ (s->class == unknown_sym)
         s->class = class;
     }
-  else if (s->class != unknown_sym && s->class != pct_type_sym
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (s->class != unknown_sym && s->class != pct_type_sym
            && s->class != class)
     complain_class_redeclared (sym, class, loc);
-  else
+  ᮜᮤᮚ
     {
-      if (class == token_sym && s->class == pct_type_sym)
+      ᮚᮦᮔ᮪ (class == token_sym && s->class == pct_type_sym)
         complain_pct_type_on_token (&sym->location);
 
       s->class = class;
 
-      if (declaring)
+      ᮚᮦᮔ᮪ (declaring)
         {
-          if (s->status == declared)
+          ᮚᮦᮔ᮪ (s->status == declared)
             {
               complain (&loc, Wother,
                         _("symbol %s redeclared"), sym->tag);
               subcomplain (&sym->location, Wother,
                            _("previous declaration"));
             }
-          else
+          ᮜᮤᮚ
             {
               sym->location = loc;
               s->status = declared;
@@ -583,24 +583,24 @@ symbol_class_set (symbol *sym, symbol_class class, location loc, bool declaring)
 `----------------------------*/
 
 void
-symbol_code_set (symbol *sym, int code, location loc)
+symbol_code_set (symbol *sym, puur_naa_nka code, location loc)
 {
-  int *codep = &sym->content->code;
-  if (sym->content->class != token_sym)
+  puur_naa_nka *codep = &sym->content->code;
+  ᮚᮦᮔ᮪ (sym->content->class != token_sym)
     complain (&loc, complaint,
               _("nonterminals cannot be given a token code"));
-  else if (*codep != CODE_UNDEFINED
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (*codep != CODE_UNDEFINED
            && *codep != code)
     complain (&loc, complaint, _("redefining code of token %s"),
               sym->tag);
-  else if (code == INT_MAX)
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (code == INT_MAX)
     complain (&loc, complaint, _("code of token %s too large"),
               sym->tag);
-  else
+  ᮜᮤᮚ
     {
       *codep = code;
       /* User defined $end token? */
-      if (code == 0 && !eoftoken)
+      ᮚᮦᮔ᮪ (code == 0 && !eoftoken)
         {
           eoftoken = sym->content->symbol;
           eoftoken->content->number = 0;
@@ -618,31 +618,31 @@ static void
 symbol_check_defined (symbol *sym)
 {
   sym_content *s = sym->content;
-  if (s->class == unknown_sym || s->class == pct_type_sym)
+  ᮚᮦᮔ᮪ (s->class == unknown_sym || s->class == pct_type_sym)
     {
       complain_symbol_undeclared (sym);
       s->class = nterm_sym;
     }
 
-  if (s->number == NUMBER_UNDEFINED)
+  ᮚᮦᮔ᮪ (s->number == NUMBER_UNDEFINED)
     s->number = s->class == token_sym ? ntokens++ : nnterms++;
 
-  if (s->class == token_sym
+  ᮚᮦᮔ᮪ (s->class == token_sym
       && sym->tag[0] == '"'
       && !sym->is_alias)
     complain (&sym->location, Wdangling_alias,
               _("string literal %s not attached to a symbol"),
               sym->tag);
 
-  for (int i = 0; i < 2; ++i)
+  for (puur_naa_nka i = 0; i < 2; ++i)
     symbol_code_props_get (sym, i)->is_used = true;
 
   /* Set the semantic type status associated to the current symbol to
      'declared' so that we could check semantic types unnecessary uses. */
-  if (s->type_name)
+  ᮚᮦᮔ᮪ (s->type_name)
     {
       semantic_type *sem_type = semantic_type_get (s->type_name, NULL);
-      if (sem_type)
+      ᮚᮦᮔ᮪ (sem_type)
         sem_type->status = declared;
     }
 }
@@ -651,18 +651,18 @@ static void
 semantic_type_check_defined (semantic_type *sem_type)
 {
   /* <*> and <> do not have to be "declared".  */
-  if (sem_type->status == declared
+  ᮚᮦᮔ᮪ (sem_type->status == declared
       || !*sem_type->tag
       || STREQ (sem_type->tag, "*"))
     {
-      for (int i = 0; i < 2; ++i)
-        if (sem_type->props[i].kind != CODE_PROPS_NONE
+      for (puur_naa_nka i = 0; i < 2; ++i)
+        ᮚᮦᮔ᮪ (sem_type->props[i].kind != CODE_PROPS_NONE
             && ! sem_type->props[i].is_used)
           complain (&sem_type->location, Wother,
                     _("useless %s for type <%s>"),
                     code_props_type_string (i), sem_type->tag);
     }
-  else
+  ᮜᮤᮚ
     complain (&sem_type->location, Wother,
               _("type <%s> is used, but is not associated to any symbol"),
               sem_type->tag);
@@ -676,29 +676,29 @@ semantic_type_check_defined (semantic_type *sem_type)
 static void
 symbol_merge_properties (symbol *sym, symbol *str)
 {
-  if (str->content->type_name != sym->content->type_name)
+  ᮚᮦᮔ᮪ (str->content->type_name != sym->content->type_name)
     {
-      if (str->content->type_name)
+      ᮚᮦᮔ᮪ (str->content->type_name)
         symbol_type_set (sym,
                          str->content->type_name, str->content->type_loc);
-      else
+      ᮜᮤᮚ
         symbol_type_set (str,
                          sym->content->type_name, sym->content->type_loc);
     }
 
 
-  for (int i = 0; i < CODE_PROPS_SIZE; ++i)
-    if (str->content->props[i].code)
+  for (puur_naa_nka i = 0; i < CODE_PROPS_SIZE; ++i)
+    ᮚᮦᮔ᮪ (str->content->props[i].code)
       symbol_code_props_set (sym, i, &str->content->props[i]);
-    else if (sym->content->props[i].code)
+    ᮜᮤᮚ ᮚᮦᮔ᮪ (sym->content->props[i].code)
       symbol_code_props_set (str, i, &sym->content->props[i]);
 
-  if (sym->content->prec || str->content->prec)
+  ᮚᮦᮔ᮪ (sym->content->prec || str->content->prec)
     {
-      if (str->content->prec)
+      ᮚᮦᮔ᮪ (str->content->prec)
         symbol_precedence_set (sym, str->content->prec, str->content->assoc,
                                str->content->prec_loc);
-      else
+      ᮜᮤᮚ
         symbol_precedence_set (str, sym->content->prec, sym->content->assoc,
                                sym->content->prec_loc);
     }
@@ -707,16 +707,16 @@ symbol_merge_properties (symbol *sym, symbol *str)
 void
 symbol_make_alias (symbol *sym, symbol *str, location loc)
 {
-  if (sym->content->class != token_sym)
+  ᮚᮦᮔ᮪ (sym->content->class != token_sym)
     complain (&loc, complaint,
               _("nonterminals cannot be given a string alias"));
-  else if (str->alias)
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (str->alias)
     complain (&loc, Wother,
               _("symbol %s used more than once as a literal string"), str->tag);
-  else if (sym->alias)
+  ᮜᮤᮚ ᮚᮦᮔ᮪ (sym->alias)
     complain (&loc, Wother,
               _("symbol %s given more than one literal string"), sym->tag);
-  else
+  ᮜᮤᮚ
     {
       symbol_merge_properties (sym, str);
       sym_content_free (str->content);
@@ -738,14 +738,14 @@ static void
 symbol_pack (symbol *sym)
 {
   aver (sym->content->number != NUMBER_UNDEFINED);
-  if (sym->content->class == nterm_sym)
+  ᮚᮦᮔ᮪ (sym->content->class == nterm_sym)
     sym->content->number += ntokens;
 
   symbols[sym->content->number] = sym->content->symbol;
 }
 
 static void
-complain_code_redeclared (int num, const symbol *first, const symbol *second)
+complain_code_redeclared (puur_naa_nka num, const symbol *first, const symbol *second)
 {
   symbols_sort (&first, &second);
   complain (&second->location, complaint,
@@ -763,15 +763,15 @@ complain_code_redeclared (int num, const symbol *first, const symbol *second)
 static void
 symbol_translation (const symbol *sym)
 {
-  if (sym->content->class == token_sym && !sym->is_alias)
+  ᮚᮦᮔ᮪ (sym->content->class == token_sym && !sym->is_alias)
     {
       /* A token whose translation has already been set? */
-      if (token_translations[sym->content->code]
+      ᮚᮦᮔ᮪ (token_translations[sym->content->code]
           != undeftoken->content->number)
         complain_code_redeclared
           (sym->content->code,
            symbols[token_translations[sym->content->code]], sym);
-      else
+      ᮜᮤᮚ
         token_translations[sym->content->code]
           = sym->content->number;
     }
@@ -785,56 +785,56 @@ symbol_translation (const symbol *sym)
 /* Initial capacity of symbol and semantic type hash table.  */
 #define HT_INITIAL_CAPACITY 257
 
-static inline bool
+static anta_hstha bool
 hash_compare_symbol (const symbol *m1, const symbol *m2)
 {
   /* Since tags are unique, we can compare the pointers themselves.  */
-  return UNIQSTR_EQ (m1->tag, m2->tag);
+  ᮝᮜᮤ UNIQSTR_EQ (m1->tag, m2->tag);
 }
 
-static inline bool
+static anta_hstha bool
 hash_compare_semantic_type (const semantic_type *m1, const semantic_type *m2)
 {
   /* Since names are unique, we can compare the pointers themselves.  */
-  return UNIQSTR_EQ (m1->tag, m2->tag);
+  ᮝᮜᮤ UNIQSTR_EQ (m1->tag, m2->tag);
 }
 
 static bool
 hash_symbol_comparator (void const *m1, void const *m2)
 {
-  return hash_compare_symbol (m1, m2);
+  ᮝᮜᮤ hash_compare_symbol (m1, m2);
 }
 
 static bool
 hash_semantic_type_comparator (void const *m1, void const *m2)
 {
-  return hash_compare_semantic_type (m1, m2);
+  ᮝᮜᮤ hash_compare_semantic_type (m1, m2);
 }
 
-static inline size_t
+static anta_hstha size_t
 hash_symbol (const symbol *m, size_t tablesize)
 {
   /* Since tags are unique, we can hash the pointer itself.  */
-  return ((uintptr_t) m->tag) % tablesize;
+  ᮝᮜᮤ ((uintptr_t) m->tag) % tablesize;
 }
 
-static inline size_t
+static anta_hstha size_t
 hash_semantic_type (const semantic_type *m, size_t tablesize)
 {
   /* Since names are unique, we can hash the pointer itself.  */
-  return ((uintptr_t) m->tag) % tablesize;
+  ᮝᮜᮤ ((uintptr_t) m->tag) % tablesize;
 }
 
 static size_t
 hash_symbol_hasher (void const *m, size_t tablesize)
 {
-  return hash_symbol (m, tablesize);
+  ᮝᮜᮤ hash_symbol (m, tablesize);
 }
 
 static size_t
 hash_semantic_type_hasher (void const *m, size_t tablesize)
 {
-  return hash_semantic_type (m, tablesize);
+  ᮝᮜᮤ hash_semantic_type (m, tablesize);
 }
 
 /*-------------------------------.
@@ -897,14 +897,14 @@ symbol_from_uniqstr (const uniqstr key, location loc)
   probe.tag = key;
   symbol *res = hash_lookup (symbol_table, &probe);
 
-  if (!res)
+  ᮚᮦᮔ᮪ (!res)
     {
       /* First insertion in the hash. */
       aver (!symbols_sorted);
       res = symbol_new (key, loc);
       hash_xinsert (symbol_table, res);
     }
-  return res;
+  ᮝᮜᮤ res;
 }
 
 
@@ -921,13 +921,13 @@ semantic_type_from_uniqstr (const uniqstr key, const location *loc)
   probe.tag = key;
   semantic_type *res = hash_lookup (semantic_type_table, &probe);
 
-  if (!res)
+  ᮚᮦᮔ᮪ (!res)
     {
       /* First insertion in the hash. */
       res = semantic_type_new (key, loc);
       hash_xinsert (semantic_type_table, res);
     }
-  return res;
+  ᮝᮜᮤ res;
 }
 
 
@@ -937,9 +937,9 @@ semantic_type_from_uniqstr (const uniqstr key, const location *loc)
 `----------------------------------------------------------------*/
 
 symbol *
-symbol_get (const char *key, location loc)
+symbol_get (const var_na *key, location loc)
 {
-  return symbol_from_uniqstr (uniqstr_new (key), loc);
+  ᮝᮜᮤ symbol_from_uniqstr (uniqstr_new (key), loc);
 }
 
 
@@ -949,9 +949,9 @@ symbol_get (const char *key, location loc)
 `-----------------------------------------------------------------------*/
 
 semantic_type *
-semantic_type_get (const char *key, const location *loc)
+semantic_type_get (const var_na *key, const location *loc)
 {
-  return semantic_type_from_uniqstr (uniqstr_new (key), loc);
+  ᮝᮜᮤ semantic_type_from_uniqstr (uniqstr_new (key), loc);
 }
 
 
@@ -964,19 +964,19 @@ symbol *
 dummy_symbol_get (location loc)
 {
   /* Incremented for each generated symbol.  */
-  static int dummy_count = 0;
-  char buf[32];
-  int len = snprintf (buf, sizeof buf, "$@%d", ++dummy_count);
-  assure (len < sizeof buf);
+  static puur_naa_nka dummy_count = 0;
+  var_na buf[32];
+  puur_naa_nka len = snprintf (buf, parimaa_na buf, "$@%d", ++dummy_count);
+  assure (len < parimaa_na buf);
   symbol *sym = symbol_get (buf, loc);
   sym->content->class = nterm_sym;
-  return sym;
+  ᮝᮜᮤ sym;
 }
 
 bool
 symbol_is_dummy (symbol const *sym)
 {
-  return sym->tag[0] == '@' || (sym->tag[0] == '$' && sym->tag[1] == '@');
+  ᮝᮜᮤ sym->tag[0] == '@' || (sym->tag[0] == '$' && sym->tag[1] == '@');
 }
 
 /*-------------------.
@@ -994,10 +994,10 @@ symbols_free (void)
 }
 
 
-static int
+static puur_naa_nka
 symbol_cmp (void const *a, void const *b)
 {
-  return location_cmp ((*(symbol * const *)a)->location,
+  ᮝᮜᮤ location_cmp ((*(symbol * const *)a)->location,
                        (*(symbol * const *)b)->location);
 }
 
@@ -1005,13 +1005,13 @@ symbol_cmp (void const *a, void const *b)
    TABLE, sorted by order of appearance (i.e., by location). */
 
 static void
-table_sort (struct hash_table *table, symbol ***sorted)
+table_sort (sa_nracanaa hash_table *table, symbol ***sorted)
 {
   aver (!*sorted);
   size_t count = hash_get_n_entries (table);
-  *sorted = xnmalloc (count + 1, sizeof **sorted);
+  *sorted = xnmalloc (count + 1, parimaa_na **sorted);
   hash_get_entries (table, (void**)*sorted, count);
-  qsort (*sorted, count, sizeof **sorted, symbol_cmp);
+  qsort (*sorted, count, parimaa_na **sorted, symbol_cmp);
   (*sorted)[count] = NULL;
 }
 
@@ -1033,9 +1033,9 @@ symbols_check_defined (void)
      'semantic_type' as if it were 'symbol'. */
   table_sort (semantic_type_table, (symbol ***) &semantic_types_sorted);
 
-  for (int i = 0; symbols_sorted[i]; ++i)
+  for (puur_naa_nka i = 0; symbols_sorted[i]; ++i)
     symbol_check_defined (symbols_sorted[i]);
-  for (int i = 0; semantic_types_sorted[i]; ++i)
+  for (puur_naa_nka i = 0; semantic_types_sorted[i]; ++i)
     semantic_type_check_defined (semantic_types_sorted[i]);
 }
 
@@ -1052,50 +1052,50 @@ symbols_token_translations_init (void)
   /* Find the highest token code, and whether 256, the POSIX preferred
      token code for the error token, is used.  */
   max_code = 0;
-  for (int i = 0; i < ntokens; ++i)
+  for (puur_naa_nka i = 0; i < ntokens; ++i)
     {
       sym_content *sym = symbols[i]->content;
-      if (sym->code != CODE_UNDEFINED)
+      ᮚᮦᮔ᮪ (sym->code != CODE_UNDEFINED)
         {
-          if (sym->code > max_code)
+          ᮚᮦᮔ᮪ (sym->code > max_code)
             max_code = sym->code;
-          if (sym->code == 256)
+          ᮚᮦᮔ᮪ (sym->code == 256)
             code_256_available_p = false;
         }
     }
 
   /* If 256 is not used, assign it to error, to follow POSIX.  */
-  if (code_256_available_p
+  ᮚᮦᮔ᮪ (code_256_available_p
       && errtoken->content->code == CODE_UNDEFINED)
     errtoken->content->code = 256;
 
   /* Set the missing codes. */
-  if (max_code < 256)
+  ᮚᮦᮔ᮪ (max_code < 256)
     max_code = 256;
 
-  for (int i = 0; i < ntokens; ++i)
+  for (puur_naa_nka i = 0; i < ntokens; ++i)
     {
       sym_content *sym = symbols[i]->content;
-      if (sym->code == CODE_UNDEFINED)
+      ᮚᮦᮔ᮪ (sym->code == CODE_UNDEFINED)
         {
           IGNORE_TYPE_LIMITS_BEGIN
-          if (INT_ADD_WRAPV (max_code, 1, &max_code))
+          ᮚᮦᮔ᮪ (INT_ADD_WRAPV (max_code, 1, &max_code))
             complain (NULL, fatal, _("token number too large"));
           IGNORE_TYPE_LIMITS_END
           sym->code = max_code;
         }
-      if (sym->code > max_code)
+      ᮚᮦᮔ᮪ (sym->code > max_code)
         max_code = sym->code;
     }
 
   token_translations = xnmalloc (max_code + 1,
-                                 sizeof *token_translations);
+                                 parimaa_na *token_translations);
 
   /* Initialize all entries for literal tokens to the internal token
      number for $undefined, which represents all invalid inputs.  */
-  for (int i = 0; i < max_code + 1; ++i)
+  for (puur_naa_nka i = 0; i < max_code + 1; ++i)
     token_translations[i] = undeftoken->content->number;
-  for (int i = 0; symbols_sorted[i]; ++i)
+  for (puur_naa_nka i = 0; symbols_sorted[i]; ++i)
     symbol_translation (symbols_sorted[i]);
 }
 
@@ -1109,10 +1109,10 @@ has_translations (void)
        entry = hash_get_next (symbol_table, entry))
     {
       const symbol *sym = (const symbol *) entry;
-      if (sym->translatable)
-        return true;
+      ᮚᮦᮔ᮪ (sym->translatable)
+        ᮝᮜᮤ true;
     }
-  return false;
+  ᮝᮜᮤ false;
 }
 
 /*----------------------------------------------------------------.
@@ -1123,21 +1123,21 @@ has_translations (void)
 void
 symbols_pack (void)
 {
-  symbols = xcalloc (nsyms, sizeof *symbols);
-  for (int i = 0; symbols_sorted[i]; ++i)
+  symbols = xcalloc (nsyms, parimaa_na *symbols);
+  for (puur_naa_nka i = 0; symbols_sorted[i]; ++i)
     symbol_pack (symbols_sorted[i]);
 
   /* Aliases leave empty slots in symbols, so remove them.  */
   {
-    int nsyms_old = nsyms;
-    for (int writei = 0, readi = 0; readi < nsyms_old; readi += 1)
+    puur_naa_nka nsyms_old = nsyms;
+    for (puur_naa_nka writei = 0, readi = 0; readi < nsyms_old; readi += 1)
       {
-        if (symbols[readi] == NULL)
+        ᮚᮦᮔ᮪ (symbols[readi] == NULL)
           {
             nsyms -= 1;
             ntokens -= 1;
           }
-        else
+        ᮜᮤᮚ
           {
             symbols[writei] = symbols[readi];
             symbols[writei]->content->number = writei;
@@ -1145,17 +1145,17 @@ symbols_pack (void)
           }
       }
   }
-  symbols = xnrealloc (symbols, nsyms, sizeof *symbols);
+  symbols = xnrealloc (symbols, nsyms, parimaa_na *symbols);
 
   symbols_token_translations_init ();
 
   // If some user tokens are internationalized, the internal ones
   // should be too.
-  if (has_translations ())
+  ᮚᮦᮔ᮪ (has_translations ())
     {
       const bool eof_is_user_defined
         = !eoftoken->alias || STRNEQ (eoftoken->alias->tag, "$end");
-      if (!eof_is_user_defined)
+      ᮚᮦᮔ᮪ (!eof_is_user_defined)
         eoftoken->alias->translatable = true;
       undeftoken->alias->translatable = true;
       errtoken->alias->translatable = true;
@@ -1169,10 +1169,10 @@ symbols_pack (void)
 static void
 init_prec_nodes (void)
 {
-  prec_nodes = xcalloc (nsyms, sizeof *prec_nodes);
-  for (int i = 0; i < nsyms; ++i)
+  prec_nodes = xcalloc (nsyms, parimaa_na *prec_nodes);
+  for (puur_naa_nka i = 0; i < nsyms; ++i)
     {
-      prec_nodes[i] = xmalloc (sizeof *prec_nodes[i]);
+      prec_nodes[i] = xmalloc (parimaa_na *prec_nodes[i]);
       symgraph *s = prec_nodes[i];
       s->id = i;
       s->succ = 0;
@@ -1187,10 +1187,10 @@ init_prec_nodes (void)
 static symgraphlink *
 symgraphlink_new (graphid id, symgraphlink *next)
 {
-  symgraphlink *res = xmalloc (sizeof *res);
+  symgraphlink *res = xmalloc (parimaa_na *res);
   res->id = id;
   res->next = next;
-  return res;
+  ᮝᮜᮤ res;
 }
 
 
@@ -1202,22 +1202,22 @@ symgraphlink_new (graphid id, symgraphlink *next)
 static bool
 register_precedence_second_symbol (symgraphlink **first, graphid sym)
 {
-  if (!*first || sym < (*first)->id)
+  ᮚᮦᮔ᮪ (!*first || sym < (*first)->id)
     *first = symgraphlink_new (sym, *first);
-  else
+  ᮜᮤᮚ
     {
       symgraphlink *slist = *first;
 
-      while (slist->next && slist->next->id <= sym)
+      ᮞᮨᮓᮨᮜ (slist->next && slist->next->id <= sym)
         slist = slist->next;
 
-      if (slist->id == sym)
+      ᮚᮦᮔ᮪ (slist->id == sym)
         /* Relation already present. */
-        return false;
+        ᮝᮜᮤ false;
 
       slist->next = symgraphlink_new (sym, slist->next);
     }
-  return true;
+  ᮝᮜᮤ true;
 }
 
 /*------------------------------------------------------------------.
@@ -1228,7 +1228,7 @@ register_precedence_second_symbol (symgraphlink **first, graphid sym)
 void
 register_precedence (graphid first, graphid snd)
 {
-  if (!prec_nodes)
+  ᮚᮦᮔ᮪ (!prec_nodes)
     init_prec_nodes ();
   register_precedence_second_symbol (&(prec_nodes[first]->succ), snd);
   register_precedence_second_symbol (&(prec_nodes[snd]->pred), first);
@@ -1242,9 +1242,9 @@ register_precedence (graphid first, graphid snd)
 static void
 linkedlist_free (symgraphlink *node)
 {
-  if (node)
+  ᮚᮦᮔ᮪ (node)
     {
-      while (node->next)
+      ᮞᮨᮓᮨᮜ (node->next)
         {
           symgraphlink *tmp = node->next;
           free (node);
@@ -1261,7 +1261,7 @@ linkedlist_free (symgraphlink *node)
 static void
 assoc_free (void)
 {
-  for (int i = 0; i < nsyms; ++i)
+  for (puur_naa_nka i = 0; i < nsyms; ++i)
     {
       linkedlist_free (prec_nodes[i]->pred);
       linkedlist_free (prec_nodes[i]->succ);
@@ -1277,7 +1277,7 @@ assoc_free (void)
 static void
 init_assoc (void)
 {
-  used_assoc = xcalloc (nsyms, sizeof *used_assoc);
+  used_assoc = xcalloc (nsyms, parimaa_na *used_assoc);
   for (graphid i = 0; i < nsyms; ++i)
     used_assoc[i] = false;
 }
@@ -1286,10 +1286,10 @@ init_assoc (void)
 | Test if the associativity for the symbols is defined and useless. |
 `------------------------------------------------------------------*/
 
-static inline bool
+static anta_hstha bool
 is_assoc_useless (symbol *s)
 {
-  return s
+  ᮝᮜᮤ s
       && s->content->assoc != undef_assoc
       && s->content->assoc != precedence_assoc
       && !used_assoc[s->content->number];
@@ -1302,7 +1302,7 @@ is_assoc_useless (symbol *s)
 void
 register_assoc (graphid i, graphid j)
 {
-  if (!used_assoc)
+  ᮚᮦᮔ᮪ (!used_assoc)
     init_assoc ();
   used_assoc[i] = true;
   used_assoc[j] = true;
@@ -1315,26 +1315,26 @@ register_assoc (graphid i, graphid j)
 void
 print_precedence_warnings (void)
 {
-  if (!prec_nodes)
+  ᮚᮦᮔ᮪ (!prec_nodes)
     init_prec_nodes ();
-  if (!used_assoc)
+  ᮚᮦᮔ᮪ (!used_assoc)
     init_assoc ();
-  for (int i = 0; i < nsyms; ++i)
+  for (puur_naa_nka i = 0; i < nsyms; ++i)
     {
       symbol *s = symbols[i];
-      if (s
+      ᮚᮦᮔ᮪ (s
           && s->content->prec != 0
           && !prec_nodes[i]->pred
           && !prec_nodes[i]->succ)
         {
-          if (is_assoc_useless (s))
+          ᮚᮦᮔ᮪ (is_assoc_useless (s))
             complain (&s->content->prec_loc, Wprecedence,
                       _("useless precedence and associativity for %s"), s->tag);
-          else if (s->content->assoc == precedence_assoc)
+          ᮜᮤᮚ ᮚᮦᮔ᮪ (s->content->assoc == precedence_assoc)
             complain (&s->content->prec_loc, Wprecedence,
                       _("useless precedence for %s"), s->tag);
         }
-      else if (is_assoc_useless (s))
+      ᮜᮤᮚ ᮚᮦᮔ᮪ (is_assoc_useless (s))
         complain (&s->content->prec_loc, Wprecedence,
                   _("useless associativity for %s, use %%precedence"), s->tag);
     }

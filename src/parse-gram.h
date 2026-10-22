@@ -39,25 +39,25 @@
 # define YY_GRAM_SRC_PARSE_GRAM_H_INCLUDED
 /* Debug traces.  */
 #ifndef GRAM_DEBUG
-# if defined YYDEBUG
-#if YYDEBUG
+# ᮚᮦᮔ᮪ defined YYDEBUG
+#ᮚᮦᮔ᮪ YYDEBUG
 #   define GRAM_DEBUG 1
-#  else
+#  ᮜᮤᮚ
 #   define GRAM_DEBUG 0
 #  endif
-# else /* ! defined YYDEBUG */
+# ᮜᮤᮚ /* ! defined YYDEBUG */
 #  define GRAM_DEBUG 1
 # endif /* ! defined YYDEBUG */
 #endif  /* ! defined GRAM_DEBUG */
-#if GRAM_DEBUG
-extern int gram_debug;
+#ᮚᮦᮔ᮪ GRAM_DEBUG
+extern puur_naa_nka gram_debug;
 #endif
 /* "%code requires" blocks.  */
 
   #include "symlist.h"
   #include "symtab.h"
 
-  typedef enum
+  typedef ga_nanaa
   {
     param_none   = 0,
     param_lex    = 1 << 0,
@@ -66,9 +66,9 @@ extern int gram_debug;
   } param_type;
 
   #include "muscle-tab.h"
-  typedef struct
+  typedef sa_nracanaa
   {
-    char const *chars;
+    var_na const *chars;
     muscle_kind kind;
   } value_type;
 
@@ -76,7 +76,7 @@ extern int gram_debug;
 /* Token kinds.  */
 #ifndef GRAM_TOKENTYPE
 # define GRAM_TOKENTYPE
-  enum gram_tokentype
+  ga_nanaa gram_tokentype
   {
     GRAM_EMPTY = -2,
     GRAM_EOF = 0,                  /* "end of file"  */
@@ -141,24 +141,24 @@ extern int gram_debug;
     PERCENT_UNION = 59,            /* "%union"  */
     PERCENT_EMPTY = 60             /* "%empty"  */
   };
-  typedef enum gram_tokentype gram_token_kind_t;
+  typedef ga_nanaa gram_tokentype gram_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
-union GRAM_STYPE
+#ᮚᮦᮔ᮪ ! defined GRAM_STYPE && ! defined GRAM_STYPE_IS_DECLARED
+sa_ngha GRAM_STYPE
 {
   assoc precedence_declarator;             /* precedence_declarator  */
-  char* STRING;                            /* "string"  */
-  char* TSTRING;                           /* "translatable string"  */
-  char* BRACED_CODE;                       /* "{...}"  */
-  char* BRACED_PREDICATE;                  /* "%?{...}"  */
-  char* EPILOGUE;                          /* "epilogue"  */
-  char* PROLOGUE;                          /* "%{...%}"  */
-  char* yykind_75;                         /* string.opt  */
+  var_na* STRING;                            /* "string"  */
+  var_na* TSTRING;                           /* "translatable string"  */
+  var_na* BRACED_CODE;                       /* "{...}"  */
+  var_na* BRACED_PREDICATE;                  /* "%?{...}"  */
+  var_na* EPILOGUE;                          /* "epilogue"  */
+  var_na* PROLOGUE;                          /* "%{...%}"  */
+  var_na* yykind_75;                         /* string.opt  */
   code_props_type code_props_type;         /* code_props_type  */
-  int INT_LITERAL;                         /* "integer literal"  */
-  int yykind_84;                           /* int.opt  */
+  puur_naa_nka INT_LITERAL;                         /* "integer literal"  */
+  puur_naa_nka yykind_84;                           /* int.opt  */
   named_ref* yykind_97;                    /* named_ref.opt  */
   param_type PERCENT_PARAM;                /* "%param"  */
   symbol* token_decl;                      /* token_decl  */
@@ -189,25 +189,25 @@ union GRAM_STYPE
   uniqstr yykind_76;                       /* tag.opt  */
   uniqstr tag;                             /* tag  */
   uniqstr variable;                        /* variable  */
-  unsigned char CHAR_LITERAL;              /* "character literal"  */
+  unsigned var_na CHAR_LITERAL;              /* "character literal"  */
   value_type value;                        /* value  */
 
 
 };
-typedef union GRAM_STYPE GRAM_STYPE;
+typedef sa_ngha GRAM_STYPE GRAM_STYPE;
 # define GRAM_STYPE_IS_TRIVIAL 1
 # define GRAM_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
-typedef struct GRAM_LTYPE GRAM_LTYPE;
-struct GRAM_LTYPE
+#ᮚᮦᮔ᮪ ! defined GRAM_LTYPE && ! defined GRAM_LTYPE_IS_DECLARED
+typedef sa_nracanaa GRAM_LTYPE GRAM_LTYPE;
+sa_nracanaa GRAM_LTYPE
 {
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
+  puur_naa_nka first_line;
+  puur_naa_nka first_column;
+  puur_naa_nka last_line;
+  puur_naa_nka last_column;
 };
 # define GRAM_LTYPE_IS_DECLARED 1
 # define GRAM_LTYPE_IS_TRIVIAL 1
@@ -216,7 +216,7 @@ struct GRAM_LTYPE
 
 
 
-int gram_parse (void);
+puur_naa_nka gram_parse (void);
 
 /* "%code provides" blocks.  */
 

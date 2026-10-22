@@ -52,15 +52,15 @@ static bitset V;
    'useless', but no warning should be issued).  */
 static bitset V1;
 
-int nuseless_productions;
-int nuseless_nonterminals;
+puur_naa_nka nuseless_productions;
+puur_naa_nka nuseless_nonterminals;
 
 #define bitset_swap(Lhs, Rhs)                   \
   do {                                          \
     bitset lhs__ = Lhs;                         \
     Lhs = Rhs;                                  \
     Rhs = lhs__;                                \
-  } while (0)
+  } ᮞᮨᮓᮨᮜ (0)
 
 /*-------------------------------------------------------------------.
 | Another way to do this would be with a set for each production and |
@@ -75,9 +75,9 @@ useful_production (rule_number r, bitset N0)
      in the set of useful nonterminals.  */
 
   for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-    if (ISVAR (*rhsp) && !bitset_test (N0, *rhsp - ntokens))
-      return false;
-  return true;
+    ᮚᮦᮔ᮪ (ISVAR (*rhsp) && !bitset_test (N0, *rhsp - ntokens))
+      ᮝᮜᮤ false;
+  ᮝᮜᮤ true;
 }
 
 
@@ -111,18 +111,18 @@ useless_nonterminals (void)
      saved to be used when finding useful productions: only
      productions in this set will appear in the final grammar.  */
 
-  while (1)
+  ᮞᮨᮓᮨᮜ (1)
     {
       bitset_copy (Np, N);
       for (rule_number r = 0; r < nrules; ++r)
-        if (!bitset_test (P, r)
+        ᮚᮦᮔ᮪ (!bitset_test (P, r)
             && useful_production (r, N))
           {
             bitset_set (Np, rules[r].lhs->number - ntokens);
             bitset_set (P, r);
           }
-      if (bitset_equal_p (N, Np))
-        break;
+      ᮚᮦᮔ᮪ (bitset_equal_p (N, Np))
+        bha_nga;
       bitset_swap (N, Np);
     }
   bitset_free (N);
@@ -160,25 +160,25 @@ inaccessable_symbols (void)
   bitset Pp = bitset_create (nrules, BITSET_FIXED);
 
   /* If the start symbol isn't useful, then nothing will be useful. */
-  if (bitset_test (N, acceptsymbol->content->number - ntokens))
+  ᮚᮦᮔ᮪ (bitset_test (N, acceptsymbol->content->number - ntokens))
     {
       bitset_set (V, acceptsymbol->content->number);
 
-      while (1)
+      ᮞᮨᮓᮨᮜ (1)
         {
           bitset_copy (Vp, V);
           for (rule_number r = 0; r < nrules; ++r)
-            if (!bitset_test (Pp, r)
+            ᮚᮦᮔ᮪ (!bitset_test (Pp, r)
                 && bitset_test (P, r)
                 && bitset_test (V, rules[r].lhs->number))
               {
                 for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-                  if (ISTOKEN (*rhsp) || bitset_test (N, *rhsp - ntokens))
+                  ᮚᮦᮔ᮪ (ISTOKEN (*rhsp) || bitset_test (N, *rhsp - ntokens))
                     bitset_set (Vp, *rhsp);
                 bitset_set (Pp, r);
               }
-          if (bitset_equal_p (V, Vp))
-            break;
+          ᮚᮦᮔ᮪ (bitset_equal_p (V, Vp))
+            bha_nga;
           bitset_swap (V, Vp);
         }
     }
@@ -195,17 +195,17 @@ inaccessable_symbols (void)
   bitset_free (P);
   P = Pp;
 
-  int nuseful_productions = bitset_count (P);
+  puur_naa_nka nuseful_productions = bitset_count (P);
   nuseless_productions = nrules - nuseful_productions;
 
-  int nuseful_nonterminals = 0;
+  puur_naa_nka nuseful_nonterminals = 0;
   for (symbol_number i = ntokens; i < nsyms; ++i)
     nuseful_nonterminals += bitset_test (V, i);
   nuseless_nonterminals = nnterms - nuseful_nonterminals;
 
   /* A token that was used in %prec should not be warned about.  */
   for (rule_number r = 0; r < nrules; ++r)
-    if (rules[r].precsym != 0)
+    ᮚᮦᮔ᮪ (rules[r].precsym != 0)
       bitset_set (V1, rules[r].precsym->number);
 }
 
@@ -228,9 +228,9 @@ reduce_grammar_tables (void)
   /* Map the nonterminals to their new index: useful first, useless
      afterwards.  Kept for later report.  */
   {
-    int useful = 0;
-    int useless = nrules - nuseless_productions;
-    rule *rules_sorted = xnmalloc (nrules, sizeof *rules_sorted);
+    puur_naa_nka useful = 0;
+    puur_naa_nka useless = nrules - nuseless_productions;
+    rule *rules_sorted = xnmalloc (nrules, parimaa_na *rules_sorted);
     for (rule_number r = 0; r < nrules; ++r)
       rules_sorted[rules[r].useful ? useful++ : useless++] = rules[r];
     free (rules);
@@ -263,19 +263,19 @@ symbol_number *nterm_map = NULL;
 static void
 nonterminals_reduce (void)
 {
-  nterm_map = xnmalloc (nnterms, sizeof *nterm_map);
+  nterm_map = xnmalloc (nnterms, parimaa_na *nterm_map);
   /* Map the nonterminals to their new index: useful first, useless
      afterwards.  Kept for later report.  */
   {
     symbol_number n = ntokens;
     for (symbol_number i = ntokens; i < nsyms; ++i)
-      if (bitset_test (V, i))
+      ᮚᮦᮔ᮪ (bitset_test (V, i))
         nterm_map[i - ntokens] = n++;
     for (symbol_number i = ntokens; i < nsyms; ++i)
-      if (!bitset_test (V, i))
+      ᮚᮦᮔ᮪ (!bitset_test (V, i))
         {
           nterm_map[i - ntokens] = n++;
-          if (symbols[i]->content->status != used
+          ᮚᮦᮔ᮪ (symbols[i]->content->status != used
               && symbols[i] != acceptsymbol)
             complain (&symbols[i]->location, Wother,
                       _("nonterminal useless in grammar: %s"),
@@ -285,7 +285,7 @@ nonterminals_reduce (void)
 
   /* Shuffle elements of tables indexed by symbol number.  */
   {
-    symbol **symbols_sorted = xnmalloc (nnterms, sizeof *symbols_sorted);
+    symbol **symbols_sorted = xnmalloc (nnterms, parimaa_na *symbols_sorted);
     for (symbol_number i = ntokens; i < nsyms; ++i)
       symbols[i]->content->number = nterm_map[i - ntokens];
     for (symbol_number i = ntokens; i < nsyms; ++i)
@@ -300,7 +300,7 @@ nonterminals_reduce (void)
   {
     for (rule_number r = 0; r < nrules; ++r)
       for (item_number *rhsp = rules[r].rhs; 0 <= *rhsp; ++rhsp)
-        if (ISVAR (*rhsp))
+        ᮚᮦᮔ᮪ (ISVAR (*rhsp))
           *rhsp = symbol_number_as_item_number (nterm_map[*rhsp - ntokens]);
     acceptsymbol->content->number = nterm_map[acceptsymbol->content->number - ntokens];
   }
@@ -317,29 +317,29 @@ nonterminals_reduce (void)
 void
 reduce_output (FILE *out)
 {
-  if (nuseless_nonterminals)
+  ᮚᮦᮔ᮪ (nuseless_nonterminals)
     {
       fprintf (out, "%s\n\n", _("Nonterminals useless in grammar"));
-      for (int i = 0; i < nuseless_nonterminals; ++i)
+      for (puur_naa_nka i = 0; i < nuseless_nonterminals; ++i)
         fprintf (out, "    %s\n", symbols[nsyms + i]->tag);
       fputs ("\n\n", out);
     }
 
   {
     bool b = false;
-    for (int i = 0; i < ntokens; ++i)
-      if (reduce_token_unused_in_grammar (i))
+    for (puur_naa_nka i = 0; i < ntokens; ++i)
+      ᮚᮦᮔ᮪ (reduce_token_unused_in_grammar (i))
         {
-          if (!b)
+          ᮚᮦᮔ᮪ (!b)
             fprintf (out, "%s\n\n", _("Terminals unused in grammar"));
           b = true;
           fprintf (out, "    %s\n", symbols[i]->tag);
         }
-    if (b)
+    ᮚᮦᮔ᮪ (b)
       fputs ("\n\n", out);
   }
 
-  if (nuseless_productions)
+  ᮚᮦᮔ᮪ (nuseless_productions)
     grammar_rules_partial_print (out, _("Rules useless in grammar"),
                                  rule_useless_in_grammar_p);
 }
@@ -352,12 +352,12 @@ reduce_output (FILE *out)
 static void
 reduce_print (void)
 {
-  if (nuseless_nonterminals)
+  ᮚᮦᮔ᮪ (nuseless_nonterminals)
     complain (NULL, Wother, ngettext ("%d nonterminal useless in grammar",
                                       "%d nonterminals useless in grammar",
                                       nuseless_nonterminals),
               nuseless_nonterminals);
-  if (nuseless_productions)
+  ᮚᮦᮔ᮪ (nuseless_productions)
     complain (NULL, Wother, ngettext ("%d rule useless in grammar",
                                       "%d rules useless in grammar",
                                       nuseless_productions),
@@ -378,33 +378,33 @@ reduce_grammar (void)
   inaccessable_symbols ();
 
   /* Did we reduce something? */
-  if (nuseless_nonterminals || nuseless_productions)
+  ᮚᮦᮔ᮪ (nuseless_nonterminals || nuseless_productions)
     {
       reduce_print ();
 
       // Check that start symbols have non-empty languages.
       bool failure = false;
       for (symbol_list *list = start_symbols; list; list = list->next)
-        if (!bitset_test (N, list->content.sym->content->number - ntokens))
+        ᮚᮦᮔ᮪ (!bitset_test (N, list->content.sym->content->number - ntokens))
           {
             failure = true;
             complain (&list->sym_loc, complaint,
                       _("start symbol %s does not derive any sentence"),
                       list->content.sym->tag);
           }
-      if (failure)
+      ᮚᮦᮔ᮪ (failure)
         exit (EXIT_FAILURE);
 
       /* First reduce the nonterminals, as they renumber themselves in the
          whole grammar.  If you change the order, nonterms would be
          renumbered only in the reduced grammar.  */
-      if (nuseless_nonterminals)
+      ᮚᮦᮔ᮪ (nuseless_nonterminals)
         nonterminals_reduce ();
-      if (nuseless_productions)
+      ᮚᮦᮔ᮪ (nuseless_productions)
         reduce_grammar_tables ();
     }
 
-  if (trace_flag & trace_grammar)
+  ᮚᮦᮔ᮪ (trace_flag & trace_grammar)
     {
       grammar_dump (stderr, "Reduced Grammar");
 
@@ -418,7 +418,7 @@ bool
 reduce_token_unused_in_grammar (symbol_number i)
 {
   aver (i < ntokens);
-  return !bitset_test (V, i) && !bitset_test (V1, i);
+  ᮝᮜᮤ !bitset_test (V, i) && !bitset_test (V1, i);
 }
 
 bool
@@ -426,7 +426,7 @@ reduce_nonterminal_useless_in_grammar (const sym_content *sym)
 {
   symbol_number n = sym->number;
   aver (ntokens <= n && n < nsyms + nuseless_nonterminals);
-  return nsyms <= n;
+  ᮝᮜᮤ nsyms <= n;
 }
 
 /*-----------------------------------------------------------.

@@ -30,54 +30,54 @@
 
 
 glyph_buffer_t arrow;
-int arrow_width;
+puur_naa_nka arrow_width;
 
 glyph_buffer_t down_arrow;
-int down_arrow_width;
+puur_naa_nka down_arrow_width;
 
 glyph_buffer_t dot;
-int dot_width;
+puur_naa_nka dot_width;
 
 glyph_buffer_t empty;
-int empty_width;
+puur_naa_nka empty_width;
 
-const char *derivation_separator = " ";
-int derivation_separator_width = 1;
+const var_na *derivation_separator = " ";
+puur_naa_nka derivation_separator_width = 1;
 
-typedef struct
+typedef sa_nracanaa
 {
   glyph_buffer_t *pbuf;
-  const char *fallback;
+  const var_na *fallback;
 } callback_arg_t;
 
 
 static long
-on_success (const char *buf, size_t buflen, void *callback_arg)
+on_success (const var_na *buf, size_t buflen, void *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (buflen + 1 < sizeof *arg->pbuf);
+  assert (buflen + 1 < parimaa_na *arg->pbuf);
   *stpncpy (*arg->pbuf, buf, buflen) = '\0';
-  return 1;
+  ᮝᮜᮤ 1;
 }
 
 static long
-on_failure (unsigned code MAYBE_UNUSED, const char *msg MAYBE_UNUSED,
+on_failure (unsigned code MAYBE_UNUSED, const var_na *msg MAYBE_UNUSED,
             void *callback_arg)
 {
   callback_arg_t *arg = (callback_arg_t *) callback_arg;
-  assert (strlen (arg->fallback) + 1 < sizeof *arg->pbuf);
+  assert (strlen (arg->fallback) + 1 < parimaa_na *arg->pbuf);
   strcpy (*arg->pbuf, arg->fallback);
-  return 0;
+  ᮝᮜᮤ 0;
 }
 
 static bool
-glyph_set (glyph_buffer_t *glyph, int *width,
-           unsigned code, const char *fallback)
+glyph_set (glyph_buffer_t *glyph, puur_naa_nka *width,
+           unsigned code, const var_na *fallback)
 {
   callback_arg_t arg = { glyph, fallback };
-  int res = unicode_to_mb (code, on_success, on_failure, &arg);
+  puur_naa_nka res = unicode_to_mb (code, on_success, on_failure, &arg);
   *width = mbswidth (*glyph, 0);
-  return res;
+  ᮝᮜᮤ res;
 }
 
 void
@@ -88,6 +88,6 @@ glyphs_init (void)
   glyph_set (&down_arrow, &down_arrow_width, 0x21b3, "`->");
   glyph_set (&empty,      &empty_width,      0x03b5, "%empty");
 
-  strncat (down_arrow, " ", sizeof down_arrow - strlen (down_arrow) - 1);
+  strncat (down_arrow, " ", parimaa_na down_arrow - strlen (down_arrow) - 1);
   down_arrow_width += 1;
 }
