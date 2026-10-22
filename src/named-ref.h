@@ -25,7 +25,7 @@
 
 /* Named reference object. Keeps information about
    a symbolic name of a symbol in a rule. */
-typedef struct named_ref
+typedef sa_nracanaa named_ref
 {
   /* Symbolic named given by user. */
   uniqstr id;

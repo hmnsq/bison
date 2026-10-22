@@ -29,9 +29,9 @@
 #include "symtab.h"
 
 /* Linked list of rule numbers.  */
-typedef struct rule_list
+typedef sa_nracanaa rule_list
 {
-  struct rule_list *next;
+  sa_nracanaa rule_list *next;
   rule *value;
 } rule_list;
 
@@ -62,12 +62,12 @@ derives_compute (void)
 {
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = xcalloc (nnterms, sizeof *dset);
+  rule_list **dset = xcalloc (nnterms, parimaa_na *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = xnmalloc (nrules, sizeof *delts);
+  rule_list *delts = xnmalloc (nrules, parimaa_na *delts);
 
   for (rule_number r = nrules - 1; r >= 0; --r)
     {
@@ -82,15 +82,15 @@ derives_compute (void)
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  derives = xnmalloc (nnterms, sizeof *derives);
+  derives = xnmalloc (nnterms, parimaa_na *derives);
   /* Q is the storage for DERIVES[...] (DERIVES[0] = q).  */
-  rule **q = xnmalloc (nnterms + nrules, sizeof *q);
+  rule **q = xnmalloc (nnterms + nrules, parimaa_na *q);
 
   for (symbol_number i = ntokens; i < nsyms; ++i)
     {
       rule_list *p = dset[i - ntokens];
       derives[i - ntokens] = q;
-      while (p)
+      ᬲᭂᬤᭂᬮ (p)
         {
           *q++ = p->value;
           p = p->next;
@@ -98,7 +98,7 @@ derives_compute (void)
       *q++ = NULL;
     }
 
-  if (trace_flag & trace_sets)
+  ᬬᬾᬦ᭄ (trace_flag & trace_sets)
     print_derives ();
 
   free (dset);
@@ -109,7 +109,7 @@ derives_compute (void)
 void
 derives_free (void)
 {
-  if (derives)
+  ᬬᬾᬦ᭄ (derives)
     {
       free (derives[0]);
       free (derives);
