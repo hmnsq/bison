@@ -18,9 +18,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#ifndef PRINT_GRAPH_H_
-# define PRINT_GRAPH_H_
+#ifndef اطبع_GRAPH_H
+# define اطبع_GRAPH_H
 
-void print_graph (void);
+فراغ اطبع_graph (فراغ);
 
 #endif /* !PRINT_GRAPH_H_ */

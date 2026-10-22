@@ -21,22 +21,22 @@
 %option prefix="gram_" outfile="lex.yy.c"
 
 %{
-#include <c-ctype.h>
-#include <errno.h>
-#include <mbswidth.h>
-#include <quote.h>
-#include <quotearg.h>
+#ضمن <c-ctype.h>
+#ضمن <errno.h>
+#ضمن <mbswidth.h>
+#ضمن <quote.h>
+#ضمن <quotearg.h>
 
-#include "src/complain.h"
-#include "src/files.h"
-#include "src/getargs.h"
-#include "src/gram.h"
-#include "src/reader.h"
-#include "src/scan-gram.h"
-#include "src/uniqstr.h"
+#ضمن "src/complain.h"
+#ضمن "src/files.h"
+#ضمن "src/getargs.h"
+#ضمن "src/gram.h"
+#ضمن "src/reader.h"
+#ضمن "src/scan-gram.h"
+#ضمن "src/uniqstr.h"
 
 #define FLEX_PREFIX(Id) gram_ ## Id
-#include "src/flex-scanner.h"
+#ضمن "src/flex-scanner.h"
 
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <https://bugs.debian.org/333231>.  */
@@ -46,7 +46,7 @@
 #define YY_DECL GRAM_LEX_DECL
 
 /* Location of scanner cursor.  */
-static boundary scanner_cursor;
+ساكن boundary scanner_cursor;
 
 #define YY_USER_ACTION  location_compute (loc, &scanner_cursor, yytext, yyleng);
 
@@ -54,74 +54,74 @@ static boundary scanner_cursor;
 #define BISON_DIRECTIVE(Directive)                              \
   (bison_directive (loc, yytext), PERCENT_ ## Directive)
 
-#define RETURN_PERCENT_PARAM(Value)             \
-  RETURN_VALUE(PERCENT_PARAM, param_ ## Value)
+#define RETURN_PERCENT_PARAM(قيمة_4)             \
+  RETURN_قيمة(PERCENT_PARAM, param_ ## قيمة_4)
 
-#define RETURN_PERCENT_FLAG(Value)                      \
-  RETURN_VALUE(PERCENT_FLAG, uniqstr_new (Value))
+#define RETURN_PERCENT_FLAG(قيمة_4)                      \
+  RETURN_قيمة(PERCENT_FLAG, uniqstr_new (قيمة_4))
 
-#define RETURN_VALUE(Token, Value)              \
-  do {                                          \
-    val->Token = Value;                         \
-    return Token;                               \
-  } while (0)
+#define RETURN_قيمة(Token, قيمة_4)              \
+  افعل {                                          \
+    val->Token = قيمة_4;                         \
+    أرجع Token;                               \
+  } طالما (0)
 
 #define ROLLBACK_CURRENT_TOKEN                                  \
-  do {                                                          \
+  افعل {                                                          \
     scanner_cursor.column -= mbsnwidth (yytext, yyleng, 0);     \
     scanner_cursor.byte -= yyleng;                              \
     yyless (0);                                                 \
-  } while (0)
+  } طالما (0)
 
-#define DEPRECATED_DIRECTIVE(Msg)                               \
-  do {                                                          \
-    deprecated_directive (loc, yytext, Msg);                    \
-    scanner_cursor.column -= mbsnwidth (Msg, strlen (Msg), 0);  \
-    scanner_cursor.byte -= strlen (Msg);                        \
-    for (size_t i = strlen (Msg); i != 0; --i)                  \
-      unput (Msg[i - 1]);                                       \
-  } while (0)
+#define DEPRECATED_DIRECTIVE(رسالة_2)                               \
+  افعل {                                                          \
+    deprecated_directive (loc, yytext, رسالة_2);                    \
+    scanner_cursor.column -= mbsnwidth (رسالة_2, strlen (رسالة_2), 0);  \
+    scanner_cursor.byte -= strlen (رسالة_2);                        \
+    لكل (size_t i = strlen (رسالة_2); i != 0; --i)                  \
+      unput (رسالة_2[i - 1]);                                       \
+  } طالما (0)
 
 
 #define STRING_GROW_ESCAPE(Char)                                \
-  do {                                                          \
+  افعل {                                                          \
     verify (UCHAR_MAX < ULONG_MAX);                             \
     long c = Char;                                              \
     bool valid = 0 < c && c <= UCHAR_MAX;                       \
-    if (!valid)                                                 \
+    إذا (!valid)                                                 \
       complain (loc, complaint,                                 \
                 _("invalid number after \\-escape: %s"),        \
                 yytext + 1);                                    \
-    if (YY_START == SC_ESCAPED_CHARACTER)                       \
+    إذا (YY_START == SC_ESCAPED_CHARACTER)                       \
       STRING_1GROW (valid ? c : '?');                           \
-    else                                                        \
+    وإلا                                                        \
       STRING_GROW ();                                           \
-  } while (0)
+  } طالما (0)
 
 
 /* The current file name.  Might change with #line.  */
-static uniqstr current_file = NULL;
+ساكن uniqstr current_file = عدم;
 
 /* A string representing the most recently saved token.  */
-static char *last_string = NULL;
+ساكن حرف *last_string = عدم;
 
 /* Bracketed identifier. */
-static uniqstr bracketed_id_str = NULL;
-static location bracketed_id_loc;
-static boundary bracketed_id_start;
-static int bracketed_id_context_state = 0;
+ساكن uniqstr bracketed_id_str = عدم;
+ساكن location bracketed_id_loc;
+ساكن boundary bracketed_id_start;
+ساكن صحيح bracketed_id_context_state = 0;
 
-void
-gram_scanner_last_string_free (void)
+فراغ
+gram_scanner_last_string_free (فراغ)
 {
   STRING_FREE ();
 }
 
-static void handle_syncline (char *, location);
-static int scan_integer (char const *p, int base, location loc);
-static int convert_ucn_to_byte (char const *hex_text);
-static void unexpected_eof (boundary, char const *);
-static void unexpected_newline (boundary, char const *);
+ساكن فراغ handle_syncline (حرف *, location);
+ساكن صحيح scan_integer (حرف ثابت *p, صحيح base, location loc);
+ساكن صحيح convert_ucn_to_byte (حرف ثابت *hex_text);
+ساكن فراغ unexpected_eof (boundary, حرف ثابت *);
+ساكن فراغ unexpected_newline (boundary, حرف ثابت *);
 
 %}
  /* A C-like comment in directives/rules. */
@@ -146,7 +146,7 @@ static void unexpected_newline (boundary, char const *);
     - predicate (code between '%?{' and '{' in middle section); */
 %x SC_PROLOGUE SC_BRACED_CODE SC_EPILOGUE SC_PREDICATE
  /* C and C++ comments in code. */
-%x SC_COMMENT SC_LINE_COMMENT
+%x SC_COMMENT SC_سطر_COMMENT
  /* Strings and characters in code. */
 %x SC_STRING SC_CHARACTER
  /* Bracketed identifiers support. */
@@ -154,7 +154,7 @@ static void unexpected_newline (boundary, char const *);
 
 letter    [.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]
 id        {letter}({letter}|[-0-9])*
-int       [0-9]+
+صحيح       [0-9]+
 xint      0[xX][0-9abcdefABCDEF]+
 
 eol       \n|\r\n
@@ -175,10 +175,10 @@ eqopt    ({sp}=)?
 %{
   /* Nesting level.  Either for nested braces, or nested angle brackets
      (but not mixed).  */
-  int nesting PACIFY_CC (= 0);
+  صحيح nesting PACIFY_CC (= 0);
 
   /* Parent context state, when applicable.  */
-  int context_state PACIFY_CC (= 0);
+  صحيح context_state PACIFY_CC (= 0);
 
   /* Location of most recent identifier, when applicable.  */
   location id_loc PACIFY_CC (= empty_loc);
@@ -194,8 +194,8 @@ eqopt    ({sp}=)?
 
   /* We cannot trust YY_USER_INIT, whose semantics changes over time
      (it moved in Flex 2.5.38).  */
-  static bool first = true;
-  if (first)
+  ساكن bool first = true;
+  إذا (first)
     {
       scanner_cursor = loc->start;
       first = false;
@@ -214,15 +214,15 @@ eqopt    ({sp}=)?
      complain (loc, Wother, _("stray ',' treated as white space"));
   }
   [ \f\t\v\r]|{eol}  |
-  "//".*       continue;
+  "//".*       استمر;
   "/*" {
     token_start = loc->start;
     context_state = YY_START;
     BEGIN SC_YACC_COMMENT;
   }
 
-  ^"#line "{int}(" \"".*"\"")?{eol} {
-    handle_syncline (yytext + sizeof "#line " - 1, *loc);
+  ^"#line "{صحيح}(" \"".*"\"")?{eol} {
+    handle_syncline (yytext + حجم "#line " - 1, *loc);
   }
 }
 
@@ -239,66 +239,66 @@ eqopt    ({sp}=)?
 
 <INITIAL>
 {
-  "%binary"                         return BISON_DIRECTIVE (NONASSOC);
-  "%code"                           return BISON_DIRECTIVE (CODE);
+  "%binary"                         أرجع BISON_DIRECTIVE (NONASSOC);
+  "%code"                           أرجع BISON_DIRECTIVE (CODE);
   "%debug"                          RETURN_PERCENT_FLAG ("parse.trace");
-  "%default-prec"                   return BISON_DIRECTIVE (DEFAULT_PREC);
-  "%define"                         return BISON_DIRECTIVE (DEFINE);
-  "%defines"                        return BISON_DIRECTIVE (HEADER); // Deprecated in 3.8.
-  "%destructor"                     return BISON_DIRECTIVE (DESTRUCTOR);
-  "%dprec"                          return BISON_DIRECTIVE (DPREC);
-  "%empty"                          return BISON_DIRECTIVE (EMPTY);
-  "%expect"                         return BISON_DIRECTIVE (EXPECT);
-  "%expect-rr"                      return BISON_DIRECTIVE (EXPECT_RR);
-  "%file-prefix"                    RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
-  "%glr-parser"                     return BISON_DIRECTIVE (GLR_PARSER);
-  "%header"                         return BISON_DIRECTIVE (HEADER);
-  "%initial-action"                 return BISON_DIRECTIVE (INITIAL_ACTION);
-  "%language"                       return BISON_DIRECTIVE (LANGUAGE);
-  "%left"                           return PERCENT_LEFT;
+  "%default-prec"                   أرجع BISON_DIRECTIVE (DEFAULT_PREC);
+  "%define"                         أرجع BISON_DIRECTIVE (DEFINE);
+  "%defines"                        أرجع BISON_DIRECTIVE (HEADER); // Deprecated in 3.8.
+  "%destructor"                     أرجع BISON_DIRECTIVE (DESTRUCTOR);
+  "%dprec"                          أرجع BISON_DIRECTIVE (DPREC);
+  "%empty"                          أرجع BISON_DIRECTIVE (EMPTY);
+  "%expect"                         أرجع BISON_DIRECTIVE (EXPECT);
+  "%expect-rr"                      أرجع BISON_DIRECTIVE (EXPECT_RR);
+  "%file-prefix"                    RETURN_قيمة (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%glr-parser"                     أرجع BISON_DIRECTIVE (GLR_PARSER);
+  "%header"                         أرجع BISON_DIRECTIVE (HEADER);
+  "%initial-action"                 أرجع BISON_DIRECTIVE (INITIAL_ACTION);
+  "%language"                       أرجع BISON_DIRECTIVE (LANGUAGE);
+  "%left"                           أرجع PERCENT_يسار;
   "%lex-param"                      RETURN_PERCENT_PARAM (lex);
   "%locations"                      RETURN_PERCENT_FLAG ("locations");
-  "%merge"                          return BISON_DIRECTIVE (MERGE);
-  "%no-default-prec"                return BISON_DIRECTIVE (NO_DEFAULT_PREC);
-  "%no-lines"                       return BISON_DIRECTIVE (NO_LINES);
-  "%nonassoc"                       return PERCENT_NONASSOC;
-  "%nondeterministic-parser"        return BISON_DIRECTIVE (NONDETERMINISTIC_PARSER);
-  "%nterm"                          return BISON_DIRECTIVE (NTERM);
-  "%output"                         return BISON_DIRECTIVE (OUTPUT);
+  "%merge"                          أرجع BISON_DIRECTIVE (MERGE);
+  "%no-default-prec"                أرجع BISON_DIRECTIVE (NO_DEFAULT_PREC);
+  "%no-lines"                       أرجع BISON_DIRECTIVE (NO_أسطر);
+  "%nonassoc"                       أرجع PERCENT_NONASSOC;
+  "%nondeterministic-parser"        أرجع BISON_DIRECTIVE (NONDETERMINISTIC_PARSER);
+  "%nterm"                          أرجع BISON_DIRECTIVE (NTERM);
+  "%output"                         أرجع BISON_DIRECTIVE (OUTPUT);
   "%param"                          RETURN_PERCENT_PARAM (both);
   "%parse-param"                    RETURN_PERCENT_PARAM (parse);
-  "%prec"                           return PERCENT_PREC;
-  "%precedence"                     return BISON_DIRECTIVE (PRECEDENCE);
-  "%printer"                        return BISON_DIRECTIVE (PRINTER);
-  "%require"                        return BISON_DIRECTIVE (REQUIRE);
-  "%right"                          return PERCENT_RIGHT;
-  "%skeleton"                       return BISON_DIRECTIVE (SKELETON);
-  "%start"                          return PERCENT_START;
-  "%term"                           return BISON_DIRECTIVE (TOKEN);
-  "%token"                          return PERCENT_TOKEN;
-  "%token-table"                    return BISON_DIRECTIVE (TOKEN_TABLE);
-  "%type"                           return PERCENT_TYPE;
-  "%union"                          return PERCENT_UNION;
-  "%verbose"                        return BISON_DIRECTIVE (VERBOSE);
-  "%yacc"                           return PERCENT_YACC;
+  "%prec"                           أرجع PERCENT_PREC;
+  "%precedence"                     أرجع BISON_DIRECTIVE (PRECEDENCE);
+  "%printer"                        أرجع BISON_DIRECTIVE (PRINTER);
+  "%require"                        أرجع BISON_DIRECTIVE (REQUIRE);
+  "%right"                          أرجع PERCENT_يمين;
+  "%skeleton"                       أرجع BISON_DIRECTIVE (SKELETON);
+  "%start"                          أرجع PERCENT_START;
+  "%term"                           أرجع BISON_DIRECTIVE (TOKEN);
+  "%token"                          أرجع PERCENT_TOKEN;
+  "%token-table"                    أرجع BISON_DIRECTIVE (TOKEN_TABLE);
+  "%type"                           أرجع PERCENT_TYPE;
+  "%union"                          أرجع PERCENT_UNION;
+  "%verbose"                        أرجع BISON_DIRECTIVE (VERBOSE);
+  "%yacc"                           أرجع PERCENT_YACC;
 
   /* Deprecated since Bison 2.3b (2008-05-27), but the warning is
      issued only since Bison 3.4. */
-  "%pure"[-_]"parser"               RETURN_VALUE (PERCENT_PURE_PARSER, uniqstr_new (yytext));
+  "%pure"[-_]"parser"               RETURN_قيمة (PERCENT_PURE_PARSER, uniqstr_new (yytext));
 
   /* Deprecated since Bison 3.0 (2013-07-25), but the warning is
      issued only since Bison 3.3. */
-  "%error-verbose"                  RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%error-verbose"                  RETURN_قيمة (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
 
   /* Deprecated since Bison 2.6 (2012-07-19), but the warning is
      issued only since Bison 3.3. */
-  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_VALUE (PERCENT_NAME_PREFIX, uniqstr_new (yytext));
+  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_قيمة (PERCENT_NAME_PREFIX, uniqstr_new (yytext));
 
   /* Deprecated since Bison 2.7.90, 2012. */
   "%default"[-_]"prec"              DEPRECATED_DIRECTIVE ("%default-prec");
-  "%error"[-_]"verbose"             RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%error"[-_]"verbose"             RETURN_قيمة (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
   "%expect"[-_]"rr"                 DEPRECATED_DIRECTIVE ("%expect-rr");
-  "%file-prefix"{eqopt}             RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%file-prefix"{eqopt}             RETURN_قيمة (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
   "%fixed"[-_]"output"[-_]"files"   DEPRECATED_DIRECTIVE ("%output \"y.tab.c\"");
   "%no"[-_]"default"[-_]"prec"      DEPRECATED_DIRECTIVE ("%no-default-prec");
   "%no"[-_]"lines"                  DEPRECATED_DIRECTIVE ("%no-lines");
@@ -307,29 +307,29 @@ eqopt    ({sp}=)?
 
   "%"{id} {
     complain (loc, complaint, _("invalid directive: %s"), quote (yytext));
-    return GRAM_error;
+    أرجع GRAM_error;
   }
 
-  ":"                     return COLON;
-  "="                     return EQUAL;
-  "|"                     return PIPE;
-  ";"                     return SEMICOLON;
+  ":"                     أرجع COLON;
+  "="                     أرجع EQUAL;
+  "|"                     أرجع PIPE;
+  ";"                     أرجع SEMICOLON;
 
   {id} {
     val->ID = uniqstr_new (yytext);
     id_loc = *loc;
-    bracketed_id_str = NULL;
+    bracketed_id_str = عدم;
     BEGIN SC_AFTER_IDENTIFIER;
   }
 
-  {int}      RETURN_VALUE (INT_LITERAL, scan_integer (yytext, 10, *loc));
-  {xint}     RETURN_VALUE (INT_LITERAL, scan_integer (yytext, 16, *loc));
+  {صحيح}      RETURN_قيمة (INT_LITERAL, scan_integer (yytext, 10, *loc));
+  {xint}     RETURN_قيمة (INT_LITERAL, scan_integer (yytext, 16, *loc));
 
   /* Identifiers may not start with a digit.  Yet, don't silently
      accept "1FOO" as "1 FOO".  */
-  {int}{id} {
+  {صحيح}{id} {
     complain (loc, complaint, _("invalid identifier: %s"), quote (yytext));
-    return GRAM_error;
+    أرجع GRAM_error;
   }
 
   /* Characters.  */
@@ -358,8 +358,8 @@ eqopt    ({sp}=)?
   }
 
   /* A type. */
-  "<*>"       return TAG_ANY;
-  "<>"        return TAG_NONE;
+  "<*>"       أرجع TAG_ANY;
+  "<>"        أرجع TAG_NONE;
   "<"         {
     nesting = 0;
     token_start = loc->start;
@@ -367,14 +367,14 @@ eqopt    ({sp}=)?
   }
 
   "%%" {
-    static int percent_percent_count;
-    if (++percent_percent_count == 2)
+    ساكن صحيح percent_percent_عدد;
+    إذا (++percent_percent_عدد == 2)
       BEGIN SC_EPILOGUE;
-    return PERCENT_PERCENT;
+    أرجع PERCENT_PERCENT;
   }
 
   "[" {
-    bracketed_id_str = NULL;
+    bracketed_id_str = عدم;
     bracketed_id_start = loc->start;
     bracketed_id_context_state = YY_START;
     BEGIN SC_BRACKETED_ID;
@@ -384,7 +384,7 @@ eqopt    ({sp}=)?
     complain (loc, complaint, "%s: %s",
               ngettext ("invalid character", "invalid characters", yyleng),
               quote_mem (yytext, yyleng));
-    return GRAM_error;
+    أرجع GRAM_error;
   }
 
   <<EOF>> {
@@ -405,7 +405,7 @@ eqopt    ({sp}=)?
     complain (loc, complaint, _("invalid null character"));
     STRING_FINISH ();
     STRING_FREE ();
-    return GRAM_error;
+    أرجع GRAM_error;
   }
 }
 
@@ -417,14 +417,14 @@ eqopt    ({sp}=)?
 <SC_AFTER_IDENTIFIER>
 {
   "[" {
-    if (bracketed_id_str)
+    إذا (bracketed_id_str)
       {
         ROLLBACK_CURRENT_TOKEN;
         BEGIN SC_RETURN_BRACKETED_ID;
         *loc = id_loc;
-        return ID;
+        أرجع ID;
       }
-    else
+    وإلا
       {
         bracketed_id_start = loc->start;
         bracketed_id_context_state = YY_START;
@@ -435,18 +435,18 @@ eqopt    ({sp}=)?
     ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
-    return ID_COLON;
+    أرجع ID_COLON;
   }
   . {
     ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
-    return ID;
+    أرجع ID;
   }
   <<EOF>> {
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
-    return ID;
+    أرجع ID;
   }
 }
 
@@ -457,14 +457,14 @@ eqopt    ({sp}=)?
 <SC_BRACKETED_ID>
 {
   {id} {
-    if (bracketed_id_str)
+    إذا (bracketed_id_str)
       {
         complain (loc, complaint,
                   _("unexpected identifier in bracketed name: %s"),
                   quote (yytext));
-        return GRAM_error;
+        أرجع GRAM_error;
       }
-    else
+    وإلا
       {
         bracketed_id_str = uniqstr_new (yytext);
         bracketed_id_loc = *loc;
@@ -472,20 +472,20 @@ eqopt    ({sp}=)?
   }
   "]" {
     BEGIN bracketed_id_context_state;
-    if (bracketed_id_str)
+    إذا (bracketed_id_str)
       {
-        if (INITIAL == bracketed_id_context_state)
+        إذا (INITIAL == bracketed_id_context_state)
           {
             val->BRACKETED_ID = bracketed_id_str;
             bracketed_id_str = 0;
             *loc = bracketed_id_loc;
-            return BRACKETED_ID;
+            أرجع BRACKETED_ID;
           }
       }
-    else
+    وإلا
       {
         complain (loc, complaint, _("an identifier expected"));
-        return GRAM_error;
+        أرجع GRAM_error;
       }
   }
 
@@ -494,7 +494,7 @@ eqopt    ({sp}=)?
               ngettext ("invalid character in bracketed name",
                         "invalid characters in bracketed name", yyleng),
               quote_mem (yytext, yyleng));
-    return GRAM_error;
+    أرجع GRAM_error;
   }
 
   <<EOF>> {
@@ -511,7 +511,7 @@ eqopt    ({sp}=)?
     bracketed_id_str = 0;
     *loc = bracketed_id_loc;
     BEGIN INITIAL;
-    return BRACKETED_ID;
+    أرجع BRACKETED_ID;
   }
 }
 
@@ -523,7 +523,7 @@ eqopt    ({sp}=)?
 <SC_YACC_COMMENT>
 {
   "*/"     BEGIN context_state;
-  .|{eol}  continue;
+  .|{eol}  استمر;
   <<EOF>>  unexpected_eof (token_start, "*/"); BEGIN context_state;
 }
 
@@ -543,7 +543,7 @@ eqopt    ({sp}=)?
   | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
-<SC_LINE_COMMENT>
+<SC_سطر_COMMENT>
 {
   {eol}          STRING_GROW (); BEGIN context_state;
   {splice}       STRING_GROW ();
@@ -565,7 +565,7 @@ eqopt    ({sp}=)?
     loc->start = token_start;
     complain (loc, Wyacc,
               _("POSIX Yacc does not support string literals"));
-    RETURN_VALUE (STRING, last_string);
+    RETURN_قيمة (STRING, last_string);
   }
   <<EOF>>   unexpected_eof (token_start, "\"");
   "\n"      unexpected_newline (token_start, "\"");
@@ -580,7 +580,7 @@ eqopt    ({sp}=)?
     loc->start = token_start;
     complain (loc, Wyacc,
               _("POSIX Yacc does not support string literals"));
-    RETURN_VALUE (TSTRING, last_string);
+    RETURN_قيمة (TSTRING, last_string);
   }
   <<EOF>>   unexpected_eof (token_start, "\")");
   "\n"      unexpected_newline (token_start, "\")");
@@ -600,23 +600,23 @@ eqopt    ({sp}=)?
     BEGIN INITIAL;
     loc->start = token_start;
 
-    if (last_string[0] == '\0')
+    إذا (last_string[0] == '\0')
       {
         complain (loc, complaint, _("empty character literal"));
         STRING_FREE ();
-        return GRAM_error;
+        أرجع GRAM_error;
       }
-    else if (last_string[1] != '\0')
+    وإلا إذا (last_string[1] != '\0')
       {
         complain (loc, complaint, _("extra characters in character literal"));
         STRING_FREE ();
-        return GRAM_error;
+        أرجع GRAM_error;
       }
-    else
+    وإلا
       {
         val->CHAR_LITERAL = last_string[0];
         STRING_FREE ();
-        return CHAR_LITERAL;
+        أرجع CHAR_LITERAL;
       }
   }
   {eol}     unexpected_newline (token_start, "'");
@@ -633,14 +633,14 @@ eqopt    ({sp}=)?
 {
   ">" {
     --nesting;
-    if (nesting < 0)
+    إذا (nesting < 0)
       {
         STRING_FINISH ();
         loc->start = token_start;
         val->TAG = uniqstr_new (last_string);
         STRING_FREE ();
         BEGIN INITIAL;
-        return TAG;
+        أرجع TAG;
       }
     STRING_GROW ();
   }
@@ -658,11 +658,11 @@ eqopt    ({sp}=)?
 <SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
 {
   \\[0-7]{1,3} {
-    STRING_GROW_ESCAPE (strtol (yytext + 1, NULL, 8));
+    STRING_GROW_ESCAPE (strtol (yytext + 1, عدم, 8));
   }
 
   \\x[0-9abcdefABCDEF]+ {
-    STRING_GROW_ESCAPE (strtol (yytext + 2, NULL, 16));
+    STRING_GROW_ESCAPE (strtol (yytext + 2, عدم, 16));
   }
 
   \\a   STRING_GROW_ESCAPE ('\a');
@@ -681,11 +681,11 @@ eqopt    ({sp}=)?
   }
 
   \\(.|{eol})      {
-    char const *p = yytext + 1;
+    حرف ثابت *p = yytext + 1;
     /* Quote only if escaping won't make the character visible.  */
-    if (c_isspace ((unsigned char) *p) && c_isprint ((unsigned char) *p))
+    إذا (c_isspace ((unsigned حرف) *p) && c_isprint ((unsigned حرف) *p))
       p = quote (p);
-    else
+    وإلا
       p = quotearg_style_mem (escape_quoting_style, p, 1);
     complain (loc, complaint, _("invalid character after \\-escape: %s"),
               p);
@@ -753,7 +753,7 @@ eqopt    ({sp}=)?
   "/"{splice}"/" {
     STRING_GROW ();
     context_state = YY_START;
-    BEGIN SC_LINE_COMMENT;
+    BEGIN SC_سطر_COMMENT;
   }
 }
 
@@ -782,12 +782,12 @@ eqopt    ({sp}=)?
     STRING_1GROW ('}');
 
     --nesting;
-    if (nesting < 0)
+    إذا (nesting < 0)
       {
         STRING_FINISH ();
         loc->start = code_start;
         BEGIN INITIAL;
-        RETURN_VALUE (BRACED_CODE, last_string);
+        RETURN_قيمة (BRACED_CODE, last_string);
       }
   }
 }
@@ -796,14 +796,14 @@ eqopt    ({sp}=)?
 {
   "}" {
     --nesting;
-    if (nesting < 0)
+    إذا (nesting < 0)
       {
         STRING_FINISH ();
         loc->start = code_start;
         BEGIN INITIAL;
-        RETURN_VALUE (BRACED_PREDICATE, last_string);
+        RETURN_قيمة (BRACED_PREDICATE, last_string);
       }
-    else
+    وإلا
       STRING_1GROW ('}');
   }
 }
@@ -818,7 +818,7 @@ eqopt    ({sp}=)?
     STRING_FINISH ();
     loc->start = code_start;
     BEGIN INITIAL;
-    RETURN_VALUE (PROLOGUE, last_string);
+    RETURN_قيمة (PROLOGUE, last_string);
   }
 
   <<EOF>>   unexpected_eof (code_start, "%}");
@@ -836,7 +836,7 @@ eqopt    ({sp}=)?
     STRING_FINISH ();
     loc->start = code_start;
     BEGIN INITIAL;
-    RETURN_VALUE (EPILOGUE, last_string);
+    RETURN_قيمة (EPILOGUE, last_string);
   }
 }
 
@@ -845,7 +845,7 @@ eqopt    ({sp}=)?
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 
-<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
+<SC_COMMENT,SC_سطر_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_TSTRING>
 {
   /* Accept multibyte characters in one block instead of byte after
      byte, so that add_column_width and mbsnwidth can compute correct
@@ -863,25 +863,25 @@ eqopt    ({sp}=)?
 | Scan NUMBER for a base-BASE integer at location LOC.  |
 `------------------------------------------------------*/
 
-static int
-scan_integer (char const *number, int base, location loc)
+ساكن صحيح
+scan_integer (حرف ثابت *رقم_2, صحيح base, location loc)
 {
   verify (INT_MAX < ULONG_MAX);
-  if (base == 16)
+  إذا (base == 16)
     complain (&loc, Wyacc,
               _("POSIX Yacc does not support hexadecimal literals"));
 
   errno = 0;
-  long num = strtol (number, NULL, base);
+  long رقم = strtol (رقم_2, عدم, base);
 
-  if (! (0 <= num && num <= INT_MAX && errno == 0))
+  إذا (! (0 <= رقم && رقم <= INT_MAX && errno == 0))
     {
       complain (&loc, complaint, _("integer out of range: %s"),
-                quote (number));
-      num = INT_MAX;
+                quote (رقم_2));
+      رقم = INT_MAX;
     }
 
-  return num;
+  أرجع رقم;
 }
 
 
@@ -891,11 +891,11 @@ scan_integer (char const *number, int base, location loc)
 | to a single-byte character.                                       |
 `------------------------------------------------------------------*/
 
-static int
-convert_ucn_to_byte (char const *ucn)
+ساكن صحيح
+convert_ucn_to_byte (حرف ثابت *ucn)
 {
   verify (UCHAR_MAX <= INT_MAX);
-  long code = strtol (ucn + 2, NULL, 16);
+  long code = strtol (ucn + 2, عدم, 16);
 
   /* FIXME: Currently we assume Unicode-compatible unibyte characters
      on ASCII hosts (i.e., Latin-1 on hosts with 8-bit bytes).  On
@@ -903,10 +903,10 @@ convert_ucn_to_byte (char const *ucn)
      These limitations should be removed once we add support for
      multibyte characters.  */
 
-  if (! (0 <= code && code <= UCHAR_MAX))
-    return -1;
+  إذا (! (0 <= code && code <= UCHAR_MAX))
+    أرجع -1;
 
-#if ! ('$' == 0x24 && '@' == 0x40 && '`' == 0x60 && '~' == 0x7e)
+#إذا ! ('$' == 0x24 && '@' == 0x40 && '`' == 0x60 && '~' == 0x7e)
   {
     /* A non-ASCII host.  Use CODE to index into a table of the C
        basic execution character set, which is guaranteed to exist on
@@ -914,7 +914,7 @@ convert_ucn_to_byte (char const *ucn)
        and '`', which are not in the basic execution character set but
        which are unibyte characters on all the platforms that we know
        about.  */
-    static signed char const table[] =
+    ساكن signed حرف ثابت table[] =
       {
         '\0',   -1,   -1,   -1,   -1,   -1,   -1, '\a',
         '\b', '\t', '\n', '\v', '\f', '\r',   -1,   -1,
@@ -934,11 +934,11 @@ convert_ucn_to_byte (char const *ucn)
          'x',  'y',  'z',  '{',  '|',  '}',  '~'
       };
 
-    code = code < sizeof table ? table[code] : -1;
+    code = code < حجم table ? table[code] : -1;
   }
 #endif
 
-  return code;
+  أرجع code;
 }
 
 
@@ -946,20 +946,20 @@ convert_ucn_to_byte (char const *ucn)
 | Handle '#line INT_LITERAL( "FILE")?\n'.  ARGS has already skipped '#line '. |
 `----------------------------------------------------------------------------*/
 
-static void
-handle_syncline (char *args, location loc)
+ساكن فراغ
+handle_syncline (حرف *وسائط, location loc)
 {
-  char *file;
+  حرف *file;
   errno = 0;
-  long lineno = strtol (args, &file, 10);
-  if (! (0 <= lineno && lineno <= INT_MAX && errno == 0))
+  long lineno = strtol (وسائط, &file, 10);
+  إذا (! (0 <= lineno && lineno <= INT_MAX && errno == 0))
     {
       complain (&loc, Wother, _("line number overflow"));
       lineno = INT_MAX;
     }
 
   file = strchr (file, '"');
-  if (file)
+  إذا (file)
     {
       *strchr (file + 1, '"') = '\0';
       current_file = uniqstr_new (file + 1);
@@ -974,8 +974,8 @@ handle_syncline (char *args, location loc)
 | expected TOKEN_END. Then, pretend that TOKEN_END was found.     |
 `----------------------------------------------------------------*/
 
-static void
-unexpected_end (boundary start, char const *msgid, char const *token_end)
+ساكن فراغ
+unexpected_end (boundary start, حرف ثابت *msgid, حرف ثابت *token_end)
 {
   location loc;
   loc.start = start;
@@ -987,12 +987,12 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
   scanner_cursor.column -= i;
   scanner_cursor.byte -= i;
 
-  while (i != 0)
+  طالما (i != 0)
     unput (token_end[--i]);
 
   token_end = quote (token_end);
   /* Instead of '\'', display "'".  */
-  if (STREQ (token_end, "'\\''"))
+  إذا (STREQ (token_end, "'\\''"))
     token_end = "\"'\"";
   complain (&loc, complaint, msgid, token_end);
 }
@@ -1004,8 +1004,8 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
 | After reporting the problem, pretend that TOKEN_END was found.          |
 `------------------------------------------------------------------------*/
 
-static void
-unexpected_eof (boundary start, char const *token_end)
+ساكن فراغ
+unexpected_eof (boundary start, حرف ثابت *token_end)
 {
   unexpected_end (start, _("missing %s at end of file"), token_end);
 }
@@ -1015,15 +1015,15 @@ unexpected_eof (boundary start, char const *token_end)
 | Likewise, but for unexpected newlines.  |
 `----------------------------------------*/
 
-static void
-unexpected_newline (boundary start, char const *token_end)
+ساكن فراغ
+unexpected_newline (boundary start, حرف ثابت *token_end)
 {
   unexpected_end (start, _("missing %s at end of line"), token_end);
 }
 
 
-void
-gram_scanner_open (const char *gram)
+فراغ
+gram_scanner_open (ثابت حرف *gram)
 {
   gram__flex_debug = trace_flag & trace_scan;
   gram_debug = trace_flag & trace_parse;
@@ -1033,8 +1033,8 @@ gram_scanner_open (const char *gram)
 }
 
 
-void
-gram_scanner_close (void)
+فراغ
+gram_scanner_close (فراغ)
 {
   xfclose (gram_in);
   /* Reclaim Flex's buffers.  */
@@ -1042,8 +1042,8 @@ gram_scanner_close (void)
 }
 
 
-void
-gram_scanner_free (void)
+فراغ
+gram_scanner_free (فراغ)
 {
   obstack_free (&obstack_for_string, 0);
 }
