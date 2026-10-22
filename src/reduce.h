@@ -36,7 +36,7 @@ void reduce_free (void);
  * reduce_grammar.  Size nnterms + nuseless_nonterminals.  */
 extern symbol_number *nterm_map;
 
-extern int nuseless_nonterminals;
-extern int nuseless_productions;
+extern ཧྲིལ nuseless_nonterminals;
+extern ཧྲིལ nuseless_productions;
 
 #endif /* !REDUCE_H_ */

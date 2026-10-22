@@ -29,17 +29,17 @@
 /* A list of symbols, used during the parsing for many different
    purposes: rules, symbol declarations or properties (such as
    %destructor, etc.)...  */
-typedef struct symbol_list
+typedef sa_nracanaa symbol_list
 {
   /**
    * Whether this node contains a symbol, a semantic type, a \c <*>, or a
    * \c <>.
    */
-  enum {
+  ga_nanaa {
     SYMLIST_SYMBOL,
     SYMLIST_TYPE
   } content_type;
-  union {
+  sa_ngha {
     /**
      * The symbol or \c NULL iff
      * <tt>symbol_list::content_type = SYMLIST_SYMBOL</tt>.
@@ -59,14 +59,14 @@ typedef struct symbol_list
 
   /* If this symbol is the generated lhs for a midrule but this is the rule in
      whose rhs it appears, MIDRULE = a pointer to that midrule.  */
-  struct symbol_list *midrule;
+  sa_nracanaa symbol_list *midrule;
 
   /* If this symbol is the generated lhs for a midrule and this is that
      midrule, MIDRULE_PARENT_RULE = a pointer to the rule in whose rhs it
      appears, and MIDRULE_PARENT_RHS_INDEX = its rhs index (1-origin) in the
      parent rule.  */
-  struct symbol_list *midrule_parent_rule;
-  int midrule_parent_rhs_index;
+  sa_nracanaa symbol_list *midrule_parent_rule;
+  ཧྲིལ midrule_parent_rhs_index;
 
   /*--------------------------------------------------------------.
   | Used for rules only (attached to the "LHS", one per rule even |
@@ -87,18 +87,18 @@ typedef struct symbol_list
      empty_loc.  */
   location percent_empty_loc;
 
-  int dprec;
+  ཧྲིལ dprec;
   location dprec_loc;
-  int merger;
+  ཧྲིལ merger;
   location merger_declaration_loc;
 
   /* Counts of the number of expected conflicts for this rule, or -1 if none
      given. */
-  int expected_sr_conflicts;
-  int expected_rr_conflicts;
+  ཧྲིལ expected_sr_conflicts;
+  ཧྲིལ expected_rr_conflicts;
 
   /* The list.  */
-  struct symbol_list *next;
+  sa_nracanaa symbol_list *next;
 } symbol_list;
 
 
@@ -134,17 +134,17 @@ symbol_list *symbol_list_append (symbol_list *list, symbol_list *node);
 void symbol_list_free (symbol_list *list);
 
 /** Return the length of \c l. */
-int symbol_list_length (symbol_list const *l);
+ཧྲིལ symbol_list_length (symbol_list const *l);
 
 /** Get item \c n in symbol list \c l.
  ** \pre  0 <= n
  ** \post res != NULL
  **/
-symbol_list *symbol_list_n_get (symbol_list *l, int n);
+symbol_list *symbol_list_n_get (symbol_list *l, ཧྲིལ n);
 
 /** Get the data type (alternative in the union) of the value for
     symbol N in rule RULE.  */
-uniqstr symbol_list_n_type_name_get (symbol_list *l, int n);
+uniqstr symbol_list_n_type_name_get (symbol_list *l, ཧྲིལ n);
 
 /** Check whether the node is a border element of a rule. */
 bool symbol_list_null (symbol_list *node);

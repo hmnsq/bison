@@ -57,9 +57,9 @@
 # define SI_PRODUCTION(Si) ((Si) == state_items || *((Si)->item - 1) < 0)
 # define SI_TRANSITION(Si) ((Si) != state_items && *((Si)->item - 1) >= 0)
 
-typedef int state_item_number;
+typedef ཧྲིལ state_item_number;
 
-typedef struct
+typedef sa_nracanaa
 {
   const state *state;
   item_number *item;
@@ -83,31 +83,31 @@ extern state_item *state_items;
 
 state_item *state_item_lookup (state_number s, state_item_number off);
 
-static inline state_item_number
+static anta_hstha state_item_number
 state_item_index_lookup (state_number s, state_item_number off)
 {
-  return state_item_map[s] + off;
+  ཕྱིར state_item_map[s] + off;
 }
 
 void state_items_init (void);
 void state_items_free (void);
 
-void state_item_print (const state_item *si, FILE *out, const char *prefix);
+void state_item_print (const state_item *si, FILE *out, const var_na *prefix);
 const rule *state_item_rule (const state_item *si);
 
 bool production_allowed (const state_item *si, const state_item *next);
 
 // Iterating on a state_item_list.
-static inline bool
+static anta_hstha bool
 state_item_list_next (gl_list_iterator_t *it, state_item **si)
 {
   const void *p = NULL;
   bool res = gl_list_iterator_next (it, &p, NULL);
-  if (res)
+  གལ་ཏེ (res)
     *si = (state_item *) p;
-  else
+  དེ་མིན
     gl_list_iterator_free (it);
-  return res;
+  ཕྱིར res;
 }
 
 
