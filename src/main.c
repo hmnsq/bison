@@ -18,79 +18,79 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <bitset.h>
-#include <bitset/stats.h>
-#include <closeout.h>
-#include <configmake.h>
-#include <progname.h>
-#include <quote.h>
-#include <quotearg.h>
-#include <relocatable.h> /* relocate2 */
-#include <timevar.h>
+#अन्तर्भाव <bitset.h>
+#अन्तर्भाव <bitset/stats.h>
+#अन्तर्भाव <closeout.h>
+#अन्तर्भाव <configmake.h>
+#अन्तर्भाव <progname.h>
+#अन्तर्भाव <quote.h>
+#अन्तर्भाव <quotearg.h>
+#अन्तर्भाव <relocatable.h> /* relocate2 */
+#अन्तर्भाव <timevar.h>
 
-#include "complain.h"
-#include "conflicts.h"
-#include "counterexample.h"
-#include "derives.h"
-#include "files.h"
-#include "fixits.h"
-#include "getargs.h"
-#include "glyphs.h"
-#include "gram.h"
-#include "ielr.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "output.h"
-#include "parse-gram.h"
-#include "print-graph.h"
-#include "print-xml.h"
-#include "print.h"
-#include "reader.h"
-#include "reduce.h"
-#include "scan-code.h"
-#include "scan-gram.h"
-#include "scan-skel.h"
-#include "symtab.h"
-#include "tables.h"
-#include "uniqstr.h"
+#अन्तर्भाव "complain.h"
+#अन्तर्भाव "conflicts.h"
+#अन्तर्भाव "counterexample.h"
+#अन्तर्भाव "derives.h"
+#अन्तर्भाव "files.h"
+#अन्तर्भाव "fixits.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "glyphs.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "ielr.h"
+#अन्तर्भाव "lalr.h"
+#अन्तर्भाव "lr0.h"
+#अन्तर्भाव "muscle-tab.h"
+#अन्तर्भाव "nullable.h"
+#अन्तर्भाव "output.h"
+#अन्तर्भाव "parse-gram.h"
+#अन्तर्भाव "print-graph.h"
+#अन्तर्भाव "print-xml.h"
+#अन्तर्भाव "print.h"
+#अन्तर्भाव "reader.h"
+#अन्तर्भाव "reduce.h"
+#अन्तर्भाव "scan-code.h"
+#अन्तर्भाव "scan-gram.h"
+#अन्तर्भाव "scan-skel.h"
+#अन्तर्भाव "symtab.h"
+#अन्तर्भाव "tables.h"
+#अन्तर्भाव "uniqstr.h"
 
 
-int
-main (int argc, char *argv[])
+पूर्णाङ्क
+main (पूर्णाङ्क argc, वर्ण *argv[])
 {
   {
-    char *cp = getenv ("BISON_PROGRAM_NAME");
-    if (cp)
+    वर्ण *cp = दो_पर्या ("BISON_PROGRAM_NAME");
+    यदि (cp)
       argv[0] = cp;
   }
 
 #define DEPENDS_ON_LIBINTL 1
   set_program_name (argv[0]);
-  setlocale (LC_ALL, "");
+  रखो_क्षेत्र (LC_ALL, "");
   {
-    char *cp = NULL;
-    char const *localedir = relocate2 (LOCALEDIR, &cp);
+    वर्ण *cp = रिक्त;
+    वर्ण अचर *localedir = relocate2 (LOCALEDIR, &cp);
     bindtextdomain ("bison", localedir);
     bindtextdomain ("bison-gnulib", localedir);
     bindtextdomain ("bison-runtime", localedir);
-    free (cp);
+    मुक्त (cp);
   }
   textdomain ("bison");
 
   {
-    char const *cp = getenv ("LC_CTYPE");
-    if (cp && STREQ (cp, "C"))
+    वर्ण अचर *cp = दो_पर्या ("LC_CTYPE");
+    यदि (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
-    else
+    अन्यथा
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
   }
 
-  atexit (close_stdout);
+  निकास_पर (close_stdout);
 
   glyphs_init ();
   uniqstrs_new ();
@@ -100,43 +100,43 @@ main (int argc, char *argv[])
 
   getargs (argc, argv);
 
-  if (trace_flag)
-    fprintf (stderr, "bison (GNU Bison) %s\n", VERSION);
+  यदि (trace_flag)
+    ख_लिखो (मानक_त्रुटि, "bison (GNU Bison) %s\n", VERSION);
 
   timevar_enabled = trace_flag & trace_time;
   timevar_init ();
   timevar_start (tv_total);
 
-  if (trace_flag & trace_bitsets)
+  यदि (trace_flag & trace_bitsets)
     bitset_stats_enable ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
      and FATTRS.  In file reader.c.  The other parts are recorded in
      the grammar; see gram.h.  */
 
-  timevar_push (tv_reader);
+  timevar_थप (tv_reader);
   reader (grammar_file);
-  timevar_pop (tv_reader);
+  timevar_झिक (tv_reader);
 
-  if (complaint_status == status_complaint)
-    goto finish;
+  यदि (complaint_status == status_complaint)
+    गच्छ finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
-  timevar_push (tv_reduce);
+  timevar_थप (tv_reduce);
   reduce_grammar ();
-  timevar_pop (tv_reduce);
+  timevar_झिक (tv_reduce);
 
   /* Record other info about the grammar.  In files derives and
      nullable.  */
-  timevar_push (tv_sets);
+  timevar_थप (tv_sets);
   derives_compute ();
   nullable_compute ();
-  timevar_pop (tv_sets);
+  timevar_झिक (tv_sets);
 
   /* Compute LR(0) parser states.  See state.h for more info.  */
-  timevar_push (tv_lr0);
+  timevar_थप (tv_lr0);
   generate_states ();
-  timevar_pop (tv_lr0);
+  timevar_झिक (tv_lr0);
 
   /* Add lookahead sets to parser states.  Except when LALR(1) is
      requested, split states to eliminate LR(1)-relative
@@ -147,27 +147,27 @@ main (int argc, char *argv[])
      lookahead is not enough to disambiguate the parsing.  In file
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
-  timevar_push (tv_conflicts);
+  timevar_थप (tv_conflicts);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
+  यदि (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
-      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
-      state_number nstates_old = nstates;
+      state_सङ्ख्या *old_to_new = xnmalloc (nstates, परिमाण *old_to_new);
+      state_सङ्ख्या nstates_old = nstates;
       state_remove_unreachable_states (old_to_new);
       lalr_update_state_numbers (old_to_new, nstates_old);
       conflicts_update_state_numbers (old_to_new, nstates_old);
-      free (old_to_new);
+      मुक्त (old_to_new);
     }
-  if (report_flag & report_cex
+  यदि (report_flag & report_cex
       || warning_is_enabled (Wcounterexamples))
     counterexample_init ();
   conflicts_print ();
-  timevar_pop (tv_conflicts);
+  timevar_झिक (tv_conflicts);
 
   /* Compute the parser tables.  */
-  timevar_push (tv_actions);
+  timevar_थप (tv_actions);
   tables_generate ();
-  timevar_pop (tv_actions);
+  timevar_झिक (tv_actions);
 
   grammar_rules_useless_report (_("rule useless in parser due to conflicts"));
 
@@ -176,65 +176,65 @@ main (int argc, char *argv[])
   /* Whether to generate output files.  */
   bool generate = !(feature_flag & feature_syntax_only);
 
-  if (generate)
+  यदि (generate)
     {
       /* Output file names. */
       compute_output_file_names ();
 
       /* Output the detailed report on the grammar.  */
-      if (report_flag)
+      यदि (report_flag)
         {
-          timevar_push (tv_report);
+          timevar_थप (tv_report);
           print_results ();
-          timevar_pop (tv_report);
+          timevar_झिक (tv_report);
         }
 
       /* Output the graph.  */
-      if (graph_flag)
+      यदि (graph_flag)
         {
-          timevar_push (tv_graph);
+          timevar_थप (tv_graph);
           print_graph ();
-          timevar_pop (tv_graph);
+          timevar_झिक (tv_graph);
         }
 
       /* Output xml.  */
-      if (html_flag || xml_flag)
+      यदि (html_flag || xml_flag)
         {
-          timevar_push (tv_xml);
+          timevar_थप (tv_xml);
           print_xml ();
-          timevar_pop (tv_xml);
+          timevar_झिक (tv_xml);
         }
 
       /* Output html.  */
-      if (html_flag)
+      यदि (html_flag)
         {
-          timevar_push (tv_html);
+          timevar_थप (tv_html);
           print_html ();
-          timevar_pop (tv_html);
+          timevar_झिक (tv_html);
         }
     }
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_status == status_complaint)
-    goto finish;
+  यदि (complaint_status == status_complaint)
+    गच्छ finish;
 
   /* Lookahead tokens are no longer needed. */
-  timevar_push (tv_free);
+  timevar_थप (tv_free);
   lalr_free ();
-  timevar_pop (tv_free);
+  timevar_झिक (tv_free);
 
   /* Output the tables and the parser to ftable.  In file output.  */
-  if (generate)
+  यदि (generate)
     {
-      timevar_push (tv_parser);
+      timevar_थप (tv_parser);
       output ();
-      timevar_pop (tv_parser);
+      timevar_झिक (tv_parser);
     }
 
  finish:
 
-  timevar_push (tv_free);
+  timevar_थप (tv_free);
   nullable_free ();
   derives_free ();
   tables_free ();
@@ -254,23 +254,23 @@ main (int argc, char *argv[])
   muscle_free ();
   code_scanner_free ();
   skel_scanner_free ();
-  timevar_pop (tv_free);
+  timevar_झिक (tv_free);
 
-  if (trace_flag & trace_bitsets)
-    bitset_stats_dump (stderr);
+  यदि (trace_flag & trace_bitsets)
+    bitset_stats_dump (मानक_त्रुटि);
 
   /* Stop timing and print the times.  */
   timevar_stop (tv_total);
-  timevar_print (stderr);
+  timevar_print (मानक_त्रुटि);
 
   /* Fix input file now, even if there are errors: that's less
      warnings in the following runs.  */
-  if (!fixits_empty ())
+  यदि (!fixits_empty ())
     {
-      if (update_flag)
+      यदि (update_flag)
         fixits_run ();
-      else
-        complain (NULL, Wother,
+      अन्यथा
+        complain (रिक्त, Wother,
                   _("fix-its can be applied.  Rerun with option '--update'."));
       fixits_free ();
     }
@@ -279,5 +279,5 @@ main (int argc, char *argv[])
   complain_free ();
   quotearg_free ();
 
-  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
+  फर्काऊ complaint_status ? निकास_त्रुटि : निकास_सफल;
 }

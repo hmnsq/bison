@@ -22,44 +22,44 @@
 /* Find which rules need lookahead in each state, and which lookahead
    tokens they accept.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include <bitset.h>
-#include <bitsetv.h>
+#अन्तर्भाव <bitset.h>
+#अन्तर्भाव <bitsetv.h>
 
-#include "complain.h"
-#include "derives.h"
-#include "getargs.h"
-#include "gram.h"
-#include "lalr.h"
-#include "lr0.h"
-#include "muscle-tab.h"
-#include "nullable.h"
-#include "reader.h"
-#include "relation.h"
-#include "symtab.h"
+#अन्तर्भाव "complain.h"
+#अन्तर्भाव "derives.h"
+#अन्तर्भाव "getargs.h"
+#अन्तर्भाव "gram.h"
+#अन्तर्भाव "lalr.h"
+#अन्तर्भाव "lr0.h"
+#अन्तर्भाव "muscle-tab.h"
+#अन्तर्भाव "nullable.h"
+#अन्तर्भाव "reader.h"
+#अन्तर्भाव "relation.h"
+#अन्तर्भाव "symtab.h"
 
-goto_number *goto_map = NULL;
-goto_number ngotos = 0;
-state_number *from_state = NULL;
-state_number *to_state = NULL;
-bitsetv goto_follows = NULL;
+goto_सङ्ख्या *goto_map = रिक्त;
+goto_सङ्ख्या ngotos = 0;
+state_सङ्ख्या *from_state = रिक्त;
+state_सङ्ख्या *to_state = रिक्त;
+bitsetv goto_follows = रिक्त;
 
 /* Linked list of goto numbers.  */
-typedef struct goto_list
+प्रकारनिर्देश संरचना goto_list
 {
-  struct goto_list *next;
-  goto_number value;
+  संरचना goto_list *next;
+  goto_सङ्ख्या मान;
 } goto_list;
 
-static goto_list *
-goto_list_new (goto_number value, struct goto_list *next)
+स्थिर goto_list *
+goto_list_new (goto_सङ्ख्या मान, संरचना goto_list *next)
 {
-  goto_list *res = xmalloc (sizeof *res);
+  goto_list *res = xmalloc (परिमाण *res);
   res->next = next;
-  res->value = value;
-  return res;
+  res->मान = मान;
+  फर्काऊ res;
 }
 
 /* LA is an nLA by NTOKENS matrix of bits.  LA[l, i] is 1 if the rule
@@ -67,8 +67,8 @@ goto_list_new (goto_number value, struct goto_list *next)
    token is symbol i.  If LA[l, i] and LA[l, j] are both 1 for i != j,
    it is a conflict.  */
 
-static bitsetv LA = NULL;
-size_t nLA;
+स्थिर bitsetv LA = रिक्त;
+माप_प्रकार nLA;
 
 
 /* "(p, A) includes (p', B)" iff
@@ -77,230 +77,230 @@ size_t nLA;
    Definition p.621 [DeRemer 1982].
 
    INCLUDES[(p, A)] = [(p', B),...] */
-static goto_number **includes;
+स्थिर goto_सङ्ख्या **includes;
 
 /* "(q, A → ω) lookback (p, A)" iff state p reaches state q on label ω.
 
    Definition p.621 [DeRemer 1982]. */
-static goto_list **lookback;
+स्थिर goto_list **lookback;
 
-static void
-goto_print (goto_number i, FILE *out)
+स्थिर शून्य
+goto_print (goto_सङ्ख्या i, खाता *out)
 {
-  const state_number src = from_state[i];
-  const state_number dst = to_state[i];
-  symbol_number var = states[dst]->accessing_symbol;
-  fprintf (out,
+  अचर state_सङ्ख्या src = from_state[i];
+  अचर state_सङ्ख्या dst = to_state[i];
+  चिह्न_सङ्ख्या var = states[dst]->accessing_चिह्न;
+  ख_लिखो (out,
            "goto[%zu] = (%d, %s, %d)", i, src, symbols[var]->tag, dst);
 }
 
-void
-set_goto_map (void)
+शून्य
+set_goto_map (शून्य)
 {
   /* Count the number of gotos (ngotos) per nterm (goto_map). */
-  if (trace_flag & trace_automaton)
-    fprintf (stderr, "nnterms: %d\n", nnterms);
-  goto_map = xcalloc (nnterms + 1, sizeof *goto_map);
+  यदि (trace_flag & trace_automaton)
+    ख_लिखो (मानक_त्रुटि, "nnterms: %d\n", nnterms);
+  goto_map = xcalloc (nnterms + 1, परिमाण *goto_map);
   ngotos = 0;
-  for (state_number s = 0; s < nstates; ++s)
+  लागि (state_सङ्ख्या s = 0; s < nstates; ++s)
     {
       transitions *trans = states[s]->transitions;
-      for (int i = trans->num - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
+      लागि (पूर्णाङ्क i = trans->अङ्क - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
         {
           ngotos++;
           /* Abort if (ngotos + 1) would overflow.  */
-          aver (ngotos != GOTO_NUMBER_MAXIMUM);
-          goto_map[TRANSITION_SYMBOL (trans, i) - ntokens]++;
+          aver (ngotos != GOTO_सङ्ख्या_MAXIMUM);
+          goto_map[TRANSITION_चिह्न (trans, i) - ntokens]++;
         }
     }
 
-  goto_number *temp_map = xnmalloc (nnterms + 1, sizeof *temp_map);
+  goto_सङ्ख्या *temp_map = xnmalloc (nnterms + 1, परिमाण *temp_map);
   {
-    goto_number k = 0;
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    goto_सङ्ख्या k = 0;
+    लागि (चिह्न_सङ्ख्या i = ntokens; i < nsyms; ++i)
       {
         temp_map[i - ntokens] = k;
         k += goto_map[i - ntokens];
       }
 
-    for (symbol_number i = ntokens; i < nsyms; ++i)
+    लागि (चिह्न_सङ्ख्या i = ntokens; i < nsyms; ++i)
       goto_map[i - ntokens] = temp_map[i - ntokens];
 
     goto_map[nsyms - ntokens] = ngotos;
     temp_map[nsyms - ntokens] = ngotos;
   }
 
-  from_state = xcalloc (ngotos, sizeof *from_state);
-  to_state = xcalloc (ngotos, sizeof *to_state);
+  from_state = xcalloc (ngotos, परिमाण *from_state);
+  to_state = xcalloc (ngotos, परिमाण *to_state);
 
-  for (state_number s = 0; s < nstates; ++s)
+  लागि (state_सङ्ख्या s = 0; s < nstates; ++s)
     {
-      const transitions *trans = states[s]->transitions;
-      for (int i = trans->num - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
+      अचर transitions *trans = states[s]->transitions;
+      लागि (पूर्णाङ्क i = trans->अङ्क - 1; 0 <= i && TRANSITION_IS_GOTO (trans, i); --i)
         {
-          goto_number k = temp_map[TRANSITION_SYMBOL (trans, i) - ntokens]++;
+          goto_सङ्ख्या k = temp_map[TRANSITION_चिह्न (trans, i) - ntokens]++;
           from_state[k] = s;
-          to_state[k] = trans->states[i]->number;
+          to_state[k] = trans->states[i]->सङ्ख्या;
         }
     }
 
-  free (temp_map);
+  मुक्त (temp_map);
 
-  if (trace_flag & trace_automaton)
+  यदि (trace_flag & trace_automaton)
     {
-      for (int i = 0; i < nnterms; ++i)
-        fprintf (stderr, "goto_map[%d (%s)] = %ld .. %ld\n",
+      लागि (पूर्णाङ्क i = 0; i < nnterms; ++i)
+        ख_लिखो (मानक_त्रुटि, "goto_map[%d (%s)] = %ld .. %ld\n",
                  i, symbols[ntokens + i]->tag,
                  goto_map[i], goto_map[i+1] - 1);
-      for (int i = 0; i < ngotos; ++i)
+      लागि (पूर्णाङ्क i = 0; i < ngotos; ++i)
         {
-          goto_print (i, stderr);
-          fputc ('\n', stderr);
+          goto_print (i, मानक_त्रुटि);
+          ख_अक्षर_दो ('\n', मानक_त्रुटि);
         }
     }
 }
 
 
-goto_number
-map_goto (state_number src, symbol_number sym)
+goto_सङ्ख्या
+map_goto (state_सङ्ख्या src, चिह्न_सङ्ख्या sym)
 {
-  goto_number low = goto_map[sym - ntokens];
-  assert (goto_map[sym - ntokens] != goto_map[sym - ntokens + 1]);
-  goto_number high = goto_map[sym - ntokens + 1] - 1;
+  goto_सङ्ख्या तल्लो = goto_map[sym - ntokens];
+  प्रतिज्ञा (goto_map[sym - ntokens] != goto_map[sym - ntokens + 1]);
+  goto_सङ्ख्या माथिल्लो = goto_map[sym - ntokens + 1] - 1;
 
-  for (;;)
+  लागि (;;)
     {
-      aver (low <= high);
-      goto_number middle = (low + high) / 2;
-      state_number s = from_state[middle];
-      if (s == src)
-        return middle;
-      else if (s < src)
-        low = middle + 1;
-      else
-        high = middle - 1;
+      aver (तल्लो <= माथिल्लो);
+      goto_सङ्ख्या बीच = (तल्लो + माथिल्लो) / 2;
+      state_सङ्ख्या s = from_state[बीच];
+      यदि (s == src)
+        फर्काऊ बीच;
+      अन्यथा यदि (s < src)
+        तल्लो = बीच + 1;
+      अन्यथा
+        माथिल्लो = बीच - 1;
     }
 }
 
 /* Print FOLLOWS for debugging.  */
-static void
-follows_print (const char* title, FILE *out)
+स्थिर शून्य
+follows_print (अचर वर्ण* title, खाता *out)
 {
-  fprintf (out, "%s:\n", title);
-  for (goto_number i = 0; i < ngotos; ++i)
+  ख_लिखो (out, "%s:\n", title);
+  लागि (goto_सङ्ख्या i = 0; i < ngotos; ++i)
     {
-      fputs ("    FOLLOWS[", out);
+      ख_माला_दो ("    FOLLOWS[", out);
       goto_print (i, out);
-      fputs ("] =", out);
+      ख_माला_दो ("] =", out);
       bitset_iterator iter;
-      symbol_number sym;
+      चिह्न_सङ्ख्या sym;
       BITSET_FOR_EACH (iter, goto_follows[i], sym, 0)
-        fprintf (out, " %s", symbols[sym]->tag);
-      fputc ('\n', out);
+        ख_लिखो (out, " %s", symbols[sym]->tag);
+      ख_अक्षर_दो ('\n', out);
     }
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
 }
 
 /* Build goto_follows. */
-static void
-initialize_goto_follows (void)
+स्थिर शून्य
+initialize_goto_follows (शून्य)
 {
-  goto_number **reads = xnmalloc (ngotos, sizeof *reads);
-  goto_number *edge = xnmalloc (ngotos, sizeof *edge);
+  goto_सङ्ख्या **reads = xnmalloc (ngotos, परिमाण *reads);
+  goto_सङ्ख्या *edge = xnmalloc (ngotos, परिमाण *edge);
 
   goto_follows = bitsetv_create (ngotos, ntokens, BITSET_FIXED);
 
-  for (goto_number i = 0; i < ngotos; ++i)
+  लागि (goto_सङ्ख्या i = 0; i < ngotos; ++i)
     {
-      state_number dst = to_state[i];
-      const transitions *trans = states[dst]->transitions;
+      state_सङ्ख्या dst = to_state[i];
+      अचर transitions *trans = states[dst]->transitions;
 
-      int j;
+      पूर्णाङ्क j;
       FOR_EACH_SHIFT (trans, j)
-        bitset_set (goto_follows[i], TRANSITION_SYMBOL (trans, j));
+        bitset_set (goto_follows[i], TRANSITION_चिह्न (trans, j));
 
       /* Gotos outgoing from DST. */
-      goto_number nedges = 0;
-      for (; j < trans->num; ++j)
+      goto_सङ्ख्या nedges = 0;
+      लागि (; j < trans->अङ्क; ++j)
         {
-          symbol_number sym = TRANSITION_SYMBOL (trans, j);
-          if (nullable[sym - ntokens])
+          चिह्न_सङ्ख्या sym = TRANSITION_चिह्न (trans, j);
+          यदि (nullable[sym - ntokens])
             {
-              assert (nedges < ngotos);
+              प्रतिज्ञा (nedges < ngotos);
               edge[nedges++] = map_goto (dst, sym);
             }
         }
 
-      if (nedges == 0)
-        reads[i] = NULL;
-      else
+      यदि (nedges == 0)
+        reads[i] = रिक्त;
+      अन्यथा
         {
-          reads[i] = xnmalloc (nedges + 1, sizeof reads[i][0]);
-          memcpy (reads[i], edge, nedges * sizeof edge[0]);
-          reads[i][nedges] = END_NODE;
+          reads[i] = xnmalloc (nedges + 1, परिमाण reads[i][0]);
+          स_नकल (reads[i], edge, nedges * परिमाण edge[0]);
+          reads[i][nedges] = END_गाँठो;
         }
     }
-  if (trace_flag & trace_automaton)
+  यदि (trace_flag & trace_automaton)
     {
-      follows_print ("follows after shifts", stderr);
-      relation_print ("reads", reads, ngotos, goto_print, stderr);
+      follows_print ("follows after shifts", मानक_त्रुटि);
+      relation_print ("reads", reads, ngotos, goto_print, मानक_त्रुटि);
     }
 
   relation_digraph (reads, ngotos, goto_follows);
-  if (trace_flag & trace_automaton)
-    follows_print ("follows after read", stderr);
+  यदि (trace_flag & trace_automaton)
+    follows_print ("follows after read", मानक_त्रुटि);
 
-  for (goto_number i = 0; i < ngotos; ++i)
-    free (reads[i]);
-  free (reads);
-  free (edge);
+  लागि (goto_सङ्ख्या i = 0; i < ngotos; ++i)
+    मुक्त (reads[i]);
+  मुक्त (reads);
+  मुक्त (edge);
 }
 
 
 /* Find the state which LOOKBACK[LOOKBACK_INDEX] is about.  */
-static const state *
-lookback_find_state (int lookback_index)
+स्थिर अचर state *
+lookback_find_state (पूर्णाङ्क lookback_index)
 {
-  state *res = NULL;
-  for (int j = 0; j < nstates; ++j)
-    if (states[j]->reductions
+  state *res = रिक्त;
+  लागि (पूर्णाङ्क j = 0; j < nstates; ++j)
+    यदि (states[j]->reductions
         && states[j]->reductions->lookaheads)
       {
-        if (states[j]->reductions->lookaheads - LA > lookback_index)
+        यदि (states[j]->reductions->lookaheads - LA > lookback_index)
           /* Went too far. */
-          break;
-        else
+          रोक;
+        अन्यथा
           res = states[j];
       }
   /* Pacify "potential null pointer dereference" warning.  */
-  if (!res)
-    abort ();
-  return res;
+  यदि (!res)
+    पात ();
+  फर्काऊ res;
 }
 
 /* Print LOOKBACK for debugging.  */
-static void
-lookback_print (FILE *out)
+स्थिर शून्य
+lookback_print (खाता *out)
 {
-  fputs ("lookback:\n", out);
-  for (int i = 0; i < nLA; ++i)
-    if (lookback[i])
+  ख_माला_दो ("lookback:\n", out);
+  लागि (पूर्णाङ्क i = 0; i < nLA; ++i)
+    यदि (lookback[i])
     {
-      fprintf (out, "   %3d = ", i);
-      const state *s = lookback_find_state (i);
-      int rnum = i - (s->reductions->lookaheads - LA);
-      const rule *r = s->reductions->rules[rnum];
-      fprintf (out, "(%3d, ", s->number);
-      rule_print (r, NULL, out);
-      fputs (") ->", out);
-      for (goto_list *sp = lookback[i]; sp; sp = sp->next)
+      ख_लिखो (out, "   %3d = ", i);
+      अचर state *s = lookback_find_state (i);
+      पूर्णाङ्क rnum = i - (s->reductions->lookaheads - LA);
+      अचर rule *r = s->reductions->rules[rnum];
+      ख_लिखो (out, "(%3d, ", s->सङ्ख्या);
+      rule_print (r, रिक्त, out);
+      ख_माला_दो (") ->", out);
+      लागि (goto_list *sp = lookback[i]; sp; sp = sp->next)
         {
-          fputc (' ', out);
-          goto_print (sp->value, out);
+          ख_अक्षर_दो (' ', out);
+          goto_print (sp->मान, out);
         }
-      fputc ('\n', out);
+      ख_अक्षर_दो ('\n', out);
     }
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
 }
 
 /* Add (S, R) -> GOTONO to LOOKBACK.
@@ -309,53 +309,53 @@ lookback_print (FILE *out)
 
    The goto number GOTONO, whose source is S (which is
    inconsistent), */
-static void
-add_lookback_edge (state *s, rule const *r, goto_number gotono)
+स्थिर शून्य
+add_lookback_edge (state *s, rule अचर *r, goto_सङ्ख्या gotono)
 {
-  int ri = state_reduction_find (s, r);
-  int idx = (s->reductions->lookaheads - LA) + ri;
+  पूर्णाङ्क ri = state_reduction_find (s, r);
+  पूर्णाङ्क idx = (s->reductions->lookaheads - LA) + ri;
   lookback[idx] = goto_list_new (gotono, lookback[idx]);
 }
 
 
 /* Compute INCLUDES and LOOKBACK.  Corresponds to step E in Sec. 6 of
    [DeRemer 1982].  */
-static void
-build_relations (void)
+स्थिर शून्य
+build_relations (शून्य)
 {
-  goto_number *edge = xnmalloc (ngotos, sizeof *edge);
-  state_number *path = xnmalloc (ritem_longest_rhs () + 1, sizeof *path);
+  goto_सङ्ख्या *edge = xnmalloc (ngotos, परिमाण *edge);
+  state_सङ्ख्या *path = xnmalloc (ritem_longest_rhs () + 1, परिमाण *path);
 
-  includes = xnmalloc (ngotos, sizeof *includes);
+  includes = xnmalloc (ngotos, परिमाण *includes);
 
   /* For each goto (from SRC to DST labeled by nterm VAR), iterate
      over each rule with VAR as LHS, and find the path PATH from SRC
      labeled with the RHS of the rule. */
-  for (goto_number i = 0; i < ngotos; ++i)
+  लागि (goto_सङ्ख्या i = 0; i < ngotos; ++i)
     {
-      const state_number src = from_state[i];
-      const state_number dst = to_state[i];
-      symbol_number var = states[dst]->accessing_symbol;
+      अचर state_सङ्ख्या src = from_state[i];
+      अचर state_सङ्ख्या dst = to_state[i];
+      चिह्न_सङ्ख्या var = states[dst]->accessing_चिह्न;
 
       /* Size of EDGE.  */
-      int nedges = 0;
-      for (rule **rulep = derives[var - ntokens]; *rulep; ++rulep)
+      पूर्णाङ्क nedges = 0;
+      लागि (rule **rulep = derives[var - ntokens]; *rulep; ++rulep)
         {
-          rule const *r = *rulep;
+          rule अचर *r = *rulep;
           state *s = states[src];
-          path[0] = s->number;
+          path[0] = s->सङ्ख्या;
 
           /* Length of PATH.  */
-          int length = 1;
-          for (item_number const *rp = r->rhs; 0 <= *rp; rp++)
+          पूर्णाङ्क length = 1;
+          लागि (item_सङ्ख्या अचर *rp = r->rhs; 0 <= *rp; rp++)
             {
-              symbol_number sym = item_number_as_symbol_number (*rp);
+              चिह्न_सङ्ख्या sym = item_सङ्ख्या_as_चिह्न_सङ्ख्या (*rp);
               s = transitions_to (s, sym);
-              path[length++] = s->number;
+              path[length++] = s->सङ्ख्या;
             }
 
           /* S is the end of PATH.  */
-          if (!s->consistent)
+          यदि (!s->consistent)
             add_lookback_edge (s, r, i);
 
           /* Walk back PATH from penultimate to beginning.
@@ -363,85 +363,85 @@ build_relations (void)
              The "0 <= p" part is actually useless: each rhs ends in a
              rule number (for which ISVAR(...) is false), and there is
              a sentinel (ritem[-1]=0) before the first rhs.  */
-          for (int p = length - 2; 0 <= p && ISVAR (r->rhs[p]); --p)
+          लागि (पूर्णाङ्क p = length - 2; 0 <= p && ISVAR (r->rhs[p]); --p)
             {
-              symbol_number sym = item_number_as_symbol_number (r->rhs[p]);
-              goto_number g = map_goto (path[p], sym);
+              चिह्न_सङ्ख्या sym = item_सङ्ख्या_as_चिह्न_सङ्ख्या (r->rhs[p]);
+              goto_सङ्ख्या g = map_goto (path[p], sym);
               /* Insert G if not already in EDGE.
                  FIXME: linear search.  A bitset instead?  */
               {
                 bool found = false;
-                for (int j = 0; !found && j < nedges; ++j)
+                लागि (पूर्णाङ्क j = 0; !found && j < nedges; ++j)
                   found = edge[j] == g;
-                if (!found)
+                यदि (!found)
                   {
-                    assert (nedges < ngotos);
+                    प्रतिज्ञा (nedges < ngotos);
                     edge[nedges++] = g;
                   }
               }
-              if (!nullable[sym - ntokens])
-                break;
+              यदि (!nullable[sym - ntokens])
+                रोक;
             }
         }
 
-      if (trace_flag & trace_automaton)
+      यदि (trace_flag & trace_automaton)
         {
-          goto_print (i, stderr);
-          fputs (" edges = ", stderr);
-          for (int j = 0; j < nedges; ++j)
+          goto_print (i, मानक_त्रुटि);
+          ख_माला_दो (" edges = ", मानक_त्रुटि);
+          लागि (पूर्णाङ्क j = 0; j < nedges; ++j)
             {
-              fputc (' ', stderr);
-              goto_print (edge[j], stderr);
+              ख_अक्षर_दो (' ', मानक_त्रुटि);
+              goto_print (edge[j], मानक_त्रुटि);
             }
-          fputc ('\n', stderr);
+          ख_अक्षर_दो ('\n', मानक_त्रुटि);
         }
 
-      if (nedges == 0)
-        includes[i] = NULL;
-      else
+      यदि (nedges == 0)
+        includes[i] = रिक्त;
+      अन्यथा
         {
-          includes[i] = xnmalloc (nedges + 1, sizeof includes[i][0]);
-          for (int j = 0; j < nedges; ++j)
+          includes[i] = xnmalloc (nedges + 1, परिमाण includes[i][0]);
+          लागि (पूर्णाङ्क j = 0; j < nedges; ++j)
             includes[i][j] = edge[j];
-          includes[i][nedges] = END_NODE;
+          includes[i][nedges] = END_गाँठो;
         }
     }
 
-  free (edge);
-  free (path);
+  मुक्त (edge);
+  मुक्त (path);
 
   relation_transpose (&includes, ngotos);
-  if (trace_flag & trace_automaton)
-    relation_print ("includes", includes, ngotos, goto_print, stderr);
+  यदि (trace_flag & trace_automaton)
+    relation_print ("includes", includes, ngotos, goto_print, मानक_त्रुटि);
 }
 
 /* Compute FOLLOWS from INCLUDES, and free INCLUDES.  */
-static void
-compute_follows (void)
+स्थिर शून्य
+compute_follows (शून्य)
 {
   relation_digraph (includes, ngotos, goto_follows);
-  if (trace_flag & trace_sets)
-    follows_print ("follows after includes", stderr);
-  for (goto_number i = 0; i < ngotos; ++i)
-    free (includes[i]);
-  free (includes);
+  यदि (trace_flag & trace_sets)
+    follows_print ("follows after includes", मानक_त्रुटि);
+  लागि (goto_सङ्ख्या i = 0; i < ngotos; ++i)
+    मुक्त (includes[i]);
+  मुक्त (includes);
 }
 
 
-static void
-compute_lookaheads (void)
+स्थिर शून्य
+compute_lookaheads (शून्य)
 {
-  if (trace_flag & trace_automaton)
-      lookback_print (stderr);
+  यदि (trace_flag & trace_automaton)
+      lookback_print (मानक_त्रुटि);
 
-  for (size_t i = 0; i < nLA; ++i)
-    for (goto_list *sp = lookback[i]; sp; sp = sp->next)
-      bitset_or (LA[i], LA[i], goto_follows[sp->value]);
+  लागि (माप_प्रकार i = 0; i < nLA; ++i)
+    लागि (goto_list *sp = lookback[i]; sp; sp = sp->next)
+      bitset_or (LA[i], LA[i], goto_follows[sp->मान]);
 
   /* Free LOOKBACK. */
-  for (size_t i = 0; i < nLA; ++i)
+  लागि (माप_प्रकार i = 0; i < nLA; ++i)
     LIST_FREE (goto_list, lookback[i]);
-  free (lookback);
+  मुक्त (lookback);
 }
 
 
@@ -449,18 +449,18 @@ compute_lookaheads (void)
 | Count the number of lookahead tokens required for S.  |
 `------------------------------------------------------*/
 
-static int
-state_lookaheads_count (state *s, bool default_reduction_only_for_accept)
+स्थिर पूर्णाङ्क
+state_lookaheads_गन्ती (state *s, bool default_reduction_only_for_accept)
 {
-  const reductions *reds = s->reductions;
-  const transitions *trans = s->transitions;
+  अचर reductions *reds = s->reductions;
+  अचर transitions *trans = s->transitions;
 
   /* Transitions are only disabled during conflict resolution, and that
      hasn't happened yet, so there should be no need to check that
      transition 0 hasn't been disabled before checking if it is a shift.
      However, this check was performed at one time, so we leave it as an
      aver.  */
-  aver (trans->num == 0 || !TRANSITION_IS_DISABLED (trans, 0));
+  aver (trans->अङ्क == 0 || !TRANSITION_IS_DISABLED (trans, 0));
 
   /* We need a lookahead either to distinguish different reductions
      (i.e., there are two or more), or to distinguish a reduction from a
@@ -471,12 +471,12 @@ state_lookaheads_count (state *s, bool default_reduction_only_for_accept)
      should be read) if the user has otherwise disabled default
      reductions.  */
   s->consistent =
-    !(reds->num > 1
-      || (reds->num == 1 && trans->num && TRANSITION_IS_SHIFT (trans, 0))
-      || (reds->num == 1 && !rule_is_initial (reds->rules[0])
+    !(reds->अङ्क > 1
+      || (reds->अङ्क == 1 && trans->अङ्क && TRANSITION_IS_SHIFT (trans, 0))
+      || (reds->अङ्क == 1 && !rule_is_initial (reds->rules[0])
           && default_reduction_only_for_accept));
 
-  return s->consistent ? 0 : reds->num;
+  फर्काऊ s->consistent ? 0 : reds->अङ्क;
 }
 
 
@@ -484,38 +484,38 @@ state_lookaheads_count (state *s, bool default_reduction_only_for_accept)
 | Compute LA, NLA, and the lookaheads members.  |
 `----------------------------------------------*/
 
-void
-initialize_LA (void)
+शून्य
+initialize_LA (शून्य)
 {
   bool default_reduction_only_for_accept;
   {
-    char *default_reductions =
+    वर्ण *default_reductions =
       muscle_percent_define_get ("lr.default-reduction");
     default_reduction_only_for_accept = STREQ (default_reductions, "accepting");
-    free (default_reductions);
+    मुक्त (default_reductions);
   }
 
   /* Compute the total number of reductions requiring a lookahead.  */
   nLA = 0;
-  for (state_number i = 0; i < nstates; ++i)
-    nLA += state_lookaheads_count (states[i],
+  लागि (state_सङ्ख्या i = 0; i < nstates; ++i)
+    nLA += state_lookaheads_गन्ती (states[i],
                                    default_reduction_only_for_accept);
   /* Avoid having to special case 0.  */
-  if (!nLA)
+  यदि (!nLA)
     nLA = 1;
 
   bitsetv pLA = LA = bitsetv_create (nLA, ntokens, BITSET_FIXED);
 
   /* Initialize the members LOOKAHEADS for each state whose reductions
      require lookahead tokens.  */
-  for (state_number i = 0; i < nstates; ++i)
+  लागि (state_सङ्ख्या i = 0; i < nstates; ++i)
     {
-      int count = state_lookaheads_count (states[i],
+      पूर्णाङ्क गन्ती = state_lookaheads_गन्ती (states[i],
                                           default_reduction_only_for_accept);
-      if (count)
+      यदि (गन्ती)
         {
           states[i]->reductions->lookaheads = pLA;
-          pLA += count;
+          pLA += गन्ती;
         }
     }
 }
@@ -525,78 +525,78 @@ initialize_LA (void)
 | Output the lookahead tokens for each state.  |
 `---------------------------------------------*/
 
-static void
-lookaheads_print (FILE *out)
+स्थिर शून्य
+lookaheads_print (खाता *out)
 {
-  fputs ("Lookaheads:\n", out);
-  for (state_number i = 0; i < nstates; ++i)
+  ख_माला_दो ("Lookaheads:\n", out);
+  लागि (state_सङ्ख्या i = 0; i < nstates; ++i)
     {
-      const reductions *reds = states[i]->reductions;
-      if (reds->num)
+      अचर reductions *reds = states[i]->reductions;
+      यदि (reds->अङ्क)
         {
-          fprintf (out, "  State %d:\n", i);
-          for (int j = 0; j < reds->num; ++j)
+          ख_लिखो (out, "  State %d:\n", i);
+          लागि (पूर्णाङ्क j = 0; j < reds->अङ्क; ++j)
             {
-              fprintf (out, "    rule %d:", reds->rules[j]->number);
-              if (reds->lookaheads)
+              ख_लिखो (out, "    rule %d:", reds->rules[j]->सङ्ख्या);
+              यदि (reds->lookaheads)
               {
                 bitset_iterator iter;
-                int k;
+                पूर्णाङ्क k;
                 BITSET_FOR_EACH (iter, reds->lookaheads[j], k, 0)
-                  fprintf (out, " %s", symbols[k]->tag);
+                  ख_लिखो (out, " %s", symbols[k]->tag);
               }
-              fputc ('\n', out);
+              ख_अक्षर_दो ('\n', out);
             }
         }
     }
-  fputc ('\n', out);
+  ख_अक्षर_दो ('\n', out);
 }
 
-void
-lalr (void)
+शून्य
+lalr (शून्य)
 {
-  if (trace_flag & trace_automaton)
+  यदि (trace_flag & trace_automaton)
     {
-      fputc ('\n', stderr);
-      begin_use_class ("trace0", stderr);
-      fprintf (stderr, "lalr: begin");
-      end_use_class ("trace0", stderr);
-      fputc ('\n', stderr);
+      ख_अक्षर_दो ('\n', मानक_त्रुटि);
+      begin_use_class ("trace0", मानक_त्रुटि);
+      ख_लिखो (मानक_त्रुटि, "lalr: begin");
+      end_use_class ("trace0", मानक_त्रुटि);
+      ख_अक्षर_दो ('\n', मानक_त्रुटि);
     }
   initialize_LA ();
   set_goto_map ();
   initialize_goto_follows ();
-  lookback = xcalloc (nLA, sizeof *lookback);
+  lookback = xcalloc (nLA, परिमाण *lookback);
   build_relations ();
   compute_follows ();
   compute_lookaheads ();
 
-  if (trace_flag & trace_sets)
-    lookaheads_print (stderr);
-  if (trace_flag & trace_automaton)
+  यदि (trace_flag & trace_sets)
+    lookaheads_print (मानक_त्रुटि);
+  यदि (trace_flag & trace_automaton)
     {
-      begin_use_class ("trace0", stderr);
-      fprintf (stderr, "lalr: done");
-      end_use_class ("trace0", stderr);
-      fputc ('\n', stderr);
+      begin_use_class ("trace0", मानक_त्रुटि);
+      ख_लिखो (मानक_त्रुटि, "lalr: done");
+      end_use_class ("trace0", मानक_त्रुटि);
+      ख_अक्षर_दो ('\n', मानक_त्रुटि);
     }
 }
 
 
-void
-lalr_update_state_numbers (state_number old_to_new[], state_number nstates_old)
+शून्य
+lalr_update_state_numbers (state_सङ्ख्या old_to_new[], state_सङ्ख्या nstates_old)
 {
-  goto_number ngotos_reachable = 0;
-  symbol_number nonterminal = 0;
+  goto_सङ्ख्या ngotos_reachable = 0;
+  चिह्न_सङ्ख्या nonterminal = 0;
   aver (nsyms == nnterms + ntokens);
 
-  for (goto_number i = 0; i < ngotos; ++i)
+  लागि (goto_सङ्ख्या i = 0; i < ngotos; ++i)
     {
-      while (i == goto_map[nonterminal])
+      जबसम्म (i == goto_map[nonterminal])
         goto_map[nonterminal++] = ngotos_reachable;
       /* If old_to_new[from_state[i]] = nstates_old, remove this goto
          entry.  */
-      if (old_to_new[from_state[i]] != nstates_old)
+      यदि (old_to_new[from_state[i]] != nstates_old)
         {
           /* from_state[i] is not removed, so it and thus to_state[i] are
              reachable, so to_state[i] != nstates_old.  */
@@ -606,7 +606,7 @@ lalr_update_state_numbers (state_number old_to_new[], state_number nstates_old)
           ++ngotos_reachable;
         }
     }
-  while (nonterminal <= nnterms)
+  जबसम्म (nonterminal <= nnterms)
     {
       aver (ngotos == goto_map[nonterminal]);
       goto_map[nonterminal++] = ngotos_reachable;
@@ -615,10 +615,10 @@ lalr_update_state_numbers (state_number old_to_new[], state_number nstates_old)
 }
 
 
-void
-lalr_free (void)
+शून्य
+lalr_free (शून्य)
 {
-  for (state_number s = 0; s < nstates; ++s)
-    states[s]->reductions->lookaheads = NULL;
+  लागि (state_सङ्ख्या s = 0; s < nstates; ++s)
+    states[s]->reductions->lookaheads = रिक्त;
   bitsetv_free (LA);
 }

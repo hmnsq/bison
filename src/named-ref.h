@@ -25,7 +25,7 @@
 
 /* Named reference object. Keeps information about
    a symbolic name of a symbol in a rule. */
-typedef struct named_ref
+प्रकारनिर्देश संरचना named_ref
 {
   /* Symbolic named given by user. */
   uniqstr id;
@@ -38,9 +38,9 @@ typedef struct named_ref
 named_ref *named_ref_new (uniqstr id, location loc);
 
 /* Allocate and return a copy.  */
-named_ref *named_ref_copy (const named_ref *r);
+named_ref *named_ref_copy (अचर named_ref *r);
 
 /* Free a named reference object. */
-void named_ref_free (named_ref *r);
+शून्य named_ref_free (named_ref *r);
 
 #endif /* !NAMED_REF_H_ */

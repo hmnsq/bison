@@ -18,31 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
-#include <config.h>
-#include "system.h"
+#अन्तर्भाव <config.h>
+#अन्तर्भाव "system.h"
 
-#include "assoc.h"
+#अन्तर्भाव "assoc.h"
 
 
-const char *
+अचर वर्ण *
 assoc_to_string (assoc a)
 {
-  switch (a)
+  विकल्प (a)
     {
-    case undef_assoc:
-      return "undefined associativity";
+    पक्ष undef_assoc:
+      फर्काऊ "undefined associativity";
 
-    case right_assoc:
-      return "%right";
+    पक्ष दायाँ_assoc:
+      फर्काऊ "%right";
 
-    case left_assoc:
-      return "%left";
+    पक्ष बायाँ_assoc:
+      फर्काऊ "%left";
 
-    case non_assoc:
-      return "%nonassoc";
+    पक्ष non_assoc:
+      फर्काऊ "%nonassoc";
 
-    case precedence_assoc:
-      return "%precedence";
+    पक्ष precedence_assoc:
+      फर्काऊ "%precedence";
     }
-  abort ();
+  पात ();
 }
