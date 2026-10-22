@@ -28,10 +28,10 @@
 #include "lssi.h"
 #include "nullable.h"
 
-struct parse_state
+sa_nracanaa parse_state
 {
   // Path of state-items the parser has traversed.
-  struct si_chunk
+  sa_nracanaa si_chunk
   {
     // Elements newly added in this chunk.
     state_item_list contents;
@@ -41,17 +41,17 @@ struct parse_state
     size_t total_size;
   } state_items;
   // List of derivations of the symbols.
-  struct deriv_chunk
+  sa_nracanaa deriv_chunk
   {
     derivation_list contents;
     const derivation *head_elt;
     const derivation *tail_elt;
     size_t total_size;
   } derivs;
-  struct parse_state *parent;
-  int reference_count;
+  sa_nracanaa parse_state *parent;
+  ကိန်းပြည့် reference_count;
   // Incremented during productions, decremented during reductions.
-  int depth;
+  ကိန်းပြည့် depth;
   // Whether the contents of the chunks should be prepended or
   // appended to the list the chunks represent.
   bool prepend;
@@ -64,59 +64,59 @@ struct parse_state
 static void
 ps_si_prepend (parse_state *ps, const state_item *si)
 {
-  struct si_chunk *sic = &ps->state_items;
+  sa_nracanaa si_chunk *sic = &ps->state_items;
   gl_list_add_first (sic->contents, si);
   sic->head_elt = si;
   ++sic->total_size;
-  if (!sic->tail_elt)
+  အကယ်၍ (!sic->tail_elt)
     sic->tail_elt = si;
 }
 
 static void
 ps_si_append (parse_state *ps, const state_item *si)
 {
-  struct si_chunk *sic = &ps->state_items;
+  sa_nracanaa si_chunk *sic = &ps->state_items;
   gl_list_add_last (sic->contents, si);
   sic->tail_elt = si;
   ++sic->total_size;
-  if (!sic->head_elt)
+  အကယ်၍ (!sic->head_elt)
     sic->head_elt = si;
 }
 
 static void
 ps_derivs_prepend (parse_state *ps, derivation *d)
 {
-  struct deriv_chunk *dc = &ps->derivs;
+  sa_nracanaa deriv_chunk *dc = &ps->derivs;
   derivation_list_prepend (dc->contents, d);
   dc->head_elt = d;
   ++dc->total_size;
-  if (!dc->tail_elt)
+  အကယ်၍ (!dc->tail_elt)
     dc->tail_elt = d;
 }
 
 static void
 ps_derivs_append (parse_state *ps, derivation *d)
 {
-  struct deriv_chunk *dc = &ps->derivs;
+  sa_nracanaa deriv_chunk *dc = &ps->derivs;
   derivation_list_append (dc->contents, d);
   dc->tail_elt = d;
   ++dc->total_size;
-  if (!dc->head_elt)
+  အကယ်၍ (!dc->head_elt)
     dc->head_elt = d;
 }
 
-static int allocs = 0;
-static int frees = 0;
+static ကိန်းပြည့် allocs = 0;
+static ကိန်းပြည့် frees = 0;
 
 static parse_state *
 empty_parse_state (void)
 {
-  parse_state *res = xcalloc (1, sizeof *res);
+  parse_state *res = xcalloc (1, parimaa_na *res);
   res->state_items.contents
     = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
   res->derivs.contents = derivation_list_new ();
   ++allocs;
-  return res;
+  ပြန်ပေး res;
 }
 
 parse_state *
@@ -125,13 +125,13 @@ new_parse_state (const state_item *si)
   parse_state *res = empty_parse_state ();
   ps_si_append (res, si);
   ps_derivs_append (res, derivation_dot ());
-  return res;
+  ပြန်ပေး res;
 }
 
 static parse_state *
 copy_parse_state (bool prepend, parse_state *parent)
 {
-  parse_state *res = xmalloc (sizeof *res);
+  parse_state *res = xmalloc (parimaa_na *res);
   *res = *parent;
   res->state_items.contents
     = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
@@ -142,43 +142,43 @@ copy_parse_state (bool prepend, parse_state *parent)
   res->free_contents_early = false;
   parse_state_retain (parent);
   ++allocs;
-  return res;
+  ပြန်ပေး res;
 }
 
 bool
 parse_state_derivation_completed (const parse_state *ps)
 {
-  return ps->derivs.total_size == 1;
+  ပြန်ပေး ps->derivs.total_size == 1;
 }
 
 derivation *
 parse_state_derivation (const parse_state *ps)
 {
-  return (derivation *) ps->derivs.head_elt;
+  ပြန်ပေး (derivation *) ps->derivs.head_elt;
 }
 
 const state_item *
 parse_state_head (const parse_state *ps)
 {
-  return ps->state_items.head_elt;
+  ပြန်ပေး ps->state_items.head_elt;
 }
 
 const state_item *
 parse_state_tail (const parse_state *ps)
 {
-  return ps->state_items.tail_elt;
+  ပြန်ပေး ps->state_items.tail_elt;
 }
 
-int
+ကိန်းပြည့်
 parse_state_length (const parse_state *ps)
 {
-  return ps->state_items.total_size;
+  ပြန်ပေး ps->state_items.total_size;
 }
 
-int
+ကိန်းပြည့်
 parse_state_depth (const parse_state *ps)
 {
-  return ps->depth;
+  ပြန်ပေး ps->depth;
 }
 
 void
@@ -198,22 +198,22 @@ free_parse_state (parse_state *original_ps)
 {
   bool free_contents = true;
   parse_state *parent_ps = NULL;
-  for (parse_state *ps = original_ps; ps && free_contents; ps = parent_ps)
+  အတွက် (parse_state *ps = original_ps; ps && free_contents; ps = parent_ps)
     {
       --ps->reference_count;
       free_contents = (ps->reference_count == 1 && ps->free_contents_early)
         || (ps->reference_count == 0 && !ps->free_contents_early);
       // need to keep the parse state around for visited hash set,
       // but its contents and parent can be freed
-      if (free_contents)
+      အကယ်၍ (free_contents)
         {
-          if (ps->state_items.contents)
+          အကယ်၍ (ps->state_items.contents)
             gl_list_free (ps->state_items.contents);
-          if (ps->derivs.contents)
+          အကယ်၍ (ps->derivs.contents)
             derivation_list_free (ps->derivs.contents);
         }
       parent_ps = ps->parent;
-      if (ps->reference_count <= 0)
+      အကယ်၍ (ps->reference_count <= 0)
         {
           free (ps);
           ++frees;
@@ -224,41 +224,41 @@ free_parse_state (parse_state *original_ps)
 size_t
 parse_state_hasher (const parse_state *ps, size_t max)
 {
-  const struct si_chunk *sis = &ps->state_items;
-  return ((state_item *) sis->head_elt - state_items +
+  const sa_nracanaa si_chunk *sis = &ps->state_items;
+  ပြန်ပေး ((state_item *) sis->head_elt - state_items +
           (state_item *) sis->tail_elt - state_items + sis->total_size) % max;
 }
 
 bool
 parse_state_comparator (const parse_state *ps1, const parse_state *ps2)
 {
-  const struct si_chunk *sis1 = &ps1->state_items;
-  const struct si_chunk *sis2 = &ps2->state_items;
-  return sis1->head_elt == sis2->head_elt
+  const sa_nracanaa si_chunk *sis1 = &ps1->state_items;
+  const sa_nracanaa si_chunk *sis2 = &ps2->state_items;
+  ပြန်ပေး sis1->head_elt == sis2->head_elt
     && sis1->tail_elt == sis2->tail_elt
     && sis1->total_size == sis2->total_size;
 }
 
 
 void
-parse_state_completed_steps (const parse_state *ps, int *shifts, int *productions)
+parse_state_completed_steps (const parse_state *ps, ကိန်းပြည့် *shifts, ကိန်းပြည့် *productions)
 {
   // traverse to the root parse_state,
   // which will have a list of all completed productions.
   const parse_state *root_ps = ps;
-  while (root_ps->parent)
+  နေစဉ် (root_ps->parent)
     root_ps = root_ps->parent;
 
   state_item_list sis = root_ps->state_items.contents;
-  int count = 0;
+  ကိန်းပြည့် count = 0;
 
   state_item *last = NULL;
   state_item *next = NULL;
-  for (gl_list_iterator_t it = gl_list_iterator (sis);
+  အတွက် (gl_list_iterator_t it = gl_list_iterator (sis);
        state_item_list_next (&it, &next);
        )
     {
-      if (last && last->state == next->state)
+      အကယ်၍ (last && last->state == next->state)
         ++count;
       last = next;
     }
@@ -279,26 +279,26 @@ list_add_last (gl_list_t list, const void *elt)
 // takes an array of n gl_lists and flattens them into two list
 // based off of the index split
 static void
-list_flatten_and_split (gl_list_t *list, gl_list_t *rets, int split, int n,
+list_flatten_and_split (gl_list_t *list, gl_list_t *rets, ကိန်းပြည့် split, ကိန်းပြည့် n,
                         chunk_append_fn append_fn)
 {
-  int ret_index = 0;
-  int ret_array = 0;
-  for (int i = 0; i < n; ++i)
+  ကိန်းပြည့် ret_index = 0;
+  ကိန်းပြည့် ret_array = 0;
+  အတွက် (ကိန်းပြည့် i = 0; i < n; ++i)
     {
       const void *p = NULL;
       gl_list_iterator_t it = gl_list_iterator (list[i]);
-      while (gl_list_iterator_next (&it, &p, NULL))
-        if (p)
+      နေစဉ် (gl_list_iterator_next (&it, &p, NULL))
+        အကယ်၍ (p)
           {
             gl_list_t l = (gl_list_t) p;
             const void *si = NULL;
             gl_list_iterator_t it2 = gl_list_iterator (l);
-            while (gl_list_iterator_next (&it2, &si, NULL))
+            နေစဉ် (gl_list_iterator_next (&it2, &si, NULL))
               {
-                if (ret_index++ == split)
+                အကယ်၍ (ret_index++ == split)
                   ++ret_array;
-                if (rets[ret_array])
+                အကယ်၍ (rets[ret_array])
                   append_fn (rets[ret_array], si);
               }
             gl_list_iterator_free (&it2);
@@ -310,7 +310,7 @@ list_flatten_and_split (gl_list_t *list, gl_list_t *rets, int split, int n,
 static parse_state_list
 parse_state_list_new (void)
 {
-  return gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
+  ပြန်ပေး gl_list_create_empty (GL_LINKED_LIST, NULL, NULL,
                                (gl_listelement_dispose_fn)free_parse_state,
                                true);
 }
@@ -326,20 +326,20 @@ parse_state_list_append (parse_state_list pl, parse_state *ps)
 // derivations and state_items off of the parse_state and returning
 // the result in ret. Returns the derivation of what's popped.
 static derivation_list
-parser_pop (parse_state *ps, int deriv_index,
-            int si_index, parse_state *ret)
+parser_pop (parse_state *ps, ကိန်းပြည့် deriv_index,
+            ကိန်းပြည့် si_index, parse_state *ret)
 {
   // prepend sis, append sis, prepend derivs, append derivs
   gl_list_t chunks[4];
-  for (int i = 0; i < 4; ++i)
+  အတွက် (ကိန်းပြည့် i = 0; i < 4; ++i)
     chunks[i] = gl_list_create_empty (GL_LINKED_LIST, NULL, NULL, NULL, true);
-  for (parse_state *pn = ps; pn != NULL; pn = pn->parent)
-    if (pn->prepend)
+  အတွက် (parse_state *pn = ps; pn != NULL; pn = pn->parent)
+    အကယ်၍ (pn->prepend)
       {
         gl_list_add_last (chunks[0], pn->state_items.contents);
         gl_list_add_last (chunks[2], pn->derivs.contents);
       }
-    else
+    မဟုတ်ပါက
       {
         gl_list_add_first (chunks[1], pn->state_items.contents);
         gl_list_add_first (chunks[3], pn->derivs.contents);
@@ -354,34 +354,34 @@ parser_pop (parse_state *ps, int deriv_index,
                           (chunk_append_fn)derivation_list_append);
   size_t s_size = gl_list_size (ret->state_items.contents);
   ret->state_items.total_size = s_size;
-  if (s_size > 0)
+  အကယ်၍ (s_size > 0)
     {
       ret->state_items.tail_elt = gl_list_get_at (ret->state_items.contents,
                                                   s_size - 1);
       ret->state_items.head_elt =
         gl_list_get_at (ret->state_items.contents, 0);
     }
-  else
+  မဟုတ်ပါက
     {
       ret->state_items.tail_elt = NULL;
       ret->state_items.head_elt = NULL;
     }
   size_t d_size = gl_list_size (ret->derivs.contents);
   ret->derivs.total_size = d_size;
-  if (d_size > 0)
+  အကယ်၍ (d_size > 0)
     {
       ret->derivs.tail_elt = gl_list_get_at (ret->derivs.contents,
                                              d_size - 1);
       ret->derivs.head_elt = gl_list_get_at (ret->derivs.contents, 0);
     }
-  else
+  မဟုတ်ပါက
     {
       ret->derivs.tail_elt = NULL;
       ret->derivs.head_elt = NULL;
     }
-  for (int i = 0; i < 4; ++i)
+  အတွက် (ကိန်းပြည့် i = 0; i < 4; ++i)
     gl_list_free (chunks[i]);
-  return popped_derivs;
+  ပြန်ပေး popped_derivs;
 }
 
 void
@@ -410,13 +410,13 @@ nullable_closure (parse_state *ps, state_item *si, parse_state_list state_list)
 {
   parse_state *current_ps = ps;
   state_item_number prev_sin = si - state_items;
-  for (state_item_number sin = si->trans; sin != -1;
+  အတွက် (state_item_number sin = si->trans; sin != -1;
        prev_sin = sin, sin = state_items[sin].trans)
     {
       state_item *psi = &state_items[prev_sin];
       symbol_number sp = item_number_as_symbol_number (*psi->item);
-      if (ISTOKEN (sp) || !nullable[sp - ntokens])
-        break;
+      အကယ်၍ (ISTOKEN (sp) || !nullable[sp - ntokens])
+        bha_nga;
 
       state_item *nsi = &state_items[sin];
       current_ps = copy_parse_state (false, current_ps);
@@ -439,15 +439,15 @@ simulate_transition (parse_state *ps)
   state_item_number si_next = si->trans;
   // Check for disabled transition, shouldn't happen as any
   // state_items that lead to these should be disabled.
-  if (si_next < 0)
-    return result;
+  အကယ်၍ (si_next < 0)
+    ပြန်ပေး result;
   parse_state *next_ps = copy_parse_state (false, ps);
   ps_si_append (next_ps, &state_items[si_next]);
   ps_derivs_append (next_ps, derivation_new_leaf (sym));
   parse_state_list_append (result, next_ps);
 
   nullable_closure (next_ps, &state_items[si_next], result);
-  return result;
+  ပြန်ပေး result;
 }
 
 /**
@@ -457,16 +457,16 @@ simulate_transition (parse_state *ps)
 static bool
 compatible (symbol_number sym1, symbol_number sym2)
 {
-  if (sym1 == sym2)
-    return true;
-  if (ISTOKEN (sym1) && ISVAR (sym2))
-    return bitset_test (FIRSTS (sym2), sym1);
-  else if (ISVAR (sym1) && ISTOKEN (sym2))
-    return bitset_test (FIRSTS (sym1), sym2);
-  else if (ISVAR (sym1) && ISVAR (sym2))
-    return !bitset_disjoint_p (FIRSTS (sym1), FIRSTS (sym2));
-  else
-    return false;
+  အကယ်၍ (sym1 == sym2)
+    ပြန်ပေး true;
+  အကယ်၍ (ISTOKEN (sym1) && ISVAR (sym2))
+    ပြန်ပေး bitset_test (FIRSTS (sym2), sym1);
+  မဟုတ်ပါက အကယ်၍ (ISVAR (sym1) && ISTOKEN (sym2))
+    ပြန်ပေး bitset_test (FIRSTS (sym1), sym2);
+  မဟုတ်ပါက အကယ်၍ (ISVAR (sym1) && ISVAR (sym2))
+    ပြန်ပေး !bitset_disjoint_p (FIRSTS (sym1), FIRSTS (sym2));
+  မဟုတ်ပါက
+    ပြန်ပေး false;
 }
 
 parse_state_list
@@ -474,7 +474,7 @@ simulate_production (parse_state *ps, symbol_number compat_sym)
 {
   parse_state_list result = parse_state_list_new ();
   const state_item *si = parse_state_tail (ps);
-  if (si->prods)
+  အကယ်၍ (si->prods)
     {
       bitset_iterator biter;
       state_item_number sin;
@@ -484,30 +484,30 @@ simulate_production (parse_state *ps, symbol_number compat_sym)
           // if first rhs symbol is compatible with compat_sym
           state_item *next = &state_items[sin];
           item_number *itm1 = next->item;
-          if (!compatible (*itm1, compat_sym) || !production_allowed (si, next))
+          အကယ်၍ (!compatible (*itm1, compat_sym) || !production_allowed (si, next))
             continue;
           parse_state *next_ps = copy_parse_state (false, ps);
           ps_si_append (next_ps, next);
           parse_state_list_append (result, next_ps);
-          if (next_ps->depth >= 0)
+          အကယ်၍ (next_ps->depth >= 0)
             ++next_ps->depth;
           nullable_closure (next_ps, next, result);
         }
     }
-  return result;
+  ပြန်ပေး result;
 }
 
 // simulates a reduction on the given parse state, conflict_item is the
 // item associated with ps's conflict. symbol_set is a lookahead set this
 // reduction must be compatible with
 parse_state_list
-simulate_reduction (parse_state *ps, int rule_len, bitset symbol_set)
+simulate_reduction (parse_state *ps, ကိန်းပြည့် rule_len, bitset symbol_set)
 {
   parse_state_list result = parse_state_list_new ();
 
-  int s_size = ps->state_items.total_size;
-  int d_size = ps->derivs.total_size;
-  if (ps->depth >= 0)
+  ကိန်းပြည့် s_size = ps->state_items.total_size;
+  ကိန်းပြည့် d_size = ps->derivs.total_size;
+  အကယ်၍ (ps->depth >= 0)
     d_size--;                   // account for dot
   parse_state *new_root = empty_parse_state ();
   derivation_list popped_derivs =
@@ -522,29 +522,29 @@ simulate_reduction (parse_state *ps, int rule_len, bitset symbol_set)
   --new_root->depth;
   ps_derivs_append (new_root, deriv);
 
-  if (s_size != rule_len + 1)
+  အကယ်၍ (s_size != rule_len + 1)
     {
       state_item *tail = (state_item *) new_root->state_items.tail_elt;
       ps_si_append (new_root, &state_items[tail->trans]);
       parse_state_list_append (result, new_root);
     }
-  else
+  မဟုတ်ပါက
     {
       // The head state_item is a production item, so we need to prepend
       // with possible source state-items.
       const state_item *head = ps->state_items.head_elt;
       state_item_list prev = lssi_reverse_production (head, symbol_set);
       // TODO: better understand what causes this case.
-      if (gl_list_size (prev) == 0)
+      အကယ်၍ (gl_list_size (prev) == 0)
         {
           // new_root needs to have an RC of 1 to be freed correctly here.
           parse_state_retain (new_root);
           free_parse_state (new_root);
         }
-      else
+      မဟုတ်ပါက
         {
           state_item *psis = NULL;
-          for (gl_list_iterator_t it = gl_list_iterator (prev);
+          အတွက် (gl_list_iterator_t it = gl_list_iterator (prev);
                state_item_list_next (&it, &psis);
                )
             {
@@ -554,7 +554,7 @@ simulate_reduction (parse_state *ps, int rule_len, bitset symbol_set)
 
               // Append the left hand side to the end of the parser state
               copy = copy_parse_state (false, copy);
-              struct si_chunk *sis = &copy->state_items;
+              sa_nracanaa si_chunk *sis = &copy->state_items;
               const state_item *tail = sis->tail_elt;
               ps_si_append (copy, &state_items[tail->trans]);
               parse_state_list_append (result, copy);
@@ -563,7 +563,7 @@ simulate_reduction (parse_state *ps, int rule_len, bitset symbol_set)
         }
       gl_list_free (prev);
     }
-  return result;
+  ပြန်ပေး result;
 }
 
 parse_state_list
@@ -579,11 +579,11 @@ parser_prepend (parse_state *ps)
   {
     parse_state *copy = copy_parse_state (true, ps);
     ps_si_prepend (copy, &state_items[sin]);
-    if (SI_TRANSITION (head))
+    အကယ်၍ (SI_TRANSITION (head))
       ps_derivs_prepend (copy, derivation_new_leaf (prepend_sym));
     parse_state_list_append (res, copy);
   }
-  return res;
+  ပြန်ပေး res;
 }
 
 void
@@ -594,7 +594,7 @@ print_parse_state (parse_state *ps)
           ps->state_items.total_size, ps->depth, ps->reference_count);
   state_item_print (ps->state_items.head_elt, out, "");
   state_item_print (ps->state_items.tail_elt, out, "");
-  if (ps->derivs.total_size > 0)
+  အကယ်၍ (ps->derivs.total_size > 0)
     derivation_print (ps->derivs.head_elt, out, "");
   putc ('\n', out);
 }

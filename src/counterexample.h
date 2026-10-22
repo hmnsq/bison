@@ -31,6 +31,6 @@ void counterexample_free (void);
 // Used both for the warnings on the terminal (OUT = stderr, PREFIX =
 // ""), and for the reports (OUT != stderr, PREFIX != "").
 void
-counterexample_report_state (const state *s, FILE *out, const char *prefix);
+counterexample_report_state (const state *s, FILE *out, const var_na *prefix);
 
 #endif /* COUNTEREXAMPLE_H */

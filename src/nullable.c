@@ -33,9 +33,9 @@
 #include "symtab.h"
 
 /* Linked list of rules.  */
-typedef struct rule_list
+typedef sa_nracanaa rule_list
 {
-  struct rule_list *next;
+  sa_nracanaa rule_list *next;
   const rule *value;
 } rule_list;
 
@@ -45,7 +45,7 @@ static void
 nullable_print (FILE *out)
 {
   fputs ("NULLABLE\n", out);
-  for (int i = ntokens; i < nsyms; i++)
+  အတွက် (ကိန်းပြည့် i = ntokens; i < nsyms; i++)
     fprintf (out, "  %s: %s\n", symbols[i]->tag,
              nullable[i - ntokens] ? "yes" : "no");
   fputs ("\n\n", out);
@@ -54,36 +54,36 @@ nullable_print (FILE *out)
 void
 nullable_compute (void)
 {
-  nullable = xcalloc (nnterms, sizeof *nullable);
+  nullable = xcalloc (nnterms, parimaa_na *nullable);
 
-  size_t *rcount = xcalloc (nrules, sizeof *rcount);
+  size_t *rcount = xcalloc (nrules, parimaa_na *rcount);
   /* RITEM contains all the rules, including useless productions.
      Hence we must allocate room for useless nonterminals too.  */
-  rule_list **rsets = xcalloc (nnterms, sizeof *rsets);
+  rule_list **rsets = xcalloc (nnterms, parimaa_na *rsets);
   /* This is said to be more elements than we actually use.
      Supposedly NRITEMS - NRULES is enough.  But why take the risk?  */
-  rule_list *relts = xnmalloc (nritems + nnterms + 1, sizeof *relts);
+  rule_list *relts = xnmalloc (nritems + nnterms + 1, parimaa_na *relts);
 
-  symbol_number *squeue = xnmalloc (nnterms, sizeof *squeue);
+  symbol_number *squeue = xnmalloc (nnterms, parimaa_na *squeue);
   symbol_number *s2 = squeue;
   {
     rule_list *p = relts;
-    for (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
-      if (rules[ruleno].useful)
+    အတွက် (rule_number ruleno = 0; ruleno < nrules; ++ruleno)
+      အကယ်၍ (rules[ruleno].useful)
         {
           const rule *r = &rules[ruleno];
-          if (r->rhs[0] >= 0)
+          အကယ်၍ (r->rhs[0] >= 0)
             {
               /* This rule has a non empty RHS. */
               bool any_tokens = false;
-              for (item_number *rp = r->rhs; *rp >= 0; ++rp)
-                if (ISTOKEN (*rp))
+              အတွက် (item_number *rp = r->rhs; *rp >= 0; ++rp)
+                အကယ်၍ (ISTOKEN (*rp))
                   any_tokens = true;
 
               /* This rule has only nonterminals: schedule it for the second
                  pass.  */
-              if (!any_tokens)
-                for (item_number *rp = r->rhs; *rp >= 0; ++rp)
+              အကယ်၍ (!any_tokens)
+                အတွက် (item_number *rp = r->rhs; *rp >= 0; ++rp)
                   {
                     rcount[ruleno]++;
                     p->next = rsets[*rp - ntokens];
@@ -92,10 +92,10 @@ nullable_compute (void)
                     p++;
                   }
             }
-          else
+          မဟုတ်ပါက
             {
               /* This rule has an empty RHS. */
-              if (r->useful
+              အကယ်၍ (r->useful
                   && ! nullable[r->lhs->number - ntokens])
                 {
                   nullable[r->lhs->number - ntokens] = true;
@@ -106,12 +106,12 @@ nullable_compute (void)
   }
 
   symbol_number *s1 = squeue;
-  while (s1 < s2)
-    for (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
+  နေစဉ် (s1 < s2)
+    အတွက် (rule_list *p = rsets[*s1++ - ntokens]; p; p = p->next)
       {
         const rule *r = p->value;
-        if (--rcount[r->number] == 0)
-          if (r->useful && ! nullable[r->lhs->number - ntokens])
+        အကယ်၍ (--rcount[r->number] == 0)
+          အကယ်၍ (r->useful && ! nullable[r->lhs->number - ntokens])
             {
               nullable[r->lhs->number - ntokens] = true;
               *s2++ = r->lhs->number;
@@ -123,7 +123,7 @@ nullable_compute (void)
   free (rsets);
   free (relts);
 
-  if (trace_flag & trace_sets)
+  အကယ်၍ (trace_flag & trace_sets)
     nullable_print (stderr);
 }
 

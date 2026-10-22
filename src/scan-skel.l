@@ -39,18 +39,18 @@
 #undef skel_wrap
 #define skel_wrap() 1
 
-#define YY_DECL static int skel_lex (void)
+#define YY_DECL static ကိန်းပြည့် skel_lex (void)
 YY_DECL;
 
-typedef void (*at_directive)(int, char**, char **, int*);
-static void at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun);
-static void at_basename (int argc, char *argv[], char**, int*);
-static void at_complain (int argc, char *argv[], char**, int*);
-static void at_output (int argc, char *argv[], char **name, int *lineno);
-static void fail_for_at_directive_too_many_args (char const *at_directive_name);
-static void fail_for_at_directive_too_few_args (char const *at_directive_name);
-static void fail_for_invalid_at (char const *at);
-static void output_mapped_file (char const *name);
+typedef void (*at_directive)(ကိန်းပြည့်, var_na**, var_na **, ကိန်းပြည့်*);
+static void at_init (ကိန်းပြည့် *argc, var_na *argv[], at_directive *at_ptr, at_directive fun);
+static void at_basename (ကိန်းပြည့် argc, var_na *argv[], var_na**, ကိန်းပြည့်*);
+static void at_complain (ကိန်းပြည့် argc, var_na *argv[], var_na**, ကိန်းပြည့်*);
+static void at_output (ကိန်းပြည့် argc, var_na *argv[], var_na **name, ကိန်းပြည့် *lineno);
+static void fail_for_at_directive_too_many_args (var_na const *at_directive_name);
+static void fail_for_at_directive_too_few_args (var_na const *at_directive_name);
+static void fail_for_invalid_at (var_na const *at);
+static void output_mapped_file (var_na const *name);
 %}
 
 /* Identifiers of our M4 macros.  */
@@ -64,15 +64,15 @@ identifier [A-Za-z_0-9]+
 %%
 
 %{
-  int out_lineno PACIFY_CC (= 0);
-  char *out_name = NULL;
+  ကိန်းပြည့် out_lineno PACIFY_CC (= 0);
+  var_na *out_name = NULL;
 
   /* Currently, only the @complain directive takes multiple arguments, and
      never more than 7, with argv[0] being the directive name and argv[1]
      being the type of complaint to dispatch. */
 #define ARGC_MAX 9
-  int argc = 0;
-  char *argv[ARGC_MAX];
+  ကိန်းပြည့် argc = 0;
+  var_na *argv[ARGC_MAX];
   at_directive at_ptr = NULL;
 %}
 
@@ -110,12 +110,12 @@ identifier [A-Za-z_0-9]+
 .               ECHO;
 
 <INITIAL><<EOF>> {
-  if (out_name)
+  အကယ်၍ (out_name)
     {
       free (out_name);
       xfclose (yyout);
     }
-  return EOF;
+  ပြန်ပေး EOF;
 }
 
 <SC_AT_DIRECTIVE_ARGS>
@@ -129,15 +129,15 @@ identifier [A-Za-z_0-9]+
   @\n    continue;
 
   @[,)] {
-    if (argc >= ARGC_MAX)
+    အကယ်၍ (argc >= ARGC_MAX)
       fail_for_at_directive_too_many_args (argv[0]);
 
     argv[argc++] = obstack_finish0 (&obstack_for_string);
 
     /* Like M4, skip whitespace after a comma.  */
-    if (yytext[1] == ',')
+    အကယ်၍ (yytext[1] == ',')
       BEGIN SC_AT_DIRECTIVE_SKIP_WS;
-    else
+    မဟုတ်ပါက
       {
         aver (at_ptr);
         at_ptr (argc, argv, &out_name, &out_lineno);
@@ -164,7 +164,7 @@ identifier [A-Za-z_0-9]+
 %%
 
 static void
-at_init (int *argc, char *argv[], at_directive *at_ptr, at_directive fun)
+at_init (ကိန်းပြည့် *argc, var_na *argv[], at_directive *at_ptr, at_directive fun)
 {
   *at_ptr = fun;
   yytext[yyleng-1] = '\0';
@@ -181,7 +181,7 @@ void
 scan_skel (FILE *in)
 {
   static bool initialized = false;
-  if (!initialized)
+  အကယ်၍ (!initialized)
     {
       initialized = true;
       obstack_init (&obstack_for_string);
@@ -199,38 +199,38 @@ skel_scanner_free (void)
   yylex_destroy ();
 }
 
-static inline warnings
-flag (const char *arg)
+static anta_hstha warnings
+flag (const var_na *arg)
 {
   /* compare with values issued from b4_error */
-  if (STREQ (arg, "complain"))
-    return complaint;
-  else if (STREQ (arg, "deprecated"))
-    return Wdeprecated;
-  else if (STREQ (arg, "fatal"))
-    return fatal;
-  else if (STREQ (arg, "note"))
-    return silent | complaint | no_caret | note;
-  else if (STREQ (arg, "warn"))
-    return Wother;
-  else
+  အကယ်၍ (STREQ (arg, "complain"))
+    ပြန်ပေး complaint;
+  မဟုတ်ပါက အကယ်၍ (STREQ (arg, "deprecated"))
+    ပြန်ပေး Wdeprecated;
+  မဟုတ်ပါက အကယ်၍ (STREQ (arg, "fatal"))
+    ပြန်ပေး fatal;
+  မဟုတ်ပါက အကယ်၍ (STREQ (arg, "note"))
+    ပြန်ပေး silent | complaint | no_caret | note;
+  မဟုတ်ပါက အကယ်၍ (STREQ (arg, "warn"))
+    ပြန်ပေး Wother;
+  မဟုတ်ပါက
     abort ();
 }
 
 static void
-at_basename (int argc, char *argv[], char **out_namep, int *out_linenop)
+at_basename (ကိန်းပြည့် argc, var_na *argv[], var_na **out_namep, ကိန်းပြည့် *out_linenop)
 {
   (void) out_namep;
   (void) out_linenop;
-  if (2 < argc)
+  အကယ်၍ (2 < argc)
     fail_for_at_directive_too_many_args (argv[0]);
   fputs (last_component (argv[1]), yyout);
 }
 
 static void
-at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
+at_complain (ကိန်းပြည့် argc, var_na *argv[], var_na **out_namep, ကိန်းပြည့် *out_linenop)
 {
-  if (argc < 4)
+  အကယ်၍ (argc < 4)
     fail_for_at_directive_too_few_args (argv[0]);
 
   (void) out_namep;
@@ -240,7 +240,7 @@ at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
 
   location loc;
   location *locp = NULL;
-  if (argv[2] && argv[2][0])
+  အကယ်၍ (argv[2] && argv[2][0])
     {
       boundary_set_from_string (&loc.start, argv[2]);
       boundary_set_from_string (&loc.end, argv[3]);
@@ -250,11 +250,11 @@ at_complain (int argc, char *argv[], char **out_namep, int *out_linenop)
 }
 
 static void
-at_output (int argc, char *argv[], char **out_namep, int *out_linenop)
+at_output (ကိန်းပြည့် argc, var_na *argv[], var_na **out_namep, ကိန်းပြည့် *out_linenop)
 {
-  if (3 < argc)
+  အကယ်၍ (3 < argc)
     fail_for_at_directive_too_many_args (argv[0]);
-  if (*out_namep)
+  အကယ်၍ (*out_namep)
     {
       free (*out_namep);
       xfclose (yyout);
@@ -267,27 +267,27 @@ at_output (int argc, char *argv[], char **out_namep, int *out_linenop)
 }
 
 static void
-fail_for_at_directive_too_few_args (char const *at_directive_name)
+fail_for_at_directive_too_few_args (var_na const *at_directive_name)
 {
   complain (NULL, fatal, _("too few arguments for %s directive in skeleton"),
             at_directive_name);
 }
 
 static void
-fail_for_at_directive_too_many_args (char const *at_directive_name)
+fail_for_at_directive_too_many_args (var_na const *at_directive_name)
 {
   complain (NULL, fatal, _("too many arguments for %s directive in skeleton"),
             at_directive_name);
 }
 
 static void
-fail_for_invalid_at (char const *at)
+fail_for_invalid_at (var_na const *at)
 {
   complain (NULL, fatal, "invalid @ in skeleton: %s", at);
 }
 
 static void
-output_mapped_file (char const *name)
+output_mapped_file (var_na const *name)
 {
   fputs (quotearg_style (c_quoting_style, map_file_name (name)), yyout);
 }

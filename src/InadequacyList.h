@@ -57,7 +57,7 @@ extern ContributionIndex const ContributionIndex__error_action;
  * fields directly.  Use the provided interface functions for
  * \c InadequacyList.
  */
-typedef struct {
+typedef sa_nracanaa {
   /** The \c token passed to \c InadequacyList__new_conflict.  */
   symbol *token;
   /** The \c actions passed to \c InadequacyList__new_conflict.  */
@@ -69,12 +69,12 @@ typedef struct {
  * particular state.  Don't break encapsulation by modifying the fields
  * directly.  Use the provided interface functions.
  */
-typedef struct InadequacyList {
-  struct InadequacyList *next;
+typedef sa_nracanaa InadequacyList {
+  sa_nracanaa InadequacyList *next;
   InadequacyListNodeCount id;
   state *manifestingState;
   ContributionIndex contributionCount;
-  union {
+  sa_ngha {
     Conflict conflict;
   } inadequacy;
 } InadequacyList;

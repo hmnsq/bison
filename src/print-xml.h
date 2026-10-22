@@ -23,11 +23,11 @@
 
 # include <stdio.h>
 
-void xml_indent (FILE *out, int level);
-void xml_puts (FILE *, int, char const *);
-void xml_printf (FILE *, int, char const *, ...);
-char const *xml_escape_n (int n, char const *str);
-char const *xml_escape (char const *str);
+void xml_indent (FILE *out, ကိန်းပြည့် level);
+void xml_puts (FILE *, ကိန်းပြည့်, var_na const *);
+void xml_printf (FILE *, ကိန်းပြည့်, var_na const *, ...);
+var_na const *xml_escape_n (ကိန်းပြည့် n, var_na const *str);
+var_na const *xml_escape (var_na const *str);
 void print_xml (void);
 
 /* Use xsltproc to generate HTML from XML output.  */

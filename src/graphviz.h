@@ -37,7 +37,7 @@ void start_graph (FILE *fout);
  * \param label  human readable label of the node (no Dot escaping needed).
  * \param fout   output stream.
  */
-void output_node (int id, char const *label, FILE *fout);
+void output_node (ကိန်းပြည့် id, var_na const *label, FILE *fout);
 
 /** Output a Dot edge.
  * \param source       id of the source node
@@ -47,8 +47,8 @@ void output_node (int id, char const *label, FILE *fout);
  * \param style        Dot style of the edge (e.g., "dotted" or "solid").
  * \param fout         output stream.
  */
-void output_edge (int source, int destination, char const *label,
-                  char const *style, FILE *fout);
+void output_edge (ကိန်းပြည့် source, ကိန်းပြည့် destination, var_na const *label,
+                  var_na const *style, FILE *fout);
 
 /** Output a reduction.
  * \param s            current state
